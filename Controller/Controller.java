@@ -4,9 +4,15 @@ package Controller;
 import View.View;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferStrategy;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Controller {
+    public static View View;
+            
     public String name;
     private static final int FRAME_DELAY = 20; // 20ms. implies 50fps (1000/20) = 50
     public static Chunk chunklist[] = new Chunk[9];
@@ -15,7 +21,7 @@ public class Controller {
     public static int tilesizeY = 40;
     public static int ChunkSizeX = 400;
     public static int ChunkSizeY = 400;
-
+    
    
     final static Random RANDOM = new Random();
    
@@ -40,6 +46,8 @@ public class Controller {
     };*/
     
     public Controller(){ 
+        Controller.View = new View();
+        addListener();
         //i und j fängt bei i/2+0,5 an und geht bis i/2-0,5
         //k von 0 bis feldgröße^2-1   
         
@@ -82,23 +90,34 @@ public class Controller {
              hier hätte ich gerne eine Methode die mit einem Aufruf von Chunk.daw()
              in einer Schleife neun mal die drawChunk ausführt. Im moment in draw_all_Chunks zu finden
          }*/
-    }      
-    
-    public static void mousePressed(MouseEvent e) {
-        clickstartX = e.getX();
-        clickstartY = e.getY();
     }
     
-    public static void mouseDragged(MouseEvent e){
-         for (int i=0;i<9;i++){
-                    chunklist[i].posX -= clickstartX - e.getX();
-                    chunklist[i].posY -= clickstartY - e.getY();
-                }
-                clickstartX = e.getX();
-                clickstartY = e.getY();
-                //draw_all_chunks();
-                View.draw_all_chunks();
+     
+    
+    private void addListener(){
+        Controller.View.setMouseDraggedListener(new MouseDraggedListener());
+        Controller.View.setMousePressedListener(new MousePressedListener());
+    }   
+        
+    class MouseDraggedListener extends MouseMotionAdapter{
+        @Override
+        public void mouseDragged(MouseEvent e){
+            for (int i=0;i<9;i++){
+                chunklist[i].posX -= clickstartX - e.getX();
+                chunklist[i].posY -= clickstartY - e.getY();
+            }
+            clickstartX = e.getX();
+            clickstartY = e.getY();
+            Controller.View.draw_all_chunks(); 
+        }
     }
     
+    class MousePressedListener extends MouseAdapter{
+        @Override
+        public void mousePressed(MouseEvent e) {
+            clickstartX = e.getX();
+            clickstartY = e.getY();
+        }
+    }
     
 }

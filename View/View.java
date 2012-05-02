@@ -3,7 +3,10 @@ package View;
 import Controller.Controller;
 import Controller.Controller.Chunk;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.ExecutorService;
@@ -14,12 +17,12 @@ import javax.swing.JFrame;
 
 
 public class View extends javax.swing.JFrame {
-    JFrame window = new JFrame();
-    public JButton b1; 
-    public JButton b2; 
+    static JFrame window = new JFrame();
+    public static JButton b1; 
+    public static JButton b2; 
     BufferStrategy bufferStrategy;
-    final ExecutorService executorService = Executors.newFixedThreadPool(1);
-    private Insets insets;
+    final ExecutorService executorService = Executors.newFixedThreadPool(3);
+    private static Insets insets;
     
     public View(){
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE );
@@ -57,43 +60,26 @@ public class View extends javax.swing.JFrame {
         b2 = new JButton("Draw Chunk 4");
         b2.addActionListener(
             new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                drawChunk(Controller.chunklist[4]); 
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    drawChunk(Controller.chunklist[4]); 
                 }
             }
         );
         
         window.getContentPane().add(b2);
         
-        class mouseEventHandler extends MouseAdapter{         
-            @Override
-             public void mousePressed(MouseEvent e){
-                Controller.mousePressed(e);
-            }
-        } 
-        
-        window.addMouseListener(new mouseEventHandler()); 
-        
-        class mouseMovedEventHandler extends MouseMotionAdapter{           
-            @Override
-            public void mouseDragged(MouseEvent e) {
-               Controller.mouseDragged(e);
-            }
-        }         
-        
-        window.addMouseMotionListener(new mouseMovedEventHandler());
        
         window.setVisible(true);
         window.createBufferStrategy(2);
         bufferStrategy = window.getBufferStrategy();  
     }
        
-        public void draw_all_chunks(){
-            for (int i = 0;i>Controller.chunklist.length;i++) drawChunk(Controller.chunklist[i]);
-   };
+    public void draw_all_chunks(){
+        for (int i = 0;i<Controller.chunklist.length;i++) drawChunk(Controller.chunklist[i]);
+    };
    
-    private int window_width(){
+    private static int window_width(){
         int value;
         Dimension size = window.getSize();
         insets = window.getInsets();
@@ -102,7 +88,7 @@ public class View extends javax.swing.JFrame {
         return value;
    }
    
-    private int window_height(){
+    private static int window_height(){
         int value;
         Dimension size = window.getSize();
         insets = window.getInsets();
@@ -136,7 +122,7 @@ public class View extends javax.swing.JFrame {
 
         //g2d.fillRect(posX,posY,window_width(),window_height());            
         g2d.setColor(Color.blue);
-
+        
         Image tilefile = new ImageIcon(this.getClass().getResource("grastile.png")).getImage();
         BufferedImage tile = gc.createCompatibleImage(Controller.tilesizeX, Controller.tilesizeY, Transparency.BITMASK);
         tile.getGraphics().drawImage(tilefile,
@@ -261,6 +247,16 @@ public class View extends javax.swing.JFrame {
             bufferStrategy.show();
             Toolkit.getDefaultToolkit().sync();
         }
+    
+    public void setMousePressedListener(MouseListener Listener){
+        window.addMouseListener(Listener);
+    }
+
+    public void setMouseDraggedListener(MouseMotionListener Listener){
+        window.addMouseMotionListener(Listener);    
+    }
 }
+
+
 
 
