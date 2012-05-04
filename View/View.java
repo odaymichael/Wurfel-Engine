@@ -21,17 +21,17 @@ public class View extends javax.swing.JFrame {
     public static JButton b1; 
     public static JButton b2; 
     BufferStrategy bufferStrategy;
-    final ExecutorService executorService = Executors.newFixedThreadPool(3);
+    final ExecutorService executorService = Executors.newFixedThreadPool(1);
     private static Insets insets;
     
     public View(){
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE );
         setUndecorated(true);
-        setIgnoreRepaint(true);
+        //setIgnoreRepaint(true);
         GraphicsDevice graphicsDevice = getGraphicsConfiguration().getDevice();
         //graphicsDevice.setFullScreenWindow(this);
-        //graphicsDevice.setDisplayMode(new DisplayMode(640, 480, 16, 60));
-        window.setSize( 800, 800 );
+        //graphicsDevice.setDisplayMode(new DisplayMode(1920, 1080, 32, 60));
+        window.setSize(800,800);
         
         //alternative. Lässt startposition vom System verwalten
         //window.setLocationByPlatform(true);
@@ -76,7 +76,8 @@ public class View extends javax.swing.JFrame {
     }
        
     public void draw_all_chunks(){
-        for (int i = 0;i<Controller.chunklist.length;i++) drawChunk(Controller.chunklist[i]);
+        for (int i = 0;i<Controller.chunklist.length;i++)
+            drawChunk(Controller.chunklist[i]);
     };
    
     private static int window_width(){
@@ -104,7 +105,12 @@ public class View extends javax.swing.JFrame {
         //Graphics2D g2d = bimage.createGraphics();            
         //Graphics2D g2d = (Graphics2D) window.getGraphics();
 
-        BasicStroke stokestyle = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
+        BasicStroke stokestyle = new BasicStroke(
+            1,
+            BasicStroke.CAP_BUTT,
+            BasicStroke.JOIN_BEVEL
+        );
+        
         g2d.setStroke(stokestyle);
 
 
@@ -124,20 +130,24 @@ public class View extends javax.swing.JFrame {
         g2d.setColor(Color.blue);
         
         Image tilefile = new ImageIcon(this.getClass().getResource("grastile.png")).getImage();
-        BufferedImage tile = gc.createCompatibleImage(Controller.tilesizeX, Controller.tilesizeY, Transparency.BITMASK);
+        Image tilefile2 = new ImageIcon(this.getClass().getResource("tile.png")).getImage();
+        
+        /*BufferedImage tile = gc.createCompatibleImage(Controller.tilesizeX, Controller.tilesizeY, Transparency.BITMASK);
         tile.getGraphics().drawImage(tilefile,
                 0,//dx1
                 0,//dy1
                 Controller.tilesizeX,//width
                 Controller.tilesizeY,//height
-                null);
+                null);*/
 
-        int amountX = window_width()/Controller.tilesizeX;
-        int amountY = window_height()/Controller.tilesizeY;
+        int amountX = 10;
+        int amountY = 10;
+        //int amountX = window_width()/Controller.tilesizeX;
+        //int amountY = window_height()/Controller.tilesizeY;
 
             for (int y=0; y < amountY*2; y++)//vertikal
             for (int x=0; x < amountX; x++)//horizontal
-                g2d.drawImage(tilefile,
+                g2d.drawImage(chunk.chunkdata[x][y]?tilefile:tilefile2,
                     chunk.posX + Math.abs((y%2)*Controller.tilesizeX/2) + x*Controller.tilesizeX ,
                     chunk.posY + y*Controller.tilesizeY/2,
                     Controller.tilesizeX,
@@ -256,7 +266,3 @@ public class View extends javax.swing.JFrame {
         window.addMouseMotionListener(Listener);    
     }
 }
-
-
-
-
