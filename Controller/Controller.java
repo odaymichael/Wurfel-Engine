@@ -99,12 +99,12 @@ public class Controller {
             clickstartX = e.getX();
             clickstartY = e.getY();
             
-            //if middle chunk is scrolled down over the middle then 
+            //if the middle chunk is scrolled down over the middle line then 
             if (chunklist[4].posX > 400) 
                 setcenterchunk(3);   
             
             
-            if (chunklist[4].posX < 0) 
+            if (chunklist[4].posX < -Chunk.width) 
                 setcenterchunk(5);   
             
             
@@ -112,12 +112,21 @@ public class Controller {
                 setcenterchunk(1);   
             
             
-            if (chunklist[4].posX < 0)
+            if (chunklist[4].posY < -Chunk.height)
                 setcenterchunk(7);   
             
             
             
-            Controller.View.draw_all_chunks(); 
+            //View.draw_all_chunks();
+            View.drawChunk(chunklist[4]);
+        }
+    }
+    
+     class MousePressedListener extends MouseAdapter{
+        @Override
+        public void mousePressed(MouseEvent e) {
+            clickstartX = e.getX();
+            clickstartY = e.getY();
         }
     }
     
@@ -125,26 +134,22 @@ public class Controller {
         //newcenter ist 1,3,5 oder 7
         System.out.println("New Center: " +newcenter);
         for (int i=0;i<8;i++){
-            if ( (i-newcenter)%3 == 0){
+            if ( (i-newcenter)%3 == 0 || i+newcenter-4<0){
                 chunklist[i] = new Chunk(
                     chunklist[i].coordX + (newcenter==3 ? -1 : (newcenter==5 ? 1 : 0)),
                     chunklist[i].coordY + (newcenter==1 ? 1 : (newcenter==7 ? -1 : 0)),
-                    chunklist[i].posX + (newcenter==3 ? ChunkSizeX : (newcenter==5 ? -ChunkSizeX : 0)),
+                    chunklist[i].posX + (newcenter==3 ? -ChunkSizeX : (newcenter==5 ? ChunkSizeX : 0)),
                     chunklist[i].posY + (newcenter==1 ? ChunkSizeY : (newcenter==7 ? -ChunkSizeY : 0))
-                    );
-            System.out.println("Neuer Chunk an chunkliste["+i+"]: "+chunklist[i].coordX+","+chunklist[i].coordY);
-            System.out.println("Pos: "+chunklist[i].posX+","+chunklist[i].posY);
-            } else
+                );
+            System.out.println("Neuer Chunk an chunkliste["+i+"]: "+ chunklist[i].coordX +","+chunklist[i].coordY);
+            System.out.println("Pos: "+ chunklist[i].posX +","+ chunklist[i].posY);
+            } else {
+                System.out.println("chunkliste[" + i + "] bekommt den alten von chunkliste["+(i+newcenter-4)+"]");
                 chunklist[i] = chunklist[i+newcenter-4];
+            }
         }
     }
 
-    class MousePressedListener extends MouseAdapter{
-        @Override
-        public void mousePressed(MouseEvent e) {
-            clickstartX = e.getX();
-            clickstartY = e.getY();
-        }
-    }
+   
     
 }

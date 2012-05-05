@@ -19,7 +19,8 @@ import javax.swing.JFrame;
 public class View extends javax.swing.JFrame {
     static JFrame window = new JFrame();
     public static JButton b1; 
-    public static JButton b2; 
+    public static JButton b2;
+    public static JButton b3;
     BufferStrategy bufferStrategy;
     final ExecutorService executorService = Executors.newFixedThreadPool(1);
     private static Insets insets;
@@ -66,9 +67,20 @@ public class View extends javax.swing.JFrame {
                 }
             }
         );
-        
         window.getContentPane().add(b2);
         
+        b3 = new JButton("Chunklist");
+        b3.addActionListener(
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    drawchunklist(); 
+                }
+            }
+        );
+        window.getContentPane().add(b3);
+        
+
        
         window.setVisible(true);
         window.createBufferStrategy(2);
@@ -97,6 +109,36 @@ public class View extends javax.swing.JFrame {
         //Controller.ChunkSizeY = value ;
         return value;
    }
+    
+   
+    public void drawchunklist(){
+    Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
+    for (int i=0;i<Controller.chunklist.length;i++){
+        g2d.setColor(Color.white);
+        g2d.fillRect(
+                i%3*40+10,
+                i/3*40+10,
+                40,
+                40
+            );
+        g2d.setColor(Color.black);
+        g2d.drawRect(
+                i%3*40+10,
+                i/3*40+10,
+                40,
+                40
+            );
+     g2d.setFont(new Font("Helvetica", Font.PLAIN, 12));
+            g2d.drawString(
+                Controller.chunklist[i].coordX+" | "+Controller.chunklist[i].coordY,
+                i%3*40+15,
+                i/3*40+40
+            );
+    }
+     g2d.dispose();
+     bufferStrategy.show();
+     Toolkit.getDefaultToolkit().sync();
+    }
     
     
     //draw the chunk
@@ -271,6 +313,7 @@ public class View extends javax.swing.JFrame {
             //anzeigen
             bufferStrategy.show();
             Toolkit.getDefaultToolkit().sync();
+            drawchunklist();
         }
     
     public void setMousePressedListener(MouseListener Listener){
