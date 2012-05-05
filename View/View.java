@@ -85,7 +85,7 @@ public class View extends javax.swing.JFrame {
         Dimension size = window.getSize();
         insets = window.getInsets();
         value = size.width - insets.left - insets.right;
-        Controller.ChunkSizeX = value ;
+        //Controller.ChunkSizeX = value ;
         return value;
    }
    
@@ -94,7 +94,7 @@ public class View extends javax.swing.JFrame {
         Dimension size = window.getSize();
         insets = window.getInsets();
         value = size.height - insets.top - insets.bottom;
-        Controller.ChunkSizeY = value ;
+        //Controller.ChunkSizeY = value ;
         return value;
    }
     
@@ -127,7 +127,7 @@ public class View extends javax.swing.JFrame {
 
 
         //g2d.fillRect(posX,posY,window_width(),window_height());            
-        g2d.setColor(Color.blue);
+        g2d.setColor(Color.yellow);
         
         Image tilefile = new ImageIcon(this.getClass().getResource("grastile.png")).getImage();
         Image tilefile2 = new ImageIcon(this.getClass().getResource("tile.png")).getImage();
@@ -140,13 +140,12 @@ public class View extends javax.swing.JFrame {
                 Controller.tilesizeY,//height
                 null);*/
 
-        int amountX = 10;
-        int amountY = 10;
+
         //int amountX = window_width()/Controller.tilesizeX;
         //int amountY = window_height()/Controller.tilesizeY;
 
-            for (int y=0; y < amountY*2; y++)//vertikal
-            for (int x=0; x < amountX; x++)//horizontal
+            for (int y=0; y < chunk.chunkdata[0].length; y++)//vertikal
+            for (int x=0; x < chunk.chunkdata.length; x++)//horizontal
                 g2d.drawImage(chunk.chunkdata[x][y]?tilefile:tilefile2,
                     chunk.posX + Math.abs((y%2)*Controller.tilesizeX/2) + x*Controller.tilesizeX ,
                     chunk.posY + y*Controller.tilesizeY/2,
@@ -194,28 +193,30 @@ public class View extends javax.swing.JFrame {
         int start1Y = chunk.posY;
         int end1X = chunk.posX;
         int end1Y = chunk.posY;
+        
         int start2X = chunk.posX;
         int start2Y = chunk.posY;
-        int end2X = chunk.posX + window_width();
+        int end2X = chunk.posX + Controller.Chunk.width;
         int end2Y = chunk.posY;
 
-        //zählervariablen
-        int s1x = 0;int s1y = 0;int e1x = 0;int e1y = 0;
-        int s2x = 0;int s2y = 0;int e2x = 0;int e2y = 0;
+        //Countervariables
+        int s1x=0;int s1y=0;int e1x=0;int e1y=0;
+        int s2x=0;int s2y=0;int e2x=0;int e2y=0;
 
-        for (int i=0; i/2 < window_width()/Controller.tilesizeX + window_height()/Controller.tilesizeY; i++){
+        for (int i=0; i < (chunk.chunkdata.length)*2 + (chunk.chunkdata[0].length); i++){
             //g2d.setColor(new Color(i*5+20,i*5+20,0));
 
-            //Linie 1 (von unten links nach oben rechts)
-            if (s1y*Controller.tilesizeY/2 > window_height()){
+            //Linie 1 (von unten links nach oben rechts) /
+            if (s1y > chunk.chunkdata[0].length) {
                 s1x++;
                 start1X = chunk.posX + s1x*Controller.tilesizeX/2;                    
             } else {
                 s1y++;
                 start1Y = chunk.posY + s1y*Controller.tilesizeY/2;       
-            }                
-
-            if ((e1x+1)*Controller.tilesizeX/2 > window_width()){
+            }         
+            
+            
+            if (e1x+1 > chunk.chunkdata.length*2) {
                 e1y++;
                 end1Y = chunk.posY + e1y*Controller.tilesizeY/2;
             } else{
@@ -223,31 +224,45 @@ public class View extends javax.swing.JFrame {
                 end1X = chunk.posX + e1x*Controller.tilesizeX/2;                    
             }
 
-            g2d.drawLine(start1X + (i%2)*Controller.tilesizeX/2,start1Y,end1X + (i%2)*Controller.tilesizeX/2,end1Y);
+            g2d.drawLine(
+                start1X + (i%2)*Controller.tilesizeX/2,
+                start1Y,
+                end1X + (i%2)*Controller.tilesizeX/2,
+                end1Y
+            );
 
 
-            //Linie 2  (von oben links nach utnen rechts)         
-            if (s2x < amountX*2){
+            //Linie 2  (von oben links nach utnen rechts)  \       
+            if (s2x < chunk.chunkdata.length*2) {
                 s2x++;
-                start2X = chunk.posX + window_width() - s2x*Controller.tilesizeX/2;
+                start2X = chunk.posX + Controller.Chunk.width - s2x*Controller.tilesizeX/2;
             } else {
                 s2y++;
                 start2Y = chunk.posY + s2y*Controller.tilesizeY/2;
             }
 
-            if (e2y < amountY*2){
+            if (e2y-1 < chunk.chunkdata[0].length){
                 e2y++;
                 end2Y = chunk.posY + e2y*Controller.tilesizeY/2;                    
             } else {
                 e2x++;
-                end2X = chunk.posX + window_width() - e2x*Controller.tilesizeX/2;                   
+                end2X = chunk.posX + Controller.Chunk.width - e2x*Controller.tilesizeX/2;                   
             }
 
-            g2d.drawLine(start2X + (i%2)*Controller.tilesizeX/2,start2Y,end2X + (i%2)*Controller.tilesizeX/2,end2Y);
+            g2d.drawLine(
+                start2X + (i%2)*Controller.tilesizeX/2,
+                start2Y,
+                end2X + (i%2)*Controller.tilesizeX/2,
+                end2Y
+            );
         }
             
             g2d.setFont(new Font("Helvetica", Font.PLAIN, 50));
-            g2d.drawString(String.valueOf(chunk.coordX)+","+String.valueOf(chunk.coordY), chunk.posX+window_width()/2-40, chunk.posY+window_height()/2-40);
+            g2d.drawString(
+                String.valueOf(chunk.coordX)+","+String.valueOf(chunk.coordY),
+                chunk.posX+Controller.Chunk.width/2 - 40,
+                chunk.posY+Controller.Chunk.height/2 - 40
+            );
            
             
             //wohl wie flush(), irgendwie für den garbage collector

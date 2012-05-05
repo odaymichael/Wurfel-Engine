@@ -13,7 +13,4 @@ public class OutThere extends javax.swing.JFrame {
     public OutThere() {
  
     }  
-} public OutThere() {
- 
-    }  
 }

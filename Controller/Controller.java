@@ -16,10 +16,10 @@ public class Controller {
     final int fieldsize = 3;
     public static Chunk chunklist[] = new Chunk[9];
     static int clickstartX,clickstartY;
-    public static int tilesizeX = 80;
-    public static int tilesizeY = 40;
-    public static int ChunkSizeX = 400;
-    public static int ChunkSizeY = 400;
+    public final static int tilesizeX = 80;
+    public final static int tilesizeY = 40;
+    public final static int ChunkSizeX = 9;
+    public final static int ChunkSizeY = 20;
     
    
     final static Random RANDOM = new Random();
@@ -50,27 +50,28 @@ public class Controller {
         int i=0;
         for (int y=(int) (fieldsize-Math.floor(fieldsize/2)-1); y>-fieldsize+Math.floor(fieldsize/2); y--)
             for (int x=(int) (-fieldsize+Math.floor(fieldsize/2)+1); x<fieldsize-Math.floor(fieldsize/2); x++){
-                chunklist[i] = new Chunk(x,y,x*ChunkSizeX,y*ChunkSizeY);
+                chunklist[i] = new Chunk(x,y,x*Chunk.width,y*Chunk.height);
                 i++;
             }
 
     }
     
-    public class Chunk {
+    public static class Chunk {
         public int coordX, coordY, posX, posY;
-        public boolean chunkdata[][] = new boolean[20][20];
+        public boolean chunkdata[][] = new boolean[ChunkSizeX][ChunkSizeY];
+        public static final int width = ChunkSizeX*tilesizeX;
+        public static final int height = (ChunkSizeY*tilesizeY)/2;
 
         //Konstruktor
         public Chunk(int X, int Y, int startposX, int startposY){
-            //die größe der Chunks, hängt von der Auflösung ab
             coordX = X;
             coordY = Y;
             posX = startposX;
             posY = startposY;
             
             //chunkdata will contain the blocks and objects
-            for (int i=0;i<chunkdata.length;i++)
-                for (int j=0;j<chunkdata.length;j++)
+            for (int i=0; i < chunkdata.length; i++)
+                for (int j=0; j < chunkdata[0].length; j++)
                     chunkdata[i][j] = new Random().nextBoolean();
         }
         
