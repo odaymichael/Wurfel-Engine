@@ -1,5 +1,4 @@
 import Controller.Controller;
-import View.View;
 
         
 public class OutThere extends javax.swing.JFrame {

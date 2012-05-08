@@ -17,7 +17,7 @@ public class Controller {
     public static Chunk chunklist[] = new Chunk[9];
     static int clickstartX,clickstartY;
     public final static int tilesizeX = 80;
-    public final static int tilesizeY = 40;
+    public final static int tilesizeY = 80;
     public final static int ChunkSizeX = 9;
     public final static int ChunkSizeY = 20;
     
@@ -39,8 +39,6 @@ public class Controller {
                 }
             }
             //shutdown();
-            
-            
         }
     };*/
     
@@ -50,10 +48,9 @@ public class Controller {
         int i=0;
         for (int y=(int) (fieldsize-Math.floor(fieldsize/2)-1); y>-fieldsize+Math.floor(fieldsize/2); y--)
             for (int x=(int) (-fieldsize+Math.floor(fieldsize/2)+1); x<fieldsize-Math.floor(fieldsize/2); x++){
-                chunklist[i] = new Chunk(x,y,x*Chunk.width,y*Chunk.height);
+                chunklist[i] = new Chunk(x,y,x*Chunk.width,y*Chunk.height/2);
                 i++;
             }
-
     }
     
     public static class Chunk {
@@ -115,10 +112,10 @@ public class Controller {
             if (chunklist[4].posY < -Chunk.height)
                 setcenterchunk(7);   
             
+
+              View.draw_all_chunks();
+              //View.drawChunk(chunklist[4]);
             
-            
-            //View.draw_all_chunks();
-            View.drawChunk(chunklist[4]);
         }
     }
     
@@ -133,19 +130,21 @@ public class Controller {
     private void setcenterchunk(int newcenter){
         //newcenter ist 1,3,5 oder 7
         System.out.println("New Center: " +newcenter);
-        for (int i=0;i<8;i++){
+        Chunk chunklist_copy[] = new Chunk[9];
+        System.arraycopy(chunklist, 0, chunklist_copy, 0, 9);
+        for (int i=0;i<9;i++){
             if ( (i-newcenter)%3 == 0 || i+newcenter-4<0){
                 chunklist[i] = new Chunk(
                     chunklist[i].coordX + (newcenter==3 ? -1 : (newcenter==5 ? 1 : 0)),
                     chunklist[i].coordY + (newcenter==1 ? 1 : (newcenter==7 ? -1 : 0)),
-                    chunklist[i].posX + (newcenter==3 ? -ChunkSizeX : (newcenter==5 ? ChunkSizeX : 0)),
-                    chunklist[i].posY + (newcenter==1 ? ChunkSizeY : (newcenter==7 ? -ChunkSizeY : 0))
+                    chunklist[i].posX + (newcenter==3 ? -Chunk.width : (newcenter==5 ? Chunk.width : 0)),
+                    chunklist[i].posY + (newcenter==1 ? ChunkSizeY : (newcenter==7 ? -Chunk.height : 0))
                 );
-            System.out.println("Neuer Chunk an chunkliste["+i+"]: "+ chunklist[i].coordX +","+chunklist[i].coordY);
+            System.out.println("chunkliste["+i+"] bekommt einen neuen Chunk: "+ chunklist[i].coordX +","+chunklist[i].coordY);
             System.out.println("Pos: "+ chunklist[i].posX +","+ chunklist[i].posY);
             } else {
                 System.out.println("chunkliste[" + i + "] bekommt den alten von chunkliste["+(i+newcenter-4)+"]");
-                chunklist[i] = chunklist[i+newcenter-4];
+                chunklist[i] = chunklist_copy[i+newcenter-4];
             }
         }
     }
