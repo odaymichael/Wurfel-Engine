@@ -48,8 +48,8 @@ public class Controller {
         int i=0;
         for (int y=(int) (fieldsize-Math.floor(fieldsize/2)-1); y>-fieldsize+Math.floor(fieldsize/2); y--)
             for (int x=(int) (-fieldsize+Math.floor(fieldsize/2)+1); x<fieldsize-Math.floor(fieldsize/2); x++){
-                chunklist[i] = new Chunk(x,y,x*Chunk.width,y*Chunk.height/2);
-                i++;
+                chunklist[i] = new Chunk(x,y,x*Chunk.width,(-y)*Chunk.height);
+                i++;               
             }
     }
     
@@ -57,7 +57,7 @@ public class Controller {
         public int coordX, coordY, posX, posY;
         public boolean chunkdata[][] = new boolean[ChunkSizeX][ChunkSizeY];
         public static final int width = ChunkSizeX*tilesizeX;
-        public static final int height = (ChunkSizeY*tilesizeY)/2;
+        public static final int height = ChunkSizeY*tilesizeY/4;
 
         //Konstruktor
         public Chunk(int X, int Y, int startposX, int startposY){
@@ -71,12 +71,6 @@ public class Controller {
                 for (int j=0; j < chunkdata[0].length; j++)
                     chunkdata[i][j] = new Random().nextBoolean();
         }
-        
-       /* public static void draw(){
-             hier hätte ich gerne eine Methode die mit einem Aufruf von Chunk.daw()
-             in einer Schleife neun mal die drawChunk ausführt. Im moment in draw_all_Chunks zu finden
-         }*/
-
     }
     
      

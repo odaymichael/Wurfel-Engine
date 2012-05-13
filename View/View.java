@@ -87,7 +87,7 @@ public class View extends javax.swing.JFrame {
     }
        
     public void draw_all_chunks(){
-        for (int i = 0;i<Controller.chunklist.length;i++)
+        for (int i = 0;i < Controller.chunklist.length;i++)
             drawChunk(Controller.chunklist[i]);
     };
    
@@ -111,32 +111,32 @@ public class View extends javax.swing.JFrame {
     
    
     public void drawchunklist(){
-    Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
-    for (int i=0;i<Controller.chunklist.length;i++){
-        g2d.setColor(Color.white);
-        g2d.fillRect(
-                i%3*40+10,
-                i/3*40+10,
-                40,
-                40
-            );
-        g2d.setColor(Color.black);
-        g2d.drawRect(
-                i%3*40+10,
-                i/3*40+10,
-                40,
-                40
-            );
-     g2d.setFont(new Font("Helvetica", Font.PLAIN, 12));
+        Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
+        g2d.setFont(new Font("Helvetica", Font.PLAIN, 12));
+        for (int i=0;i < Controller.chunklist.length;i++){
+            g2d.setColor(Color.white);
+            g2d.fillRect(
+                    i%3*40+10,
+                    i/3*40+10,
+                    40,
+                    40
+                );
+            g2d.setColor(Color.black);
+            g2d.drawRect(
+                    i%3*40+10,
+                    i/3*40+10,
+                    40,
+                    40
+                );
             g2d.drawString(
-                Controller.chunklist[i].coordX+" | "+Controller.chunklist[i].coordY,
+                Controller.chunklist[i].coordX +" | "+ Controller.chunklist[i].coordY,
                 i%3*40+15,
                 i/3*40+40
             );
-    }
-     g2d.dispose();
-     bufferStrategy.show();
-     Toolkit.getDefaultToolkit().sync();
+        }
+        g2d.dispose();
+        bufferStrategy.show();
+        Toolkit.getDefaultToolkit().sync();
     }
     
     
