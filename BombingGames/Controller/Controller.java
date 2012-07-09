@@ -1,7 +1,7 @@
-package Controller;
+package BombingGames.Controller;
 
 
-import View.View;
+import BombingGames.View.View;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -17,9 +17,11 @@ public class Controller {
     public static Chunk chunklist[] = new Chunk[9];
     static int clickstartX,clickstartY;
     public final static int tilesizeX = 80;
-    public final static int tilesizeY = 80;
+    public final static int tilesizeY = 40;
+    public final static int tilesizeZ = 80;
     public final static int ChunkSizeX = 9;
     public final static int ChunkSizeY = 20;
+    public final static int ChunkSizeZ = 20;
     
    
     final static Random RANDOM = new Random();
@@ -46,8 +48,9 @@ public class Controller {
         Controller.View = new View();
         addListener();
         int i=0;
-        for (int y=(int) (fieldsize-Math.floor(fieldsize/2)-1); y>-fieldsize+Math.floor(fieldsize/2); y--)
-            for (int x=(int) (-fieldsize+Math.floor(fieldsize/2)+1); x<fieldsize-Math.floor(fieldsize/2); x++){
+        //chunklist mit Chunks füllen
+        for (int y=(int) (fieldsize - Math.floor(fieldsize/2)-1); y > - fieldsize + Math.floor(fieldsize/2); y--)
+            for (int x=(int) (-fieldsize+Math.floor(fieldsize/2)+1); x < fieldsize-Math.floor(fieldsize/2); x++){
                 chunklist[i] = new Chunk(x,y,x*Chunk.width,(-y)*Chunk.height);
                 i++;               
             }
@@ -55,9 +58,9 @@ public class Controller {
     
     public static class Chunk {
         public int coordX, coordY, posX, posY;
-        public boolean chunkdata[][] = new boolean[ChunkSizeX][ChunkSizeY];
+        public Block chunkdata[][][] = new Block[ChunkSizeX][ChunkSizeY][ChunkSizeZ];
         public static final int width = ChunkSizeX*tilesizeX;
-        public static final int height = ChunkSizeY*tilesizeY/4;
+        public static final int height = ChunkSizeY*tilesizeY/2;
 
         //Konstruktor
         public Chunk(int X, int Y, int startposX, int startposY){
@@ -67,11 +70,14 @@ public class Controller {
             posY = startposY;
             
             //chunkdata will contain the blocks and objects
+            //alternative to chunkdata.length ChunkSize
             for (int i=0; i < chunkdata.length; i++)
                 for (int j=0; j < chunkdata[0].length; j++)
-                    chunkdata[i][j] = new Random().nextBoolean();
+                    for (int k=0; k < chunkdata[0][0].length; k++)
+                        chunkdata[i][j][k] = new Block(2,0);
         }
     }
+   
     
      
     
@@ -113,6 +119,7 @@ public class Controller {
         }
     }
     
+  
      class MousePressedListener extends MouseAdapter{
         @Override
         public void mousePressed(MouseEvent e) {

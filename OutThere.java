@@ -1,4 +1,4 @@
-import Controller.Controller;
+import BombingGames.Controller.Controller;
 
         
 public class OutThere extends javax.swing.JFrame {

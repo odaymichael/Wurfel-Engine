@@ -1,19 +1,21 @@
-package View;
+package BombingGames.View;
 
-import Controller.Controller;
-import Controller.Controller.Chunk;
+import BombingGames.Controller.Controller;
+import BombingGames.Controller.Controller.Chunk;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
+import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+//import com.BombingGames.View.Blockimages;
 
 public class View extends javax.swing.JFrame {
     static JFrame window = new JFrame();
@@ -170,9 +172,8 @@ public class View extends javax.swing.JFrame {
         //g2d.fillRect(posX,posY,window_width(),window_height());            
         g2d.setColor(Color.yellow);
         
-        Image tilefile = new ImageIcon(this.getClass().getResource("gras.png")).getImage();
-        Image tilefile2 = new ImageIcon(this.getClass().getResource("stone.png")).getImage();
         
+
         /*BufferedImage tile = gc.createCompatibleImage(Controller.tilesizeX, Controller.tilesizeY, Transparency.BITMASK);
         tile.getGraphics().drawImage(tilefile,
                 0,//dx1
@@ -184,17 +185,30 @@ public class View extends javax.swing.JFrame {
 
         //int amountX = window_width()/Controller.tilesizeX;
         //int amountY = window_height()/Controller.tilesizeY;
-
+        
+        
+        Integer lastID = -1;
+        
+        //es macht irgendiwe keinen Unterschied, ob View.View oder View.Blockimages nutzt, da er nicht in das package geht.
+        URL temp = BombingGames.View.View.class.getResource("Blockimages/0-0.png");
         for (int y=0; y < chunk.chunkdata[0].length; y++)//vertikal
             for (int x=0; x < chunk.chunkdata.length; x++)//horizontal
-                g2d.drawImage(
-                    chunk.chunkdata[x][y]?tilefile:tilefile2,
-                    chunk.posX + Math.abs((y%2)*Controller.tilesizeX/2) + x*Controller.tilesizeX ,
-                    chunk.posY + y*Controller.tilesizeY/4,
-                    Controller.tilesizeX,
-                    Controller.tilesizeY,
-                    null
-                );
+                for (int z=0; z < Controller.ChunkSizeZ; z++) {
+                    //load only file, if block changed
+                    if (chunk.chunkdata[x][y][z].ID != lastID){
+                        temp = BombingGames.View.View.class.getResource("Blockimages/" + chunk.chunkdata[x][y][z].ID + "-0.png");
+                        lastID = chunk.chunkdata[x][y][z].ID;
+                    }
+                    //draw the block
+                    g2d.drawImage(
+                        new ImageIcon(temp).getImage(),
+                        chunk.posX + Math.abs((y%2)*Controller.tilesizeX/2) + x*Controller.tilesizeX ,
+                        chunk.posY + y*Controller.tilesizeY/2,
+                        Controller.tilesizeX,
+                        2*Controller.tilesizeY,
+                        null
+                    );
+                }
             
         /*Ansatz mit Zeichnen der halben tiles
         for (int v=0; v < amountY*2; v++)//vertikal
@@ -227,7 +241,7 @@ public class View extends javax.swing.JFrame {
                     */
                         
         /*-------------------*/ 
-        /*---Linien zeichen--*/
+        /*---draw lines-------*/
         /*-------------------*/ 
 
         //Komponenten der Punkte
@@ -254,13 +268,13 @@ public class View extends javax.swing.JFrame {
                 start1X = chunk.posX + s1x*Controller.tilesizeX/2;                    
             } else {
                 s1y++;
-                start1Y = chunk.posY + s1y*Controller.tilesizeY/4;       
+                start1Y = chunk.posY + s1y*Controller.tilesizeY/2;       
             }         
             
             
             if (e1x+1 > chunk.chunkdata.length*2) {
                 e1y++;
-                end1Y = chunk.posY + e1y*Controller.tilesizeY/4;
+                end1Y = chunk.posY + e1y*Controller.tilesizeY/2;
             } else{
                 e1x++; 
                 end1X = chunk.posX + e1x*Controller.tilesizeX/2;                    
@@ -280,12 +294,12 @@ public class View extends javax.swing.JFrame {
                 start2X = chunk.posX + Controller.Chunk.width - s2x*Controller.tilesizeX/2;
             } else {
                 s2y++;
-                start2Y = chunk.posY + s2y*Controller.tilesizeY/4;
+                start2Y = chunk.posY + s2y*Controller.tilesizeY/2;
             }
 
             if (e2y-1 < chunk.chunkdata[0].length){
                 e2y++;
-                end2Y = chunk.posY + e2y*Controller.tilesizeY/4;                    
+                end2Y = chunk.posY + e2y*Controller.tilesizeY/2;                    
             } else {
                 e2x++;
                 end2X = chunk.posX + Controller.Chunk.width - e2x*Controller.tilesizeX/2;                   
