@@ -1,8 +1,6 @@
 import BombingGames.Controller.Controller;
-
-        
+    
 public class OutThere extends javax.swing.JFrame {
-
     
     public static void main(String[] args) {
         OutThere OutThere = new OutThere();
@@ -10,6 +8,6 @@ public class OutThere extends javax.swing.JFrame {
     }
          
     public OutThere() {
- 
+    System.out.println("OutThere");    
     }  
 }
