@@ -7,8 +7,11 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
@@ -25,7 +28,6 @@ public class View extends javax.swing.JFrame {
     
     //Konstruktor
     public View(){
-        System.out.println("View");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE );
         window.setSize(400,400);
         
@@ -40,7 +42,14 @@ public class View extends javax.swing.JFrame {
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e){
-                    GameController GameController = new GameController();
+                try {
+                    GameController GameController = new GameController(false);
+                    window.remove(menubutton[0]);
+                    window.remove(menubutton[1]);
+                    window.remove(menubutton[2]);
+                } catch (IOException ex) {
+                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 }
             }
         );
@@ -50,7 +59,14 @@ public class View extends javax.swing.JFrame {
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e){
-                    GameController GameController = new GameController();
+                try {
+                    GameController GameController = new GameController(true);
+                    window.remove(menubutton[0]);
+                    window.remove(menubutton[1]);
+                    window.remove(menubutton[2]);
+                } catch (IOException ex) {
+                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 }
             }
         );
@@ -90,7 +106,4 @@ public class View extends javax.swing.JFrame {
         //Controller.ChunkSizeY = value ;
         return value;
    }
-    
-   
-   
 }

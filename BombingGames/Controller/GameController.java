@@ -4,10 +4,8 @@ import BombingGames.View.GameView;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.io.*;
+import java.io.IOException;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class GameController {
@@ -24,6 +22,7 @@ public class GameController {
     public final static int ChunkSizeY = 20;
     public final static int ChunkSizeZ = 20; 
     final static Random RANDOM = new Random();
+    
     /*Runnable gameLoop = new Runnable() {
         @Override
         public void run() {
@@ -44,46 +43,16 @@ public class GameController {
     
     
     //Constructor
-    public GameController() throws IOException{
-        System.out.println("GameController");
+    public GameController(boolean loadmap) throws IOException{
         GameController.GameView = new GameView();
         addListener();
-        int i=0;
+        int i = 0;
         //chunklist mit Chunks füllen
         for (int y=(int) (fieldsize - Math.floor(fieldsize/2)-1); y > - fieldsize + Math.floor(fieldsize/2); y--)
             for (int x=(int) (-fieldsize+Math.floor(fieldsize/2)+1); x < fieldsize-Math.floor(fieldsize/2); x++){
-                chunklist[i] = new Chunk(x, y, x*Chunk.width, (-y)*Chunk.height);
+                chunklist[i] = new Chunk(x, y, x*Chunk.width, (-y)*Chunk.height,loadmap);
                 i++;               
             }
-        /*
-        //to find root path of project
-        File here = new File(".");
-        System.out.println(here.getAbsolutePath());*/
-        
-        //Reading map files test
-        try {
-            //the path may cause problems with other IDE's
-            FileReader input = new FileReader("build/classes/map1/Map.otmi");
-            BufferedReader bufRead = new BufferedReader(input);
-              
-            String line;    // String that holds current file line
-              int count = 0;  // Line number of count 
-              
-              // Read first line
-            line = bufRead.readLine();
-            count++;
-              
-            // Read through file one line at time. Print line # and line
-            while (line != null){
-                  System.out.println(count+": "+line);
-                  line = bufRead.readLine();
-                  count++;
-            }
-              
-              bufRead.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     private void addListener(){
@@ -103,7 +72,8 @@ public class GameController {
                     chunklist[i].coordX + (newcenter == 3 ? -1 : (newcenter == 5 ? 1 : 0)),
                     chunklist[i].coordY + (newcenter == 1 ? 1 : (newcenter == 7 ? -1 : 0)),
                     chunklist[i].posX + (newcenter == 3 ? -Chunk.width : (newcenter == 5 ? Chunk.width : 0)),
-                    chunklist[i].posY + (newcenter == 1 ? ChunkSizeY : (newcenter == 7 ? -Chunk.height : 0))
+                    chunklist[i].posY + (newcenter == 1 ? ChunkSizeY : (newcenter == 7 ? -Chunk.height : 0)),
+                    false
                 );
             System.out.println("chunkliste["+i+"] bekommt einen neuen Chunk: "+ chunklist[i].coordX +","+chunklist[i].coordY);
             System.out.println("Pos: "+ chunklist[i].posX +","+ chunklist[i].posY);

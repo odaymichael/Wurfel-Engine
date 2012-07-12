@@ -25,7 +25,6 @@ public class GameView extends javax.swing.JFrame {
     
     //Konstruktor 
     public GameView() {
-        System.out.println("GameView");
         //setIgnoreRepaint(true);
         GraphicsDevice graphicsDevice = getGraphicsConfiguration().getDevice();
         //graphicsDevice.setFullScreenWindow(this);
@@ -159,14 +158,14 @@ public class GameView extends javax.swing.JFrame {
         //es macht irgendiwe keinen Unterschied, ob View.View oder View.Blockimages nutzt, da er nicht in das package geht.
       
         URL temp = BombingGames.View.View.class.getResource("Blockimages/0-0.png");
-        for (int y=0; y < chunk.chunkdata[0].length; y++)//vertikal
-            for (int x=0; x < chunk.chunkdata.length; x++)//horizontal
+        for (int y=0; y < GameController.ChunkSizeY; y++)//vertikal
+            for (int x=0; x < GameController.ChunkSizeX; x++)//horizontal
                 for (int z=0; z < GameController.ChunkSizeZ; z++) {
-                    if (chunk.chunkdata[x][y][z].ID != 0){
+                    if (chunk.data[x][y][z].ID != 0){
                         //load only file, if block changed
-                        if (chunk.chunkdata[x][y][z].ID != lastID){
-                            temp = BombingGames.View.View.class.getResource("Blockimages/" + chunk.chunkdata[x][y][z].ID + "-0.png");
-                            lastID = chunk.chunkdata[x][y][z].ID;
+                        if (chunk.data[x][y][z].ID != lastID){
+                            temp = BombingGames.View.View.class.getResource("Blockimages/" + chunk.data[x][y][z].ID + "-0.png");
+                            lastID = chunk.data[x][y][z].ID;
                         }
                         //draw the block
                         g2d.drawImage(
@@ -229,11 +228,11 @@ public class GameView extends javax.swing.JFrame {
         int s1x=0;int s1y=0;int e1x=0;int e1y=0;
         int s2x=0;int s2y=0;int e2x=0;int e2y=0;
 
-        for (int i=0; i < (chunk.chunkdata.length)*2 + (chunk.chunkdata[0].length); i++){
+        for (int i=0; i < (chunk.data.length)*2 + (chunk.data[0].length); i++){
             //g2d.setColor(new Color(i*5+20,i*5+20,0));
 
             //Linie 1 (von unten links nach oben rechts) /
-            if (s1y > chunk.chunkdata[0].length) {
+            if (s1y > chunk.data[0].length) {
                 s1x++;
                 start1X = chunk.posX + s1x*GameController.tilesizeX/2;                    
             } else {
@@ -242,7 +241,7 @@ public class GameView extends javax.swing.JFrame {
             }         
             
             
-            if (e1x+1 > chunk.chunkdata.length*2) {
+            if (e1x+1 > chunk.data.length*2) {
                 e1y++;
                 end1Y = chunk.posY + e1y*GameController.tilesizeY/2;
             } else{
@@ -259,7 +258,7 @@ public class GameView extends javax.swing.JFrame {
 
 
             //Linie 2  (von oben links nach utnen rechts)  \       
-            if (s2x < chunk.chunkdata.length*2) {
+            if (s2x < chunk.data.length*2) {
                 s2x++;
                 start2X = chunk.posX + Chunk.width - s2x*GameController.tilesizeX/2;
             } else {
@@ -267,7 +266,7 @@ public class GameView extends javax.swing.JFrame {
                 start2Y = chunk.posY + s2y*GameController.tilesizeY/2;
             }
 
-            if (e2y-1 < chunk.chunkdata[0].length){
+            if (e2y-1 < chunk.data[0].length){
                 e2y++;
                 end2Y = chunk.posY + e2y*GameController.tilesizeY/2;                    
             } else {

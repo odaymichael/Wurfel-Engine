@@ -7,7 +7,6 @@ public class OutThere extends javax.swing.JFrame {
         Controller Controller = new Controller();
     }
          
-    public OutThere() {
-    System.out.println("OutThere");    
+    public OutThere() { 
     }  
 }

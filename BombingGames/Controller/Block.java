@@ -1,10 +1,10 @@
 package BombingGames.Controller;
 
 public class Block {
-    Integer Health = 100;
+    public Integer Health = 100;
     public Integer ID = -1;
-    Integer Value = 0;
-    String name = "undefined";
+    public Integer Value = 0;
+    public String name = "undefined";
     boolean transparent;
     boolean obstacle;
     //Konstruktor
@@ -12,51 +12,42 @@ public class Block {
         ID = pID;
         Value = pValue;
         switch (ID){
-            case 0: {
-                     name = "air";
+            case 0:  name = "air";
                      transparent = true;
                      obstacle = false;
-                };
-            case 1: {
-                     name = "gras";
+                     break;
+            case 1:  name = "gras";
                      transparent = false;
                      obstacle = true;
-                };
-            case 2: {
-                     name = "dirt";
+                     break;
+            case 2:  name = "dirt";
                      transparent = false;
                      obstacle = true;
-                };
-            case 3: {
-                     name = "stone";
+                     break;
+            case 3:  name = "stone";
                      transparent = false;
                      obstacle = true;
-                };
-            case 4: {
-                     name = "asphalt";
+                     break;
+            case 4:  name = "asphalt";
                      transparent = false;
                      obstacle = true;
-                };
-            case 5: {
-                     name = "cobblestone";
+                     break;
+            case 5:  name = "cobblestone";
                      transparent = false;
                      obstacle = true;
-                };
-            case 20: {
-                     name = "red brick wall";
+                     break;
+            case 20: name = "red brick wall";
                      transparent = false;
                      obstacle = true;
-                };
-            case 50: {
-                      name = "strohbed" ;
-                      transparent = true;
-                      obstacle = false;
-                 };   
-            default: {
-                     name = "undefined";
+                     break;
+            case 50: name = "strohbed" ;
                      transparent = true;
                      obstacle = false;
-                  };  
+                     break;  
+            default: name = "undefined";
+                     transparent = true;
+                     obstacle = false;
+                     break; 
         }
     }
 }
