@@ -1,43 +1,34 @@
-package BombingGames.View;
+package MainMenu;
 
-import BombingGames.Controller.GameController;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferStrategy;
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JFrame;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 //import com.BombingGames.View.Blockimages;
 
-public class View extends javax.swing.JFrame {
-    public GameController GameController;
-    static JFrame window = new JFrame();
+public class View {
+    float startGameScale = 1;
+    float exitScale = 1;
+    Image background = null;
+    Image startGameOption = null;
+    Image exitOption = null;
+    /*public GameController GameController;
     public static JButton[] menubutton = new JButton[5]; 
     BufferStrategy bufferStrategy;
     final ExecutorService executorService = Executors.newFixedThreadPool(1);
-    private static Insets insets;
+    private static Insets insets;*/
     
     
     //Konstruktor
-    public View(){
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE );
-        window.setSize(400,400);
-        
-        //alternative. Lässt startposition vom System verwalten
-        //window.setLocationByPlatform(true);
-        window.setLocationRelativeTo(null);
-        
-        window.getContentPane().setLayout(new FlowLayout());
-        
-        menubutton[0] = new JButton("Neue Map");
+    public View() throws SlickException{
+        background = new Image("MainMenu/Images/bg.png");
+ 
+        // load the menu images
+        Image menuOptions = new Image("MainMenu/Images/MainMenu.png");
+ 
+        startGameOption = menuOptions.getSubImage(0, 0, 400, 50);
+ 
+        exitOption = menuOptions.getSubImage(0, 50, 400, 50);
+        /*menubutton[0] = new JButton("Neue Map");
         menubutton[0].addActionListener(
             new ActionListener() {
                 @Override
@@ -85,11 +76,19 @@ public class View extends javax.swing.JFrame {
         window.getContentPane().add(menubutton[0]);  
         window.getContentPane().add(menubutton[1]); 
         window.getContentPane().add(menubutton[2]); 
-        
-        window.setVisible(true);       
+         */      
     }
 
-    private static int window_width(){
+    public void render(Controller Controller){
+        // render the background
+        background.draw(0,0);
+ 
+        // Draw menu
+        startGameOption.draw(50, 50, startGameScale);
+ 
+        exitOption.draw(300, 300, exitScale);
+    }
+    /*private static int window_width(){
         int value;
         Dimension size = window.getSize();
         insets = window.getInsets();
@@ -105,5 +104,5 @@ public class View extends javax.swing.JFrame {
         value = size.height - insets.top - insets.bottom;
         //Controller.ChunkSizeY = value ;
         return value;
-   }
+   }*/
 }

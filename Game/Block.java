@@ -1,4 +1,4 @@
-package BombingGames.Controller;
+package Game;
 
 public class Block {
     public Integer Health = 100;

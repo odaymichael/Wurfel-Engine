@@ -1,12 +1,16 @@
-import BombingGames.Controller.Controller;
+import OutThere.Starter;
+import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.SlickException;
+
+public class OutThere {
     
-public class OutThere extends javax.swing.JFrame {
-    
-    public static void main(String[] args) {
-        OutThere OutThere = new OutThere();
-        Controller Controller = new Controller();
+    public OutThere(){
     }
-         
-    public OutThere() { 
-    }  
+ 
+    public static void main(String[] args) throws SlickException {
+         AppGameContainer app = new AppGameContainer(new Starter());
+         app.setDisplayMode(800, 800, false);
+         app.start();
+    }
+ 
 }

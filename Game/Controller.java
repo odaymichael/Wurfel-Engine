@@ -1,15 +1,16 @@
-package BombingGames.Controller;
+package Game;
 
-import BombingGames.View.GameView;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.newdawn.slick.SlickException;
 
 
-public class GameController {
-    public static GameView GameView;
+public class Controller {
+    public static View View;
     private static final int FRAME_DELAY = 20; // 20ms. implies 50fps (1000/20) = 50
     //anzahl der Chunks. Muss ungerade Sein        
     final int fieldsize = 3;
@@ -23,29 +24,10 @@ public class GameController {
     public final static int ChunkSizeZ = 20; 
     final static Random RANDOM = new Random();
     
-    /*Runnable gameLoop = new Runnable() {
-        @Override
-        public void run() {
-            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
- 
-            while (!shouldExitGame) {
-                //processKeys();
-                //updateGameState();
-                //drawScene();
-                try {
-                    TimeUnit.MILLISECONDS.sleep(15L);
-                } catch (InterruptedException e) {
-                }
-            }
-            //shutdown();
-        }
-    };*/
-    
-    
     //Constructor
-    public GameController(boolean loadmap) throws IOException{
-        GameController.GameView = new GameView();
-        addListener();
+    public Controller(boolean loadmap, View View) throws SlickException{
+        Controller.View = new View();
+        //addListener();
         int i = 0;
         //chunklist mit Chunks füllen
         for (int y=(int) (fieldsize - Math.floor(fieldsize/2)-1); y > - fieldsize + Math.floor(fieldsize/2); y--)
@@ -55,11 +37,11 @@ public class GameController {
             }
     }
     
-    private void addListener(){
+    /*private void addListener(){
         GameController.GameView.setMouseDraggedListener(new MouseDraggedListener());
         GameController.GameView.setMousePressedListener(new MousePressedListener());
-    }
-    
+    }*/
+
       
     private void setcenterchunk(int newcenter){
         //newcenter ist 1,3,5 oder 7
@@ -83,7 +65,12 @@ public class GameController {
             }
         }
     }
-        
+    
+    public void update(){
+    
+    }
+
+      
    
         
     class MouseDraggedListener extends MouseMotionAdapter{
@@ -101,7 +88,7 @@ public class GameController {
                 setcenterchunk(3);   
             
             
-            if (chunklist[4].posX < -BombingGames.Controller.Chunk.width) 
+            if (chunklist[4].posX < -Game.Chunk.width) 
                 setcenterchunk(5);   
             
             
@@ -109,12 +96,14 @@ public class GameController {
                 setcenterchunk(1);   
             
             
-            if (chunklist[4].posY < -BombingGames.Controller.Chunk.height)
+            if (chunklist[4].posY < -Game.Chunk.height)
                 setcenterchunk(7);   
-            
-
-              GameView.draw_all_chunks();
-              //View.drawChunk(chunklist[4]);
+            try {
+                View.draw_all_chunks();
+                //View.drawChunk(chunklist[4]);
+            } catch (SlickException ex) {
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
         }
     }
@@ -127,4 +116,6 @@ public class GameController {
             clickstartY = e.getY();
         }
     }
+     
+     
 }

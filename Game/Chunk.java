@@ -1,4 +1,4 @@
-package BombingGames.Controller;
+package Game;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 
 public class Chunk {
         public int coordX, coordY, posX, posY;
-        public Block data[][][] = new Block[GameController.ChunkSizeX][GameController.ChunkSizeY][GameController.ChunkSizeZ];
-        public static final int width = GameController.ChunkSizeX*GameController.tilesizeX;
-        public static final int height = GameController.ChunkSizeY*GameController.tilesizeY/2;
+        public Block data[][][] = new Block[Controller.ChunkSizeX][Controller.ChunkSizeY][Controller.ChunkSizeZ];
+        public static final int width = Controller.ChunkSizeX*Controller.tilesizeX;
+        public static final int height = Controller.ChunkSizeY*Controller.tilesizeY/2;
 
         //Konstruktor
         public Chunk(int ChunkX, int ChunkY, int startposX, int startposY, boolean loadmap){
@@ -25,17 +25,17 @@ public class Chunk {
             }else{
                 //chunkdata will contain the blocks and objects
                 //alternative to chunkdata.length ChunkSize
-                for (int x=0; x < GameController.ChunkSizeX; x++)
-                    for (int y=0; y < GameController.ChunkSizeY; y++){
+                for (int x=0; x < Controller.ChunkSizeX; x++)
+                    for (int y=0; y < Controller.ChunkSizeY; y++){
                         //Dirt from 0 to 8
-                        for (int z=0; z < GameController.ChunkSizeZ / 2 - 1; z++)
+                        for (int z=0; z < Controller.ChunkSizeZ / 2 - 1; z++)
                             data[x][y][z] = new Block(2,0);
 
                         //Gras on z=9
-                        data[x][y][GameController.ChunkSizeZ / 2 - 1] = new Block(1,0);
+                        data[x][y][Controller.ChunkSizeZ / 2 - 1] = new Block(1,0);
 
                         //air from z=10 to 19
-                        for (int z = GameController.ChunkSizeZ / 2; z < GameController.ChunkSizeZ; z++)
+                        for (int z = Controller.ChunkSizeZ / 2; z < Controller.ChunkSizeZ; z++)
                             data[x][y][z] = new Block(0,0);
                     }
             }
