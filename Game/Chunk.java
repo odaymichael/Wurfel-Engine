@@ -10,8 +10,8 @@ import java.util.logging.Logger;
 public class Chunk {
         public int coordX, coordY, posX, posY;
         public Block data[][][] = new Block[Controller.ChunkSizeX][Controller.ChunkSizeY][Controller.ChunkSizeZ];
-        public static final int width = Controller.ChunkSizeX*Controller.tilesizeX;
-        public static final int height = Controller.ChunkSizeY*Controller.tilesizeY/2;
+        public static final int width = Controller.ChunkSizeX*Controller.blockSizeX;
+        public static final int height = Controller.ChunkSizeY*Controller.blockSizeY/2;
 
         //Konstruktor
         public Chunk(int ChunkX, int ChunkY, int startposX, int startposY, boolean loadmap){

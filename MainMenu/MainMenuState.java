@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
  
-public class MainMenuState extends BasicGameState {
+public class MainMenuState extends BasicGameState{
     int stateID = -1;
  
     View View = null;
@@ -34,9 +34,8 @@ public class MainMenuState extends BasicGameState {
     }
 
     @Override
-    public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+    public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         View.render(Controller);
         
     }
- 
 }

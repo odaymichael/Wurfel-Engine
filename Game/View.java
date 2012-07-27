@@ -1,7 +1,8 @@
 package Game;
 
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.state.StateBasedGame;
 
 
 
@@ -9,80 +10,32 @@ import org.newdawn.slick.SlickException;
 public class View {
     private Controller Controller;
     Image blockimages[] = new Image[3];
-    //public static JButton b1; 
-    //public static JButton b2;
-    //public static JButton b3;
+    private Graphics g = null; 
+    private java.awt.Font font;
+    private TrueTypeFont tTFont;
+    private GameContainer container;
+    private MsgSystem iglog;
     //private static Insets insets;
     
     //Konstruktor 
     public View() throws SlickException {
         //Create a list with all the images in it.
         for (int i=0;i<3;i++) blockimages[i] = new Image("Game/Blockimages/"+i+"-0.png");
+        GameplayState.iglog.add("View meldet sich zu diensten!");
         
-        /*try {
-            Display.setDisplayMode(new DisplayMode(800,800));
-            Display.setFullscreen(false);
-            Display.setTitle("Out There V0.1");
-            Display.create();
-            //Keyboard
-            Keyboard.create();
-
-            //Mouse
-            Mouse.setGrabbed(false);
-            Mouse.create();
-
-            //OpenGL
-            initGL();
-            resizeGL();
-            
-            //setIgnoreRepaint(true);
-            //GraphicsDevice graphicsDevice = getGraphicsConfiguration().getDevice();
-            //graphicsDevice.setFullScreenWindow(this);
-            //graphicsDevice.setDisplayMode(new DisplayMode(1920, 1080, 32, 60));
-               
-            //Canvas gui = new Canvas();
-            //window.getContentPane().add(gui);
-            
-            b1 = new JButton("Beenden");
-            b1.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e){
-                        executorService.shutdown();
-                        System.exit(0);  
-                    }
-                }
-            );
-            
-            View.window.getContentPane().add(b1);
-            
-            b2 = new JButton("Draw Chunk 4");
-            b2.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e){
-                        drawChunk(GameController.chunklist[4]); 
-                    }
-                }
-            );
-             View.window.getContentPane().add(b2);
-            
-            b3 = new JButton("Chunklist");
-            b3.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e){
-                        drawchunklist(); 
-                    }
-                }
-            );
-             View.window.getContentPane().add(b3);
-
-             View.window.createBufferStrategy(2);
-             bufferStrategy = View.window.getBufferStrategy();
-        } catch (LWJGLException ex) {
-            Logger.getLogger(GameView.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        // initialise the font CAUSES LONG LOADING TIME!!!
+        font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
+        tTFont = new TrueTypeFont(font, true);
+    }
+    
+     public void render(Controller pController,GameContainer pcontainer, StateBasedGame game, Graphics pg) throws SlickException{
+        Controller = pController;
+        g = pg;
+        container = pcontainer;
+        
+        draw_all_Chunks();
+        drawchunklist();
+        drawiglog();
     }
     
     /*private void initGL() {
@@ -117,47 +70,9 @@ public class View {
   glEnd(); // Zeichenaktion beenden
      }*/
     
-     public void draw_all_chunks() throws SlickException{
-        for (int i = 0;i < Controller.chunklist.length;i++)
-            drawChunk(Controller.chunklist[i]);
-     };
-
-       
-     public void drawchunklist(){
-        /*Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
-        g2d.setFont(new Font("Helvetica", Font.PLAIN, 12));
-        for (int i=0;i < Controller.chunklist.length;i++){
-            g2d.setColor(Color.white);
-            g2d.fillRect(
-                    i%3*40+10,
-                    i/3*40+10,
-                    40,
-                    40
-                );
-                g2d.setColor(Color.black);
-                g2d.drawRect(
-                    i%3*40+10,
-                    i/3*40+10,
-                    40,
-                    40
-                );
-                g2d.drawString(
-                    Controller.chunklist[i].coordX +" | "+ Controller.chunklist[i].coordY,
-                    i%3*40+15,
-                    i/3*40+40
-                );
-        }
-        g2d.dispose();
-        bufferStrategy.show();
-        Toolkit.getDefaultToolkit().sync();
-        */
-    }
-    
-    
-    //draw the chunk
-    public void drawChunk(Chunk chunk) throws SlickException {
-        /*
-         * //Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
+     public void draw_all_Chunks() throws SlickException{
+            /*
+         //Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
         //Graphics2D g2d = bimage.createGraphics();            
         //Graphics2D g2d = (Graphics2D) window.getGraphics();
 
@@ -196,26 +111,26 @@ public class View {
                 null);
 
 
-        //int amountX = window_width()/Controller.tilesizeX;
-        //int amountY = window_height()/Controller.tilesizeY;
         
         */
         Integer lastID = -1;
         
-        //es macht irgendiwe keinen Unterschied, ob View.View oder View.Blockimages nutzt, da er nicht in das package geht.
-        for (int y=0; y < Controller.ChunkSizeY; y++)//vertikal
-            for (int x=0; x < Controller.ChunkSizeX; x++)//horizontal
-                for (int z=0; z < Controller.ChunkSizeZ; z++) {
-                    if (chunk.data[x][y][z].ID != 0){
-                        //draw the block
-                        blockimages[chunk.data[x][y][z].ID].draw(
-                            chunk.posX + Math.abs((y%2)*Controller.tilesizeX/2) + x*Controller.tilesizeX,
-                            chunk.posY + y*Controller.tilesizeY/2-z*Controller.tilesizeZ/2
-                        );
-                    }
-                }
+        for (int y=0; y < Controller.renderarray[0].length; y++)//vertikal
+            for (int x=0; x < Controller.renderarray.length; x++)//horizontal
+                if (Controller.renderarray[x][y].ID != 0){
+                    //draw the block except air
+                    blockimages[Controller.renderarray[x][y].ID].draw(
+                        Controller.chunklist[4].posX + (y%2)*Math.abs(Controller.blockSizeX/2) + x*Controller.blockSizeX,
+                        Controller.chunklist[4].posY + y*((Controller.blockSizeY)/4),
+                        (int) Math.abs(Controller.blockSizeX*Controller.zoom),
+                        (int) Math.abs(Controller.blockSizeY*Controller.zoom)
+                    );
+                 }
+                
             
         /*Ansatz mit Zeichnen der halben tiles
+        //int amountX = window_width()/Controller.tilesizeX;
+        //int amountY = window_height()/Controller.tilesizeY;
         for (int v=0; v < amountY*2; v++)//vertikal
         for (int h=0; h < amountX; h++)//horizontal
             g2d.drawImage(tilefile,
@@ -249,7 +164,11 @@ public class View {
         /*---draw lines-------*/
         /*-------------------*/ 
 
-        /*//Komponenten der Punkte
+         /*glBegin(GL_LINES)
+        glVertex2f(x1, y1): glVertex2f(x2, y2)
+        glEnd()*/
+     /*
+        //Komponenten der Punkte
         int start1X = chunk.posX;
         int start1Y = chunk.posY;
         int end1X = chunk.posX;
@@ -285,7 +204,7 @@ public class View {
                 end1X = chunk.posX + e1x*Controller.tilesizeX/2;                    
             }
 
-            g2d.drawLine(
+            g.drawLine(
                 start1X + (i%2)*Controller.tilesizeX/2,
                 start1Y,
                 end1X + (i%2)*Controller.tilesizeX/2,
@@ -310,7 +229,7 @@ public class View {
                 end2X = chunk.posX + Chunk.width - e2x*Controller.tilesizeX/2;                   
             }
 
-            g2d.drawLine(
+            g.drawLine(
                 start2X + (i%2)*Controller.tilesizeX/2,
                 start2Y,
                 end2X + (i%2)*Controller.tilesizeX/2,
@@ -318,28 +237,66 @@ public class View {
             );
         }
             
-            g2d.setFont(new Font("Helvetica", Font.PLAIN, 50));
-            g2d.drawString(
+            //g.setFont(new java.awt.Font("Helvetica", ava.awt.Font.PLAIN, 50));
+            g.drawString(
                 String.valueOf(chunk.coordX)+","+String.valueOf(chunk.coordY),
                 chunk.posX + Chunk.width/2 - 40,
                 chunk.posY + Chunk.height/2 - 40
-            );
-           
-            
-            //wohl wie flush(), irgendwie für den garbage collector
-            g2d.dispose();
-            
-            //anzeigen
-            bufferStrategy.show();
-            Toolkit.getDefaultToolkit().sync();
-            drawchunklist();*/
+            );*/
+     };
+
+       
+     public void drawchunklist(){
+         Rectangle rectangle = new Rectangle(20,20,80,80);
+         
+         
+        //trueTypeFont.drawString(20.0f, 20.0f, "Slick displaying True Type Fonts", Color.green);
+         
+         //java.awt.Font font = new java.awt.Font("Helvetica", java.awt.Font.BOLD, 12);
+         //UnicodeFont uFont = new UnicodeFont(font , 20, false, false);
+         //custom fonts makes them dissapear. y u no work?
+         //g.setFont(uFont);
+         
+        for (int i=0;i < Controller.chunklist.length;i++){
+            g.setColor(Color.white);
+            g.fillRect(
+                    i%3*40+700,
+                    i/3*40+10,
+                    40,
+                    40
+                );
+                g.setColor(Color.black);
+                g.drawRect(
+                    i%3*40+700,
+                    i/3*40+10,
+                    40,
+                    40
+                );
+                g.setColor(Color.black);
+                tTFont.drawString(
+                    i%3*40+700,
+                    i/3*40+30,
+                    Controller.chunklist[i].coordX +" | "+ Controller.chunklist[i].coordY,
+                    Color.black
+                );
         }
-    
-    
-    public void render(Controller pController) throws SlickException{
-        Controller = pController;
-        //draw_all_chunks();
-        drawChunk(Controller.chunklist[4]);
+        
+    } 
+     
+    private void drawiglog(){
+        for (int i=0;i < GameplayState.iglog.size();i++){
+            Msg msg = (Msg) GameplayState.iglog.get(i);
+            Color clr= Color.blue;
+            if ("System".equals(msg.getSender())) clr = Color.green;
+            
+            //draw
+            tTFont.drawString(
+                900,
+                50+i*20,
+                msg.getMessage(),
+                clr
+            );
+        }
     }
     /*public void setMousePressedListener(MouseListener Listener){
          View.window.addMouseListener(Listener);

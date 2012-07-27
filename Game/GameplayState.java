@@ -9,36 +9,50 @@ import org.newdawn.slick.state.StateBasedGame;
  
 
 public class GameplayState extends BasicGameState { 
-    View View = null;
-    Controller Controller = null;
+    private View View = null;
+    private Controller Controller = null;
+    private int stateID = -1;
+    public static MsgSystem iglog;
     
-    int stateID = -1;
  
     public GameplayState( int stateID ){
        this.stateID = stateID;
     }
  
+    
     @Override
     public int getID() {
         return stateID;
     }
  
+     
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        View = new View();
-        Controller = new Controller(false,View);  
+
+
     }
- 
-  
+    
+    
+    @Override 
+    public void enter(GameContainer container, StateBasedGame game) throws SlickException{
+        iglog = new MsgSystem();
+        iglog.add("Starting Game....");
+        View = new View();
+        Controller = new Controller(false,View,container,game);
+    }
+    
+    
  
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-        Controller.update();
+        Controller.update(gc,sbg,delta);
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        View.render(Controller);
+        //clipping everythoing out of the viewport does not affect anything
+        //g.setClip(0, 0, 600, 800);
+        View.render(Controller,container,game,g);
     }
  
 }
