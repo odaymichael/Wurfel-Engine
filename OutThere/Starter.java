@@ -20,7 +20,9 @@ public class Starter extends StateBasedGame {
         MainMenuState state = new MainMenuState(1);
         //What does .enter do?
         //state.enter(gc, this);
-        this.addState(state);
-        this.addState(new GameplayState(2));
+        addState(state);
+        addState(new GameplayState(2));
     }
+    
+    
 }

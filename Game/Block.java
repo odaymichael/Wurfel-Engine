@@ -7,6 +7,8 @@ public class Block {
     public String name = "undefined";
     boolean transparent;
     boolean obstacle;
+    public static int width = 160;
+    public static int height = 160;
     //Konstruktor
     public Block(Integer pID, Integer pValue){
         ID = pID;

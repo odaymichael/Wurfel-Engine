@@ -109,23 +109,22 @@ public class View {
                 Controller.tilesizeX,//width
                 Controller.tilesizeY,//height
                 null);
-
-
-        
         */
-        Integer lastID = -1;
-        
+         
+         
         for (int y=0; y < Controller.renderarray[0].length; y++)//vertikal
             for (int x=0; x < Controller.renderarray.length; x++)//horizontal
-                if (Controller.renderarray[x][y].ID != 0){
-                    //draw the block except air
-                    blockimages[Controller.renderarray[x][y].ID].draw(
-                        Controller.chunklist[4].posX + (y%2)*Math.abs(Controller.blockSizeX/2) + x*Controller.blockSizeX,
-                        Controller.chunklist[4].posY + y*((Controller.blockSizeY)/4),
-                        (int) Math.abs(Controller.blockSizeX*Controller.zoom),
-                        (int) Math.abs(Controller.blockSizeY*Controller.zoom)
-                    );
-                 }
+                for (int z=0; z < Controller.renderarray[0][0].length; z++)
+                    if (Controller.renderarray[x][y][z].ID != 0){
+                        //draw the block except air
+                        //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
+                        blockimages[Controller.renderarray[x][y][z].ID].draw(
+                            Controller.chunklist[4].posX + x*Block.width + (y%2) * Block.width/2,
+                            Controller.chunklist[4].posY + y*Block.height/4 - z*Block.height/2,
+                            Block.width,
+                            Block.height
+                        );
+                    }
                 
             
         /*Ansatz mit Zeichnen der halben tiles
@@ -248,8 +247,7 @@ public class View {
        
      public void drawchunklist(){
          Rectangle rectangle = new Rectangle(20,20,80,80);
-         
-         
+          
         //trueTypeFont.drawString(20.0f, 20.0f, "Slick displaying True Type Fonts", Color.green);
          
          //java.awt.Font font = new java.awt.Font("Helvetica", java.awt.Font.BOLD, 12);
@@ -298,12 +296,4 @@ public class View {
             );
         }
     }
-    /*public void setMousePressedListener(MouseListener Listener){
-         View.window.addMouseListener(Listener);
-    }
-
-    public void setMouseDraggedListener(MouseMotionListener Listener){
-         View.window.addMouseMotionListener(Listener);    
-    }*/
-    
 }

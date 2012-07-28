@@ -7,6 +7,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
  
 public class MainMenuState extends BasicGameState{
+    public static boolean loadmap;
     int stateID = -1;
  
     View View = null;

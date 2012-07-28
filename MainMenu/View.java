@@ -11,11 +11,6 @@ public class View {
     Image background = null;
     Image startGameOption = null;
     Image exitOption = null;
-    /*public GameController GameController;
-    public static JButton[] menubutton = new JButton[5]; 
-    BufferStrategy bufferStrategy;
-    final ExecutorService executorService = Executors.newFixedThreadPool(1);
-    private static Insets insets;*/
     
     
     //Konstruktor
@@ -27,56 +22,7 @@ public class View {
  
         startGameOption = menuOptions.getSubImage(0, 0, 400, 50);
  
-        exitOption = menuOptions.getSubImage(0, 50, 400, 50);
-        /*menubutton[0] = new JButton("Neue Map");
-        menubutton[0].addActionListener(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e){
-                try {
-                    GameController GameController = new GameController(false);
-                    window.remove(menubutton[0]);
-                    window.remove(menubutton[1]);
-                    window.remove(menubutton[2]);
-                } catch (IOException ex) {
-                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                }
-            }
-        );
-        
-        menubutton[1] = new JButton("Map laden");
-        menubutton[1].addActionListener(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e){
-                try {
-                    GameController GameController = new GameController(true);
-                    window.remove(menubutton[0]);
-                    window.remove(menubutton[1]);
-                    window.remove(menubutton[2]);
-                } catch (IOException ex) {
-                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                }
-            }
-        );
-        
-        menubutton[2] = new JButton("Beenden");
-        menubutton[2].addActionListener(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e){
-                    executorService.shutdown();
-                    System.exit(0);  
-                }
-            }
-        );
-        
-        window.getContentPane().add(menubutton[0]);  
-        window.getContentPane().add(menubutton[1]); 
-        window.getContentPane().add(menubutton[2]); 
-         */      
+        exitOption = menuOptions.getSubImage(0, 50, 400, 50);  
     }
 
     public void render(Controller Controller){

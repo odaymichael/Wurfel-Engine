@@ -6,29 +6,26 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Controller {
     public static View View;
-    private static final int FRAME_DELAY = 20; // 20ms. implies 50fps (1000/20) = 50
-    //anzahl der Chunks. Muss ungerade Sein        
-    final int fieldsize = 3;
-    public Block renderarray[][] = new Block[ChunkSizeX*fieldsize][ChunkSizeY*fieldsize];  
+    //amount of chunks. must be ungerade        
+    private final int fieldsize = 3;
+    public Block renderarray[][][] = new Block[Chunk.SizeX*fieldsize][Chunk.SizeY*fieldsize][Chunk.SizeZ];  
     public static Chunk chunklist[] = new Chunk[9];
-    public static int blockSizeX = 80;
-    public static int blockSizeY = 80;
-    public final static int ChunkSizeX = 9;
-    public final static int ChunkSizeY = 20;
-    public final static int ChunkSizeZ = 20;
     public float zoom = 1;
+    
     private boolean changes = true;
     private GameContainer gc;
     
     //Constructor is called when entering the gamemode.
     public Controller(boolean loadmap, View pView,GameContainer container, StateBasedGame game) throws SlickException{
-        GameplayState.iglog.add("Controller meldet sich zu diensten!");
+        //update resolution things
+        GameplayState.iglog.add("W: "+container.getScreenWidth()+" H: "+container.getScreenHeight());
+        Block.width = container.getScreenWidth()/Chunk.SizeX;
+        Block.height = 4*container.getScreenHeight()/Chunk.SizeY;
+        GameplayState.iglog.add("BlockWidth: "+Block.width+" BlockHeight: "+Block.height);
         
-        GameplayState.iglog.add("W:"+container.getScreenWidth()+" H:"+container.getScreenHeight());
-        blockSizeX = container.getScreenWidth()/ChunkSizeX;
-        blockSizeY = 4*container.getScreenHeight()/ChunkSizeY;
-        GameplayState.iglog.add("BlockWidth:"+blockSizeX+" BlockHeight:"+blockSizeY);
-        
+        Chunk.width = Chunk.SizeX*Block.width;
+        Chunk.height = Chunk.SizeY*Block.height/2;
+        GameplayState.iglog.add("Chunk.Width: "+Chunk.width+" Chunk.height: "+Chunk.height);
 
         View = pView;
         
@@ -36,7 +33,13 @@ public class Controller {
         int i = 0;
         for (int y=(int) (fieldsize - Math.floor(fieldsize/2)-1); y > - fieldsize + Math.floor(fieldsize/2); y--)
             for (int x=(int) (-fieldsize+Math.floor(fieldsize/2)+1); x < fieldsize-Math.floor(fieldsize/2); x++){
-                chunklist[i] = new Chunk(x, y, x*Chunk.width, (-y)*Chunk.height,loadmap);
+                chunklist[i] = new Chunk(
+                    x,
+                    y,
+                    x*Chunk.width,
+                    -y*Chunk.height,
+                    loadmap
+                );
                 i++;               
         }
     }
@@ -63,8 +66,7 @@ public class Controller {
        //do raytracing
        if (changes) raytracing();
        
-       GameplayState.iglog.update();
-        
+       GameplayState.iglog.update(delta);
     }
 
       
@@ -79,6 +81,7 @@ public class Controller {
          
          */
         //System.out.println("New Center: " +newcenter);
+        GameplayState.iglog.add("New Center: "+newcenter);
         Chunk chunklist_copy[] = new Chunk[9];
         System.arraycopy(chunklist, 0, chunklist_copy, 0, 9);
         for (int i=0;i<9;i++){
@@ -89,7 +92,7 @@ public class Controller {
                 chunklist[i] = new Chunk(
                     chunklist[i].coordX + (newcenter == 3 ? -1 : (newcenter == 5 ? 1 : 0)),
                     chunklist[i].coordY + (newcenter == 1 ? 1 : (newcenter == 7 ? -1 : 0)),
-                    chunklist[i].posX + (newcenter == 3 ? -Chunk.width : (newcenter == 5 ? Chunk.width : 0)),
+                    chunklist[i].posX + (newcenter == 3 ? -Chunk.width : (newcenter == 5 ?  Chunk.width: 0)),
                     chunklist[i].posY + (newcenter == 1 ? -Chunk.height : (newcenter == 7 ? Chunk.height : 0)),
                     false
                 );
@@ -120,41 +123,44 @@ public class Controller {
 
     
     public void raytracing(){
+        //fill renderarray with air
+        for (int x=0;x <Chunk.SizeX*fieldsize;x++)
+            for (int y=0;y <Chunk.SizeY*fieldsize;y++)
+                for (int z=0;z <Chunk.SizeZ;z++)
+                    renderarray[x][y][z] = new Block(0,0);
+            
+            
         //create big array out of all other arrays to performe the algorithm
-        Block ninechunks[][][] = new Block[ChunkSizeX*fieldsize][ChunkSizeY*fieldsize][ChunkSizeZ];
+        Block bigchunk[][][] = new Block[Chunk.SizeX*fieldsize][Chunk.SizeY*fieldsize][Chunk.SizeZ];
         
         for (int i=0;i <fieldsize*fieldsize;i++)
-            for (int x=0;x <ChunkSizeX;x++)
-                for (int y=0;y <ChunkSizeY;y++)
+            for (int x=0;x <Chunk.SizeX;x++)
+                for (int y=0;y <Chunk.SizeY;y++)
                     System.arraycopy(
                         chunklist[i].data[x][y],
                         0,
-                        ninechunks[x+ ChunkSizeX*(i%3)][y+ ChunkSizeY*Math.abs(i/3)],
+                        bigchunk[x+ Chunk.SizeX*(i%3)][y+ Chunk.SizeY*Math.abs(i/3)],
                         0,
-                        ChunkSizeZ
+                        Chunk.SizeZ
                     );
         
-        //generate  array which has render information in it. Now only 2D, later with half transparent block 3D.
-        //raytracing
+        //generate array which has render information in it. It filters every non visible block
         for (int i=0;i <fieldsize*fieldsize;i++)
-            for (int x=0;x < ninechunks.length; x++)
-                for (int y=0;y < ninechunks[0].length; y++){
+            for (int x=0;x < bigchunk.length; x++)
+                for (int y=0;y < bigchunk[0].length; y++){
                     //do raytracing until it found a not transparent block.
                     int tempx = x;
-                    int tempy = y;
-                    int tempz = ChunkSizeZ;
-                    do {
-                        tempz--;
-                        tempy -= 2;
-                        
-                    } while ((tempy > 0) && (tempz>0) && (ninechunks[tempx][tempy][tempz].transparent));
+                    int tempy = y+2;
+                    int tempz = Chunk.SizeZ;
                     
-                    //save the found block in renderarray. If there was none take the highest.
-                    Block visibleblock;
-                    if ((tempy <= 0) || (tempz<=0))
-                        visibleblock = ninechunks[x][y][ChunkSizeZ-1];
-                    else visibleblock = ninechunks[tempx][tempy][tempz];
-                    renderarray[x][y] = visibleblock;
+                    do {
+                        tempy -= 2;
+                        tempz--;                        
+                    } while ((tempy >= 0) && (tempz>=0) && (bigchunk[tempx][tempy][tempz].transparent));
+                    
+                    //save the found block in renderarray. If there was none do nothing
+                    if ((tempy >= 0) && (tempz>=0))
+                        renderarray[tempx][tempy][tempz] = bigchunk[tempx][tempy][tempz];
                 }
         changes = false;
     }
@@ -166,12 +172,15 @@ public class Controller {
         public void mouseWheelMoved(int change) {
             gc.getInput().consumeEvent();
             
-            System.out.println("change:"+change);
-             System.out.println("change/500:"+change/500f);
             zoom = zoom+ zoom*(change/500f);
             if (zoom<0) zoom *= -1;
-            System.out.println(zoom);
-            GameplayState.iglog.add("Zoom:"+zoom);
+            
+            Block.width = (int) (160*zoom);
+            Block.height = (int) (160*zoom);
+            Chunk.width = (int) (Chunk.SizeX*Block.width*zoom);
+            Chunk.height = (int) (Chunk.SizeY*Block.height*zoom/2);
+            
+            GameplayState.iglog.add("Zoom:"+zoom+" Chunk.width:"+Chunk.width+" Chunk.height"+Chunk.height);   
         }
 
         @Override
@@ -183,8 +192,7 @@ public class Controller {
         }
 
         @Override
-        public void mouseReleased(int button, int x, int y) {
-            
+        public void mouseReleased(int button, int x, int y) {   
         }
 
         @Override
@@ -198,25 +206,26 @@ public class Controller {
             
             //Bug. Is called several times
             for (int i=0;i<9;i++){
-                chunklist[i].posX += newx -oldx;
-                chunklist[i].posY += newy -oldy ;
-                
+                chunklist[i].posX += newx - oldx;
+                chunklist[i].posY += newy - oldy ;
             }
             
             //if the middle chunk is scrolled down over the middle line then 
-            if (chunklist[4].posX > gc.getScreenWidth()/2) 
+            //GameplayState.iglog.add("Chunk.width: "+String.valueOf(Chunk.width));
+            //GameplayState.iglog.add("chunk: "+String.valueOf(chunklist[4].posX));
+            if (chunklist[4].posX > Chunk.width/2)
                 setcenterchunk(3);   
             
             
-            if (chunklist[4].posX < -Chunk.width) 
+            if (chunklist[4].posX < -Chunk.width/2) 
                 setcenterchunk(5);   
             
             
-            if (chunklist[4].posY > gc.getScreenHeight()/2) 
+            if (chunklist[4].posY > Chunk.height/2) 
                 setcenterchunk(1);   
             
             
-            if (chunklist[4].posY < -Chunk.height)
+            if (chunklist[4].posY < -Chunk.height/2)
                 setcenterchunk(7);     
         }
 

@@ -29,8 +29,7 @@ public class Controller {
              ( input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
             ) {
             fx.play(); 
-            sbg.enterState(2);
-            
+            sbg.enterState(2);            
         }
     }
    

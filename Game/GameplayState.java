@@ -29,7 +29,6 @@ public class GameplayState extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 
-
     }
     
     

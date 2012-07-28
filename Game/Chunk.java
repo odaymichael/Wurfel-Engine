@@ -9,9 +9,12 @@ import java.util.logging.Logger;
 
 public class Chunk {
         public int coordX, coordY, posX, posY;
-        public Block data[][][] = new Block[Controller.ChunkSizeX][Controller.ChunkSizeY][Controller.ChunkSizeZ];
-        public static final int width = Controller.ChunkSizeX*Controller.blockSizeX;
-        public static final int height = Controller.ChunkSizeY*Controller.blockSizeY/2;
+        public static int width;
+        public static int height;
+        public static int SizeX = 9;
+        public static int SizeY = 20;
+        public static int SizeZ = 20;
+        public Block data[][][] = new Block[SizeX][SizeY][SizeZ];
 
         //Konstruktor
         public Chunk(int ChunkX, int ChunkY, int startposX, int startposY, boolean loadmap){
@@ -20,22 +23,40 @@ public class Chunk {
             posX = startposX;
             posY = startposY;
             
+            width = SizeX*Block.width;
+            height = SizeY*Block.height/4;
+           
+            //fill everything with air to avoid crashes
+            for (int x=0; x < SizeX; x++)
+                for (int y=0; y < SizeY; y++)
+                    for (int z=0; z < SizeZ; z++)
+                        data[x][y][z] = new Block(0,0);
+            
             if (loadmap) {
                 loadchunk();
             }else{
                 //chunkdata will contain the blocks and objects
                 //alternative to chunkdata.length ChunkSize
-                for (int x=0; x < Controller.ChunkSizeX; x++)
-                    for (int y=0; y < Controller.ChunkSizeY; y++){
+                
+                for (int x=0; x < SizeX; x++)
+                    for (int y=0; y < SizeY; y++){
                         //Dirt from 0 to 8
-                        for (int z=0; z < Controller.ChunkSizeZ / 2 - 1; z++)
+                        for (int z=0; z < SizeZ / 2 - 1; z++)
                             data[x][y][z] = new Block(2,0);
 
+                        //data[0][y][SizeZ / 2 - 1] = new Block(2,0);
+                        
                         //Gras on z=9
-                        data[x][y][Controller.ChunkSizeZ / 2 - 1] = new Block(1,0);
+                        //if ((x > 0) && (x < SizeX-1))
+                        data[x][y][SizeZ / 2 - 1] = new Block(1,0);
+                        
+                        if (y == SizeY-1)
+                            data[x][y][SizeZ/2-1] = new Block(0,0);
+                        
+                        
 
                         //air from z=10 to 19
-                        for (int z = Controller.ChunkSizeZ / 2; z < Controller.ChunkSizeZ; z++)
+                        for (int z = SizeZ / 2; z < SizeZ; z++)
                             data[x][y][z] = new Block(0,0);
                     }
             }
