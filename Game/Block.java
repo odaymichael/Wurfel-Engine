@@ -38,6 +38,10 @@ public class Block {
                      transparent = false;
                      obstacle = true;
                      break;
+            case 9:  name = "water";
+                     transparent = true;
+                     obstacle = true;
+                     break;    
             case 20: name = "red brick wall";
                      transparent = false;
                      obstacle = true;

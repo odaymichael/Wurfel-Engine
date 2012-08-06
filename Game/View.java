@@ -9,10 +9,11 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class View {
     private Controller Controller;
-    Image blockimages[] = new Image[3];
+    Image blockimages[] = new Image[10];
     private Graphics g = null; 
     private java.awt.Font font;
     private TrueTypeFont tTFont;
+    private TrueTypeFont tTFont_small;
     private GameContainer container;
     private MsgSystem iglog;
     //private static Insets insets;
@@ -20,12 +21,22 @@ public class View {
     //Konstruktor 
     public View() throws SlickException {
         //Create a list with all the images in it.
-        for (int i=0;i<3;i++) blockimages[i] = new Image("Game/Blockimages/"+i+"-0.png");
-        GameplayState.iglog.add("View meldet sich zu diensten!");
+        for (int i=0;i<blockimages.length;i++){
+            try{
+            blockimages[i] = new Image("Game/Blockimages/"+ i +"-0.png");
+             }
+                catch(RuntimeException e) {
+                    System.out.println("Block "+i+" not found.");
+                }   
+        }
+            
+       
         
-        // initialise the font CAUSES LONG LOADING TIME!!!
+        // initialise the font which CAUSES LONG LOADING TIME!!!
         font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
         tTFont = new TrueTypeFont(font, true);
+        font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 8);
+        tTFont_small = new TrueTypeFont(font, true);
     }
     
      public void render(Controller pController,GameContainer pcontainer, StateBasedGame game, Graphics pg) throws SlickException{
@@ -72,10 +83,6 @@ public class View {
     
      public void draw_all_Chunks() throws SlickException{
             /*
-         //Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
-        //Graphics2D g2d = bimage.createGraphics();            
-        //Graphics2D g2d = (Graphics2D) window.getGraphics();
-
         BasicStroke stokestyle = new BasicStroke(
             1,
             BasicStroke.CAP_BUTT,
@@ -119,8 +126,8 @@ public class View {
                         //draw the block except air
                         //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
                         blockimages[Controller.renderarray[x][y][z].ID].draw(
-                            Controller.chunklist[4].posX + x*Block.width + (y%2) * Block.width/2,
-                            Controller.chunklist[4].posY + y*Block.height/4 - z*Block.height/2,
+                            Controller.chunklist[0].posX + x*Block.width + (y%2) * Block.width/2,
+                            Controller.chunklist[0].posY + y*Block.height/4 - z*Block.height/2,
                             Block.width,
                             Block.height
                         );
@@ -258,23 +265,29 @@ public class View {
         for (int i=0;i < Controller.chunklist.length;i++){
             g.setColor(Color.white);
             g.fillRect(
-                    i%3*40+700,
-                    i/3*40+10,
-                    40,
-                    40
+                    i%3*80+700,
+                    i/3*80+10,
+                    80,
+                    80
                 );
                 g.setColor(Color.black);
                 g.drawRect(
-                    i%3*40+700,
-                    i/3*40+10,
-                    40,
-                    40
+                    i%3*80+700,
+                    i/3*80+10,
+                    80,
+                    80
                 );
                 g.setColor(Color.black);
                 tTFont.drawString(
-                    i%3*40+700,
-                    i/3*40+30,
+                    i%3*80+720,
+                    i/3*80+20,
                     Controller.chunklist[i].coordX +" | "+ Controller.chunklist[i].coordY,
+                    Color.black
+                );
+                 tTFont_small.drawString(
+                    i%3*80+720,
+                    i/3*80+70,
+                    Controller.chunklist[i].posX +" | "+ Controller.chunklist[i].posY,
                     Color.black
                 );
         }

@@ -37,7 +37,7 @@ public class GameplayState extends BasicGameState {
         iglog = new MsgSystem();
         iglog.add("Starting Game....");
         View = new View();
-        Controller = new Controller(false,View,container,game);
+        Controller = new Controller(View,container,game);
     }
     
     

@@ -9,6 +9,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Starter extends StateBasedGame {
     int gamestate = 0;
+    public static GameContainer gc;
     
     
     public Starter() throws SlickException{
@@ -16,12 +17,12 @@ public class Starter extends StateBasedGame {
     }
  
     @Override
-    public void initStatesList(GameContainer gc) throws SlickException {
+    public void initStatesList(GameContainer pgc) throws SlickException {
         MainMenuState state = new MainMenuState(1);
-        //What does .enter do?
-        //state.enter(gc, this);
         addState(state);
         addState(new GameplayState(2));
+        
+        gc = pgc;
     }
     
     

@@ -1,5 +1,6 @@
 package Game;
 
+import MainMenu.MainMenuState;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -12,25 +13,32 @@ public class Controller {
     public static Chunk chunklist[] = new Chunk[9];
     public float zoom = 1;
     
-    private boolean changes = true;
+    
+    private boolean changes;
     private GameContainer gc;
     
     //Constructor is called when entering the gamemode.
-    public Controller(boolean loadmap, View pView,GameContainer container, StateBasedGame game) throws SlickException{
+    public Controller(View pView,GameContainer container, StateBasedGame game) throws SlickException{
+        View = pView;
+        gc = container;
+        fill_chunklist(MainMenuState.loadmap);
+    }
+    
+    private void fill_chunklist(boolean loadmap){
         //update resolution things
-        GameplayState.iglog.add("W: "+container.getScreenWidth()+" H: "+container.getScreenHeight());
-        Block.width = container.getScreenWidth()/Chunk.SizeX;
-        Block.height = 4*container.getScreenHeight()/Chunk.SizeY;
+        GameplayState.iglog.add("W: "+gc.getScreenWidth()+" H: "+gc.getScreenHeight());
+        Block.width = gc.getScreenWidth() / Chunk.SizeX;
+        Block.height = 4*gc.getScreenHeight() / Chunk.SizeY;
         GameplayState.iglog.add("BlockWidth: "+Block.width+" BlockHeight: "+Block.height);
         
         Chunk.width = Chunk.SizeX*Block.width;
-        Chunk.height = Chunk.SizeY*Block.height/2;
+        Chunk.height = Chunk.SizeY * Block.height / 4;
         GameplayState.iglog.add("Chunk.Width: "+Chunk.width+" Chunk.height: "+Chunk.height);
 
-        View = pView;
-        
         //fill chunklist with Chunks
         int i = 0;
+        zoom=1;
+        
         for (int y=(int) (fieldsize - Math.floor(fieldsize/2)-1); y > - fieldsize + Math.floor(fieldsize/2); y--)
             for (int x=(int) (-fieldsize+Math.floor(fieldsize/2)+1); x < fieldsize-Math.floor(fieldsize/2); x++){
                 chunklist[i] = new Chunk(
@@ -41,7 +49,9 @@ public class Controller {
                     loadmap
                 );
                 i++;               
-        }
+            }
+        changes = true;
+        GameplayState.iglog.add("4:X: "+chunklist[4].posX+" Y: "+chunklist[4].posX);
     }
     
     public void update(GameContainer pgc, StateBasedGame sbg, int delta) throws SlickException{
@@ -62,6 +72,9 @@ public class Controller {
        
        //toggle fullscreen
        if (gc.getInput().isKeyDown(Input.KEY_F)) ((AppGameContainer) gc).setFullscreen(!((AppGameContainer) gc).isFullscreen()); 
+       
+       //restart
+       if (gc.getInput().isKeyDown(Input.KEY_N)) fill_chunklist(false);
        
        //do raytracing
        if (changes) raytracing();
@@ -100,6 +113,7 @@ public class Controller {
                 //System.out.println("Pos: "+ chunklist[i].posX +","+ chunklist[i].posY);
             }
         }
+        changes = true;
     }
     
     private boolean check_chunk_movement(int pos, int movement){
@@ -144,27 +158,54 @@ public class Controller {
                         Chunk.SizeZ
                     );
         
-        //generate array which has render information in it. It filters every non visible block
-        for (int i=0;i <fieldsize*fieldsize;i++)
-            for (int x=0;x < bigchunk.length; x++)
-                for (int y=0;y < bigchunk[0].length; y++){
-                    //do raytracing until it found a not transparent block.
-                    int tempx = x;
-                    int tempy = y+2;
-                    int tempz = Chunk.SizeZ;
-                    
-                    do {
-                        tempy -= 2;
-                        tempz--;                        
-                    } while ((tempy >= 0) && (tempz>=0) && (bigchunk[tempx][tempy][tempz].transparent));
-                    
-                    //save the found block in renderarray. If there was none do nothing
-                    if ((tempy >= 0) && (tempz>=0))
-                        renderarray[tempx][tempy][tempz] = bigchunk[tempx][tempy][tempz];
-                }
+        //generate array (renderarray) which has render information in it. It filters every non visible block
+
+        
+        //check top of big chunk
+        for (int x=0; x < bigchunk.length; x++)
+            for (int y=0; y < bigchunk[0].length; y++)
+                trace_ray(
+                    bigchunk,
+                    x,
+                    y,
+                    bigchunk[0][0].length-1
+                );
+            
+        //check front side
+        for (int x=0; x < bigchunk.length; x++)
+            for (int z=0; z <bigchunk[0][0].length-1 ; z++)            
+                trace_ray(
+                    bigchunk,
+                    x,
+                    bigchunk[0].length-1,
+                    z
+                );
+        for (int x=0; x < bigchunk.length; x++)
+            for (int z=0; z <bigchunk[0][0].length-1 ; z++)            
+                trace_ray(
+                    bigchunk,
+                    x,
+                    bigchunk[0].length-2,
+                    z
+                );
+                
         changes = false;
     }
 
+    private void trace_ray(Block bigchunk[][][],int x, int y, int z){
+        //do raytracing until it found a not transparent block
+       while ((y >= 0) && (z>=0) && (bigchunk[x][y][z].transparent)) {
+           //save every block which is not air
+           if ((bigchunk[x][y][z].transparent) && (bigchunk[x][y][z].ID != 0))
+              renderarray[x][y][z] = bigchunk[x][y][z]; 
+           y -= 2;
+           z--;                       
+        }   
+                    
+        //save the found block in renderarray. If there was none do nothing
+        if ((y >= 0) && (z>=0))
+           renderarray[x][y][z] = bigchunk[x][y][z];
+    }
       
         
     class MouseDraggedListener implements MouseListener{
@@ -175,8 +216,8 @@ public class Controller {
             zoom = zoom+ zoom*(change/500f);
             if (zoom<0) zoom *= -1;
             
-            Block.width = (int) (160*zoom);
-            Block.height = (int) (160*zoom);
+            Block.width =(int) (gc.getScreenWidth() *zoom / Chunk.SizeX);
+            Block.height = (int) (4*gc.getScreenHeight()*zoom / Chunk.SizeY);
             Chunk.width = (int) (Chunk.SizeX*Block.width*zoom);
             Chunk.height = (int) (Chunk.SizeY*Block.height*zoom/2);
             

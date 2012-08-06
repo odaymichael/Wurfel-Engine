@@ -7,8 +7,10 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
  
 public class MainMenuState extends BasicGameState{
-    public static boolean loadmap;
+    public static boolean loadmap = false;
     int stateID = -1;
+    public static GameContainer gc;
+    public static StateBasedGame sbg;
  
     View View = null;
     Controller Controller = null;
@@ -24,9 +26,11 @@ public class MainMenuState extends BasicGameState{
     }
  
     @Override
-    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+    public void init(GameContainer pgc, StateBasedGame psbg) throws SlickException {
+        gc = pgc;
+        sbg = psbg;
         View = new View();
-        Controller = new Controller(View);  
+        Controller = new Controller(View); 
     }
   
     @Override

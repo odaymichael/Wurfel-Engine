@@ -1,6 +1,7 @@
 package MainMenu;
 
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 //import com.BombingGames.View.Blockimages;
@@ -8,9 +9,10 @@ import org.newdawn.slick.SlickException;
 public class View {
     float startGameScale = 1;
     float exitScale = 1;
-    Image background = null;
-    Image startGameOption = null;
-    Image exitOption = null;
+    private Image background = null;
+    public MenuItem startGameOption = new MenuItem();
+    public MenuItem loadGameOption = new MenuItem();
+    public MenuItem exitOption = new MenuItem();
     
     
     //Konstruktor
@@ -19,20 +21,28 @@ public class View {
  
         // load the menu images
         Image menuOptions = new Image("MainMenu/Images/MainMenu.png");
- 
-        startGameOption = menuOptions.getSubImage(0, 0, 400, 50);
- 
-        exitOption = menuOptions.getSubImage(0, 50, 400, 50);  
+
+        startGameOption.image = menuOptions.getSubImage(0, 0, 400, 50);
+        startGameOption.X = (OutThere.Starter.gc.getScreenWidth() - startGameOption.image.getWidth())/2;
+        startGameOption.Y = 50;
+        
+        loadGameOption.image = menuOptions.getSubImage(0,50,400,50);
+        loadGameOption.X = (OutThere.Starter.gc.getScreenWidth()-loadGameOption.image.getWidth())/2;
+        loadGameOption.Y = 100;
+        
+        exitOption.image = menuOptions.getSubImage(0, 100, 400, 50);
+        exitOption.X = 300;
+        exitOption.Y = 300;
     }
 
-    public void render(Controller Controller){
+    public void render(Controller pController){
         // render the background
         background.draw(0,0);
- 
         // Draw menu
-        startGameOption.draw(50, 50, startGameScale);
- 
-        exitOption.draw(300, 300, exitScale);
+
+        startGameOption.draw();
+        loadGameOption.draw();
+        exitOption.draw();
     }
     /*private static int window_width(){
         int value;
@@ -51,4 +61,30 @@ public class View {
         //Controller.ChunkSizeY = value ;
         return value;
    }*/
+}
+
+class MenuItem{
+    public int X = 0;
+    public int Y = 0;
+    public Image image;
+    
+    public void draw(){
+        image.draw(X,Y);
+    }
+
+    boolean isClicked(Input input) {
+        int mouseX = input.getMouseX();
+        int mouseY = input.getMouseY();
+        
+        if (
+            (mouseX >= X && mouseX <= X + image.getWidth()) &&
+            (mouseY >= Y && mouseY <= Y + image.getHeight()) &&
+            (input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
+           )
+            return true;
+       else
+            return false;
+    }
+    
+
 }

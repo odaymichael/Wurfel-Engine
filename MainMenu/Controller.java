@@ -20,17 +20,21 @@ public class Controller {
     public void update(GameContainer gc, StateBasedGame sbg, int delta){
         Input input = gc.getInput();
  
-        int mouseX = input.getMouseX();
-        int mouseY = input.getMouseY();
+
         
-        if (
-             ( mouseX >= 50 && mouseX <= 50 + View.startGameOption.getWidth()) &&
-             ( mouseY >= 50 && mouseY <= 50 + View.startGameOption.getHeight()) &&
-             ( input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
-            ) {
+        if (View.startGameOption.isClicked(input)){
+            MainMenuState.loadmap = false;
             fx.play(); 
             sbg.enterState(2);            
+        } else if (View.loadGameOption.isClicked(input)) { 
+                MainMenuState.loadmap = true;
+                fx.play();
+                sbg.enterState(2); 
+        }else if (View.exitOption.isClicked(input)){
+            gc.exit();
         }
+        
     }
+   
    
 }
