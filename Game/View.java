@@ -1,88 +1,72 @@
 package Game;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
-
-
 
 
 public class View {
     private Controller Controller;
-    Image blockimages[] = new Image[10];
+    public Block renderarray[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
+    Block bigchunk[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
+    public int cameraX;
+    public int cameraY;
+    public int cameraWidth;
+    public int cameraHeight;
+    public static float zoom = 1;
     private Graphics g = null; 
     private java.awt.Font font;
     private TrueTypeFont tTFont;
     private TrueTypeFont tTFont_small;
-    private GameContainer container;
+    private GameContainer gc;
     private MsgSystem iglog;
     //private static Insets insets;
     
     //Konstruktor 
-    public View() throws SlickException {
-        //Create a list with all the images in it.
-        for (int i=0;i<blockimages.length;i++){
-            try{
-            blockimages[i] = new Image("Game/Blockimages/"+ i +"-0.png");
-             }
-                catch(RuntimeException e) {
-                    System.out.println("Block "+i+" not found.");
-                }   
-        }
-            
+    public View(Controller pController,GameContainer pgc) throws SlickException {
+        Controller = pController;
+        gc = pgc;
+        Block.listImages();        
        
-        
         // initialise the font which CAUSES LONG LOADING TIME!!!
         font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
         tTFont = new TrueTypeFont(font, true);
         font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 8);
         tTFont_small = new TrueTypeFont(font, true);
+        
+        //update resolution things
+        GameplayState.iglog.add("Resolution: "+gc.getScreenWidth()+" x "+gc.getScreenHeight());
+        //Block.width = gc.getScreenWidth() / Chunk.BlocksX;
+        //Block.height = gc.getScreenHeight() / ((Chunk.BlocksY-1)/4);
+        zoom = (float) ((float) gc.getScreenHeight()*4/((Chunk.BlocksY)* Block.height));
+        // Block.width = Block.height;
+        GameplayState.iglog.add("Blocks: "+Block.width+" x "+Block.height);
+        GameplayState.iglog.add("Zoom: "+zoom);
+        GameplayState.iglog.add("chunk: "+Chunk.SizeX+" x "+Chunk.SizeY);
+        GameplayState.iglog.add("chunk w/ zoom: "+Chunk.SizeX*zoom+" x "+Chunk.SizeY*zoom);
+  
+        
+        cameraWidth = (int) (gc.getScreenWidth()*zoom);
+        cameraHeight= (int) (gc.getScreenHeight()*zoom);
     }
     
-     public void render(Controller pController,GameContainer pcontainer, StateBasedGame game, Graphics pg) throws SlickException{
-        Controller = pController;
+    /**
+     * Main method which is called every time
+     * @param game
+     * @param pg
+     * @throws SlickException
+     */
+    public void render(StateBasedGame game, Graphics pg) throws SlickException{
         g = pg;
-        container = pcontainer;
-        
         draw_all_Chunks();
+        //Controller.Player.draw();
+        
+        //GUI
         drawchunklist();
         drawiglog();
     }
-    
-    /*private void initGL() {
-        //2D Initialization
-        glClearColor(0.0f,0.0f,0.0f,0.0f);
-        glDisable(GL_DEPTH_TEST);
-        glDisable(GL_LIGHTING);
-    }
-    
-    private void resizeGL() {
-        //2D Scene
-        glViewport(0,0,800,800);
-
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluOrtho2D(0.0f,800,0.0f,800);
-        glPushMatrix();
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glPushMatrix();
-        
-        
-        glLoadIdentity();
-         glTranslatef(-1.5f,0.0f,-6.0f);
-         glBegin(GL_QUADS); // Ein Viereck zeichnen
-    glColor3f(1.0f,0.0f,0.0f); // es soll rot werden
-    glVertex3f(-1.0f, 1.0f, 0.0f); // oben links
-    glVertex3f( 1.0f, 1.0f, 0.0f); // oben rechts
-    glVertex3f( 1.0f,-1.0f, 0.0f); // unten rechts
-    glVertex3f(-1.0f,-1.0f, 0.0f); // unten links
-  glEnd(); // Zeichenaktion beenden
-     }*/
-    
-     public void draw_all_Chunks() throws SlickException{
-            /*
+     
+    public void draw_all_Chunks() throws SlickException{
+       /*
         BasicStroke stokestyle = new BasicStroke(
             1,
             BasicStroke.CAP_BUTT,
@@ -91,24 +75,6 @@ public class View {
         
         //g2d.setStroke(stokestyle);
 
-
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        GraphicsConfiguration gc = gd.getDefaultConfiguration();
-        // Create an image that supports transparent pixels
-        //BufferedImage bimage = gc.createCompatibleImage(window_width(), window_height(), Transparency.BITMASK);
-
-        //Zeile wird irgendwie ignoriert
-        //bimage.getGraphics().setColor(Color.red);
-        //bimage.getGraphics().fillRect(0, 0, bimage.getWidth(), bimage.getHeight());
-        //g2d.drawImage(bimage, null, posX, posY);
-
-
-        //g2d.fillRect(posX,posY,window_width(),window_height());            
-        //g2d.setColor(Color.yellow);
-        
-        
-
         BufferedImage tile = gc.createCompatibleImage(Controller.tilesizeX, Controller.tilesizeY, Transparency.BITMASK);
         tile.getGraphics().drawImage(tilefile,
                 0,//dx1
@@ -116,24 +82,32 @@ public class View {
                 Controller.tilesizeX,//width
                 Controller.tilesizeY,//height
                 null);
-        */
-         
-         
-        for (int y=0; y < Controller.renderarray[0].length; y++)//vertikal
-            for (int x=0; x < Controller.renderarray.length; x++)//horizontal
-                for (int z=0; z < Controller.renderarray[0][0].length; z++)
-                    if (Controller.renderarray[x][y][z].ID != 0){
-                        //draw the block except air
+        */  
+
+       for (int y=0; y < renderarray[0].length; y++)//vertikal
+            for (int x=0; x < renderarray.length; x++)//horizontal
+                for (int z=0; z < renderarray[0][0].length; z++)
+                    //draw the block except air
+                    if (renderarray[x][y][z].ID() != 0){
                         //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
-                        blockimages[Controller.renderarray[x][y][z].ID].draw(
-                            Controller.chunklist[0].posX + x*Block.width + (y%2) * Block.width/2,
-                            Controller.chunklist[0].posY + y*Block.height/4 - z*Block.height/2,
-                            Block.width,
-                            Block.height
+                        if (Controller.goodgraphics){
+                            int zbottom=Chunk.BlocksZ-1;
+                            while (bigchunk[x][y][zbottom].transparent == true && zbottom > 0 ){
+                                zbottom--; 
+                            }
+                            float brigthness = (float) z/zbottom; 
+                            Block.images[renderarray[x][y][z].ID()].setColor(0, brigthness, brigthness, brigthness, 1);
+                            Block.images[renderarray[x][y][z].ID()].setColor(1, brigthness, brigthness, brigthness, 1);
+                            Block.images[renderarray[x][y][z].ID()].setColor(2, brigthness, brigthness, brigthness, 1);
+                            Block.images[renderarray[x][y][z].ID()].setColor(3, brigthness, brigthness, brigthness, 1);
+                        }
+                        Block.images[renderarray[x][y][z].ID()].draw(
+                            (Controller.chunklist[0].posX + x*Block.width + (y%2) * Block.width/2)*zoom,
+                            (Controller.chunklist[0].posY + y*Block.height/2 - z*Block.height)*zoom / 2,
+                            zoom
                         );
                     }
                 
-            
         /*Ansatz mit Zeichnen der halben tiles
         //int amountX = window_width()/Controller.tilesizeX;
         //int amountY = window_height()/Controller.tilesizeY;
@@ -251,58 +225,131 @@ public class View {
             );*/
      };
 
+    public void raytracing(){
+        //fill renderarray with air
+        for (int x=0;x <Chunk.BlocksX*3;x++)
+            for (int y=0;y <Chunk.BlocksY*3;y++)
+                for (int z=0;z <Chunk.BlocksZ;z++)
+                    renderarray[x][y][z] = new Block(0,0);
+            
+        //create big array out of all other arrays to performe the algorithm
+        for (int i=0;i <9;i++)
+            for (int x=0;x <Chunk.BlocksX;x++)
+                for (int y=0;y <Chunk.BlocksY;y++)
+                    System.arraycopy(
+                        Controller.chunklist[i].data[x][y],
+                        0,
+                        bigchunk[x+ Chunk.BlocksX*(i%3)][y+ Chunk.BlocksY*Math.abs(i/3)],
+                        0,
+                        Chunk.BlocksZ
+                    );
+        
+        //generate array (renderarray) which has render information in it. It filters every non visible block
+
+        //check top of big chunk
+        for (int x=0; x < bigchunk.length; x++)
+            for (int y=0; y < bigchunk[0].length; y++)
+                trace_ray(
+                    bigchunk,
+                    x,
+                    y,
+                    bigchunk[0][0].length-1
+                );
+            
+        //check front side
+        for (int x=0; x < bigchunk.length; x++)
+            for (int z=0; z <bigchunk[0][0].length-1 ; z++)            
+                trace_ray(
+                    bigchunk,
+                    x,
+                    bigchunk[0].length-1,
+                    z
+                );
+        for (int x=0; x < bigchunk.length; x++)
+            for (int z=0; z <bigchunk[0][0].length-1 ; z++)            
+                trace_ray(
+                    bigchunk,
+                    x,
+                    bigchunk[0].length-2,
+                    z
+                );
+                
+        Controller.changes = false;
+    }
+
+    private void trace_ray(Block bigchunk[][][],int x, int y, int z){
+        //do raytracing until it found a not transparent block
+       while ((y >= 0) && (z>=0) && (bigchunk[x][y][z].transparent)) {
+           //save every block which is not air
+           if ((bigchunk[x][y][z].transparent) && (bigchunk[x][y][z].ID() != 0))
+              renderarray[x][y][z] = bigchunk[x][y][z]; 
+           y -= 2;
+           z--;                       
+        }   
+                    
+        //save the found block in renderarray. If there was none do nothing
+        if ((y >= 0) && (z>=0))
+           renderarray[x][y][z] = bigchunk[x][y][z];
+    }
        
-     public void drawchunklist(){
-         Rectangle rectangle = new Rectangle(20,20,80,80);
-          
+    public void drawchunklist(){
+         //Rectangle rectangle = new Rectangle(20,20,80,80);
         //trueTypeFont.drawString(20.0f, 20.0f, "Slick displaying True Type Fonts", Color.green);
          
          //java.awt.Font font = new java.awt.Font("Helvetica", java.awt.Font.BOLD, 12);
          //UnicodeFont uFont = new UnicodeFont(font , 20, false, false);
          //custom fonts makes them dissapear. y u no work?
          //g.setFont(uFont);
-         
         for (int i=0;i < Controller.chunklist.length;i++){
             g.setColor(Color.white);
             g.fillRect(
-                    i%3*80+700,
-                    i/3*80+10,
-                    80,
-                    80
+                    gc.getScreenWidth() - 300 + i%3 *60,
+                    i/3*60+10,
+                    60,
+                    60
                 );
+            
                 g.setColor(Color.black);
                 g.drawRect(
-                    i%3*80+700,
-                    i/3*80+10,
-                    80,
-                    80
+                    gc.getScreenWidth() - 300 + i%3 *60,
+                    i/3*60+10,
+                    60,
+                    60
                 );
+                
                 g.setColor(Color.black);
                 tTFont.drawString(
-                    i%3*80+720,
-                    i/3*80+20,
+                    gc.getScreenWidth()- 290 + i%3*60,
+                    i/3*60+20,
                     Controller.chunklist[i].coordX +" | "+ Controller.chunklist[i].coordY,
                     Color.black
                 );
-                 tTFont_small.drawString(
-                    i%3*80+720,
-                    i/3*80+70,
+                
+                tTFont_small.drawString(
+                    gc.getScreenWidth()-290 +  i%3*60,
+                    i/3*60+50,
                     Controller.chunklist[i].posX +" | "+ Controller.chunklist[i].posY,
                     Color.black
                 );
         }
+        tTFont_small.drawString(
+            gc.getScreenWidth()-290,
+            300,
+            cameraX +" | "+ cameraY,
+            Color.black
+       );
         
     } 
      
     private void drawiglog(){
         for (int i=0;i < GameplayState.iglog.size();i++){
             Msg msg = (Msg) GameplayState.iglog.get(i);
-            Color clr= Color.blue;
+            Color clr = Color.blue;
             if ("System".equals(msg.getSender())) clr = Color.green;
             
             //draw
             tTFont.drawString(
-                900,
+                10,
                 50+i*20,
                 msg.getMessage(),
                 clr

@@ -4,33 +4,49 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-
+/**
+ *
+ * @author Benedikt
+ * 
+ */
 public class Chunk {
         public int coordX, coordY, posX, posY;
-        public static int width;
-        public static int height;
-        public static int SizeX = 12;//16:9
-        public static int SizeY = 27;
-        public static int SizeZ = 20;
-        public Block data[][][] = new Block[SizeX][SizeY][SizeZ];
+
+        public static final int BlocksX = 12;//16:9 => 12:27, 4:3=>12:36
+        public static final int BlocksY = 28;
+        public static final int BlocksZ = 20;
+        /**
+        *The size of a chunk in pixels
+        */
+        public static int SizeX = BlocksX*Block.width;
+        /**
+        *The size of a chunk in pixels
+        */
+        public static int SizeY = BlocksY*Block.height/4;
+        public static int SizeZ = BlocksZ*Block.height/2;
+        
+        public Block data[][][] = new Block[BlocksX][BlocksY][BlocksZ];
 
         //Konstruktor
-        public Chunk(int ChunkX, int ChunkY, int startposX, int startposY, boolean loadmap){
+     /**
+     *
+     * @param ChunkX
+     * @param ChunkY
+     * @param startposX
+     * @param startposY
+     * @param loadmap
+     */
+    public Chunk(int ChunkX, int ChunkY, int startposX, int startposY, boolean loadmap){
             coordX = ChunkX;
             coordY = ChunkY;
             posX = startposX;
             posY = startposY;
             
-            width = SizeX*Block.width;
-            height = SizeY*Block.height/4;
-           
             //fill everything with air to avoid crashes
-            for (int x=0; x < SizeX; x++)
-                for (int y=0; y < SizeY; y++)
-                    for (int z=0; z < SizeZ; z++)
+            for (int x=0; x < BlocksX; x++)
+                for (int y=0; y < BlocksY; y++)
+                    for (int z=0; z < BlocksZ; z++)
                         data[x][y][z] = new Block(0,0);
             
             if (loadmap) 
@@ -41,38 +57,34 @@ public class Chunk {
        
         private void newChunk(){
             //chunkdata will contain the blocks and objects
-            //alternative to chunkdata.length ChunkSize
-            
-            System.out.println("Neu:"+coordX+","+ coordY);
-            for (int x=0; x < SizeX; x++)
-                for (int y=0; y < SizeY; y++){
+            //alternative to chunkdata.length ChunkBlocks
+            GameplayState.iglog.add("Neu: "+coordX+","+ coordY);
+            for (int x=0; x < BlocksX; x++)
+                for (int y=0; y < BlocksY; y++){
                     //Dirt from 0 to 8
-                    for (int z=0; z < SizeZ / 2 - 1; z++){
-                        //for (int z=0; z < SizeZ-4; z++)
+                    for (int z=0; z <  Chunk.BlocksZ / 2; z++){
+                        //for (int z=0; z < BlocksZ-4; z++)
                         data[x][y][z] = new Block(2,0);
                         // if ((z>10) && (x>10) && (y>5))
                         //  data[x][y][z] = new Block (9,0);
                      }
 
-                    //data[0][y][SizeZ / 2 - 1] = new Block(2,0);
+                    //data[0][y][BlocksZ / 2 - 1] = new Block(2,0);
                         
                        
                     //Gras on z=9
-                    //if ((x > 0) && (x < SizeX-1) && (y>0))                        
-                    data[x][y][SizeZ/2-1] = new Block(1,0);
-                    data[x][y][SizeZ/2] = new Block(9,0);
+                    //if ((x > 0) && (x < BlocksX-1) && (y>0))                        
+                    //data[x][y][BlocksZ/2-1] = new Block(1,0);
+                    //data[x][y][BlocksZ/2] = new Block(9,0);
                         
                         
                     /*
-                    if (y == SizeY-1)
-                        data[x][y][SizeZ/2-1] = new Block(0,0);
+                    if (y == BlocksY-1)
+                        data[x][y][BlocksZ/2-1] = new Block(0,0);
                         
-                        
-
                     //air from z=10 to 19
-                    for (int z = SizeZ / 2; z < SizeZ; z++)
-                        data[x][y][z] = new Block(0,0);
-                            
+                    for (int z = BlocksZ / 2; z < BlocksZ; z++)
+                        data[x][y][z] = new Block(0,0);   
                     */
                     }
         }
@@ -109,9 +121,9 @@ public class Chunk {
                
                 bufRead.close();
                 */
-                if (new File("build/classes/map1/chunk"+coordX+","+coordY+".otmc").exists()) {
-                    System.out.println("Load:"+coordX+","+ coordY);
-                    FileReader input = new FileReader("build/classes/map1/chunk"+coordX+","+coordY+".otmc");
+                if (new File("build/classes/map/chunk"+coordX+","+coordY+".otmc").exists()) {
+                    GameplayState.iglog.add("Load: "+coordX+","+coordY);
+                    FileReader input = new FileReader("build/classes/map/chunk"+coordX+","+coordY+".otmc");
                     BufferedReader bufRead = new BufferedReader(input);
 
                     StringBuilder line;
@@ -153,13 +165,13 @@ public class Chunk {
                                             );
                                 x++;
                                 line.delete(0,posend+1);
-                            } while (x < SizeX);
+                            } while (x < BlocksX);
                             
                             line = new StringBuilder();
                             line.append(bufRead.readLine());
                             
                             y++;
-                        }while (y < SizeY);
+                        }while (y < BlocksY);
                         lastline = bufRead.readLine();
                         z++;
                     }while (lastline != null);

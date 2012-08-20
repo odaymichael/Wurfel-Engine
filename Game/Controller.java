@@ -4,85 +4,125 @@ import MainMenu.MainMenuState;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
 
-
+/**
+ *
+ * @author Benedikt
+ */
 public class Controller {
-    public static View View;
-    //amount of chunks. must be ungerade        
-    private final int fieldsize = 3;
-    public Block renderarray[][][] = new Block[Chunk.SizeX*fieldsize][Chunk.SizeY*fieldsize][Chunk.SizeZ];  
+    /**
+     *The list which has all nine chunks in it.
+     */
     public static Chunk chunklist[] = new Chunk[9];
-    public float zoom = 1;
+
+    public static boolean changes;
+    public Player Player;   
+    public boolean goodgraphics = true;
     
-    
-    private boolean changes;
+    private View View;
     private GameContainer gc;
+    private StateBasedGame sbg;
+    private int oldx;
+    private int oldy;
     
     //Constructor is called when entering the gamemode.
-    public Controller(View pView,GameContainer container, StateBasedGame game) throws SlickException{
-        View = pView;
+    public Controller(GameContainer container, StateBasedGame game) throws SlickException{
         gc = container;
+        sbg = game;
+             
         fill_chunklist(MainMenuState.loadmap);
+        Player = new Player(6,14,19);
     }
     
     private void fill_chunklist(boolean loadmap){
-        //update resolution things
-        GameplayState.iglog.add("W: "+gc.getScreenWidth()+" H: "+gc.getScreenHeight());
-        Block.width = gc.getScreenWidth() / Chunk.SizeX;
-        Block.height = 4*gc.getScreenHeight() / Chunk.SizeY;
-        GameplayState.iglog.add("BlockWidth: "+Block.width+" BlockHeight: "+Block.height);
-        
-        Chunk.width = Chunk.SizeX*Block.width;
-        Chunk.height = Chunk.SizeY * Block.height / 4;
-        GameplayState.iglog.add("Chunk.Width: "+Chunk.width+" Chunk.height: "+Chunk.height);
-
+     
         //fill chunklist with Chunks
         int i = 0;
-        zoom=1;
         
-        for (int y=(int) (fieldsize - Math.floor(fieldsize/2)-1); y > - fieldsize + Math.floor(fieldsize/2); y--)
-            for (int x=(int) (-fieldsize+Math.floor(fieldsize/2)+1); x < fieldsize-Math.floor(fieldsize/2); x++){
+        for (int y=1; y > - 2; y--)
+            for (int x=-1; x < 2; x++){
                 chunklist[i] = new Chunk(
                     x,
                     y,
-                    x*Chunk.width,
-                    -y*Chunk.height,
+                    x*Chunk.SizeX,
+                    -y*Chunk.SizeY,
                     loadmap
                 );
                 i++;               
             }
         changes = true;
-        GameplayState.iglog.add("4:X: "+chunklist[4].posX+" Y: "+chunklist[4].posX);
     }
     
-    public void update(GameContainer pgc, StateBasedGame sbg, int delta) throws SlickException{
-       gc = pgc;
-       
-       Input input = gc.getInput();
- 
-       int mouseX = input.getMouseX();
-       int mouseY = input.getMouseY();
-       gc.getInput().addMouseListener(new MouseDraggedListener());
-       
-
-       if (gc.getInput().isKeyDown(Input.KEY_Q)) gc.exit();
-       
-       //open menu
-       if (gc.getInput().isKeyDown(Input.KEY_ESCAPE)) openmenu();
-       
-       
-       //toggle fullscreen
-       if (gc.getInput().isKeyDown(Input.KEY_F)) ((AppGameContainer) gc).setFullscreen(!((AppGameContainer) gc).isFullscreen()); 
-       
-       //restart
-       if (gc.getInput().isKeyDown(Input.KEY_N)) fill_chunklist(false);
-       
-       //do raytracing
-       if (changes) raytracing();
-       
-       GameplayState.iglog.update(delta);
+    public void giveView(View pView) {
+        View = pView;
     }
+    
+    /* Main method which is called every time */
+    public void update(int delta) throws SlickException{  
+        Input input = gc.getInput();
+ 
+        input.addMouseListener(new MouseDraggedListener());
 
-      
+        if (input.isKeyDown(Input.KEY_Q)) gc.exit();
+       
+        //open menu
+        if (input.isKeyPressed(Input.KEY_ESCAPE)) openmenu();
+       
+        //toggle fullscreen
+        if (input.isKeyPressed(Input.KEY_F)) gc.setFullscreen(!gc.isFullscreen()); 
+       
+        //pause
+        if (input.isKeyDown(Input.KEY_P)) gc.setPaused(true);
+
+        //good graphics
+        if (input.isKeyPressed(Input.KEY_G)) goodgraphics = !goodgraphics;
+        
+        //restart
+        if (input.isKeyPressed(Input.KEY_N)) fill_chunklist(false);
+        
+        oldx = View.cameraX;
+        oldy = View.cameraY;
+        
+        //walk
+        if (input.isKeyDown(Input.KEY_UP)) {Player.walk(1);}
+        if (input.isKeyDown(Input.KEY_DOWN)) {Player.walk(7);}
+        if (input.isKeyDown(Input.KEY_LEFT)) {Player.walk(3);}
+        if (input.isKeyDown(Input.KEY_RIGHT)) {Player.walk(5);}
+        if (input.isKeyPressed(Input.KEY_SPACE)) Player.jump();
+       
+        Player.update();
+        
+        View.cameraX = (Player.coordX)*Block.width - View.cameraWidth;
+        View.cameraY = Player.coordY*Block.height/2 - (Player.coordZ*Block.height/2) - View.cameraHeight;
+       
+        for (int i=0;i<9;i++){
+           chunklist[i].posX -= View.cameraX - oldx;
+           chunklist[i].posY -= View.cameraY - oldy;
+        }
+       
+        
+        //earth to right
+        if (View.cameraX - Chunk.SizeX*chunklist[4].coordX < -Chunk.SizeX/2)
+           setcenterchunk(3);   
+            
+        //earth to the left
+        if (View.cameraX + View.cameraWidth - Chunk.SizeX*chunklist[4].coordX  > 3*Chunk.SizeX/2) 
+           setcenterchunk(5);   
+
+        ///scroll up, earth down
+        if (View.cameraY - (Chunk.SizeY + Chunk.SizeZ)*chunklist[4].coordY > 3*(Chunk.SizeY) / 2) 
+           setcenterchunk(1);   
+
+        //scroll down, earth up
+        if (View.cameraY-View.cameraHeight - (Chunk.SizeY+Chunk.SizeZ)*chunklist[4].coordY < -3*(Chunk.SizeY) / 2)
+           setcenterchunk(7); 
+           
+        
+        //do raytracing
+        if (changes) View.raytracing();
+       
+        GameplayState.iglog.update(delta);
+    }
+    
     private void setcenterchunk(int newcenter){
         //newcenter is 1,3,5 or 7
         /*
@@ -91,23 +131,22 @@ public class Controller {
           |3|4|5|
           -------
           |6|7|8|
-         
          */
-        //System.out.println("New Center: " +newcenter);
+        
         GameplayState.iglog.add("New Center: "+newcenter);
         Chunk chunklist_copy[] = new Chunk[9];
         System.arraycopy(chunklist, 0, chunklist_copy, 0, 9);
-        for (int i=0;i<9;i++){
-            if (check_chunk_movement(i,newcenter)){
+        for (int pos=0; pos<9; pos++){
+            if (check_chunk_movement(pos,newcenter)){
                 //System.out.println("chunkliste[" + i + "] bekommt den alten von chunkliste["+ (i + newcenter - 4) +"]");
-                chunklist[i] = chunklist_copy[i-4+newcenter];   
+                chunklist[pos] = chunklist_copy[pos-4+newcenter];   
             } else {
-                chunklist[i] = new Chunk(
-                    chunklist[i].coordX + (newcenter == 3 ? -1 : (newcenter == 5 ? 1 : 0)),
-                    chunklist[i].coordY + (newcenter == 1 ? 1 : (newcenter == 7 ? -1 : 0)),
-                    chunklist[i].posX + (newcenter == 3 ? -Chunk.width : (newcenter == 5 ?  Chunk.width: 0)),
-                    chunklist[i].posY + (newcenter == 1 ? -Chunk.height : (newcenter == 7 ? Chunk.height : 0)),
-                    false
+                chunklist[pos] = new Chunk(
+                    chunklist[pos].coordX + (newcenter == 3 ? -1 : (newcenter == 5 ? 1 : 0)),
+                    chunklist[pos].coordY + (newcenter == 1 ? 1 : (newcenter == 7 ? -1 : 0)),
+                    chunklist[pos].posX + (int) ((newcenter == 3 ? -Chunk.SizeX : (newcenter == 5 ?  Chunk.SizeX: 0))),
+                    chunklist[pos].posY + (int) ((newcenter == 1 ? -Chunk.SizeY : (newcenter == 7 ? Chunk.SizeY : 0))),
+                   MainMenuState.loadmap
                 );
                 //System.out.println("chunkliste["+i+"] bekommt einen neuen Chunk: "+ chunklist[i].coordX +","+chunklist[i].coordY);
                 //System.out.println("Pos: "+ chunklist[i].posX +","+ chunklist[i].posY);
@@ -117,7 +156,7 @@ public class Controller {
     }
     
     private boolean check_chunk_movement(int pos, int movement){
-        //checks if the number can be reached be moving the net in a direction, very complicated
+        //checks if the number can be reached by moving the net in a direction, very complicated
         boolean result = true; 
         switch (movement){
             case 1: if ((pos==0) || (pos==1) || (pos==2)) result = false;
@@ -134,94 +173,21 @@ public class Controller {
         } 
         return result;
     }
-
     
-    public void raytracing(){
-        //fill renderarray with air
-        for (int x=0;x <Chunk.SizeX*fieldsize;x++)
-            for (int y=0;y <Chunk.SizeY*fieldsize;y++)
-                for (int z=0;z <Chunk.SizeZ;z++)
-                    renderarray[x][y][z] = new Block(0,0);
-            
-            
-        //create big array out of all other arrays to performe the algorithm
-        Block bigchunk[][][] = new Block[Chunk.SizeX*fieldsize][Chunk.SizeY*fieldsize][Chunk.SizeZ];
-        
-        for (int i=0;i <fieldsize*fieldsize;i++)
-            for (int x=0;x <Chunk.SizeX;x++)
-                for (int y=0;y <Chunk.SizeY;y++)
-                    System.arraycopy(
-                        chunklist[i].data[x][y],
-                        0,
-                        bigchunk[x+ Chunk.SizeX*(i%3)][y+ Chunk.SizeY*Math.abs(i/3)],
-                        0,
-                        Chunk.SizeZ
-                    );
-        
-        //generate array (renderarray) which has render information in it. It filters every non visible block
-
-        
-        //check top of big chunk
-        for (int x=0; x < bigchunk.length; x++)
-            for (int y=0; y < bigchunk[0].length; y++)
-                trace_ray(
-                    bigchunk,
-                    x,
-                    y,
-                    bigchunk[0][0].length-1
-                );
-            
-        //check front side
-        for (int x=0; x < bigchunk.length; x++)
-            for (int z=0; z <bigchunk[0][0].length-1 ; z++)            
-                trace_ray(
-                    bigchunk,
-                    x,
-                    bigchunk[0].length-1,
-                    z
-                );
-        for (int x=0; x < bigchunk.length; x++)
-            for (int z=0; z <bigchunk[0][0].length-1 ; z++)            
-                trace_ray(
-                    bigchunk,
-                    x,
-                    bigchunk[0].length-2,
-                    z
-                );
-                
-        changes = false;
-    }
-
-    private void trace_ray(Block bigchunk[][][],int x, int y, int z){
-        //do raytracing until it found a not transparent block
-       while ((y >= 0) && (z>=0) && (bigchunk[x][y][z].transparent)) {
-           //save every block which is not air
-           if ((bigchunk[x][y][z].transparent) && (bigchunk[x][y][z].ID != 0))
-              renderarray[x][y][z] = bigchunk[x][y][z]; 
-           y -= 2;
-           z--;                       
-        }   
-                    
-        //save the found block in renderarray. If there was none do nothing
-        if ((y >= 0) && (z>=0))
-           renderarray[x][y][z] = bigchunk[x][y][z];
-    }
-      
-        
     class MouseDraggedListener implements MouseListener{
         @Override
         public void mouseWheelMoved(int change) {
             gc.getInput().consumeEvent();
             
-            zoom = zoom+ zoom*(change/500f);
-            if (zoom<0) zoom *= -1;
+            View.zoom = View.zoom+ View.zoom*(change/500f);
+            if (View.zoom<0) View.zoom *= -1;
             
-            Block.width =(int) (gc.getScreenWidth() *zoom / Chunk.SizeX);
-            Block.height = (int) (4*gc.getScreenHeight()*zoom / Chunk.SizeY);
-            Chunk.width = (int) (Chunk.SizeX*Block.width*zoom);
-            Chunk.height = (int) (Chunk.SizeY*Block.height*zoom/2);
+           /* Block.width =(int) (gc.getScreenWidth() *zoom / Chunk.BlocksX);
+            Block.height = (int) (4*gc.getScreenHeight()*zoom / Chunk.BlocksY);
+            Chunk.SizeX = (int) (Chunk.BlocksX*Block.width*zoom);
+            Chunk.SizeY = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
-            GameplayState.iglog.add("Zoom:"+zoom+" Chunk.width:"+Chunk.width+" Chunk.height"+Chunk.height);   
+            GameplayState.iglog.add("Zoom: "+View.zoom+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
         }
 
         @Override
@@ -242,32 +208,19 @@ public class Controller {
 
         @Override
         public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-            //workaround for the bug
+            //workaround for the bug, because the event is called multiple times
             gc.getInput().consumeEvent();
             
-            //Bug. Is called several times
-            for (int i=0;i<9;i++){
+            /*for (int i=0;i<9;i++){
                 chunklist[i].posX += newx - oldx;
                 chunklist[i].posY += newy - oldy ;
-            }
+            }*/
             
             //if the middle chunk is scrolled down over the middle line then 
-            //GameplayState.iglog.add("Chunk.width: "+String.valueOf(Chunk.width));
+            //GameplayState.iglog.add("Chunk.SizeX: "+String.valueOf(Chunk.SizeX));
             //GameplayState.iglog.add("chunk: "+String.valueOf(chunklist[4].posX));
-            if (chunklist[4].posX > Chunk.width/2)
-                setcenterchunk(3);   
             
-            
-            if (chunklist[4].posX < -Chunk.width/2) 
-                setcenterchunk(5);   
-            
-            
-            if (chunklist[4].posY > Chunk.height/2) 
-                setcenterchunk(1);   
-            
-            
-            if (chunklist[4].posY < -Chunk.height/2)
-                setcenterchunk(7);     
+    
         }
 
         @Override

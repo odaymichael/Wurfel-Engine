@@ -1,19 +1,25 @@
 package Game;
 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 public class Block {
     public Integer Health = 100;
-    public Integer ID = -1;
+    private Integer fID = -1;
     public Integer Value = 0;
     public String name = "undefined";
-    boolean transparent;
-    boolean obstacle;
+    public boolean transparent;
+    public boolean obstacle;
     public static int width = 160;
     public static int height = 160;
+    public static Image images[] = new Image[45];
+    
     //Konstruktor
+    
     public Block(Integer pID, Integer pValue){
-        ID = pID;
+        fID = pID;
         Value = pValue;
-        switch (ID){
+        switch (fID){
             case 0:  name = "air";
                      transparent = true;
                      obstacle = false;
@@ -38,6 +44,14 @@ public class Block {
                      transparent = false;
                      obstacle = true;
                      break;
+            case 6:  name = "pavement";
+                     transparent = false;
+                     obstacle = true;
+                     break;
+            case 7:  name = "concrete";
+                     transparent = false;
+                     obstacle = true;
+                     break;    
             case 9:  name = "water";
                      transparent = true;
                      obstacle = true;
@@ -46,7 +60,11 @@ public class Block {
                      transparent = false;
                      obstacle = true;
                      break;
-            case 50: name = "strohbed" ;
+            case 40: name = "player";
+                     transparent = true;
+                     obstacle = false;
+                     break;
+            case 50: name = "strewbed" ;
                      transparent = true;
                      obstacle = false;
                      break;  
@@ -56,4 +74,20 @@ public class Block {
                      break; 
         }
     }
+    
+    public static void listImages() throws SlickException{
+        for (int i=0; i<images.length; i++){
+                try {
+                    images[i] = new Image("Game/Blockimages/"+ i +"-0.png");
+                    //images[i].setColor(1, 0, 0, 0, 1);
+                    //images[i].setColor(1, 1, 1, 1, 1);
+                 } catch(RuntimeException e) {
+                    System.out.println("Block "+i+" not found.");
+                 }   
+            }  
+    }
+    public int ID(){
+        return fID;
+    }
+    
 }
