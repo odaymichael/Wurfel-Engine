@@ -1,9 +1,6 @@
 package Game;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 /**
  *
@@ -90,8 +87,7 @@ public class Chunk {
         }
         
        private void loadChunk(){
-            /*
-            //to find root path of project
+            /*//to find root path of project
             File here = new File(".");
             System.out.println(here.getAbsolutePath());*/
         
@@ -121,10 +117,12 @@ public class Chunk {
                
                 bufRead.close();
                 */
-                if (new File("build/classes/map/chunk"+coordX+","+coordY+".otmc").exists()) {
+               // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
+               if (getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc") != null) {    
                     GameplayState.iglog.add("Load: "+coordX+","+coordY);
-                    FileReader input = new FileReader("build/classes/map/chunk"+coordX+","+coordY+".otmc");
-                    BufferedReader bufRead = new BufferedReader(input);
+                    //FileReader input = new FileReader("map/chunk"+coordX+","+coordY+".otmc");
+                    //BufferedReader bufRead = new BufferedReader(input);
+                    BufferedReader bufRead = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc")));
 
                     StringBuilder line;
                     //jump over first line to prevent problems with length byte
@@ -171,11 +169,12 @@ public class Chunk {
                             line.append(bufRead.readLine());
                             
                             y++;
-                        }while (y < BlocksY);
+                        } while (y < BlocksY);
                         lastline = bufRead.readLine();
                         z++;
                     }while (lastline != null);
                 } else {
+                    GameplayState.iglog.add(coordX+","+coordY +"dont exist");
                     newChunk();
                 }
                 
