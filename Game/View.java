@@ -12,6 +12,7 @@ public class View {
     public int cameraY;
     public int cameraWidth;
     public int cameraHeight;
+    public boolean cameramode = false;
     public static float zoom = 1;
     private Graphics g = null; 
     private java.awt.Font font;
@@ -95,11 +96,11 @@ public class View {
                             while (bigchunk[x][y][zbottom].transparent == true && zbottom > 0 ){
                                 zbottom--; 
                             }
-                            float brigthness = (float) z/zbottom; 
-                            Block.images[renderarray[x][y][z].ID()].setColor(0, brigthness, brigthness, brigthness, 1);
-                            Block.images[renderarray[x][y][z].ID()].setColor(1, brigthness, brigthness, brigthness, 1);
-                            Block.images[renderarray[x][y][z].ID()].setColor(2, brigthness, brigthness, brigthness, 1);
-                            Block.images[renderarray[x][y][z].ID()].setColor(3, brigthness, brigthness, brigthness, 1);
+                                float brigthness = (float) z/zbottom; 
+                                Block.images[renderarray[x][y][z].ID()].setColor(0, brigthness, brigthness, brigthness, 1);
+                                Block.images[renderarray[x][y][z].ID()].setColor(1, brigthness, brigthness, brigthness, 1);
+                                Block.images[renderarray[x][y][z].ID()].setColor(2, brigthness, brigthness, brigthness, 1);
+                                Block.images[renderarray[x][y][z].ID()].setColor(3, brigthness, brigthness, brigthness, 1);
                         }
                         Block.images[renderarray[x][y][z].ID()].draw(
                             (Controller.chunklist[0].posX + x*Block.width + (y%2) * Block.width/2)*zoom,

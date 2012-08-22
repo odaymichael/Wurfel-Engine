@@ -1,14 +1,17 @@
 package Game;
 
 import MainMenu.MainMenuState;
-import org.newdawn.slick.*;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.MouseListener;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *
  * @author Benedikt
  */
-public class Controller {
+public class Controller implements MouseListener {
     /**
      *The list which has all nine chunks in it.
      */
@@ -28,7 +31,8 @@ public class Controller {
     public Controller(GameContainer container, StateBasedGame game) throws SlickException{
         gc = container;
         sbg = game;
-             
+          
+        gc.getInput().addMouseListener(this);
         fill_chunklist(MainMenuState.loadmap);
         Player = new Player(6,14,19);
     }
@@ -58,10 +62,14 @@ public class Controller {
     
     /* Main method which is called every time */
     public void update(int delta) throws SlickException{  
+        oldx = View.cameraX;
+        oldy = View.cameraY;
+        
+        
+        
         Input input = gc.getInput();
  
-        input.addMouseListener(new MouseDraggedListener());
-
+        
         if (input.isKeyDown(Input.KEY_Q)) gc.exit();
        
         //open menu
@@ -77,10 +85,11 @@ public class Controller {
         if (input.isKeyPressed(Input.KEY_G)) goodgraphics = !goodgraphics;
         
         //restart
-        if (input.isKeyPressed(Input.KEY_N)) fill_chunklist(false);
+        if (input.isKeyPressed(Input.KEY_C)) View.cameramode = !View.cameramode;
         
-        oldx = View.cameraX;
-        oldy = View.cameraY;
+        //restart
+        if (input.isKeyPressed(Input.KEY_N)) fill_chunklist(false);
+                
         
         //walk
         if (input.isKeyDown(Input.KEY_UP)) {Player.walk(1);}
@@ -91,8 +100,10 @@ public class Controller {
        
         Player.update();
         
-        View.cameraX = (Player.coordX)*Block.width - View.cameraWidth;
-        View.cameraY = Player.coordY*Block.height/2 - (Player.coordZ*Block.height/2) - View.cameraHeight;
+        if (View.cameramode == false) {
+            View.cameraX = (Player.coordX)*Block.width - View.cameraWidth;
+            View.cameraY = Player.coordY*Block.height/2 - (Player.coordZ*Block.height/2) - View.cameraHeight;
+        }
        
         for (int i=0;i<9;i++){
            chunklist[i].posX -= View.cameraX - oldx;
@@ -174,7 +185,7 @@ public class Controller {
         return result;
     }
     
-    class MouseDraggedListener implements MouseListener{
+    
         @Override
         public void mouseWheelMoved(int change) {
             gc.getInput().consumeEvent();
@@ -211,6 +222,10 @@ public class Controller {
             //workaround for the bug, because the event is called multiple times
             gc.getInput().consumeEvent();
             
+            if (View.cameramode) {
+                View.cameraX += newx-oldx;
+                View.cameraY += newy-oldy;
+            }
             /*for (int i=0;i<9;i++){
                 chunklist[i].posX += newx - oldx;
                 chunklist[i].posY += newy - oldy ;
@@ -240,7 +255,7 @@ public class Controller {
         @Override
         public void inputStarted() {
         }
-    }
+    
     
     private void openmenu(){
         boolean openmenu = true;

@@ -12,7 +12,7 @@ public class Block {
     public boolean obstacle;
     public static int width = 160;
     public static int height = 160;
-    public static Image images[] = new Image[45];
+    public static Image images[] = new Image[75];
     
     //Konstruktor
     
@@ -64,10 +64,14 @@ public class Block {
                      transparent = true;
                      obstacle = false;
                      break;
-            case 50: name = "strewbed" ;
+            case 50: name = "strewbed";
                      transparent = true;
                      obstacle = false;
-                     break;  
+                     break;
+            case 70: name = "campfire";
+                     transparent = true;
+                     obstacle = false;
+                     break;
             default: name = "undefined";
                      transparent = true;
                      obstacle = false;
@@ -82,7 +86,8 @@ public class Block {
                     //images[i].setColor(1, 0, 0, 0, 1);
                     //images[i].setColor(1, 1, 1, 1, 1);
                  } catch(RuntimeException e) {
-                    System.out.println("Block "+i+" not found.");
+                    System.out.println("Block "+i+" not found. Using air instead.");
+                    images[i] = new Image("Game/Blockimages/0-0.png");
                  }   
             }  
     }
