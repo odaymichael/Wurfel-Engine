@@ -1,11 +1,12 @@
 package Game;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
- *
+ * A Chunk is filled with many Blocks and is a part of the map.
  * @author Benedikt
- * 
  */
 public class Chunk {
         public int coordX, coordY, posX, posY;
@@ -51,6 +52,14 @@ public class Chunk {
             else
                 newChunk();
         }
+
+    Chunk() {
+    //fill everything with air
+    for (int x=0; x < BlocksX; x++)
+        for (int y=0; y < BlocksY; y++)
+            for (int z=0; z < BlocksZ; z++)
+                data[x][y][z] = new Block(0,0);
+    }
        
         private void newChunk(){
             //chunkdata will contain the blocks and objects

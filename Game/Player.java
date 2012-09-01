@@ -6,144 +6,156 @@ package Game;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 
 /**
  *
  * @author Benedikt
  */
 public class Player {
-   int posX = 0;
-   int posY = 0;
-   int posZ = 0;
-   int coordX;
-   int coordY;
-   int coordZ;
-   int ChunkCoordX;
-   int ChunkCoordY;
+   public int posX = 0;
+   public int posY = 0;
+   public int posZ = 0;
+   private int absCoordX;
+   private int absCoordY;
+   public int coordZ;
+   private int relCoordX;
+   private int relCoordY;
+   public int ChunkCoordX;
+   public int ChunkCoordY;
    private Image picture;
+   Sound fallsound;
    
-    /**Konstruktor
+    /**Creates a player
      *
-     * @param X
-     * @param Y
-     * @param Z
+     * @param X X Pos
+     * @param Y Y Pos
+     * @param Z Z Pos
      * @throws SlickException
      */
     public Player(int X, int Y, int Z) throws SlickException{
-     //chunk is always 0,0 at the moment
-     picture = new Image("Game/Images/Player.PNG");
-     coordX = X;
-     coordY = Y;
-     coordZ = Z;
-     if (coordZ > Chunk.BlocksZ-2) coordZ = Chunk.BlocksZ -2;
-     Controller.chunklist[4].data[coordX][coordY][coordZ] = new Block(40,0);
-     Controller.chunklist[4].data[coordX][coordY][coordZ] = new Block(40,1);
-   }
+        picture = new Image("Game/Images/Player.PNG");
+        fallsound = new Sound("Game/Sounds/wind.wav");
+        setAbsCoords(X,Y,Z);
+        //if Z is too high set to highes possible position
+        if (coordZ > Chunk.BlocksZ-2) coordZ = Chunk.BlocksZ -2;
+        
+        Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
+        Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,1);
+    }
+    
+    private void setAbsCoordX(int X){
+      absCoordX = X;
+      relCoordX = absCoordX - Controller.map.coordlistX[4]*Chunk.BlocksX;
+    }
+    
+    private void setAbsCoordY(int Y){
+      absCoordY = Y;
+      relCoordY = absCoordY - Controller.map.coordlistY[4]*Chunk.BlocksY;
+    }    
    
-   public void draw(){
-        picture.draw(
-                Controller.chunklist[4].posX + coordX*Block.width + (coordY%2) * Block.width/2 + posX,
-                Controller.chunklist[4].posY + coordY*Block.height/4 - coordZ*Block.height/2 + posY + posZ,
-                View.zoom
-                );
-   }
-   
+    private void setAbsCoords(int X, int Y, int Z){
+      setAbsCoordX(X);
+      setAbsCoordY(Y);
+      coordZ = Z;
+    }
+    
+    public int relCoordX(){
+        return relCoordX;
+    }
+    
+    public int relCoordY(){
+        return relCoordY;
+    }
+       
     public void walk(int dir){
         int chunk = 4;
         switch (dir) {
             case 1:
-                Controller.chunklist[4].data[coordX][coordY][coordZ] = new Block(0,0);
-                Controller.chunklist[4].data[coordX][coordY][coordZ+1] = new Block(0,0);
-                coordY--;
-                //border of chunk reached
-                if (coordY < 0) {
-                    GameplayState.iglog.add("Border: "+dir);
-                    coordY = Chunk.BlocksY-1;
-                    ChunkCoordY = Controller.chunklist[4].coordY+1;
-                    chunk = 1;
+                if (relCoordY > 0) {
+                    Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
+                    Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
+                    setAbsCoordY(absCoordY-1);
+              
+                    Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
+                    Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);  
+                    Controller.map.changes = true;
+                }else {
+                     GameplayState.iglog.add("Border: "+dir);
                 }
-                 
-                Controller.chunklist[chunk].data[coordX][coordY][coordZ] = new Block(40,0);
-                Controller.chunklist[chunk].data[coordX][coordY][coordZ+1] = new Block(40,1);  
-                Controller.changes = true;
            break;
                
-           case 3: 
-                Controller.chunklist[4].data[coordX][coordY][coordZ] = new Block(0,0);
-                Controller.chunklist[4].data[coordX][coordY][coordZ+1] = new Block(0,0);
-                coordX--;
+           case 3:
+               if (relCoordX > 0) {
+                Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
+                Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
+                setAbsCoordX(absCoordX-1);
                 
-                if (coordX<0) {
-                    GameplayState.iglog.add("Border: "+dir);
-                    coordX = Chunk.BlocksX-1;
-                    ChunkCoordX = Controller.chunklist[4].coordX-1;
-                    chunk = 3; 
-                }
                 
-                Controller.chunklist[chunk].data[coordX][coordY][coordZ] = new Block(40,0);
-                Controller.chunklist[chunk].data[coordX][coordY][coordZ+1] = new Block(40,1);
-                Controller.changes = true;
+                Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
+                Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
+                Controller.map.changes = true;
+               }else {
+                    GameplayState.iglog.add("Border: "+dir);  
+               }
            break;
                
            case 5: 
-                Controller.chunklist[4].data[coordX][coordY][coordZ] = new Block(0,0);
-                Controller.chunklist[4].data[coordX][coordY][coordZ+1] = new Block(0,0);
-                coordX++;
-                
-                if (coordX > Chunk.BlocksX-1) {
-                    GameplayState.iglog.add("Border: "+dir);
-                    coordX = 0;
-                    ChunkCoordX = Controller.chunklist[4].coordX+1;
-                    chunk = 5;
+                if (relCoordX < Chunk.BlocksX*3-1) {
+                    Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
+                    Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
+                    setAbsCoordX(absCoordX+1);
+                    Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
+                    Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
+                    Controller.map.changes = true;
+                } else {
+                    GameplayState.iglog.add("Border: "+dir);     
                 }
-                
-                Controller.chunklist[chunk].data[coordX][coordY][coordZ] = new Block(40,0);
-                Controller.chunklist[chunk].data[coordX][coordY][coordZ+1] = new Block(40,1);
-                Controller.changes = true;
            break;        
            
-           case 7: 
-                Controller.chunklist[4].data[coordX][coordY][coordZ] = new Block(0,0);
-                Controller.chunklist[4].data[coordX][coordY][coordZ+1] = new Block(0,0);
-                coordY++;
+           case 7:
+                if (relCoordY < Chunk.BlocksY*3-1) {
+                    Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
+                    Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
+                    setAbsCoordY(absCoordY+1);
                 
-                if (coordY > Chunk.BlocksY-1) {
-                    GameplayState.iglog.add("Border: "+dir);
-                    coordY = Chunk.BlocksY-1;
-                    ChunkCoordY = Controller.chunklist[4].coordY-1;
-                    chunk = 7; 
+                    Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
+                    Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
+                    Controller.map.changes = true;
+                }else {
+                     GameplayState.iglog.add("Border: "+dir);
                 }
-                
-                Controller.chunklist[chunk].data[coordX][coordY][coordZ] = new Block(40,0);
-                Controller.chunklist[chunk].data[coordX][coordY][coordZ+1] = new Block(40,1);
-                Controller.changes = true;
            break;
        }
-       GameplayState.iglog.add(coordX+":"+coordY+":"+coordZ);
+       //GameplayState.iglog.add(relCoordX+":"+relCoordY+":"+coordZ);
                
    }
    
    public void jump(){
        if (coordZ<Chunk.BlocksZ-2){
-           Controller.chunklist[4].data[coordX][coordY][coordZ] = new Block(0,0);
-           Controller.chunklist[4].data[coordX][coordY][coordZ+1] = new Block(0,0);
+           Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
+           Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
            coordZ++;
-           Controller.chunklist[4].data[coordX][coordY][coordZ] = new Block(40,0);
-           Controller.chunklist[4].data[coordX][coordY][coordZ+1] = new Block(40,1);
+           Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
+           Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
            
-           Controller.changes = true;
+           Controller.map.changes = true;
        }
-       GameplayState.iglog.add(coordX+":"+coordY+":"+coordZ);
+       //GameplayState.iglog.add(relCoordX+":"+relCoordY+":"+coordZ);
    }
    
    public void update(){
-       if (Controller.chunklist[4].data[coordX][coordY][coordZ-1].ID() == 0 && coordZ>1){
-           Controller.chunklist[4].data[coordX][coordY][coordZ] = new Block(0,0);
-           Controller.chunklist[4].data[coordX][coordY][coordZ+1] = new Block(0,0);
+       //Gravitation
+       if (Controller.map.data[relCoordX][relCoordY][coordZ-1].obstacle==false && coordZ>1){
+           if (! fallsound.playing()) fallsound.play();
+           Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
+           Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
            coordZ--;
-           Controller.chunklist[4].data[coordX][coordY][coordZ] = new Block(40,0);
-           Controller.chunklist[4].data[coordX][coordY][coordZ+1] = new Block(40,1);
-           GameplayState.iglog.add(coordX+":"+coordY+":"+coordZ);
+           Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
+           Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
+           //GameplayState.iglog.add(relCoordX+":"+relCoordY+":"+coordZ);
+       } else{
+            fallsound.stop();
        }
    }
            
