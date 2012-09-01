@@ -4,25 +4,61 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
 
 
+/**
+ * 
+ * @author Benedikt
+ */
 public class View {
     private Controller Controller;
-    public Block renderarray[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
-    Block bigchunk[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
-    public int cameraX;
-    public int cameraY;
-    public int cameraWidth;
-    public int cameraHeight;
+    /**
+     * the array which is created after analysing the Map.data
+     */
+    private Block renderarray[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
+    /**
+     * 
+     */
+    public static int cameraX;
+    /**
+     * 
+     */
+    public static int cameraY;
+    /**
+     * Width of camera
+     */
+    public static int cameraWidth;
+    /**
+     * Height of camera
+     */
+    public static int cameraHeight;
+    /**
+     * is the player centered or ???
+     */
     public boolean cameramode = false;
+    /**
+     * the factor with the map is zoomed
+     */
     public static float zoom = 1;
     private Graphics g = null; 
     private java.awt.Font font;
-    private TrueTypeFont tTFont;
-    private TrueTypeFont tTFont_small;
+    /**
+     * 
+     */
+    public static TrueTypeFont tTFont;
+    /**
+     * 
+     */
+    public static TrueTypeFont tTFont_small;
     private GameContainer gc;
     private MsgSystem iglog;
     //private static Insets insets;
     
     //Konstruktor 
+    /**
+     * 
+     * @param pController
+     * @param pgc
+     * @throws SlickException
+     */
     public View(Controller pController,GameContainer pgc) throws SlickException {
         Controller = pController;
         gc = pgc;
@@ -59,13 +95,17 @@ public class View {
     public void render(StateBasedGame game, Graphics pg) throws SlickException{
         g = pg;
         draw_all_Chunks();
-        //Controller.Player.draw();
+        //Controller.player.draw();
         
         //GUI
-        drawchunklist();
+        Controller.minimap.draw(pg);
         drawiglog();
     }
      
+    /**
+     * 
+     * @throws SlickException
+     */
     public void draw_all_Chunks() throws SlickException{
        /*
         BasicStroke stokestyle = new BasicStroke(
@@ -93,7 +133,7 @@ public class View {
                         //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
                         if (Controller.goodgraphics){
                             int zbottom=Chunk.BlocksZ-1;
-                            while (bigchunk[x][y][zbottom].transparent == true && zbottom > 0 ){
+                            while (Controller.map.data[x][y][zbottom].transparent == true && zbottom > 0 ){
                                 zbottom--; 
                             }
                                 float brigthness = (float) z/zbottom; 
@@ -103,8 +143,8 @@ public class View {
                                 Block.images[renderarray[x][y][z].ID()].setColor(3, brigthness, brigthness, brigthness, 1);
                         }
                         Block.images[renderarray[x][y][z].ID()].draw(
-                            (Controller.chunklist[0].posX + x*Block.width + (y%2) * Block.width/2)*zoom,
-                            (Controller.chunklist[0].posY + y*Block.height/2 - z*Block.height)*zoom / 2,
+                            (Controller.map.posX + x*Block.width + (y%2) * Block.width/2)*zoom,
+                            (Controller.map.posY + y*Block.height/2 - z*Block.height)*zoom / 2,
                             zoom
                         );
                     }
@@ -226,6 +266,9 @@ public class View {
             );*/
      };
 
+    /**
+     * 
+     */
     public void raytracing(){
         //fill renderarray with air
         for (int x=0;x <Chunk.BlocksX*3;x++)
@@ -233,49 +276,39 @@ public class View {
                 for (int z=0;z <Chunk.BlocksZ;z++)
                     renderarray[x][y][z] = new Block(0,0);
             
-        //create big array out of all other arrays to performe the algorithm
-        for (int i=0;i <9;i++)
-            for (int x=0;x <Chunk.BlocksX;x++)
-                for (int y=0;y <Chunk.BlocksY;y++)
-                    System.arraycopy(
-                        Controller.chunklist[i].data[x][y],
-                        0,
-                        bigchunk[x+ Chunk.BlocksX*(i%3)][y+ Chunk.BlocksY*Math.abs(i/3)],
-                        0,
-                        Chunk.BlocksZ
-                    );
+
         
         //generate array (renderarray) which has render information in it. It filters every non visible block
 
         //check top of big chunk
-        for (int x=0; x < bigchunk.length; x++)
-            for (int y=0; y < bigchunk[0].length; y++)
+        for (int x=0; x < Controller.map.data.length; x++)
+            for (int y=0; y < Controller.map.data[0].length; y++)
                 trace_ray(
-                    bigchunk,
+                    Controller.map.data,
                     x,
                     y,
-                    bigchunk[0][0].length-1
+                    Controller.map.data[0][0].length-1
                 );
             
         //check front side
-        for (int x=0; x < bigchunk.length; x++)
-            for (int z=0; z <bigchunk[0][0].length-1 ; z++)            
+        for (int x=0; x < Controller.map.data.length; x++)
+            for (int z=0; z < Controller.map.data[0][0].length-1 ; z++)            
                 trace_ray(
-                    bigchunk,
+                    Controller.map.data,
                     x,
-                    bigchunk[0].length-1,
+                    Controller.map.data[0].length-1,
                     z
                 );
-        for (int x=0; x < bigchunk.length; x++)
-            for (int z=0; z <bigchunk[0][0].length-1 ; z++)            
+        for (int x=0; x < Controller.map.data.length; x++)
+            for (int z=0; z < Controller.map.data[0][0].length-1 ; z++)            
                 trace_ray(
-                    bigchunk,
+                    Controller.map.data,
                     x,
-                    bigchunk[0].length-2,
+                    Controller.map.data[0].length-2,
                     z
                 );
                 
-        Controller.changes = false;
+        Controller.map.changes = false;
     }
 
     private void trace_ray(Block bigchunk[][][],int x, int y, int z){
@@ -293,6 +326,9 @@ public class View {
            renderarray[x][y][z] = bigchunk[x][y][z];
     }
        
+    /**
+     * 
+     */
     public void drawchunklist(){
          //Rectangle rectangle = new Rectangle(20,20,80,80);
         //trueTypeFont.drawString(20.0f, 20.0f, "Slick displaying True Type Fonts", Color.green);
@@ -301,41 +337,11 @@ public class View {
          //UnicodeFont uFont = new UnicodeFont(font , 20, false, false);
          //custom fonts makes them dissapear. y u no work?
          //g.setFont(uFont);
-        for (int i=0;i < Controller.chunklist.length;i++){
-            g.setColor(Color.white);
-            g.fillRect(
-                    gc.getScreenWidth() - 300 + i%3 *60,
-                    i/3*60+10,
-                    60,
-                    60
-                );
-            
-                g.setColor(Color.black);
-                g.drawRect(
-                    gc.getScreenWidth() - 300 + i%3 *60,
-                    i/3*60+10,
-                    60,
-                    60
-                );
-                
-                g.setColor(Color.black);
-                tTFont.drawString(
-                    gc.getScreenWidth()- 290 + i%3*60,
-                    i/3*60+20,
-                    Controller.chunklist[i].coordX +" | "+ Controller.chunklist[i].coordY,
-                    Color.black
-                );
-                
-                tTFont_small.drawString(
-                    gc.getScreenWidth()-290 +  i%3*60,
-                    i/3*60+50,
-                    Controller.chunklist[i].posX +" | "+ Controller.chunklist[i].posY,
-                    Color.black
-                );
-        }
+        
+        
         tTFont_small.drawString(
             gc.getScreenWidth()-290,
-            300,
+            250,
             cameraX +" | "+ cameraY,
             Color.black
        );

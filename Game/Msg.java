@@ -5,12 +5,8 @@
 package Game;
 
 /**
- *
+ * The Message object is put into the MsgSystem. It contains the message, the sender and the importance.
  * @author Benedikt
- */
-/**
- * 
- * Dies ist ein Javadoc test
  */
 public class Msg {
     private String fmessage;
