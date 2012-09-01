@@ -1,0 +1,185 @@
+package Game;
+
+import java.io.*;
+
+/**
+ *
+ * @author Benedikt
+ * 
+ */
+public class Chunk {
+        public int coordX, coordY, posX, posY;
+
+        public static final int BlocksX = 12;//16:9 => 12:27, 4:3=>12:36
+        public static final int BlocksY = 28;
+        public static final int BlocksZ = 20;
+        /**
+        *The size of a chunk in pixels
+        */
+        public static int SizeX = BlocksX*Block.width;
+        /**
+        *The size of a chunk in pixels
+        */
+        public static int SizeY = BlocksY*Block.height/4;
+        public static int SizeZ = BlocksZ*Block.height/2;
+        
+        public Block data[][][] = new Block[BlocksX][BlocksY][BlocksZ];
+
+        //Konstruktor
+     /**
+     *
+     * @param ChunkX
+     * @param ChunkY
+     * @param startposX
+     * @param startposY
+     * @param loadmap
+     */
+    public Chunk(int ChunkX, int ChunkY, int startposX, int startposY, boolean loadmap){
+            coordX = ChunkX;
+            coordY = ChunkY;
+            posX = startposX;
+            posY = startposY;
+            
+            //fill everything with air to avoid crashes
+            for (int x=0; x < BlocksX; x++)
+                for (int y=0; y < BlocksY; y++)
+                    for (int z=0; z < BlocksZ; z++)
+                        data[x][y][z] = new Block(0,0);
+            
+            if (loadmap) 
+                loadChunk();
+            else
+                newChunk();
+        }
+       
+        private void newChunk(){
+            //chunkdata will contain the blocks and objects
+            //alternative to chunkdata.length ChunkBlocks
+            GameplayState.iglog.add("Neu: "+coordX+","+ coordY);
+            for (int x=0; x < BlocksX; x++)
+                for (int y=0; y < BlocksY; y++){
+                    //Dirt from 0 to 8
+                    for (int z=0; z <  Chunk.BlocksZ / 2; z++){
+                        //for (int z=0; z < BlocksZ-4; z++)
+                        data[x][y][z] = new Block(2,0);
+                        // if ((z>10) && (x>10) && (y>5))
+                        //  data[x][y][z] = new Block (9,0);
+                     }
+
+                    //data[0][y][BlocksZ / 2 - 1] = new Block(2,0);
+                        
+                       
+                    //Gras on z=9
+                    //if ((x > 0) && (x < BlocksX-1) && (y>0))                        
+                    //data[x][y][BlocksZ/2-1] = new Block(1,0);
+                    //data[x][y][BlocksZ/2] = new Block(9,0);
+                        
+                        
+                    /*
+                    if (y == BlocksY-1)
+                        data[x][y][BlocksZ/2-1] = new Block(0,0);
+                        
+                    //air from z=10 to 19
+                    for (int z = BlocksZ / 2; z < BlocksZ; z++)
+                        data[x][y][z] = new Block(0,0);   
+                    */
+                    }
+        }
+        
+       private void loadChunk(){
+            /*//to find root path of project
+            File here = new File(".");
+            System.out.println(here.getAbsolutePath());*/
+        
+            //Reading map files test
+            try {
+                /*
+                 //the path may cause problems with other IDE's
+                FileReader input = new FileReader("build/classes/map1/map.otmi");
+                BufferedReader bufRead = new BufferedReader(input);
+
+                int count = 1;  // Line number of count 
+
+                
+                String readstring = "";
+                    
+                // Read through file one line at time. Print line # and line
+                while (readstring != null){
+                    readstring = bufRead.readLine();
+                    StringBuilder line = new StringBuilder();
+                    line.append(readstring);
+                    line.deleteCharAt(0);
+                    
+                    if (readstring != null) System.out.println(count+":"+line.toString());
+                        
+                    count++;
+                }
+               
+                bufRead.close();
+                */
+               // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
+               if (getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc") != null) {    
+                    GameplayState.iglog.add("Load: "+coordX+","+coordY);
+                    //FileReader input = new FileReader("map/chunk"+coordX+","+coordY+".otmc");
+                    //BufferedReader bufRead = new BufferedReader(input);
+                    BufferedReader bufRead = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc")));
+
+                    StringBuilder line;
+                    //jump over first line to prevent problems with length byte
+                    bufRead.readLine();
+                    
+
+                    int z = 0;
+                    int x;
+                    int y;
+                    String lastline;
+
+                    //nimm einen Block auseinander
+                    do {
+                        line = new StringBuilder();
+                        line.append(bufRead.readLine());
+                        //optionale Kommentarzeile überspringen
+                        if ((line.charAt(1) == '/') && (line.charAt(2) == '/')){
+                            line = new StringBuilder();
+                            line.append(bufRead.readLine());
+                        }
+
+                        //Ebene
+                        y = 0;
+                        do{
+                            x = 0;
+
+                            do{
+                                int posdots = line.indexOf(":");
+
+                                int posend = 1;
+                                while ((posend < -1+line.length()) && (line.charAt(posend)!= ' '))  {
+                                    posend++;
+                                }
+
+                                data[x][y][z] = new Block(
+                                            (int) Integer.parseInt(line.substring(0,posdots)),
+                                            (int) Integer.parseInt(line.substring(posdots+1,posend))
+                                            );
+                                x++;
+                                line.delete(0,posend+1);
+                            } while (x < BlocksX);
+                            
+                            line = new StringBuilder();
+                            line.append(bufRead.readLine());
+                            
+                            y++;
+                        } while (y < BlocksY);
+                        lastline = bufRead.readLine();
+                        z++;
+                    }while (lastline != null);
+                } else {
+                    GameplayState.iglog.add(coordX+","+coordY +"dont exist");
+                    newChunk();
+                }
+                
+            } catch (IOException ex) {
+                
+            }
+       }
+}
