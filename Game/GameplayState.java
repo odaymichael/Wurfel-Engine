@@ -7,8 +7,8 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class GameplayState extends BasicGameState { 
-    private View View = null;
-    private Controller Controller = null;
+    protected static View View = null;
+    protected static Controller Controller = null;
     private int stateID = -1;
     public static MsgSystem iglog;
     

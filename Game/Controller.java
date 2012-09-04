@@ -20,11 +20,12 @@ public class Controller {
     public boolean goodgraphics = true;
     public Minimap minimap;
     
-    private View View;
+    private View view;
     private GameContainer gc;
     private StateBasedGame sbg;
     private int oldx;
     private int oldy;
+    private float zoomx = 1;
     
     
     //Constructor is called when entering the gamemode.
@@ -39,15 +40,13 @@ public class Controller {
     }
     
     
-    public void giveView(View pView) {
-        View = pView;
+    public void giveView(View view) {
+         this.view = view;
     }
     
     /* Main method which is called every time */
     public void update(int delta) throws SlickException{  
-        oldx = View.cameraX;
-        oldy = View.cameraY;
-        
+
         Input input = gc.getInput();
  
         if (input.isKeyDown(Input.KEY_Q)) gc.exit();
@@ -64,52 +63,65 @@ public class Controller {
         //good graphics
         if (input.isKeyPressed(Input.KEY_G)) goodgraphics = !goodgraphics;
         
-        //restart
-        if (input.isKeyPressed(Input.KEY_C)) View.cameramode = !View.cameramode;
+        //toggle camera
+        if (input.isKeyPressed(Input.KEY_C)) view.cameramode = !view.cameramode;
         
         //restart
         if (input.isKeyPressed(Input.KEY_N)) map = new Map(false);
                 
+        //reset zoom
+        if (input.isKeyPressed(Input.KEY_Z)) {
+            view.setzoom(1);
+            GameplayState.iglog.add("Zoom reset");
+        }
+        
         
         //walk
-        if (input.isKeyDown(Input.KEY_UP)) {player.walk(1);}
-        if (input.isKeyDown(Input.KEY_DOWN)) {player.walk(7);}
-        if (input.isKeyDown(Input.KEY_LEFT)) {player.walk(3);}
-        if (input.isKeyDown(Input.KEY_RIGHT)) {player.walk(5);}
+        if (input.isKeyDown(Input.KEY_W)) {player.walk(1,delta);}
+        if (input.isKeyDown(Input.KEY_S)) {player.walk(7,delta);}
+        if (input.isKeyDown(Input.KEY_A)) {player.walk(3,delta);}
+        if (input.isKeyDown(Input.KEY_D)) {player.walk(5,delta);}
         if (input.isKeyPressed(Input.KEY_SPACE)) player.jump();
        
-        player.update();
-        
-        if (View.cameramode == false) {
-            View.cameraX = player.relCoordX()*Block.width - View.cameraWidth / 2;
-            View.cameraY = player.relCoordY()*Block.height/2 - (player.coordZ*Block.height/2) - View.cameraHeight;
-        }
        
-        map.posX -= View.cameraX - oldx;
-        map.posY -= View.cameraY - oldy;
-        
-       
-        
-        //earth to right
-        if (View.cameraX - Chunk.SizeX*map.coordlistX[4] < -Chunk.SizeX/2)
-           map.setCenter(3);  
-            
-        /*
-         * //earth to the left
-        if (View.cameraX + View.cameraWidth - Chunk.SizeX*map.coordlistX[4]  > 3*Chunk.SizeX/2) 
-           map.setcenterchunk(5);   
-*/
-        ///scroll up, earth down
-        /*if (View.cameraY - (Chunk.SizeY + Chunk.SizeZ)*map.coordlistY[4] > 3*(Chunk.SizeY) / 2) 
-           map.setcenterchunk(1);   
 
-        //scroll down, earth up
-        if (View.cameraY-View.cameraHeight - (Chunk.SizeY+Chunk.SizeZ)*map.coordlistY[4] < -3*(Chunk.SizeY) / 2)
-           map.setcenterchunk(7); 
-          */ 
+        //earth to right
+        if (view.cameraX < Chunk.SizeX/3)
+           map.setCenter(3);
+        else {       
+            //earth to the left
+            if (view.cameraX + view.cameraWidth > 8*Chunk.SizeX/3) 
+                map.setCenter(5); 
+        }
+        
+       //scroll up, earth down            
+        if (view.cameraY  <= 0) 
+            map.setCenter(1);
+        else {
+            //scroll down, earth up
+            if (view.cameraY+view.cameraHeight > Chunk.SizeY*3)
+                map.setCenter(7);
+            }
+        
+        //camera
+        oldx = view.cameraX;
+        oldy = view.cameraY;
+        
+        player.update(delta);
+        
+        if (view.cameramode == false) {
+            view.cameraX = player.getRelCoordX()*Block.width - view.cameraWidth / 2;
+            view.cameraY = player.getRelCoordY()*Block.height/2 - (player.coordZ*Block.height/2) - view.cameraHeight;
+        } 
+        
+        map.posX -= view.cameraX - oldx;
+        map.posY -= view.cameraY - oldy;
+            
+
+       
         
         //do raytracing
-        if (map.changes) View.raytracing();
+        if (map.changes) view.raytracing();
        
         GameplayState.iglog.update(delta);
     }
@@ -121,15 +133,18 @@ public class Controller {
         public void mouseWheelMoved(int change) {
             gc.getInput().consumeEvent();
             
-            View.zoom = View.zoom+ View.zoom*(change/500f);
-            if (View.zoom<0) View.zoom *= -1;
+            zoomx = zoomx + change/1000f;
+            view.setzoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
+            
+            view.cameraWidth = (int) (gc.getScreenWidth() / view.getzoom());
+            view.cameraHeight= (int) (gc.getScreenHeight() / view.getzoom());
             
            /* Block.width =(int) (gc.getScreenWidth() *zoom / Chunk.BlocksX);
             Block.height = (int) (4*gc.getScreenHeight()*zoom / Chunk.BlocksY);
             Chunk.SizeX = (int) (Chunk.BlocksX*Block.width*zoom);
             Chunk.SizeY = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
-            GameplayState.iglog.add("Zoom: "+View.zoom+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
+            GameplayState.iglog.add("Zoom: "+view.getzoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
         }
 
         @Override
@@ -153,9 +168,9 @@ public class Controller {
             //workaround for the bug, because the event is called multiple times
             gc.getInput().consumeEvent();
             
-            if (View.cameramode) {
-                View.cameraX += newx-oldx;
-                View.cameraY += newy-oldy;
+            if (view.cameramode) {
+                view.cameraX += newx-oldx;
+                view.cameraY += newy-oldy;
             }
             /*for (int i=0;i<9;i++){
                 chunklist[i].posX += newx - oldx;

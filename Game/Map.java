@@ -24,7 +24,7 @@ public class Map {
      */
     public int coordlistY[] = new int[9];;
 
-    Map(boolean loadmap) {
+    public Map(boolean loadmap) {
         //create the map
         Chunk tempchunk;
         int pos = 0;
@@ -46,13 +46,26 @@ public class Map {
         changes = true;
     }
     
+    private Block[][][] copyOf3Dim(Block[][][] array) {
+        Block[][][] copy;
+        copy = new Block[array.length][][];
+        for (int i = 0; i < array.length; i++) {
+            copy[i] = new Block[array[i].length][];
+            for (int j = 0; j < array[i].length; j++) {
+                copy[i][j] = new Block[array[i][j].length];
+                System.arraycopy(array[i][j], 0, copy[i][j], 0, 
+                    array[i][j].length);
+            }
+        }
+        return copy;
+    } 
+    
     /**
      * Reorgnanises the map and sets the center to newcenter.
      * Move all chunks when loading or creating a new piece of the map
-     * @param center 
+     * @param center center is 1,3,5 or 7
      */
     public void setCenter(int center){
-        //newcenter is 1,3,5 or 7
         /*
           |0|1|2|
           -------
@@ -62,12 +75,16 @@ public class Map {
          */
         
         GameplayState.iglog.add("New Center: "+center);
+        System.out.println("New Center: "+center);
         
-        Block data_copy[][][] = data;
+        Block data_copy[][][] = copyOf3Dim(data);
         
         for (int pos=0; pos<9; pos++){
+            coordlistX[pos] += (center == 3 ? -1 : (center == 5 ? 1 : 0));
+            coordlistY[pos] += (center == 1 ? 1 : (center == 7 ? -1 : 0));
+            
             if (check_chunk_movement(pos,center)){
-                //System.out.println("chunkliste[" + i + "] bekommt den alten von chunkliste["+ (i + newcenter - 4) +"]");
+                System.out.println("[" + pos + "] <- ["+ (pos + center - 4) +"] (old)");
                 setChunk(
                     pos,
                     getChunk(data_copy,pos -4 + center)
@@ -76,17 +93,21 @@ public class Map {
                 setChunk(
                         pos,
                         new Chunk(
-                            coordlistX[pos] + (center == 3 ? -1 : (center == 5 ? 1 : 0)),
-                            coordlistY[pos] + (center == 1 ? 1 : (center == 7 ? -1 : 0)),
+                            coordlistX[pos],
+                            coordlistY[pos],
                             coordlistX[pos] + (int) ((center == 3 ? -Chunk.SizeX : (center == 5 ?  Chunk.SizeX: 0))),
                             coordlistY[pos] + (int) ((center == 1 ? -Chunk.SizeY : (center == 7 ? Chunk.SizeY : 0))),
                             MainMenuState.loadmap
                         )
                 );
-                //System.out.println("chunkliste["+i+"] bekommt einen neuen Chunk: "+ chunklist[i].coordX +","+chunklist[i].coordY);
-                //System.out.println("Pos: "+ chunklist[i].posX +","+ chunklist[i].posY);
+                System.out.println("["+pos+"] new: "+ coordlistX[pos] +","+coordlistY[pos]);
             }
         }
+        //player switches chunk
+        System.out.println("Player was rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
+        Controller.player.setRelCoordX(Controller.player.getRelCoordX() +  (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BlocksX);
+        Controller.player.setRelCoordY(Controller.player.getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BlocksY);
+        System.out.println("Player is rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
         changes = true;
     }
     
@@ -116,18 +137,17 @@ public class Map {
     private Chunk getChunk(Block[][][] data, int pos) {
         Chunk tmpChunk = new Chunk();
         for (int x = Chunk.BlocksX*(pos % 3);
-                x <Chunk.BlocksX*(pos % 3+1);
+                x < Chunk.BlocksX*(pos % 3+1);
                 x++
             )
-                for (int y=Chunk.BlocksY*Math.abs(pos / 3);
+                for (int y = Chunk.BlocksY*Math.abs(pos / 3);
                         y < Chunk.BlocksY*Math.abs(pos / 3+1);
                         y++
                     ) {
                     System.arraycopy(
-                        data[x]
-                            [y],                
+                        data[x][y],                
                         0,
-                        data[x][y],
+                        tmpChunk.data[x-Chunk.BlocksX*(pos % 3)][y-Chunk.BlocksY*(pos / 3)],
                         0,
                         Chunk.BlocksZ
                     );

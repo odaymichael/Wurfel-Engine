@@ -1,7 +1,10 @@
 package Game;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 
 /**
  * A Block is a wonderfull piece of information.
@@ -37,9 +40,15 @@ public class Block {
      *height of the image 
      */
     public static int height = 160;
+    
+    public int spritex = 0;
+    public int spritey = 0;
+    public static SpriteSheet Blocksheet;
+    
     /**
      * the list wich contains all images
      */
+    
     public static Image images[] = new Image[75];
     
     /**
@@ -73,34 +82,50 @@ public class Block {
             case 1:  name = "gras";
                      transparent = false;
                      obstacle = true;
+                     spritex=0;
+                     spritey=1;
                      break;
             case 2:  name = "dirt";
                      transparent = false;
                      obstacle = true;
+                     spritex=0;
+                     spritey=2;
                      break;
             case 3:  name = "stone";
                      transparent = false;
                      obstacle = true;
+                     spritex=1;
+                     spritey=1;
                      break;
             case 4:  name = "asphalt";
                      transparent = false;
                      obstacle = true;
+                     spritex=1;
+                     spritey=2;
                      break;
             case 5:  name = "cobblestone";
                      transparent = false;
                      obstacle = true;
+                     spritex=2;
+                     spritey=1;
                      break;
             case 6:  name = "pavement";
                      transparent = false;
                      obstacle = true;
+                     spritex=2;
+                     spritey=2;
                      break;
             case 7:  name = "concrete";
                      transparent = false;
                      obstacle = true;
+                     spritex=3;
+                     spritey=0;
                      break;
             case 8:  name = "sand";
                      transparent = false;
                      obstacle = true;
+                     spritex=3;
+                     spritey=2;
                      break;      
             case 9:  name = "water";
                      transparent = true;
@@ -109,10 +134,14 @@ public class Block {
             case 20: name = "red brick wall";
                      transparent = false;
                      obstacle = true;
+                     spritex=1;
+                     spritey=0;
                      break;
             case 40: name = "player";
                      transparent = true;
                      obstacle = false;
+                     spritex=2;
+                     spritey=0;
                      break;
             case 50: name = "strewbed";
                      transparent = true;
@@ -121,10 +150,14 @@ public class Block {
             case 70: name = "campfire";
                      transparent = true;
                      obstacle = false;
+                     spritex=4;
+                     spritey=0;
                      break;
             default: name = "undefined";
                      transparent = true;
                      obstacle = true;
+                     spritex=4;
+                     spritey=0;
                      break; 
         }
     }
@@ -133,17 +166,15 @@ public class Block {
      * 
      * @throws SlickException
      */
-    public static void listImages() throws SlickException{
-        for (int i=0; i<images.length; i++){
-                try {
-                    images[i] = new Image("Game/Blockimages/"+ i +"-0.png");
-                    //images[i].setColor(1, 0, 0, 0, 1);
-                    //images[i].setColor(1, 1, 1, 1, 1);
-                 } catch(RuntimeException e) {
-                    System.out.println("Block "+i+" not found. Using air instead.");
-                    images[i] = new Image("Game/Blockimages/0-0.png");
-                 }   
-            }  
+    public static void listImages(float zoom) {
+        SpriteSheet tempBlocksheet;
+        try {
+            tempBlocksheet = new SpriteSheet("Game/Blockimages/Blocksprite.png", width,height,4);
+            Blocksheet = new SpriteSheet(tempBlocksheet.getScaledCopy(zoom),(int) (width*zoom),(int) (height*zoom),(int)(4*zoom));
+        } catch (SlickException ex) {
+            Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     /**

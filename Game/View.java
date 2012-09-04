@@ -17,19 +17,19 @@ public class View {
     /**
      * 
      */
-    public static int cameraX;
+    public int cameraX;
     /**
      * 
      */
-    public static int cameraY;
+    public int cameraY;
     /**
      * Width of camera
      */
-    public static int cameraWidth;
+    public int cameraWidth;
     /**
      * Height of camera
      */
-    public static int cameraHeight;
+    public int cameraHeight;
     /**
      * is the player centered or ???
      */
@@ -37,7 +37,7 @@ public class View {
     /**
      * the factor with the map is zoomed
      */
-    public static float zoom = 1;
+    private float zoom = 1;
     private Graphics g = null; 
     private java.awt.Font font;
     /**
@@ -49,7 +49,6 @@ public class View {
      */
     public static TrueTypeFont tTFont_small;
     private GameContainer gc;
-    private MsgSystem iglog;
     //private static Insets insets;
     
     //Konstruktor 
@@ -62,7 +61,7 @@ public class View {
     public View(Controller pController,GameContainer pgc) throws SlickException {
         Controller = pController;
         gc = pgc;
-        Block.listImages();        
+             
        
         // initialise the font which CAUSES LONG LOADING TIME!!!
         font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
@@ -72,9 +71,10 @@ public class View {
         
         //update resolution things
         GameplayState.iglog.add("Resolution: "+gc.getScreenWidth()+" x "+gc.getScreenHeight());
-        //Block.width = gc.getScreenWidth() / Chunk.BlocksX;
-        //Block.height = gc.getScreenHeight() / ((Chunk.BlocksY-1)/4);
-        zoom = (float) ((float) gc.getScreenHeight()*4/((Chunk.BlocksY)* Block.height));
+        
+        zoom = gc.getScreenHeight()*4 / (float)(Chunk.BlocksY* Block.height);
+        System.out.println(zoom);
+        Block.listImages(zoom); 
         // Block.width = Block.height;
         GameplayState.iglog.add("Blocks: "+Block.width+" x "+Block.height);
         GameplayState.iglog.add("Zoom: "+zoom);
@@ -82,8 +82,8 @@ public class View {
         GameplayState.iglog.add("chunk w/ zoom: "+Chunk.SizeX*zoom+" x "+Chunk.SizeY*zoom);
   
         
-        cameraWidth = (int) (gc.getScreenWidth()*zoom);
-        cameraHeight= (int) (gc.getScreenHeight()*zoom);
+        cameraWidth = (int) (gc.getScreenWidth()/zoom);
+        cameraHeight= (int) (gc.getScreenHeight()/zoom);
     }
     
     /**
@@ -125,13 +125,14 @@ public class View {
                 null);
         */  
 
+       Block.Blocksheet.startUse();
        for (int y=0; y < renderarray[0].length; y++)//vertikal
             for (int x=0; x < renderarray.length; x++)//horizontal
                 for (int z=0; z < renderarray[0][0].length; z++)
                     //draw the block except air
                     if (renderarray[x][y][z].ID() != 0){
                         //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
-                        if (Controller.goodgraphics){
+                        /*if (Controller.goodgraphics){
                             int zbottom=Chunk.BlocksZ-1;
                             while (Controller.map.data[x][y][zbottom].transparent == true && zbottom > 0 ){
                                 zbottom--; 
@@ -141,13 +142,23 @@ public class View {
                                 Block.images[renderarray[x][y][z].ID()].setColor(1, brigthness, brigthness, brigthness, 1);
                                 Block.images[renderarray[x][y][z].ID()].setColor(2, brigthness, brigthness, brigthness, 1);
                                 Block.images[renderarray[x][y][z].ID()].setColor(3, brigthness, brigthness, brigthness, 1);
-                        }
-                        Block.images[renderarray[x][y][z].ID()].draw(
-                            (Controller.map.posX + x*Block.width + (y%2) * Block.width/2)*zoom,
-                            (Controller.map.posY + y*Block.height/2 - z*Block.height)*zoom / 2,
-                            zoom
+                        }*/
+                        /*Block.Blocksheet.getSprite(
+                            Controller.map.data[x][y][z].spritex,
+                            Controller.map.data[x][y][z].spritey
+                            ).draw(
+                                (int) ((Controller.map.posX + x*Block.width + (y%2) * Block.width/2)*zoom),
+                                (int) ((Controller.map.posY + y*Block.height/2 - z*Block.height)*zoom / 2)
+                            );*/
+                       
+                        Block.Blocksheet.renderInUse(
+                            (int) ((Controller.map.posX + x*Block.width + (y%2) * Block.width/2)*zoom),
+                            (int) ((Controller.map.posY + y*Block.height/2 - z*Block.height)*zoom / 2),
+                            Controller.map.data[x][y][z].spritex,
+                            Controller.map.data[x][y][z].spritey
                         );
                     }
+       Block.Blocksheet.endUse();
                 
         /*Ansatz mit Zeichnen der halben tiles
         //int amountX = window_width()/Controller.tilesizeX;
@@ -325,28 +336,16 @@ public class View {
         if ((y >= 0) && (z>=0))
            renderarray[x][y][z] = bigchunk[x][y][z];
     }
+    
+    public void setzoom(float zoom) {
+        this.zoom = zoom;
+        Block.listImages(zoom);
+    }
+    
+    public float getzoom() {
+        return zoom;
+    }
        
-    /**
-     * 
-     */
-    public void drawchunklist(){
-         //Rectangle rectangle = new Rectangle(20,20,80,80);
-        //trueTypeFont.drawString(20.0f, 20.0f, "Slick displaying True Type Fonts", Color.green);
-         
-         //java.awt.Font font = new java.awt.Font("Helvetica", java.awt.Font.BOLD, 12);
-         //UnicodeFont uFont = new UnicodeFont(font , 20, false, false);
-         //custom fonts makes them dissapear. y u no work?
-         //g.setFont(uFont);
-        
-        
-        tTFont_small.drawString(
-            gc.getScreenWidth()-290,
-            250,
-            cameraX +" | "+ cameraY,
-            Color.black
-       );
-        
-    } 
      
     private void drawiglog(){
         for (int i=0;i < GameplayState.iglog.size();i++){
