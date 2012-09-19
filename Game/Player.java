@@ -4,7 +4,6 @@
  */
 package Game;
 
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
@@ -21,7 +20,6 @@ public class Player extends Block{
    public int coordZ;
    private int relCoordX;
    private int relCoordY;
-   private Image picture;
    private Sound fallsound;
    private int timetillmove;
    
@@ -34,7 +32,6 @@ public class Player extends Block{
      */
     public Player(int X, int Y, int Z) throws SlickException{
         name="Player";
-        picture = new Image("Game/Images/Player.PNG");
         fallsound = new Sound("Game/Sounds/wind.wav");
         setAbsCoords(X,Y,Z);
         //if Z is too high set to highes possible position
@@ -43,28 +40,29 @@ public class Player extends Block{
         Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
         Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,1);
     }
+
     
     private void setAbsCoordX(int X){
-      absCoordX = X;
-      setRelCoordX(X - Controller.map.coordlistX[4]*Chunk.BlocksX);
+        absCoordX = X;
+        setRelCoordX(X - Controller.map.coordlistX[4]*Chunk.BlocksX);
     }
     
     private void setAbsCoordY(int Y){
-      absCoordY = Y;
-      //da das Map Coordinatensystem in y Richtugn in zwei unterschiedliche Richtungen geht
-      setRelCoordY(Y + Controller.map.coordlistY[4]*Chunk.BlocksY);
+        absCoordY = Y;
+        //da das Map Coordinatensystem in y-Richtung in zwei unterschiedliche Richtungen geht
+        setRelCoordY(Y + Controller.map.coordlistY[4]*Chunk.BlocksY);
     }    
    
     private void setAbsCoords(int X, int Y, int Z){
-      setAbsCoordX(X);
-      setAbsCoordY(Y);
-      coordZ = Z;
+        setAbsCoordX(X);
+        setAbsCoordY(Y);
+        coordZ = Z;
     }
     
     public void setRelCoordX(int X){
         if (X < Chunk.BlocksX*3){
             relCoordX = X;
-        }else {
+        } else {
             this.relCoordX = 3*Chunk.BlocksX-1;
             GameplayState.iglog.add("RelativeCoordX ist too high:"+X);
             System.out.println("RelativeCoordX ist too high:"+X);
@@ -72,7 +70,7 @@ public class Player extends Block{
         
         if (X >= 0) {
             relCoordX = X;
-        }else {
+        } else {
             relCoordX = 0;
             GameplayState.iglog.add("RelativeCoordX ist too low:"+X);
             System.out.println("RelativeCoordX ist too low:"+X);
@@ -108,70 +106,70 @@ public class Player extends Block{
        
     public void walk(int dir, int delta) throws SlickException{
         timetillmove += delta;
-        if (timetillmove > 40){
+        if (timetillmove > 50){
             switch (dir) {
                 case 1://up
-                    if (relCoordY > 0) {
-                        posY--;
-                        Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
-                        Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
-                        setAbsCoordY(absCoordY-1);
-
-                        Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
-                        Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);  
-                        Controller.map.changes = true;
-                        System.out.println(relCoordX+" | "+relCoordY);
-                    }else {
-                        GameplayState.iglog.add("Border: "+dir);
-                    }
+                    posY--;
                 break;
 
                 case 3: //left
-                    if (relCoordX > 0) {
-                        posX--;   
+                    posX--;
+                break;
+
+                case 5: //right
+                    posX++;
+                break;        
+
+                case 7://down
+                    posY++;
+                break;
+            }
+            
+            if (posY >= Block.height /2 && relCoordY < Chunk.BlocksY*3-1) {
+                    posY = 0;
+                    Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
+                    Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
+                    setAbsCoordY(absCoordY+1);
+
+                    Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
+                    Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
+                    Controller.map.changes = true;
+            } else {
+                if (posY < 0 && relCoordY > 0) {
+                    posY = Block.height;
+                    Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
+                    Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
+                    setAbsCoordY(absCoordY-1);
+
+                    Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
+                    Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);  
+                    Controller.map.changes = true;
+                } else {
+                    if (posX >= Block.width /2 && relCoordX < Chunk.BlocksX*3-1) {
+                        posX = 0;        
                         Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
                         Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
-                        setAbsCoordX(absCoordX-1);
-
+                        setAbsCoordX(absCoordX+1);
 
                         Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
                         Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
                         Controller.map.changes = true;
-                    }else {
-                            GameplayState.iglog.add("Border: "+dir);  
+                    } else {
+                        if (posX > 0 && relCoordX > 0) {
+                            posX = Block.width;
+                            Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
+                            Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
+                            setAbsCoordX(absCoordX-1);
+                            Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
+                            Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
+                            Controller.map.changes = true;
+                        }
                     }
-                break;
-
-                case 5: //right
-                        if (relCoordX < Chunk.BlocksX*3-1) {
-                            posX++; 
-                            Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
-                            Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
-                            setAbsCoordX(absCoordX+1);
-
-                            Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
-                            Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
-                            Controller.map.changes = true;
-                        } else {
-                            GameplayState.iglog.add("Border: "+dir);     
-                        }
-                break;        
-
-                case 7://down
-                        if (relCoordY < Chunk.BlocksY*3-1) {
-                            posY++;
-                            Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
-                            Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
-                            setAbsCoordY(absCoordY+1);
-
-                            Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
-                            Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
-                            Controller.map.changes = true;
-                        }else {
-                            GameplayState.iglog.add("Border: "+dir);
-                        }
-                break;
+                }
             }
+            offsetX = posX / 2;
+            offsetY = posY / 2;   
+                 
            timetillmove = 0;
        }
        //GameplayState.iglog.add(relCoordX+":"+relCoordY+":"+coordZ);
@@ -193,7 +191,6 @@ public class Player extends Block{
    }
    
    public void update(int delta){
-       
        
        //Gravitation
        if (Controller.map.data[relCoordX][relCoordY][coordZ-1].obstacle==false && coordZ>1){

@@ -125,47 +125,50 @@ public class View {
                 null);
         */  
 
-       Block.Blocksheet.startUse();
+       if (!Controller.goodgraphics) Block.Blocksheet.startUse();
        for (int y=0; y < renderarray[0].length; y++)//vertikal
             for (int x=0; x < renderarray.length; x++)//horizontal
                 for (int z=0; z < renderarray[0][0].length; z++)
                     //draw the block except air
                     if (renderarray[x][y][z].ID() != 0){
                         //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
-                        /*if (Controller.goodgraphics){
-                            int zbottom=Chunk.BlocksZ-1;
-                            while (Controller.map.data[x][y][zbottom].transparent == true && zbottom > 0 ){
-                                zbottom--; 
-                            }
-                                float brigthness = (float) z/zbottom; 
-                                Block.images[renderarray[x][y][z].ID()].setColor(0, brigthness, brigthness, brigthness, 1);
-                                Block.images[renderarray[x][y][z].ID()].setColor(1, brigthness, brigthness, brigthness, 1);
-                                Block.images[renderarray[x][y][z].ID()].setColor(2, brigthness, brigthness, brigthness, 1);
-                                Block.images[renderarray[x][y][z].ID()].setColor(3, brigthness, brigthness, brigthness, 1);
-                        }*/
-                        /*Block.Blocksheet.getSprite(
-                            Controller.map.data[x][y][z].spritex,
-                            Controller.map.data[x][y][z].spritey
-                            ).draw(
+                        if (Controller.goodgraphics){
+                            Block Block = Controller.map.data[x][y][z]; 
+                            Image temp = Block.Blocksheet.getSprite(
+                                Block.spritex,
+                                Block.spritey
+                            );
+                            
+                            int lightlevel = Block.lightlevel*255/100;
+                            //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
+                            Color color = new Color(lightlevel,lightlevel,lightlevel);
+                            
+                            //wieso ist temp.setcoller wirkungslos? Im Slikc Forum nachfragen
+                            
+                            temp.startUse();
+                            temp.drawEmbedded(
+                                (int) (zoom*Controller.map.posX) + x*Block.displBlockWidth + (y%2) * Block.displBlockWidth/2+Block.offsetX,
+                                (int) (zoom*Controller.map.posY / 2) + y*Block.displBlockHeight/4 - z*Block.displBlockHeight/2+Block.offsetY
+                            );
+                            temp.endUse();
+                        } else {
+                            Block.Blocksheet.renderInUse(
                                 (int) ((Controller.map.posX + x*Block.width + (y%2) * Block.width/2)*zoom),
-                                (int) ((Controller.map.posY + y*Block.height/2 - z*Block.height)*zoom / 2)
-                            );*/
-                       
-                        Block.Blocksheet.renderInUse(
-                            (int) ((Controller.map.posX + x*Block.width + (y%2) * Block.width/2)*zoom),
-                            (int) ((Controller.map.posY + y*Block.height/2 - z*Block.height)*zoom / 2),
-                            Controller.map.data[x][y][z].spritex,
-                            Controller.map.data[x][y][z].spritey
-                        );
+                                (int) ((Controller.map.posY + y*Block.height/2 - z*Block.height)*zoom / 2),
+                                Controller.map.data[x][y][z].spritex,
+                                Controller.map.data[x][y][z].spritey
+                            );
+                        }
                     }
-       Block.Blocksheet.endUse();
+       if (!Controller.goodgraphics) Block.Blocksheet.endUse();
                 
         /*Ansatz mit Zeichnen der halben tiles
         //int amountX = window_width()/Controller.tilesizeX;
         //int amountY = window_height()/Controller.tilesizeY;
         for (int v=0; v < amountY*2; v++)//vertikal
         for (int h=0; h < amountX; h++)//horizontal
-            g2d.drawImage(tilefile,
+            g2d.drawImage(
+                    tilefile,
                     //Position
                     h==0 && v%2!=2//dx1
                     ? (v%2)*tilesizeX/2+posX
@@ -277,9 +280,7 @@ public class View {
             );*/
      };
 
-    /**
-     * 
-     */
+    
     public void raytracing(){
         //fill renderarray with air
         for (int x=0;x <Chunk.BlocksX*3;x++)
@@ -287,8 +288,6 @@ public class View {
                 for (int z=0;z <Chunk.BlocksZ;z++)
                     renderarray[x][y][z] = new Block(0,0);
             
-
-        
         //generate array (renderarray) which has render information in it. It filters every non visible block
 
         //check top of big chunk
@@ -335,6 +334,25 @@ public class View {
         //save the found block in renderarray. If there was none do nothing
         if ((y >= 0) && (z>=0))
            renderarray[x][y][z] = bigchunk[x][y][z];
+    }
+    
+    /*
+     * Calculates the light level based on the sun wit han angle of 90 deg
+     */
+    public void calc_light(){
+        for (int x=0; x < Chunk.BlocksX*3; x++){
+            for (int y=0; y < Chunk.BlocksY*3; y++){
+                //find top most Block
+                int z = Chunk.BlocksZ-1;
+                while (renderarray[x][y][z].transparent == true && z > 0 ){
+                    z--;
+                }
+                for (int level=z; level > 0; level--)
+                    renderarray[x][y][level].lightlevel = level*100/z;
+                
+            }
+        }
+                
     }
     
     public void setzoom(float zoom) {

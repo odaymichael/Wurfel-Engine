@@ -17,7 +17,7 @@ public class Block {
     public Integer HP = 100;
     private Integer ID = -1;
     /**
-     * the value which can be used for storing information about a subversion of the object
+     * the value which can be used for storing information about a sub version of the object
      */
     public Integer Value = 0;
     /**
@@ -35,21 +35,26 @@ public class Block {
     /**
      * width of the image
      */
-    public static int width = 160;
+    public static final int width = 160;
     /**
      *height of the image 
      */
-    public static int height = 160;
+    public static final int height = 160;
+    
+    public static int displBlockWidth = width;
+    public static int displBlockHeight = height;
     
     public int spritex = 0;
     public int spritey = 0;
+    
+    public int lightlevel = 100;
+    public int offsetX = 0;
+    public int offsetY = 0;
+    
     public static SpriteSheet Blocksheet;
     
-    /**
-     * the list wich contains all images
-     */
     
-    public static Image images[] = new Image[75];
+    
     
     /**
      * Creates an air block. 
@@ -137,7 +142,8 @@ public class Block {
                      spritex=1;
                      spritey=0;
                      break;
-            case 40: name = "player";
+            case 40: 
+                    name = "player";
                      transparent = true;
                      obstacle = false;
                      spritex=2;
@@ -167,10 +173,24 @@ public class Block {
      * @throws SlickException
      */
     public static void listImages(float zoom) {
-        SpriteSheet tempBlocksheet;
         try {
-            tempBlocksheet = new SpriteSheet("Game/Blockimages/Blocksprite.png", width,height,4);
-            Blocksheet = new SpriteSheet(tempBlocksheet.getScaledCopy(zoom),(int) (width*zoom),(int) (height*zoom),(int)(4*zoom));
+            SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/Blocksprite.png", width, height, 4);
+            Image scaledBlockSheet = srcBlockSheet.getScaledCopy(zoom);
+            int spacing = ((scaledBlockSheet.getWidth()) /5 - (int) (width*zoom)) ; // divide by amount of blocks in a row
+            //int spacing = (int) (4*zoom);
+            //displBlockWidth = (int) ((scaledBlockSheet.getWidth()+4)/5 - spacing);
+            displBlockWidth = (int) (width*zoom);
+            displBlockHeight = (int) (height*zoom);
+            
+            GameplayState.iglog.add("Spacing:"+spacing);
+            GameplayState.iglog.add("BlockWidth"+displBlockWidth);
+            
+            Blocksheet = new SpriteSheet(
+                scaledBlockSheet,
+                displBlockWidth,
+                displBlockHeight,
+                spacing
+            );
         } catch (SlickException ex) {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -184,5 +204,7 @@ public class Block {
     public int ID(){
         return this.ID;
     }
+
+    
     
 }

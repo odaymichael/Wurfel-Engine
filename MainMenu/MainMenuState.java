@@ -29,7 +29,7 @@ public class MainMenuState extends BasicGameState{
     public void init(GameContainer pgc, StateBasedGame psbg) throws SlickException {
         gc = pgc;
         sbg = psbg;
-        View = new View();
+        View = new View(pgc);
         Controller = new Controller(View); 
     }
   

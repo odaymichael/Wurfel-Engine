@@ -35,7 +35,8 @@ public class Controller {
           
         gc.getInput().addMouseListener(new MouseDraggedListener());
         map = new Map(MainMenuState.loadmap);
-        player = new Player((int) (Chunk.BlocksX*1.5),(int) (Chunk.BlocksY*1.5),19);
+        map.data[(int) (Chunk.BlocksX*1.5)][(int) (Chunk.BlocksY*1.5)][19] = new Player((int) (Chunk.BlocksX*1.5),(int) (Chunk.BlocksY*1.5),19);
+        player = (Player) map.data[(int) (Chunk.BlocksX*1.5)][(int) (Chunk.BlocksY*1.5)][19];
         minimap = new Minimap(gc);
     }
     
@@ -61,7 +62,10 @@ public class Controller {
         if (input.isKeyDown(Input.KEY_P)) gc.setPaused(true);
 
         //good graphics
-        if (input.isKeyPressed(Input.KEY_G)) goodgraphics = !goodgraphics;
+        if (input.isKeyPressed(Input.KEY_G)) {
+            goodgraphics = !goodgraphics;
+            GameplayState.iglog.add("Good Graphics is now "+goodgraphics);
+        }
         
         //toggle camera
         if (input.isKeyPressed(Input.KEY_C)) view.cameramode = !view.cameramode;
@@ -121,7 +125,11 @@ public class Controller {
        
         
         //do raytracing
-        if (map.changes) view.raytracing();
+        if (map.changes) {
+            view.raytracing();
+            view.calc_light();
+        }
+        
        
         GameplayState.iglog.update(delta);
     }

@@ -61,7 +61,7 @@ public class Map {
     } 
     
     /**
-     * Reorgnanises the map and sets the center to newcenter.
+     * Reorgnanises the map and sets the center to param center.
      * Move all chunks when loading or creating a new piece of the map
      * @param center center is 1,3,5 or 7
      */
@@ -74,8 +74,8 @@ public class Map {
           |6|7|8|
          */
         
-        GameplayState.iglog.add("New Center: "+center);
-        System.out.println("New Center: "+center);
+        //GameplayState.iglog.add("New Center: "+center);
+        //System.out.println("New Center: "+center);
         
         Block data_copy[][][] = copyOf3Dim(data);
         
@@ -84,7 +84,7 @@ public class Map {
             coordlistY[pos] += (center == 1 ? 1 : (center == 7 ? -1 : 0));
             
             if (check_chunk_movement(pos,center)){
-                System.out.println("[" + pos + "] <- ["+ (pos + center - 4) +"] (old)");
+                //System.out.println("[" + pos + "] <- ["+ (pos + center - 4) +"] (old)");
                 setChunk(
                     pos,
                     getChunk(data_copy,pos -4 + center)
@@ -100,7 +100,7 @@ public class Map {
                             MainMenuState.loadmap
                         )
                 );
-                System.out.println("["+pos+"] new: "+ coordlistX[pos] +","+coordlistY[pos]);
+                //System.out.println("["+pos+"] new: "+ coordlistX[pos] +","+coordlistY[pos]);
             }
         }
         //player switches chunk
