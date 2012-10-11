@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
  * @author Benedikt
  */
 public class Chunk {
-    public int coordX, coordY, posX, posY;
+    public int coordX, coordY;
 
     public static final int BlocksX = 12;//16:9 => 12:27, 4:3=>12:36
     public static final int BlocksY = 28;
@@ -28,7 +28,7 @@ public class Chunk {
 
     //Konstruktoren
     
-    Chunk() {
+    public Chunk() {
         //fill everything with air
         for (int x=0; x < BlocksX; x++)
             for (int y=0; y < BlocksY; y++)
@@ -47,8 +47,8 @@ public class Chunk {
     public Chunk(int ChunkX, int ChunkY, int startposX, int startposY, boolean loadmap){
         coordX = ChunkX;
         coordY = ChunkY;
-        posX = startposX;
-        posY = startposY;
+//        posX = startposX;
+//        posY = startposY;
 
         //fill everything with air to avoid crashes
         for (int x=0; x < BlocksX; x++)
@@ -61,8 +61,6 @@ public class Chunk {
         else
             newChunk();
     }
-
-    
        
     private void newChunk(){
         //chunkdata will contain the blocks and objects
@@ -82,9 +80,9 @@ public class Chunk {
 
 
                 //Gras on z=9
-                //if ((x > 0) && (x < BlocksX-1) && (y>0))                        
-                //data[x][y][BlocksZ/2-1] = new Block(1,0);
-                //data[x][y][BlocksZ/2] = new Block(9,0);
+                if ((x > 0) && (x < BlocksX-1) && (y>0))                        
+                data[x][y][BlocksZ/2-1] = new Block(1,0);
+                data[x][y][BlocksZ/2] = new Block(9,0);
 
 
                 /*

@@ -17,8 +17,9 @@ public class OutThere extends StateBasedGame {
     public static void main(String[] args) throws SlickException {
         //has to call starter to avoid problems with the default package. Maybe the main function can run in starter
          app = new AppGameContainer(new OutThere());
-         //appsetDisplayMode(1280, 720, false);
-         app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), false);
+         app.setDisplayMode(1280, 720, false);
+         app.setUpdateOnlyWhenVisible(true);
+         //app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), false);
          //System.out.println(app.isVSyncRequested());
          app.start();
     }

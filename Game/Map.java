@@ -12,8 +12,17 @@ import MainMenu.MainMenuState;
  */
 public class Map {
     Block data[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
+    /**
+     * The offset of the Map in X direction
+     */
     public int posX;
+    /**
+     * The offset of the Map in Y direction
+     */
     public int posY;
+    /**
+     * When true the renderarray will be recalculated.
+     */
     public boolean changes;
     /**
      *A list of the X coordinates.
@@ -24,6 +33,16 @@ public class Map {
      */
     public int coordlistY[] = new int[9];;
 
+    /**
+     * Contains the minimap
+     */
+    public Minimap minimap;
+    
+    
+    /**
+     * Creates a map.
+     * @param loadmap Should the map be generated or loaded from disk?
+     */
     public Map(boolean loadmap) {
         //create the map
         Chunk tempchunk;
@@ -44,8 +63,15 @@ public class Map {
                 pos++;               
             }
         changes = true;
+       
+        minimap = new Minimap();
     }
     
+    /**
+     * Copies a 3D array
+     * @param array
+     * @return 
+     */
     private Block[][][] copyOf3Dim(Block[][][] array) {
         Block[][][] copy;
         copy = new Block[array.length][][];
@@ -68,9 +94,9 @@ public class Map {
     public void setCenter(int center){
         /*
           |0|1|2|
-          -------
+          -------------
           |3|4|5|
-          -------
+          -------------
           |6|7|8|
          */
         

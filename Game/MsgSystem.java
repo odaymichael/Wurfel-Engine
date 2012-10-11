@@ -42,7 +42,5 @@ public class MsgSystem extends ArrayList {
                     else remove(i);
             }
         }
-
-        
     }
 }

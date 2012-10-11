@@ -11,14 +11,14 @@ public class View {
     float startGameScale = 1;
     float exitScale = 1;
     private Image background = null;
-    public MenuItem startGameOption = new MenuItem();
-    public MenuItem loadGameOption = new MenuItem();
-    public MenuItem exitOption = new MenuItem();
+    protected MenuItem startGameOption = new MenuItem();
+    protected MenuItem loadGameOption = new MenuItem();
+    protected MenuItem exitOption = new MenuItem();
     
     
     //Konstruktor
     public View(GameContainer pgc) throws SlickException{
-        background = new Image("MainMenu/Images/landschaft.jpg");
+        background = new Image("MainMenu/Images/Logo.jpg");
  
         // load the menu images
         Image menuOptions = new Image("MainMenu/Images/MainMenu.png");

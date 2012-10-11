@@ -9,8 +9,9 @@ import org.newdawn.slick.state.StateBasedGame;
 public class GameplayState extends BasicGameState { 
     protected static View View = null;
     protected static Controller Controller = null;
-    private int stateID = -1;
+    private int stateID = 2;
     public static MsgSystem iglog;
+    public static GameContainer gc;
     
  
     public GameplayState( int stateID ){
@@ -24,7 +25,7 @@ public class GameplayState extends BasicGameState {
      
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-
+        GameplayState.gc = gc;
     }
     
     @Override 
@@ -33,7 +34,7 @@ public class GameplayState extends BasicGameState {
         iglog.add("Starting Game....");
         Controller = new Controller(container, game);
         View = new View(Controller,container);
-        Controller.giveView(View);
+        
     }
     
 

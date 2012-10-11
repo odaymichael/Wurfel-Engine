@@ -1,5 +1,13 @@
 package Game;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.vecmath.Vector3d;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -9,7 +17,7 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Benedikt
  */
 public class View {
-    private Controller Controller;
+
     /**
      * the array which is created after analysing the Map.data
      */
@@ -23,19 +31,19 @@ public class View {
      */
     public int cameraY;
     /**
-     * Width of camera
+     * The amount of pixel which are visible in X direction
      */
     public int cameraWidth;
     /**
-     * Height of camera
+     * The amount of pixel which are visible in Y direction
      */
     public int cameraHeight;
     /**
-     * is the player centered or ???
+     * toogle between camer locked to player or not
      */
     public boolean cameramode = false;
     /**
-     * the factor with the map is zoomed
+     * the zoom factor of the map. Higher value means the zoom is higher.
      */
     private float zoom = 1;
     private Graphics g = null; 
@@ -50,29 +58,45 @@ public class View {
     public static TrueTypeFont tTFont_small;
     private GameContainer gc;
     //private static Insets insets;
+    private Font baseFont;
     
-    //Konstruktor 
+    private ArrayList offsetBlock = new ArrayList<Vector3d>();
+    private ArrayList leftBlockInFront = new ArrayList();
+    
     /**
-     * 
+     * Konstruktor 
      * @param pController
      * @param pgc
      * @throws SlickException
      */
     public View(Controller pController,GameContainer pgc) throws SlickException {
-        Controller = pController;
+        GameplayState.Controller = pController;
         gc = pgc;
              
        
         // initialise the font which CAUSES LONG LOADING TIME!!!
-        font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
+        TrueTypeFont trueTypeFont;
+        Font startFont;
+        try {
+            startFont = Font.createFont(Font.TRUETYPE_FONT,new BufferedInputStream(this.getClass().getResourceAsStream("Blox2.ttf")));
+            baseFont = startFont.deriveFont(Font.PLAIN, 12);
+        } catch (FontFormatException ex) {
+            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tTFont = new TrueTypeFont(baseFont, true);
+        
+        
+        /*font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
         tTFont = new TrueTypeFont(font, true);
         font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 8);
-        tTFont_small = new TrueTypeFont(font, true);
+        tTFont_small = new TrueTypeFont(font, true);*/
         
         //update resolution things
-        GameplayState.iglog.add("Resolution: "+gc.getScreenWidth()+" x "+gc.getScreenHeight());
+        GameplayState.iglog.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
         
-        zoom = gc.getScreenHeight()*4 / (float)(Chunk.BlocksY* Block.height);
+        zoom = gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.height);
         System.out.println(zoom);
         Block.listImages(zoom); 
         // Block.width = Block.height;
@@ -82,8 +106,8 @@ public class View {
         GameplayState.iglog.add("chunk w/ zoom: "+Chunk.SizeX*zoom+" x "+Chunk.SizeY*zoom);
   
         
-        cameraWidth = (int) (gc.getScreenWidth()/zoom);
-        cameraHeight= (int) (gc.getScreenHeight()/zoom);
+        cameraWidth = (int) (gc.getWidth() / zoom);
+        cameraHeight= (int) (gc.getHeight() / zoom);
     }
     
     /**
@@ -92,76 +116,21 @@ public class View {
      * @param pg
      * @throws SlickException
      */
-    public void render(StateBasedGame game, Graphics pg) throws SlickException{
-        g = pg;
+    public void render(StateBasedGame game, Graphics g) throws SlickException{
+        this.g = g;
         draw_all_Chunks();
         //Controller.player.draw();
         
         //GUI
-        Controller.minimap.draw(pg);
+        GameplayState.Controller.map.minimap.draw(g);
         drawiglog();
     }
-     
+      
     /**
      * 
      * @throws SlickException
      */
     public void draw_all_Chunks() throws SlickException{
-       /*
-        BasicStroke stokestyle = new BasicStroke(
-            1,
-            BasicStroke.CAP_BUTT,
-            BasicStroke.JOIN_BEVEL
-        );
-        
-        //g2d.setStroke(stokestyle);
-
-        BufferedImage tile = gc.createCompatibleImage(Controller.tilesizeX, Controller.tilesizeY, Transparency.BITMASK);
-        tile.getGraphics().drawImage(tilefile,
-                0,//dx1
-                0,//dy1
-                Controller.tilesizeX,//width
-                Controller.tilesizeY,//height
-                null);
-        */  
-
-       if (!Controller.goodgraphics) Block.Blocksheet.startUse();
-       for (int y=0; y < renderarray[0].length; y++)//vertikal
-            for (int x=0; x < renderarray.length; x++)//horizontal
-                for (int z=0; z < renderarray[0][0].length; z++)
-                    //draw the block except air
-                    if (renderarray[x][y][z].ID() != 0){
-                        //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
-                        if (Controller.goodgraphics){
-                            Block Block = Controller.map.data[x][y][z]; 
-                            Image temp = Block.Blocksheet.getSprite(
-                                Block.spritex,
-                                Block.spritey
-                            );
-                            
-                            int lightlevel = Block.lightlevel*255/100;
-                            //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
-                            Color color = new Color(lightlevel,lightlevel,lightlevel);
-                            
-                            //wieso ist temp.setcoller wirkungslos? Im Slikc Forum nachfragen
-                            
-                            temp.startUse();
-                            temp.drawEmbedded(
-                                (int) (zoom*Controller.map.posX) + x*Block.displBlockWidth + (y%2) * Block.displBlockWidth/2+Block.offsetX,
-                                (int) (zoom*Controller.map.posY / 2) + y*Block.displBlockHeight/4 - z*Block.displBlockHeight/2+Block.offsetY
-                            );
-                            temp.endUse();
-                        } else {
-                            Block.Blocksheet.renderInUse(
-                                (int) ((Controller.map.posX + x*Block.width + (y%2) * Block.width/2)*zoom),
-                                (int) ((Controller.map.posY + y*Block.height/2 - z*Block.height)*zoom / 2),
-                                Controller.map.data[x][y][z].spritex,
-                                Controller.map.data[x][y][z].spritey
-                            );
-                        }
-                    }
-       if (!Controller.goodgraphics) Block.Blocksheet.endUse();
-                
         /*Ansatz mit Zeichnen der halben tiles
         //int amountX = window_width()/Controller.tilesizeX;
         //int amountY = window_height()/Controller.tilesizeY;
@@ -270,25 +239,78 @@ public class View {
                 end2X + (i%2)*Controller.tilesizeX/2,
                 end2Y
             );
-        }
-            
-            //g.setFont(new java.awt.Font("Helvetica", ava.awt.Font.PLAIN, 50));
-            g.drawString(
-                String.valueOf(chunk.coordX)+","+String.valueOf(chunk.coordY),
-                chunk.posX + Chunk.width/2 - 40,
-                chunk.posY + Chunk.height/2 - 40
-            );*/
+        }*/
+        
+       Block.Blocksheet.startUse();
+       
+        for (int z=0; z < renderarray[0][0].length; z++) {
+            for (int y=0; y < renderarray[0].length; y++) {//vertikal
+                for (int x=0; x < renderarray.length; x++){//horizontal
+                    if ((x < renderarray.length-1 && renderarray[x+1][y][z].renderorder == -1) || renderarray[x][y][z].renderorder == 1) {
+                        renderblock(x+1,y,z);
+                        renderblock(x,y,z);
+                        x++;
+                    } else renderblock(x,y,z);
+                }
+            }
+       }
+       Block.Blocksheet.endUse(); 
      };
 
+    private void renderblock(int x,int y, int z) {
+        //draw every block except air
+        if (renderarray[x][y][z].ID() != 0){
+            //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
+            Block renderBlock = Controller.map.data[x][y][z]; 
+            
+            if (GameplayState.Controller.goodgraphics){                           
+                //new Color(lightlevel,lightlevel,lightlevel).bind(); 
+ 
+                Image temp = Block.Blocksheet.getSubImage(renderBlock.spritex, renderBlock.spritey);
+
+                //calc  brightness
+                float lightlevel = renderBlock.lightlevel / 100f;
+                //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
+
+                temp.setColor(0,lightlevel,lightlevel,lightlevel);
+                temp.setColor(1, lightlevel,lightlevel, lightlevel);
+
+                lightlevel -= .1f;
+                //System.out.println(lightlevel);
+
+                temp.setColor(2, lightlevel,lightlevel, lightlevel);
+                temp.setColor(3, lightlevel,lightlevel, lightlevel);
+
+                temp.drawEmbedded(
+                    (int) (zoom*Controller.map.posX) + x*Block.displBlockWidth + (y%2) * (int) (Block.displBlockWidth/2) + renderBlock.getOffsetX(),
+                    (int) (zoom*Controller.map.posY / 2) + y*Block.displBlockHeight/4 - z*Block.displBlockHeight/2 + renderBlock.getOffsetY()
+                );
+
+            } else {
+                //calc  brightness
+                int brightness = renderBlock.lightlevel * 255 / 100;
+                new Color(brightness,brightness,brightness).bind();     
+
+                Block.Blocksheet.renderInUse(
+                    (int) (zoom*Controller.map.posX) + x*Block.displBlockWidth + (y%2) * (int) (Block.displBlockWidth/2) + renderBlock.getOffsetX(),
+                    (int) (zoom*Controller.map.posY / 2) + y*Block.displBlockHeight/4 - z*Block.displBlockHeight/2 + renderBlock.getOffsetY(),
+                    renderBlock.spritex,
+                    renderBlock.spritey
+                );
+            }
+        }
+    }
     
+    
+    /**
+     * Filters every Block wich is not visible
+     */
     public void raytracing(){
         //fill renderarray with air
         for (int x=0;x <Chunk.BlocksX*3;x++)
             for (int y=0;y <Chunk.BlocksY*3;y++)
                 for (int z=0;z <Chunk.BlocksZ;z++)
                     renderarray[x][y][z] = new Block(0,0);
-            
-        //generate array (renderarray) which has render information in it. It filters every non visible block
 
         //check top of big chunk
         for (int x=0; x < Controller.map.data.length; x++)
@@ -321,23 +343,34 @@ public class View {
         Controller.map.changes = false;
     }
 
-    private void trace_ray(Block bigchunk[][][],int x, int y, int z){
-        //do raytracing until it found a not transparent block
-       while ((y >= 0) && (z>=0) && (bigchunk[x][y][z].transparent)) {
-           //save every block which is not air
-           if ((bigchunk[x][y][z].transparent) && (bigchunk[x][y][z].ID() != 0))
-              renderarray[x][y][z] = bigchunk[x][y][z]; 
+    private void trace_ray(Block mapdata[][][],int x, int y, int z){
+        //trace ray until it found a not transparent block
+       while ((y >= 0) && (z>=0) && (mapdata[x][y][z].transparent)) {
+           //save every transparent block which is not air
+           if ((mapdata[x][y][z].transparent) && (mapdata[x][y][z].ID() != 0))
+              renderarray[x][y][z] = mapdata[x][y][z]; 
+           
+           //check if it has offset, not part of the original raytracing, but checking it here saves iteration. mapdata and renderarray are for the field with x,y,z equal
+           if (mapdata[x][y][z].getOffsetY() > 0)
+               renderarray[x][y][z].renderorder = 1;
+           else if (mapdata[x][y][z].getOffsetX() < 0 && mapdata[x][y][z].getOffsetY() < 0)
+                renderarray[x][y][z].renderorder = -1;
+                else renderarray[x][y][z].renderorder = 0;
+           
            y -= 2;
            z--;                       
         }   
                     
-        //save the found block in renderarray. If there was none do nothing
+        //Take the first
         if ((y >= 0) && (z>=0))
-           renderarray[x][y][z] = bigchunk[x][y][z];
+           renderarray[x][y][z] = mapdata[x][y][z];
     }
     
     /*
-     * Calculates the light level based on the sun wit han angle of 90 deg
+     * Calculates the light level based on the sun with an angle of 90 deg
+     */
+    /**
+     * 
      */
     public void calc_light(){
         for (int x=0; x < Chunk.BlocksX*3; x++){
@@ -351,15 +384,22 @@ public class View {
                     renderarray[x][y][level].lightlevel = level*100/z;
                 
             }
-        }
-                
+        }         
     }
     
+    /**
+     * Set the zoom factor and regenerates the sprites.
+     * @param zoom
+     */
     public void setzoom(float zoom) {
         this.zoom = zoom;
         Block.listImages(zoom);
     }
     
+    /**
+     * Returns the zoomfactor.
+     * @return
+     */
     public float getzoom() {
         return zoom;
     }

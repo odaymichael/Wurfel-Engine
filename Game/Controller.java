@@ -16,19 +16,28 @@ public class Controller {
      *The list which has all current nine chunks in it.
      */
     public static Map map;
+    /**
+     * Contains the player
+     */
     public static Player player;   
+    /**
+     * Should the graphic be a bit slower but better?
+     */
     public boolean goodgraphics = true;
-    public Minimap minimap;
-    
-    private View view;
-    private GameContainer gc;
+        
+    public GameContainer gc;
     private StateBasedGame sbg;
     private int oldx;
     private int oldy;
     private float zoomx = 1;
     
     
-    //Constructor is called when entering the gamemode.
+    /**
+     * Constructor is called when entering the gamemode.
+     * @param container
+     * @param game
+     * @throws SlickException
+     */
     public Controller(GameContainer container, StateBasedGame game) throws SlickException{
         gc = container;
         sbg = game;
@@ -37,15 +46,16 @@ public class Controller {
         map = new Map(MainMenuState.loadmap);
         map.data[(int) (Chunk.BlocksX*1.5)][(int) (Chunk.BlocksY*1.5)][19] = new Player((int) (Chunk.BlocksX*1.5),(int) (Chunk.BlocksY*1.5),19);
         player = (Player) map.data[(int) (Chunk.BlocksX*1.5)][(int) (Chunk.BlocksY*1.5)][19];
-        minimap = new Minimap(gc);
     }
     
     
-    public void giveView(View view) {
-         this.view = view;
-    }
+
     
-    /* Main method which is called every time */
+    /**
+     * Main method which is called every time
+     * @param delta
+     * @throws SlickException
+     */
     public void update(int delta) throws SlickException{  
 
         Input input = gc.getInput();
@@ -68,14 +78,14 @@ public class Controller {
         }
         
         //toggle camera
-        if (input.isKeyPressed(Input.KEY_C)) view.cameramode = !view.cameramode;
+        if (input.isKeyPressed(Input.KEY_C)) GameplayState.View.cameramode = !GameplayState.View.cameramode;
         
         //restart
         if (input.isKeyPressed(Input.KEY_N)) map = new Map(false);
                 
         //reset zoom
         if (input.isKeyPressed(Input.KEY_Z)) {
-            view.setzoom(1);
+            GameplayState.View.setzoom(1);
             GameplayState.iglog.add("Zoom reset");
         }
         
@@ -90,47 +100,47 @@ public class Controller {
        
 
         //earth to right
-        if (view.cameraX < Chunk.SizeX/3)
+        if (GameplayState.View.cameraX < Chunk.SizeX/3)
            map.setCenter(3);
         else {       
             //earth to the left
-            if (view.cameraX + view.cameraWidth > 8*Chunk.SizeX/3) 
+            if (GameplayState.View.cameraX + GameplayState.View.cameraWidth > 8*Chunk.SizeX/3) 
                 map.setCenter(5); 
         }
         
        //scroll up, earth down            
-        if (view.cameraY  <= 0) 
+        if (GameplayState.View.cameraY  <= 0) {
             map.setCenter(1);
-        else {
+        } else {
             //scroll down, earth up
-            if (view.cameraY+view.cameraHeight > Chunk.SizeY*3)
+            if (GameplayState.View.cameraY+GameplayState.View.cameraHeight > Chunk.SizeY*3)
                 map.setCenter(7);
-            }
+        }
         
         //camera
-        oldx = view.cameraX;
-        oldy = view.cameraY;
+        oldx = GameplayState.View.cameraX;
+        oldy = GameplayState.View.cameraY;
         
         player.update(delta);
         
-        if (view.cameramode == false) {
-            view.cameraX = player.getRelCoordX()*Block.width - view.cameraWidth / 2;
-            view.cameraY = player.getRelCoordY()*Block.height/2 - (player.coordZ*Block.height/2) - view.cameraHeight;
+        if (GameplayState.View.cameramode == false) {
+            GameplayState.View.cameraX = player.getRelCoordX() * Block.width + Block.width / 2 *(player.getRelCoordY() % 2) + player.getOffsetX() - GameplayState.View.cameraWidth / 2;
+            GameplayState.View.cameraY = (player.getRelCoordY() - player.coordZ) * Block.height/2 + player.getOffsetY()*2 - GameplayState.View.cameraHeight;
         } 
         
-        map.posX -= view.cameraX - oldx;
-        map.posY -= view.cameraY - oldy;
+        map.data[player.getRelCoordX()][player.getRelCoordY()][player.coordZ] = player;
+        map.posX -= GameplayState.View.cameraX - oldx;
+        map.posY -= GameplayState.View.cameraY - oldy;
             
 
-       
-        
+
         //do raytracing
         if (map.changes) {
-            view.raytracing();
-            view.calc_light();
-        }
-        
+            GameplayState.View.raytracing();
+            GameplayState.View.calc_light();
+        }        
        
+        //update the log
         GameplayState.iglog.update(delta);
     }
     
@@ -142,17 +152,17 @@ public class Controller {
             gc.getInput().consumeEvent();
             
             zoomx = zoomx + change/1000f;
-            view.setzoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
+            GameplayState.View.setzoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
             
-            view.cameraWidth = (int) (gc.getScreenWidth() / view.getzoom());
-            view.cameraHeight= (int) (gc.getScreenHeight() / view.getzoom());
+            GameplayState.View.cameraWidth = (int) (gc.getWidth() / GameplayState.View.getzoom());
+            GameplayState.View.cameraHeight= (int) (gc.getHeight() / GameplayState.View.getzoom());
             
-           /* Block.width =(int) (gc.getScreenWidth() *zoom / Chunk.BlocksX);
-            Block.height = (int) (4*gc.getScreenHeight()*zoom / Chunk.BlocksY);
+           /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
+            Block.height = (int) (4*gc.getHeight()*zoom / Chunk.BlocksY);
             Chunk.SizeX = (int) (Chunk.BlocksX*Block.width*zoom);
             Chunk.SizeY = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
-            GameplayState.iglog.add("Zoom: "+view.getzoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
+            GameplayState.iglog.add("Zoom: "+GameplayState.View.getzoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
         }
 
         @Override
@@ -176,9 +186,9 @@ public class Controller {
             //workaround for the bug, because the event is called multiple times
             gc.getInput().consumeEvent();
             
-            if (view.cameramode) {
-                view.cameraX += newx-oldx;
-                view.cameraY += newy-oldy;
+            if (GameplayState.View.cameramode) {
+                GameplayState.View.cameraX += newx-oldx;
+                GameplayState.View.cameraY += newy-oldy;
             }
             /*for (int i=0;i<9;i++){
                 chunklist[i].posX += newx - oldx;
