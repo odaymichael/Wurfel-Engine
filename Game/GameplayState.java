@@ -31,10 +31,8 @@ public class GameplayState extends BasicGameState {
     @Override 
     public void enter(GameContainer container, StateBasedGame game) throws SlickException{
         iglog = new MsgSystem();
-        iglog.add("Starting Game....");
         Controller = new Controller(container, game);
-        View = new View(Controller,container);
-        
+        View = new View(container);
     }
     
 

@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game;
 
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 /**
- *The Player is a character who can wlk. absCooords are the coordiantes which are absolute to the map.Rleative is relative to the currently loaded chunks.
+ *The Player is a character who can walk. absCooords are the coordiantes which are absolute to the map. Relative is relative to the currently loaded chunks (map).
  * @author Benedikt
  */
 public class Player extends Block{
@@ -36,11 +32,12 @@ public class Player extends Block{
    private int relCoordY;
    private Sound fallsound = new Sound("Game/Sounds/wind.wav");
    private int timetillmove;
+   private String controls = "WASD";
    
    
    
     /**
-     * Creates a player.
+     * Creates a player. The parameters are for the lower half of the player. The constructor automatically creates a block on top of it.
      * @param X Absolute X-Pos of lower half
      * @param Y Absolute Y-Pos of lower half
      * @param Z Absolute Z-Pos of lower half
@@ -61,6 +58,7 @@ public class Player extends Block{
         setRelCoordX(X - Controller.map.coordlistX[4] * Chunk.BlocksX);
     }
     
+
     private void setAbsCoordY(int Y){
         absCoordY = Y;
         //da das Map Coordinatensystem in y-Richtung in zwei unterschiedliche Richtungen geht (hier "+" ???)
@@ -136,6 +134,14 @@ public class Player extends Block{
         return relCoordY;
     }
     
+    public void setControls(String controls){
+        if ("arrows".equals(controls) || "WASD".equals(controls))
+            this.controls = controls;
+    }
+    
+    public String getControls(){
+        return controls;
+    }
        
     /**
      * Let the player walk
@@ -148,24 +154,80 @@ public class Player extends Block{
         if (timetillmove > 10){
             switch (dir) {
                 case 1://up
-                    posY-=3;
+                    posY -= 3+Block.height/4;
+                    if (    (
+                                inCorner(0)
+                                && ((Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ].obstacle)
+                                || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ+1].obstacle))
+                            )
+                        || 
+                            (
+                                inCorner(1)
+                                && ((Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ].obstacle)
+                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ+1].obstacle))
+                            )
+                        )
+                        posY+=3;
+                    posY += Block.height/4;
+                    
                 break;
 
                 case 3: //left
-                    posX-=3;
+                    posX-=3+Block.width/2;
+                    if (    (
+                                inCorner(0) 
+                                && ((Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ].obstacle)
+                                || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ+1].obstacle))
+                            )
+                        ||
+                            (
+                                inCorner(3)
+                                && ((Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ].obstacle)
+                                || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ+1].obstacle))
+                            )
+                       )
+                            posX += 3;
+                    posX += Block.width/2;
+                    
                 break;
 
                 case 5: //right
-                    posX+=3;
+                    posX += 3+Block.width/2;
+                    if (    (
+                                inCorner(1)
+                                && ((Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ].obstacle)
+                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ+1].obstacle))
+                            ) 
+                        ||
+                            (
+                                inCorner(2)
+                                && (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ].obstacle)
+                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ+1].obstacle))
+                        )
+                            posX-=3;
+                    posX -= Block.width/2;
                 break;        
 
                 case 7://down
-                    posY+=3;
+                    posY += 3+Block.height/4;
+                    if (    (
+                                inCorner(2)
+                                && ((Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ].obstacle)
+                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ+1].obstacle))
+                            ) 
+                        ||
+                            (
+                            inCorner(3)
+                            && (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ].obstacle)
+                            || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ+1].obstacle))
+                        )
+                            posY-=3;
+                    posY -= Block.height/4;
                 break;
             }
             
-            
-            if (posX+2*posY <= Block.width /2 && relCoordY < Chunk.BlocksY*3-1){
+            //check the coordiante movement
+            if (inCorner(0)){
                 GameplayState.iglog.add("oben links");
                 posY = posY + Block.height/4;
                 posX = posX + Block.width/2;
@@ -180,10 +242,10 @@ public class Player extends Block{
                 Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
                 Controller.map.changes = true;
             } else {
-                if (-posX + 2*posY < -Block.height/2 && relCoordY < Chunk.BlocksY*3-1) {
+                if (inCorner(1)) {
                     GameplayState.iglog.add("oben rechts");
-                    posY = posY + Block.height/4;
-                    posX = posX - Block.width/2;
+                    posY = posY + Block.height / 4;
+                    posX = posX - Block.width / 2;
                     
                     Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
                     Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);
@@ -194,7 +256,7 @@ public class Player extends Block{
                     Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);  
                     Controller.map.changes = true;
                 } else {
-                    if (-posX + 2*posY> Block.height /2 && relCoordX > 0) {
+                    if (inCorner(3)) {
                         GameplayState.iglog.add("unten links");
                         posY = posY - Block.height/4;
                         posX = posX + Block.width/2;
@@ -208,7 +270,7 @@ public class Player extends Block{
                         Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
                         Controller.map.changes = true;
                     } else {
-                        if (posX + 2*posY > Block.width /2 + Block.height && relCoordX > 0) { //rechts oben
+                        if (inCorner(2)) {
                             GameplayState.iglog.add("unten rechts");
                             posY = posY - Block.height/4;
                             posX = posX - Block.width/2;
@@ -237,6 +299,20 @@ public class Player extends Block{
         //System.out.println(relCoordX+":"+relCoordY+":"+coordZ);
               
    }
+    
+    private boolean inCorner(int corner) {
+        switch (corner){
+            case 0://top left
+                return (posX+2*posY <= Block.width /2 && relCoordY < Chunk.BlocksY*3-1);
+            case 1://top right
+                return (-posX + 2*posY < -Block.height/2 && relCoordY < Chunk.BlocksY*3-1);
+            case 2://bottom right
+                return (posX + 2*posY > Block.width /2 + Block.height && relCoordX > 0);
+            case 3://bottom left
+                return (-posX + 2*posY> Block.height /2 && relCoordX > 0);
+            default: return false;
+        }
+    }
    
     /**
      * 

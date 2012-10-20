@@ -20,17 +20,17 @@ public class Controller {
      * Contains the player
      */
     public static Player player;   
-    /**
-     * Should the graphic be a bit slower but better?
+   
+   /**
+     * Should the graphic be a bit slower but better? Must be in Controller because is needed for e.g. the Block and there used as data
      */
     public boolean goodgraphics = true;
-        
+    
     public GameContainer gc;
     private StateBasedGame sbg;
     private int oldx;
     private int oldy;
     private float zoomx = 1;
-    
     
     /**
      * Constructor is called when entering the gamemode.
@@ -44,7 +44,15 @@ public class Controller {
           
         gc.getInput().addMouseListener(new MouseDraggedListener());
         map = new Map(MainMenuState.loadmap);
+        gameConstructor();
+    }
+    
+    /**
+     *Later this method will be abstract to split into engine and game
+     */
+    private void gameConstructor() throws SlickException{
         map.data[(int) (Chunk.BlocksX*1.5)][(int) (Chunk.BlocksY*1.5)][19] = new Player((int) (Chunk.BlocksX*1.5),(int) (Chunk.BlocksY*1.5),19);
+        //the player is created but must be saved into the field
         player = (Player) map.data[(int) (Chunk.BlocksX*1.5)][(int) (Chunk.BlocksY*1.5)][19];
     }
     
@@ -73,8 +81,9 @@ public class Controller {
 
         //good graphics
         if (input.isKeyPressed(Input.KEY_G)) {
-            goodgraphics = !goodgraphics;
-            GameplayState.iglog.add("Good Graphics is now "+goodgraphics);
+            GameplayState.Controller.goodgraphics = !GameplayState.Controller.goodgraphics;
+            GameplayState.iglog.add("Good Graphics is now "+GameplayState.Controller.goodgraphics);
+            Block.reloadSprites(GameplayState.View.getZoom());
         }
         
         //toggle camera
@@ -85,17 +94,19 @@ public class Controller {
                 
         //reset zoom
         if (input.isKeyPressed(Input.KEY_Z)) {
-            GameplayState.View.setzoom(1);
+            GameplayState.View.setZoom(1);
             GameplayState.iglog.add("Zoom reset");
         }
         
         
         //walk
-        if (input.isKeyDown(Input.KEY_W)) {player.walk(1,delta);}
-        if (input.isKeyDown(Input.KEY_S)) {player.walk(7,delta);}
-        if (input.isKeyDown(Input.KEY_A)) {player.walk(3,delta);}
-        if (input.isKeyDown(Input.KEY_D)) {player.walk(5,delta);}
-        if (input.isKeyPressed(Input.KEY_SPACE)) player.jump();
+        if ("WASD".equals(player.getControls())){
+            if (input.isKeyDown(Input.KEY_W)) player.walk(1,delta);
+            if (input.isKeyDown(Input.KEY_S)) player.walk(7,delta);
+            if (input.isKeyDown(Input.KEY_A)) player.walk(3,delta);
+            if (input.isKeyDown(Input.KEY_D)) player.walk(5,delta);
+            if (input.isKeyPressed(Input.KEY_SPACE)) player.jump();
+        }
        
        
 
@@ -152,17 +163,17 @@ public class Controller {
             gc.getInput().consumeEvent();
             
             zoomx = zoomx + change/1000f;
-            GameplayState.View.setzoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
+            GameplayState.View.setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
             
-            GameplayState.View.cameraWidth = (int) (gc.getWidth() / GameplayState.View.getzoom());
-            GameplayState.View.cameraHeight= (int) (gc.getHeight() / GameplayState.View.getzoom());
+            GameplayState.View.cameraWidth = (int) (gc.getWidth() / GameplayState.View.getZoom());
+            GameplayState.View.cameraHeight= (int) (gc.getHeight() / GameplayState.View.getZoom());
             
            /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
             Block.height = (int) (4*gc.getHeight()*zoom / Chunk.BlocksY);
             Chunk.SizeX = (int) (Chunk.BlocksX*Block.width*zoom);
             Chunk.SizeY = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
-            GameplayState.iglog.add("Zoom: "+GameplayState.View.getzoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
+            GameplayState.iglog.add("Zoom: "+GameplayState.View.getZoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
         }
 
         @Override

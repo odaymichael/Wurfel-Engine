@@ -17,18 +17,18 @@ public class View {
     
     
     //Konstruktor
-    public View(GameContainer pgc) throws SlickException{
-        background = new Image("MainMenu/Images/Logo.jpg");
+    public View(GameContainer gc) throws SlickException{
+        background = new Image("MainMenu/Images/Logo.png");
  
         // load the menu images
         Image menuOptions = new Image("MainMenu/Images/MainMenu.png");
 
         startGameOption.image = menuOptions.getSubImage(0, 0, 400, 50);
-        startGameOption.X = (pgc.getScreenWidth() - startGameOption.image.getWidth())/2;
+        startGameOption.X = (gc.getWidth() - startGameOption.image.getWidth())/2;
         startGameOption.Y = 50;
         
         loadGameOption.image = menuOptions.getSubImage(0,50,400,50);
-        loadGameOption.X = (pgc.getScreenWidth()-loadGameOption.image.getWidth())/2;
+        loadGameOption.X = (gc.getWidth()-loadGameOption.image.getWidth())/2;
         loadGameOption.Y = 100;
         
         exitOption.image = menuOptions.getSubImage(0, 100, 400, 50);
@@ -38,7 +38,7 @@ public class View {
 
     public void render(Controller pController){
         // render the background
-        background.draw(0,0,1920,1080);
+        background.draw(0,0);
         // Draw menu
 
         startGameOption.draw();

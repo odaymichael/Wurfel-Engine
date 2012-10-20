@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game;
    
 import org.newdawn.slick.Color;
@@ -16,12 +12,12 @@ public class Minimap {
     private int Y;
     private final float scalefactor= 8;
     
-    Minimap() {
+    public Minimap() {
         X = GameplayState.gc.getWidth() - 400;
         Y = 10;
     } 
             
-    void draw(Graphics g) {
+    public void draw(Graphics g) {
         for (int pos=0;pos < 9;pos++){
                  
 //            g.setColor(Color.white);
@@ -35,11 +31,11 @@ public class Minimap {
         for (int x = Chunk.BlocksX*(pos%3); x < Chunk.BlocksX * (pos%3+1); x++){
             for (int y = Chunk.BlocksY*(pos/3); y < Chunk.BlocksY * (pos/3+1); y++){
                 Color temp = Block.Blocksheet.getSubImage(
-                        Controller.map.data[x][y][Controller.player.coordZ-1].spritex,
-                        Controller.map.data[x][y][Controller.player.coordZ-1].spritey
+                        Controller.map.data[x][y][Controller.player.coordZ-1].spriteX[0],
+                        Controller.map.data[x][y][Controller.player.coordZ-1].spriteY[0]
                     ).getColor(
-                        Block.displBlockWidth/2,
-                        Block.displBlockHeight/4
+                        Block.displWidth/2,
+                        Block.displHeight/4
                 );
 
                 g.setColor(temp);
@@ -105,8 +101,5 @@ public class Minimap {
             GameplayState.View.cameraX +" | "+ GameplayState.View.cameraY,
             Color.white
         );
-  
     }
- 
-    
 }

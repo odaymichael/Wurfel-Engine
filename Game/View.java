@@ -4,10 +4,8 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.vecmath.Vector3d;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -21,7 +19,7 @@ public class View {
     /**
      * the array which is created after analysing the Map.data
      */
-    private Block renderarray[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
+   // private Block renderarray[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
     /**
      * 
      */
@@ -56,23 +54,21 @@ public class View {
      * 
      */
     public static TrueTypeFont tTFont_small;
+    
+   
     private GameContainer gc;
     //private static Insets insets;
     private Font baseFont;
-    
-    private ArrayList offsetBlock = new ArrayList<Vector3d>();
-    private ArrayList leftBlockInFront = new ArrayList();
+
     
     /**
-     * Konstruktor 
+     * Constructor
      * @param pController
      * @param pgc
      * @throws SlickException
      */
-    public View(Controller pController,GameContainer pgc) throws SlickException {
-        GameplayState.Controller = pController;
-        gc = pgc;
-             
+    public View(GameContainer pgc) throws SlickException {
+        gc = pgc;  
        
         // initialise the font which CAUSES LONG LOADING TIME!!!
         TrueTypeFont trueTypeFont;
@@ -98,7 +94,7 @@ public class View {
         
         zoom = gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.height);
         System.out.println(zoom);
-        Block.listImages(zoom); 
+        Block.reloadSprites(zoom); 
         // Block.width = Block.height;
         GameplayState.iglog.add("Blocks: "+Block.width+" x "+Block.height);
         GameplayState.iglog.add("Zoom: "+zoom);
@@ -122,7 +118,7 @@ public class View {
         //Controller.player.draw();
         
         //GUI
-        GameplayState.Controller.map.minimap.draw(g);
+        if (GameplayState.Controller.map.minimap != null) GameplayState.Controller.map.minimap.draw(g);
         drawiglog();
     }
       
@@ -131,39 +127,7 @@ public class View {
      * @throws SlickException
      */
     public void draw_all_Chunks() throws SlickException{
-        /*Ansatz mit Zeichnen der halben tiles
-        //int amountX = window_width()/Controller.tilesizeX;
-        //int amountY = window_height()/Controller.tilesizeY;
-        for (int v=0; v < amountY*2; v++)//vertikal
-        for (int h=0; h < amountX; h++)//horizontal
-            g2d.drawImage(
-                    tilefile,
-                    //Position
-                    h==0 && v%2!=2//dx1
-                    ? (v%2)*tilesizeX/2+posX
-                    : tilesizeX*h - tilesizeX/2 + (v%2)*tilesizeX/2 + posX,
-                    v==0//dy1
-                    ? posY
-                    : (v-1)*tilesizeY/2 + posY,
-                    h==0 && v%2!=2//dx2
-                    ? tilesizeX/2 + (v%2)*tilesizeX/2 + posX
-                    : tilesizeX*h - tilesizeX/2 + tilesizeX + (v%2)*tilesizeX/2 + posX,
-                    v==0//dy2
-                    ? tilesizeY + posY
-                    : (v-1)*tilesizeY/2 + posY + tilesizeY,
-
-                    //Source
-                    h==0 && v%2!=2 ? tilesizeX/2:0,//sx1
-                    v==0//sy2
-                    ? tilesizeY/2
-                    : 0,
-                    h==amountX && v%2!=2 
-                    ? tilesizeX/2
-                    : tilesizeX,//sx2
-                    tilesizeY,//sy2
-                    null);
-                    */
-                        
+        /*                        
         /*-------------------*/ 
         /*---draw lines-------*/
         /*-------------------*/ 
@@ -243,10 +207,13 @@ public class View {
         
        Block.Blocksheet.startUse();
        
-        for (int z=0; z < renderarray[0][0].length; z++) {
-            for (int y=0; y < renderarray[0].length; y++) {//vertikal
-                for (int x=0; x < renderarray.length; x++){//horizontal
-                    if ((x < renderarray.length-1 && renderarray[x+1][y][z].renderorder == -1) || renderarray[x][y][z].renderorder == 1) {
+        for (int z=0; z < Chunk.BlocksZ; z++) {
+            for (int y=0; y < Chunk.BlocksY*3; y++) {//vertikal
+                for (int x=0; x < Chunk.BlocksX*3; x++){//horizontal
+                    if (
+                        (x < Chunk.BlocksX*3-1 && GameplayState.Controller.map.data[x+1][y][z].renderorder == -1)
+                        || GameplayState.Controller.map.data[x][y][z].renderorder == 1
+                        ) {
                         renderblock(x+1,y,z);
                         renderblock(x,y,z);
                         x++;
@@ -259,130 +226,239 @@ public class View {
 
     private void renderblock(int x,int y, int z) {
         //draw every block except air
-        if (renderarray[x][y][z].ID() != 0){
+        if (GameplayState.Controller.map.data[x][y][z].getID() != 0){
             //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
             Block renderBlock = Controller.map.data[x][y][z]; 
             
-            if (GameplayState.Controller.goodgraphics){                           
-                //new Color(lightlevel,lightlevel,lightlevel).bind(); 
- 
-                Image temp = Block.Blocksheet.getSubImage(renderBlock.spritex, renderBlock.spritey);
-
-                //calc  brightness
-                float lightlevel = renderBlock.lightlevel / 100f;
-                //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
-
-                temp.setColor(0,lightlevel,lightlevel,lightlevel);
-                temp.setColor(1, lightlevel,lightlevel, lightlevel);
-
-                lightlevel -= .1f;
-                //System.out.println(lightlevel);
-
-                temp.setColor(2, lightlevel,lightlevel, lightlevel);
-                temp.setColor(3, lightlevel,lightlevel, lightlevel);
-
-                temp.drawEmbedded(
-                    (int) (zoom*Controller.map.posX) + x*Block.displBlockWidth + (y%2) * (int) (Block.displBlockWidth/2) + renderBlock.getOffsetX(),
-                    (int) (zoom*Controller.map.posY / 2) + y*Block.displBlockHeight/4 - z*Block.displBlockHeight/2 + renderBlock.getOffsetY()
-                );
+            if (GameplayState.Controller.goodgraphics){ 
+                if (renderBlock.renderTop) renderSide(x,y,z, 1, renderBlock);
+                if (renderBlock.renderLeft) renderSide(x,y,z, 0, renderBlock);
+                if (renderBlock.renderRight) renderSide(x,y,z, 2, renderBlock);
 
             } else {
-                //calc  brightness
-                int brightness = renderBlock.lightlevel * 255 / 100;
-                new Color(brightness,brightness,brightness).bind();     
+                Image temp = Block.Blocksheet.getSubImage(renderBlock.spriteX[0], renderBlock.spriteY[0]);
 
-                Block.Blocksheet.renderInUse(
-                    (int) (zoom*Controller.map.posX) + x*Block.displBlockWidth + (y%2) * (int) (Block.displBlockWidth/2) + renderBlock.getOffsetX(),
-                    (int) (zoom*Controller.map.posY / 2) + y*Block.displBlockHeight/4 - z*Block.displBlockHeight/2 + renderBlock.getOffsetY(),
-                    renderBlock.spritex,
-                    renderBlock.spritey
+                //calc  brightness
+                float brightness = renderBlock.lightlevel / 100f;
+                //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
+                
+                //or paint whole block with :
+                //int brightness = renderBlock.lightlevel * 255 / 100;
+                //new Color(brightness,brightness,brightness).bind(); 
+                
+                temp.setColor(0, brightness,brightness,brightness);
+                temp.setColor(1, brightness,brightness, brightness);
+
+                brightness -= .1f;
+                //System.out.println(lightlevel);
+
+                temp.setColor(2, brightness, brightness, brightness);
+                temp.setColor(3, brightness, brightness, brightness);
+                
+                temp.drawEmbedded(
+                    (int) (zoom*Controller.map.posX) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
+                    (int) (zoom*Controller.map.posY / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY()
                 );
+                
+//                Block.Blocksheet.renderInUse(
+//                    (int) (zoom*Controller.map.posX) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
+//                    (int) (zoom*Controller.map.posY / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY(),
+//                    renderBlock.spritex,
+//                    renderBlock.spritey
+//                );
             }
         }
     }
     
+    private void renderSide(int x, int y, int z,int side, Block renderBlock){
+        //int brightness = (renderBlock.lightlevel - side*25) * 255 / 100;
+        //new Color(brightness,brightness,brightness).bind();
+        
+        Image temp = renderBlock.getSideSprite(side);
+        
+        //calc  brightness
+        float brightness = (renderBlock.lightlevel - side*25) / 100f;
+                
+        temp.setColor(0, brightness,brightness,brightness);
+        temp.setColor(1, brightness,brightness, brightness);
+
+        if (side!=1) brightness -= .3f;
+
+        temp.setColor(2, brightness, brightness, brightness);
+        temp.setColor(3, brightness, brightness, brightness);
+        
+        temp.drawEmbedded(
+            (int) (zoom*Controller.map.posX)
+            + x*Block.displWidth
+            + (y%2) * (int) (Block.displWidth/2)
+            + renderBlock.getOffsetX(),
+            
+            (int) (zoom*Controller.map.posY / 2)
+            + y*Block.displHeight/4
+            - z*Block.displHeight/2
+            + ( side != 1 ? Block.displHeight/4:0)
+            + renderBlock.getOffsetY()
+        );
+    }
+    
     
     /**
-     * Filters every Block wich is not visible
+     * Filters every Block (and side) wich is not visible. Boosts rendering speed.
      */
     public void raytracing(){
-        //fill renderarray with air
-        for (int x=0;x <Chunk.BlocksX*3;x++)
-            for (int y=0;y <Chunk.BlocksY*3;y++)
-                for (int z=0;z <Chunk.BlocksZ;z++)
-                    renderarray[x][y][z] = new Block(0,0);
+        //set visibility of every block to false
+        for (int x=0;x < Chunk.BlocksX*3;x++)
+            for (int y=0;y < Chunk.BlocksY*3;y++)
+                for (int z=0;z < Chunk.BlocksZ;z++)
+                    GameplayState.Controller.map.data[x][y][z].setVisible(false);
 
         //check top of big chunk
         for (int x=0; x < Controller.map.data.length; x++)
             for (int y=0; y < Controller.map.data[0].length; y++)
-                trace_ray(
-                    Controller.map.data,
-                    x,
-                    y,
-                    Controller.map.data[0][0].length-1
-                );
+                for (int side=0; side < 3; side++)
+                    trace_ray(
+                        Controller.map.data,
+                        x,
+                        y,
+                        Controller.map.data[0][0].length-1,
+                        side
+                    );
             
         //check front side
         for (int x=0; x < Controller.map.data.length; x++)
-            for (int z=0; z < Controller.map.data[0][0].length-1 ; z++)            
+            for (int z=0; z < Controller.map.data[0][0].length-1 ; z++)
+                for (int side=0; side < 3; side++)
                 trace_ray(
                     Controller.map.data,
                     x,
                     Controller.map.data[0].length-1,
-                    z
+                    z,
+                    side
                 );
-        for (int x=0; x < Controller.map.data.length; x++)
-            for (int z=0; z < Controller.map.data[0][0].length-1 ; z++)            
-                trace_ray(
-                    Controller.map.data,
-                    x,
-                    Controller.map.data[0].length-2,
-                    z
-                );
+        if (!GameplayState.Controller.goodgraphics){
+            //for the shifted row again
+            for (int x=0; x < Controller.map.data.length; x++)
+                for (int z=0; z < Controller.map.data[0][0].length-1 ; z++)            
+                    trace_ray(
+                        Controller.map.data,
+                        x,
+                        Controller.map.data[0].length-2,
+                        z,
+                        0
+                    );
+       }
                 
         Controller.map.changes = false;
     }
 
-    private void trace_ray(Block mapdata[][][],int x, int y, int z){
-        //trace ray until it found a not transparent block
-       while ((y >= 0) && (z>=0) && (mapdata[x][y][z].transparent)) {
-           //save every transparent block which is not air
-           if ((mapdata[x][y][z].transparent) && (mapdata[x][y][z].ID() != 0))
-              renderarray[x][y][z] = mapdata[x][y][z]; 
-           
-           //check if it has offset, not part of the original raytracing, but checking it here saves iteration. mapdata and renderarray are for the field with x,y,z equal
-           if (mapdata[x][y][z].getOffsetY() > 0)
-               renderarray[x][y][z].renderorder = 1;
-           else if (mapdata[x][y][z].getOffsetX() < 0 && mapdata[x][y][z].getOffsetY() < 0)
-                renderarray[x][y][z].renderorder = -1;
-                else renderarray[x][y][z].renderorder = 0;
-           
-           y -= 2;
-           z--;                       
-        }   
+    private void trace_ray(Block[][][] mapdata, int x, int y, int z, int side){
+        if (GameplayState.Controller.goodgraphics){
+            boolean leftside = false;
+            boolean rightside = false;
+            y += 2;
+            z++;
+            do {
+                y -= 2;
+                z--;
+                if (side == 0){
+                    if (mapdata[x][y][z].getID() != 0) {
+                        //put every transparent block with transparent block on top in renderarrray, except air.
+                        GameplayState.Controller.map.data[x][y][z].setVisible(true);
+                        GameplayState.Controller.map.data[x][y][z].renderLeft = true;
+                    }
                     
-        //Take the first
-        if ((y >= 0) && (z>=0))
-           renderarray[x][y][z] = mapdata[x][y][z];
+                    //block on left hiding the side
+                    if (x>0 && y>0 && z>0 && ! mapdata[x - (y%2 == 0 ? 1:0)][y-1][z-1].transparent) break;
+                    
+                    //two blocks hiding the side
+                    if (x>0 && y>0) {
+                        if (! mapdata[x - (y%2 == 0 ? 1:0)][y-1][z].transparent) leftside = true;
+                        if (z>0 && ! mapdata[x][y][z-1].transparent) rightside = true;
+                     }                    
+                } else                 
+                    if (side == 1) {
+                        if (mapdata[x][y][z].getID() != 0 && (mapdata[x][y][z+1].transparent || z == Chunk.BlocksZ-1)) {
+                            //put every transparent block with transparent block on top in renderarrray, except air.
+                            GameplayState.Controller.map.data[x][y][z].setVisible(true);
+                            GameplayState.Controller.map.data[x][y][z].renderTop = true;
+                        }
+
+                       //two 0- and 2-sides hiding the side 1
+                        if (x>0 && y>0) {
+                            if (! mapdata[x - (y%2 == 0 ? 1:0)][y-1][z].transparent) leftside = true;
+                            if (x < Chunk.BlocksX*3-1 && ! mapdata[x + (y%2 == 0 ? 0:1)][y-1][z].transparent) rightside = true;
+                        }
+
+                    } else
+                        if (side==2){
+                            if (mapdata[x][y][z].getID() != 0) {
+                                //put every transparent block with transparent block on top in renderarrray, except air.
+                                GameplayState.Controller.map.data[x][y][z].setVisible(true);
+                                GameplayState.Controller.map.data[x][y][z].renderRight = true;
+                            }
+                    
+                            //block on right hiding the side
+                            if (x < Chunk.BlocksX*3-1 && y>0 && z>0 && ! mapdata[x + (y%2 == 0 ? 0:1)][y-1][z-1].transparent) break;
+                    
+                            //two blocks hiding the side
+                            if (x>0 && z>0) {
+                                if (z>0 && ! mapdata[x][y][z-1].transparent) leftside = true;
+                                if (x < Chunk.BlocksX*3-1 && ! mapdata[x + (y%2 == 0 ? 0:1)][y][z-1].transparent) rightside = true;
+                            } 
+                        }
+                
+           } while (y > 1 && z > 0 && mapdata[x][y][z].transparent && !(leftside && rightside));
+//           Take the last block
+//            if (y >= 0 && z >= 0 && z < Chunk.BlocksZ-1 && (mapdata[x][y][z+1].transparent)){
+//                renderarray[x][y][z] = mapdata[x][y][z];
+//                renderarray[x][y][z].renderTop = true;
+//            }
+        } else{
+            //trace ray until it found a not transparent block
+            boolean leftHalfHidden = false;
+            boolean rightHalfHidden = false;
+            while ((y >= 0) && (z >= 0) && (mapdata[x][y][z].transparent)) {
+                //check blocks hidden by 4 other halfs
+                if ( x>0 && y>0 && ! mapdata[x - (x%2 == 0? 1 : 0)][y-1][z].transparent )
+                    leftHalfHidden = true;
+                if (y>0 && x < Chunk.BlocksX*3-1 && ! mapdata[x + (x%2==0?0:1)][y-1][z].transparent)
+                    rightHalfHidden = true;        
+
+                if ((mapdata[x][y][z].getID() != 0) && ! (leftHalfHidden && rightHalfHidden))  {
+                    //save every transparent block
+                    if (mapdata[x][y][z].transparent)
+                        GameplayState.Controller.map.data[x][y][z].setVisible(true);
+
+                    //check if it has offset, not part of the original raytracing, but checking it here saves iteration. mapdata and renderarray are for the field with x,y,z equal
+                    if (mapdata[x][y][z].getOffsetY() > 0)
+                        GameplayState.Controller.map.data[x][y][z].renderorder = 1;
+                    else if (mapdata[x][y][z].getOffsetX() < 0 && mapdata[x][y][z].getOffsetY() < 0)
+                            GameplayState.Controller.map.data[x][y][z].renderorder = -1;
+                        else GameplayState.Controller.map.data[x][y][z].renderorder = 0;
+                }
+                y -= 2;
+                z--;                       
+            }
+            //Take the last block
+            if ((y >= 0) && (z>=0))
+                GameplayState.Controller.map.data[x][y][z].setVisible(true);
+       }
+
     }
     
-    /*
-     * Calculates the light level based on the sun with an angle of 90 deg
-     */
     /**
-     * 
+     * Calculates the light level based on the sun with an angle of 90 deg
      */
     public void calc_light(){
         for (int x=0; x < Chunk.BlocksX*3; x++){
-            for (int y=0; y < Chunk.BlocksY*3; y++){
+            for (int y=0; y < Chunk.BlocksY*3; y++) {
                 //find top most Block
                 int z = Chunk.BlocksZ-1;
-                while (renderarray[x][y][z].transparent == true && z > 0 ){
+                while (GameplayState.Controller.map.data[x][y][z].transparent == true && z > 0 ){
                     z--;
                 }
                 for (int level=z; level > 0; level--)
-                    renderarray[x][y][level].lightlevel = level*100/z;
-                
+                    GameplayState.Controller.map.data[x][y][level].lightlevel = level*100/z;
             }
         }         
     }
@@ -391,16 +467,16 @@ public class View {
      * Set the zoom factor and regenerates the sprites.
      * @param zoom
      */
-    public void setzoom(float zoom) {
+    public void setZoom(float zoom) {
         this.zoom = zoom;
-        Block.listImages(zoom);
+        Block.reloadSprites(zoom);
     }
     
     /**
      * Returns the zoomfactor.
      * @return
      */
-    public float getzoom() {
+    public float getZoom() {
         return zoom;
     }
        

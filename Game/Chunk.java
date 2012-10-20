@@ -47,8 +47,6 @@ public class Chunk {
     public Chunk(int ChunkX, int ChunkY, int startposX, int startposY, boolean loadmap){
         coordX = ChunkX;
         coordY = ChunkY;
-//        posX = startposX;
-//        posY = startposY;
 
         //fill everything with air to avoid crashes
         for (int x=0; x < BlocksX; x++)
@@ -169,7 +167,7 @@ public class Chunk {
 
                             data[x][y][z] = new Block(
                                         (int) Integer.parseInt(line.substring(0,posdots)),
-                                        (int) Integer.parseInt(line.substring(posdots+1,posend))
+                                        (int) Integer.parseInt(line.substring(posdots+1, posend))
                                         );
                             x++;
                             line.delete(0,posend+1);

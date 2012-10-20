@@ -11,7 +11,7 @@ import MainMenu.MainMenuState;
  * @author Benedikt
  */
 public class Map {
-    Block data[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
+    public Block data[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
     /**
      * The offset of the Map in X direction
      */
@@ -64,7 +64,7 @@ public class Map {
             }
         changes = true;
        
-        minimap = new Minimap();
+        //minimap = new Minimap();
     }
     
     /**
@@ -130,10 +130,10 @@ public class Map {
             }
         }
         //player switches chunk
-        System.out.println("Player was rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
+        //System.out.println("Player was rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
         Controller.player.setRelCoordX(Controller.player.getRelCoordX() +  (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BlocksX);
         Controller.player.setRelCoordY(Controller.player.getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BlocksY);
-        System.out.println("Player is rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
+        //System.out.println("Player is rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
         changes = true;
     }
     
