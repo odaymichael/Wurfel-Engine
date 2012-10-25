@@ -11,32 +11,35 @@ import MainMenu.MainMenuState;
  * @author Benedikt
  */
 public class Map {
+    /**
+     * The map's data is stored inside here.
+     */
     public Block data[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
     /**
      * The offset of the Map in X direction
      */
-    public int posX;
+    private int posX;
     /**
      * The offset of the Map in Y direction
      */
-    public int posY;
+    private int posY;
     /**
      * When true the renderarray will be recalculated.
      */
-    public boolean changes;
+    private boolean recalcRequested;
     /**
-     *A list of the X coordinates.
+     *A list of the X coordinates of the current chunks.
      */
-    public int[] coordlistX = new int[9];
+    private int[] coordlistX = new int[9];
     /**
      *A list for the y coordinates of the current chunks.
      */
-    public int coordlistY[] = new int[9];;
+    private int coordlistY[] = new int[9];;
 
     /**
      * Contains the minimap
      */
-    public Minimap minimap;
+    private Minimap minimap;
     
     
     /**
@@ -62,7 +65,7 @@ public class Map {
                 setChunk(pos, tempchunk);
                 pos++;               
             }
-        changes = true;
+        recalcRequested = true;
        
         //minimap = new Minimap();
     }
@@ -93,12 +96,12 @@ public class Map {
      */
     public void setCenter(int center){
         /*
-          |0|1|2|
-          -------------
-          |3|4|5|
-          -------------
-          |6|7|8|
-         */
+                |0|1|2|
+                -------------
+                |3|4|5|
+                -------------
+                |6|7|8|
+                */
         
         //GameplayState.iglog.add("New Center: "+center);
         //System.out.println("New Center: "+center);
@@ -134,7 +137,7 @@ public class Map {
         Controller.player.setRelCoordX(Controller.player.getRelCoordX() +  (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BlocksX);
         Controller.player.setRelCoordY(Controller.player.getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BlocksY);
         //System.out.println("Player is rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
-        changes = true;
+        recalcRequested = true;
     }
     
      private boolean check_chunk_movement(int pos, int movement){
@@ -193,4 +196,53 @@ public class Map {
                     );
                 }
     }
+    
+    /**
+     * Informs the map that a recalc is requested.
+     */
+    public void requestRecalc(){
+        recalcRequested = true;
+    }
+    
+    /**
+     * When the recalc was requested it calls raytracing and light recalculing.
+     * Request a recalc with <i>reuqestRecalc()</i>. This method should be called every update.
+     */
+    public void recalcIfRequested(){
+        if (recalcRequested) {
+            GameplayState.View.raytracing();
+            GameplayState.View.calc_light();
+            recalcRequested = false;
+        }
+    }
+
+    public int getCoordlistX(int i) {
+        return coordlistX[i];
+    }
+  
+    public int getCoordlistY(int i) {
+        return coordlistY[i];
+    }
+   
+    public int getPosX() {
+        return posX;
+    }
+
+    public void changePosX(int posX) {
+        this.posX = this.posX+posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void changePosY(int posY) {
+        this.posY = this.posY+posY;
+    }
+
+    public Minimap getMinimap() {
+        return minimap;
+    }
+    
+    
 }

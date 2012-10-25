@@ -63,25 +63,22 @@ public class View {
     
     /**
      * Constructor
-     * @param pController
-     * @param pgc
+     * @param gc
      * @throws SlickException
      */
-    public View(GameContainer pgc) throws SlickException {
-        gc = pgc;  
+    public View(GameContainer gc) throws SlickException {
+        this.gc = gc;  
        
         // initialise the font which CAUSES LONG LOADING TIME!!!
         TrueTypeFont trueTypeFont;
-        Font startFont;
-        try {
-            startFont = Font.createFont(Font.TRUETYPE_FONT,new BufferedInputStream(this.getClass().getResourceAsStream("Blox2.ttf")));
-            baseFont = startFont.deriveFont(Font.PLAIN, 12);
-        } catch (FontFormatException ex) {
-            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        //startFont = Font.createFont(Font.TRUETYPE_FONT,new BufferedInputStream(this.getClass().getResourceAsStream("Blox2.ttf")));
+        UnicodeFont startFont = new UnicodeFont("Game/Blox2.ttf", 20, false, false);
+        //baseFont = startFont.deriveFont(Font.PLAIN, 12);
+        baseFont = startFont.getFont().deriveFont(Font.PLAIN, 12);
+     
         tTFont = new TrueTypeFont(baseFont, true);
+        
         
         
         /*font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
@@ -109,7 +106,7 @@ public class View {
     /**
      * Main method which is called every time
      * @param game
-     * @param pg
+     * @param g 
      * @throws SlickException
      */
     public void render(StateBasedGame game, Graphics g) throws SlickException{
@@ -118,7 +115,8 @@ public class View {
         //Controller.player.draw();
         
         //GUI
-        if (GameplayState.Controller.map.minimap != null) GameplayState.Controller.map.minimap.draw(g);
+        if (GameplayState.Controller.map.getMinimap() != null)
+            GameplayState.Controller.map.getMinimap().draw(g);
         drawiglog();
     }
       
@@ -226,7 +224,7 @@ public class View {
 
     private void renderblock(int x,int y, int z) {
         //draw every block except air
-        if (GameplayState.Controller.map.data[x][y][z].getID() != 0){
+        if (GameplayState.Controller.map.data[x][y][z].getId() != 0){
             //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
             Block renderBlock = Controller.map.data[x][y][z]; 
             
@@ -256,8 +254,8 @@ public class View {
                 temp.setColor(3, brightness, brightness, brightness);
                 
                 temp.drawEmbedded(
-                    (int) (zoom*Controller.map.posX) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
-                    (int) (zoom*Controller.map.posY / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY()
+                    (int) (zoom*Controller.map.getPosX()) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
+                    (int) (zoom*Controller.map.getPosY() / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY()
                 );
                 
 //                Block.Blocksheet.renderInUse(
@@ -288,12 +286,12 @@ public class View {
         temp.setColor(3, brightness, brightness, brightness);
         
         temp.drawEmbedded(
-            (int) (zoom*Controller.map.posX)
+            (int) (zoom*Controller.map.getPosX())
             + x*Block.displWidth
             + (y%2) * (int) (Block.displWidth/2)
             + renderBlock.getOffsetX(),
             
-            (int) (zoom*Controller.map.posY / 2)
+            (int) (zoom*Controller.map.getPosY() / 2)
             + y*Block.displHeight/4
             - z*Block.displHeight/2
             + ( side != 1 ? Block.displHeight/4:0)
@@ -302,7 +300,7 @@ public class View {
     }
     
     
-    /**
+ /**
      * Filters every Block (and side) wich is not visible. Boosts rendering speed.
      */
     public void raytracing(){
@@ -346,9 +344,8 @@ public class View {
                         z,
                         0
                     );
-       }
-                
-        Controller.map.changes = false;
+       }    
+       Controller.map.requestRecalc();
     }
 
     private void trace_ray(Block[][][] mapdata, int x, int y, int z, int side){
@@ -361,7 +358,7 @@ public class View {
                 y -= 2;
                 z--;
                 if (side == 0){
-                    if (mapdata[x][y][z].getID() != 0) {
+                    if (mapdata[x][y][z].getId() != 0) {
                         //put every transparent block with transparent block on top in renderarrray, except air.
                         GameplayState.Controller.map.data[x][y][z].setVisible(true);
                         GameplayState.Controller.map.data[x][y][z].renderLeft = true;
@@ -377,7 +374,7 @@ public class View {
                      }                    
                 } else                 
                     if (side == 1) {
-                        if (mapdata[x][y][z].getID() != 0 && (mapdata[x][y][z+1].transparent || z == Chunk.BlocksZ-1)) {
+                        if (mapdata[x][y][z].getId() != 0 && (mapdata[x][y][z+1].transparent || z == Chunk.BlocksZ-1)) {
                             //put every transparent block with transparent block on top in renderarrray, except air.
                             GameplayState.Controller.map.data[x][y][z].setVisible(true);
                             GameplayState.Controller.map.data[x][y][z].renderTop = true;
@@ -391,7 +388,7 @@ public class View {
 
                     } else
                         if (side==2){
-                            if (mapdata[x][y][z].getID() != 0) {
+                            if (mapdata[x][y][z].getId() != 0) {
                                 //put every transparent block with transparent block on top in renderarrray, except air.
                                 GameplayState.Controller.map.data[x][y][z].setVisible(true);
                                 GameplayState.Controller.map.data[x][y][z].renderRight = true;
@@ -424,7 +421,7 @@ public class View {
                 if (y>0 && x < Chunk.BlocksX*3-1 && ! mapdata[x + (x%2==0?0:1)][y-1][z].transparent)
                     rightHalfHidden = true;        
 
-                if ((mapdata[x][y][z].getID() != 0) && ! (leftHalfHidden && rightHalfHidden))  {
+                if ((mapdata[x][y][z].getId() != 0) && ! (leftHalfHidden && rightHalfHidden))  {
                     //save every transparent block
                     if (mapdata[x][y][z].transparent)
                         GameplayState.Controller.map.data[x][y][z].setVisible(true);

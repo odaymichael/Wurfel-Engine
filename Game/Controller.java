@@ -140,16 +140,13 @@ public class Controller {
         } 
         
         map.data[player.getRelCoordX()][player.getRelCoordY()][player.coordZ] = player;
-        map.posX -= GameplayState.View.cameraX - oldx;
-        map.posY -= GameplayState.View.cameraY - oldy;
+        map.changePosX(- GameplayState.View.cameraX + oldx);
+        map.changePosY(-GameplayState.View.cameraY + oldy);
             
 
 
-        //do raytracing
-        if (map.changes) {
-            GameplayState.View.raytracing();
-            GameplayState.View.calc_light();
-        }        
+        //recalc if requested
+        map.recalcIfRequested();      
        
         //update the log
         GameplayState.iglog.update(delta);

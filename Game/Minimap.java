@@ -54,7 +54,7 @@ public class Minimap {
         View.tTFont.drawString(
             X + 10 + pos%3*Chunk.BlocksX*scalefactor,
             Y +10 + pos/3*(Chunk.BlocksY*scalefactor/4),
-            Controller.map.coordlistX[pos] +" | "+ Controller.map.coordlistY[pos],
+            Controller.map.getCoordlistX(pos) +" | "+ Controller.map.getCoordlistY(pos) ,
             Color.black
         );
     }

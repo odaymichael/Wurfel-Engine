@@ -11,17 +11,17 @@ import org.newdawn.slick.SpriteSheet;
  * @author Benedikt
  */
 public class Block {
-    private int ID = -1;
+    private final int id;
     
     /**
         * How much <b>h</b>ealth <b>p</b>oints has the block?
         * When it is 0 it get's destroyed.
         */
-    public int HP = 100;
+    public int hp = 100;
     /**
         * the value which can be used for storing information about a sub version of the object
         */
-    public int Value = 0;
+    public int value = 0;
     /**
        * The Name of the Block.
        */
@@ -62,11 +62,12 @@ public class Block {
     public int[] spriteY = new int[9];
     
     /**
-     * 1. Layer: Value
-     * 2. Layer: Side
-     * 3. Layer: X- or Y-coordinate
+     * 1. Dimension id
+     * 2. Layer: value
+     * 3. Layer: Side
+     * 4. Layer: X- or Y-coordinate
      */
-    private int[][][] SidesSprites = new int[2][3][2];
+    private static final int[][][][] SidesSprites = new int[99][9][3][2];
     
     /** How bright is the block?
      * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black.
@@ -106,31 +107,24 @@ public class Block {
     }
     
     /**
-     * Creates a block (getID) with Value 0. 
-     *  @param ID 
+     * Creates a block (id) with value 0. 
+     *  @param id 
      */ 
-    public Block(int ID){
-        this(ID,0);
+    public Block(int id){
+        this(id,0);
     }    
     
     /**
-     * Creates a block (getID) with Value (Value).
-     * @param ID 
-     * @param Value 
+     * Creates a block (id) with value (value).
+     * @param id 
+     * @param value 
      */    
-    public Block(int ID, int Value){
-        this.ID = ID;
-        this.Value = Value;
+    public Block(int id, int Value){
+        this.id = id;
+        this.value = Value;
         
         //define the default SideSprites
-        SidesSprites[0][0][0] = 0;
-        SidesSprites[0][0][1] = 0;
-        SidesSprites[0][1][0] = 1;
-        SidesSprites[0][1][1] = 0;
-        SidesSprites[0][2][0] = 2;
-        SidesSprites[0][2][1] = 0;
-        
-        switch (ID){
+        switch (id){
             case 0: name = "air";
                     transparent = true;
                     obstacle = false;
@@ -146,12 +140,6 @@ public class Block {
                     obstacle = true;
                     spriteX[0]=0;
                     spriteY[0]=2;
-                    SidesSprites[0][0][0] = 0;
-                    SidesSprites[0][0][1] = 1;
-                    SidesSprites[0][1][0] = 1;
-                    SidesSprites[0][1][1] = 1;
-                    SidesSprites[0][2][0] = 2;
-                    SidesSprites[0][2][1] = 1;
                     break;
             case 3: name = "stone";
                     transparent = false;
@@ -164,12 +152,6 @@ public class Block {
                     obstacle = true;
                     spriteX[0]=1;
                     spriteY[0]=2;
-                    SidesSprites[0][0][0] = 0;
-                    SidesSprites[0][0][1] = 2;
-                    SidesSprites[0][1][0] = 1;
-                    SidesSprites[0][1][1] = 2;
-                    SidesSprites[0][2][0] = 2;
-                    SidesSprites[0][2][1] = 2;
                     break;
             case 5: name = "cobblestone";
                     transparent = false;
@@ -188,24 +170,13 @@ public class Block {
                     obstacle = true;
                     spriteX[0]=3;
                     spriteY[0]=0;
-                    SidesSprites[0][0][0] = 0;
-                    SidesSprites[0][0][1] = 3;
-                    SidesSprites[0][1][0] = 1;
-                    SidesSprites[0][1][1] = 3;
-                    SidesSprites[0][2][0] = 2;
-                    SidesSprites[0][2][1] = 3;
                     break;
             case 8: name = "sand";
                     transparent = false;
                     obstacle = true;
                     spriteX[0]=3;
                     spriteY[0]=2;
-                    SidesSprites[0][0][0] = 0;
-                    SidesSprites[0][0][1] = 4;
-                    SidesSprites[0][1][0] = 1;
-                    SidesSprites[0][1][1] = 4;
-                    SidesSprites[0][2][0] = 2;
-                    SidesSprites[0][2][1] = 4;
+                    
                     break;      
             case 9: name = "water";
                     transparent = true;
@@ -245,12 +216,10 @@ public class Block {
 
     
     /**
-     * returns the ID of a block
-     * @return getID
+     * returns the id of a block
+     * @return getId
      */
-    public int getID(){
-        return this.ID;
-    }
+    public int getId(){ return this.id;}
     
     
     /**
@@ -290,7 +259,7 @@ public class Block {
      * @return the X-Coodinate of the Sprite
      */
     public int getSideSpritePosX(int side){
-        return SidesSprites[Value][side][0];        
+        return SidesSprites[id][value][side][0];        
     }
     
     /**
@@ -299,7 +268,7 @@ public class Block {
      * @return the Y-Coodinate of the Sprite
      */
     public int getSideSpritePosY(int side){
-        return SidesSprites[Value][side][1];        
+        return SidesSprites[id][value][side][1];        
     }
     
     /**
@@ -308,7 +277,7 @@ public class Block {
      * @return a image ot the side
      */
     public Image getSideSprite(int side){
-        return Blocksheet.getSubImage(SidesSprites[Value][side][0], SidesSprites[Value][side][1]);
+        return Blocksheet.getSubImage(SidesSprites[id][value][side][0], SidesSprites[id][value][side][1]);
     }
     
       /**
@@ -335,6 +304,42 @@ public class Block {
                     displWidth,
                     (int) (displHeight*0.75)
                 );
+                SidesSprites[2][0][0][0] = 0;
+                SidesSprites[2][0][0][1] = 1;
+                SidesSprites[2][0][1][0] = 1;
+                SidesSprites[2][0][1][1] = 1;
+                SidesSprites[2][0][2][0] = 2;
+                SidesSprites[2][0][2][1] = 1;
+                SidesSprites[4][0][0][0] = 0;
+                SidesSprites[4][0][0][1] = 2;
+                SidesSprites[4][0][1][0] = 1;
+                SidesSprites[4][0][1][1] = 2;
+                SidesSprites[4][0][2][0] = 2;
+                SidesSprites[4][0][2][1] = 2;
+                SidesSprites[7][0][0][0] = 0;
+                SidesSprites[7][0][0][1] = 3;
+                SidesSprites[7][0][1][0] = 1;
+                SidesSprites[7][0][1][1] = 3;
+                SidesSprites[7][0][2][0] = 2;
+                SidesSprites[7][0][2][1] = 3;
+                SidesSprites[8][0][0][0] = 0;
+                SidesSprites[8][0][0][1] = 4;
+                SidesSprites[8][0][1][0] = 1;
+                SidesSprites[8][0][1][1] = 4;
+                SidesSprites[8][0][2][0] = 2;
+                SidesSprites[8][0][2][1] = 4;
+                SidesSprites[40][0][0][0] = 0;
+                SidesSprites[40][0][0][1] = 4;
+                SidesSprites[40][0][1][0] = 1;
+                SidesSprites[40][0][1][1] = 4;
+                SidesSprites[40][0][2][0] = 2;
+                SidesSprites[40][0][2][1] = 4;
+                SidesSprites[40][1][0][0] = 0;
+                SidesSprites[40][1][0][1] = 2;
+                SidesSprites[40][1][1][0] = 1;
+                SidesSprites[40][1][1][1] = 4;
+                SidesSprites[40][1][2][0] = 2;
+                SidesSprites[40][1][2][1] = 4;
             } else {
                 SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/Blocksprite.png", width, height, 4);
             

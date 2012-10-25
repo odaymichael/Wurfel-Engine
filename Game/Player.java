@@ -9,16 +9,16 @@ import org.newdawn.slick.Sound;
  */
 public class Player extends Block{
     /**
-     * The X Position of the center of the player. Value in pixel.
+     * The X Position of the center of the player. value in pixel.
      */
     public int posX = Block.width / 2;
    /**
-    * The Y Position on a block. Value in pixel.
+    * The Y Position on a block. value in pixel.
     */
    public int posY = Block.height / 4;
    
    /**
-    * The Z Position on a block. Value in pixel.
+    * The Z Position on a block. value in pixel.
     */
    public int posZ = 0;
    private int absCoordX;
@@ -55,14 +55,14 @@ public class Player extends Block{
      */
     private void setAbsCoordX(int X){
         absCoordX = X;
-        setRelCoordX(X - Controller.map.coordlistX[4] * Chunk.BlocksX);
+        setRelCoordX(X - Controller.map.getCoordlistX(4)  * Chunk.BlocksX);
     }
     
 
     private void setAbsCoordY(int Y){
         absCoordY = Y;
         //da das Map Coordinatensystem in y-Richtung in zwei unterschiedliche Richtungen geht (hier "+" ???)
-        setRelCoordY(Y + Controller.map.coordlistY[4]*Chunk.BlocksY);
+        setRelCoordY(Y + Controller.map.getCoordlistY(4) *Chunk.BlocksY);
     }    
    
     private void setAbsCoords(int X, int Y, int Z){
@@ -240,7 +240,7 @@ public class Player extends Block{
 
                 Controller.map.data[relCoordX][relCoordY][coordZ] = this;
                 Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
-                Controller.map.changes = true;
+                Controller.map.requestRecalc();
             } else {
                 if (inCorner(1)) {
                     GameplayState.iglog.add("oben rechts");
@@ -254,7 +254,7 @@ public class Player extends Block{
                     
                     Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
                     Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);  
-                    Controller.map.changes = true;
+                    Controller.map.requestRecalc();
                 } else {
                     if (inCorner(3)) {
                         GameplayState.iglog.add("unten links");
@@ -268,7 +268,7 @@ public class Player extends Block{
 
                         Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
                         Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
-                        Controller.map.changes = true;
+                        Controller.map.requestRecalc();
                     } else {
                         if (inCorner(2)) {
                             GameplayState.iglog.add("unten rechts");
@@ -282,7 +282,7 @@ public class Player extends Block{
                             
                             Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
                             Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
-                            Controller.map.changes = true;
+                            Controller.map.requestRecalc();
                         }
                    }
                 }
@@ -325,7 +325,7 @@ public class Player extends Block{
            Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(40,0);
            Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(40,1);
            
-           Controller.map.changes = true;
+           Controller.map.requestRecalc();
        }
        //GameplayState.iglog.add(relCoordX+":"+relCoordY+":"+coordZ);
    }

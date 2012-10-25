@@ -19,9 +19,7 @@ public class Controller {
     
     public void update(GameContainer gc, StateBasedGame sbg, int delta){
         Input input = gc.getInput();
- 
-
-        
+         
         if (View.startGameOption.isClicked(input)){
             MainMenuState.loadmap = false;
             fx.play(); 
