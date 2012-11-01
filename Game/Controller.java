@@ -19,7 +19,7 @@ public class Controller {
     /**
      * Contains the player
      */
-    public static Player player;   
+    public Player player;   
    
    /**
      * Should the graphic be a bit slower but better? Must be in Controller because is needed for e.g. the Block and there used as data
@@ -51,9 +51,11 @@ public class Controller {
      *Later this method will be abstract to split into engine and game
      */
     private void gameConstructor() throws SlickException{
+        
         map.data[(int) (Chunk.BlocksX*1.5)][(int) (Chunk.BlocksY*1.5)][19] = new Player((int) (Chunk.BlocksX*1.5),(int) (Chunk.BlocksY*1.5),19);
-        //the player is created but must be saved into the field
         player = (Player) map.data[(int) (Chunk.BlocksX*1.5)][(int) (Chunk.BlocksY*1.5)][19];
+        //the player is created but must be saved into the field
+
     }
     
     
@@ -81,21 +83,21 @@ public class Controller {
 
         //good graphics
         if (input.isKeyPressed(Input.KEY_G)) {
-            GameplayState.Controller.goodgraphics = !GameplayState.Controller.goodgraphics;
-            GameplayState.iglog.add("Good Graphics is now "+GameplayState.Controller.goodgraphics);
-            Block.reloadSprites(GameplayState.View.getZoom());
+            Gameplay.controller.goodgraphics = !Gameplay.controller.goodgraphics;
+            Gameplay.iglog.add("Good Graphics is now "+Gameplay.controller.goodgraphics);
+            Block.reloadSprites(Gameplay.view.getZoom());
         }
         
         //toggle camera
-        if (input.isKeyPressed(Input.KEY_C)) GameplayState.View.cameramode = !GameplayState.View.cameramode;
+        if (input.isKeyPressed(Input.KEY_C)) Gameplay.view.cameramode = !Gameplay.view.cameramode;
         
         //restart
         if (input.isKeyPressed(Input.KEY_N)) map = new Map(false);
                 
         //reset zoom
         if (input.isKeyPressed(Input.KEY_Z)) {
-            GameplayState.View.setZoom(1);
-            GameplayState.iglog.add("Zoom reset");
+            Gameplay.view.setZoom(1);
+            Gameplay.iglog.add("Zoom reset");
         }
         
         
@@ -111,37 +113,37 @@ public class Controller {
        
 
         //earth to right
-        if (GameplayState.View.cameraX < Chunk.SizeX/3)
+        if (Gameplay.view.cameraX < Chunk.SizeX/3)
            map.setCenter(3);
         else {       
             //earth to the left
-            if (GameplayState.View.cameraX + GameplayState.View.cameraWidth > 8*Chunk.SizeX/3) 
+            if (Gameplay.view.cameraX + Gameplay.view.cameraWidth > 8*Chunk.SizeX/3) 
                 map.setCenter(5); 
         }
         
        //scroll up, earth down            
-        if (GameplayState.View.cameraY  <= 0) {
+        if (Gameplay.view.cameraY  <= 0) {
             map.setCenter(1);
         } else {
             //scroll down, earth up
-            if (GameplayState.View.cameraY+GameplayState.View.cameraHeight > Chunk.SizeY*3)
+            if (Gameplay.view.cameraY+Gameplay.view.cameraHeight > Chunk.SizeY*3)
                 map.setCenter(7);
         }
         
         //camera
-        oldx = GameplayState.View.cameraX;
-        oldy = GameplayState.View.cameraY;
+        oldx = Gameplay.view.cameraX;
+        oldy = Gameplay.view.cameraY;
         
         player.update(delta);
         
-        if (GameplayState.View.cameramode == false) {
-            GameplayState.View.cameraX = player.getRelCoordX() * Block.width + Block.width / 2 *(player.getRelCoordY() % 2) + player.getOffsetX() - GameplayState.View.cameraWidth / 2;
-            GameplayState.View.cameraY = (player.getRelCoordY() - player.coordZ) * Block.height/2 + player.getOffsetY()*2 - GameplayState.View.cameraHeight;
+        if (Gameplay.view.cameramode == false) {
+            Gameplay.view.cameraX = player.getRelCoordX() * Block.width + Block.width / 2 *(player.getRelCoordY() % 2) + player.getOffsetX() - Gameplay.view.cameraWidth / 2;
+            Gameplay.view.cameraY = (player.getRelCoordY() - player.coordZ) * Block.height/2 + player.getOffsetY()*2 - Gameplay.view.cameraHeight;
         } 
         
         map.data[player.getRelCoordX()][player.getRelCoordY()][player.coordZ] = player;
-        map.changePosX(- GameplayState.View.cameraX + oldx);
-        map.changePosY(-GameplayState.View.cameraY + oldy);
+        map.changePosX(- Gameplay.view.cameraX + oldx);
+        map.changePosY(-Gameplay.view.cameraY + oldy);
             
 
 
@@ -149,7 +151,7 @@ public class Controller {
         map.recalcIfRequested();      
        
         //update the log
-        GameplayState.iglog.update(delta);
+        Gameplay.iglog.update(delta);
     }
     
     
@@ -160,17 +162,17 @@ public class Controller {
             gc.getInput().consumeEvent();
             
             zoomx = zoomx + change/1000f;
-            GameplayState.View.setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
+            Gameplay.view.setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
             
-            GameplayState.View.cameraWidth = (int) (gc.getWidth() / GameplayState.View.getZoom());
-            GameplayState.View.cameraHeight= (int) (gc.getHeight() / GameplayState.View.getZoom());
+            Gameplay.view.cameraWidth = (int) (gc.getWidth() / Gameplay.view.getZoom());
+            Gameplay.view.cameraHeight= (int) (gc.getHeight() / Gameplay.view.getZoom());
             
            /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
             Block.height = (int) (4*gc.getHeight()*zoom / Chunk.BlocksY);
             Chunk.SizeX = (int) (Chunk.BlocksX*Block.width*zoom);
             Chunk.SizeY = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
-            GameplayState.iglog.add("Zoom: "+GameplayState.View.getZoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
+            Gameplay.iglog.add("Zoom: "+Gameplay.view.getZoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
         }
 
         @Override
@@ -194,9 +196,9 @@ public class Controller {
             //workaround for the bug, because the event is called multiple times
             gc.getInput().consumeEvent();
             
-            if (GameplayState.View.cameramode) {
-                GameplayState.View.cameraX += newx-oldx;
-                GameplayState.View.cameraY += newy-oldy;
+            if (Gameplay.view.cameramode) {
+                Gameplay.view.cameraX += newx-oldx;
+                Gameplay.view.cameraY += newy-oldy;
             }
             /*for (int i=0;i<9;i++){
                 chunklist[i].posX += newx - oldx;

@@ -17,23 +17,25 @@ public class Block {
         * How much <b>h</b>ealth <b>p</b>oints has the block?
         * When it is 0 it get's destroyed.
         */
-    public int hp = 100;
+    private int hp = 100;
     /**
         * the value which can be used for storing information about a sub version of the object
         */
-    public int value = 0;
+    private int value = 0;
     /**
        * The Name of the Block.
        */
-    public String name = "undefined";
+    public final String name;
     /**
      * Can light travel throug block?
      */
-    public boolean transparent;
+    private boolean transparent;
+
     /**
         * Is this Block an obstacle or can you pass through?
         */
-    public boolean obstacle;
+    private boolean obstacle;
+
     /**
        * width of the image
        */
@@ -53,11 +55,11 @@ public class Block {
     public static int displHeight = height;
     
     /**
-     * The X positon of the sprite
+     * The X positon of the Block sprite
      */
     public int[] spriteX = new int[9];
     /**
-     * The Y position of the sprite
+     * The Y position of the Block sprite
      */
     public int[] spriteY = new int[9];
     
@@ -67,12 +69,9 @@ public class Block {
      * 3. Layer: Side
      * 4. Layer: X- or Y-coordinate
      */
-    private static final int[][][][] SidesSprites = new int[99][9][3][2];
+    public static final int[][][][] SidesSprites = new int[99][9][3][2];
     
-    /** How bright is the block?
-     * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black.
-     */
-    public int lightlevel = 100;
+    private int lightlevel = 100;
     /**
      * The offset of the image in X direction
      */
@@ -92,8 +91,17 @@ public class Block {
      */
     public int renderorder = 0;
     
+    /**
+     * 
+     */
     public boolean renderTop = false;
+    /**
+     * 
+     */
     public boolean renderLeft = false;
+    /**
+     * 
+     */
     public boolean renderRight = false;
     private boolean visible;
     
@@ -117,7 +125,7 @@ public class Block {
     /**
      * Creates a block (id) with value (value).
      * @param id 
-     * @param value 
+     * @param Value 
      */    
     public Block(int id, int Value){
         this.id = id;
@@ -176,10 +184,9 @@ public class Block {
                     obstacle = true;
                     spriteX[0]=3;
                     spriteY[0]=2;
-                    
                     break;      
             case 9: name = "water";
-                    transparent = true;
+                    transparent = false;
                     obstacle = false;
                     break;    
             case 20:name = "red brick wall";
@@ -280,13 +287,180 @@ public class Block {
         return Blocksheet.getSubImage(SidesSprites[id][value][side][0], SidesSprites[id][value][side][1]);
     }
     
-      /**
+
+
+    /**
+     * 
+     * @param visible
+     */
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public boolean isVisible(){
+        return visible;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public boolean isObstacle() {
+        return obstacle;
+    }
+
+    /**
+     * 
+     * @param obstacle
+     */
+    public void setObstacle(boolean obstacle) {
+        this.obstacle = obstacle;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public boolean isTransparent() {
+        return transparent;
+    }
+
+    /**
+     * 
+     * @param transparent
+     */
+    public void setTransparent(boolean transparent) {
+        this.transparent = transparent;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public int getValue() {
+        return value;
+    }
+
+    /**
+     * 
+     * @param value
+     */
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+        /** How bright is the block?
+     * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black.
+     * @return 
+     */
+    public int getLightlevel() {
+        return lightlevel;
+    }
+
+        /** Set the brightness of the Block.
+     * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black.
+     * @param lightlevel 
+     */
+    public void setLightlevel(int lightlevel) {
+        this.lightlevel = lightlevel;
+    }
+    
+    
+    
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void renderblock(int x,int y, int z) {
+        //draw every block except air
+        if (Controller.map.data[x][y][z].getId() != 0){
+            //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
+            Block renderBlock = Controller.map.data[x][y][z]; 
+            
+            if (Gameplay.controller.goodgraphics){ 
+                if (renderBlock.renderTop) renderSide(x,y,z, 1, renderBlock);
+                if (renderBlock.renderLeft) renderSide(x,y,z, 0, renderBlock);
+                if (renderBlock.renderRight) renderSide(x,y,z, 2, renderBlock);
+
+            } else {
+                Image temp = Block.Blocksheet.getSubImage(renderBlock.spriteX[0], renderBlock.spriteY[0]);
+
+                //calc  brightness
+                float brightness = renderBlock.lightlevel / 100f;
+                //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
+                
+                //or paint whole block with :
+                //int brightness = renderBlock.lightlevel * 255 / 100;
+                //new Color(brightness,brightness,brightness).bind(); 
+                
+                temp.setColor(0, brightness,brightness,brightness);
+                temp.setColor(1, brightness,brightness, brightness);
+
+                brightness -= .1f;
+                //System.out.println(lightlevel);
+
+                temp.setColor(2, brightness, brightness, brightness);
+                temp.setColor(3, brightness, brightness, brightness);
+                
+                temp.drawEmbedded(
+                    (int) (Gameplay.view.getZoom()*Controller.map.getPosX()) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
+                    (int) (Gameplay.view.getZoom()*Controller.map.getPosY() / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY()
+                );
+                
+//                Block.Blocksheet.renderInUse(
+//                    (int) (zoom*Controller.map.posX) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
+//                    (int) (zoom*Controller.map.posY / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY(),
+//                    renderBlock.spritex,
+//                    renderBlock.spritey
+//                );
+            }
+        }
+    }
+    
+        private void renderSide(int x, int y, int z,int side, Block renderBlock){
+        //int brightness = (renderBlock.lightlevel - side*25) * 255 / 100;
+        //new Color(brightness,brightness,brightness).bind();
+        
+        Image temp = renderBlock.getSideSprite(side);
+        
+        //calc  brightness
+        float brightness = (renderBlock.lightlevel - side*25) / 100f;
+                
+        temp.setColor(0, brightness,brightness,brightness);
+        temp.setColor(1, brightness,brightness, brightness);
+
+        if (side!=1) brightness -= .3f;
+
+        temp.setColor(2, brightness, brightness, brightness);
+        temp.setColor(3, brightness, brightness, brightness);
+        
+        temp.drawEmbedded(
+            (int) (Gameplay.view.getZoom()*Controller.map.getPosX())
+            + x*Block.displWidth
+            + (y%2) * (int) (Block.displWidth/2)
+            + renderBlock.getOffsetX(),
+            
+            (int) (Gameplay.view.getZoom()*Controller.map.getPosY() / 2)
+            + y*Block.displHeight/4
+            - z*Block.displHeight/2
+            + ( side != 1 ? Block.displHeight/4:0)
+            + renderBlock.getOffsetY()
+        );
+    }
+        
+            /**
      * creates the new sprite image at a specific zoom factor. Also calculates displWidth and displHeight which change with zooming.
      * @param zoom the zoom factor of the new image
      */
     public static void reloadSprites(float zoom) {
         try {
-            if (GameplayState.Controller.goodgraphics){
+            if (Gameplay.controller.goodgraphics){
                 SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/SideSprite.png", width, (int) (height*0.75));
             
                 Image scaledBlockSheet = srcBlockSheet.getScaledCopy(zoom);
@@ -297,13 +471,19 @@ public class Block {
                 displHeight = (int) (height*zoom);
 
                 //GameplayState.iglog.add("Spacing:"+spacing);
-                GameplayState.iglog.add("BlockWidth"+displWidth);
+                Gameplay.iglog.add("BlockWidth"+displWidth);
 
                 Blocksheet = new SpriteSheet(
                     scaledBlockSheet,
                     displWidth,
                     (int) (displHeight*0.75)
                 );
+                SidesSprites[1][0][0][0] = 3;
+                SidesSprites[1][0][0][1] = 0;
+                SidesSprites[1][0][1][0] = 4;
+                SidesSprites[1][0][1][1] = 0;
+                SidesSprites[1][0][2][0] = 5;
+                SidesSprites[1][0][2][1] = 0;
                 SidesSprites[2][0][0][0] = 0;
                 SidesSprites[2][0][0][1] = 1;
                 SidesSprites[2][0][1][0] = 1;
@@ -322,12 +502,30 @@ public class Block {
                 SidesSprites[7][0][1][1] = 3;
                 SidesSprites[7][0][2][0] = 2;
                 SidesSprites[7][0][2][1] = 3;
-                SidesSprites[8][0][0][0] = 0;
-                SidesSprites[8][0][0][1] = 4;
-                SidesSprites[8][0][1][0] = 1;
-                SidesSprites[8][0][1][1] = 4;
-                SidesSprites[8][0][2][0] = 2;
-                SidesSprites[8][0][2][1] = 4;
+                SidesSprites[8][0][0][0] = 2;
+                SidesSprites[8][0][0][1] = 5;
+                SidesSprites[8][0][1][0] = 3;
+                SidesSprites[8][0][1][1] = 5;
+                SidesSprites[8][0][2][0] = 0;
+                SidesSprites[8][0][2][1] = 6;
+                SidesSprites[8][1][0][0] = 1;
+                SidesSprites[8][1][0][1] = 5;
+                SidesSprites[8][1][1][0] = 5;
+                SidesSprites[8][1][1][1] = 5;
+                SidesSprites[8][1][2][0] = 2;
+                SidesSprites[8][1][2][1] = 6;
+                SidesSprites[8][2][0][0] = 5;
+                SidesSprites[8][2][0][1] = 0;
+                SidesSprites[8][2][1][0] = 4;
+                SidesSprites[8][2][1][1] = 5;
+                SidesSprites[8][2][2][0] = 1;
+                SidesSprites[8][2][2][1] = 6;
+                SidesSprites[9][0][0][0] = 3;
+                SidesSprites[9][0][0][1] = 6;
+                SidesSprites[9][0][1][0] = 4;
+                SidesSprites[9][0][1][1] = 6;
+                SidesSprites[9][0][2][0] = 5;
+                SidesSprites[9][0][2][1] = 6;
                 SidesSprites[40][0][0][0] = 0;
                 SidesSprites[40][0][0][1] = 4;
                 SidesSprites[40][0][1][0] = 1;
@@ -350,8 +548,8 @@ public class Block {
                 displWidth = (int) (width*zoom);
                 displHeight = (int) (height*zoom);
 
-                GameplayState.iglog.add("Spacing:"+spacing);
-                GameplayState.iglog.add("BlockWidth"+displWidth);
+                Gameplay.iglog.add("Spacing:"+spacing);
+                Gameplay.iglog.add("BlockWidth"+displWidth);
 
                 Blocksheet = new SpriteSheet(
                     scaledBlockSheet,
@@ -364,13 +562,4 @@ public class Block {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-    
-    public boolean getVisible(){
-        return visible;
-    }
-    
 }

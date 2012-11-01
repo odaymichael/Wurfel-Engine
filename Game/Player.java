@@ -2,6 +2,7 @@ package Game;
 
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.util.Log;
 
 /**
  *The Player is a character who can walk. absCooords are the coordiantes which are absolute to the map. Relative is relative to the currently loaded chunks (map).
@@ -83,16 +84,16 @@ public class Player extends Block{
             relCoordX = X;
         } else {
             this.relCoordX = 3*Chunk.BlocksX-1;
-            GameplayState.iglog.add("RelativeCoordX ist too high:"+X);
-            System.out.println("RelativeCoordX ist too high:"+X);
+            Gameplay.iglog.add("RelativeCoordX ist too high:"+X);
+            Log.warn("RelativeCoordX ist too high:"+X);
         }
         
         if (X >= 0) {
             relCoordX = X;
         } else {
             relCoordX = 0;
-            GameplayState.iglog.add("RelativeCoordX ist too low:"+X);
-            System.out.println("RelativeCoordX ist too low:"+X);
+            Gameplay.iglog.add("RelativeCoordX ist too low:"+X);
+            Log.warn("RelativeCoordX ist too low:"+X);
         }
     }
     
@@ -113,16 +114,16 @@ public class Player extends Block{
             relCoordY = Y;
         }else {
             relCoordY = 3*Chunk.BlocksY-1;
-            GameplayState.iglog.add("RelativeCoordY ist too high: "+Y);
-            System.out.println("RelativeCoordY ist too high: "+Y);
+            Gameplay.iglog.add("RelativeCoordY ist too high: "+Y);
+            Log.warn("RelativeCoordY ist too high: "+Y);
         }
         
         if (Y >= 0) {
             relCoordY = Y;
         }else {
             relCoordY = 0;
-            GameplayState.iglog.add("RelativeCoordY ist too low: "+Y);
-            System.out.println("RelativeCoordY ist too low: "+Y);
+            Gameplay.iglog.add("RelativeCoordY ist too low: "+Y);
+            Log.warn("RelativeCoordY ist too low: "+Y);
         }
     }
     
@@ -157,14 +158,14 @@ public class Player extends Block{
                     posY -= 3+Block.height/4;
                     if (    (
                                 inCorner(0)
-                                && ((Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ].obstacle)
-                                || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ+1].obstacle))
+                                && ((Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ].isObstacle())
+                                || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ+1].isObstacle()))
                             )
                         || 
                             (
                                 inCorner(1)
-                                && ((Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ].obstacle)
-                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ+1].obstacle))
+                                && ((Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ].isObstacle())
+                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ+1].isObstacle()))
                             )
                         )
                         posY+=3;
@@ -176,14 +177,14 @@ public class Player extends Block{
                     posX-=3+Block.width/2;
                     if (    (
                                 inCorner(0) 
-                                && ((Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ].obstacle)
-                                || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ+1].obstacle))
+                                && ((Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ].isObstacle())
+                                || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY-1][coordZ+1].isObstacle()))
                             )
                         ||
                             (
                                 inCorner(3)
-                                && ((Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ].obstacle)
-                                || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ+1].obstacle))
+                                && ((Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ].isObstacle())
+                                || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ+1].isObstacle()))
                             )
                        )
                             posX += 3;
@@ -195,14 +196,14 @@ public class Player extends Block{
                     posX += 3+Block.width/2;
                     if (    (
                                 inCorner(1)
-                                && ((Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ].obstacle)
-                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ+1].obstacle))
+                                && ((Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ].isObstacle())
+                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY-1][coordZ+1].isObstacle()))
                             ) 
                         ||
                             (
                                 inCorner(2)
-                                && (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ].obstacle)
-                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ+1].obstacle))
+                                && (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ].isObstacle())
+                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ+1].isObstacle()))
                         )
                             posX-=3;
                     posX -= Block.width/2;
@@ -212,14 +213,14 @@ public class Player extends Block{
                     posY += 3+Block.height/4;
                     if (    (
                                 inCorner(2)
-                                && ((Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ].obstacle)
-                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ+1].obstacle))
+                                && ((Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ].isObstacle())
+                                || (Controller.map.data[relCoordX +(absCoordY % 2 == 1 ? 1 : 0)][relCoordY+1][coordZ+1].isObstacle()))
                             ) 
                         ||
                             (
                             inCorner(3)
-                            && (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ].obstacle)
-                            || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ+1].obstacle))
+                            && (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ].isObstacle())
+                            || (Controller.map.data[relCoordX -(absCoordY % 2 == 0 ? 1 : 0)][relCoordY+1][coordZ+1].isObstacle()))
                         )
                             posY-=3;
                     posY -= Block.height/4;
@@ -228,7 +229,7 @@ public class Player extends Block{
             
             //check the coordiante movement
             if (inCorner(0)){
-                GameplayState.iglog.add("oben links");
+                Gameplay.iglog.add("oben links");
                 posY = posY + Block.height/4;
                 posX = posX + Block.width/2;
                 
@@ -243,7 +244,7 @@ public class Player extends Block{
                 Controller.map.requestRecalc();
             } else {
                 if (inCorner(1)) {
-                    GameplayState.iglog.add("oben rechts");
+                    Gameplay.iglog.add("oben rechts");
                     posY = posY + Block.height / 4;
                     posX = posX - Block.width / 2;
                     
@@ -257,7 +258,7 @@ public class Player extends Block{
                     Controller.map.requestRecalc();
                 } else {
                     if (inCorner(3)) {
-                        GameplayState.iglog.add("unten links");
+                        Gameplay.iglog.add("unten links");
                         posY = posY - Block.height/4;
                         posX = posX + Block.width/2;
                         
@@ -271,7 +272,7 @@ public class Player extends Block{
                         Controller.map.requestRecalc();
                     } else {
                         if (inCorner(2)) {
-                            GameplayState.iglog.add("unten rechts");
+                            Gameplay.iglog.add("unten rechts");
                             posY = posY - Block.height/4;
                             posX = posX - Block.width/2;
                             
@@ -286,6 +287,8 @@ public class Player extends Block{
                         }
                    }
                 }
+                //enable to see where to player stands
+                Controller.map.data[relCoordX][relCoordY][coordZ-1].setLightlevel(0);
             }
             
             setOffset(posX -Block.width/2, posY + posZ - Block.height/4);
@@ -337,7 +340,7 @@ public class Player extends Block{
     public void update(int delta){
        
        //Gravitation
-       if (Controller.map.data[relCoordX][relCoordY][coordZ-1].obstacle==false && coordZ>1){
+       if (Controller.map.data[relCoordX][relCoordY][coordZ-1].isObstacle()==false && coordZ>1){
            if (! fallsound.playing()) fallsound.play();
            Controller.map.data[relCoordX][relCoordY][coordZ] = new Block(0,0);
            Controller.map.data[relCoordX][relCoordY][coordZ+1] = new Block(0,0);

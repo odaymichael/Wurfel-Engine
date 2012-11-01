@@ -1,13 +1,9 @@
 package Game;
 
 import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
 
 
 /**
@@ -87,16 +83,16 @@ public class View {
         tTFont_small = new TrueTypeFont(font, true);*/
         
         //update resolution things
-        GameplayState.iglog.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
+        Gameplay.iglog.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
         
         zoom = gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.height);
-        System.out.println(zoom);
+        Log.debug("Zoom is:"+Float.toString(zoom));
         Block.reloadSprites(zoom); 
         // Block.width = Block.height;
-        GameplayState.iglog.add("Blocks: "+Block.width+" x "+Block.height);
-        GameplayState.iglog.add("Zoom: "+zoom);
-        GameplayState.iglog.add("chunk: "+Chunk.SizeX+" x "+Chunk.SizeY);
-        GameplayState.iglog.add("chunk w/ zoom: "+Chunk.SizeX*zoom+" x "+Chunk.SizeY*zoom);
+        Gameplay.iglog.add("Blocks: "+Block.width+" x "+Block.height);
+        Gameplay.iglog.add("Zoom: "+zoom);
+        Gameplay.iglog.add("chunk: "+Chunk.SizeX+" x "+Chunk.SizeY);
+        Gameplay.iglog.add("chunk w/ zoom: "+Chunk.SizeX*zoom+" x "+Chunk.SizeY*zoom);
   
         
         cameraWidth = (int) (gc.getWidth() / zoom);
@@ -111,12 +107,12 @@ public class View {
      */
     public void render(StateBasedGame game, Graphics g) throws SlickException{
         this.g = g;
-        draw_all_Chunks();
+        Controller.map.draw();
         //Controller.player.draw();
         
         //GUI
-        if (GameplayState.Controller.map.getMinimap() != null)
-            GameplayState.Controller.map.getMinimap().draw(g);
+        if (Controller.map.getMinimap() != null)
+            Controller.map.getMinimap().draw(g);
         drawiglog();
     }
       
@@ -203,102 +199,8 @@ public class View {
             );
         }*/
         
-       Block.Blocksheet.startUse();
-       
-        for (int z=0; z < Chunk.BlocksZ; z++) {
-            for (int y=0; y < Chunk.BlocksY*3; y++) {//vertikal
-                for (int x=0; x < Chunk.BlocksX*3; x++){//horizontal
-                    if (
-                        (x < Chunk.BlocksX*3-1 && GameplayState.Controller.map.data[x+1][y][z].renderorder == -1)
-                        || GameplayState.Controller.map.data[x][y][z].renderorder == 1
-                        ) {
-                        renderblock(x+1,y,z);
-                        renderblock(x,y,z);
-                        x++;
-                    } else renderblock(x,y,z);
-                }
-            }
-       }
-       Block.Blocksheet.endUse(); 
      };
 
-    private void renderblock(int x,int y, int z) {
-        //draw every block except air
-        if (GameplayState.Controller.map.data[x][y][z].getId() != 0){
-            //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
-            Block renderBlock = Controller.map.data[x][y][z]; 
-            
-            if (GameplayState.Controller.goodgraphics){ 
-                if (renderBlock.renderTop) renderSide(x,y,z, 1, renderBlock);
-                if (renderBlock.renderLeft) renderSide(x,y,z, 0, renderBlock);
-                if (renderBlock.renderRight) renderSide(x,y,z, 2, renderBlock);
-
-            } else {
-                Image temp = Block.Blocksheet.getSubImage(renderBlock.spriteX[0], renderBlock.spriteY[0]);
-
-                //calc  brightness
-                float brightness = renderBlock.lightlevel / 100f;
-                //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
-                
-                //or paint whole block with :
-                //int brightness = renderBlock.lightlevel * 255 / 100;
-                //new Color(brightness,brightness,brightness).bind(); 
-                
-                temp.setColor(0, brightness,brightness,brightness);
-                temp.setColor(1, brightness,brightness, brightness);
-
-                brightness -= .1f;
-                //System.out.println(lightlevel);
-
-                temp.setColor(2, brightness, brightness, brightness);
-                temp.setColor(3, brightness, brightness, brightness);
-                
-                temp.drawEmbedded(
-                    (int) (zoom*Controller.map.getPosX()) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
-                    (int) (zoom*Controller.map.getPosY() / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY()
-                );
-                
-//                Block.Blocksheet.renderInUse(
-//                    (int) (zoom*Controller.map.posX) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
-//                    (int) (zoom*Controller.map.posY / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY(),
-//                    renderBlock.spritex,
-//                    renderBlock.spritey
-//                );
-            }
-        }
-    }
-    
-    private void renderSide(int x, int y, int z,int side, Block renderBlock){
-        //int brightness = (renderBlock.lightlevel - side*25) * 255 / 100;
-        //new Color(brightness,brightness,brightness).bind();
-        
-        Image temp = renderBlock.getSideSprite(side);
-        
-        //calc  brightness
-        float brightness = (renderBlock.lightlevel - side*25) / 100f;
-                
-        temp.setColor(0, brightness,brightness,brightness);
-        temp.setColor(1, brightness,brightness, brightness);
-
-        if (side!=1) brightness -= .3f;
-
-        temp.setColor(2, brightness, brightness, brightness);
-        temp.setColor(3, brightness, brightness, brightness);
-        
-        temp.drawEmbedded(
-            (int) (zoom*Controller.map.getPosX())
-            + x*Block.displWidth
-            + (y%2) * (int) (Block.displWidth/2)
-            + renderBlock.getOffsetX(),
-            
-            (int) (zoom*Controller.map.getPosY() / 2)
-            + y*Block.displHeight/4
-            - z*Block.displHeight/2
-            + ( side != 1 ? Block.displHeight/4:0)
-            + renderBlock.getOffsetY()
-        );
-    }
-    
     
  /**
      * Filters every Block (and side) wich is not visible. Boosts rendering speed.
@@ -308,7 +210,7 @@ public class View {
         for (int x=0;x < Chunk.BlocksX*3;x++)
             for (int y=0;y < Chunk.BlocksY*3;y++)
                 for (int z=0;z < Chunk.BlocksZ;z++)
-                    GameplayState.Controller.map.data[x][y][z].setVisible(false);
+                    Controller.map.data[x][y][z].setVisible(false);
 
         //check top of big chunk
         for (int x=0; x < Controller.map.data.length; x++)
@@ -333,7 +235,7 @@ public class View {
                     z,
                     side
                 );
-        if (!GameplayState.Controller.goodgraphics){
+        if (!Gameplay.controller.goodgraphics){
             //for the shifted row again
             for (int x=0; x < Controller.map.data.length; x++)
                 for (int z=0; z < Controller.map.data[0][0].length-1 ; z++)            
@@ -349,7 +251,7 @@ public class View {
     }
 
     private void trace_ray(Block[][][] mapdata, int x, int y, int z, int side){
-        if (GameplayState.Controller.goodgraphics){
+        if (Gameplay.controller.goodgraphics){
             boolean leftside = false;
             boolean rightside = false;
             y += 2;
@@ -359,103 +261,103 @@ public class View {
                 z--;
                 if (side == 0){
                     if (mapdata[x][y][z].getId() != 0) {
-                        //put every transparent block with transparent block on top in renderarrray, except air.
-                        GameplayState.Controller.map.data[x][y][z].setVisible(true);
-                        GameplayState.Controller.map.data[x][y][z].renderLeft = true;
+                        //put every isTransparent() block with isTransparent() block on top in renderarrray, except air.
+                        Controller.map.data[x][y][z].setVisible(true);
+                        Controller.map.data[x][y][z].renderLeft = true;
                     }
                     
                     //block on left hiding the side
-                    if (x>0 && y>0 && z>0 && ! mapdata[x - (y%2 == 0 ? 1:0)][y-1][z-1].transparent) break;
+                    if (x>0 && y>0 && z>0 && ! mapdata[x - (y%2 == 0 ? 1:0)][y-1][z-1].isTransparent()) break;
                     
                     //two blocks hiding the side
                     if (x>0 && y>0) {
-                        if (! mapdata[x - (y%2 == 0 ? 1:0)][y-1][z].transparent) leftside = true;
-                        if (z>0 && ! mapdata[x][y][z-1].transparent) rightside = true;
+                        if (! mapdata[x - (y%2 == 0 ? 1:0)][y-1][z].isTransparent()) leftside = true;
+                        if (z>0 && ! mapdata[x][y][z-1].isTransparent()) rightside = true;
                      }                    
                 } else                 
                     if (side == 1) {
-                        if (mapdata[x][y][z].getId() != 0 && (mapdata[x][y][z+1].transparent || z == Chunk.BlocksZ-1)) {
-                            //put every transparent block with transparent block on top in renderarrray, except air.
-                            GameplayState.Controller.map.data[x][y][z].setVisible(true);
-                            GameplayState.Controller.map.data[x][y][z].renderTop = true;
+                        if (mapdata[x][y][z].getId() != 0 && (mapdata[x][y][z+1].isTransparent() || z == Chunk.BlocksZ-1)) {
+                            //put every isTransparent() block with isTransparent() block on top in renderarrray, except air.
+                            Controller.map.data[x][y][z].setVisible(true);
+                            Controller.map.data[x][y][z].renderTop = true;
                         }
 
                        //two 0- and 2-sides hiding the side 1
                         if (x>0 && y>0) {
-                            if (! mapdata[x - (y%2 == 0 ? 1:0)][y-1][z].transparent) leftside = true;
-                            if (x < Chunk.BlocksX*3-1 && ! mapdata[x + (y%2 == 0 ? 0:1)][y-1][z].transparent) rightside = true;
+                            if (! mapdata[x - (y%2 == 0 ? 1:0)][y-1][z].isTransparent()) leftside = true;
+                            if (x < Chunk.BlocksX*3-1 && ! mapdata[x + (y%2 == 0 ? 0:1)][y-1][z].isTransparent()) rightside = true;
                         }
 
                     } else
                         if (side==2){
                             if (mapdata[x][y][z].getId() != 0) {
-                                //put every transparent block with transparent block on top in renderarrray, except air.
-                                GameplayState.Controller.map.data[x][y][z].setVisible(true);
-                                GameplayState.Controller.map.data[x][y][z].renderRight = true;
+                                //put every isTransparent() block with isTransparent() block on top in renderarrray, except air.
+                                Controller.map.data[x][y][z].setVisible(true);
+                                Controller.map.data[x][y][z].renderRight = true;
                             }
                     
                             //block on right hiding the side
-                            if (x < Chunk.BlocksX*3-1 && y>0 && z>0 && ! mapdata[x + (y%2 == 0 ? 0:1)][y-1][z-1].transparent) break;
+                            if (x < Chunk.BlocksX*3-1 && y>0 && z>0 && ! mapdata[x + (y%2 == 0 ? 0:1)][y-1][z-1].isTransparent()) break;
                     
                             //two blocks hiding the side
                             if (x>0 && z>0) {
-                                if (z>0 && ! mapdata[x][y][z-1].transparent) leftside = true;
-                                if (x < Chunk.BlocksX*3-1 && ! mapdata[x + (y%2 == 0 ? 0:1)][y][z-1].transparent) rightside = true;
+                                if (z>0 && ! mapdata[x][y][z-1].isTransparent()) leftside = true;
+                                if (x < Chunk.BlocksX*3-1 && ! mapdata[x + (y%2 == 0 ? 0:1)][y][z-1].isTransparent()) rightside = true;
                             } 
                         }
                 
-           } while (y > 1 && z > 0 && mapdata[x][y][z].transparent && !(leftside && rightside));
+           } while (y > 1 && z > 0 && mapdata[x][y][z].isTransparent() && !(leftside && rightside));
 //           Take the last block
-//            if (y >= 0 && z >= 0 && z < Chunk.BlocksZ-1 && (mapdata[x][y][z+1].transparent)){
+//            if (y >= 0 && z >= 0 && z < Chunk.BlocksZ-1 && (mapdata[x][y][z+1].isTransparent())){
 //                renderarray[x][y][z] = mapdata[x][y][z];
 //                renderarray[x][y][z].renderTop = true;
 //            }
         } else{
-            //trace ray until it found a not transparent block
+            //trace ray until it found a not isTransparent() block
             boolean leftHalfHidden = false;
             boolean rightHalfHidden = false;
-            while ((y >= 0) && (z >= 0) && (mapdata[x][y][z].transparent)) {
+            while ((y >= 0) && (z >= 0) && (mapdata[x][y][z].isTransparent())) {
                 //check blocks hidden by 4 other halfs
-                if ( x>0 && y>0 && ! mapdata[x - (x%2 == 0? 1 : 0)][y-1][z].transparent )
+                if ( x>0 && y>0 && ! mapdata[x - (x%2 == 0? 1 : 0)][y-1][z].isTransparent() )
                     leftHalfHidden = true;
-                if (y>0 && x < Chunk.BlocksX*3-1 && ! mapdata[x + (x%2==0?0:1)][y-1][z].transparent)
+                if (y>0 && x < Chunk.BlocksX*3-1 && ! mapdata[x + (x%2==0?0:1)][y-1][z].isTransparent())
                     rightHalfHidden = true;        
 
                 if ((mapdata[x][y][z].getId() != 0) && ! (leftHalfHidden && rightHalfHidden))  {
-                    //save every transparent block
-                    if (mapdata[x][y][z].transparent)
-                        GameplayState.Controller.map.data[x][y][z].setVisible(true);
+                    //save every isTransparent() block
+                    if (mapdata[x][y][z].isTransparent())
+                        Controller.map.data[x][y][z].setVisible(true);
 
                     //check if it has offset, not part of the original raytracing, but checking it here saves iteration. mapdata and renderarray are for the field with x,y,z equal
                     if (mapdata[x][y][z].getOffsetY() > 0)
-                        GameplayState.Controller.map.data[x][y][z].renderorder = 1;
+                        Controller.map.data[x][y][z].renderorder = 1;
                     else if (mapdata[x][y][z].getOffsetX() < 0 && mapdata[x][y][z].getOffsetY() < 0)
-                            GameplayState.Controller.map.data[x][y][z].renderorder = -1;
-                        else GameplayState.Controller.map.data[x][y][z].renderorder = 0;
+                            Controller.map.data[x][y][z].renderorder = -1;
+                        else Controller.map.data[x][y][z].renderorder = 0;
                 }
                 y -= 2;
                 z--;                       
             }
             //Take the last block
             if ((y >= 0) && (z>=0))
-                GameplayState.Controller.map.data[x][y][z].setVisible(true);
+                Controller.map.data[x][y][z].setVisible(true);
        }
 
     }
     
     /**
-     * Calculates the light level based on the sun with an angle of 90 deg
+     * Calculates the light level based on the sun shining straight from the top
      */
     public void calc_light(){
         for (int x=0; x < Chunk.BlocksX*3; x++){
             for (int y=0; y < Chunk.BlocksY*3; y++) {
                 //find top most Block
                 int z = Chunk.BlocksZ-1;
-                while (GameplayState.Controller.map.data[x][y][z].transparent == true && z > 0 ){
+                while (Controller.map.data[x][y][z].isTransparent() == true && z > 0 ){
                     z--;
                 }
                 for (int level=z; level > 0; level--)
-                    GameplayState.Controller.map.data[x][y][level].lightlevel = level*100/z;
+                    Controller.map.data[x][y][level].setLightlevel(level*100/z);
             }
         }         
     }
@@ -479,8 +381,8 @@ public class View {
        
      
     private void drawiglog(){
-        for (int i=0;i < GameplayState.iglog.size();i++){
-            Msg msg = (Msg) GameplayState.iglog.get(i);
+        for (int i=0;i < Gameplay.iglog.size();i++){
+            Msg msg = (Msg) Gameplay.iglog.get(i);
             Color clr = Color.blue;
             if ("System".equals(msg.getSender())) clr = Color.green;
             

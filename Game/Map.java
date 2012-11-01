@@ -5,6 +5,7 @@
 package Game;
 
 import MainMenu.MainMenuState;
+import org.newdawn.slick.util.Log;
 
 /**
  *
@@ -15,26 +16,16 @@ public class Map {
      * The map's data is stored inside here.
      */
     public Block data[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
-    /**
-     * The offset of the Map in X direction
-     */
+
     private int posX;
-    /**
-     * The offset of the Map in Y direction
-     */
+
     private int posY;
-    /**
-     * When true the renderarray will be recalculated.
-     */
+
     private boolean recalcRequested;
-    /**
-     *A list of the X coordinates of the current chunks.
-     */
+
     private int[] coordlistX = new int[9];
-    /**
-     *A list for the y coordinates of the current chunks.
-     */
-    private int coordlistY[] = new int[9];;
+
+    private int[] coordlistY = new int[9];;
 
     /**
      * Contains the minimap
@@ -56,10 +47,10 @@ public class Map {
                 coordlistX[pos] = x;
                 coordlistY[pos] = y;
                 tempchunk = new Chunk(
-                        coordlistX[pos],
-                        coordlistY[pos],
-                        coordlistX[pos]*Chunk.SizeX,
-                        -coordlistY[pos]*Chunk.SizeY,
+                        x,
+                        y,
+                        x*Chunk.SizeX,
+                        -y*Chunk.SizeY,
                         loadmap
                 );
                 setChunk(pos, tempchunk);
@@ -102,10 +93,12 @@ public class Map {
                 -------------
                 |6|7|8|
                 */
+        if (center==1 || center==3 || center==5 || center==7) {
         
         //GameplayState.iglog.add("New Center: "+center);
         //System.out.println("New Center: "+center);
         
+        //make a copy of the data
         Block data_copy[][][] = copyOf3Dim(data);
         
         for (int pos=0; pos<9; pos++){
@@ -116,7 +109,7 @@ public class Map {
                 //System.out.println("[" + pos + "] <- ["+ (pos + center - 4) +"] (old)");
                 setChunk(
                     pos,
-                    getChunk(data_copy,pos -4 + center)
+                    getChunk(data_copy, pos -4 + center)
                 );
             } else {
                 setChunk(
@@ -134,10 +127,13 @@ public class Map {
         }
         //player switches chunk
         //System.out.println("Player was rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
-        Controller.player.setRelCoordX(Controller.player.getRelCoordX() +  (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BlocksX);
-        Controller.player.setRelCoordY(Controller.player.getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BlocksY);
+        Gameplay.controller.player.setRelCoordX(Gameplay.controller.player.getRelCoordX() +  (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BlocksX);
+        Gameplay.controller.player.setRelCoordY(Gameplay.controller.player.getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BlocksY);
         //System.out.println("Player is rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
         recalcRequested = true;
+        } else {
+            Log.error("setCenter was called with center:"+center);
+        }
     }
     
      private boolean check_chunk_movement(int pos, int movement){
@@ -159,8 +155,9 @@ public class Map {
         return result;
     }
      
-    /*
-     * To fill a chunk by copying a chunk of the map 
+    /**
+     * Get a chunk out of data (should be a copy of this.data)
+     * @param data
      * @param pos
      */ 
     private Chunk getChunk(Block[][][] data, int pos) {
@@ -184,17 +181,22 @@ public class Map {
         return tmpChunk;
     }
 
-    private void setChunk(int pos, Chunk oldchunk) {
-        for (int x=0;x <Chunk.BlocksX;x++)
-                for (int y=0;y < Chunk.BlocksY;y++) {
-                    System.arraycopy(
-                        oldchunk.data[x][y],
-                        0,
-                        data[x+ Chunk.BlocksX*(pos%3)][y+ Chunk.BlocksY*Math.abs(pos/3)],
-                        0,
-                        Chunk.BlocksZ
-                    );
-                }
+    /**
+     * Inserts a chunk in the map.
+     * @param pos The position in the grid
+     * @param newchunk 
+     */
+    private void setChunk(int pos, Chunk newchunk) {
+        for (int x=0;x < Chunk.BlocksX; x++)
+            for (int y=0;y < Chunk.BlocksY;y++) {
+                System.arraycopy(
+                    newchunk.data[x][y],
+                    0,
+                    data[x+ Chunk.BlocksX*(pos%3)][y+ Chunk.BlocksY*Math.abs(pos/3)],
+                    0,
+                    Chunk.BlocksZ
+                );
+            }
     }
     
     /**
@@ -210,36 +212,90 @@ public class Map {
      */
     public void recalcIfRequested(){
         if (recalcRequested) {
-            GameplayState.View.raytracing();
-            GameplayState.View.calc_light();
+            Gameplay.view.raytracing();
+            Gameplay.view.calc_light();
             recalcRequested = false;
         }
     }
+    
+    /**
+     * 
+     */
+    public void draw(){
+        Block.Blocksheet.startUse();
+       
+        for (int z=0; z < Chunk.BlocksZ; z++) {
+            for (int y=0; y < Chunk.BlocksY*3; y++) {//vertikal
+                for (int x=0; x < Chunk.BlocksX*3; x++){//horizontal
+                    if (
+                        (x < Chunk.BlocksX*3-1 && Controller.map.data[x+1][y][z].renderorder == -1)
+                        ||
+                        Controller.map.data[x][y][z].renderorder == 1
+                       ) {
+                        data[x][y][z].renderblock(x+1,y,z);
+                        data[x][y][z].renderblock(x,y,z);
+                        x++;
+                    } else data[x][y][z].renderblock(x,y,z);
+                }
+            }
+       }
+       Block.Blocksheet.endUse(); 
+    }
 
+   /**
+     *A list of the X coordinates of the current chunks. 
+     * @param i 
+     * @return 
+     */
     public int getCoordlistX(int i) {
         return coordlistX[i];
     }
   
+   /**
+     *A list for the y coordinates of the current chunks.
+     * @param i 
+     * @return 
+     */
     public int getCoordlistY(int i) {
         return coordlistY[i];
     }
    
+        /**
+     * The offset of the Map in X direction
+     * @return 
+     */
     public int getPosX() {
         return posX;
     }
 
+    /**
+     * 
+     * @param posX
+     */
     public void changePosX(int posX) {
         this.posX = this.posX+posX;
     }
 
+    /**
+     * The offset of the Map in Y direction
+     * @return 
+     */
     public int getPosY() {
         return posY;
     }
 
+    /**
+     * 
+     * @param posY
+     */
     public void changePosY(int posY) {
         this.posY = this.posY+posY;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Minimap getMinimap() {
         return minimap;
     }

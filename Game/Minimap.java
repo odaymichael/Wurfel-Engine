@@ -13,7 +13,7 @@ public class Minimap {
     private final float scalefactor= 8;
     
     public Minimap() {
-        X = GameplayState.gc.getWidth() - 400;
+        X = Gameplay.gc.getWidth() - 400;
         Y = 10;
     } 
             
@@ -31,8 +31,8 @@ public class Minimap {
         for (int x = Chunk.BlocksX*(pos%3); x < Chunk.BlocksX * (pos%3+1); x++){
             for (int y = Chunk.BlocksY*(pos/3); y < Chunk.BlocksY * (pos/3+1); y++){
                 Color temp = Block.Blocksheet.getSubImage(
-                        Controller.map.data[x][y][Controller.player.coordZ-1].spriteX[0],
-                        Controller.map.data[x][y][Controller.player.coordZ-1].spriteY[0]
+                        Controller.map.data[x][y][Gameplay.controller.player.coordZ-1].spriteX[0],
+                        Controller.map.data[x][y][Gameplay.controller.player.coordZ-1].spriteY[0]
                     ).getColor(
                         Block.displWidth/2,
                         Block.displHeight/4
@@ -62,17 +62,17 @@ public class Minimap {
     //camera rectangle
     g.setColor(Color.green);
     g.drawRect(
-            X + scalefactor * GameplayState.View.cameraX * Chunk.BlocksX / Chunk.SizeX,
-            Y + scalefactor * GameplayState.View.cameraY * (Chunk.BlocksY/2+Chunk.BlocksZ)/2 /(Chunk.SizeY + Chunk.SizeZ),
-            GameplayState.View.cameraWidth * (Chunk.BlocksX*scalefactor / Chunk.SizeX),
-            GameplayState.View.cameraHeight * ((Chunk.BlocksY*scalefactor/4)/Chunk.SizeY)
+            X + scalefactor * Gameplay.view.cameraX * Chunk.BlocksX / Chunk.SizeX,
+            Y + scalefactor * Gameplay.view.cameraY * (Chunk.BlocksY/2+Chunk.BlocksZ)/2 /(Chunk.SizeY + Chunk.SizeZ),
+            Gameplay.view.cameraWidth * (Chunk.BlocksX*scalefactor / Chunk.SizeX),
+            Gameplay.view.cameraHeight * ((Chunk.BlocksY*scalefactor/4)/Chunk.SizeY)
     );
 
     //player coord and pos
     g.setColor(Color.blue);
     g.drawRect(
-        X+ scalefactor * GameplayState.Controller.player.getRelCoordX(),
-        Y+ scalefactor * (GameplayState.Controller.player.getRelCoordY()/2 - Chunk.BlocksZ/2),
+        X+ scalefactor * Gameplay.controller.player.getRelCoordX(),
+        Y+ scalefactor * (Gameplay.controller.player.getRelCoordY()/2 - Chunk.BlocksZ/2),
         scalefactor,
         scalefactor
     );
@@ -80,25 +80,25 @@ public class Minimap {
     //player coord
     g.setColor(Color.blue);
     View.tTFont.drawString(
-        X+ scalefactor * GameplayState.Controller.player.getRelCoordX(),
-        Y+ scalefactor * (GameplayState.Controller.player.getRelCoordY()/2 - Chunk.BlocksZ/2),
-        Controller.player.getRelCoordX() +" | "+ Controller.player.getRelCoordY() +" | "+ Controller.player.coordZ,
+        X+ scalefactor * Gameplay.controller.player.getRelCoordX(),
+        Y+ scalefactor * (Gameplay.controller.player.getRelCoordY()/2 - Chunk.BlocksZ/2),
+        Gameplay.controller.player.getRelCoordX() +" | "+ Gameplay.controller.player.getRelCoordY() +" | "+ Gameplay.controller.player.coordZ,
         Color.blue
     );
 
     //player pos
     View.tTFont.drawString(
-        X+ scalefactor * GameplayState.Controller.player.getRelCoordX(),
-        Y+ scalefactor * (GameplayState.Controller.player.getRelCoordY()/2 - Chunk.BlocksZ/2)+20,
-        Controller.player.posX +" | "+ Controller.player.posY +" | "+ Controller.player.posZ,
+        X+ scalefactor * Gameplay.controller.player.getRelCoordX(),
+        Y+ scalefactor * (Gameplay.controller.player.getRelCoordY()/2 - Chunk.BlocksZ/2)+20,
+        Gameplay.controller.player.posX +" | "+ Gameplay.controller.player.posY +" | "+ Gameplay.controller.player.posZ,
         Color.red
     );
 
     //camera pos
     View.tTFont.drawString(
-            GameplayState.gc.getWidth()- 100,
+            Gameplay.gc.getWidth()- 100,
             15,
-            GameplayState.View.cameraX +" | "+ GameplayState.View.cameraY,
+            Gameplay.view.cameraX +" | "+ Gameplay.view.cameraY,
             Color.white
         );
     }

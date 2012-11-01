@@ -1,4 +1,4 @@
-import Game.GameplayState;
+import Game.Gameplay;
 import MainMenu.MainMenuState;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -28,7 +28,7 @@ public class OutThere extends StateBasedGame {
     public void initStatesList(GameContainer container) throws SlickException {
         MainMenuState state = new MainMenuState(1);
         addState(state);
-        addState(new GameplayState(2));
+        addState(new Gameplay(2));
         
         gc = container;
     }

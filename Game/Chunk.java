@@ -45,31 +45,24 @@ public class Chunk {
     * @param loadmap
     */
     public Chunk(int ChunkX, int ChunkY, int startposX, int startposY, boolean loadmap){
+        this();
         coordX = ChunkX;
         coordY = ChunkY;
 
-        //fill everything with air to avoid crashes
-        for (int x=0; x < BlocksX; x++)
-            for (int y=0; y < BlocksY; y++)
-                for (int z=0; z < BlocksZ; z++)
-                    data[x][y][z] = new Block(0,0);
-
-        if (loadmap) 
-            loadChunk();
-        else
-            newChunk();
+        if (loadmap) loadChunk();
+            else newChunk();
     }
        
     private void newChunk(){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
-        GameplayState.iglog.add("Neu: "+coordX+","+ coordY);
+        Gameplay.iglog.add("Neuer Chunk: "+coordX+","+ coordY);
         for (int x=0; x < BlocksX; x++)
             for (int y=0; y < BlocksY; y++){
                 //Dirt from 0 to 8
                 for (int z=0; z <  Chunk.BlocksZ / 2; z++){
                     //for (int z=0; z < BlocksZ-4; z++)
-                    data[x][y][z] = new Block(2,0);
+                    data[x][y][z] = new Block(2);
                     // if ((z>10) && (x>10) && (y>5))
                     //  data[x][y][z] = new Block (9,0);
                     }
@@ -78,9 +71,9 @@ public class Chunk {
 
 
                 //Gras on z=9
-                if ((x > 0) && (x < BlocksX-1) && (y>0))                        
-                data[x][y][BlocksZ/2-1] = new Block(1,0);
-                data[x][y][BlocksZ/2] = new Block(9,0);
+                //if ((x > 0) && (x < BlocksX-1) && (y>0))                        
+                data[x][y][BlocksZ/2-1] = new Block(1);
+                //data[x][y][BlocksZ/2] = new Block(9);
 
 
                 /*
@@ -127,7 +120,7 @@ public class Chunk {
             */
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
             if (getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc") != null) {    
-                GameplayState.iglog.add("Load: "+coordX+","+coordY);
+                Gameplay.iglog.add("Load: "+coordX+","+coordY);
                 //FileReader input = new FileReader("map/chunk"+coordX+","+coordY+".otmc");
                 //BufferedReader bufRead = new BufferedReader(input);
                 BufferedReader bufRead = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc")));
