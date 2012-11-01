@@ -10,4 +10,6 @@ The Goal of Wurfelengine
 4. Minecraft is hip, so blocks are
 
 
+![Wurflengine logo](http://out-there-game.net/wordpress/wp-content/uploads/2012/10/Wurfelengine-Logo-Small.png)
+
 
