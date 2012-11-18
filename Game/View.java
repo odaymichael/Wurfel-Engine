@@ -1,5 +1,6 @@
 package Game;
 
+import Game.Blocks.Block;
 import java.awt.Font;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
@@ -19,28 +20,10 @@ public class View {
     /**
      * 
      */
-    public int cameraX;
-    /**
-     * 
-     */
-    public int cameraY;
-    /**
-     * The amount of pixel which are visible in X direction
-     */
-    public int cameraWidth;
-    /**
-     * The amount of pixel which are visible in Y direction
-     */
-    public int cameraHeight;
-    /**
-     * toogle between camer locked to player or not
-     */
-    public boolean cameramode = false;
-    /**
-     * the zoom factor of the map. Higher value means the zoom is higher.
-     */
-    private float zoom = 1;
-    private Graphics g = null; 
+    public Camera camera;
+    
+
+    public Graphics g = null; 
     private java.awt.Font font;
     /**
      * 
@@ -75,6 +58,7 @@ public class View {
      
         tTFont = new TrueTypeFont(baseFont, true);
         
+        camera = new Camera(gc,gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.height));
         
         
         /*font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
@@ -85,18 +69,14 @@ public class View {
         //update resolution things
         Gameplay.iglog.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
         
-        zoom = gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.height);
-        Log.debug("Zoom is:"+Float.toString(zoom));
-        Block.reloadSprites(zoom); 
+        Block.reloadSprites(camera.getZoom()); 
         // Block.width = Block.height;
         Gameplay.iglog.add("Blocks: "+Block.width+" x "+Block.height);
-        Gameplay.iglog.add("Zoom: "+zoom);
+        Gameplay.iglog.add("Zoom: "+camera.getZoom());
         Gameplay.iglog.add("chunk: "+Chunk.SizeX+" x "+Chunk.SizeY);
-        Gameplay.iglog.add("chunk w/ zoom: "+Chunk.SizeX*zoom+" x "+Chunk.SizeY*zoom);
+        Gameplay.iglog.add("chunk w/ zoom: "+Chunk.SizeX*camera.getZoom()+" x "+Chunk.SizeY*camera.getZoom());
   
         
-        cameraWidth = (int) (gc.getWidth() / zoom);
-        cameraHeight= (int) (gc.getHeight() / zoom);
     }
     
     /**
@@ -235,7 +215,7 @@ public class View {
                     z,
                     side
                 );
-        if (!Gameplay.controller.goodgraphics){
+        if (!Gameplay.controller.rendermethod){
             //for the shifted row again
             for (int x=0; x < Controller.map.data.length; x++)
                 for (int z=0; z < Controller.map.data[0][0].length-1 ; z++)            
@@ -251,7 +231,7 @@ public class View {
     }
 
     private void trace_ray(Block[][][] mapdata, int x, int y, int z, int side){
-        if (Gameplay.controller.goodgraphics){
+        if (Gameplay.controller.rendermethod){
             boolean leftside = false;
             boolean rightside = false;
             y += 2;
@@ -276,7 +256,7 @@ public class View {
                      }                    
                 } else                 
                     if (side == 1) {
-                        if (mapdata[x][y][z].getId() != 0 && (mapdata[x][y][z+1].isTransparent() || z == Chunk.BlocksZ-1)) {
+                        if (mapdata[x][y][z].getId() != 0 && (z == Chunk.BlocksZ-1 || mapdata[x][y][z+1].isTransparent())) {
                             //put every isTransparent() block with isTransparent() block on top in renderarrray, except air.
                             Controller.map.data[x][y][z].setVisible(true);
                             Controller.map.data[x][y][z].renderTop = true;
@@ -351,33 +331,19 @@ public class View {
     public void calc_light(){
         for (int x=0; x < Chunk.BlocksX*3; x++){
             for (int y=0; y < Chunk.BlocksY*3; y++) {
+                
                 //find top most Block
                 int z = Chunk.BlocksZ-1;
                 while (Controller.map.data[x][y][z].isTransparent() == true && z > 0 ){
                     z--;
                 }
+                
                 for (int level=z; level > 0; level--)
-                    Controller.map.data[x][y][level].setLightlevel(level*100/z);
+                    Controller.map.data[x][y][level].setLightlevel(level*50/z);
             }
         }         
     }
     
-    /**
-     * Set the zoom factor and regenerates the sprites.
-     * @param zoom
-     */
-    public void setZoom(float zoom) {
-        this.zoom = zoom;
-        Block.reloadSprites(zoom);
-    }
-    
-    /**
-     * Returns the zoomfactor.
-     * @return
-     */
-    public float getZoom() {
-        return zoom;
-    }
        
      
     private void drawiglog(){

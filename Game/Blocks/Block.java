@@ -1,10 +1,15 @@
-package Game;
+package Game.Blocks;
 
+import Game.Controller;
+import Game.Gameplay;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.util.Log;
 
 /**
  * A Block is a wonderfull piece of information and a geometrical object.
@@ -48,12 +53,14 @@ public class Block {
     /**
      * The size the block is rendered at.
      */
-    public static int displWidth = width;
+    public static int displWidth;
     /**
      * The height the block is rendered at.
      */
-    public static int displHeight = height;
+    public static int displHeight;
     
+    
+    public static final float aspectRatio;
     /**
      * The X positon of the Block sprite
      */
@@ -64,14 +71,15 @@ public class Block {
     public int[] spriteY = new int[9];
     
     /**
+     * Has the positions of the sprites for rendering with sides
      * 1. Dimension id
-     * 2. Layer: value
-     * 3. Layer: Side
-     * 4. Layer: X- or Y-coordinate
+     * 2. Dimension: value
+     * 3. Dimension: Side
+     * 4. Dimension: X- or Y-coordinate
      */
     public static final int[][][][] SidesSprites = new int[99][9][3][2];
     
-    private int lightlevel = 100;
+    private int lightlevel = 50;
     /**
      * The offset of the image in X direction
      */
@@ -105,7 +113,107 @@ public class Block {
     public boolean renderRight = false;
     private boolean visible;
     
-    
+    static {
+        aspectRatio = width/(height/2);
+        Log.debug("Aspect ratio of blocks: "+ Float.toString(aspectRatio));
+        SidesSprites[1][0][0][0] = 3;
+        SidesSprites[1][0][0][1] = 0;
+        SidesSprites[1][0][1][0] = 4;
+        SidesSprites[1][0][1][1] = 0;
+        SidesSprites[1][0][2][0] = 5;
+        SidesSprites[1][0][2][1] = 0;
+        SidesSprites[2][0][0][0] = 0;
+        SidesSprites[2][0][0][1] = 1;
+        SidesSprites[2][0][1][0] = 1;
+        SidesSprites[2][0][1][1] = 1;
+        SidesSprites[2][0][2][0] = 2;
+        SidesSprites[2][0][2][1] = 1;
+        //asphalt
+        SidesSprites[4][0][0][0] = 1;
+        SidesSprites[4][0][0][1] = 3;
+        SidesSprites[4][0][1][0] = 2;
+        SidesSprites[4][0][1][1] = 3;
+        SidesSprites[4][0][2][0] = 3;
+        SidesSprites[4][0][2][1] = 3;
+        //concrete
+        SidesSprites[7][0][0][0] = 4;
+        SidesSprites[7][0][0][1] = 4;
+        SidesSprites[7][0][1][0] = 5;
+        SidesSprites[7][0][1][1] = 4;
+        SidesSprites[7][0][2][0] = 0;
+        SidesSprites[7][0][2][1] = 5;
+        SidesSprites[8][0][0][0] = 2;
+        SidesSprites[8][0][0][1] = 5;
+        SidesSprites[8][0][1][0] = 3;
+        SidesSprites[8][0][1][1] = 5;
+        SidesSprites[8][0][2][0] = 0;
+        SidesSprites[8][0][2][1] = 6;
+        SidesSprites[8][1][0][0] = 1;
+        SidesSprites[8][1][0][1] = 5;
+        SidesSprites[8][1][1][0] = 5;
+        SidesSprites[8][1][1][1] = 5;
+        SidesSprites[8][1][2][0] = 2;
+        SidesSprites[8][1][2][1] = 6;
+        SidesSprites[8][2][0][0] = 5;
+        SidesSprites[8][2][0][1] = 0;
+        SidesSprites[8][2][1][0] = 4;
+        SidesSprites[8][2][1][1] = 5;
+        SidesSprites[8][2][2][0] = 1;
+        SidesSprites[8][2][2][1] = 6;
+        SidesSprites[9][0][0][0] = 3;
+        SidesSprites[9][0][0][1] = 6;
+        SidesSprites[9][0][1][0] = 4;
+        SidesSprites[9][0][1][1] = 6;
+        SidesSprites[9][0][2][0] = 5;
+        SidesSprites[9][0][2][1] = 6;
+        SidesSprites[40][0][0][0] = 3;
+        SidesSprites[40][0][0][1] = 1;
+        SidesSprites[40][0][1][0] = 4;
+        SidesSprites[40][0][1][1] = 1;
+        SidesSprites[40][0][2][0] = 5;
+        SidesSprites[40][0][2][1] = 1;
+        SidesSprites[40][1][0][0] = 3;
+        SidesSprites[40][1][0][1] = 1;
+        SidesSprites[40][1][1][0] = 4;
+        SidesSprites[40][1][1][1] = 1;
+        SidesSprites[40][1][2][0] = 5;
+        SidesSprites[40][1][2][1] = 1;
+        
+        //pack-u-like
+//        SidesSprites[0][0][0] = "0-1.png";
+//        SidesSprites[0][0][1]= "0-1.png";
+//        SidesSprites[0][0][2]= "0-2.png";
+//        SidesSprites[1][0][0] = "1-0.png";
+//        SidesSprites[1][0][1]= "1-1.png";
+//        SidesSprites[1][0][2] = "1-2.png";
+//        SidesSprites[2][0][0] = "2-0.png";
+//        SidesSprites[2][0][1] = "2-1.png";
+//        SidesSprites[2][0][2] = "2-2.png";
+//        SidesSprites[4][0][0] = "4-0.png";
+//        SidesSprites[4][0][1] = "4-1.png";
+//        SidesSprites[4][0][2] = "4-2.png";
+//        SidesSprites[7][0][0] = "7-0.png";
+//        SidesSprites[7][0][1] = "7-1.png";
+//        SidesSprites[7][0][2] = "7-2.png";
+//        SidesSprites[8][0][0] = "8-0.png";
+//        SidesSprites[8][0][1] = "8-1-0.png";
+//        SidesSprites[8][0][2] = "8-2-0.png";
+//        SidesSprites[8][1][0] = "8-1-1.png";
+//        SidesSprites[8][1][1] = "8-1-1.png";
+//        SidesSprites[8][1][2] = "8-1-2.png";
+//        SidesSprites[8][2][0] = "8-2-0.png";
+//        SidesSprites[8][2][1] = "8-2-1.png";
+//        SidesSprites[8][2][2] = "8-2-2.png";
+//        SidesSprites[9][0][0] = "9-0.png";
+//        SidesSprites[9][0][1] = "9-1.png";
+//        SidesSprites[9][0][2] = "9-2.png";
+//        SidesSprites[40][0][0] = "20-0.png";
+//        SidesSprites[40][0][1] = "20-1.png";
+//        SidesSprites[40][0][2] = "20-2.png";
+//        SidesSprites[40][1][0] = "20-0.png";
+//        SidesSprites[40][1][1] = "20-1.png";
+//        SidesSprites[40][1][2] = "20-2.png";
+    }
 
     /**
      * Creates an air block. 
@@ -125,11 +233,11 @@ public class Block {
     /**
      * Creates a block (id) with value (value).
      * @param id 
-     * @param Value 
+     * @param value 
      */    
-    public Block(int id, int Value){
+    public Block(int id, int value){
         this.id = id;
-        this.value = Value;
+        this.value = value;
         
         //define the default SideSprites
         switch (id){
@@ -226,7 +334,9 @@ public class Block {
      * returns the id of a block
      * @return getId
      */
-    public int getId(){ return this.id;}
+    public int getId(){
+        return this.id;
+    }
     
     
     /**
@@ -383,7 +493,7 @@ public class Block {
             //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
             Block renderBlock = Controller.map.data[x][y][z]; 
             
-            if (Gameplay.controller.goodgraphics){ 
+            if (Gameplay.controller.rendermethod){ 
                 if (renderBlock.renderTop) renderSide(x,y,z, 1, renderBlock);
                 if (renderBlock.renderLeft) renderSide(x,y,z, 0, renderBlock);
                 if (renderBlock.renderRight) renderSide(x,y,z, 2, renderBlock);
@@ -409,8 +519,15 @@ public class Block {
                 temp.setColor(3, brightness, brightness, brightness);
                 
                 temp.drawEmbedded(
-                    (int) (Gameplay.view.getZoom()*Controller.map.getPosX()) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
-                    (int) (Gameplay.view.getZoom()*Controller.map.getPosY() / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY()
+                    (int) (Gameplay.view.camera.getZoom()*Controller.map.getPosX())
+                    + x*Block.displWidth
+                    + (y%2) * (int) (Block.displWidth/2)
+                    + renderBlock.getOffsetX()
+                    ,
+                    (int) (Gameplay.view.camera.getZoom()*Controller.map.getPosY() / 2)
+                    + y*Block.displHeight/4
+                    - z*Block.displHeight/2
+                    + renderBlock.getOffsetY() * (1/Block.aspectRatio)
                 );
                 
 //                Block.Blocksheet.renderInUse(
@@ -423,34 +540,41 @@ public class Block {
         }
     }
     
-        private void renderSide(int x, int y, int z,int side, Block renderBlock){
-        //int brightness = (renderBlock.lightlevel - side*25) * 255 / 100;
-        //new Color(brightness,brightness,brightness).bind();
+    private void renderSide(int x, int y, int z,int sidenumb, Block renderBlock){
+        Image sideimage = renderBlock.getSideSprite(sidenumb);
         
-        Image temp = renderBlock.getSideSprite(side);
+        if (Gameplay.controller.goodgraphics){
+            if (sidenumb == 0){
+                int brightness = renderBlock.lightlevel * 255 / 100;
+                new Color(brightness,brightness,brightness).bind();
+            } else {
+                Color.black.bind();
+            }
+            GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
+        }
         
         //calc  brightness
-        float brightness = (renderBlock.lightlevel - side*25) / 100f;
+        float brightness = renderBlock.lightlevel / 50f;
                 
-        temp.setColor(0, brightness,brightness,brightness);
-        temp.setColor(1, brightness,brightness, brightness);
+        sideimage.setColor(0, brightness,brightness,brightness);
+        sideimage.setColor(1, brightness,brightness, brightness);
 
-        if (side!=1) brightness -= .3f;
+        if (sidenumb!=1) brightness -= .3f;
 
-        temp.setColor(2, brightness, brightness, brightness);
-        temp.setColor(3, brightness, brightness, brightness);
+        sideimage.setColor(2, brightness, brightness, brightness);
+        sideimage.setColor(3, brightness, brightness, brightness);
         
-        temp.drawEmbedded(
-            (int) (Gameplay.view.getZoom()*Controller.map.getPosX())
+        sideimage.drawEmbedded(
+            (int) (Gameplay.view.camera.getZoom()*Controller.map.getPosX())
             + x*Block.displWidth
             + (y%2) * (int) (Block.displWidth/2)
-            + renderBlock.getOffsetX(),
-            
-            (int) (Gameplay.view.getZoom()*Controller.map.getPosY() / 2)
+            + Gameplay.view.camera.getZoom() * renderBlock.getOffsetX()
+            ,            
+            (int) (Gameplay.view.camera.getZoom() * Controller.map.getPosY() / 2)
             + y*Block.displHeight/4
             - z*Block.displHeight/2
-            + ( side != 1 ? Block.displHeight/4:0)
-            + renderBlock.getOffsetY()
+            + ( sidenumb != 1 ? Block.displHeight/4:0)
+            + Gameplay.view.camera.getZoom() * renderBlock.getOffsetY() * (1/Block.aspectRatio)
         );
     }
         
@@ -460,7 +584,7 @@ public class Block {
      */
     public static void reloadSprites(float zoom) {
         try {
-            if (Gameplay.controller.goodgraphics){
+            if (Gameplay.controller.rendermethod){
                 SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/SideSprite.png", width, (int) (height*0.75));
             
                 Image scaledBlockSheet = srcBlockSheet.getScaledCopy(zoom);
@@ -478,66 +602,6 @@ public class Block {
                     displWidth,
                     (int) (displHeight*0.75)
                 );
-                SidesSprites[1][0][0][0] = 3;
-                SidesSprites[1][0][0][1] = 0;
-                SidesSprites[1][0][1][0] = 4;
-                SidesSprites[1][0][1][1] = 0;
-                SidesSprites[1][0][2][0] = 5;
-                SidesSprites[1][0][2][1] = 0;
-                SidesSprites[2][0][0][0] = 0;
-                SidesSprites[2][0][0][1] = 1;
-                SidesSprites[2][0][1][0] = 1;
-                SidesSprites[2][0][1][1] = 1;
-                SidesSprites[2][0][2][0] = 2;
-                SidesSprites[2][0][2][1] = 1;
-                SidesSprites[4][0][0][0] = 0;
-                SidesSprites[4][0][0][1] = 2;
-                SidesSprites[4][0][1][0] = 1;
-                SidesSprites[4][0][1][1] = 2;
-                SidesSprites[4][0][2][0] = 2;
-                SidesSprites[4][0][2][1] = 2;
-                SidesSprites[7][0][0][0] = 0;
-                SidesSprites[7][0][0][1] = 3;
-                SidesSprites[7][0][1][0] = 1;
-                SidesSprites[7][0][1][1] = 3;
-                SidesSprites[7][0][2][0] = 2;
-                SidesSprites[7][0][2][1] = 3;
-                SidesSprites[8][0][0][0] = 2;
-                SidesSprites[8][0][0][1] = 5;
-                SidesSprites[8][0][1][0] = 3;
-                SidesSprites[8][0][1][1] = 5;
-                SidesSprites[8][0][2][0] = 0;
-                SidesSprites[8][0][2][1] = 6;
-                SidesSprites[8][1][0][0] = 1;
-                SidesSprites[8][1][0][1] = 5;
-                SidesSprites[8][1][1][0] = 5;
-                SidesSprites[8][1][1][1] = 5;
-                SidesSprites[8][1][2][0] = 2;
-                SidesSprites[8][1][2][1] = 6;
-                SidesSprites[8][2][0][0] = 5;
-                SidesSprites[8][2][0][1] = 0;
-                SidesSprites[8][2][1][0] = 4;
-                SidesSprites[8][2][1][1] = 5;
-                SidesSprites[8][2][2][0] = 1;
-                SidesSprites[8][2][2][1] = 6;
-                SidesSprites[9][0][0][0] = 3;
-                SidesSprites[9][0][0][1] = 6;
-                SidesSprites[9][0][1][0] = 4;
-                SidesSprites[9][0][1][1] = 6;
-                SidesSprites[9][0][2][0] = 5;
-                SidesSprites[9][0][2][1] = 6;
-                SidesSprites[40][0][0][0] = 0;
-                SidesSprites[40][0][0][1] = 4;
-                SidesSprites[40][0][1][0] = 1;
-                SidesSprites[40][0][1][1] = 4;
-                SidesSprites[40][0][2][0] = 2;
-                SidesSprites[40][0][2][1] = 4;
-                SidesSprites[40][1][0][0] = 0;
-                SidesSprites[40][1][0][1] = 2;
-                SidesSprites[40][1][1][0] = 1;
-                SidesSprites[40][1][1][1] = 4;
-                SidesSprites[40][1][2][0] = 2;
-                SidesSprites[40][1][2][1] = 4;
             } else {
                 SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/Blocksprite.png", width, height, 4);
             

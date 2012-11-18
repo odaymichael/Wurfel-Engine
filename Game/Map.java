@@ -4,7 +4,9 @@
  */
 package Game;
 
+import Game.Blocks.Block;
 import MainMenu.MainMenuState;
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -58,7 +60,7 @@ public class Map {
             }
         recalcRequested = true;
        
-        //minimap = new Minimap();
+        minimap = new Minimap();
     }
     
     /**
@@ -222,8 +224,10 @@ public class Map {
      * 
      */
     public void draw(){
+        if (Gameplay.controller.goodgraphics) Block.Blocksheet.bind();
+        if (Gameplay.controller.goodgraphics) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         Block.Blocksheet.startUse();
-       
+        //render vom bottom to top
         for (int z=0; z < Chunk.BlocksZ; z++) {
             for (int y=0; y < Chunk.BlocksY*3; y++) {//vertikal
                 for (int x=0; x < Chunk.BlocksX*3; x++){//horizontal
@@ -240,6 +244,7 @@ public class Map {
             }
        }
        Block.Blocksheet.endUse(); 
+       if (Gameplay.controller.goodgraphics) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
     }
 
    /**
@@ -294,7 +299,7 @@ public class Map {
 
     /**
      * 
-     * @return
+     * @return the minimap of this map
      */
     public Minimap getMinimap() {
         return minimap;

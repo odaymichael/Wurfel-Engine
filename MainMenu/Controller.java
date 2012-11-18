@@ -27,6 +27,8 @@ public class Controller {
         } else if (View.loadGameOption.isClicked(input)) { 
                 MainMenuState.loadmap = true;
                 fx.play();
+                //fade in is a bad idea because afer the fade in is a lag.
+                //sbg.enterState(2, new FadeInTransition(), new FadeInTransition());
                 sbg.enterState(2); 
         }else if (View.exitOption.isClicked(input)){
             gc.exit();

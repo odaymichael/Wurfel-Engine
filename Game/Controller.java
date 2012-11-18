@@ -1,11 +1,14 @@
 package Game;
 
+import Game.Blocks.Block;
+import Game.Blocks.Player;
 import MainMenu.MainMenuState;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
 
 /**
  *
@@ -24,7 +27,8 @@ public class Controller {
    /**
      * Should the graphic be a bit slower but better? Must be in Controller because is needed for e.g. the Block and there used as data
      */
-    public boolean goodgraphics = true;
+    public boolean goodgraphics = false;
+    public boolean rendermethod = true;
     
     public GameContainer gc;
     private StateBasedGame sbg;
@@ -44,20 +48,8 @@ public class Controller {
           
         gc.getInput().addMouseListener(new MouseDraggedListener());
         map = new Map(MainMenuState.loadmap);
-        gameConstructor();
     }
-    
-    /**
-     *Later this method will be abstract to split into engine and game
-     */
-    private void gameConstructor() throws SlickException{
-        
-        map.data[(int) (Chunk.BlocksX*1.5)][(int) (Chunk.BlocksY*1.5)][19] = new Player((int) (Chunk.BlocksX*1.5),(int) (Chunk.BlocksY*1.5),19);
-        player = (Player) map.data[(int) (Chunk.BlocksX*1.5)][(int) (Chunk.BlocksY*1.5)][19];
-        //the player is created but must be saved into the field
 
-    }
-    
     
 
     
@@ -67,9 +59,10 @@ public class Controller {
      * @throws SlickException
      */
     public void update(int delta) throws SlickException{  
-
+        if (delta>200) Log.warn("delta is too high to stay stable. d: "+delta);
+            
         Input input = gc.getInput();
- 
+         
         if (input.isKeyDown(Input.KEY_Q)) gc.exit();
        
         //open menu
@@ -83,67 +76,80 @@ public class Controller {
 
         //good graphics
         if (input.isKeyPressed(Input.KEY_G)) {
-            Gameplay.controller.goodgraphics = !Gameplay.controller.goodgraphics;
-            Gameplay.iglog.add("Good Graphics is now "+Gameplay.controller.goodgraphics);
-            Block.reloadSprites(Gameplay.view.getZoom());
+            goodgraphics = !goodgraphics;
+            Gameplay.iglog.add("Good Graphics is now "+goodgraphics);
         }
         
+        //render method
+        if (input.isKeyPressed(Input.KEY_R)) {
+            rendermethod = !rendermethod;
+            Gameplay.iglog.add("Rendermethod changes "+rendermethod);
+            Block.reloadSprites(Gameplay.view.camera.getZoom());
+        }
+        
+        
         //toggle camera
-        if (input.isKeyPressed(Input.KEY_C)) Gameplay.view.cameramode = !Gameplay.view.cameramode;
+        if (input.isKeyPressed(Input.KEY_C)) Gameplay.view.camera.focus = !Gameplay.view.camera.focus;
         
         //restart
         if (input.isKeyPressed(Input.KEY_N)) map = new Map(false);
                 
         //reset zoom
         if (input.isKeyPressed(Input.KEY_Z)) {
-            Gameplay.view.setZoom(1);
+            Gameplay.view.camera.setZoom(1);
             Gameplay.iglog.add("Zoom reset");
         }
         
         
         //walk
         if ("WASD".equals(player.getControls())){
-            if (input.isKeyDown(Input.KEY_W)) player.walk(1,delta);
-            if (input.isKeyDown(Input.KEY_S)) player.walk(7,delta);
-            if (input.isKeyDown(Input.KEY_A)) player.walk(3,delta);
-            if (input.isKeyDown(Input.KEY_D)) player.walk(5,delta);
+            player.walk(
+                input.isKeyDown(Input.KEY_W),
+                input.isKeyDown(Input.KEY_S),
+                input.isKeyDown(Input.KEY_A),
+                input.isKeyDown(Input.KEY_D),
+                .25f+(input.isKeyDown(Input.KEY_LSHIFT)? 0.75f: 0),
+                delta
+            );
             if (input.isKeyPressed(Input.KEY_SPACE)) player.jump();
         }
        
        
 
         //earth to right
-        if (Gameplay.view.cameraX < Chunk.SizeX/3)
+        if (Gameplay.view.camera.x < Chunk.SizeX/3)
            map.setCenter(3);
         else {       
             //earth to the left
-            if (Gameplay.view.cameraX + Gameplay.view.cameraWidth > 8*Chunk.SizeX/3) 
+            if (Gameplay.view.camera.x + Gameplay.view.camera.width > 8*Chunk.SizeX/3) 
                 map.setCenter(5); 
         }
         
        //scroll up, earth down            
-        if (Gameplay.view.cameraY  <= 0) {
+        if (Gameplay.view.camera.y  <= 0) {
             map.setCenter(1);
         } else {
             //scroll down, earth up
-            if (Gameplay.view.cameraY+Gameplay.view.cameraHeight > Chunk.SizeY*3)
+            if (Gameplay.view.camera.y+Gameplay.view.camera.height > Chunk.SizeY*3)
                 map.setCenter(7);
         }
         
         //camera
-        oldx = Gameplay.view.cameraX;
-        oldy = Gameplay.view.cameraY;
+        oldx = Gameplay.view.camera.x;
+        oldy = Gameplay.view.camera.y;
         
         player.update(delta);
         
-        if (Gameplay.view.cameramode == false) {
-            Gameplay.view.cameraX = player.getRelCoordX() * Block.width + Block.width / 2 *(player.getRelCoordY() % 2) + player.getOffsetX() - Gameplay.view.cameraWidth / 2;
-            Gameplay.view.cameraY = (player.getRelCoordY() - player.coordZ) * Block.height/2 + player.getOffsetY()*2 - Gameplay.view.cameraHeight;
+        if (Gameplay.view.camera.focus == false) {
+            Gameplay.view.camera.x = player.getRelCoordX() * Block.width + Block.width / 2 *(player.getRelCoordY() % 2) + player.getOffsetX() - Gameplay.view.camera.width / 2;
+            Gameplay.view.camera.y = (int) ((player.getRelCoordY() - player.coordZ) * Block.height/2
+                                           + player.getOffsetY()* 2* (1/Block.aspectRatio)//why does it have to be multiplied by two?
+                                           - Gameplay.view.camera.height);
         } 
         
         map.data[player.getRelCoordX()][player.getRelCoordY()][player.coordZ] = player;
-        map.changePosX(- Gameplay.view.cameraX + oldx);
-        map.changePosY(-Gameplay.view.cameraY + oldy);
+        map.changePosX(- Gameplay.view.camera.x + oldx);
+        map.changePosY(-Gameplay.view.camera.y + oldy);
             
 
 
@@ -162,17 +168,17 @@ public class Controller {
             gc.getInput().consumeEvent();
             
             zoomx = zoomx + change/1000f;
-            Gameplay.view.setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
+            Gameplay.view.camera.setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
             
-            Gameplay.view.cameraWidth = (int) (gc.getWidth() / Gameplay.view.getZoom());
-            Gameplay.view.cameraHeight= (int) (gc.getHeight() / Gameplay.view.getZoom());
+            Gameplay.view.camera.width = (int) (gc.getWidth() / Gameplay.view.camera.getZoom());
+            Gameplay.view.camera.height= (int) (gc.getHeight() / Gameplay.view.camera.getZoom());
             
            /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
             Block.height = (int) (4*gc.getHeight()*zoom / Chunk.BlocksY);
             Chunk.SizeX = (int) (Chunk.BlocksX*Block.width*zoom);
             Chunk.SizeY = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
-            Gameplay.iglog.add("Zoom: "+Gameplay.view.getZoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
+            Gameplay.iglog.add("Zoom: "+Gameplay.view.camera.getZoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
         }
 
         @Override
@@ -196,9 +202,9 @@ public class Controller {
             //workaround for the bug, because the event is called multiple times
             gc.getInput().consumeEvent();
             
-            if (Gameplay.view.cameramode) {
-                Gameplay.view.cameraX += newx-oldx;
-                Gameplay.view.cameraY += newy-oldy;
+            if (Gameplay.view.camera.focus) {
+                Gameplay.view.camera.x += newx-oldx;
+                Gameplay.view.camera.y += newy-oldy;
             }
             /*for (int i=0;i<9;i++){
                 chunklist[i].posX += newx - oldx;
