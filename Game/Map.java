@@ -225,8 +225,8 @@ public class Map {
         Block.Blocksheet.startUse();
         //render vom bottom to top
         for (int z=0; z < Chunk.BlocksZ; z++) {
-            for (int y=0; y < Chunk.BlocksY*3; y++) {//vertikal
-                for (int x=0; x < Chunk.BlocksX*3; x++){//horizontal
+            for (int y = Gameplay.view.camera.getTopBorder(); y < Chunk.BlocksY*3; y++) {//vertikal
+                for (int x = Gameplay.view.camera.getLeftBorder(); x < Gameplay.view.camera.getRightBorder(); x++){//horizontal
                     if (
                         (x < Chunk.BlocksX*3-1 && Controller.map.data[x+1][y][z].renderorder == -1)
                         ||

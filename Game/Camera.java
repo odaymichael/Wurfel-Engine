@@ -114,18 +114,26 @@ public class Camera {
      * 
      */
     public int getLeftBorder(){
-        return x/Block.width;
+        int tmp = x/Block.width -1;
+        if (tmp < 0) return 0;
+        return tmp;
     }
     
     public int getRightBorder(){
-        return (x+width)/Block.width;
+        int tmp = (x+width)/Block.width+2;
+        if (tmp >= Chunk.BlocksX*3) return Chunk.BlocksX*3-1;
+        return tmp;
     }
     
     public int getTopBorder(){
-        return y/Block.height;
+        int tmp = 2*y/Block.height;
+        if (tmp < 0) return 0;
+        return tmp;
     }
     
     public int getBottomBorder(){
-        return (y+height)/Block.height;
+        int tmp = (2*y+height)/Block.height;
+        if (tmp >= Chunk.BlocksY*3) return Chunk.BlocksY*3-1;
+        return tmp;
     }
 }
