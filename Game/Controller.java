@@ -116,40 +116,36 @@ public class Controller {
        
        
 
-        //earth to right
-        if (Gameplay.view.camera.x < Chunk.SizeX/3)
-           map.setCenter(3);
-        else {       
-            //earth to the left
-            if (Gameplay.view.camera.x + Gameplay.view.camera.width > 8*Chunk.SizeX/3) 
-                map.setCenter(5); 
-        }
-        
-       //scroll up, earth down            
-        if (Gameplay.view.camera.y  <= 0) {
-            map.setCenter(1);
-        } else {
-            //scroll down, earth up
-            if (Gameplay.view.camera.y+Gameplay.view.camera.height > Chunk.SizeY*3)
-                map.setCenter(7);
-        }
+//        //earth to right
+//        if (Gameplay.view.camera.x < Chunk.SizeX/3)
+//           map.setCenter(3);
+//        else {       
+//            //earth to the left
+//            if (Gameplay.view.camera.x + Gameplay.view.camera.width > 8*Chunk.SizeX/3) 
+//                map.setCenter(5); 
+//        }
+//        
+//       //scroll up, earth down            
+//        if (Gameplay.view.camera.y  <= 0) {
+//            map.setCenter(1);
+//        } else {
+//            //scroll down, earth up
+//            if (Gameplay.view.camera.y+Gameplay.view.camera.height > Chunk.SizeY*3)
+//                map.setCenter(7);
+//        }
         
         //camera
-        oldx = Gameplay.view.camera.x;
-        oldy = Gameplay.view.camera.y;
+        //oldx = Gameplay.view.camera.x;
+        //oldy = Gameplay.view.camera.y;
         
         player.update(delta);
         
-        if (Gameplay.view.camera.focus == false) {
-            Gameplay.view.camera.x = player.getRelCoordX() * Block.width + Block.width / 2 *(player.getRelCoordY() % 2) + player.getOffsetX() - Gameplay.view.camera.width / 2;
-            Gameplay.view.camera.y = (int) ((player.getRelCoordY() - player.coordZ) * Block.height/2
-                                           + player.getOffsetY()* 2* (1/Block.aspectRatio)//why does it have to be multiplied by two?
-                                           - Gameplay.view.camera.height);
-        } 
+        Gameplay.view.camera.update();
         
         map.data[player.getRelCoordX()][player.getRelCoordY()][player.coordZ] = player;
-        map.changePosX(- Gameplay.view.camera.x + oldx);
-        map.changePosY(-Gameplay.view.camera.y + oldy);
+        
+        //map.changePosX(- Gameplay.view.camera.x + oldx);
+        //map.changePosY(-Gameplay.view.camera.y + oldy);
             
 
 

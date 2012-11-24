@@ -64,8 +64,8 @@ public class Minimap {
         //player
         g.setColor(Color.blue);
         g.drawRect(
-            X+ (Gameplay.controller.player.getRelCoordX() + (Gameplay.controller.player.getRelCoordY()%2==1?0.5f:0) ) * scaleX,
-            Y+ scaleY *Gameplay.controller.player.getRelCoordY(),
+            X + (Gameplay.controller.player.getRelCoordX() + (Gameplay.controller.player.getRelCoordY()%2==1?0.5f:0) ) * scaleX,
+            Y + Gameplay.controller.player.getRelCoordY() * scaleY,
             scaleX,
             scaleY
         );
@@ -88,29 +88,39 @@ public class Minimap {
         );
     }
 
-    //camera rectangle
+    //bottom camera rectangle
     g.setColor(Color.green);
     g.drawRect(
-            X + scaleX * Gameplay.view.camera.x * Chunk.BlocksX / Chunk.SizeX,
-            Y + scaleY * Gameplay.view.camera.y * (Chunk.BlocksY/2+Chunk.BlocksZ)/2 /(Chunk.SizeY + Chunk.SizeZ),
-            Gameplay.view.camera.width * (Chunk.BlocksX*scaleX / Chunk.SizeX),
-            Gameplay.view.camera.height * ((Chunk.BlocksY*scaleY)/Chunk.SizeY)
+        X + scaleX * Gameplay.view.camera.x * Chunk.BlocksX / Chunk.SizeX,
+        Y + scaleY * Gameplay.view.camera.y * (Chunk.BlocksY/2 + Chunk.BlocksZ) /(Chunk.SizeY + Chunk.SizeZ),
+        Gameplay.view.camera.width * (Chunk.BlocksX*scaleX / Chunk.SizeX),
+        Gameplay.view.camera.height * ((Chunk.BlocksY*scaleY)/Chunk.SizeY)
+    );
+    
+    //player level camera rectangle
+    g.setColor(Color.white);
+    g.drawRect(
+        X + scaleX * Gameplay.view.camera.x * Chunk.BlocksX / Chunk.SizeX,
+        Y + scaleY * Gameplay.view.camera.y * (Chunk.BlocksY/2 + Chunk.BlocksZ) /(Chunk.SizeY + Chunk.SizeZ)
+          + scaleY *(Gameplay.controller.player.coordZ * Block.height/2) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
+        Gameplay.view.camera.width * (Chunk.BlocksX*scaleX / Chunk.SizeX),
+        Gameplay.view.camera.height * ((Chunk.BlocksY*scaleY)/Chunk.SizeY)
     );
 
 
     //player coord
     g.setColor(Color.blue);
     View.tTFont.drawString(
-        X+ scaleX * Gameplay.controller.player.getRelCoordX(),
-        Y+ scaleY * (Gameplay.controller.player.getRelCoordY()/2 - Chunk.BlocksZ/2),
+        X + (Gameplay.controller.player.getRelCoordX() + (Gameplay.controller.player.getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
+        Y + Gameplay.controller.player.getRelCoordY() * scaleY - 50,
         Gameplay.controller.player.getRelCoordX() +" | "+ Gameplay.controller.player.getRelCoordY() +" | "+ Gameplay.controller.player.coordZ,
         Color.blue
     );
 
     //player pos
     View.tTFont.drawString(
-        X+ scaleX * Gameplay.controller.player.getRelCoordX(),
-        Y+ scaleY * (Gameplay.controller.player.getRelCoordY()/2 - Chunk.BlocksZ/2)+20,
+        X + (Gameplay.controller.player.getRelCoordX() + (Gameplay.controller.player.getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
+        Y + Gameplay.controller.player.getRelCoordY() * scaleY - 30,
         Gameplay.controller.player.posX +" | "+ Gameplay.controller.player.posY +" | "+ Gameplay.controller.player.posZ,
         Color.red
     );

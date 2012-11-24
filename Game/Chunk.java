@@ -10,10 +10,22 @@ import java.io.InputStreamReader;
  * @author Benedikt
  */
 public class Chunk {
+    /**
+     * 
+     */
     public int coordX, coordY;
 
+    /**
+     * The amount of blocks in X direction
+     */
     public static final int BlocksX = 12;//16:9 => 12:27, 4:3=>12:36
+    /**
+     * The amount of blocks in y direction
+     */
     public static final int BlocksY = 28;
+    /**
+     * The amount of blocks in Z direction
+     */
     public static final int BlocksZ = 20;
     /**
     *The size of a chunk in pixels
@@ -23,12 +35,19 @@ public class Chunk {
     *The size of a chunk in pixels
     */
     public static int SizeY = BlocksY*Block.height/4;
+    /**
+     * The size of a chunk in pixels
+     */
     public static int SizeZ = BlocksZ*Block.height/2;
 
+    /**
+     * 
+     */
     public Block data[][][] = new Block[BlocksX][BlocksY][BlocksZ];
-
-    //Konstruktoren
-    
+  
+    /**
+     * Creates a Chunk filled with air
+     */
     public Chunk() {
         //fill everything with air
         for (int x=0; x < BlocksX; x++)

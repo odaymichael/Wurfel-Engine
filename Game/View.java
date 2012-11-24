@@ -4,7 +4,6 @@ import Game.Blocks.Block;
 import java.awt.Font;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.Log;
 
 
 /**

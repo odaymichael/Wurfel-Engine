@@ -19,10 +19,6 @@ public class Map {
      */
     public Block data[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
 
-    private int posX;
-
-    private int posY;
-
     private boolean recalcRequested;
 
     private int[] coordlistX = new int[9];
@@ -107,7 +103,7 @@ public class Map {
             coordlistX[pos] += (center == 3 ? -1 : (center == 5 ? 1 : 0));
             coordlistY[pos] += (center == 1 ? 1 : (center == 7 ? -1 : 0));
             
-            if (check_chunk_movement(pos,center)){
+            if (isChunkSwitchPosibble(pos,center)){
                 //System.out.println("[" + pos + "] <- ["+ (pos + center - 4) +"] (old)");
                 setChunk(
                     pos,
@@ -138,7 +134,7 @@ public class Map {
         }
     }
     
-     private boolean check_chunk_movement(int pos, int movement){
+     private boolean isChunkSwitchPosibble(int pos, int movement){
         //checks if the number can be reached by moving the net in a direction, very complicated
         boolean result = true; 
         switch (movement){
@@ -223,7 +219,7 @@ public class Map {
     /**
      * 
      */
-    public void draw(){
+    public void draw() {
         if (Gameplay.controller.goodgraphics) Block.Blocksheet.bind();
         if (Gameplay.controller.goodgraphics) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         Block.Blocksheet.startUse();
@@ -236,9 +232,10 @@ public class Map {
                         ||
                         Controller.map.data[x][y][z].renderorder == 1
                        ) {
-                        data[x][y][z].renderblock(x+1,y,z);
-                        data[x][y][z].renderblock(x,y,z);
                         x++;
+                        data[x][y][z].renderblock(x,y,z);//draw the right block first
+                        data[x-1][y][z].renderblock(x-1,y,z);
+                        
                     } else data[x][y][z].renderblock(x,y,z);
                 }
             }
@@ -265,37 +262,6 @@ public class Map {
         return coordlistY[i];
     }
    
-        /**
-     * The offset of the Map in X direction
-     * @return 
-     */
-    public int getPosX() {
-        return posX;
-    }
-
-    /**
-     * 
-     * @param posX
-     */
-    public void changePosX(int posX) {
-        this.posX = this.posX+posX;
-    }
-
-    /**
-     * The offset of the Map in Y direction
-     * @return 
-     */
-    public int getPosY() {
-        return posY;
-    }
-
-    /**
-     * 
-     * @param posY
-     */
-    public void changePosY(int posY) {
-        this.posY = this.posY+posY;
-    }
 
     /**
      * 

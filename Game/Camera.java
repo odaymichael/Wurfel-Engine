@@ -5,16 +5,17 @@
 package Game;
 
 import Game.Blocks.Block;
+import Game.Blocks.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.util.Log;
 
 /**
- *
+ *The camera automatically locks to the player. It can be disabled with <i>focus</i>.
  * @author Benedikt
  */
 public class Camera {
       /**
-     * The Camera Position
+     * The Camera Position.
      */
    public int x;
     /**
@@ -44,10 +45,8 @@ public class Camera {
         Log.debug("Zoom is:"+Float.toString(zoom));
         
         width = (int) (gc.getWidth() / zoom);
-        height= (int) (gc.getHeight() / zoom);
-    }
-    
-      
+        height = (int) (gc.getHeight() / zoom);  
+    }      
     
     /**
      * Set the zoom factor and regenerates the sprites.
@@ -64,5 +63,21 @@ public class Camera {
      */
     public float getZoom() {
         return zoom;
+    }
+
+    void update() {
+        Player player = Gameplay.controller.player;
+        if (focus == false) {
+            x = player.getRelCoordX() * Block.width
+                + Block.width / 2 *(player.getRelCoordY() % 2)
+                + player.getOffsetX()
+                - Gameplay.view.camera.width / 2;
+            
+            y = (int) (
+                (player.getRelCoordY()/2f - player.coordZ) * Block.height/2f
+                - Gameplay.view.camera.height/2
+                + player.getOffsetY() * (1/Block.aspectRatio)
+                );
+        } 
     }
 }

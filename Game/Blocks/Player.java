@@ -58,8 +58,8 @@ public class Player extends SelfAwareBlock{
     
   
     /**
-     * 
-     * @param controls
+     * Set the controls.
+     * @param controls either "arrows" or "WASD".
      */
     public void setControls(String controls){
         if ("arrows".equals(controls) || "WASD".equals(controls))
@@ -226,7 +226,6 @@ public class Player extends SelfAwareBlock{
    
     /**
      * Jumps
-     * 
      */
     public void jump(){
         if (veloZ==0 && posZ==0) veloZ = 0.5f;
@@ -248,60 +247,57 @@ public class Player extends SelfAwareBlock{
      * @param delta
      */
     public void update(int delta){
-    if (speed>0.5f){
-        if (!runningsound.playing()) runningsound.play();
-    }  else runningsound.stop();
-    
-    //Gravity
-    //acceleration
-    float acc = -(9.81f/Block.width)/(delta);
-    
-    //if (delta<1000) acc = Controller.map.gravity*delta;
-    
-    
-    
-    if (posZ <= 0 && coordZ>1 && Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ-1].isObstacle()){
-        //landing
-        if (posZ<0){
-            veloZ = 0;
-            fallsound.stop();
+        if (speed > 0.5f){
+            if (!runningsound.playing()) runningsound.play();
+        }  else runningsound.stop();
+
+        //Gravity
+        //acceleration
+        float acc = -(9.81f/Block.width)/(delta);// this should be g=9.81 m/s^2
+
+        //if (delta<1000) acc = Controller.map.gravity*delta;
+
+        if (posZ <= 0 && coordZ>1 && Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ-1].isObstacle()){
+            //landing
+            if (posZ<0){
+                veloZ = 0;
+                fallsound.stop();
+            }
+            posZ = 0;
+            acc = 0;
         }
-        posZ = 0;
-        acc = 0;
-    }
-    
-    if (delta<500) {
-        veloZ += acc;
-        posZ += veloZ*delta;
-    }
-    
-    
-    //coordinate switch
-    //down
-    if (posZ <= 0 && coordZ>1 && !Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ-1].isObstacle()){
-        if (! fallsound.playing()) fallsound.play();
-        
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = new Block(0,0);
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1] = new Block(0,0);
-        coordZ--;
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = new Block(40,0);
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1] = new Block(40,1);
-        
-        posZ += Block.width;
-   }
-    
-    //up
-   if (posZ >= Block.height && coordZ < Chunk.BlocksZ-2 && !Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1].isObstacle()){
-        if (! fallsound.playing()) fallsound.play();
-        
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = new Block(0,0);
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1] = new Block(0,0);
-        coordZ++;
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = new Block(40,0);
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1] = new Block(40,1);
-        
-        posZ -= Block.width;
-   } 
+
+        if (delta < 500) {
+            veloZ += acc;
+            posZ += veloZ*delta;
+        }
+
+
+        //coordinate switch
+        //down
+        if (posZ <= 0 && coordZ>1 && !Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ-1].isObstacle()){
+            if (! fallsound.playing()) fallsound.play();
+            coordZ--;
+            
+            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+2] = new Block(0,0);
+            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1].setValue(1);
+            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = new Block(40,0);
+
+            posZ += Block.width;
+        }
+
+        //up
+        if (posZ >= Block.height && coordZ < Chunk.BlocksZ-2 && !Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1].isObstacle()){
+            if (! fallsound.playing()) fallsound.play();
+
+            coordZ++;
+
+            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1] = new Block(40,1);
+            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ].setValue(0);
+            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ-1] = new Block(0,0);
+
+            posZ -= Block.width;
+        } 
     
    }
            
