@@ -5,6 +5,7 @@
 package Game;
 
 import Game.Blocks.Block;
+import Game.Blocks.Blockpointer;
 import Game.Blocks.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.util.Log;
@@ -39,6 +40,7 @@ public class Camera {
      */
     private float zoom = 1;
 
+    private Blockpointer focusblock;
 
     Camera(GameContainer gc, float zoom) {
         this.zoom = zoom;
@@ -78,6 +80,26 @@ public class Camera {
                 - Gameplay.view.camera.height/2
                 + player.getOffsetY() * (1/Block.aspectRatio)
                 );
-        } 
+        } else {
+            x = focusblock.getX() * Block.width
+                + Block.width / 2 *(focusblock.getY() % 2)
+                + focusblock.getBlock().getOffsetX()
+                - Gameplay.view.camera.width / 2;
+            
+            y = (int) (
+                (focusblock.getY()/2f - focusblock.getZ()) * Block.height/2f
+                - Gameplay.view.camera.height/2
+                + focusblock.getBlock().getOffsetY() * (1/Block.aspectRatio)
+                );
+        }
+    }
+    
+    public void FocusOnBlock(Blockpointer blockpointer){
+        focus = true;
+        focusblock = blockpointer;        
+    }
+    
+    public void FocusOnPlayer(){
+        focus = false;
     }
 }
