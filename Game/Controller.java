@@ -58,63 +58,69 @@ public class Controller {
      * @param delta
      * @throws SlickException
      */
-    public void update(int delta) throws SlickException{  
+    public void update(int delta) throws SlickException{
         if (delta>200) Log.warn("delta is too high to stay stable. d: "+delta);
             
         Input input = gc.getInput();
          
-        if (input.isKeyDown(Input.KEY_Q)) gc.exit();
-       
-        //open menu
-        if (input.isKeyPressed(Input.KEY_ESCAPE)) openmenu();
-       
-        //toggle fullscreen
-        if (input.isKeyPressed(Input.KEY_F)) gc.setFullscreen(!gc.isFullscreen()); 
-       
-        //pause
-        if (input.isKeyDown(Input.KEY_P)) gc.setPaused(true);
+        if (!Gameplay.msgSystem.isListeningForInput()) {
+            if (input.isKeyDown(Input.KEY_Q)) gc.exit();
 
-        //good graphics
-        if (input.isKeyPressed(Input.KEY_G)) {
-            goodgraphics = !goodgraphics;
-            Gameplay.iglog.add("Good Graphics is now "+goodgraphics);
+            //open menu
+            if (input.isKeyPressed(Input.KEY_ESCAPE)) openmenu();
+
+            //toggle fullscreen
+            if (input.isKeyPressed(Input.KEY_F)) gc.setFullscreen(!gc.isFullscreen()); 
+
+            //pause
+            if (input.isKeyDown(Input.KEY_P)) gc.setPaused(true);
+
+            //good graphics
+            if (input.isKeyPressed(Input.KEY_G)) {
+                goodgraphics = !goodgraphics;
+                Gameplay.msgSystem.add("Good Graphics is now "+goodgraphics);
+            }
+
+            //render method
+            if (input.isKeyPressed(Input.KEY_R)) {
+                rendermethod = !rendermethod;
+                Gameplay.msgSystem.add("Rendermethod changes "+rendermethod);
+                Block.reloadSprites(Gameplay.view.camera.getZoom());
+            }
+
+
+            //toggle camera
+            if (input.isKeyPressed(Input.KEY_C)) Gameplay.view.camera.focus = !Gameplay.view.camera.focus;
+
+            //restart
+            if (input.isKeyPressed(Input.KEY_N)) map = new Map(false);
+
+            //reset zoom
+            if (input.isKeyPressed(Input.KEY_Z)) {
+                Gameplay.view.camera.setZoom(1);
+                Gameplay.msgSystem.add("Zoom reset");
+            }        
+
+            //walk
+            if ("WASD".equals(player.getControls())){
+                player.walk(
+                    input.isKeyDown(Input.KEY_W),
+                    input.isKeyDown(Input.KEY_S),
+                    input.isKeyDown(Input.KEY_A),
+                    input.isKeyDown(Input.KEY_D),
+                    .25f+(input.isKeyDown(Input.KEY_LSHIFT)? 0.75f: 0),
+                    delta
+                );
+                if (input.isKeyPressed(Input.KEY_SPACE)) player.jump();
+            }
+            
+        } else {
+            //fetch input and write it down
+            //to-do
         }
         
-        //render method
-        if (input.isKeyPressed(Input.KEY_R)) {
-            rendermethod = !rendermethod;
-            Gameplay.iglog.add("Rendermethod changes "+rendermethod);
-            Block.reloadSprites(Gameplay.view.camera.getZoom());
-        }
-        
-        
-        //toggle camera
-        if (input.isKeyPressed(Input.KEY_C)) Gameplay.view.camera.focus = !Gameplay.view.camera.focus;
-        
-        //restart
-        if (input.isKeyPressed(Input.KEY_N)) map = new Map(false);
-                
-        //reset zoom
-        if (input.isKeyPressed(Input.KEY_Z)) {
-            Gameplay.view.camera.setZoom(1);
-            Gameplay.iglog.add("Zoom reset");
-        }
-        
-        
-        //walk
-        if ("WASD".equals(player.getControls())){
-            player.walk(
-                input.isKeyDown(Input.KEY_W),
-                input.isKeyDown(Input.KEY_S),
-                input.isKeyDown(Input.KEY_A),
-                input.isKeyDown(Input.KEY_D),
-                .25f+(input.isKeyDown(Input.KEY_LSHIFT)? 0.75f: 0),
-                delta
-            );
-            if (input.isKeyPressed(Input.KEY_SPACE)) player.jump();
-        }
-       
-       
+       //toggle input for msgSystem
+            if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.msgSystem.listenForInput(!Gameplay.msgSystem.isListeningForInput());
 
 //        //earth to right
 //        if (Gameplay.view.camera.x < Chunk.SizeX/3)
@@ -153,7 +159,7 @@ public class Controller {
         map.recalcIfRequested();      
        
         //update the log
-        Gameplay.iglog.update(delta);
+        Gameplay.msgSystem.update(delta);
     }
     
     
@@ -174,7 +180,7 @@ public class Controller {
             Chunk.SizeX = (int) (Chunk.BlocksX*Block.width*zoom);
             Chunk.SizeY = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
-            Gameplay.iglog.add("Zoom: "+Gameplay.view.camera.getZoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
+            Gameplay.msgSystem.add("Zoom: "+Gameplay.view.camera.getZoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
         }
 
         @Override

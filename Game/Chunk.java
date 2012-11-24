@@ -76,7 +76,7 @@ public class Chunk {
     private void newChunk(){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
-        Gameplay.iglog.add("Neuer Chunk: "+coordX+","+ coordY);
+        Gameplay.msgSystem.add("Neuer Chunk: "+coordX+","+ coordY);
         for (int x=0; x < BlocksX; x++)
             for (int y=0; y < BlocksY; y++){
                 //Dirt from 0 to 8
@@ -140,7 +140,7 @@ public class Chunk {
             */
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
             if (getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc") != null) {    
-                Gameplay.iglog.add("Load: "+coordX+","+coordY);
+                Gameplay.msgSystem.add("Load: "+coordX+","+coordY);
                 //FileReader input = new FileReader("map/chunk"+coordX+","+coordY+".otmc");
                 //BufferedReader bufRead = new BufferedReader(input);
                 BufferedReader bufRead = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc")));

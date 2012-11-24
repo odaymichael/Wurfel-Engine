@@ -161,7 +161,7 @@ public class Player extends SelfAwareBlock{
 
         //track the coordiante change
         if (getCorner() == 7){
-            Gameplay.iglog.add("top left");
+            Gameplay.msgSystem.add("top left");
             posY += Block.width/2;
             posX += Block.width/2;
             
@@ -173,7 +173,7 @@ public class Player extends SelfAwareBlock{
             Controller.map.requestRecalc();
         } else {
             if (getCorner() == 1) {
-                Gameplay.iglog.add("top right");
+                Gameplay.msgSystem.add("top right");
                 posY += Block.width / 2;
                 posX -= Block.width / 2;
 
@@ -185,7 +185,7 @@ public class Player extends SelfAwareBlock{
                 Controller.map.requestRecalc();
             } else {
                 if (getCorner() == 5) {
-                    Gameplay.iglog.add("bottom left");
+                    Gameplay.msgSystem.add("bottom left");
                     posY -= Block.width/2;
                     posX += Block.width/2;
 
@@ -197,7 +197,7 @@ public class Player extends SelfAwareBlock{
                     Controller.map.requestRecalc();
                 } else {
                     if (getCorner() == 3) {
-                        Gameplay.iglog.add("bottom right");
+                        Gameplay.msgSystem.add("bottom right");
                         posY -= Block.width/2;
                         posX -= Block.width/2;
 

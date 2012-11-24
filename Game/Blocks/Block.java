@@ -603,7 +603,7 @@ public class Block {
                 displHeight = (int) (height*zoom);
 
                 //GameplayState.iglog.add("Spacing:"+spacing);
-                Gameplay.iglog.add("BlockWidth"+displWidth);
+                Gameplay.msgSystem.add("BlockWidth"+displWidth);
 
                 Blocksheet = new SpriteSheet(
                     scaledBlockSheet,
@@ -620,8 +620,8 @@ public class Block {
                 displWidth = (int) (width*zoom);
                 displHeight = (int) (height*zoom);
 
-                Gameplay.iglog.add("Spacing:"+spacing);
-                Gameplay.iglog.add("BlockWidth"+displWidth);
+                Gameplay.msgSystem.add("Spacing:"+spacing);
+                Gameplay.msgSystem.add("BlockWidth"+displWidth);
 
                 Blocksheet = new SpriteSheet(
                     scaledBlockSheet,

@@ -66,7 +66,7 @@ public class SelfAwareBlock extends Block{
             relCoordX = X;
         } else {
             this.relCoordX = 3*Chunk.BlocksX-1;
-            Gameplay.iglog.add("RelativeCoordX ist too high:"+X);
+            Gameplay.msgSystem.add("RelativeCoordX ist too high:"+X);
             Log.warn("RelativeCoordX ist too high:"+X);
         }
         
@@ -74,7 +74,7 @@ public class SelfAwareBlock extends Block{
             relCoordX = X;
         } else {
             relCoordX = 0;
-            Gameplay.iglog.add("RelativeCoordX ist too low:"+X);
+            Gameplay.msgSystem.add("RelativeCoordX ist too low:"+X);
             Log.warn("RelativeCoordX ist too low:"+X);
         }
     }
@@ -92,7 +92,7 @@ public class SelfAwareBlock extends Block{
             relCoordY = Y;
         }else {
             relCoordY = 3*Chunk.BlocksY-1;
-            Gameplay.iglog.add("RelativeCoordY ist too high: "+Y);
+            Gameplay.msgSystem.add("RelativeCoordY ist too high: "+Y);
             Log.warn("RelativeCoordY ist too high: "+Y);
         }
         
@@ -100,7 +100,7 @@ public class SelfAwareBlock extends Block{
             relCoordY = Y;
         }else {
             relCoordY = 0;
-            Gameplay.iglog.add("RelativeCoordY ist too low: "+Y);
+            Gameplay.msgSystem.add("RelativeCoordY ist too low: "+Y);
             Log.warn("RelativeCoordY ist too low: "+Y);
         }
     }

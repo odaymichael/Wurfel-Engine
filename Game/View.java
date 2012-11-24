@@ -5,23 +5,20 @@ import java.awt.Font;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
 
-
 /**
- * 
+ * The View manages everything what should be drawn.
  * @author Benedikt
  */
 public class View {
-
     /**
-     * the array which is created after analysing the Map.data
-     */
-   // private Block renderarray[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
-    /**
-     * 
+     * The camera which display everything
      */
     public Camera camera;
     
 
+    /**
+     * The reference for the graphics context
+     */
     public Graphics g = null; 
     private java.awt.Font font;
     /**
@@ -38,7 +35,6 @@ public class View {
     //private static Insets insets;
     private Font baseFont;
 
-    
     /**
      * Constructor
      * @param gc
@@ -54,7 +50,7 @@ public class View {
         UnicodeFont startFont = new UnicodeFont("Game/Blox2.ttf", 20, false, false);
         //baseFont = startFont.deriveFont(Font.PLAIN, 12);
         baseFont = startFont.getFont().deriveFont(Font.PLAIN, 12);
-     
+        
         tTFont = new TrueTypeFont(baseFont, true);
         
         camera = new Camera(gc,gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.height));
@@ -66,16 +62,14 @@ public class View {
         tTFont_small = new TrueTypeFont(font, true);*/
         
         //update resolution things
-        Gameplay.iglog.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
+        Gameplay.msgSystem.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
         
         Block.reloadSprites(camera.getZoom()); 
         // Block.width = Block.height;
-        Gameplay.iglog.add("Blocks: "+Block.width+" x "+Block.height);
-        Gameplay.iglog.add("Zoom: "+camera.getZoom());
-        Gameplay.iglog.add("chunk: "+Chunk.SizeX+" x "+Chunk.SizeY);
-        Gameplay.iglog.add("chunk w/ zoom: "+Chunk.SizeX*camera.getZoom()+" x "+Chunk.SizeY*camera.getZoom());
-  
-        
+        Gameplay.msgSystem.add("Blocks: "+Block.width+" x "+Block.height);
+        Gameplay.msgSystem.add("Zoom: "+camera.getZoom());
+        Gameplay.msgSystem.add("chunk: "+Chunk.SizeX+" x "+Chunk.SizeY);
+        Gameplay.msgSystem.add("chunk w/ zoom: "+Chunk.SizeX*camera.getZoom()+" x "+Chunk.SizeY*camera.getZoom());
     }
     
     /**
@@ -92,7 +86,7 @@ public class View {
         //GUI
         if (Controller.map.getMinimap() != null)
             Controller.map.getMinimap().draw(g);
-        drawiglog();
+        Gameplay.msgSystem.draw();        
     }
       
     /**
@@ -341,23 +335,5 @@ public class View {
                     Controller.map.data[x][y][level].setLightlevel(level*50/z);
             }
         }         
-    }
-    
-       
-     
-    private void drawiglog(){
-        for (int i=0;i < Gameplay.iglog.size();i++){
-            Msg msg = (Msg) Gameplay.iglog.get(i);
-            Color clr = Color.blue;
-            if ("System".equals(msg.getSender())) clr = Color.green;
-            
-            //draw
-            tTFont.drawString(
-                10,
-                50+i*20,
-                msg.getMessage(),
-                clr
-            );
-        }
     }
 }

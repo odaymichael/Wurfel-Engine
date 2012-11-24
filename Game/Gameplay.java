@@ -10,7 +10,7 @@ public class Gameplay extends BasicGameState {
     public static View view = null;
     public static Controller controller = null;
     private int stateID = 2;
-    public static MsgSystem iglog;
+    public static MsgSystem msgSystem;
     public static GameContainer gc;
     
  
@@ -30,7 +30,7 @@ public class Gameplay extends BasicGameState {
     
     @Override 
     public void enter(GameContainer container, StateBasedGame game) throws SlickException{
-        iglog = new MsgSystem();
+        msgSystem = new MsgSystem();
         controller = new GameController(container, game);
         view = new View(container);
     }
