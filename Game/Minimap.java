@@ -102,7 +102,7 @@ public class Minimap {
     g.drawRect(
         X + scaleX * Gameplay.view.camera.x * Chunk.BlocksX / Chunk.SizeX,
         Y + scaleY * Gameplay.view.camera.y * (Chunk.BlocksY/2 + Chunk.BlocksZ) /(Chunk.SizeY + Chunk.SizeZ)
-          + scaleY *(Gameplay.controller.player.coordZ * Block.height/2) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
+          + scaleY *(Gameplay.controller.player.coordZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
         Gameplay.view.camera.width * (Chunk.BlocksX*scaleX / Chunk.SizeX),
         Gameplay.view.camera.height * ((Chunk.BlocksY*scaleY)/Chunk.SizeY)
     );

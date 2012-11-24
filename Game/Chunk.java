@@ -34,11 +34,11 @@ public class Chunk {
     /**
     *The size of a chunk in pixels
     */
-    public static int SizeY = BlocksY*Block.height/4;
+    public static int SizeY = BlocksY*Block.height/2;
     /**
      * The size of a chunk in pixels
      */
-    public static int SizeZ = BlocksZ*Block.height/2;
+    public static int SizeZ = BlocksZ*Block.height;
 
     /**
      * 

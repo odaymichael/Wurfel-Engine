@@ -47,14 +47,14 @@ public class Block {
     /**
        *height of the image 
        */
-    public static final int height = 160;
+    public static final int height = 80;
     
     /**
-     * The size the block is rendered at.
+     * The size the block is rendered at. You should only use this at rendering!
      */
     public static int displWidth;
     /**
-     * The height the block is rendered at.
+     * The height the block is rendered at. You should only use this at rendering!
      */
     public static int displHeight;
     
@@ -115,7 +115,7 @@ public class Block {
     private boolean visible;
     
     static {
-        aspectRatio = width/(height/2);
+        aspectRatio = width/height;
         Log.debug("Aspect ratio of blocks: "+ Float.toString(aspectRatio));
         SidesSprites[1][0][0][0] = 3;
         SidesSprites[1][0][0][1] = 0;
@@ -586,39 +586,41 @@ public class Block {
         );
     }
         
-            /**
+  /**
      * creates the new sprite image at a specific zoom factor. Also calculates displWidth and displHeight which change with zooming.
      * @param zoom the zoom factor of the new image
      */
     public static void reloadSprites(float zoom) {
+        displWidth = (int) (width*zoom);
+        displHeight = (int) (2*height*zoom);
         try {
-            if (Gameplay.controller.rendermethod){
-                SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/SideSprite.png", width, (int) (height*0.75));
+            if (Gameplay.controller.rendermethod){//single sides
+                SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/SideSprite.png", width, (int) (height*1.5f));
             
                 Image scaledBlockSheet = srcBlockSheet.getScaledCopy(zoom);
+                
                 //int spacing = ((scaledBlockSheet.getWidth()) /(int)(srcBlockSheet.getWidth()/width) - (int) (width*zoom)) ; // calculate spacing by dividing by amount of blocks in a row and later gettin the rest
                 //int spacing = (int) (4*zoom);
                 //displWidth = (int) ((scaledBlockSheet.getWidth()+4)/5 - spacing);
-                displWidth = (int) (width*zoom);
-                displHeight = (int) (height*zoom);
 
                 //GameplayState.iglog.add("Spacing:"+spacing);
-                Gameplay.msgSystem.add("BlockWidth"+displWidth);
+                Gameplay.msgSystem.add("displWidth: "+displWidth);
+                Log.debug("displWidth: "+displWidth);
+                Gameplay.msgSystem.add("displHeight: "+displHeight);
+                Log.debug("displHeight: "+displHeight);
 
                 Blocksheet = new SpriteSheet(
                     scaledBlockSheet,
                     displWidth,
-                    (int) (displHeight*0.75)
+                    (int) (displHeight*.75f)
                 );
-            } else {
-                SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/Blocksprite.png", width, height, 4);
+            } else {//whole Blocks
+                SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/Blocksprite.png", width, height*2, 4);
             
                 Image scaledBlockSheet = srcBlockSheet.getScaledCopy(zoom);
                 int spacing = ((scaledBlockSheet.getWidth()) /5 - (int) (width*zoom)) ; // divide by amount of blocks in a row
                 //int spacing = (int) (4*zoom);
                 //displWidth = (int) ((scaledBlockSheet.getWidth()+4)/5 - spacing);
-                displWidth = (int) (width*zoom);
-                displHeight = (int) (height*zoom);
 
                 Gameplay.msgSystem.add("Spacing:"+spacing);
                 Gameplay.msgSystem.add("BlockWidth"+displWidth);

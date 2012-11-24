@@ -53,7 +53,7 @@ public class View {
         
         tTFont = new TrueTypeFont(baseFont, true);
         
-        camera = new Camera(gc,gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.height));
+        camera = new Camera(gc,gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.height*2));
         
         
         /*font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);

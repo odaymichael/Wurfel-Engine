@@ -11,7 +11,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.util.Log;
 
 /**
- *The camera automatically locks to the player. It can be disabled with <i>focus</i>.
+ *The camera locks to the player by default. It can be changed with <i>focusblock()</i>.
  * @author Benedikt
  */
 public class Camera {
@@ -76,7 +76,7 @@ public class Camera {
                 - Gameplay.view.camera.width / 2;
             
             y = (int) (
-                (player.getRelCoordY()/2f - player.coordZ) * Block.height/2f
+                (player.getRelCoordY()/2f - player.coordZ) * Block.height
                 - Gameplay.view.camera.height/2
                 + player.getOffsetY() * (1/Block.aspectRatio)
                 );
@@ -87,19 +87,45 @@ public class Camera {
                 - Gameplay.view.camera.width / 2;
             
             y = (int) (
-                (focusblock.getY()/2f - focusblock.getZ()) * Block.height/2f
+                (focusblock.getY()/2f - focusblock.getZ()) * Block.height
                 - Gameplay.view.camera.height/2
                 + focusblock.getBlock().getOffsetY() * (1/Block.aspectRatio)
                 );
         }
     }
     
+    /**
+     * Use this if you want to focus on a special block
+     * @param blockpointer
+     */
     public void FocusOnBlock(Blockpointer blockpointer){
         focus = true;
         focusblock = blockpointer;        
     }
     
+    /**
+     * The camera now follows the player
+     */
     public void FocusOnPlayer(){
         focus = false;
+    }
+    
+    /**
+     * 
+     */
+    public int getLeftBorder(){
+        return x/Block.width;
+    }
+    
+    public int getRightBorder(){
+        return (x+width)/Block.width;
+    }
+    
+    public int getTopBorder(){
+        return y/Block.height;
+    }
+    
+    public int getBottomBorder(){
+        return (y+height)/Block.height;
     }
 }
