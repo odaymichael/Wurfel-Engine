@@ -520,12 +520,12 @@ public class Block {
                 temp.setColor(3, brightness, brightness, brightness);
                 
                 temp.drawEmbedded(
-                    -(int) (Gameplay.view.camera.getZoom()*Gameplay.view.camera.x)
+                    -(int) (Gameplay.view.camera.getZoom()*Gameplay.view.camera.getX())
                     + x*Block.displWidth
                     + (y%2) * (int) (Block.displWidth/2)
                     + getOffsetX()
                     ,
-                    -(int) (Gameplay.view.camera.getZoom()*Gameplay.view.camera.y/2)
+                    -(int) (Gameplay.view.camera.getZoom()*Gameplay.view.camera.getY()/2)
                     + y*Block.displHeight/4
                     - z*Block.displHeight/2
                     + getOffsetY() * (1/Block.aspectRatio)
@@ -573,12 +573,12 @@ public class Block {
         sideimage.setColor(3, brightness, brightness, brightness);
         
         sideimage.drawEmbedded(
-            - (int) (Gameplay.view.camera.getZoom() * Gameplay.view.camera.x)
+            - (int) (Gameplay.view.camera.getZoom() * Gameplay.view.camera.getX())
             + x*Block.displWidth
             + (y%2) * (int) (Block.displWidth/2)
             + Gameplay.view.camera.getZoom() * getOffsetX()
             ,            
-            - (int) (Gameplay.view.camera.getZoom() * Gameplay.view.camera.y)
+            - (int) (Gameplay.view.camera.getZoom() * Gameplay.view.camera.getY())
             + y*Block.displHeight/4
             - z*Block.displHeight/2
             + ( sidenumb == 1 ? -Block.displHeight/4:0)//the top is drawn /4 Blocks higher

@@ -14,11 +14,18 @@ public class Minimap {
     private final float scaleX = 8;
     private final float scaleY = 8;
     
+    /**
+     * 
+     */
     public Minimap() {
-        X = Gameplay.gc.getWidth() - 400;
-        Y = 10;
+        X = Gameplay.gc.getWidth() - 400; //400 pixels from right side
+        Y = 10; //10 pixels from top
     } 
             
+    /**
+     * 
+     * @param g
+     */
     public void draw(Graphics g) {
         for (int pos=0;pos < 9;pos++){
                  
@@ -91,28 +98,38 @@ public class Minimap {
     //bottom camera rectangle
     g.setColor(Color.green);
     g.drawRect(
-        X + scaleX * Gameplay.view.camera.x * Chunk.BlocksX / Chunk.SizeX,
-        Y + scaleY * Gameplay.view.camera.y * Chunk.BlocksY /Chunk.SizeY,
-        scaleX*Gameplay.view.camera.width * Chunk.BlocksX / Chunk.SizeX,
-        scaleY*Gameplay.view.camera.height * Chunk.BlocksY/Chunk.SizeY
+        X + scaleX * Gameplay.view.camera.getX() * Chunk.BlocksX / Chunk.SizeX,
+        Y + scaleY * Gameplay.view.camera.getY() * Chunk.BlocksY /Chunk.SizeY,
+        scaleX*Gameplay.view.camera.getWidth() * Chunk.BlocksX / Chunk.SizeX,
+        scaleY*Gameplay.view.camera.getHeight() * Chunk.BlocksY/Chunk.SizeY
     );
     
     //player level camera rectangle
+    g.setColor(Color.gray);
+    g.drawRect(
+        X + scaleX * Gameplay.view.camera.getX() * Chunk.BlocksX / Chunk.SizeX,
+        Y + scaleY * Gameplay.view.camera.getY() * Chunk.BlocksY /Chunk.SizeY
+          + scaleY *2*(Gameplay.controller.player.coordZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
+        scaleX*Gameplay.view.camera.getWidth() * Chunk.BlocksX / Chunk.SizeX,
+        scaleY*Gameplay.view.camera.getHeight() * Chunk.BlocksY/Chunk.SizeY
+    );
+    
+    //top level camera rectangle
     g.setColor(Color.white);
     g.drawRect(
-        X + scaleX * Gameplay.view.camera.x * Chunk.BlocksX / Chunk.SizeX,
-        Y + scaleY * Gameplay.view.camera.y * Chunk.BlocksY /Chunk.SizeY
-          + scaleY *2*(Gameplay.controller.player.coordZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
-        scaleX*Gameplay.view.camera.width * Chunk.BlocksX / Chunk.SizeX,
-        scaleY*Gameplay.view.camera.height * Chunk.BlocksY/Chunk.SizeY
+        X + scaleX * Gameplay.view.camera.getX() * Chunk.BlocksX / Chunk.SizeX,
+        Y + scaleY * Gameplay.view.camera.getY() * Chunk.BlocksY /Chunk.SizeY
+          + scaleY *2*(Chunk.BlocksZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
+        scaleX*Gameplay.view.camera.getWidth() * Chunk.BlocksX / Chunk.SizeX,
+        scaleY*Gameplay.view.camera.getHeight() * Chunk.BlocksY/Chunk.SizeY
     );
     
     View.tTFont.drawString(
-            X + scaleX * Gameplay.view.camera.x * Chunk.BlocksX / Chunk.SizeX
-              + scaleX*Gameplay.view.camera.width * Chunk.BlocksX / Chunk.SizeX,
-            Y + scaleY * Gameplay.view.camera.y * Chunk.BlocksY /Chunk.SizeY
+            X + scaleX * Gameplay.view.camera.getX() * Chunk.BlocksX / Chunk.SizeX
+              + scaleX*Gameplay.view.camera.getWidth() * Chunk.BlocksX / Chunk.SizeX,
+            Y + scaleY * Gameplay.view.camera.getY() * Chunk.BlocksY /Chunk.SizeY
               + scaleY *2*(Gameplay.controller.player.coordZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ)
-              + scaleY*Gameplay.view.camera.height * Chunk.BlocksY/Chunk.SizeY,
+              + scaleY*Gameplay.view.camera.getHeight() * Chunk.BlocksY/Chunk.SizeY,
             Gameplay.view.camera.getRightBorder() +" | "+ Gameplay.view.camera.getBottomBorder() ,
             Color.black
         );
@@ -139,7 +156,7 @@ public class Minimap {
     View.tTFont.drawString(
             Gameplay.gc.getWidth()- 100,
             15,
-            Gameplay.view.camera.x +" | "+ Gameplay.view.camera.y,
+            Gameplay.view.camera.getX() +" | "+ Gameplay.view.camera.getY(),
             Color.white
         );
     }

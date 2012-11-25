@@ -67,8 +67,8 @@ public class Player extends SelfAwareBlock{
     }
     
     /**
-     * 
-     * @return
+     * Returns the Controls
+     * @return either "arrows" or "WASD".
      */
     public String getControls(){
         return controls;

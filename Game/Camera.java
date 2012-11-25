@@ -7,7 +7,6 @@ package Game;
 import Game.Blocks.Block;
 import Game.Blocks.Blockpointer;
 import Game.Blocks.Player;
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -15,59 +14,41 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Camera {
-      /**
-     * The Camera Position.
-     */
-   public int x;
-    /**
-     *  The Camera Position.
-     */
-    public int y;
-    /**
-     * The amount of pixel which are visible in x direction
-     */
-    public int width;
-    /**
-     * The amount of pixel which are visible in Y direction
-     */
-    public int height;
-    /**
-     * toogle between camer locked to player or not
-     */ 
-    public boolean focus = false;
-    /**
-     * the zoom factor of the map. Higher value means the zoom is higher.
-     */
-    private float zoom = 1;
-
+    private int x;
+    private int y;
+    private int width;
+    private int height;
+    private boolean focus = false;
     private Blockpointer focusblock;
+    private float zoom = 1;
+    private final int screenWidth;
+    private final int screenHeight;
+    private final int screenX;
+    private final int screenY;
 
-    Camera(GameContainer gc, float zoom) {
+    /**
+     * Creates a camera.
+     * @param x The screen coordinates
+     * @param y The screen coordinate
+     * @param width The screen width of the camera
+     * @param height The screeb height of the camera
+     * @param zoom The zoom factor.
+     */
+    Camera(int x, int y,int width, int height,float zoom) {
+        screenX = x;
+        screenY = y;
+        screenWidth = width;
+        screenHeight = height;
         this.zoom = zoom;
         Log.debug("Zoom is:"+Float.toString(zoom));
-        
-        width = (int) (gc.getWidth() / zoom);
-        height = (int) (gc.getHeight() / zoom);  
-    }      
-    
+        this.width = (int) (screenWidth / zoom);
+        this.height = (int) (screenHeight / zoom);
+    } 
+       
     /**
-     * Set the zoom factor and regenerates the sprites.
-     * @param zoom
+     * 
      */
-    public void setZoom(float zoom) {
-        this.zoom = zoom;
-        Block.reloadSprites(zoom);
-    }
-    
-    /**
-     * Returns the zoomfactor.
-     * @return
-     */
-    public float getZoom() {
-        return zoom;
-    }
-
-    void update() {
+    public void update() {
         Player player = Gameplay.controller.player;
         if (focus == false) {
             x = player.getRelCoordX() * Block.width
@@ -95,6 +76,24 @@ public class Camera {
     }
     
     /**
+     * Set the zoom factor and regenerates the sprites.
+     * @param zoom
+     */
+    public void setZoom(float zoom) {
+        this.zoom = zoom;
+        Block.reloadSprites(zoom);
+    }
+    
+    /**
+     * Returns the zoomfactor.
+     * @return
+     */
+    public float getZoom() {
+        return zoom;
+    }
+
+    
+    /**
      * Use this if you want to focus on a special block
      * @param blockpointer
      */
@@ -112,6 +111,7 @@ public class Camera {
     
     /**
      * 
+     * @return 
      */
     public int getLeftBorder(){
         int tmp = x/Block.width -1;
@@ -119,6 +119,10 @@ public class Camera {
         return tmp;
     }
     
+    /**
+     * 
+     * @return
+     */
     public int getRightBorder(){
         int tmp = (x+width)/Block.width+2;
         if (tmp >= Chunk.BlocksX*3) return Chunk.BlocksX*3-1;
@@ -144,4 +148,97 @@ public class Camera {
         if (tmp >= Chunk.BlocksY*3) return Chunk.BlocksY*3-1;
         return tmp;
     }
+    
+ 
+
+   /**
+    * The amount of pixel which are visible in Y direction (game pixels). For screen pixels use <i>ScreenHeight()</i>.
+    * @return
+    */
+   public int getHeight() {
+        return height;
+    }
+
+    /**
+     * 
+     * @param height
+     */
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    /**
+     * The amount of pixel which are visible in x direction (game pixels). For screen pixels use <i>ScreenWidth()</i>.
+     * @return
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * 
+     * @param width
+     */
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+       /**
+     * The Camera Position.
+     * @return 
+     */
+    public int getX() {
+        return x;
+    }
+
+    /**
+     * 
+     * @param x
+     */
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public int getY() {
+        return y;
+    }
+
+    /**
+     * 
+     * @param y
+     */
+    public void setY(int y) {
+        this.y = y;
+    }
+    
+    
+    /**
+     * False=player, true=block
+     * @return
+     */
+    public boolean getFocus(){
+        return focus;
+    }
+
+    public float getScreenHeight() {
+        return screenHeight;
+    }
+
+    public float getScreenWidth() {
+        return screenWidth;
+    }
+
+    public int getScreenX() {
+        return screenX;
+    }
+
+    public int getScreenY() {
+        return screenY;
+    }
+    
+    
 }

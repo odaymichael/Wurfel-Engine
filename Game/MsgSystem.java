@@ -68,6 +68,9 @@ public class MsgSystem extends ArrayList {
         }
     }
     
+    /**
+     * 
+     */
     public void draw(){
         if (waitforinput) Gameplay.view.g.drawString("MSG:", Gameplay.gc.getWidth()/2, 3*Gameplay.gc.getHeight()/4);
         

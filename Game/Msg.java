@@ -20,18 +20,34 @@ public class Msg {
         importance = imp;
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getMessage(){
         return fmessage;    
     }
     
+    /**
+     * 
+     * @return
+     */
     public String getSender(){
         return sender;
     }
     
+    /**
+     * 
+     * @return
+     */
     public int getImportance(){
         return importance;
     }
   
+    /**
+     * 
+     * @param imp
+     */
     public void setImportance(int imp){
         if ((imp>=0) && (imp<=100))
             importance = imp;    

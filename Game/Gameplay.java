@@ -6,14 +6,34 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+/**
+ * 
+ * @author Benedikt
+ */
 public class Gameplay extends BasicGameState { 
+    /**
+     * 
+     */
     public static View view = null;
+    /**
+     * 
+     */
     public static Controller controller = null;
     private int stateID = 2;
+    /**
+     * 
+     */
     public static MsgSystem msgSystem;
+    /**
+     * 
+     */
     public static GameContainer gc;
     
  
+    /**
+     * 
+     * @param stateID
+     */
     public Gameplay( int stateID ){
        this.stateID = stateID;
     }

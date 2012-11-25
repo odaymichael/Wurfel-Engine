@@ -28,8 +28,14 @@ public class Controller {
      * Should the graphic be a bit slower but better? Must be in Controller because is needed for e.g. the Block and there used as data
      */
     public boolean goodgraphics = false;
+    /**
+     * 
+     */
     public boolean rendermethod = true;
     
+    /**
+     * 
+     */
     public GameContainer gc;
     private StateBasedGame sbg;
     private int oldx;
@@ -90,7 +96,7 @@ public class Controller {
             }
 
             //toggle camera
-            if (input.isKeyPressed(Input.KEY_C)) Gameplay.view.camera.focus = !Gameplay.view.camera.focus;
+            //if (input.isKeyPressed(Input.KEY_C)) 
 
             //restart
             if (input.isKeyPressed(Input.KEY_N)) map = new Map(false);
@@ -172,8 +178,8 @@ public class Controller {
             zoomx = zoomx + change/1000f;
             Gameplay.view.camera.setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
             
-            Gameplay.view.camera.width = (int) (gc.getWidth() / Gameplay.view.camera.getZoom());
-            Gameplay.view.camera.height= (int) (gc.getHeight() / Gameplay.view.camera.getZoom());
+            Gameplay.view.camera.setWidth((int) (gc.getWidth() / Gameplay.view.camera.getZoom()));
+            Gameplay.view.camera.setHeight((int) (gc.getHeight() / Gameplay.view.camera.getZoom()));
             
            /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
             Block.height = (int) (4*gc.getHeight()*zoom / Chunk.BlocksY);
@@ -204,9 +210,9 @@ public class Controller {
             //workaround for the bug, because the event is called multiple times
             gc.getInput().consumeEvent();
             
-            if (Gameplay.view.camera.focus) {
-                Gameplay.view.camera.x += newx-oldx;
-                Gameplay.view.camera.y += newy-oldy;
+            if (Gameplay.view.camera.getFocus()) {
+                Gameplay.view.camera.setX(Gameplay.view.camera.getX()+newx-oldx);
+                Gameplay.view.camera.setY(Gameplay.view.camera.getY()+newx-oldy);
             }
             /*for (int i=0;i<9;i++){
                 chunklist[i].posX += newx - oldx;
