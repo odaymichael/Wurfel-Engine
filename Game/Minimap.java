@@ -92,20 +92,30 @@ public class Minimap {
     g.setColor(Color.green);
     g.drawRect(
         X + scaleX * Gameplay.view.camera.x * Chunk.BlocksX / Chunk.SizeX,
-        Y + scaleY * Gameplay.view.camera.y * (Chunk.BlocksY/2 + Chunk.BlocksZ) /(Chunk.SizeY + Chunk.SizeZ),
-        Gameplay.view.camera.width * (Chunk.BlocksX*scaleX / Chunk.SizeX),
-        Gameplay.view.camera.height * ((Chunk.BlocksY*scaleY)/Chunk.SizeY)
+        Y + scaleY * Gameplay.view.camera.y * Chunk.BlocksY /Chunk.SizeY,
+        scaleX*Gameplay.view.camera.width * Chunk.BlocksX / Chunk.SizeX,
+        scaleY*Gameplay.view.camera.height * Chunk.BlocksY/Chunk.SizeY
     );
     
     //player level camera rectangle
     g.setColor(Color.white);
     g.drawRect(
         X + scaleX * Gameplay.view.camera.x * Chunk.BlocksX / Chunk.SizeX,
-        Y + scaleY * Gameplay.view.camera.y * (Chunk.BlocksY/2 + Chunk.BlocksZ) /(Chunk.SizeY + Chunk.SizeZ)
-          + scaleY *(Gameplay.controller.player.coordZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
-        Gameplay.view.camera.width * (Chunk.BlocksX*scaleX / Chunk.SizeX),
-        Gameplay.view.camera.height * ((Chunk.BlocksY*scaleY)/Chunk.SizeY)
+        Y + scaleY * Gameplay.view.camera.y * Chunk.BlocksY /Chunk.SizeY
+          + scaleY *2*(Gameplay.controller.player.coordZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
+        scaleX*Gameplay.view.camera.width * Chunk.BlocksX / Chunk.SizeX,
+        scaleY*Gameplay.view.camera.height * Chunk.BlocksY/Chunk.SizeY
     );
+    
+    View.tTFont.drawString(
+            X + scaleX * Gameplay.view.camera.x * Chunk.BlocksX / Chunk.SizeX
+              + scaleX*Gameplay.view.camera.width * Chunk.BlocksX / Chunk.SizeX,
+            Y + scaleY * Gameplay.view.camera.y * Chunk.BlocksY /Chunk.SizeY
+              + scaleY *2*(Gameplay.controller.player.coordZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ)
+              + scaleY*Gameplay.view.camera.height * Chunk.BlocksY/Chunk.SizeY,
+            Gameplay.view.camera.getRightBorder() +" | "+ Gameplay.view.camera.getBottomBorder() ,
+            Color.black
+        );
 
 
     //player coord

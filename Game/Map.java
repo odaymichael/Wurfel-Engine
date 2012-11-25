@@ -217,7 +217,7 @@ public class Map {
     }
     
     /**
-     * 
+     * Draws the map
      */
     public void draw() {
         if (Gameplay.controller.goodgraphics) Block.Blocksheet.bind();
@@ -225,7 +225,7 @@ public class Map {
         Block.Blocksheet.startUse();
         //render vom bottom to top
         for (int z=0; z < Chunk.BlocksZ; z++) {
-            for (int y = Gameplay.view.camera.getTopBorder(); y < Chunk.BlocksY*3; y++) {//vertikal
+            for (int y = Gameplay.view.camera.getTopBorder(); y < Gameplay.view.camera.getBottomBorder(); y++) {//vertikal
                 for (int x = Gameplay.view.camera.getLeftBorder(); x < Gameplay.view.camera.getRightBorder(); x++){//horizontal
                     if (
                         (x < Chunk.BlocksX*3-1 && Controller.map.data[x+1][y][z].renderorder == -1)
@@ -233,10 +233,10 @@ public class Map {
                         Controller.map.data[x][y][z].renderorder == 1
                        ) {
                         x++;
-                        data[x][y][z].renderblock(x,y,z);//draw the right block first
-                        data[x-1][y][z].renderblock(x-1,y,z);
+                        data[x][y][z].draw(x,y,z);//draw the right block first
+                        data[x-1][y][z].draw(x-1,y,z);
                         
-                    } else data[x][y][z].renderblock(x,y,z);
+                    } else data[x][y][z].draw(x,y,z);
                 }
             }
        }

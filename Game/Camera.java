@@ -125,14 +125,22 @@ public class Camera {
         return tmp;
     }
     
+    /**
+     * Returns the top seight border of the deepest block
+     * @return measured in blocks
+     */
     public int getTopBorder(){
         int tmp = 2*y/Block.height;
         if (tmp < 0) return 0;
         return tmp;
     }
     
+     /**
+     * Returns the bottom seight border of the highest block
+     * @return measured in blocks
+     */
     public int getBottomBorder(){
-        int tmp = (2*y+height)/Block.height;
+        int tmp = (y+height)/(Block.height/2) + Chunk.BlocksZ*2;
         if (tmp >= Chunk.BlocksY*3) return Chunk.BlocksY*3-1;
         return tmp;
     }

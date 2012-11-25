@@ -60,9 +60,10 @@ public class Controller {
      */
     public void update(int delta) throws SlickException{
         if (delta>200) Log.warn("delta is too high to stay stable. d: "+delta);
-            
-        Input input = gc.getInput();
          
+        //get input and do actions
+        Input input = gc.getInput();
+        
         if (!Gameplay.msgSystem.isListeningForInput()) {
             if (input.isKeyDown(Input.KEY_Q)) gc.exit();
 
@@ -87,7 +88,6 @@ public class Controller {
                 Gameplay.msgSystem.add("Rendermethod changes "+rendermethod);
                 Block.reloadSprites(Gameplay.view.camera.getZoom());
             }
-
 
             //toggle camera
             if (input.isKeyPressed(Input.KEY_C)) Gameplay.view.camera.focus = !Gameplay.view.camera.focus;
@@ -119,24 +119,24 @@ public class Controller {
             //to-do
         }
         
-       //toggle input for msgSystem
-            if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.msgSystem.listenForInput(!Gameplay.msgSystem.isListeningForInput());
+        //toggle input for msgSystem
+        if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.msgSystem.listenForInput(!Gameplay.msgSystem.isListeningForInput());
 
         //earth to right
-        if (Gameplay.view.camera.x < Chunk.SizeX/3)
+        if (Gameplay.view.camera.getLeftBorder() < Chunk.BlocksX/3)
            map.setCenter(3);
         else {       
             //earth to the left
-            if (Gameplay.view.camera.x + Gameplay.view.camera.width > 8*Chunk.SizeX/3) 
+            if (Gameplay.view.camera.getRightBorder() > 8*Chunk.BlocksX/3) 
                 map.setCenter(5); 
         }
         
        //scroll up, earth down            
-        if (Gameplay.view.camera.y  <= 0) {
+        if (Gameplay.view.camera.getTopBorder()  <= 0) {
             map.setCenter(1);
         } else {
             //scroll down, earth up
-            if (Gameplay.view.camera.y+Gameplay.view.camera.height > Chunk.SizeY*3)
+            if (Gameplay.view.camera.getBottomBorder() > 8*Chunk.BlocksY/3)
                 map.setCenter(7);
         }
         

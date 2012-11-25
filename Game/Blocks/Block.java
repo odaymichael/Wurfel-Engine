@@ -488,16 +488,16 @@ public class Block {
      * @param y
      * @param z
      */
-    public void renderblock(int x,int y, int z) {
+    public void draw(int x,int y, int z) {
         //draw every block except air
         if (id != 0){
             //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
             //Block renderBlock = Controller.map.data[x][y][z]; 
             
             if (Gameplay.controller.rendermethod){ 
-                if (renderTop) renderSide(x,y,z, 1);
-                if (renderLeft) renderSide(x,y,z, 0);
-                if (renderRight) renderSide(x,y,z, 2);
+                if (renderTop) drawSide(x,y,z, 1);
+                if (renderLeft) drawSide(x,y,z, 0);
+                if (renderRight) drawSide(x,y,z, 2);
 
             } else {
                 Image temp = Block.Blocksheet.getSubImage(spriteX[0], spriteY[0]);
@@ -520,12 +520,12 @@ public class Block {
                 temp.setColor(3, brightness, brightness, brightness);
                 
                 temp.drawEmbedded(
-                    (int) (Gameplay.view.camera.getZoom()*Gameplay.view.camera.x)
+                    -(int) (Gameplay.view.camera.getZoom()*Gameplay.view.camera.x)
                     + x*Block.displWidth
                     + (y%2) * (int) (Block.displWidth/2)
                     + getOffsetX()
                     ,
-                    (int) (Gameplay.view.camera.getZoom()*Gameplay.view.camera.y/2)
+                    -(int) (Gameplay.view.camera.getZoom()*Gameplay.view.camera.y/2)
                     + y*Block.displHeight/4
                     - z*Block.displHeight/2
                     + getOffsetY() * (1/Block.aspectRatio)
@@ -541,14 +541,14 @@ public class Block {
         }
     }
     /**
-     * 
+     * Draws a side of a block
      * @param x
      * @param y
      * @param z
      * @param sidenumb The number of the side. 0 left, 1 top 2, right
      * @param renderBlock The block which gets rendered
      */
-    private void renderSide(int x, int y, int z,int sidenumb){
+    private void drawSide(int x, int y, int z,int sidenumb){
         Image sideimage = getSideSprite(sidenumb);
         
         if (Gameplay.controller.goodgraphics){
