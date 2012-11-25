@@ -206,19 +206,20 @@ public class View {
         for (int x=0; x < Chunk.BlocksX*3; x++)
             for (int z=0; z < Chunk.BlocksZ; z++)
                 for (int side=0; side < 3; side++)
-                trace_ray(
-                    x,
-                    Chunk.BlocksY-1,
-                    z,
-                    side
-                );
+                    trace_ray(
+                        x,
+                        Chunk.BlocksY*3-1,
+                        z,
+                        side
+                    );
+        
         if (!Gameplay.controller.renderSides){
             //send it for the shifted row again
             for (int x=0; x < Chunk.BlocksX*3; x++)
                 for (int z=0; z < Chunk.BlocksZ; z++)            
                     trace_ray(
                         x,
-                        Chunk.BlocksY-2,
+                        Chunk.BlocksY*3-2,
                         z,
                         0
                     );
@@ -228,8 +229,8 @@ public class View {
 
     private void trace_ray(int x, int y, int z, int side){
         if (Gameplay.controller.renderSides){//trace ray on every side
-            boolean leftside = false;
-            boolean rightside = false;
+            boolean leftside = true;
+            boolean rightside = true;
             
             y += 2;
             z++;
@@ -237,54 +238,52 @@ public class View {
                 y -= 2;
                 z--;
                 if (side == 0){
-                    if (Controller.map.getData(x, y, z).getId() != 0) {
-                        Controller.map.getData(x, y, z).setVisible(true);
-                        Controller.map.getData(x, y, z).renderLeft = true;
-                    }
-                    
-                    //block on left hiding the left side
-                    if (x>0 && y>0 && z>0 && ! Controller.map.getData(x - (y%2 == 0 ? 1:0), y-1, z-1).isTransparent()) break;
+                   //block on left hiding the left side
+                    if (! Controller.map.getData(x - (y%2 == 0 ? 1:0), y+1, z).isTransparent())
+                       break;
                     
                     //two blocks hiding the left side
-                    if (x>0 && y>0) {
-                        if (! Controller.map.getData(x - (y%2 == 0 ? 1:0), y-1, z).isTransparent()) leftside = true;
-                        if (z>0 && ! Controller.map.getData(x, y, z-1).isTransparent()) rightside = true;
-                     }                    
+                    if (! Controller.map.getData(x - (y%2 == 0 ? 1:0), y+1, z+1).isTransparent())
+                        leftside = false;
+                    if (! Controller.map.getData(x, y+2, z).isTransparent())
+                        rightside = false;
+                    
+                    if (leftside || rightside){
+                        Controller.map.getData(x, y, z).setVisible(true);
+                        Controller.map.getData(x, y, z).renderLeft = true;
+                    } else break;
                 } else                 
                     if (side == 1) {//check top side
-                        if (Controller.map.getData(x, y, z).getId() != 0 && (z == Chunk.BlocksZ-1 || Controller.map.getData(x, y, z+1).isTransparent())) {
-                            //put every isTransparent() block with isTransparent() block on top in renderarrray, except air.
+                        if (! Controller.map.getData(x, y, z+1).isTransparent()) break;   
+                            
+                        //two 0- and 2-sides hiding the side 1
+                        if (! Controller.map.getData(x - (y%2 == 0 ? 1:0), y+1, z+1).isTransparent())
+                            leftside = false;
+                        if (! Controller.map.getData(x - (y%2 == 0 ? 0:-1), y+1, z+1).isTransparent())
+                            rightside = false;
+                        
+                        if (leftside || rightside){
                             Controller.map.getData(x, y, z).setVisible(true);
                             Controller.map.getData(x, y, z).renderTop = true;
-                        }
-
-                       //two 0- and 2-sides hiding the side 1
-                        if (x>0 && y>0) {
-                            if (! Controller.map.getData(x - (y%2 == 0 ? 1:0), y-1, z).isTransparent()) leftside = true;
-                            if (x < Chunk.BlocksX*3-1 && ! Controller.map.getData(x + (y%2 == 0 ? 0:1), y-1, z).isTransparent()) rightside = true;
-                        }
-
+                        } else break;
                     } else
                         if (side==2){
-                            if (Controller.map.getData(x, y, z).getId() != 0) {
-                                //put every isTransparent() block with isTransparent() block on top in renderarrray, except air.
-                                Controller.map.getData(x, y, z).setVisible(true);
-                                Controller.map.getData(x, y, z).renderRight = true;
-                            }
-                    
                             //block on right hiding the right side
-                            if (x < Chunk.BlocksX*3-1 && y>0 && z>0 && ! Controller.map.getData(x + (y%2 == 0 ? 0:1), y-1, z-1).isTransparent()) break;
+                            if (! Controller.map.getData(x + (y%2 == 0 ? 0:1), y+1, z).isTransparent()) break;
                     
                             //two blocks hiding the side
-                            if (x>0 && z>0) {
-                                if (z>0 && ! Controller.map.getData(x, y, z-1).isTransparent())
-                                    leftside = true;
-                                if (x < Chunk.BlocksX*3-1 && ! Controller.map.getData(x + (y%2 == 0 ? 0:1), y, z-1).isTransparent())
-                                    rightside = true;
-                            } 
+                            if (! Controller.map.getData(x, y, z+2).isTransparent())
+                                leftside = false;
+                            if (! Controller.map.getData(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent())
+                                rightside = false;
+                            
+                            if (leftside || rightside){    
+                                Controller.map.getData(x, y, z).setVisible(true);
+                                Controller.map.getData(x, y, z).renderRight = true;
+                            } else break;
                         }
                 
-           } while (y > 1 && z > 0 && Controller.map.getData(x, y, z).isTransparent() && !(leftside && rightside));
+           } while (y > 1 && z > 0 && Controller.map.getData(x, y, z).isTransparent());
 //           Take the last block
 //            if (y >= 0 && z >= 0 && z < Chunk.BlocksZ-1 && (mapdata[x][y][z+1].isTransparent())){
 //                renderarray[x][y][z] = mapgetData(x, y, z);
@@ -294,14 +293,16 @@ public class View {
             //trace ray until it found a not isTransparent() block
             boolean leftHalfHidden = false;
             boolean rightHalfHidden = false;
-            while ((y >= 0) && (z >= 0) && (Controller.map.getData(x, y, z).isTransparent())) {
+            while ((y >= 0) && (z >= 0) && Controller.map.getData(x, y, z).isTransparent()) {
                 //check blocks hidden by 4 other halfs
-                if ( x>0 && y>0 && ! Controller.map.getData(x - (x%2 == 0? 1 : 0), y-1, z).isTransparent() )
+                if (! Controller.map.getData(x - (x%2 == 0? 1 : 0), y-1, z).isTransparent() )
                     leftHalfHidden = true;
-                if (y>0 && x < Chunk.BlocksX*3-1 && ! Controller.map.getData(x + (x%2==0?0:1), y-1, z).isTransparent())
+                if (! Controller.map.getData(x + (x%2==0?0:1), y-1, z).isTransparent())
                     rightHalfHidden = true;        
 
-                if ((Controller.map.getData(x, y, z).getId() != 0) && ! (leftHalfHidden && rightHalfHidden))  {
+                if ((leftHalfHidden && rightHalfHidden)){
+                    break;
+                } else {
                     //save every isTransparent() block
                     if (Controller.map.getData(x, y, z).isTransparent())
                         Controller.map.getData(x, y, z).setVisible(true);
@@ -316,7 +317,8 @@ public class View {
                 y -= 2;
                 z--;                       
             }
-            //Take the last block
+            
+            //make the last block visible when came to an end
             if ((y >= 0) && (z>=0))
                 Controller.map.getData(x, y, z).setVisible(true);
        }
