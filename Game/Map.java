@@ -17,7 +17,7 @@ public class Map {
     /**
      * The map's data is stored inside here.
      */
-    public Block data[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
+    private Block data[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
 
     private boolean recalcRequested;
 
@@ -271,5 +271,62 @@ public class Map {
         return minimap;
     }
     
+    public Block getData(int x, int y, int z){
+        if (x >= Chunk.BlocksX*3){
+            x = Chunk.BlocksX*3-1;
+            Log.warn("X too high!");
+        } else if(x<0){
+            x = 0;
+            Log.warn("X too low!");
+        }
+        
+        if (y >= Chunk.BlocksY*3){
+            y = Chunk.BlocksY*3-1;
+            Log.warn("Y too high!");
+        } else if(y<0){
+            y = 0;
+            Log.warn("Y too low!");
+        }
+        
+        if (z >= Chunk.BlocksZ){
+            z = Chunk.BlocksZ-1;
+            Log.warn("Z too high!");
+        } else if(z<0){
+            z = 0;
+            Log.warn("Z too low!");
+        }
+        
+        return data[x][y][z];    
+    } 
     
+    public void setData(int x, int y, int z, Block block){
+        if (x >= Chunk.BlocksX*3){
+            x = Chunk.BlocksX*3-1;
+            Log.warn("X too high!");
+        } else if(x<0){
+            x = 0;
+            Log.warn("X too low!");
+        }
+        
+        if (y >= Chunk.BlocksY*3){
+            y = Chunk.BlocksY*3-1;
+            Log.warn("Y too high!");
+        } else if(y<0){
+            y = 0;
+            Log.warn("Y too low!");
+        }
+        
+        if (z >= Chunk.BlocksZ){
+            z = Chunk.BlocksZ-1;
+            Log.warn("Z too high!");
+        } else if(z<0){
+            z = 0;
+            Log.warn("Z too low!");
+        }
+        data[x][y][z] = block;    
+    }
+
+    Block[][][] getData() {
+        return data;
+    }
 }

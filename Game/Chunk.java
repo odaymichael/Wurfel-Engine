@@ -26,7 +26,7 @@ public class Chunk {
     /**
      * The amount of blocks in Z direction
      */
-    public static final int BlocksZ = 10;
+    public static final int BlocksZ = 20;
     /**
     *The size of a chunk in pixels
     */
@@ -57,12 +57,12 @@ public class Chunk {
     }
     
     /**
-    *
+    *Creates a chunk.
     * @param ChunkX
     * @param ChunkY
     * @param startposX
     * @param startposY
-    * @param loadmap
+    * @param loadmap load from HD(true) or generate new (false)?
     */
     public Chunk(int ChunkX, int ChunkY, int startposX, int startposY, boolean loadmap){
         this();
@@ -80,19 +80,22 @@ public class Chunk {
         for (int x=0; x < BlocksX; x++)
             for (int y=0; y < BlocksY; y++){
                 //Dirt from 0 to 8
-                for (int z=0; z <  Chunk.BlocksZ / 2; z++){
+                int height = (int) (Math.random()*BlocksZ-1)+1;
+                //int height = (int) Chunk.BlocksZ / 2;
+                for (int z=0; z < height; z++){
                     //for (int z=0; z < BlocksZ-4; z++)
                     data[x][y][z] = new Block(2);
                     // if ((z>10) && (x>10) && (y>5))
                     //  data[x][y][z] = new Block (9,0);
                     }
+                data[x][y][height] = new Block(1);
 
                 //data[0][y][BlocksZ / 2 - 1] = new Block(2,0);
 
 
                 //Gras on z=9
                 //if ((x > 0) && (x < BlocksX-1) && (y>0))                        
-                data[x][y][BlocksZ/2-1] = new Block(1);
+                //data[x][y][BlocksZ/2-1] = new Block(1);
                 //data[x][y][BlocksZ/2] = new Block(9);
 
 

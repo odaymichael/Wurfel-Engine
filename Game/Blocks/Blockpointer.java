@@ -83,6 +83,6 @@ public class Blockpointer{
      * @return
      */
     public Block getBlock() {
-        return Controller.map.data[x][y][z];
+        return Controller.map.getData(x, y, z);
     }
 }

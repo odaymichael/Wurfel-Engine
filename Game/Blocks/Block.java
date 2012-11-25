@@ -494,7 +494,7 @@ public class Block {
             //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
             //Block renderBlock = Controller.map.data[x][y][z]; 
             
-            if (Gameplay.controller.rendermethod){ 
+            if (Gameplay.controller.renderSides){ 
                 if (renderTop) drawSide(x,y,z, 1);
                 if (renderLeft) drawSide(x,y,z, 0);
                 if (renderRight) drawSide(x,y,z, 2);
@@ -594,7 +594,7 @@ public class Block {
         displWidth = (int) (width*zoom);
         displHeight = (int) (2*height*zoom);
         try {
-            if (Gameplay.controller.rendermethod){//single sides
+            if (Gameplay.controller.renderSides){//single sides
                 SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/SideSprite.png", width, (int) (height*1.5f));
             
                 Image scaledBlockSheet = srcBlockSheet.getScaledCopy(zoom);

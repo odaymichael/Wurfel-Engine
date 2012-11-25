@@ -131,12 +131,12 @@ public class SelfAwareBlock extends Block{
     
     //how can you make that this methods are only avilable to extending classes?
     protected void selfDestroy(){
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = new Block(0,0);
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1] = new Block(0,0);
+        Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(0,0));
+        Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(0,0));
     }
     
     protected void selfRebuild(){
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = this;
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1] = new Block(40,1);
+        Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ, this);
+        Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));
     }
 }

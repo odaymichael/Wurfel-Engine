@@ -29,9 +29,9 @@ public class Controller {
      */
     public boolean goodgraphics = false;
     /**
-     * 
+     * When true every side is rendered. When false the whole block is rendered.
      */
-    public boolean rendermethod = true;
+    public boolean renderSides = true;
     
     /**
      * 
@@ -56,7 +56,6 @@ public class Controller {
         map = new Map(MainMenuState.loadmap);
     }
 
-    
 
     
     /**
@@ -90,8 +89,8 @@ public class Controller {
 
             //render method
             if (input.isKeyPressed(Input.KEY_R)) {
-                rendermethod = !rendermethod;
-                Gameplay.msgSystem.add("Rendermethod changes "+rendermethod);
+                renderSides = !renderSides;
+                Gameplay.msgSystem.add("Rendermethod changes "+renderSides);
                 Block.reloadSprites(Gameplay.view.camera.getZoom());
             }
 
@@ -122,29 +121,29 @@ public class Controller {
             
         } else {
             //fetch input and write it down
-            //to-do
+            //to-do!
         }
         
-        //toggle input for msgSystem
-        if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.msgSystem.listenForInput(!Gameplay.msgSystem.isListeningForInput());
-
-        //earth to right
-        if (Gameplay.view.camera.getLeftBorder() < Chunk.BlocksX/3)
-           map.setCenter(3);
-        else {       
-            //earth to the left
-            if (Gameplay.view.camera.getRightBorder() > 8*Chunk.BlocksX/3) 
-                map.setCenter(5); 
-        }
-        
-       //scroll up, earth down            
-        if (Gameplay.view.camera.getTopBorder()  <= 0) {
-            map.setCenter(1);
-        } else {
-            //scroll down, earth up
-            if (Gameplay.view.camera.getBottomBorder() > 8*Chunk.BlocksY/3)
-                map.setCenter(7);
-        }
+//        //toggle input for msgSystem
+//        if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.msgSystem.listenForInput(!Gameplay.msgSystem.isListeningForInput());
+//
+//        //earth to right
+//        if (Gameplay.view.camera.getLeftBorder() < Chunk.BlocksX/3)
+//           map.setCenter(3);
+//        else {       
+//            //earth to the left
+//            if (Gameplay.view.camera.getRightBorder() > 8*Chunk.BlocksX/3) 
+//                map.setCenter(5); 
+//        }
+//        
+//       //scroll up, earth down            
+//        if (Gameplay.view.camera.getTopBorder()  <= 0) {
+//            map.setCenter(1);
+//        } else {
+//            //scroll down, earth up
+//            if (Gameplay.view.camera.getBottomBorder() > 8*Chunk.BlocksY/3)
+//                map.setCenter(7);
+//        }
         
         //camera
         //oldx = Gameplay.view.camera.x;
@@ -154,7 +153,7 @@ public class Controller {
         
         Gameplay.view.camera.update();
         
-        map.data[player.getRelCoordX()][player.getRelCoordY()][player.coordZ] = player;
+        //map.data[player.getRelCoordX()][player.getRelCoordY()][player.coordZ] = player;
         
         //map.changePosX(- Gameplay.view.camera.x + oldx);
         //map.changePosY(-Gameplay.view.camera.y + oldy);

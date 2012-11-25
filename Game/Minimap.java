@@ -12,7 +12,7 @@ public class Minimap {
     private int X;
     private int Y;
     private final float scaleX = 8;
-    private final float scaleY = 8;
+    private final float scaleY = 4;
     
     /**
      * 
@@ -40,8 +40,8 @@ public class Minimap {
         Color temp;
         for (int x = Chunk.BlocksX*(pos%3); x < Chunk.BlocksX * (pos%3+1); x++){
             for (int y = Chunk.BlocksY*(pos/3); y < Chunk.BlocksY * (pos/3+1); y++){
-                if (Gameplay.controller.rendermethod){
-                    Block block = Controller.map.data[x][y][Gameplay.controller.player.coordZ-1];
+                if (Gameplay.controller.renderSides){
+                    Block block = Controller.map.getData(x, y, Gameplay.controller.player.coordZ-1);
                     temp = Block.Blocksheet.getSubImage(
                             Block.SidesSprites[block.getId()][block.getValue()][1][0],
                             Block.SidesSprites[block.getId()][block.getValue()][1][1]
@@ -51,8 +51,8 @@ public class Minimap {
                     );                
                 } else
                     temp = Block.Blocksheet.getSubImage(
-                        Controller.map.data[x][y][Gameplay.controller.player.coordZ-1].spriteX[0],
-                        Controller.map.data[x][y][Gameplay.controller.player.coordZ-1].spriteY[0]
+                        Controller.map.getData(x, y, Gameplay.controller.player.coordZ-1).spriteX[0],
+                        Controller.map.getData(x, y, Gameplay.controller.player.coordZ-1).spriteY[0]
                     ).getColor(
                         Block.displWidth/2,
                         Block.displHeight/4

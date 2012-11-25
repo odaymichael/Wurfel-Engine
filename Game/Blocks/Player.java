@@ -53,7 +53,7 @@ public class Player extends SelfAwareBlock{
         super(40,0);
         setAbsCoords(X,Y,Z);
         //creates the top of the player
-        Controller.map.data[X][Y][coordZ+1] = new Block(40,1);
+        Controller.map.setData(X, Y, coordZ+1, new Block(40,1));
     }
     
   
@@ -103,23 +103,23 @@ public class Player extends SelfAwareBlock{
        int z = coordZ+relZ;
         switch(side){
             case 0:
-                return Controller.map.data[getRelCoordX()][getRelCoordY()-2][z];
+                return Controller.map.getData(getRelCoordX(),getRelCoordY()-2, z);
             case 1:
-                return Controller.map.data[getRelCoordX() -(getRelCoordY() % 2 == 1 ? 1 : 0)][getRelCoordY()-1][z];
+                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()-1, z);
             case 2:
-                return Controller.map.data[getRelCoordX()+1][getRelCoordY()][z];
+                return Controller.map.getData(getRelCoordX()+1, getRelCoordY(), z);
             case 3:
-                return Controller.map.data[getRelCoordX() +(getRelCoordY() % 2 == 1 ? 1 : 0)][getRelCoordY()+1][z];
+                return Controller.map.getData(getRelCoordX() +(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()+1, z);
             case 4:
-                return Controller.map.data[getRelCoordX()][getRelCoordY()+2][z];
+                return Controller.map.getData(getRelCoordX(), getRelCoordY()+2, z);
             case 5:
-                return Controller.map.data[getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0)][getRelCoordY()+1][z];
+                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()+1, z);
             case 6:
-                return Controller.map.data[getRelCoordX()-1][getRelCoordY()][z];         
+                return Controller.map.getData(getRelCoordX()-1, getRelCoordY(), z);         
             case 7:
-                return Controller.map.data[getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0)][getRelCoordY()-1][z];
+                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()-1, z);
             default:
-                return Controller.map.data[getRelCoordX()][getRelCoordY()][z];        
+                return Controller.map.getData(getRelCoordX(), getRelCoordY(), z);        
         } 
     }
         
@@ -212,23 +212,21 @@ public class Player extends SelfAwareBlock{
             }  
         }
         //enable this line to see where to player stands
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ-1].setLightlevel(40);
+        Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ-1).setLightlevel(40);
 
         //set the offset for the rendering
         setOffset(posX - Block.width/2, posY - posZ - Block.width/2);
-        Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1].setOffset(getOffsetX(), getOffsetY());
+        Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ+1).setOffset(getOffsetX(), getOffsetY());
 
        //GameplayState.iglog.add(getRelCoordX()+":"+getRelCoordY()+":"+coordZ);
         //System.out.println(getRelCoordX()+":"+getRelCoordY()+":"+coordZ);    
    }
-    
-
    
     /**
-     * Jumps
+     * Jumps the player
      */
     public void jump(){
-        if (veloZ==0 && posZ==0) veloZ = 0.5f;
+        if (veloZ==0 && posZ==0) veloZ = 0.8f;
         
 //       if (coordZ<Chunk.BlocksZ-2){
 //           Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = new Block(0,0);
@@ -252,21 +250,26 @@ public class Player extends SelfAwareBlock{
         }  else runningsound.stop();
 
         //Gravity
-        //acceleration
         float acc = -(9.81f/Block.width)/(delta);// this should be g=9.81 m/s^2
 
         //if (delta<1000) acc = Controller.map.gravity*delta;
 
-        if (posZ <= 0 && coordZ>1 && Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ-1].isObstacle()){
-            //landing
-            if (posZ<0){
-                veloZ = 0;
-                fallsound.stop();
-            }
+        //land if standing in or under ground level and there is an obstacle
+        if (veloZ < 0
+            && posZ <= 0
+            && (
+                coordZ==0
+                ||
+                Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ-1).isObstacle()
+            )
+        ){
+            veloZ = 0;
+            fallsound.stop();
             posZ = 0;
             acc = 0;
         }
 
+        //move if delta is okay
         if (delta < 500) {
             veloZ += acc;
             posZ += veloZ*delta;
@@ -275,26 +278,26 @@ public class Player extends SelfAwareBlock{
 
         //coordinate switch
         //down
-        if (posZ <= 0 && coordZ>1 && !Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ-1].isObstacle()){
+        if (posZ <= 0 && coordZ>0 && !Controller.map.getData(getRelCoordX(),getRelCoordY(),coordZ-1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
             coordZ--;
             
-            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+2] = new Block(0,0);
-            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1].setValue(1);
-            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = new Block(40,0);
+            Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ+2, new Block(0,0));
+            Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ+1).setValue(1);
+            Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(40,0));
 
             posZ += Block.width;
         }
 
         //up
-        if (posZ >= Block.height && coordZ < Chunk.BlocksZ-2 && !Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1].isObstacle()){
+        if (posZ >= Block.height && coordZ < Chunk.BlocksZ-2 && !Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ+1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
 
             coordZ++;
 
-            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1] = new Block(40,1);
-            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ].setValue(0);
-            Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ-1] = new Block(0,0);
+            Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));
+            Controller.map.getData(getRelCoordX(),getRelCoordY(), coordZ).setValue(0);
+            Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ-1, new Block(0,0));
 
             posZ -= Block.width;
         } 
