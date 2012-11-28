@@ -177,8 +177,6 @@ public class Controller {
             zoomx = zoomx + change/1000f;
             Gameplay.view.camera.setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
             
-            Gameplay.view.camera.setWidth((int) (gc.getWidth() / Gameplay.view.camera.getZoom()));
-            Gameplay.view.camera.setHeight((int) (gc.getHeight() / Gameplay.view.camera.getZoom()));
             
            /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
             Block.height = (int) (4*gc.getHeight()*zoom / Chunk.BlocksY);

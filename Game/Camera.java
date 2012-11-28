@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game;
 
 import Game.Blocks.Block;
@@ -18,20 +14,23 @@ public class Camera {
     private int y;
     private int width;
     private int height;
+    
     private boolean focus = false;
     private Blockpointer focusblock;
+    
     private float zoom = 1;
-    private final int screenWidth;
-    private final int screenHeight;
+    
     private final int screenX;
     private final int screenY;
+    private final int screenWidth;
+    private final int screenHeight;
 
     /**
      * Creates a camera.
      * @param x The screen coordinates
      * @param y The screen coordinate
      * @param width The screen width of the camera
-     * @param height The screeb height of the camera
+     * @param height The screen height of the camera
      * @param zoom The zoom factor.
      */
     Camera(int x, int y,int width, int height,float zoom) {
@@ -46,7 +45,7 @@ public class Camera {
     } 
        
     /**
-     * 
+     * Updates the camera
      */
     public void update() {
         Player player = Gameplay.controller.player;
@@ -81,6 +80,8 @@ public class Camera {
      */
     public void setZoom(float zoom) {
         this.zoom = zoom;
+        width = (int) (screenWidth / zoom);
+        height = (int) (screenHeight / zoom);
         Block.reloadSprites(zoom);
     }
     
@@ -110,7 +111,7 @@ public class Camera {
     }
     
     /**
-     * 
+     * Returns the left border of the visible area.
      * @return 
      */
     public int getLeftBorder(){
@@ -120,7 +121,7 @@ public class Camera {
     }
     
     /**
-     * 
+     * Returns the right border of the visible area.
      * @return
      */
     public int getRightBorder(){
@@ -159,13 +160,6 @@ public class Camera {
         return height;
     }
 
-    /**
-     * 
-     * @param height
-     */
-    public void setHeight(int height) {
-        this.height = height;
-    }
 
     /**
      * The amount of pixel which are visible in x direction (game pixels). For screen pixels use <i>ScreenWidth()</i>.
@@ -175,16 +169,18 @@ public class Camera {
         return width;
     }
 
+
     /**
-     * 
-     * @param width
+     * Returns the amount of (game) pixels visible in Y direction. Ground level+ slope width.
+     * @return
      */
-    public void setWidth(int width) {
-        this.width = width;
+    public int getYzWidth() {
+        return width+Block.height*Chunk.BlocksZ;
     }
 
-       /**
-     * The Camera Position.
+    
+   /**
+     * The Camera Position in the game world.
      * @return 
      */
     public int getX() {
@@ -192,7 +188,7 @@ public class Camera {
     }
 
     /**
-     * 
+     * The Camera Position in the game world.
      * @param x
      */
     public void setX(int x) {
@@ -200,7 +196,7 @@ public class Camera {
     }
 
     /**
-     * 
+     * The Camera Position in the game world.
      * @return
      */
     public int getY() {
@@ -208,7 +204,7 @@ public class Camera {
     }
 
     /**
-     * 
+     * The Camera Position in the game world.
      * @param y
      */
     public void setY(int y) {
@@ -217,25 +213,42 @@ public class Camera {
     
     
     /**
-     * False=player, true=block
+     * False= Focus on player, true= Focus is on a block
      * @return
      */
     public boolean getFocus(){
         return focus;
     }
 
+    
+    /**
+     * Returns the height of the camera output.
+     * @return
+     */
     public float getScreenHeight() {
         return screenHeight;
     }
 
+    /**
+     * Returns the width of the camera output.
+     * @return
+     */
     public float getScreenWidth() {
         return screenWidth;
     }
 
+    /**
+     * Returns the position of the cameras output.
+     * @return
+     */
     public int getScreenX() {
         return screenX;
     }
 
+    /**
+     * Returns the position of the camera
+     * @return
+     */
     public int getScreenY() {
         return screenY;
     }
