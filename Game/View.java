@@ -54,12 +54,15 @@ public class View {
         tTFont = new TrueTypeFont(baseFont, true);
         
         camera = new Camera(
-            0,
-            0,
-            gc.getWidth(),
-            gc.getHeight(),
-            gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.height*2)
+            0,//top
+            0,//left
+            gc.getWidth(),//full width
+            gc.getHeight(),//full height
+            gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.height*2)//zoom factor
             );
+        
+        if (camera.getYzHeight() > Chunk.SizeY) Gameplay.msgSystem.add("The chunks are too small for this camera height/resolution", "Warning");
+        
         
         
         /*font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
@@ -73,8 +76,8 @@ public class View {
         Block.reloadSprites(camera.getZoom()); 
         // Block.width = Block.height;
         Gameplay.msgSystem.add("Blocks: "+Block.width+" x "+Block.height);
-        Gameplay.msgSystem.add("Zoom: "+camera.getZoom());
-        Gameplay.msgSystem.add("chunk: "+Chunk.SizeX+" x "+Chunk.SizeY);
+        Gameplay.msgSystem.add("Zoom: "+ camera.getZoom());
+        Gameplay.msgSystem.add("chunk: "+ Chunk.SizeX+" x "+Chunk.SizeY);
         Gameplay.msgSystem.add("chunk w/ zoom: "+Chunk.SizeX*camera.getZoom()+" x "+Chunk.SizeY*camera.getZoom());
     }
     

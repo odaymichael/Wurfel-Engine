@@ -22,35 +22,34 @@ public class MsgSystem extends ArrayList {
     }
         
     /**
-     * 
-     * @param msg
+     * Adds a message with the sender "System"
+     * @param message
      */
-    public void add(String msg) {
-        add(new Msg(msg, "System",100));
+    public void add(String message) {
+        add(new Msg(message, "System", 100));
     }
     
     /**
      * 
-     * @param msg
-     * @param psender
+     * @param message
+     * @param sender
      */
-    public void add(String msg, String psender){
-        add(new Msg(msg, psender,100));
+    public void add(String message, String sender){
+        add(new Msg(message, sender, 100));
     }
     
     /**
      * 
-     * @param msg
-     * @param psender
-     * @param imp
+     * @param message
+     * @param sender
+     * @param importance
      */
-    public void add(String msg, String psender, int imp){
-        if (imp>100) imp=100;
-        add(new Msg(msg, psender,imp));
+    public void add(String message, String sender, int importance){
+        add(new Msg(message, sender, importance));
     }
     
     /**
-     * 
+     * Updates the Message System
      * @param delta
      */
     public void update(int delta){
@@ -69,7 +68,7 @@ public class MsgSystem extends ArrayList {
     }
     
     /**
-     * 
+     * Draws the Messages
      */
     public void draw(){
         if (waitforinput) Gameplay.view.g.drawString("MSG:", Gameplay.gc.getWidth()/2, 3*Gameplay.gc.getHeight()/4);
@@ -78,6 +77,7 @@ public class MsgSystem extends ArrayList {
             Msg msg = (Msg) Gameplay.msgSystem.get(i);
             Color clr = Color.blue;
             if ("System".equals(msg.getSender())) clr = Color.green;
+                else if ("Warning".equals(msg.getSender())) clr = Color.red;
             
             //draw
             View.tTFont.drawString(

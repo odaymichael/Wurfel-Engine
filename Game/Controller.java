@@ -37,9 +37,6 @@ public class Controller {
      * 
      */
     public GameContainer gc;
-    private StateBasedGame sbg;
-    private int oldx;
-    private int oldy;
     private float zoomx = 1;
     
     /**
@@ -50,7 +47,6 @@ public class Controller {
      */
     public Controller(GameContainer container, StateBasedGame game) throws SlickException{
         gc = container;
-        sbg = game;
           
         gc.getInput().addMouseListener(new MouseDraggedListener());
         map = new Map(MainMenuState.loadmap);
@@ -59,12 +55,12 @@ public class Controller {
 
     
     /**
-     * Main method which is called every time
+     * Main method which is called the whole time
      * @param delta
      * @throws SlickException
      */
     public void update(int delta) throws SlickException{
-        if (delta>200) Log.warn("delta is too high to stay stable. d: "+delta);
+        if (delta > 200) Log.warn("delta is too high to stay stable. d: "+delta);
          
         //get input and do actions
         Input input = gc.getInput();

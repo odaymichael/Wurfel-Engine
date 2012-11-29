@@ -7,11 +7,12 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Wurfelengine extends StateBasedGame {
     public static AppGameContainer app = null; 
-    int gamestate = 0;
+    public int gamestate = 0;
     public static GameContainer gc;
+    public static final String version = "0.2";
         
     public Wurfelengine(){
-        super("Wurfelengine V0.2");
+        super("Wurfelengine V" + version);
     }
 
     public static void main(String[] args) throws SlickException {

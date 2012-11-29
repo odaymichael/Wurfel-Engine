@@ -150,36 +150,7 @@ public class Camera {
         return tmp;
     }
     
- 
-
-   /**
-    * The amount of pixel which are visible in Y direction (game pixels). For screen pixels use <i>ScreenHeight()</i>.
-    * @return
-    */
-   public int getHeight() {
-        return height;
-    }
-
-
-    /**
-     * The amount of pixel which are visible in x direction (game pixels). For screen pixels use <i>ScreenWidth()</i>.
-     * @return
-     */
-    public int getWidth() {
-        return width;
-    }
-
-
-    /**
-     * Returns the amount of (game) pixels visible in Y direction. Ground level+ slope width.
-     * @return
-     */
-    public int getYzWidth() {
-        return width+Block.height*Chunk.BlocksZ;
-    }
-
-    
-   /**
+  /**
      * The Camera Position in the game world.
      * @return 
      */
@@ -210,7 +181,33 @@ public class Camera {
     public void setY(int y) {
         this.y = y;
     }
-    
+
+   /**
+    * The amount of pixel which are visible in Y direction (game pixels). For screen pixels use <i>ScreenHeight()</i>.
+    * @return
+    */
+   public int getHeight() {
+        return height;
+    }
+
+
+    /**
+     * The amount of pixel which are visible in x direction (game pixels). For screen pixels use <i>ScreenWidth()</i>.
+     * @return
+     */
+    public int getWidth() {
+        return width;
+    }
+
+
+    /**
+     * Returns the amount of (game) pixels visible in Y direction. Ground level+ slope width.
+     * @return
+     */
+    public int getYzHeight() {
+        return height + Block.height*Chunk.BlocksZ;
+    }
+
     
     /**
      * False= Focus on player, true= Focus is on a block
