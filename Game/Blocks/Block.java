@@ -409,7 +409,7 @@ public class Block {
     }
     
     /**
-     * 
+     * Is the Block visible?
      * @return
      */
     public boolean isVisible(){
@@ -425,7 +425,7 @@ public class Block {
     }
 
     /**
-     * 
+     * Make the block to an obstacle
      * @param obstacle
      */
     public void setObstacle(boolean obstacle) {
@@ -441,7 +441,7 @@ public class Block {
     }
 
     /**
-     * 
+     * Make the Block transparent
      * @param transparent
      */
     public void setTransparent(boolean transparent) {
@@ -449,7 +449,7 @@ public class Block {
     }
 
     /**
-     * 
+     * Get the value.
      * @return
      */
     public int getValue() {
@@ -457,7 +457,7 @@ public class Block {
     }
 
     /**
-     * 
+     * Set the value of the block. 
      * @param value
      */
     public void setValue(int value) {

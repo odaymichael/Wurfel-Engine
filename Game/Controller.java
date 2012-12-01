@@ -120,9 +120,9 @@ public class Controller {
             //to-do!
         }
         
-//        //toggle input for msgSystem
-//        if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.msgSystem.listenForInput(!Gameplay.msgSystem.isListeningForInput());
-//
+        //toggle input for msgSystem
+        if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.msgSystem.listenForInput(!Gameplay.msgSystem.isListeningForInput());
+
 //        //earth to right
 //        if (Gameplay.view.camera.getLeftBorder() < Chunk.BlocksX/3)
 //           map.setCenter(3);

@@ -29,8 +29,8 @@ public class Player extends SelfAwareBlock{
    
    /*The three values together build a vector. Always one of them must be  to prevent a division with 0.*/
    private float veloX = 1;
-   private float veloY=0;
-   private float veloZ=0;
+   private float veloY = 0;
+   private float veloZ = 0;
    
    //provides a factor for the vector
    private float speed;
@@ -90,38 +90,7 @@ public class Player extends SelfAwareBlock{
                     else return 8;//the middle
     }
     
-    /**
-     * Returns a block next to it
-     * 701
-     * 682
-     * 543
-     * @param side Clockwise starting from top
-     * @param relZ if you want to check another layer. relZ is added to coordZ.
-     * @return The neighbour block
-     */
-    public Block getNeighbourBlock(int side, int relZ){
-       int z = coordZ+relZ;
-        switch(side){
-            case 0:
-                return Controller.map.getData(getRelCoordX(),getRelCoordY()-2, z);
-            case 1:
-                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()-1, z);
-            case 2:
-                return Controller.map.getData(getRelCoordX()+1, getRelCoordY(), z);
-            case 3:
-                return Controller.map.getData(getRelCoordX() +(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()+1, z);
-            case 4:
-                return Controller.map.getData(getRelCoordX(), getRelCoordY()+2, z);
-            case 5:
-                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()+1, z);
-            case 6:
-                return Controller.map.getData(getRelCoordX()-1, getRelCoordY(), z);         
-            case 7:
-                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()-1, z);
-            default:
-                return Controller.map.getData(getRelCoordX(), getRelCoordY(), z);        
-        } 
-    }
+
         
     /**
      * Lets the player walk.
@@ -301,7 +270,13 @@ public class Player extends SelfAwareBlock{
 
             posZ -= Block.width;
         } 
-    
    }
+    
+     @Override
+     public void draw(int x, int y, int z){ 
+        super.draw(x, y, z);
+        //this line causes massive rendering problems
+        //Gameplay.view.g.fillRect(500, 500, 900, 600);
+    }
            
 }

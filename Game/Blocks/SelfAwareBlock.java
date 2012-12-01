@@ -83,7 +83,7 @@ public class SelfAwareBlock extends Block{
         return relCoordY;
     }
 
-        /**
+  /**
      * Set the relative Y Coordinate
      * @param Y
      */
@@ -138,5 +138,38 @@ public class SelfAwareBlock extends Block{
     protected void selfRebuild(){
         Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ, this);
         Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));
+    }
+    
+   /**
+     * Returns a block next to it
+     * 701
+     * 682
+     * 543
+     * @param side Clockwise starting from top
+     * @param relZ if you want to check another layer. relZ is added to coordZ.
+     * @return The neighbour block
+     */
+    public Block getNeighbourBlock(int side, int relZ){
+       int z = coordZ+relZ;
+        switch(side){
+            case 0:
+                return Controller.map.getData(getRelCoordX(),getRelCoordY()-2, z);
+            case 1:
+                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()-1, z);
+            case 2:
+                return Controller.map.getData(getRelCoordX()+1, getRelCoordY(), z);
+            case 3:
+                return Controller.map.getData(getRelCoordX() +(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()+1, z);
+            case 4:
+                return Controller.map.getData(getRelCoordX(), getRelCoordY()+2, z);
+            case 5:
+                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()+1, z);
+            case 6:
+                return Controller.map.getData(getRelCoordX()-1, getRelCoordY(), z);         
+            case 7:
+                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()-1, z);
+            default:
+                return Controller.map.getData(getRelCoordX(), getRelCoordY(), z);        
+        } 
     }
 }
