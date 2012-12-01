@@ -89,99 +89,100 @@ public class View {
      */
     public void render(StateBasedGame game, Graphics g) throws SlickException{
         this.g = g;
+        g.scale(camera.getZoom(), camera.getZoom());
         Controller.map.draw();
-        //Controller.player.draw();
         
+        g.scale(1/camera.getZoom(), 1/camera.getZoom());
         //GUI
         if (Controller.map.getMinimap() != null)
             Controller.map.getMinimap().draw(g);
         Gameplay.msgSystem.draw();        
     }
       
-    /**
-     * 
-     * @throws SlickException
-     */
-    public void draw_all_Chunks() throws SlickException{
-        /*                        
-        /*-------------------*/ 
-        /*---draw lines-------*/
-        /*-------------------*/ 
-
-         /*glBegin(GL_LINES)
-        glVertex2f(x1, y1): glVertex2f(x2, y2)
-        glEnd()*/
-     /*
-        //Komponenten der Punkte
-        int start1X = chunk.posX;
-        int start1Y = chunk.posY;
-        int end1X = chunk.posX;
-        int end1Y = chunk.posY;
-        
-        int start2X = chunk.posX;
-        int start2Y = chunk.posY;
-        int end2X = chunk.posX + Chunk.width;
-        int end2Y = chunk.posY;
-
-        //Countervariables
-        int s1x=0;int s1y=0;int e1x=0;int e1y=0;
-        int s2x=0;int s2y=0;int e2x=0;int e2y=0;
-
-        for (int i=0; i < (chunk.data.length)*2 + (chunk.data[0].length); i++){
-            //g2d.setColor(new Color(i*5+20,i*5+20,0));
-
-            //Linie 1 (von unten links nach oben rechts) /
-            if (s1y > chunk.data[0].length) {
-                s1x++;
-                start1X = chunk.posX + s1x*Controller.tilesizeX/2;                    
-            } else {
-                s1y++;
-                start1Y = chunk.posY + s1y*Controller.tilesizeY/2;       
-            }         
-            
-            
-            if (e1x+1 > chunk.data.length*2) {
-                e1y++;
-                end1Y = chunk.posY + e1y*Controller.tilesizeY/2;
-            } else{
-                e1x++; 
-                end1X = chunk.posX + e1x*Controller.tilesizeX/2;                    
-            }
-
-            g.drawLine(
-                start1X + (i%2)*Controller.tilesizeX/2,
-                start1Y,
-                end1X + (i%2)*Controller.tilesizeX/2,
-                end1Y
-            );
-
-
-            //Linie 2  (von oben links nach utnen rechts)  \       
-            if (s2x < chunk.data.length*2) {
-                s2x++;
-                start2X = chunk.posX + Chunk.width - s2x*Controller.tilesizeX/2;
-            } else {
-                s2y++;
-                start2Y = chunk.posY + s2y*Controller.tilesizeY/2;
-            }
-
-            if (e2y-1 < chunk.data[0].length){
-                e2y++;
-                end2Y = chunk.posY + e2y*Controller.tilesizeY/2;                    
-            } else {
-                e2x++;
-                end2X = chunk.posX + Chunk.width - e2x*Controller.tilesizeX/2;                   
-            }
-
-            g.drawLine(
-                start2X + (i%2)*Controller.tilesizeX/2,
-                start2Y,
-                end2X + (i%2)*Controller.tilesizeX/2,
-                end2Y
-            );
-        }*/
-        
-     };
+//    /**
+//     * 
+//     * @throws SlickException
+//     */
+//    public void draw_all_Chunks() throws SlickException{
+//        /*                        
+//        /*-------------------*/ 
+//        /*---draw lines-------*/
+//        /*-------------------*/ 
+//
+//         /*glBegin(GL_LINES)
+//        glVertex2f(x1, y1): glVertex2f(x2, y2)
+//        glEnd()*/
+//     /*
+//        //Komponenten der Punkte
+//        int start1X = chunk.posX;
+//        int start1Y = chunk.posY;
+//        int end1X = chunk.posX;
+//        int end1Y = chunk.posY;
+//        
+//        int start2X = chunk.posX;
+//        int start2Y = chunk.posY;
+//        int end2X = chunk.posX + Chunk.width;
+//        int end2Y = chunk.posY;
+//
+//        //Countervariables
+//        int s1x=0;int s1y=0;int e1x=0;int e1y=0;
+//        int s2x=0;int s2y=0;int e2x=0;int e2y=0;
+//
+//        for (int i=0; i < (chunk.data.length)*2 + (chunk.data[0].length); i++){
+//            //g2d.setColor(new Color(i*5+20,i*5+20,0));
+//
+//            //Linie 1 (von unten links nach oben rechts) /
+//            if (s1y > chunk.data[0].length) {
+//                s1x++;
+//                start1X = chunk.posX + s1x*Controller.tilesizeX/2;                    
+//            } else {
+//                s1y++;
+//                start1Y = chunk.posY + s1y*Controller.tilesizeY/2;       
+//            }         
+//            
+//            
+//            if (e1x+1 > chunk.data.length*2) {
+//                e1y++;
+//                end1Y = chunk.posY + e1y*Controller.tilesizeY/2;
+//            } else{
+//                e1x++; 
+//                end1X = chunk.posX + e1x*Controller.tilesizeX/2;                    
+//            }
+//
+//            g.drawLine(
+//                start1X + (i%2)*Controller.tilesizeX/2,
+//                start1Y,
+//                end1X + (i%2)*Controller.tilesizeX/2,
+//                end1Y
+//            );
+//
+//
+//            //Linie 2  (von oben links nach utnen rechts)  \       
+//            if (s2x < chunk.data.length*2) {
+//                s2x++;
+//                start2X = chunk.posX + Chunk.width - s2x*Controller.tilesizeX/2;
+//            } else {
+//                s2y++;
+//                start2Y = chunk.posY + s2y*Controller.tilesizeY/2;
+//            }
+//
+//            if (e2y-1 < chunk.data[0].length){
+//                e2y++;
+//                end2Y = chunk.posY + e2y*Controller.tilesizeY/2;                    
+//            } else {
+//                e2x++;
+//                end2X = chunk.posX + Chunk.width - e2x*Controller.tilesizeX/2;                   
+//            }
+//
+//            g.drawLine(
+//                start2X + (i%2)*Controller.tilesizeX/2,
+//                start2Y,
+//                end2X + (i%2)*Controller.tilesizeX/2,
+//                end2Y
+//            );
+//        }*/
+//        
+//     };
 
     
  /**
@@ -325,7 +326,6 @@ public class View {
             if ((y >= 0) && (z>=0))
                 Controller.map.getData(x, y, z).setVisible(true);
        }
-
     }
     
     /**

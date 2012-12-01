@@ -483,7 +483,7 @@ public class Block {
     
     
     /**
-     * 
+     * Draws a block
      * @param x
      * @param y
      * @param z
@@ -520,15 +520,13 @@ public class Block {
                 temp.setColor(3, brightness, brightness, brightness);
                 
                 temp.drawEmbedded(
-                    -(int) (Gameplay.view.camera.getZoom()*Gameplay.view.camera.getX())
-                    + x*Block.displWidth
-                    + (y%2) * (int) (Block.displWidth/2)
-                    + getOffsetX()
+                    - Gameplay.view.camera.getX()
+                    + x*Block.width
+                    + (y%2) * (int) (Block.width/2)
                     ,
-                    -(int) (Gameplay.view.camera.getZoom()*Gameplay.view.camera.getY()/2)
-                    + y*Block.displHeight/4
-                    - z*Block.displHeight/2
-                    + getOffsetY() * (1/Block.aspectRatio)
+                    - Gameplay.view.camera.getY()
+                    + y*Block.height/2
+                    - z*Block.height
                 );
                 
 //                Block.Blocksheet.renderInUse(
@@ -552,13 +550,14 @@ public class Block {
         Image sideimage = getSideSprite(sidenumb);
         
         if (Gameplay.controller.goodgraphics){
+                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
+        
             if (sidenumb == 0){
                 int brightness = lightlevel * 255 / 100;
                 new Color(brightness,brightness,brightness).bind();
             } else {
                 Color.black.bind();
             }
-            GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
         }
         
         //calc  brightness
@@ -573,16 +572,14 @@ public class Block {
         sideimage.setColor(3, brightness, brightness, brightness);
         
         sideimage.drawEmbedded(
-            - (int) (Gameplay.view.camera.getZoom() * Gameplay.view.camera.getX())
-            + x*Block.displWidth
-            + (y%2) * (int) (Block.displWidth/2)
-            + Gameplay.view.camera.getZoom() * getOffsetX()
+            - Gameplay.view.camera.getX()
+            + x*Block.width
+            + (y%2) * (int) (Block.width/2)
             ,            
-            - (int) (Gameplay.view.camera.getZoom() * Gameplay.view.camera.getY())
-            + y*Block.displHeight/4
-            - z*Block.displHeight/2
-            + ( sidenumb == 1 ? -Block.displHeight/4:0)//the top is drawn /4 Blocks higher
-            + Gameplay.view.camera.getZoom() * getOffsetY() * (1/Block.aspectRatio)
+            - Gameplay.view.camera.getY()
+            + y*Block.height/2
+            - z*Block.height
+            + ( sidenumb == 1 ? -Block.height/2:0)//the top is drawn /4 Blocks higher
         );
     }
         
@@ -592,45 +589,20 @@ public class Block {
      */
     public static void reloadSprites(float zoom) {
         displWidth = (int) (width*zoom);
-        displHeight = (int) (2*height*zoom);
+        displHeight = (int) (height*zoom);
         try {
             if (Gameplay.controller.renderSides){//single sides
-                SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/SideSprite.png", width, (int) (height*1.5f));
+                Blocksheet = new SpriteSheet("Game/Blockimages/SideSprite.png", width, (int) (height*1.5f));
             
-                Image scaledBlockSheet = srcBlockSheet.getScaledCopy(zoom);
-                
-                //int spacing = ((scaledBlockSheet.getWidth()) /(int)(srcBlockSheet.getWidth()/width) - (int) (width*zoom)) ; // calculate spacing by dividing by amount of blocks in a row and later gettin the rest
-                //int spacing = (int) (4*zoom);
-                //displWidth = (int) ((scaledBlockSheet.getWidth()+4)/5 - spacing);
-
-                //GameplayState.iglog.add("Spacing:"+spacing);
                 Gameplay.msgSystem.add("displWidth: "+displWidth);
                 Log.debug("displWidth: "+displWidth);
                 Gameplay.msgSystem.add("displHeight: "+displHeight);
                 Log.debug("displHeight: "+displHeight);
 
-                Blocksheet = new SpriteSheet(
-                    scaledBlockSheet,
-                    displWidth,
-                    (int) (displHeight*.75f)
-                );
             } else {//whole Blocks
-                SpriteSheet srcBlockSheet = new SpriteSheet("Game/Blockimages/Blocksprite.png", width, height*2, 4);
-            
-                Image scaledBlockSheet = srcBlockSheet.getScaledCopy(zoom);
-                int spacing = ((scaledBlockSheet.getWidth()) /5 - (int) (width*zoom)) ; // divide by amount of blocks in a row
-                //int spacing = (int) (4*zoom);
-                //displWidth = (int) ((scaledBlockSheet.getWidth()+4)/5 - spacing);
-
-                Gameplay.msgSystem.add("Spacing:"+spacing);
+                Blocksheet = new SpriteSheet("Game/Blockimages/Blocksprite.png", width, height*2, 4);
+                
                 Gameplay.msgSystem.add("BlockWidth"+displWidth);
-
-                Blocksheet = new SpriteSheet(
-                    scaledBlockSheet,
-                    displWidth,
-                    displHeight,
-                    spacing
-                );
             }
         } catch (SlickException ex) {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);

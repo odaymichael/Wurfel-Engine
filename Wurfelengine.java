@@ -17,10 +17,13 @@ public class Wurfelengine extends StateBasedGame {
 
     public static void main(String[] args) throws SlickException {
         //has to call starter to avoid problems with the default package. Maybe the main function can run in starter
-         app = new AppGameContainer(new Wurfelengine());
-         //app.setDisplayMode(1280, 960, false);
+         app = new AppGameContainer(new Wurfelengine());         
          app.setUpdateOnlyWhenVisible(true);
-         app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), false);
+         
+         //you can start the game with a custom resolution
+         if (args.length==0)
+            app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), false);
+         else app.setDisplayMode(Integer.parseInt(args[0]), Integer.parseInt(args[1]), false);
          //System.out.println(app.isVSyncRequested());
          app.start();
     }

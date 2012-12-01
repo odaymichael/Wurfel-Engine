@@ -179,7 +179,7 @@ public class Controller {
             Chunk.SizeX = (int) (Chunk.BlocksX*Block.width*zoom);
             Chunk.SizeY = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
-            Gameplay.msgSystem.add("Zoom: "+Gameplay.view.camera.getZoom()+" Chunk.SizeX: "+Chunk.SizeX+" Chunk.SizeY: "+Chunk.SizeY);   
+            Gameplay.msgSystem.add("Zoom: "+Gameplay.view.camera.getZoom());   
         }
 
         @Override

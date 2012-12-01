@@ -47,7 +47,7 @@ public class Minimap {
                             Block.SidesSprites[block.getId()][block.getValue()][1][1]
                         ).getColor(
                             Block.displWidth/2,
-                            Block.displHeight/2
+                            Block.displHeight
                     );                
                 } else
                     temp = Block.Blocksheet.getSubImage(
@@ -55,7 +55,7 @@ public class Minimap {
                         Controller.map.getData(x, y, Gameplay.controller.player.coordZ-1).spriteY[0]
                     ).getColor(
                         Block.displWidth/2,
-                        Block.displHeight/4
+                        Block.displHeight/2
                 );
 
                 g.setColor(temp);

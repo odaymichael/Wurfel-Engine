@@ -48,8 +48,20 @@ public class Camera {
      * Updates the camera
      */
     public void update() {
-        Player player = Gameplay.controller.player;
-        if (focus == false) {
+        if (focus) {//focus on block
+             x = focusblock.getX() * Block.width
+                + Block.width / 2 *(focusblock.getY() % 2)
+                + focusblock.getBlock().getOffsetX()
+                - Gameplay.view.camera.width / 2;
+            
+            y = (int) (
+                (focusblock.getY()/2f - focusblock.getZ()) * Block.height
+                - Gameplay.view.camera.height/2
+                + focusblock.getBlock().getOffsetY() * (1/Block.aspectRatio)
+                );
+            
+        } else {//focus on player
+            Player player = Gameplay.controller.player;
             x = player.getRelCoordX() * Block.width
                 + Block.width / 2 *(player.getRelCoordY() % 2)
                 + player.getOffsetX()
@@ -60,17 +72,7 @@ public class Camera {
                 - Gameplay.view.camera.height/2
                 + player.getOffsetY() * (1/Block.aspectRatio)
                 );
-        } else {
-            x = focusblock.getX() * Block.width
-                + Block.width / 2 *(focusblock.getY() % 2)
-                + focusblock.getBlock().getOffsetX()
-                - Gameplay.view.camera.width / 2;
-            
-            y = (int) (
-                (focusblock.getY()/2f - focusblock.getZ()) * Block.height
-                - Gameplay.view.camera.height/2
-                + focusblock.getBlock().getOffsetY() * (1/Block.aspectRatio)
-                );
+           
         }
     }
     
@@ -115,7 +117,7 @@ public class Camera {
      * @return 
      */
     public int getLeftBorder(){
-        int tmp = x/Block.width -1;
+        int tmp = x/Block.displWidth -1;
         if (tmp < 0) return 0;
         return tmp;
     }
@@ -125,7 +127,7 @@ public class Camera {
      * @return
      */
     public int getRightBorder(){
-        int tmp = (x+width)/Block.width+2;
+        int tmp = (x+width)/Block.displWidth+2;
         if (tmp >= Chunk.BlocksX*3) return Chunk.BlocksX*3-1;
         return tmp;
     }
@@ -135,7 +137,7 @@ public class Camera {
      * @return measured in blocks
      */
     public int getTopBorder(){
-        int tmp = 2*y/Block.height;
+        int tmp = 2*y/Block.displHeight;
         if (tmp < 0) return 0;
         return tmp;
     }
@@ -145,7 +147,7 @@ public class Camera {
      * @return measured in blocks
      */
     public int getBottomBorder(){
-        int tmp = (y+height)/(Block.height/2) + Chunk.BlocksZ*2;
+        int tmp = (y+height)/(Block.displHeight/2) + Chunk.BlocksZ*2;
         if (tmp >= Chunk.BlocksY*3) return Chunk.BlocksY*3-1;
         return tmp;
     }
