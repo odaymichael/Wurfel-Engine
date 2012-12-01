@@ -520,13 +520,15 @@ public class Block {
                 temp.setColor(3, brightness, brightness, brightness);
                 
                 temp.drawEmbedded(
-                    - Gameplay.view.camera.getX()
+                    -Gameplay.view.camera.getX()
                     + x*Block.width
                     + (y%2) * (int) (Block.width/2)
+                    + getOffsetX()
                     ,
-                    - Gameplay.view.camera.getY()
+                    -Gameplay.view.camera.getY()/2
                     + y*Block.height/2
                     - z*Block.height
+                    + getOffsetY() * (1/Block.aspectRatio)
                 );
                 
 //                Block.Blocksheet.renderInUse(
@@ -572,14 +574,16 @@ public class Block {
         sideimage.setColor(3, brightness, brightness, brightness);
         
         sideimage.drawEmbedded(
-            - Gameplay.view.camera.getX()
+            -  Gameplay.view.camera.getX()
             + x*Block.width
             + (y%2) * (int) (Block.width/2)
+            + getOffsetX()
             ,            
             - Gameplay.view.camera.getY()
             + y*Block.height/2
             - z*Block.height
             + ( sidenumb == 1 ? -Block.height/2:0)//the top is drawn /4 Blocks higher
+            + getOffsetY() * (1/Block.aspectRatio)
         );
     }
         
