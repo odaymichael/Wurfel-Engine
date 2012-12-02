@@ -1,22 +1,35 @@
-package MainMenu;
+package com.BombingGames.MainMenu;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
 
+/**
+ * 
+ * @author Benedikt
+ */
 public class Controller {
     View View = null;
     Sound fx = null;
-    public FadeInTransition transition = null;
     
+    /**
+     * Creates a new Controller
+     * @param pView
+     * @throws SlickException
+     */
     public Controller(View pView) throws SlickException{
         View = pView;
-        fx = new Sound("MainMenu/click2.wav");
+        fx = new Sound("com/BombingGames/MainMenu/click2.wav");
     }
     
+    /**
+     * updates game logic
+     * @param gc
+     * @param sbg
+     * @param delta
+     */
     public void update(GameContainer gc, StateBasedGame sbg, int delta){
         Input input = gc.getInput();
          
@@ -33,7 +46,6 @@ public class Controller {
         }else if (View.exitOption.isClicked(input)){
             gc.exit();
         }
-        
     }
    
    

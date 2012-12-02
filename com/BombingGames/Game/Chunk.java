@@ -1,6 +1,6 @@
-package Game;
+package com.BombingGames.Game;
 
-import Game.Blocks.Block;
+import com.BombingGames.Game.Blocks.Block;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

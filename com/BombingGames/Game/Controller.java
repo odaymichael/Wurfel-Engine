@@ -1,8 +1,8 @@
-package Game;
+package com.BombingGames.Game;
 
-import Game.Blocks.Block;
-import Game.Blocks.Player;
-import MainMenu.MainMenuState;
+import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.Game.Blocks.Player;
+import com.BombingGames.MainMenu.MainMenuState;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;

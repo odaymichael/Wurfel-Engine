@@ -1,6 +1,6 @@
-package Game;
+package com.BombingGames.Game;
 
-import Game.Blocks.Block;
+import com.BombingGames.Game.Blocks.Block;
 import java.awt.Font;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
@@ -47,7 +47,7 @@ public class View {
         TrueTypeFont trueTypeFont;
 
         //startFont = Font.createFont(Font.TRUETYPE_FONT,new BufferedInputStream(this.getClass().getResourceAsStream("Blox2.ttf")));
-        UnicodeFont startFont = new UnicodeFont("Game/Blox2.ttf", 20, false, false);
+        UnicodeFont startFont = new UnicodeFont("com/BombingGames/Game/Blox2.ttf", 20, false, false);
         //baseFont = startFont.deriveFont(Font.PLAIN, 12);
         baseFont = startFont.getFont().deriveFont(Font.PLAIN, 12);
         

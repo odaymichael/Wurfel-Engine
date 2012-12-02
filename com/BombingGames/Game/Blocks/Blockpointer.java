@@ -1,10 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package Game.Blocks;
+package com.BombingGames.Game.Blocks;
 
-import Game.Controller;
+import com.BombingGames.Game.Controller;
 
 
   

@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package Game.Blocks;
+package com.BombingGames.Game.Blocks;
 
-import Game.Chunk;
-import Game.Controller;
-import Game.Gameplay;
+import com.BombingGames.Game.Chunk;
+import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Gameplay;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -37,23 +33,43 @@ public class SelfAwareBlock extends Block{
        super(id, value);
    }
    
+   /**
+    * 
+    * @return
+    */
    public int getAbsCoordX() {
         return absCoordX;
     }
 
-    public int getAbsCoordY() {
+   /**
+    * 
+    * @return
+    */
+   public int getAbsCoordY() {
         return absCoordY;
     }
 
-     public int getCoordZ() {
+    /**
+     * 
+     * @return
+     */
+    public int getCoordZ() {
         return coordZ;
     }
 
-    public void setCoordZ(int coordZ) {
+     /**
+      * 
+      * @param coordZ
+      */
+     public void setCoordZ(int coordZ) {
         this.coordZ = coordZ;
     }
 
-    public int getRelCoordX() {
+     /**
+      * 
+      * @return
+      */
+     public int getRelCoordX() {
         return relCoordX;
     }
 
@@ -79,6 +95,10 @@ public class SelfAwareBlock extends Block{
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getRelCoordY() {
         return relCoordY;
     }
@@ -115,12 +135,22 @@ public class SelfAwareBlock extends Block{
     }
     
 
+    /**
+     * 
+     * @param Y
+     */
     public void setAbsCoordY(int Y){
         absCoordY = Y;
         //da das Map Coordinatensystem in y-Richtung in zwei unterschiedliche Richtungen geht (hier "+" ???)
         setRelCoordY(Y + Controller.map.getCoordlistY(4) *Chunk.BlocksY);
     }    
    
+    /**
+     * 
+     * @param X
+     * @param Y
+     * @param Z
+     */
     public void setAbsCoords(int X, int Y, int Z){
         setAbsCoordX(X);
         setAbsCoordY(Y);
@@ -130,11 +160,17 @@ public class SelfAwareBlock extends Block{
     }
     
     //how can you make that this methods are only avilable to extending classes?
+    /**
+     * 
+     */
     protected void selfDestroy(){
         Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(0,0));
         Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(0,0));
     }
     
+    /**
+     * 
+     */
     protected void selfRebuild(){
         Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ, this);
         Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));

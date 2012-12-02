@@ -1,4 +1,4 @@
-package Game;
+package com.BombingGames.Game;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

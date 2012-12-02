@@ -1,8 +1,8 @@
-package Game;
+package com.BombingGames.Game;
 
-import Game.Blocks.Block;
-import Game.Blocks.Blockpointer;
-import Game.Blocks.Player;
+import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.Game.Blocks.Blockpointer;
+import com.BombingGames.Game.Blocks.Player;
 import org.newdawn.slick.util.Log;
 
 /**

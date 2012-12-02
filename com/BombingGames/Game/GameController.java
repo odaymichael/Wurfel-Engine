@@ -1,10 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package Game;
+package com.BombingGames.Game;
 
-import Game.Blocks.Player;
+import com.BombingGames.Game.Blocks.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;

@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package Game;
+package com.BombingGames.Game;
 
-import Game.Blocks.Block;
-import MainMenu.MainMenuState;
+import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.MainMenu.MainMenuState;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.util.Log;
 
@@ -182,7 +178,7 @@ public class Map {
     /**
      * Inserts a chunk in the map.
      * @param pos The position in the grid
-     * @param newchunk 
+     * @param newchunk The chunk you want to insert
      */
     private void setChunk(int pos, Chunk newchunk) {
         for (int x=0;x < Chunk.BlocksX; x++)
@@ -271,6 +267,13 @@ public class Map {
         return minimap;
     }
     
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
     public Block getData(int x, int y, int z){
         if (x >= Chunk.BlocksX*3){
             x = Chunk.BlocksX*3-1;
@@ -299,6 +302,13 @@ public class Map {
         return data[x][y][z];    
     } 
     
+    /**
+     * Set a block at a specific coordinate
+     * @param x
+     * @param y
+     * @param z
+     * @param block The block you want to set.
+     */
     public void setData(int x, int y, int z, Block block){
         if (x >= Chunk.BlocksX*3){
             x = Chunk.BlocksX*3-1;

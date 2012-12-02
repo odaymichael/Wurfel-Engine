@@ -1,6 +1,7 @@
-package Game;
+package com.BombingGames.Game;
    
-import Game.Blocks.Block;
+
+import com.BombingGames.Game.Blocks.Block;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -46,16 +47,16 @@ public class Minimap {
                             Block.SidesSprites[block.getId()][block.getValue()][1][0],
                             Block.SidesSprites[block.getId()][block.getValue()][1][1]
                         ).getColor(
-                            Block.displWidth/2,
-                            Block.displHeight
+                            Block.width/2,
+                            Block.height
                     );                
                 } else
                     temp = Block.Blocksheet.getSubImage(
                         Controller.map.getData(x, y, Gameplay.controller.player.coordZ-1).spriteX[0],
                         Controller.map.getData(x, y, Gameplay.controller.player.coordZ-1).spriteY[0]
                     ).getColor(
-                        Block.displWidth/2,
-                        Block.displHeight/2
+                        Block.width/2,
+                        Block.height/2
                 );
 
                 g.setColor(temp);

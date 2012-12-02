@@ -1,27 +1,42 @@
-package MainMenu;
+package com.BombingGames.MainMenu;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-//import com.BombingGames.View.Blockimages;
-
+/**
+ * The View manages ouput
+ * @author Benedikt
+ */
 public class View {
     float startGameScale = 1;
     float exitScale = 1;
     private Image background = null;
+    /**
+     * 
+     */
     protected MenuItem startGameOption = new MenuItem();
+    /**
+     * 
+     */
     protected MenuItem loadGameOption = new MenuItem();
+    /**
+     * 
+     */
     protected MenuItem exitOption = new MenuItem();
     
     
-    //Konstruktor
+    /**
+     * Creates a View.
+     * @param gc
+     * @throws SlickException
+     */
     public View(GameContainer gc) throws SlickException{
-        background = new Image("MainMenu/Images/Logo.png");
+        background = new Image("com/BombingGames/MainMenu/Images/Logo.png");
  
         // load the menu images
-        Image menuOptions = new Image("MainMenu/Images/MainMenu.png");
+        Image menuOptions = new Image("com/BombingGames/MainMenu/Images/MainMenu.png");
 
         startGameOption.image = menuOptions.getSubImage(0, 0, 400, 50);
         startGameOption.X = (gc.getWidth() - startGameOption.image.getWidth())/2;
@@ -36,6 +51,10 @@ public class View {
         exitOption.Y = 300;
     }
 
+    /**
+     * renders the scene
+     * @param pController
+     */
     public void render(Controller pController){
         // render the background
         background.draw(0,0);

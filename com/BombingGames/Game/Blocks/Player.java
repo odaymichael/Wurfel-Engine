@@ -1,8 +1,8 @@
-package Game.Blocks;
+package com.BombingGames.Game.Blocks;
 
-import Game.Chunk;
-import Game.Controller;
-import Game.Gameplay;
+import com.BombingGames.Game.Chunk;
+import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Gameplay;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
@@ -36,8 +36,8 @@ public class Player extends SelfAwareBlock{
    private float speed;
    
 
-   private Sound fallsound = new Sound("Game/Sounds/wind.wav");
-   private Sound runningsound = new Sound("Game/Sounds/victorcenusa_running.wav");
+   private Sound fallsound = new Sound("com/BombingGames/Game/Sounds/wind.wav");
+   private Sound runningsound = new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav");
    private String controls = "WASD";
    
    
@@ -98,6 +98,7 @@ public class Player extends SelfAwareBlock{
      * @param down 
      * @param delta time which has passed since last call
      * @param left 
+     * @param walkingspeed 
      * @param right 
      * @throws SlickException
      */

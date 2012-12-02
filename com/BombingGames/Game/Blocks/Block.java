@@ -1,6 +1,6 @@
-package Game.Blocks;
+package com.BombingGames.Game.Blocks;
 
-import Game.Gameplay;
+import com.BombingGames.Game.Gameplay;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.lwjgl.opengl.GL11;
@@ -596,7 +596,7 @@ public class Block {
         displHeight = (int) (height*zoom);
         try {
             if (Gameplay.controller.renderSides){//single sides
-                Blocksheet = new SpriteSheet("Game/Blockimages/SideSprite.png", width, (int) (height*1.5f));
+                Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", width, (int) (height*1.5f));
             
                 Gameplay.msgSystem.add("displWidth: "+displWidth);
                 Log.debug("displWidth: "+displWidth);
@@ -604,7 +604,7 @@ public class Block {
                 Log.debug("displHeight: "+displHeight);
 
             } else {//whole Blocks
-                Blocksheet = new SpriteSheet("Game/Blockimages/Blocksprite.png", width, height*2, 4);
+                Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Blocksprite.png", width, height*2, 4);
                 
                 Gameplay.msgSystem.add("BlockWidth"+displWidth);
             }

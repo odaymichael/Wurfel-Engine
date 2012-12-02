@@ -1,4 +1,4 @@
-package MainMenu;
+package com.BombingGames.MainMenu;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -6,15 +6,32 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
  
+/**
+ * The game state of the Main Menu
+ * @author Benedikt
+ */
 public class MainMenuState extends BasicGameState{
+    /**
+     * 
+     */
     public static boolean loadmap = false;
     int stateID = 1;
+    /**
+     * 
+     */
     public static GameContainer gc;
+    /**
+     * 
+     */
     public static StateBasedGame sbg;
  
     View View = null;
     Controller Controller = null;
     
+    /**
+     * 
+     * @param stateID
+     */
     public MainMenuState( int stateID) {
        this.stateID = stateID;
     }

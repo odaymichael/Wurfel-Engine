@@ -1,8 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package Game;
+package com.BombingGames.Game;
 
 /**
  * The Message object is put into the MsgSystem. It contains the message, the sender and the importance.
