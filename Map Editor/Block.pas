@@ -1,0 +1,118 @@
+unit Block;
+
+interface
+
+type TBlock = class(TObject)
+     private
+     public
+           ID, Value, Health:integer;
+           obstacle,transparent:boolean;
+           name:String;
+           constructor create(P_ID,P_Value:integer);overload;
+     published 
+     constructor create(P_ID:integer);overload;
+     
+end;
+
+implementation
+   constructor TBlock.Create(P_ID,P_Value:integer);
+   begin
+        Health := 100;
+        ID := P_ID;
+        Value := P_Value;
+        case ID of
+             0: begin
+                     name := 'air';
+                     transparent := true;
+                     obstacle := false;
+                end;
+             1: begin
+                     name := 'gras';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             2: begin
+                     name := 'dirt';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             3: begin
+                     name := 'stone';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             4: begin
+                     name := 'asphalt';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             5: begin
+                     name := 'cobblestone';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             6: begin
+                     name := 'pavement';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             7: begin
+                     name := 'concrete';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             8: begin
+                     name := 'sand';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             9: begin
+                     name := 'water';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             20: begin
+                     name := 'red brick wall';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             30: begin
+                     name := 'fence';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             32: begin
+                     name := 'sandbags';
+                     transparent := false;
+                     obstacle := true;
+                end;
+             40: begin
+                    name := 'player';
+                     transparent := true;
+                     obstacle := false;
+                 end;        
+             50: begin
+                      name := 'strohbed' ;
+                      transparent := true;
+                      obstacle := false;
+                 end;
+             70: begin
+                     name := 'campfire';
+                     transparent := true;
+                     obstacle := false;
+                end;       
+             else begin
+                     name := 'undefined';
+                     transparent := true;
+                     obstacle := false;
+                  end;  
+        end;          
+   end;
+
+   constructor TBlock.Create(P_ID:integer);
+   begin
+        //hier soltle genau das gleiceh wie in der noramlen passieren, nur das p_Value := 0 ist;     
+   end;
+
+end.
+ 

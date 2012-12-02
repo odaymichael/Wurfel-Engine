@@ -1,0 +1,19 @@
+program pLeveleditor;
+
+uses
+  Forms,
+  mLeveleditor in 'mLeveleditor.pas' {Mapeditor},
+  Block in 'Block.pas',
+  mWelcome in 'mWelcome.pas' {Welcome},
+  mMapinfo in 'mMapinfo.pas' {Mapinfo};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.Title := 'Out There Mapeditor';
+  Application.ShowHint := True;
+  Application.HintPause := 0;
+  Application.CreateForm(TWelcome, Welcome);
+  Application.Run;
+end.
