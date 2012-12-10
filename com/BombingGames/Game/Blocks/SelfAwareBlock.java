@@ -9,7 +9,7 @@ import org.newdawn.slick.util.Log;
  *A Block that knows his own position
  * @author Benedikt
  */
-public class SelfAwareBlock extends Block{
+public abstract class SelfAwareBlock extends Block{
   /**
     * CoordZ is always absolute and relative at the same time.
     */
