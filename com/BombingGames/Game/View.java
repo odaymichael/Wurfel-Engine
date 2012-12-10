@@ -15,18 +15,17 @@ public class View {
      */
     public Camera camera;
     
-
     /**
      * The reference for the graphics context
      */
     public Graphics g = null; 
     private java.awt.Font font;
     /**
-     * 
+     * Contains a bigger font.
      */
     public static TrueTypeFont tTFont;
     /**
-     * 
+     * Contains a font
      */
     public static TrueTypeFont tTFont_small;
     
@@ -36,7 +35,7 @@ public class View {
     private Font baseFont;
 
     /**
-     * Constructor
+     * Creates a View
      * @param gc
      * @throws SlickException
      */
@@ -89,14 +88,7 @@ public class View {
      */
     public void render(StateBasedGame game, Graphics g) throws SlickException{
         this.g = g;
-        g.scale(camera.getZoom(), camera.getZoom());
-        Controller.map.draw();
-        
-        g.scale(1/camera.getZoom(), 1/camera.getZoom());
-        //GUI
-        if (Controller.map.getMinimap() != null)
-            Controller.map.getMinimap().draw(g);
-        Gameplay.msgSystem.draw();        
+        camera.draw();      
     }
       
 //    /**

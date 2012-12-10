@@ -251,6 +251,19 @@ public class Camera {
     public int getScreenY() {
         return screenY;
     }
+
+    void draw() {
+        Gameplay.view.g.scale(getZoom(), getZoom());
+        Controller.map.draw();
+        
+        Gameplay.view.g.scale(1/getZoom(), 1/getZoom());
+        //GUI
+        if (Controller.map.getMinimap() != null)
+            Controller.map.getMinimap().draw();
+        Gameplay.msgSystem.draw();  
+    }
+    
+
     
     
 }
