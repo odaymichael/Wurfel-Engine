@@ -19,7 +19,6 @@ public class Gameplay extends BasicGameState {
      * 
      */
     public static Controller controller = null;
-    private int stateID = 2;
     /**
      * 
      */
@@ -31,16 +30,15 @@ public class Gameplay extends BasicGameState {
     
  
     /**
-     * 
+     * The Gameplay State. This is state where the magic happens.
      * @param stateID
      */
-    public Gameplay( int stateID ){
-       this.stateID = stateID;
+    public Gameplay(){
     }
     
     @Override
     public int getID() {
-        return stateID;
+        return 2;
     }
      
     @Override
@@ -63,8 +61,6 @@ public class Gameplay extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        //clipping everythoing out of the viewport does not affect anything
-        //g.setClip(0, 0, 600, 800);
         view.render(game, g);
     }
  

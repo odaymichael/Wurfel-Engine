@@ -57,9 +57,8 @@ public class Wurfelengine extends StateBasedGame {
 
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
-        MainMenuState state = new MainMenuState(1);
-        addState(state);
-        addState(new Gameplay(2));
+        addState(new MainMenuState(1));
+        addState(new Gameplay());
         
         gc = container;
     }

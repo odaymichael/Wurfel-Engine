@@ -16,18 +16,18 @@ public class Minimap {
     private final float scaleY = 4;
     
     /**
-     * 
+     * Creates a Minimap. At the momen this is primary for development purposes.
      */
     public Minimap() {
-        X = Gameplay.gc.getWidth() - 400; //400 pixels from right side
+        X = Gameplay.gc.getWidth() - (int) (3*Chunk.BlocksX*scaleX) - 10;
         Y = 10; //10 pixels from top
     } 
             
     /**
      * 
-     * @param g
+     *
      */
-    public void draw(Graphics g) {
+    public void draw() {
         for (int pos=0;pos < 9;pos++){
                  
 //            g.setColor(Color.white);
@@ -59,8 +59,8 @@ public class Minimap {
                         Block.height/2
                 );
 
-                g.setColor(temp);
-                g.fillRect(
+                Gameplay.view.g.setColor(temp);
+                Gameplay.view.g.fillRect(
                     X + (x + (y%2==1?0.5f:0) ) * scaleX,
                     Y + y*scaleY,
                     scaleX,
@@ -70,8 +70,8 @@ public class Minimap {
         }
         
         //player
-        g.setColor(Color.blue);
-        g.drawRect(
+        Gameplay.view.g.setColor(Color.blue);
+        Gameplay.view.g.drawRect(
             X + (Gameplay.controller.player.getRelCoordX() + (Gameplay.controller.player.getRelCoordY()%2==1?0.5f:0) ) * scaleX,
             Y + Gameplay.controller.player.getRelCoordY() * scaleY,
             scaleX,
@@ -80,8 +80,8 @@ public class Minimap {
     
 
         //Chunk outline
-        g.setColor(Color.black);
-        g.drawRect(
+        Gameplay.view.g.setColor(Color.black);
+        Gameplay.view.g.drawRect(
             X + pos%3 *(Chunk.BlocksX*scaleX),
             Y + pos/3*(Chunk.BlocksY*scaleY),
             Chunk.BlocksX*scaleX,
@@ -97,8 +97,8 @@ public class Minimap {
     }
 
     //bottom camera rectangle
-    g.setColor(Color.green);
-    g.drawRect(
+    Gameplay.view.g.setColor(Color.green);
+    Gameplay.view.g.drawRect(
         X + scaleX * Gameplay.view.camera.getX() * Chunk.BlocksX / Chunk.SizeX,
         Y + scaleY * Gameplay.view.camera.getY() * Chunk.BlocksY /Chunk.SizeY,
         scaleX*Gameplay.view.camera.getWidth() * Chunk.BlocksX / Chunk.SizeX,
@@ -106,8 +106,8 @@ public class Minimap {
     );
     
     //player level camera rectangle
-    g.setColor(Color.gray);
-    g.drawRect(
+    Gameplay.view.g.setColor(Color.gray);
+    Gameplay.view.g.drawRect(
         X + scaleX * Gameplay.view.camera.getX() * Chunk.BlocksX / Chunk.SizeX,
         Y + scaleY * Gameplay.view.camera.getY() * Chunk.BlocksY /Chunk.SizeY
           + scaleY *2*(Gameplay.controller.player.coordZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
@@ -116,8 +116,8 @@ public class Minimap {
     );
     
     //top level camera rectangle
-    g.setColor(Color.white);
-    g.drawRect(
+    Gameplay.view.g.setColor(Color.white);
+    Gameplay.view.g.drawRect(
         X + scaleX * Gameplay.view.camera.getX() * Chunk.BlocksX / Chunk.SizeX,
         Y + scaleY * Gameplay.view.camera.getY() * Chunk.BlocksY /Chunk.SizeY
           + scaleY *2*(Chunk.BlocksZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
@@ -137,7 +137,7 @@ public class Minimap {
 
 
     //player coord
-    g.setColor(Color.blue);
+    Gameplay.view.g.setColor(Color.blue);
     View.tTFont.drawString(
         X + (Gameplay.controller.player.getRelCoordX() + (Gameplay.controller.player.getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
         Y + Gameplay.controller.player.getRelCoordY() * scaleY - 50,
@@ -149,7 +149,7 @@ public class Minimap {
     View.tTFont.drawString(
         X + (Gameplay.controller.player.getRelCoordX() + (Gameplay.controller.player.getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
         Y + Gameplay.controller.player.getRelCoordY() * scaleY - 30,
-        Gameplay.controller.player.posX +" | "+ Gameplay.controller.player.posY +" | "+ Gameplay.controller.player.posZ,
+        Gameplay.controller.player.getPosX() +" | "+ Gameplay.controller.player.getPosY() +" | "+ Gameplay.controller.player.getPosZ(),
         Color.red
     );
 
