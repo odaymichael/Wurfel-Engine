@@ -20,15 +20,19 @@ public class Gameplay extends BasicGameState {
      */
     public static Controller controller = null;
     /**
-     * 
+     * Contains the Message System
      */
-    public static MsgSystem msgSystem;
+    public static final MsgSystem MSGSYSTEM;
     /**
      * 
      */
     public static GameContainer gc;
     
  
+    static {
+        MSGSYSTEM = new MsgSystem();
+    }
+    
     /**
      * The Gameplay State. This is state where the magic happens.
      * @param stateID
@@ -48,7 +52,6 @@ public class Gameplay extends BasicGameState {
     
     @Override 
     public void enter(GameContainer container, StateBasedGame game) throws SlickException{
-        msgSystem = new MsgSystem();
         controller = new GameController(container, game);
         view = new View(container);
     }

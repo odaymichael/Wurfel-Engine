@@ -30,15 +30,15 @@ public class Chunk {
     /**
     *The size of a chunk in pixels
     */
-    public static int SizeX = BlocksX*Block.width;
+    public static int SizeX = BlocksX*Block.WIDTH;
     /**
     *The size of a chunk in pixels
     */
-    public static int SizeY = BlocksY*Block.height/2;
+    public static int SizeY = BlocksY*Block.HEIGHT/2;
     /**
      * The size of a chunk in pixels
      */
-    public static int SizeZ = BlocksZ*Block.height;
+    public static int SizeZ = BlocksZ*Block.HEIGHT;
 
     /**
      * 
@@ -76,12 +76,12 @@ public class Chunk {
     private void newChunk(){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
-        Gameplay.msgSystem.add("Neuer Chunk: "+coordX+","+ coordY);
+        Gameplay.MSGSYSTEM.add("Neuer Chunk: "+coordX+","+ coordY);
         for (int x=0; x < BlocksX; x++)
             for (int y=0; y < BlocksY; y++){
                 //Dirt from 0 to 8
                 int height = (int) (Math.random()*BlocksZ-1)+1;
-                //int height = (int) Chunk.BlocksZ / 2;
+                //int HEIGHT = (int) Chunk.BlocksZ / 2;
                 for (int z=0; z < height; z++){
                     //for (int z=0; z < BlocksZ-4; z++)
                     data[x][y][z] = new Block(2);
@@ -143,7 +143,7 @@ public class Chunk {
             */
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
             if (getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc") != null) {    
-                Gameplay.msgSystem.add("Load: "+coordX+","+coordY);
+                Gameplay.MSGSYSTEM.add("Load: "+coordX+","+coordY);
                 //FileReader input = new FileReader("map/chunk"+coordX+","+coordY+".otmc");
                 //BufferedReader bufRead = new BufferedReader(input);
                 BufferedReader bufRead = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc")));

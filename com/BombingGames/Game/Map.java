@@ -121,8 +121,8 @@ public class Map {
         }
         //player switches chunk
         //System.out.println("Player was rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
-        Gameplay.controller.player.setRelCoordX(Gameplay.controller.player.getRelCoordX() +  (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BlocksX);
-        Gameplay.controller.player.setRelCoordY(Gameplay.controller.player.getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BlocksY);
+        Gameplay.controller.getPlayer().setRelCoordX(Gameplay.controller.getPlayer().getRelCoordX() +  (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BlocksX);
+        Gameplay.controller.getPlayer().setRelCoordY(Gameplay.controller.getPlayer().getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BlocksY);
         //System.out.println("Player is rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
         recalcRequested = true;
         } else {
@@ -216,8 +216,8 @@ public class Map {
      * Draws the map
      */
     public void draw() {
-        if (Gameplay.controller.goodgraphics) Block.Blocksheet.bind();
-        if (Gameplay.controller.goodgraphics) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
+        if (Gameplay.controller.hasGoodGraphics()) Block.Blocksheet.bind();
+        if (Gameplay.controller.hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         Block.Blocksheet.startUse();
         //render vom bottom to top
         for (int z=0; z < Chunk.BlocksZ; z++) {
@@ -237,7 +237,7 @@ public class Map {
             }
        }
        Block.Blocksheet.endUse(); 
-       if (Gameplay.controller.goodgraphics) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
+       if (Gameplay.controller.hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
     }
 
    /**

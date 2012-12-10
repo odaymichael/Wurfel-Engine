@@ -76,7 +76,7 @@ public class Player extends MovingBlock{
         }  else runningsound.stop();
 
         //Gravity
-        float acc = -(9.81f/Block.width)/(delta);// this should be g=9.81 m/s^2
+        float acc = -(9.81f/Block.WIDTH)/(delta);// this should be g=9.81 m/s^2
 
         //if (delta<1000) acc = Controller.map.gravity*delta;
 
@@ -112,11 +112,11 @@ public class Player extends MovingBlock{
             Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ+1).setValue(1);
             Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(40,0));
 
-            posZ += Block.width;
+            posZ += Block.WIDTH;
         }
 
         //up
-        if (posZ >= Block.height && coordZ < Chunk.BlocksZ-2 && !Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ+1).isObstacle()){
+        if (posZ >= Block.HEIGHT && coordZ < Chunk.BlocksZ-2 && !Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ+1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
 
             coordZ++;
@@ -125,7 +125,7 @@ public class Player extends MovingBlock{
             Controller.map.getData(getRelCoordX(),getRelCoordY(), coordZ).setValue(0);
             Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ-1, new Block(0,0));
 
-            posZ -= Block.width;
+            posZ -= Block.WIDTH;
         } 
    }
     

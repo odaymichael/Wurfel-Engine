@@ -19,19 +19,10 @@ public class Controller {
      *The list which has all current nine chunks in it.
      */
     public static Map map;
-    /**
-     * Contains the player
-     */
-    public Player player;   
+    private Player player;   
    
-   /**
-     * Should the graphic be a bit slower but better? Must be in Controller because is needed for e.g. the Block and there used as data
-     */
-    public boolean goodgraphics = false;
-    /**
-     * When true every side is rendered. When false the whole block is rendered.
-     */
-    public boolean renderSides = true;
+    private boolean goodgraphics = false;
+    private boolean renderSides = true;
     
     /**
      * 
@@ -65,7 +56,7 @@ public class Controller {
         //get input and do actions
         Input input = gc.getInput();
         
-        if (!Gameplay.msgSystem.isListeningForInput()) {
+        if (!Gameplay.MSGSYSTEM.isListeningForInput()) {
             if (input.isKeyDown(Input.KEY_Q)) gc.exit();
 
             //open menu
@@ -80,13 +71,13 @@ public class Controller {
             //good graphics
             if (input.isKeyPressed(Input.KEY_G)) {
                 goodgraphics = !goodgraphics;
-                Gameplay.msgSystem.add("Good Graphics is now "+goodgraphics);
+                Gameplay.MSGSYSTEM.add("Good Graphics is now "+goodgraphics);
             }
 
             //render method
             if (input.isKeyPressed(Input.KEY_R)) {
                 renderSides = !renderSides;
-                Gameplay.msgSystem.add("Rendermethod changes "+renderSides);
+                Gameplay.MSGSYSTEM.add("Rendermethod changes "+renderSides);
                 Block.reloadSprites(Gameplay.view.camera.getZoom());
             }
 
@@ -99,7 +90,7 @@ public class Controller {
             //reset zoom
             if (input.isKeyPressed(Input.KEY_Z)) {
                 Gameplay.view.camera.setZoom(1);
-                Gameplay.msgSystem.add("Zoom reset");
+                Gameplay.MSGSYSTEM.add("Zoom reset");
             }        
 
             //walk
@@ -121,7 +112,7 @@ public class Controller {
         }
         
         //toggle input for msgSystem
-        if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.msgSystem.listenForInput(!Gameplay.msgSystem.isListeningForInput());
+        if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.MSGSYSTEM.listenForInput(!Gameplay.MSGSYSTEM.isListeningForInput());
 
 //        //earth to right
 //        if (Gameplay.view.camera.getLeftBorder() < Chunk.BlocksX/3)
@@ -160,7 +151,7 @@ public class Controller {
         map.recalcIfRequested();      
        
         //update the log
-        Gameplay.msgSystem.update(delta);
+        Gameplay.MSGSYSTEM.update(delta);
     }
     
     
@@ -179,7 +170,7 @@ public class Controller {
             Chunk.SizeX = (int) (Chunk.BlocksX*Block.width*zoom);
             Chunk.SizeY = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
-            Gameplay.msgSystem.add("Zoom: "+Gameplay.view.camera.getZoom());   
+            Gameplay.MSGSYSTEM.add("Zoom: "+Gameplay.view.camera.getZoom());   
         }
 
         @Override
@@ -241,4 +232,35 @@ public class Controller {
     private void openmenu(){
         boolean openmenu = true;
     }
+
+    /**
+     * Returns the player
+     * @return the player
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * Sets a player 
+     */
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+   /**
+     * Should the graphic be a bit slower but better? Must be in Controller because is needed for e.g. the Block and there used as data
+     */
+    public boolean hasGoodGraphics() {
+        return goodgraphics;
+    }
+
+    /**
+     * When true every side is rendered. When false the whole block is rendered.
+     */
+    public boolean renderSides() {
+        return renderSides;
+    }
+    
+    
 }

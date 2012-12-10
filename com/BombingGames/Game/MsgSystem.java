@@ -54,7 +54,7 @@ public class MsgSystem extends ArrayList {
        //delay 30*100 = 3000ms
        if (timelastupdate >= 30) {
             timelastupdate = 0;
-            for (int i=0;i<size();i++) {
+            for (int i=0; i < size(); i++) {
                 Msg temp = (Msg) get(i);
                 if (temp.getImportance()>0)
                     temp.setImportance(temp.getImportance()-1); 
@@ -69,8 +69,8 @@ public class MsgSystem extends ArrayList {
     public void draw(){
         if (waitforinput) Gameplay.view.g.drawString("MSG:", Gameplay.gc.getWidth()/2, 3*Gameplay.gc.getHeight()/4);
         
-        for (int i=0;i < Gameplay.msgSystem.size();i++){
-            Msg msg = (Msg) Gameplay.msgSystem.get(i);
+        for (int i=0; i < size(); i++){
+            Msg msg = (Msg) get(i);
             Color clr = Color.blue;
             if ("System".equals(msg.getSender())) clr = Color.green;
                 else if ("Warning".equals(msg.getSender())) clr = Color.red;

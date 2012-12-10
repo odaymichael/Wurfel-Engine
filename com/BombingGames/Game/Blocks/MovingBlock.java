@@ -15,8 +15,8 @@ import org.newdawn.slick.SlickException;
  */
 public abstract class MovingBlock extends SelfAwareBlock {
      /*Value in pixels*/
-   protected int posX = Block.width / 2;
-   protected int posY = Block.width / 2;
+   protected int posX = Block.WIDTH / 2;
+   protected int posY = Block.WIDTH / 2;
    protected int posZ = 0;
    
    /*The three values together build a vector. Always one of them must be 1 to prevent a division with 0.*/
@@ -45,13 +45,13 @@ public abstract class MovingBlock extends SelfAwareBlock {
     }
         
     protected int getCorner(int x, int y) {
-        if (x+y <= Block.width /2 && getRelCoordX() > 0)
+        if (x+y <= Block.WIDTH /2 && getRelCoordX() > 0)
             return 7;//top left
-        else if (x-y >= Block.width /2 && getRelCoordX() > 0) 
+        else if (x-y >= Block.WIDTH /2 && getRelCoordX() > 0) 
                 return 1; //top right
-             else if (x+y >= 3*Block.width /2 && getRelCoordY() < Chunk.BlocksY*3-1)
+             else if (x+y >= 3*Block.WIDTH /2 && getRelCoordY() < Chunk.BlocksY*3-1)
                     return 3;//bottom right
-                else if (-x+y >= Block.width /2 && getRelCoordY() < Chunk.BlocksY*3-1)
+                else if (-x+y >= Block.WIDTH /2 && getRelCoordY() < Chunk.BlocksY*3-1)
                         return 5;//bottom left
                     else return 8;//the middle
     }
@@ -95,9 +95,9 @@ public abstract class MovingBlock extends SelfAwareBlock {
 
         //track the coordiante change
         if (getCorner() == 7){
-            Gameplay.msgSystem.add("top left");
-            posY += Block.width/2;
-            posX += Block.width/2;
+            Gameplay.MSGSYSTEM.add("top left");
+            posY += Block.WIDTH/2;
+            posX += Block.WIDTH/2;
             
             selfDestroy();
             setAbsCoordY(getAbsCoordY()-1);
@@ -107,9 +107,9 @@ public abstract class MovingBlock extends SelfAwareBlock {
             Controller.map.requestRecalc();
         } else {
             if (getCorner() == 1) {
-                Gameplay.msgSystem.add("top right");
-                posY += Block.width / 2;
-                posX -= Block.width / 2;
+                Gameplay.MSGSYSTEM.add("top right");
+                posY += Block.WIDTH / 2;
+                posX -= Block.WIDTH / 2;
 
                 selfDestroy();
                 setAbsCoordY(getAbsCoordY()-1);
@@ -119,9 +119,9 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 Controller.map.requestRecalc();
             } else {
                 if (getCorner() == 5) {
-                    Gameplay.msgSystem.add("bottom left");
-                    posY -= Block.width/2;
-                    posX += Block.width/2;
+                    Gameplay.MSGSYSTEM.add("bottom left");
+                    posY -= Block.WIDTH/2;
+                    posX += Block.WIDTH/2;
 
                     selfDestroy();
                     setAbsCoordY(getAbsCoordY()+1);
@@ -131,9 +131,9 @@ public abstract class MovingBlock extends SelfAwareBlock {
                     Controller.map.requestRecalc();
                 } else {
                     if (getCorner() == 3) {
-                        Gameplay.msgSystem.add("bottom right");
-                        posY -= Block.width/2;
-                        posX -= Block.width/2;
+                        Gameplay.MSGSYSTEM.add("bottom right");
+                        posY -= Block.WIDTH/2;
+                        posX -= Block.WIDTH/2;
 
                         selfDestroy();
                         setAbsCoordY(getAbsCoordY()+1);
@@ -149,7 +149,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
         Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ-1).setLightlevel(40);
 
         //set the offset for the rendering
-        setOffset(posX - Block.width/2, posY - posZ - Block.width/2);
+        setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
         Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ+1).setOffset(getOffsetX(), getOffsetY());
 
        //GameplayState.iglog.add(getRelCoordX()+":"+getRelCoordY()+":"+coordZ);

@@ -18,19 +18,14 @@ public class Block {
     private final int id;
     
     /**
-        * How much <b>h</b>ealth <b>p</b>oints has the block?
-        * When it is 0 it get's destroyed.
-        */
-    private int hp = 100;
-    /**
         * the value which can be used for storing information about a sub version of the object
         */
     private int value = 0;
     /**
        * The Name of the Block.
        */
-    public final String name;
-    /**
+    
+        /**
      * Can light travel throug block?
      */
     private boolean transparent;
@@ -39,27 +34,28 @@ public class Block {
         * Is this Block an obstacle or can you pass through?
         */
     private boolean obstacle;
+    public final String name;
 
     /**
-       * width of the image
+       * WIDTH of the image
        */
-    public static final int width = 160;
+    public static final int WIDTH = 160;
     /**
-       *height of the image 
+       *HEIGHT of the image 
        */
-    public static final int height = 80;
+    public static final int HEIGHT = 80;
     
     /**
      * The size the block is rendered at. You should only use this at rendering!
      */
     public static int displWidth;
     /**
-     * The height the block is rendered at. You should only use this at rendering!
+     * The HEIGHT the block is rendered at. You should only use this at rendering!
      */
     public static int displHeight;
     
     /**
-     * How much bigger is the width than the hight (block height not image height) of a block?
+     * How much bigger is the WIDTH than the hight (block HEIGHT not image HEIGHT) of a block?
      */
     public static final float aspectRatio;
     /**
@@ -114,8 +110,15 @@ public class Block {
     public boolean renderRight = false;
     private boolean visible;
     
+    /**
+        * How much <b>h</b>ealth <b>p</b>oints has the block?
+        * When it is 0 it get's destroyed.
+        */
+    private int hp = 100;
+    
+    
     static {
-        aspectRatio = width/height;
+        aspectRatio = WIDTH/HEIGHT;
         Log.debug("Aspect ratio of blocks: "+ Float.toString(aspectRatio));
         SidesSprites[1][0][0][0] = 3;
         SidesSprites[1][0][0][1] = 0;
@@ -494,7 +497,7 @@ public class Block {
             //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
             //Block renderBlock = Controller.map.data[x][y][z]; 
             
-            if (Gameplay.controller.renderSides){ 
+            if (Gameplay.controller.renderSides()){ 
                 if (renderTop) drawSide(x,y,z, 1);
                 if (renderLeft) drawSide(x,y,z, 0);
                 if (renderRight) drawSide(x,y,z, 2);
@@ -521,13 +524,13 @@ public class Block {
                 
                 temp.drawEmbedded(
                     -Gameplay.view.camera.getX()
-                    + x*Block.width
-                    + (y%2) * (int) (Block.width/2)
+                    + x*Block.WIDTH
+                    + (y%2) * (int) (Block.WIDTH/2)
                     + getOffsetX()
                     ,
                     -Gameplay.view.camera.getY()/2
-                    + y*Block.height/2
-                    - z*Block.height
+                    + y*Block.HEIGHT/2
+                    - z*Block.HEIGHT
                     + getOffsetY() * (1/Block.aspectRatio)
                 );
                 
@@ -551,7 +554,7 @@ public class Block {
     private void drawSide(int x, int y, int z,int sidenumb){
         Image sideimage = getSideSprite(sidenumb);
         
-        if (Gameplay.controller.goodgraphics){
+        if (Gameplay.controller.hasGoodGraphics()){
                 GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
         
             if (sidenumb == 0){
@@ -575,14 +578,14 @@ public class Block {
         
         sideimage.drawEmbedded(
             -  Gameplay.view.camera.getX()
-            + x*Block.width
-            + (y%2) * (int) (Block.width/2)
+            + x*Block.WIDTH
+            + (y%2) * (int) (Block.WIDTH/2)
             + getOffsetX()
             ,            
             - Gameplay.view.camera.getY()
-            + y*Block.height/2
-            - z*Block.height
-            + ( sidenumb == 1 ? -Block.height/2:0)//the top is drawn /4 Blocks higher
+            + y*Block.HEIGHT/2
+            - z*Block.HEIGHT
+            + ( sidenumb == 1 ? -Block.HEIGHT/2:0)//the top is drawn /4 Blocks higher
             + getOffsetY() * (1/Block.aspectRatio)
         );
     }
@@ -592,21 +595,21 @@ public class Block {
      * @param zoom the zoom factor of the new image
      */
     public static void reloadSprites(float zoom) {
-        displWidth = (int) (width*zoom);
-        displHeight = (int) (height*zoom);
+        displWidth = (int) (WIDTH*zoom);
+        displHeight = (int) (HEIGHT*zoom);
         try {
-            if (Gameplay.controller.renderSides){//single sides
-                Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", width, (int) (height*1.5f));
+            if (Gameplay.controller.renderSides()){//single sides
+                Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", WIDTH, (int) (HEIGHT*1.5f));
             
-                Gameplay.msgSystem.add("displWidth: "+displWidth);
+                Gameplay.MSGSYSTEM.add("displWidth: "+displWidth);
                 Log.debug("displWidth: "+displWidth);
-                Gameplay.msgSystem.add("displHeight: "+displHeight);
+                Gameplay.MSGSYSTEM.add("displHeight: "+displHeight);
                 Log.debug("displHeight: "+displHeight);
 
             } else {//whole Blocks
-                Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Blocksprite.png", width, height*2, 4);
+                Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Blocksprite.png", WIDTH, HEIGHT*2, 4);
                 
-                Gameplay.msgSystem.add("BlockWidth"+displWidth);
+                Gameplay.MSGSYSTEM.add("BlockWidth"+displWidth);
             }
         } catch (SlickException ex) {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);

@@ -3,7 +3,6 @@ package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 
 /**
  *
@@ -41,22 +40,22 @@ public class Minimap {
         Color temp;
         for (int x = Chunk.BlocksX*(pos%3); x < Chunk.BlocksX * (pos%3+1); x++){
             for (int y = Chunk.BlocksY*(pos/3); y < Chunk.BlocksY * (pos/3+1); y++){
-                if (Gameplay.controller.renderSides){
-                    Block block = Controller.map.getData(x, y, Gameplay.controller.player.coordZ-1);
+                if (Gameplay.controller.renderSides()){
+                    Block block = Controller.map.getData(x, y, Gameplay.controller.getPlayer().coordZ-1);
                     temp = Block.Blocksheet.getSubImage(
                             Block.SidesSprites[block.getId()][block.getValue()][1][0],
                             Block.SidesSprites[block.getId()][block.getValue()][1][1]
                         ).getColor(
-                            Block.width/2,
-                            Block.height
+                            Block.WIDTH/2,
+                            Block.HEIGHT
                     );                
                 } else
                     temp = Block.Blocksheet.getSubImage(
-                        Controller.map.getData(x, y, Gameplay.controller.player.coordZ-1).spriteX[0],
-                        Controller.map.getData(x, y, Gameplay.controller.player.coordZ-1).spriteY[0]
+                        Controller.map.getData(x, y, Gameplay.controller.getPlayer().coordZ-1).spriteX[0],
+                        Controller.map.getData(x, y, Gameplay.controller.getPlayer().coordZ-1).spriteY[0]
                     ).getColor(
-                        Block.width/2,
-                        Block.height/2
+                        Block.WIDTH/2,
+                        Block.HEIGHT/2
                 );
 
                 Gameplay.view.g.setColor(temp);
@@ -72,8 +71,8 @@ public class Minimap {
         //player
         Gameplay.view.g.setColor(Color.blue);
         Gameplay.view.g.drawRect(
-            X + (Gameplay.controller.player.getRelCoordX() + (Gameplay.controller.player.getRelCoordY()%2==1?0.5f:0) ) * scaleX,
-            Y + Gameplay.controller.player.getRelCoordY() * scaleY,
+            X + (Gameplay.controller.getPlayer().getRelCoordX() + (Gameplay.controller.getPlayer().getRelCoordY()%2==1?0.5f:0) ) * scaleX,
+            Y + Gameplay.controller.getPlayer().getRelCoordY() * scaleY,
             scaleX,
             scaleY
         );
@@ -110,7 +109,7 @@ public class Minimap {
     Gameplay.view.g.drawRect(
         X + scaleX * Gameplay.view.camera.getX() * Chunk.BlocksX / Chunk.SizeX,
         Y + scaleY * Gameplay.view.camera.getY() * Chunk.BlocksY /Chunk.SizeY
-          + scaleY *2*(Gameplay.controller.player.coordZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
+          + scaleY *2*(Gameplay.controller.getPlayer().coordZ * Block.HEIGHT) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
         scaleX*Gameplay.view.camera.getWidth() * Chunk.BlocksX / Chunk.SizeX,
         scaleY*Gameplay.view.camera.getHeight() * Chunk.BlocksY/Chunk.SizeY
     );
@@ -120,7 +119,7 @@ public class Minimap {
     Gameplay.view.g.drawRect(
         X + scaleX * Gameplay.view.camera.getX() * Chunk.BlocksX / Chunk.SizeX,
         Y + scaleY * Gameplay.view.camera.getY() * Chunk.BlocksY /Chunk.SizeY
-          + scaleY *2*(Chunk.BlocksZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
+          + scaleY *2*(Chunk.BlocksZ * Block.HEIGHT) * (Chunk.BlocksZ / (float) Chunk.SizeZ),
         scaleX*Gameplay.view.camera.getWidth() * Chunk.BlocksX / Chunk.SizeX,
         scaleY*Gameplay.view.camera.getHeight() * Chunk.BlocksY/Chunk.SizeY
     );
@@ -129,7 +128,7 @@ public class Minimap {
             X + scaleX * Gameplay.view.camera.getX() * Chunk.BlocksX / Chunk.SizeX
               + scaleX*Gameplay.view.camera.getWidth() * Chunk.BlocksX / Chunk.SizeX,
             Y + scaleY * Gameplay.view.camera.getY() * Chunk.BlocksY /Chunk.SizeY
-              + scaleY *2*(Gameplay.controller.player.coordZ * Block.height) * (Chunk.BlocksZ / (float) Chunk.SizeZ)
+              + scaleY *2*(Gameplay.controller.getPlayer().coordZ * Block.HEIGHT) * (Chunk.BlocksZ / (float) Chunk.SizeZ)
               + scaleY*Gameplay.view.camera.getHeight() * Chunk.BlocksY/Chunk.SizeY,
             Gameplay.view.camera.getRightBorder() +" | "+ Gameplay.view.camera.getBottomBorder() ,
             Color.black
@@ -139,17 +138,17 @@ public class Minimap {
     //player coord
     Gameplay.view.g.setColor(Color.blue);
     View.tTFont.drawString(
-        X + (Gameplay.controller.player.getRelCoordX() + (Gameplay.controller.player.getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
-        Y + Gameplay.controller.player.getRelCoordY() * scaleY - 50,
-        Gameplay.controller.player.getRelCoordX() +" | "+ Gameplay.controller.player.getRelCoordY() +" | "+ Gameplay.controller.player.coordZ,
+        X + (Gameplay.controller.getPlayer().getRelCoordX() + (Gameplay.controller.getPlayer().getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
+        Y + Gameplay.controller.getPlayer().getRelCoordY() * scaleY - 50,
+        Gameplay.controller.getPlayer().getRelCoordX() +" | "+ Gameplay.controller.getPlayer().getRelCoordY() +" | "+ Gameplay.controller.getPlayer().coordZ,
         Color.blue
     );
 
     //player pos
     View.tTFont.drawString(
-        X + (Gameplay.controller.player.getRelCoordX() + (Gameplay.controller.player.getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
-        Y + Gameplay.controller.player.getRelCoordY() * scaleY - 30,
-        Gameplay.controller.player.getPosX() +" | "+ Gameplay.controller.player.getPosY() +" | "+ Gameplay.controller.player.getPosZ(),
+        X + (Gameplay.controller.getPlayer().getRelCoordX() + (Gameplay.controller.getPlayer().getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
+        Y + Gameplay.controller.getPlayer().getRelCoordY() * scaleY - 30,
+        Gameplay.controller.getPlayer().getPosX() +" | "+ Gameplay.controller.getPlayer().getPosY() +" | "+ Gameplay.controller.getPlayer().getPosZ(),
         Color.red
     );
 

@@ -29,8 +29,8 @@ public class Camera {
      * Creates a camera.
      * @param x The screen coordinates
      * @param y The screen coordinate
-     * @param width The screen width of the camera
-     * @param height The screen height of the camera
+     * @param WIDTH The screen WIDTH of the camera
+     * @param HEIGHT The screen HEIGHT of the camera
      * @param zoom The zoom factor.
      */
     Camera(int x, int y,int width, int height,float zoom) {
@@ -49,26 +49,26 @@ public class Camera {
      */
     public void update() {
         if (focus) {//focus on block
-             x = focusblock.getX() * Block.width
-                + Block.width / 2 *(focusblock.getY() % 2)
+             x = focusblock.getX() * Block.WIDTH
+                + Block.WIDTH / 2 *(focusblock.getY() % 2)
                 + focusblock.getBlock().getOffsetX()
                 - Gameplay.view.camera.width / 2;
             
             y = (int) (
-                (focusblock.getY()/2f - focusblock.getZ()) * Block.height
+                (focusblock.getY()/2f - focusblock.getZ()) * Block.HEIGHT
                 - Gameplay.view.camera.height/2
                 + focusblock.getBlock().getOffsetY() * (1/Block.aspectRatio)
                 );
             
         } else {//focus on player
-            Player player = Gameplay.controller.player;
-            x = player.getRelCoordX() * Block.width
-                + Block.width / 2 *(player.getRelCoordY() % 2)
+            Player player = Gameplay.controller.getPlayer();
+            x = player.getRelCoordX() * Block.WIDTH
+                + Block.WIDTH / 2 *(player.getRelCoordY() % 2)
                 + player.getOffsetX()
                 - Gameplay.view.camera.width / 2;
             
             y = (int) (
-                (player.getRelCoordY()/2f - player.coordZ) * Block.height
+                (player.getRelCoordY()/2f - player.coordZ) * Block.HEIGHT
                 - Gameplay.view.camera.height/2
                 + player.getOffsetY() * (1/Block.aspectRatio)
                 );
@@ -117,7 +117,7 @@ public class Camera {
      * @return 
      */
     public int getLeftBorder(){
-        int tmp = x/Block.width -1;
+        int tmp = x/Block.WIDTH -1;
         if (tmp < 0) return 0;
         return tmp;
     }
@@ -127,7 +127,7 @@ public class Camera {
      * @return
      */
     public int getRightBorder(){
-        int tmp = (x+width)/Block.width+2;
+        int tmp = (x+width)/Block.WIDTH+2;
         if (tmp >= Chunk.BlocksX*3) return Chunk.BlocksX*3-1;
         return tmp;
     }
@@ -137,7 +137,7 @@ public class Camera {
      * @return measured in blocks
      */
     public int getTopBorder(){
-        int tmp = 2*y/Block.height;
+        int tmp = 2*y/Block.HEIGHT;
         if (tmp < 0) return 0;
         return tmp;
     }
@@ -147,7 +147,7 @@ public class Camera {
      * @return measured in blocks
      */
     public int getBottomBorder(){
-        int tmp = (y+height)/(Block.height/2) + Chunk.BlocksZ*2;
+        int tmp = (y+height)/(Block.HEIGHT/2) + Chunk.BlocksZ*2;
         if (tmp >= Chunk.BlocksY*3) return Chunk.BlocksY*3-1;
         return tmp;
     }
@@ -203,11 +203,11 @@ public class Camera {
 
 
     /**
-     * Returns the amount of (game) pixels visible in Y direction. Ground level+ slope width.
+     * Returns the amount of (game) pixels visible in Y direction. Ground level+ slope WIDTH.
      * @return
      */
     public int getYzHeight() {
-        return height + Block.height*Chunk.BlocksZ;
+        return height + Block.HEIGHT*Chunk.BlocksZ;
     }
 
     
@@ -221,7 +221,7 @@ public class Camera {
 
     
     /**
-     * Returns the height of the camera output.
+     * Returns the HEIGHT of the camera output.
      * @return
      */
     public float getScreenHeight() {
@@ -229,7 +229,7 @@ public class Camera {
     }
 
     /**
-     * Returns the width of the camera output.
+     * Returns the WIDTH of the camera output.
      * @return
      */
     public float getScreenWidth() {
@@ -260,7 +260,7 @@ public class Camera {
         //GUI
         if (Controller.map.getMinimap() != null)
             Controller.map.getMinimap().draw();
-        Gameplay.msgSystem.draw();  
+        Gameplay.MSGSYSTEM.draw();  
     }
     
 

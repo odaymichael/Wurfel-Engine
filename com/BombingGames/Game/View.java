@@ -55,12 +55,12 @@ public class View {
         camera = new Camera(
             0,//top
             0,//left
-            gc.getWidth(),//full width
-            gc.getHeight(),//full height
-            gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.height*2)//zoom factor
+            gc.getWidth(),//full WIDTH
+            gc.getHeight(),//full HEIGHT
+            gc.getHeight()*4 / (float)(Chunk.BlocksY* Block.HEIGHT*2)//zoom factor
             );
         
-        if (camera.getYzHeight() > Chunk.SizeY) Gameplay.msgSystem.add("The chunks are too small for this camera height/resolution", "Warning");
+        if (camera.getYzHeight() > Chunk.SizeY) Gameplay.MSGSYSTEM.add("The chunks are too small for this camera height/resolution", "Warning");
         
         
         
@@ -70,14 +70,14 @@ public class View {
         tTFont_small = new TrueTypeFont(font, true);*/
         
         //update resolution things
-        Gameplay.msgSystem.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
+        Gameplay.MSGSYSTEM.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
         
         Block.reloadSprites(camera.getZoom()); 
-        // Block.width = Block.height;
-        Gameplay.msgSystem.add("Blocks: "+Block.width+" x "+Block.height);
-        Gameplay.msgSystem.add("Zoom: "+ camera.getZoom());
-        Gameplay.msgSystem.add("chunk: "+ Chunk.SizeX+" x "+Chunk.SizeY);
-        Gameplay.msgSystem.add("chunk w/ zoom: "+Chunk.SizeX*camera.getZoom()+" x "+Chunk.SizeY*camera.getZoom());
+        // Block.WIDTH = Block.HEIGHT;
+        Gameplay.MSGSYSTEM.add("Blocks: "+Block.WIDTH+" x "+Block.HEIGHT);
+        Gameplay.MSGSYSTEM.add("Zoom: "+ camera.getZoom());
+        Gameplay.MSGSYSTEM.add("chunk: "+ Chunk.SizeX+" x "+Chunk.SizeY);
+        Gameplay.MSGSYSTEM.add("chunk w/ zoom: "+Chunk.SizeX*camera.getZoom()+" x "+Chunk.SizeY*camera.getZoom());
     }
     
     /**
@@ -113,7 +113,7 @@ public class View {
 //        
 //        int start2X = chunk.posX;
 //        int start2Y = chunk.posY;
-//        int end2X = chunk.posX + Chunk.width;
+//        int end2X = chunk.posX + Chunk.WIDTH;
 //        int end2Y = chunk.posY;
 //
 //        //Countervariables
@@ -152,7 +152,7 @@ public class View {
 //            //Linie 2  (von oben links nach utnen rechts)  \       
 //            if (s2x < chunk.data.length*2) {
 //                s2x++;
-//                start2X = chunk.posX + Chunk.width - s2x*Controller.tilesizeX/2;
+//                start2X = chunk.posX + Chunk.WIDTH - s2x*Controller.tilesizeX/2;
 //            } else {
 //                s2y++;
 //                start2Y = chunk.posY + s2y*Controller.tilesizeY/2;
@@ -163,7 +163,7 @@ public class View {
 //                end2Y = chunk.posY + e2y*Controller.tilesizeY/2;                    
 //            } else {
 //                e2x++;
-//                end2X = chunk.posX + Chunk.width - e2x*Controller.tilesizeX/2;                   
+//                end2X = chunk.posX + Chunk.WIDTH - e2x*Controller.tilesizeX/2;                   
 //            }
 //
 //            g.drawLine(
@@ -209,7 +209,7 @@ public class View {
                         side
                     );
         
-        if (!Gameplay.controller.renderSides){
+        if (!Gameplay.controller.renderSides()){
             //send it for the shifted row again
             for (int x=0; x < Chunk.BlocksX*3; x++)
                 for (int z=0; z < Chunk.BlocksZ; z++)            
@@ -224,7 +224,7 @@ public class View {
     }
 
     private void trace_ray(int x, int y, int z, int side){
-        if (Gameplay.controller.renderSides){//trace ray on every side
+        if (Gameplay.controller.renderSides()){//trace ray on every side
             boolean leftside = true;
             boolean rightside = true;
             
