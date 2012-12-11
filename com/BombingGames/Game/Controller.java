@@ -18,7 +18,7 @@ public class Controller {
     /**
      *The list which has all current nine chunks in it.
      */
-    public static Map map;
+    private static Map map;
     private Player player;   
    
     private boolean goodgraphics = false;
@@ -260,6 +260,18 @@ public class Controller {
      */
     public boolean renderSides() {
         return renderSides;
+    }
+
+    public static Map getMap() {
+        return map;
+    }
+    
+    public static Block[][][] getMapData(){
+        return map.getData();
+    }
+    
+    public static Block getMapData(int x, int y, int z){
+        return map.getData(x, y, z);
     }
     
     

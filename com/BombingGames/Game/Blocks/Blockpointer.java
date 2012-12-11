@@ -79,6 +79,6 @@ public class Blockpointer{
      * @return
      */
     public Block getBlock() {
-        return Controller.map.getData(x, y, z);
+        return Controller.getMapData(x, y, z);
     }
 }

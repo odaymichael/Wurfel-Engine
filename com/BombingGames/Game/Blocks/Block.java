@@ -99,15 +99,15 @@ public class Block {
     /**
      * Render top side?
      */
-    public boolean renderTop = false;
+    private boolean renderTop = false;
     /**
      * Render Left Side?
      */
-    public boolean renderLeft = false;
+    private boolean renderLeft = false;
     /**
      * Render Right Side
      */
-    public boolean renderRight = false;
+    private boolean renderRight = false;
     private boolean visible;
     
     /**
@@ -404,11 +404,16 @@ public class Block {
 
 
     /**
-     * 
-     * @param visible
+     *When visible=false, every side will get invisible. This is important for rendering with the siderendering algorithm
+     * @param visible Sets the visibility
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
+        if (!this.visible){
+            renderLeft = false;
+            renderTop = false;
+            renderRight = false;
+        }
     }
     
     /**
@@ -615,4 +620,21 @@ public class Block {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    /**
+     * Make a side (in)visible. If one side is visible, the whole block is visible.
+     * @param side 0 = left, 1 = top, 2 = right
+     * @param visible The value
+     */
+    public void setSideVisibility(int side, boolean visible) {
+        if (side==0)
+            renderLeft = visible;
+        else if (side==1)
+            renderTop = visible;
+                else if (side==2)
+                    renderRight = visible;
+        if (visible) this.visible = true;
+    }
+
+
 }

@@ -41,7 +41,7 @@ public class Minimap {
         for (int x = Chunk.BlocksX*(pos%3); x < Chunk.BlocksX * (pos%3+1); x++){
             for (int y = Chunk.BlocksY*(pos/3); y < Chunk.BlocksY * (pos/3+1); y++){
                 if (Gameplay.controller.renderSides()){
-                    Block block = Controller.map.getData(x, y, Gameplay.controller.getPlayer().coordZ-1);
+                    Block block = Controller.getMapData(x, y, Gameplay.controller.getPlayer().coordZ-1);
                     temp = Block.Blocksheet.getSubImage(
                             Block.SidesSprites[block.getId()][block.getValue()][1][0],
                             Block.SidesSprites[block.getId()][block.getValue()][1][1]
@@ -51,8 +51,8 @@ public class Minimap {
                     );                
                 } else
                     temp = Block.Blocksheet.getSubImage(
-                        Controller.map.getData(x, y, Gameplay.controller.getPlayer().coordZ-1).spriteX[0],
-                        Controller.map.getData(x, y, Gameplay.controller.getPlayer().coordZ-1).spriteY[0]
+                        Controller.getMapData(x, y, Gameplay.controller.getPlayer().coordZ-1).spriteX[0],
+                        Controller.getMapData(x, y, Gameplay.controller.getPlayer().coordZ-1).spriteY[0]
                     ).getColor(
                         Block.WIDTH/2,
                         Block.HEIGHT/2
@@ -90,7 +90,7 @@ public class Minimap {
         View.tTFont.drawString(
             X + 10 + pos%3*Chunk.BlocksX*scaleX,
             Y +10 + pos/3*(Chunk.BlocksY*scaleY),
-            Controller.map.getCoordlistX(pos) +" | "+ Controller.map.getCoordlistY(pos) ,
+            Controller.getMap().getCoordlistX(pos) +" | "+ Controller.getMap().getCoordlistY(pos) ,
             Color.black
         );
     }

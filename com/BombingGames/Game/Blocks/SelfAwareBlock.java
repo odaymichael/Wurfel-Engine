@@ -131,7 +131,7 @@ public abstract class SelfAwareBlock extends Block{
      */
     public void setAbsCoordX(int X){
         absCoordX = X;
-        setRelCoordX(X - Controller.map.getCoordlistX(4)  * Chunk.BlocksX);
+        setRelCoordX(X - Controller.getMap().getCoordlistX(4)  * Chunk.BlocksX);
     }
     
 
@@ -142,7 +142,7 @@ public abstract class SelfAwareBlock extends Block{
     public void setAbsCoordY(int Y){
         absCoordY = Y;
         //da das Map Coordinatensystem in y-Richtung in zwei unterschiedliche Richtungen geht (hier "+" ???)
-        setRelCoordY(Y + Controller.map.getCoordlistY(4) *Chunk.BlocksY);
+        setRelCoordY(Y + Controller.getMap().getCoordlistY(4) *Chunk.BlocksY);
     }    
    
     /**
@@ -164,16 +164,16 @@ public abstract class SelfAwareBlock extends Block{
      * 
      */
     protected void selfDestroy(){
-        Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(0,0));
-        Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(0,0));
+        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(0,0));
+        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(0,0));
     }
     
     /**
      * 
      */
     protected void selfRebuild(){
-        Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ, this);
-        Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));
+        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, this);
+        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));
     }
     
    /**
@@ -189,23 +189,23 @@ public abstract class SelfAwareBlock extends Block{
        int z = coordZ+relZ;
         switch(side){
             case 0:
-                return Controller.map.getData(getRelCoordX(),getRelCoordY()-2, z);
+                return Controller.getMapData(getRelCoordX(),getRelCoordY()-2, z);
             case 1:
-                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()-1, z);
+                return Controller.getMapData(getRelCoordX() -(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()-1, z);
             case 2:
-                return Controller.map.getData(getRelCoordX()+1, getRelCoordY(), z);
+                return Controller.getMapData(getRelCoordX()+1, getRelCoordY(), z);
             case 3:
-                return Controller.map.getData(getRelCoordX() +(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()+1, z);
+                return Controller.getMapData(getRelCoordX() +(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()+1, z);
             case 4:
-                return Controller.map.getData(getRelCoordX(), getRelCoordY()+2, z);
+                return Controller.getMapData(getRelCoordX(), getRelCoordY()+2, z);
             case 5:
-                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()+1, z);
+                return Controller.getMapData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()+1, z);
             case 6:
-                return Controller.map.getData(getRelCoordX()-1, getRelCoordY(), z);         
+                return Controller.getMapData(getRelCoordX()-1, getRelCoordY(), z);         
             case 7:
-                return Controller.map.getData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()-1, z);
+                return Controller.getMapData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()-1, z);
             default:
-                return Controller.map.getData(getRelCoordX(), getRelCoordY(), z);        
+                return Controller.getMapData(getRelCoordX(), getRelCoordY(), z);        
         } 
     }
 }

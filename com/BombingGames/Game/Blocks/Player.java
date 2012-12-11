@@ -25,7 +25,7 @@ public class Player extends MovingBlock{
         super(40,0);
         setAbsCoords(X,Y,Z);
         //creates the top of the player
-        Controller.map.setData(X, Y, coordZ+1, new Block(40,1));
+        Controller.getMap().setData(X, Y, coordZ+1, new Block(40,1));
     }
     
   
@@ -86,7 +86,7 @@ public class Player extends MovingBlock{
             && (
                 coordZ==0
                 ||
-                Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ-1).isObstacle()
+                Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ-1).isObstacle()
             )
         ){
             veloZ = 0;
@@ -104,26 +104,26 @@ public class Player extends MovingBlock{
 
         //coordinate switch
         //down
-        if (posZ <= 0 && coordZ>0 && !Controller.map.getData(getRelCoordX(),getRelCoordY(),coordZ-1).isObstacle()){
+        if (posZ <= 0 && coordZ>0 && !Controller.getMapData(getRelCoordX(),getRelCoordY(),coordZ-1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
             coordZ--;
             
-            Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ+2, new Block(0,0));
-            Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ+1).setValue(1);
-            Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(40,0));
+            Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+2, new Block(0,0));
+            Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).setValue(1);
+            Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(40,0));
 
             posZ += Block.WIDTH;
         }
 
         //up
-        if (posZ >= Block.HEIGHT && coordZ < Chunk.BlocksZ-2 && !Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ+1).isObstacle()){
+        if (posZ >= Block.HEIGHT && coordZ < Chunk.BlocksZ-2 && !Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
 
             coordZ++;
 
-            Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));
-            Controller.map.getData(getRelCoordX(),getRelCoordY(), coordZ).setValue(0);
-            Controller.map.setData(getRelCoordX(), getRelCoordY(), coordZ-1, new Block(0,0));
+            Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));
+            Controller.getMapData(getRelCoordX(),getRelCoordY(), coordZ).setValue(0);
+            Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ-1, new Block(0,0));
 
             posZ -= Block.WIDTH;
         } 

@@ -224,9 +224,9 @@ public class Map {
             for (int y = Gameplay.view.camera.getTopBorder(); y < Gameplay.view.camera.getBottomBorder(); y++) {//vertikal
                 for (int x = Gameplay.view.camera.getLeftBorder(); x < Gameplay.view.camera.getRightBorder(); x++){//horizontal
                     if (
-                        (x < Chunk.BlocksX*3-1 && Controller.map.data[x+1][y][z].renderorder == -1)
+                        (x < Chunk.BlocksX*3-1 && data[x+1][y][z].renderorder == -1)
                         ||
-                        Controller.map.data[x][y][z].renderorder == 1
+                        data[x][y][z].renderorder == 1
                        ) {
                         x++;
                         data[x][y][z].draw(x,y,z);//draw the right block first

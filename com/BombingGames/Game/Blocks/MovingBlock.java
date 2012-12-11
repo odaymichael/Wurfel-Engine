@@ -104,7 +104,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
             if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
             selfRebuild();
             
-            Controller.map.requestRecalc();
+            Controller.getMap().requestRecalc();
         } else {
             if (getCorner() == 1) {
                 Gameplay.MSGSYSTEM.add("top right");
@@ -116,7 +116,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
                 selfRebuild(); 
                 
-                Controller.map.requestRecalc();
+                Controller.getMap().requestRecalc();
             } else {
                 if (getCorner() == 5) {
                     Gameplay.MSGSYSTEM.add("bottom left");
@@ -128,7 +128,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
                     if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
                     selfRebuild();
                     
-                    Controller.map.requestRecalc();
+                    Controller.getMap().requestRecalc();
                 } else {
                     if (getCorner() == 3) {
                         Gameplay.MSGSYSTEM.add("bottom right");
@@ -140,17 +140,17 @@ public abstract class MovingBlock extends SelfAwareBlock {
                         if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
                         selfRebuild();
                         
-                        Controller.map.requestRecalc();
+                        Controller.getMap().requestRecalc();
                     }
                 }
             }  
         }
         //enable this line to see where to player stands
-        Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ-1).setLightlevel(40);
+        Controller.getMap().getData(getRelCoordX(), getRelCoordY(), coordZ-1).setLightlevel(40);
 
         //set the offset for the rendering
         setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
-        Controller.map.getData(getRelCoordX(), getRelCoordY(), coordZ+1).setOffset(getOffsetX(), getOffsetY());
+        Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).setOffset(getOffsetX(), getOffsetY());
 
        //GameplayState.iglog.add(getRelCoordX()+":"+getRelCoordY()+":"+coordZ);
         //System.out.println(getRelCoordX()+":"+getRelCoordY()+":"+coordZ);    

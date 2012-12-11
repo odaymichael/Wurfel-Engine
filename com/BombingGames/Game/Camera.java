@@ -254,12 +254,12 @@ public class Camera {
 
     void draw() {
         Gameplay.view.g.scale(getZoom(), getZoom());
-        Controller.map.draw();
+        Controller.getMap().draw();
         
         Gameplay.view.g.scale(1/getZoom(), 1/getZoom());
         //GUI
-        if (Controller.map.getMinimap() != null)
-            Controller.map.getMinimap().draw();
+        if (Controller.getMap().getMinimap() != null)
+            Controller.getMap().getMinimap().draw();
         Gameplay.MSGSYSTEM.draw();  
     }
     
