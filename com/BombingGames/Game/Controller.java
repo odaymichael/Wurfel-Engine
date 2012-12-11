@@ -243,6 +243,7 @@ public class Controller {
 
     /**
      * Sets a player 
+     * @param player 
      */
     public void setPlayer(Player player) {
         this.player = player;
@@ -250,6 +251,7 @@ public class Controller {
 
    /**
      * Should the graphic be a bit slower but better? Must be in Controller because is needed for e.g. the Block and there used as data
+     * @return 
      */
     public boolean hasGoodGraphics() {
         return goodgraphics;
@@ -257,6 +259,7 @@ public class Controller {
 
     /**
      * When true every side is rendered. When false the whole block is rendered.
+     * @return 
      */
     public boolean renderSides() {
         return renderSides;

@@ -15,16 +15,37 @@ import org.newdawn.slick.SlickException;
  */
 public abstract class MovingBlock extends SelfAwareBlock {
      /*Value in pixels*/
-   protected int posX = Block.WIDTH / 2;
+    /**
+     * 
+     */
+    protected int posX = Block.WIDTH / 2;
+   /**
+    * 
+    */
    protected int posY = Block.WIDTH / 2;
+   /**
+    * 
+    */
    protected int posZ = 0;
    
    /*The three values together build a vector. Always one of them must be 1 to prevent a division with 0.*/
+   /**
+    * 
+    */
    protected float veloX = 1;
+   /**
+    * 
+    */
    protected float veloY = 0;
+   /**
+    * 
+    */
    protected float veloZ = 0;
    
    //provides a factor for the vector
+   /**
+    * 
+    */
    protected float speed;
    
    
@@ -40,10 +61,20 @@ public abstract class MovingBlock extends SelfAwareBlock {
         super(id, value);
     }
     
+    /**
+     * 
+     * @return
+     */
     protected int getCorner() {
         return getCorner(posX,posY);
     }
         
+    /**
+     * 
+     * @param x
+     * @param y
+     * @return
+     */
     protected int getCorner(int x, int y) {
         if (x+y <= Block.WIDTH /2 && getRelCoordX() > 0)
             return 7;//top left
@@ -158,14 +189,26 @@ public abstract class MovingBlock extends SelfAwareBlock {
    
     abstract void jump();
     
+    /**
+     * 
+     * @return
+     */
     public int getPosX() {
         return posX;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getPosY() {
         return posY;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getPosZ() {
         return posZ;
     }      

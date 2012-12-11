@@ -65,6 +65,10 @@ public class Wurfelengine extends StateBasedGame {
         gc = container;
     }
 
+    /**
+     * 
+     * @return
+     */
     public static File getWorkingDirectory() {
         return workingDirectory;
     }

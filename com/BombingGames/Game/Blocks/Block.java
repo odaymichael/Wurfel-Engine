@@ -34,6 +34,9 @@ public class Block {
         * Is this Block an obstacle or can you pass through?
         */
     private boolean obstacle;
+    /**
+     * 
+     */
     public final String name;
 
     /**
