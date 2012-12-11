@@ -1,9 +1,9 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.BombingGames.Wurfelengine;
+import java.io.*;
+import org.newdawn.slick.util.Log;
 
 /**
  * A Chunk is filled with many Blocks and is a part of the map.
@@ -76,7 +76,8 @@ public class Chunk {
     private void newChunk(){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
-        Gameplay.MSGSYSTEM.add("Neuer Chunk: "+coordX+","+ coordY);
+        Log.debug("Creating new chunk: "+ coordX + ", "+ coordY);
+        Gameplay.MSGSYSTEM.add("Creating new chunk: "+coordX+", "+ coordY);
         for (int x=0; x < BlocksX; x++)
             for (int y=0; y < BlocksY; y++){
                 //Dirt from 0 to 8
@@ -142,11 +143,14 @@ public class Chunk {
             bufRead.close();
             */
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
-            if (getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc") != null) {    
-                Gameplay.MSGSYSTEM.add("Load: "+coordX+","+coordY);
+            File  path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/chunk"+coordX+","+coordY+".otmc");
+            Log.debug("Trying to load Chunk: "+ coordX + ", "+ coordY + " from \"" + path.getAbsolutePath() + "\"");
+            Gameplay.MSGSYSTEM.add("Load: "+coordX+","+coordY);
+            
+            if (path.isFile()) {
                 //FileReader input = new FileReader("map/chunk"+coordX+","+coordY+".otmc");
                 //BufferedReader bufRead = new BufferedReader(input);
-                BufferedReader bufRead = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/map/chunk"+coordX+","+coordY+".otmc")));
+                BufferedReader bufRead = new BufferedReader(new FileReader(path));
 
                 StringBuilder line;
                 //jump over first line to prevent problems with length byte
@@ -198,11 +202,12 @@ public class Chunk {
                     z++;
                 } while (lastline != null);
             } else {
+                Log.debug("...but it could not be found. Creating new.");
                 newChunk();
             }
 
         } catch (IOException ex) {
-
+            Log.debug("Loading of chunk "+coordX+","+coordY + "failed: "+ex);
         }
     }
 }

@@ -1,6 +1,8 @@
+package com.BombingGames;
+
 import java.io.File;
 
-class Util {
+class WorkingDirectory {
     public static File getWorkingDirectory(String applicationName) {
         String userHome = System.getProperty("user.home", ".");
         File workingDirectory;

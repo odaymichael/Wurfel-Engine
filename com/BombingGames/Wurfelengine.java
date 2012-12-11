@@ -3,6 +3,7 @@ package com.BombingGames;
 
 import com.BombingGames.Game.Gameplay;
 import com.BombingGames.MainMenu.MainMenuState;
+import java.io.File;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -13,10 +14,9 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Benedikt
  */
 public class Wurfelengine extends StateBasedGame {
-    /**
-     * Contains the app
-     */
-    private static AppGameContainer app = null; 
+    private static AppGameContainer app = null;
+    
+    private static File workingDirectory;
     /**
      * 
      */
@@ -28,13 +28,13 @@ public class Wurfelengine extends StateBasedGame {
     /**
      * The Version of the Engine
      */
-    public static final String version = "0.2";
+    public static final String VERSION = "0.2";
         
     /**
      * Creates a new Wurfelengine
      */
     public Wurfelengine(){
-        super("Wurfelengine V" + version);
+        super("Wurfelengine V" + VERSION);
     }
 
     /**
@@ -43,6 +43,8 @@ public class Wurfelengine extends StateBasedGame {
      * @throws SlickException
      */
     public static void main(String[] args) throws SlickException {
+        workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
+        
         //has to call starter to avoid problems with the default package. Maybe the main function can run in starter
          app = new AppGameContainer(new Wurfelengine());         
          app.setUpdateOnlyWhenVisible(true);
@@ -62,5 +64,8 @@ public class Wurfelengine extends StateBasedGame {
         
         gc = container;
     }
- 
+
+    public static File getWorkingDirectory() {
+        return workingDirectory;
+    }
 }
