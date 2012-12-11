@@ -262,14 +262,21 @@ public class Controller {
         return renderSides;
     }
 
+    /**
+     * Returns the currently loaded map.
+     * @return 
+     */
     public static Map getMap() {
         return map;
     }
     
-    public static Block[][][] getMapData(){
-        return map.getData();
-    }
-    
+    /**
+     * Returns a block inside the map. The same as "getMap().getData(x,y,z)"
+     * @param x
+     * @param y
+     * @param z
+     * @return 
+     */
     public static Block getMapData(int x, int y, int z){
         return map.getData(x, y, z);
     }

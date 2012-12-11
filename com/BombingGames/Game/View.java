@@ -188,7 +188,7 @@ public class View {
                     Controller.getMapData(x, y, z).setVisible(false);
                 
 
-        //send ray through top of the map
+        //send rays through top of the map
         for (int x=0; x < Chunk.BlocksX*3; x++)
             for (int y=0; y < Chunk.BlocksY*3; y++)
                 for (int side=0; side < 3; side++)
@@ -213,17 +213,26 @@ public class View {
         if (!Gameplay.controller.renderSides()){
             //send it for the shifted row again
             for (int x=0; x < Chunk.BlocksX*3; x++)
-                for (int z=0; z < Chunk.BlocksZ; z++)            
+            for (int z=0; z < Chunk.BlocksZ; z++)
+                for (int side=0; side < 3; side++)
                     trace_ray(
                         x,
                         Chunk.BlocksY*3-2,
                         z,
-                        0
+                        side
                     );
-       }    
+       }
+        
        Controller.getMap().requestRecalc();
     }
 
+    /**
+     * Traces a single ray-
+     * @param x The starting x-coordinate.
+     * @param y The starting y-coordinate.
+     * @param z The starting z-coordinate.
+     * @param side The sides ray traces
+     */
     private void trace_ray(int x, int y, int z, int side){
         if (Gameplay.controller.renderSides()){//trace ray on every side
             boolean leftside = true;

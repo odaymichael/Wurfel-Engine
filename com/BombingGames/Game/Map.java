@@ -32,7 +32,9 @@ public class Map {
      * @param loadmap Should the map be generated or loaded from disk?
      */
     public Map(boolean loadmap) {
-        //create the map
+        Log.debug("Creating the map...");
+        Log.debug("Should the Engine load a map: "+loadmap);
+        
         Chunk tempchunk;
         int pos = 0;
         
@@ -53,10 +55,11 @@ public class Map {
         recalcRequested = true;
        
         minimap = new Minimap();
+        Log.debug("...Finished creating the map");
     }
     
     /**
-     * Copies a 3D array
+     * Copies an array with three dimensions. Code by Kevin Brock from http://stackoverflow.com/questions/2068370/efficient-system-arraycopy-on-multidimensional-arrays
      * @param array
      * @return 
      */
