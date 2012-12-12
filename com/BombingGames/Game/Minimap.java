@@ -29,14 +29,6 @@ public class Minimap {
     public void draw() {
         for (int pos=0;pos < 9;pos++){
                  
-//            g.setColor(Color.white);
-//            g.fillRect(
-//                x + pos%3 *(Chunk.BLOCKS_X*scalefactor),
-//                Y +pos/3*(Chunk.BLOCKS_Y*scalefactor/4),
-//                Chunk.BLOCKS_X*scalefactor,
-//                Chunk.BLOCKS_Y*scalefactor/4
-//            );
-//            
         Color temp;
         for (int x = Chunk.BLOCKS_X*(pos%3); x < Chunk.BLOCKS_X * (pos%3+1); x++){
             for (int y = Chunk.BLOCKS_Y*(pos/3); y < Chunk.BLOCKS_Y * (pos/3+1); y++){
@@ -47,7 +39,7 @@ public class Minimap {
                             Block.SidesSprites[block.getId()][block.getValue()][1][1]
                         ).getColor(
                             Block.WIDTH/2,
-                            Block.HEIGHT
+                            Block.HEIGHT/2
                     );                
                 } else
                     temp = Block.Blocksheet.getSubImage(
