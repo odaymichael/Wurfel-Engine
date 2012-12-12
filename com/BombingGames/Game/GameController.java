@@ -19,8 +19,8 @@ public class GameController extends Controller {
      */
     public GameController(GameContainer container, StateBasedGame game) throws SlickException{
         super(container, game);
-        setPlayer(new Player((int) (Chunk.BlocksX*1.5),(int) (Chunk.BlocksY*1.5),Chunk.BlocksZ-2));
-        getMap().setData((int) (Chunk.BlocksX*1.5), (int) (Chunk.BlocksY*1.5), Chunk.BlocksZ-2, getPlayer());
+        setPlayer(new Player((int) (Chunk.BLOCKS_X*1.5),(int) (Chunk.BLOCKS_Y*1.5),Chunk.BLOCKS_Z-2));
+        getMap().setData((int) (Chunk.BLOCKS_X*1.5), (int) (Chunk.BLOCKS_Y*1.5), Chunk.BLOCKS_Z-2, getPlayer());
     }
     
 }

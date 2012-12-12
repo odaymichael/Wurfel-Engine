@@ -2,7 +2,10 @@ package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
 import com.BombingGames.Wurfelengine;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -18,41 +21,41 @@ public class Chunk {
     /**
      * The amount of blocks in X direction
      */
-    public static final int BlocksX = 12;//16:9 => 12:27, 4:3=>12:36
+    public static final int BLOCKS_X = 12;//16:9 => 12:27, 4:3=>12:36
     /**
      * The amount of blocks in y direction
      */
-    public static final int BlocksY = 28;
+    public static final int BLOCKS_Y = 28;//28
     /**
      * The amount of blocks in Z direction
      */
-    public static final int BlocksZ = 20;
+    public static final int BLOCKS_Z = 20;//20
     /**
     *The size of a chunk in pixels
     */
-    public static int SizeX = BlocksX*Block.WIDTH;
+    public static int SizeX = BLOCKS_X*Block.WIDTH;
     /**
     *The size of a chunk in pixels
     */
-    public static int SizeY = BlocksY*Block.HEIGHT/2;
+    public static int SizeY = BLOCKS_Y*Block.HEIGHT/2;
     /**
      * The size of a chunk in pixels
      */
-    public static int SizeZ = BlocksZ*Block.HEIGHT;
+    public static int SizeZ = BLOCKS_Z*Block.HEIGHT;
 
     /**
      * 
      */
-    public Block data[][][] = new Block[BlocksX][BlocksY][BlocksZ];
+    public Block data[][][] = new Block[BLOCKS_X][BLOCKS_Y][BLOCKS_Z];
   
     /**
      * Creates a Chunk filled with air
      */
     public Chunk() {
         //fill everything with air
-        for (int x=0; x < BlocksX; x++)
-            for (int y=0; y < BlocksY; y++)
-                for (int z=0; z < BlocksZ; z++)
+        for (int x=0; x < BLOCKS_X; x++)
+            for (int y=0; y < BLOCKS_Y; y++)
+                for (int z=0; z < BLOCKS_Z; z++)
                     data[x][y][z] = new Block(0,0);
     }
     
@@ -78,34 +81,34 @@ public class Chunk {
         //alternative to chunkdata.length ChunkBlocks
         Log.debug("Creating new chunk: "+ coordX + ", "+ coordY);
         Gameplay.MSGSYSTEM.add("Creating new chunk: "+coordX+", "+ coordY);
-        for (int x=0; x < BlocksX; x++)
-            for (int y=0; y < BlocksY; y++){
+        for (int x=0; x < BLOCKS_X; x++)
+            for (int y=0; y < BLOCKS_Y; y++){
                 //Dirt from 0 to 8
-                int height = (int) (Math.random()*BlocksZ-1)+1;
-                //int HEIGHT = (int) Chunk.BlocksZ / 2;
+                int height = (int) (Math.random()*BLOCKS_Z-1)+1;
+                //int HEIGHT = (int) Chunk.BLOCKS_Z / 2;
                 for (int z=0; z < height; z++){
-                    //for (int z=0; z < BlocksZ-4; z++)
+                    //for (int z=0; z < BLOCKS_Z-4; z++)
                     data[x][y][z] = new Block(2);
                     // if ((z>10) && (x>10) && (y>5))
                     //  data[x][y][z] = new Block (9,0);
                     }
                 data[x][y][height] = new Block(1);
 
-                //data[0][y][BlocksZ / 2 - 1] = new Block(2,0);
+                //data[0][y][BLOCKS_Z / 2 - 1] = new Block(2,0);
 
 
                 //Gras on z=9
-                //if ((x > 0) && (x < BlocksX-1) && (y>0))                        
-                //data[x][y][BlocksZ/2-1] = new Block(1);
-                //data[x][y][BlocksZ/2] = new Block(9);
+                //if ((x > 0) && (x < BLOCKS_X-1) && (y>0))                        
+                //data[x][y][BLOCKS_Z/2-1] = new Block(1);
+                //data[x][y][BLOCKS_Z/2] = new Block(9);
 
 
                 /*
-                if (y == BlocksY-1)
-                    data[x][y][BlocksZ/2-1] = new Block(0,0);
+                if (y == BLOCKS_Y-1)
+                    data[x][y][BLOCKS_Z/2-1] = new Block(0,0);
 
                 //air from z=10 to 19
-                for (int z = BlocksZ / 2; z < BlocksZ; z++)
+                for (int z = BLOCKS_Z / 2; z < BLOCKS_Z; z++)
                     data[x][y][z] = new Block(0,0);   
                 */
             }
@@ -191,13 +194,13 @@ public class Chunk {
                                         );
                             x++;
                             line.delete(0,posend+1);
-                        } while (x < BlocksX);
+                        } while (x < BLOCKS_X);
 
                         line = new StringBuilder();
                         line.append(bufRead.readLine());
 
                         y++;
-                    } while (y < BlocksY);
+                    } while (y < BLOCKS_Y);
                     lastline = bufRead.readLine();
                     z++;
                 } while (lastline != null);

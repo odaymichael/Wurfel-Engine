@@ -80,9 +80,9 @@ public abstract class MovingBlock extends SelfAwareBlock {
             return 7;//top left
         else if (x-y >= Block.WIDTH /2 && getRelCoordX() > 0) 
                 return 1; //top right
-             else if (x+y >= 3*Block.WIDTH /2 && getRelCoordY() < Chunk.BlocksY*3-1)
+             else if (x+y >= 3*Block.WIDTH /2 && getRelCoordY() < Chunk.BLOCKS_Y*3-1)
                     return 3;//bottom right
-                else if (-x+y >= Block.WIDTH /2 && getRelCoordY() < Chunk.BlocksY*3-1)
+                else if (-x+y >= Block.WIDTH /2 && getRelCoordY() < Chunk.BLOCKS_Y*3-1)
                         return 5;//bottom left
                     else return 8;//the middle
     }

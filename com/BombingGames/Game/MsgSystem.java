@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.Color;
 
 /**
- *The message system can show messages.
+ *The message system can manage&show messages (Msg).
  * @author Benedikt
  */
 public class MsgSystem extends ArrayList {

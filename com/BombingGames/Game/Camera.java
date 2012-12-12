@@ -128,7 +128,7 @@ public class Camera {
      */
     public int getRightBorder(){
         int tmp = (x+width)/Block.WIDTH+2;
-        if (tmp >= Chunk.BlocksX*3) return Chunk.BlocksX*3-1;
+        if (tmp >= Chunk.BLOCKS_X*3) return Chunk.BLOCKS_X*3-1;
         return tmp;
     }
     
@@ -147,8 +147,8 @@ public class Camera {
      * @return measured in blocks
      */
     public int getBottomBorder(){
-        int tmp = (y+height)/(Block.HEIGHT/2) + Chunk.BlocksZ*2;
-        if (tmp >= Chunk.BlocksY*3) return Chunk.BlocksY*3-1;
+        int tmp = (y+height)/(Block.HEIGHT/2) + Chunk.BLOCKS_Z*2;
+        if (tmp >= Chunk.BLOCKS_Y*3) return Chunk.BLOCKS_Y*3-1;
         return tmp;
     }
     
@@ -207,7 +207,7 @@ public class Camera {
      * @return
      */
     public int getYzHeight() {
-        return height + Block.HEIGHT*Chunk.BlocksZ;
+        return height + Block.HEIGHT*Chunk.BLOCKS_Z;
     }
 
     

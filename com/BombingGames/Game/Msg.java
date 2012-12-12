@@ -1,7 +1,7 @@
 package com.BombingGames.Game;
 
 /**
- * The Message object is put into the MsgSystem. It contains the message, the sender and the importance.
+ * A message is put into the MsgSystem. It contains the message, the sender and the importance.
  * @author Benedikt
  */
 public class Msg {

@@ -43,8 +43,6 @@ public class Controller {
         map = new Map(MainMenuState.loadmap);
     }
 
-
-    
     /**
      * Main method which is called the whole time
      * @param delta
@@ -267,7 +265,7 @@ public class Controller {
 
     /**
      * Returns the currently loaded map.
-     * @return 
+     * @return the map
      */
     public static Map getMap() {
         return map;
@@ -278,11 +276,24 @@ public class Controller {
      * @param x
      * @param y
      * @param z
-     * @return 
+     * @return the wanted block
+     * @see com.BombingGames.Game.Map#getData(int, int, int) 
      */
     public static Block getMapData(int x, int y, int z){
         return map.getData(x, y, z);
     }
     
+    /**
+     * Same as "Map.getDataUnsafe(int, int, int)"
+     * 
+     * @param x
+     * @param y
+     * @param z
+     * @return the wanted block
+     * @see com.BombingGames.Game.Map#getDataUnsafe(int, int, int) 
+     */
+    public static Block getMapDataUnsafe(int x, int y, int z){
+        return map.getDataUnsafe(x, y, z);
+    }
     
 }

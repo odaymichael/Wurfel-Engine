@@ -6,34 +6,27 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.util.Log;
 
 /**
- *
+ *A map stores nine chunks as part of a bigger map.
  * @author Benedikt
  */
 public class Map {
     /**
      * The map's data is stored inside here.
      */
-    private Block data[][][] = new Block[Chunk.BlocksX*3][Chunk.BlocksY*3][Chunk.BlocksZ];
-
-    private boolean recalcRequested;
-
+    private Block data[][][] = new Block[Chunk.BLOCKS_X*3][Chunk.BLOCKS_Y*3][Chunk.BLOCKS_Z];
+     private boolean recalcRequested;
     private int[] coordlistX = new int[9];
-
     private int[] coordlistY = new int[9];;
-
-    /**
-     * Contains the minimap
-     */
     private Minimap minimap;
     
     
     /**
      * Creates a map.
-     * @param loadmap Should the map be generated or loaded from disk?
+     * @param load Should the map be generated or loaded from disk?
      */
-    public Map(boolean loadmap) {
+    public Map(boolean load) {
         Log.debug("Creating the map...");
-        Log.debug("Should the Engine load a map: "+loadmap);
+        Log.debug("Should the Engine load a map: "+load);
         
         Chunk tempchunk;
         int pos = 0;
@@ -47,7 +40,7 @@ public class Map {
                         y,
                         x*Chunk.SizeX,
                         -y*Chunk.SizeY,
-                        loadmap
+                        load
                 );
                 setChunk(pos, tempchunk);
                 pos++;               
@@ -61,7 +54,7 @@ public class Map {
     /**
      * Copies an array with three dimensions. Code by Kevin Brock from http://stackoverflow.com/questions/2068370/efficient-system-arraycopy-on-multidimensional-arrays
      * @param array
-     * @return 
+     * @return The copy of the array-
      */
     private Block[][][] copyOf3Dim(Block[][][] array) {
         Block[][][] copy;
@@ -124,8 +117,8 @@ public class Map {
         }
         //player switches chunk
         //System.out.println("Player was rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
-        Gameplay.controller.getPlayer().setRelCoordX(Gameplay.controller.getPlayer().getRelCoordX() +  (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BlocksX);
-        Gameplay.controller.getPlayer().setRelCoordY(Gameplay.controller.getPlayer().getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BlocksY);
+        Gameplay.controller.getPlayer().setRelCoordX(Gameplay.controller.getPlayer().getRelCoordX() +  (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BLOCKS_X);
+        Gameplay.controller.getPlayer().setRelCoordY(Gameplay.controller.getPlayer().getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BLOCKS_Y);
         //System.out.println("Player is rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
         recalcRequested = true;
         } else {
@@ -159,20 +152,20 @@ public class Map {
      */ 
     private Chunk getChunk(Block[][][] data, int pos) {
         Chunk tmpChunk = new Chunk();
-        for (int x = Chunk.BlocksX*(pos % 3);
-                x < Chunk.BlocksX*(pos % 3+1);
+        for (int x = Chunk.BLOCKS_X*(pos % 3);
+                x < Chunk.BLOCKS_X*(pos % 3+1);
                 x++
             )
-                for (int y = Chunk.BlocksY*Math.abs(pos / 3);
-                        y < Chunk.BlocksY*Math.abs(pos / 3+1);
+                for (int y = Chunk.BLOCKS_Y*Math.abs(pos / 3);
+                        y < Chunk.BLOCKS_Y*Math.abs(pos / 3+1);
                         y++
                     ) {
                     System.arraycopy(
                         data[x][y],                
                         0,
-                        tmpChunk.data[x-Chunk.BlocksX*(pos % 3)][y-Chunk.BlocksY*(pos / 3)],
+                        tmpChunk.data[x-Chunk.BLOCKS_X*(pos % 3)][y-Chunk.BLOCKS_Y*(pos / 3)],
                         0,
-                        Chunk.BlocksZ
+                        Chunk.BLOCKS_Z
                     );
                 }
         return tmpChunk;
@@ -184,14 +177,14 @@ public class Map {
      * @param newchunk The chunk you want to insert
      */
     private void setChunk(int pos, Chunk newchunk) {
-        for (int x=0;x < Chunk.BlocksX; x++)
-            for (int y=0;y < Chunk.BlocksY;y++) {
+        for (int x=0;x < Chunk.BLOCKS_X; x++)
+            for (int y=0;y < Chunk.BLOCKS_Y;y++) {
                 System.arraycopy(
                     newchunk.data[x][y],
                     0,
-                    data[x+ Chunk.BlocksX*(pos%3)][y+ Chunk.BlocksY*Math.abs(pos/3)],
+                    data[x+ Chunk.BLOCKS_X*(pos%3)][y+ Chunk.BLOCKS_Y*Math.abs(pos/3)],
                     0,
-                    Chunk.BlocksZ
+                    Chunk.BLOCKS_Z
                 );
             }
     }
@@ -223,11 +216,11 @@ public class Map {
         if (Gameplay.controller.hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         Block.Blocksheet.startUse();
         //render vom bottom to top
-        for (int z=0; z < Chunk.BlocksZ; z++) {
+        for (int z=0; z < Chunk.BLOCKS_Z; z++) {
             for (int y = Gameplay.view.camera.getTopBorder(); y < Gameplay.view.camera.getBottomBorder(); y++) {//vertikal
                 for (int x = Gameplay.view.camera.getLeftBorder(); x < Gameplay.view.camera.getRightBorder(); x++){//horizontal
                     if (
-                        (x < Chunk.BlocksX*3-1 && data[x+1][y][z].renderorder == -1)
+                        (x < Chunk.BLOCKS_X*3-1 && data[x+1][y][z].renderorder == -1)
                         ||
                         data[x][y][z].renderorder == 1
                        ) {
@@ -271,31 +264,31 @@ public class Map {
     }
     
     /**
-     * 
-     * @param x
-     * @param y
-     * @param z
-     * @return
+     * Returns a block of the map.
+     * @param x If too high or too low, it takes the highest/deepest value possible
+     * @param y If too high or too low, it takes the highest/deepest value possible
+     * @param z If too high or too low, it takes the highest/deepest value possible
+     * @return A single block at the wanted coordinates.
      */
     public Block getData(int x, int y, int z){
-        if (x >= Chunk.BlocksX*3){
-            x = Chunk.BlocksX*3-1;
+        if (x >= Chunk.BLOCKS_X*3){
+            x = Chunk.BLOCKS_X*3-1;
             //Log.warn("X too high!");
         } else if(x<0){
             x = 0;
             //Log.warn("X too low!");
         }
         
-        if (y >= Chunk.BlocksY*3){
-            y = Chunk.BlocksY*3-1;
+        if (y >= Chunk.BLOCKS_Y*3){
+            y = Chunk.BLOCKS_Y*3-1;
            // Log.warn("Y too high!");
         } else if(y<0){
             y = 0;
             //Log.warn("Y too low!");
         }
         
-        if (z >= Chunk.BlocksZ){
-            z = Chunk.BlocksZ-1;
+        if (z >= Chunk.BLOCKS_Z){
+            z = Chunk.BLOCKS_Z-1;
             //Log.warn("Z too high!");
         } else if(z<0){
             z = 0;
@@ -303,7 +296,19 @@ public class Map {
         }
         
         return data[x][y][z];    
-    } 
+    }
+    
+    /**
+     * Returns  a Block without checking the parameters first. Good for debugging and also faster.
+     * @param x 
+     * @param y 
+     * @param z 
+     * @return the single block
+     * @see com.BombingGames.Game.Map#getData(int, int, int) 
+     */
+    public Block getDataUnsafe(int x, int y, int z){
+            return data[x][y][z];  
+    }
     
     /**
      * Set a block at a specific coordinate
@@ -313,24 +318,24 @@ public class Map {
      * @param block The block you want to set.
      */
     public void setData(int x, int y, int z, Block block){
-        if (x >= Chunk.BlocksX*3){
-            x = Chunk.BlocksX*3-1;
+        if (x >= Chunk.BLOCKS_X*3){
+            x = Chunk.BLOCKS_X*3-1;
            // Log.warn("X too high!");
         } else if(x<0){
             x = 0;
            // Log.warn("X too low!");
         }
         
-        if (y >= Chunk.BlocksY*3){
-            y = Chunk.BlocksY*3-1;
+        if (y >= Chunk.BLOCKS_Y*3){
+            y = Chunk.BLOCKS_Y*3-1;
             //Log.warn("Y too high!");
         } else if(y<0){
             y = 0;
            // Log.warn("Y too low!");
         }
         
-        if (z >= Chunk.BlocksZ){
-            z = Chunk.BlocksZ-1;
+        if (z >= Chunk.BLOCKS_Z){
+            z = Chunk.BLOCKS_Z-1;
             //Log.warn("Z too high!");
         } else if(z<0){
             z = 0;

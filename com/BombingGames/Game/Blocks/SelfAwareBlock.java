@@ -78,10 +78,10 @@ public abstract class SelfAwareBlock extends Block{
      * @param X
      */
     public void setRelCoordX(int X){
-        if (X < Chunk.BlocksX*3){
+        if (X < Chunk.BLOCKS_X*3){
             relCoordX = X;
         } else {
-            this.relCoordX = 3*Chunk.BlocksX-1;
+            this.relCoordX = 3*Chunk.BLOCKS_X-1;
             Gameplay.MSGSYSTEM.add("RelativeCoordX ist too high:"+X);
             Log.warn("RelativeCoordX ist too high:"+X);
         }
@@ -108,10 +108,10 @@ public abstract class SelfAwareBlock extends Block{
      * @param Y
      */
     public void setRelCoordY(int Y){
-        if (Y < Chunk.BlocksY*3){
+        if (Y < Chunk.BLOCKS_Y*3){
             relCoordY = Y;
         }else {
-            relCoordY = 3*Chunk.BlocksY-1;
+            relCoordY = 3*Chunk.BLOCKS_Y-1;
             Gameplay.MSGSYSTEM.add("RelativeCoordY ist too high: "+Y);
             Log.warn("RelativeCoordY ist too high: "+Y);
         }
@@ -131,7 +131,7 @@ public abstract class SelfAwareBlock extends Block{
      */
     public void setAbsCoordX(int X){
         absCoordX = X;
-        setRelCoordX(X - Controller.getMap().getCoordlistX(4)  * Chunk.BlocksX);
+        setRelCoordX(X - Controller.getMap().getCoordlistX(4)  * Chunk.BLOCKS_X);
     }
     
 
@@ -142,7 +142,7 @@ public abstract class SelfAwareBlock extends Block{
     public void setAbsCoordY(int Y){
         absCoordY = Y;
         //da das Map Coordinatensystem in y-Richtung in zwei unterschiedliche Richtungen geht (hier "+" ???)
-        setRelCoordY(Y + Controller.getMap().getCoordlistY(4) *Chunk.BlocksY);
+        setRelCoordY(Y + Controller.getMap().getCoordlistY(4) *Chunk.BLOCKS_Y);
     }    
    
     /**
@@ -156,7 +156,7 @@ public abstract class SelfAwareBlock extends Block{
         setAbsCoordY(Y);
         coordZ = Z;
         //if Z is too high set to highes possible position
-        if (coordZ > Chunk.BlocksZ-2) coordZ = Chunk.BlocksZ -2;
+        if (coordZ > Chunk.BLOCKS_Z-2) coordZ = Chunk.BLOCKS_Z -2;
     }
     
     //how can you make that this methods are only avilable to extending classes?

@@ -407,8 +407,8 @@ public class Block {
 
 
     /**
-     *When visible=false, every side will get invisible. This is important for rendering with the siderendering algorithm
-     * @param visible Sets the visibility
+     * Hide this block and prevent it from beeing rendered.
+     * @param visible Sets the visibility. When it is false, every side will also get invisible
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
@@ -630,13 +630,14 @@ public class Block {
      * @param visible The value
      */
     public void setSideVisibility(int side, boolean visible) {
+        if (visible) this.visible = true;
+        
         if (side==0)
             renderLeft = visible;
         else if (side==1)
             renderTop = visible;
                 else if (side==2)
                     renderRight = visible;
-        if (visible) this.visible = true;
     }
 
 

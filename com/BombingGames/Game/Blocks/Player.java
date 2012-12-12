@@ -54,7 +54,7 @@ public class Player extends MovingBlock{
     public void jump(){
         if (veloZ==0 && posZ==0) veloZ = 0.8f;
         
-//       if (coordZ<Chunk.BlocksZ-2){
+//       if (coordZ<Chunk.BLOCKS_Z-2){
 //           Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = new Block(0,0);
 //           Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1] = new Block(0,0);
 //           coordZ++;
@@ -116,7 +116,7 @@ public class Player extends MovingBlock{
         }
 
         //up
-        if (posZ >= Block.HEIGHT && coordZ < Chunk.BlocksZ-2 && !Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).isObstacle()){
+        if (posZ >= Block.HEIGHT && coordZ < Chunk.BLOCKS_Z-2 && !Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
 
             coordZ++;
