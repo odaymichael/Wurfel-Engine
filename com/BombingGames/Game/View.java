@@ -4,7 +4,6 @@ import com.BombingGames.Game.Blocks.Block;
 import java.awt.Font;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.Log;
 
 /**
  * The View manages everything what should be drawn.
@@ -32,7 +31,6 @@ public class View {
     
    
     private GameContainer gc;
-    //private static Insets insets;
     private Font baseFont;
 
     /**

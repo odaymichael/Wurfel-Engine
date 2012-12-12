@@ -112,23 +112,23 @@ public class Controller {
         //toggle input for msgSystem
         if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.MSGSYSTEM.listenForInput(!Gameplay.MSGSYSTEM.isListeningForInput());
 
-//        //earth to right
-//        if (Gameplay.view.camera.getLeftBorder() < Chunk.BlocksX/3)
-//           map.setCenter(3);
-//        else {       
-//            //earth to the left
-//            if (Gameplay.view.camera.getRightBorder() > 8*Chunk.BlocksX/3) 
-//                map.setCenter(5); 
-//        }
-//        
-//       //scroll up, earth down            
-//        if (Gameplay.view.camera.getTopBorder()  <= 0) {
-//            map.setCenter(1);
-//        } else {
-//            //scroll down, earth up
-//            if (Gameplay.view.camera.getBottomBorder() > 8*Chunk.BlocksY/3)
-//                map.setCenter(7);
-//        }
+        //earth to right
+        if (Gameplay.view.camera.getLeftBorder() < Chunk.BLOCKS_X/3)
+           map.setCenter(3);
+        else {       
+            //earth to the left
+            if (Gameplay.view.camera.getRightBorder() > 8*Chunk.BLOCKS_X/3) 
+                map.setCenter(5); 
+        }
+        
+       //scroll up, earth down            
+        if (Gameplay.view.camera.getTopBorder()  <= 0) {
+            map.setCenter(1);
+        } else {
+            //scroll down, earth up
+            if (Gameplay.view.camera.getBottomBorder() > 8*Chunk.BLOCKS_Y/3)
+                map.setCenter(7);
+        }
         
         //camera
         //oldx = Gameplay.view.camera.x;

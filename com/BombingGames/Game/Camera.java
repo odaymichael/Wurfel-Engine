@@ -262,8 +262,4 @@ public class Camera {
             Controller.getMap().getMinimap().draw();
         Gameplay.MSGSYSTEM.draw();  
     }
-    
-
-    
-    
 }
