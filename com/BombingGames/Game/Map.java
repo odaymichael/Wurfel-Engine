@@ -14,7 +14,7 @@ public class Map {
      * The map's data is stored inside here.
      */
     private Block data[][][] = new Block[Chunk.BLOCKS_X*3][Chunk.BLOCKS_Y*3][Chunk.BLOCKS_Z];
-     private boolean recalcRequested;
+    private boolean recalcRequested;
     private int[] coordlistX = new int[9];
     private int[] coordlistY = new int[9];;
     private Minimap minimap;
@@ -38,8 +38,8 @@ public class Map {
                 tempchunk = new Chunk(
                         x,
                         y,
-                        x*Chunk.SizeX,
-                        -y*Chunk.SizeY,
+                        x*Chunk.SIZE_X,
+                        -y*Chunk.SIZE_Y,
                         load
                 );
                 setChunk(pos, tempchunk);
@@ -107,19 +107,19 @@ public class Map {
                         new Chunk(
                             coordlistX[pos],
                             coordlistY[pos],
-                            coordlistX[pos] + (int) ((center == 3 ? -Chunk.SizeX : (center == 5 ?  Chunk.SizeX: 0))),
-                            coordlistY[pos] + (int) ((center == 1 ? -Chunk.SizeY : (center == 7 ? Chunk.SizeY : 0))),
+                            coordlistX[pos] + (int) ((center == 3 ? -Chunk.SIZE_X : (center == 5 ?  Chunk.SIZE_X: 0))),
+                            coordlistY[pos] + (int) ((center == 1 ? -Chunk.SIZE_Y : (center == 7 ? Chunk.SIZE_Y : 0))),
                             MainMenuState.loadmap
                         )
                 );
                 //System.out.println("["+pos+"] new: "+ coordlistX[pos] +","+coordlistY[pos]);
             }
         }
-        //player switches chunk
-        //System.out.println("Player was rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
-        Gameplay.controller.getPlayer().setRelCoordX(Gameplay.controller.getPlayer().getRelCoordX() +  (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BLOCKS_X);
-        Gameplay.controller.getPlayer().setRelCoordY(Gameplay.controller.getPlayer().getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BLOCKS_Y);
-        //System.out.println("Player is rel: "+Controller.player.getRelCoordX() + " | " + Controller.player.getRelCoordY() + " | " + Controller.player.coordZ);
+        //selfaware should be updated here, only player
+        if (Gameplay.controller.getPlayer() != null){ 
+            Gameplay.controller.getPlayer().setRelCoordX(Gameplay.controller.getPlayer().getRelCoordX() + (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BLOCKS_X);
+            Gameplay.controller.getPlayer().setRelCoordY(Gameplay.controller.getPlayer().getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BLOCKS_Y);
+        }
         recalcRequested = true;
         } else {
             Log.error("setCenter was called with center:"+center);
@@ -163,7 +163,7 @@ public class Map {
                     System.arraycopy(
                         data[x][y],                
                         0,
-                        tmpChunk.data[x-Chunk.BLOCKS_X*(pos % 3)][y-Chunk.BLOCKS_Y*(pos / 3)],
+                        tmpChunk.getData()[x-Chunk.BLOCKS_X*(pos % 3)][y - Chunk.BLOCKS_Y*(pos / 3)],
                         0,
                         Chunk.BLOCKS_Z
                     );
@@ -180,7 +180,7 @@ public class Map {
         for (int x=0;x < Chunk.BLOCKS_X; x++)
             for (int y=0;y < Chunk.BLOCKS_Y;y++) {
                 System.arraycopy(
-                    newchunk.data[x][y],
+                    newchunk.getData()[x][y],
                     0,
                     data[x+ Chunk.BLOCKS_X*(pos%3)][y+ Chunk.BLOCKS_Y*Math.abs(pos/3)],
                     0,
@@ -190,21 +190,23 @@ public class Map {
     }
     
     /**
-     * Informs the map that a recalc is requested.
+     * Informs the map that a recalc is requested. It will do it in the next update. Thhis method exist to prevent exzessive updates.
      */
     public void requestRecalc(){
         recalcRequested = true;
     }
     
     /**
-     * When the recalc was requested it calls raytracing and light recalculing.
-     * Request a recalc with <i>reuqestRecalc()</i>. This method should be called every update.
+     * When the recalc was requested it calls raytracing and light recalculing. This method should be called every update.
+     * Request a recalc with <i>reuqestRecalc()</i>. 
      */
     public void recalcIfRequested(){
         if (recalcRequested) {
+           Log.debug("recalc start");
             Gameplay.view.raytracing();
             Gameplay.view.calc_light();
             recalcRequested = false;
+            Log.debug("recalc finish");
         }
     }
     

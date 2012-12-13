@@ -10,20 +10,15 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Camera {
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    private int x, y, width, height;
+    private int leftborder, topborder, rightborder, bottomborder;
     
     private boolean focus = false;
     private Blockpointer focusblock;
     
     private float zoom = 1;
     
-    private final int screenX;
-    private final int screenY;
-    private final int screenWidth;
-    private final int screenHeight;
+    private final int screenX, screenY, screenWidth, screenHeight;
 
     /**
      * Creates a camera.
@@ -72,8 +67,21 @@ public class Camera {
                 - Gameplay.view.camera.height/2
                 + player.getOffsetY() * (1/Block.aspectRatio)
                 );
-           
         }
+        
+        //update borders
+        leftborder = x/Block.WIDTH -1;
+        if (leftborder < 0) leftborder= 0;
+        
+        rightborder = (x+width)/Block.WIDTH+2;
+        if (rightborder >= Chunk.BLOCKS_X*3) rightborder = Chunk.BLOCKS_X*3-1;
+        
+        topborder = 2*y/Block.HEIGHT;
+        if (topborder < 0) topborder= 0;
+        
+        bottomborder = (y+height)/(Block.HEIGHT/2) + Chunk.BLOCKS_Z*2;
+        if (bottomborder >= Chunk.BLOCKS_Y*3) bottomborder = Chunk.BLOCKS_Y*3-1;
+        
     }
     
     /**
@@ -117,9 +125,7 @@ public class Camera {
      * @return 
      */
     public int getLeftBorder(){
-        int tmp = x/Block.WIDTH -1;
-        if (tmp < 0) return 0;
-        return tmp;
+        return leftborder;
     }
     
     /**
@@ -127,9 +133,7 @@ public class Camera {
      * @return
      */
     public int getRightBorder(){
-        int tmp = (x+width)/Block.WIDTH+2;
-        if (tmp >= Chunk.BLOCKS_X*3) return Chunk.BLOCKS_X*3-1;
-        return tmp;
+        return rightborder;
     }
     
     /**
@@ -137,9 +141,7 @@ public class Camera {
      * @return measured in blocks
      */
     public int getTopBorder(){
-        int tmp = 2*y/Block.HEIGHT;
-        if (tmp < 0) return 0;
-        return tmp;
+        return topborder;
     }
     
      /**
@@ -147,9 +149,7 @@ public class Camera {
      * @return measured in blocks
      */
     public int getBottomBorder(){
-        int tmp = (y+height)/(Block.HEIGHT/2) + Chunk.BLOCKS_Z*2;
-        if (tmp >= Chunk.BLOCKS_Y*3) return Chunk.BLOCKS_Y*3-1;
-        return tmp;
+        return bottomborder;
     }
     
   /**

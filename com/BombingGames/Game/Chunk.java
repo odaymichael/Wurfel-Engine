@@ -16,17 +16,17 @@ public class Chunk {
     /**
      * The amount of blocks in X direction
      */
-    public static final int BLOCKS_X = 20;//16:9 => 12:27, 4:3=>12:36
+    public static final int BLOCKS_X = 12;//16:9 => 12:27, 4:3=>12:36
     
     /**
      * The amount of blocks in y direction
      */
-    public static final int BLOCKS_Y = 60;//28
+    public static final int BLOCKS_Y = 28;//28
     
     /**
      * The amount of blocks in Z direction
      */
-    public static final int BLOCKS_Z = 3;//20
+    public static final int BLOCKS_Z = 20;//20
     
     /**
     *The size of a chunk in pixels

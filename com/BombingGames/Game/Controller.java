@@ -92,17 +92,18 @@ public class Controller {
             }        
 
             //walk
-            if ("WASD".equals(player.getControls())){
-                player.walk(
-                    input.isKeyDown(Input.KEY_W),
-                    input.isKeyDown(Input.KEY_S),
-                    input.isKeyDown(Input.KEY_A),
-                    input.isKeyDown(Input.KEY_D),
-                    .25f+(input.isKeyDown(Input.KEY_LSHIFT)? 0.75f: 0),
-                    delta
-                );
-                if (input.isKeyPressed(Input.KEY_SPACE)) player.jump();
-            }
+            if (player != null)
+                if ("WASD".equals(player.getControls())){
+                    player.walk(
+                        input.isKeyDown(Input.KEY_W),
+                        input.isKeyDown(Input.KEY_S),
+                        input.isKeyDown(Input.KEY_A),
+                        input.isKeyDown(Input.KEY_D),
+                        .25f+(input.isKeyDown(Input.KEY_LSHIFT)? 0.75f: 0),
+                        delta
+                    );
+                    if (input.isKeyPressed(Input.KEY_SPACE)) player.jump();
+                }
             
         } else {
             //fetch input and write it down
@@ -133,8 +134,8 @@ public class Controller {
         //camera
         //oldx = Gameplay.view.camera.x;
         //oldy = Gameplay.view.camera.y;
-        
-        player.update(delta);
+        if (player!=null)
+            player.update(delta);
         
         Gameplay.view.camera.update();
         
@@ -145,7 +146,7 @@ public class Controller {
             
 
 
-        //recalc if requested
+        //recalculates the light if requested
         map.recalcIfRequested();      
        
         //update the log
@@ -165,8 +166,8 @@ public class Controller {
             
            /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
             Block.height = (int) (4*gc.getHeight()*zoom / Chunk.BlocksY);
-            Chunk.SizeX = (int) (Chunk.BlocksX*Block.width*zoom);
-            Chunk.SizeY = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
+            Chunk.SIZE_X = (int) (Chunk.BlocksX*Block.width*zoom);
+            Chunk.SIZE_Y = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
             Gameplay.MSGSYSTEM.add("Zoom: "+Gameplay.view.camera.getZoom());   
         }
@@ -202,7 +203,7 @@ public class Controller {
             }*/
             
             //if the middle chunk is scrolled down over the middle line then 
-            //GameplayState.iglog.add("Chunk.SizeX: "+String.valueOf(Chunk.SizeX));
+            //GameplayState.iglog.add("Chunk.SIZE_X: "+String.valueOf(Chunk.SIZE_X));
             //GameplayState.iglog.add("chunk: "+String.valueOf(chunklist[4].posX));
             
     

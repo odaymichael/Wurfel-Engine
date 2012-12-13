@@ -1,9 +1,11 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.Game.Blocks.Blockpointer;
 import java.awt.Font;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
 
 /**
  * The View manages everything what should be drawn.
@@ -59,7 +61,9 @@ public class View {
             gc.getHeight()*4 / (float)(Chunk.BLOCKS_Y* Block.HEIGHT*2)//zoom factor
             );
         
-        if (camera.getYzHeight() > Chunk.SizeY) Gameplay.MSGSYSTEM.add("The chunks are too small for this camera height/resolution", "Warning");
+        //camera.FocusOnBlock(new Blockpointer(Chunk.BLOCKS_X*3/2,Chunk.BLOCKS_Y*3/2,Chunk.BLOCKS_Z/2));
+        
+        if (camera.getYzHeight() > Chunk.SIZE_Y) Gameplay.MSGSYSTEM.add("The chunks are too small for this camera height/resolution", "Warning");
         
         
         
@@ -75,8 +79,8 @@ public class View {
         // Block.WIDTH = Block.HEIGHT;
         Gameplay.MSGSYSTEM.add("Blocks: "+Block.WIDTH+" x "+Block.HEIGHT);
         Gameplay.MSGSYSTEM.add("Zoom: "+ camera.getZoom());
-        Gameplay.MSGSYSTEM.add("chunk: "+ Chunk.SizeX+" x "+Chunk.SizeY);
-        Gameplay.MSGSYSTEM.add("chunk w/ zoom: "+Chunk.SizeX*camera.getZoom()+" x "+Chunk.SizeY*camera.getZoom());
+        Gameplay.MSGSYSTEM.add("chunk: "+ Chunk.SIZE_X+" x "+Chunk.SIZE_Y);
+        Gameplay.MSGSYSTEM.add("chunk w/ zoom: "+Chunk.SIZE_X*camera.getZoom()+" x "+Chunk.SIZE_Y*camera.getZoom());
     }
     
     /**
@@ -180,6 +184,7 @@ public class View {
      * Filters every Block (and side) wich is not visible. Boosts rendering speed.
      */
     public void raytracing(){
+        Log.debug("doing raytracing");
         //set visibility of every block to false
         for (int x=0;x < Chunk.BLOCKS_X*3;x++)
             for (int y=0;y < Chunk.BLOCKS_Y*3;y++)
