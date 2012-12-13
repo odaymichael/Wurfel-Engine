@@ -26,7 +26,7 @@ public class Chunk {
     /**
      * The amount of blocks in Z direction
      */
-    public static final int BLOCKS_Z = 20;//20
+    public static final int BLOCKS_Z = 4;//20
     
     /**
     *The size of a chunk in pixels
@@ -117,7 +117,8 @@ public class Chunk {
             case 2: {
                for (int x=0; x < BLOCKS_X; x++)
                     for (int y=0; y < BLOCKS_Y; y++){
-                        data[x][y][0] = new Block(1);
+                        data[x][y][0] = new Block(2);
+                        data[x][y][1] = new Block(1);
                     }
                 break;
             }
@@ -156,7 +157,7 @@ public class Chunk {
             bufRead.close();
             */
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
-            File  path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/chunk"+coordX+","+coordY+".otmc");
+            File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/chunk"+coordX+","+coordY+".otmc");
             Log.debug("Trying to load Chunk: "+ coordX + ", "+ coordY + " from \"" + path.getAbsolutePath() + "\"");
             Gameplay.MSGSYSTEM.add("Load: "+coordX+","+coordY);
             

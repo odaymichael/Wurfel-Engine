@@ -159,7 +159,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
             }  
         }
         //enable this line to see where to player stands
-        Controller.getMap().getData(getRelCoordX(), getRelCoordY(), coordZ-1).setLightlevel(40);
+        Controller.getMapDataUnsafe(getRelCoordX(), getRelCoordY(), coordZ-1).setLightlevel(40);
 
         //set the offset for the rendering
         setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);

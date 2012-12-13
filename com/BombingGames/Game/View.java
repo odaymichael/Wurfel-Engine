@@ -1,7 +1,6 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
-import com.BombingGames.Game.Blocks.Blockpointer;
 import java.awt.Font;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
@@ -31,7 +30,6 @@ public class View {
      */
     public static TrueTypeFont tTFont_small;
     
-   
     private GameContainer gc;
     private Font baseFont;
 
@@ -63,7 +61,10 @@ public class View {
         
         //camera.FocusOnBlock(new Blockpointer(Chunk.BLOCKS_X*3/2,Chunk.BLOCKS_Y*3/2,Chunk.BLOCKS_Z/2));
         
-        if (camera.getYzHeight() > Chunk.SIZE_Y) Gameplay.MSGSYSTEM.add("The chunks are too small for this camera height/resolution", "Warning");
+        if (camera.getYzHeight() > Chunk.SIZE_Y) {
+            Gameplay.MSGSYSTEM.add("The chunks are too small for this camera height/resolution", "Warning");
+            Log.warn("The chunks are too small for this camera height/resolution");
+        }
         
         
         
@@ -93,93 +94,7 @@ public class View {
         this.g = g;
         camera.draw();      
     }
-      
-//    /**
-//     * 
-//     * @throws SlickException
-//     */
-//    public void draw_all_Chunks() throws SlickException{
-//        /*                        
-//        /*-------------------*/ 
-//        /*---draw lines-------*/
-//        /*-------------------*/ 
-//
-//         /*glBegin(GL_LINES)
-//        glVertex2f(x1, y1): glVertex2f(x2, y2)
-//        glEnd()*/
-//     /*
-//        //Komponenten der Punkte
-//        int start1X = chunk.posX;
-//        int start1Y = chunk.posY;
-//        int end1X = chunk.posX;
-//        int end1Y = chunk.posY;
-//        
-//        int start2X = chunk.posX;
-//        int start2Y = chunk.posY;
-//        int end2X = chunk.posX + Chunk.WIDTH;
-//        int end2Y = chunk.posY;
-//
-//        //Countervariables
-//        int s1x=0;int s1y=0;int e1x=0;int e1y=0;
-//        int s2x=0;int s2y=0;int e2x=0;int e2y=0;
-//
-//        for (int i=0; i < (chunk.data.length)*2 + (chunk.data[0].length); i++){
-//            //g2d.setColor(new Color(i*5+20,i*5+20,0));
-//
-//            //Linie 1 (von unten links nach oben rechts) /
-//            if (s1y > chunk.data[0].length) {
-//                s1x++;
-//                start1X = chunk.posX + s1x*Controller.tilesizeX/2;                    
-//            } else {
-//                s1y++;
-//                start1Y = chunk.posY + s1y*Controller.tilesizeY/2;       
-//            }         
-//            
-//            
-//            if (e1x+1 > chunk.data.length*2) {
-//                e1y++;
-//                end1Y = chunk.posY + e1y*Controller.tilesizeY/2;
-//            } else{
-//                e1x++; 
-//                end1X = chunk.posX + e1x*Controller.tilesizeX/2;                    
-//            }
-//
-//            g.drawLine(
-//                start1X + (i%2)*Controller.tilesizeX/2,
-//                start1Y,
-//                end1X + (i%2)*Controller.tilesizeX/2,
-//                end1Y
-//            );
-//
-//
-//            //Linie 2  (von oben links nach utnen rechts)  \       
-//            if (s2x < chunk.data.length*2) {
-//                s2x++;
-//                start2X = chunk.posX + Chunk.WIDTH - s2x*Controller.tilesizeX/2;
-//            } else {
-//                s2y++;
-//                start2Y = chunk.posY + s2y*Controller.tilesizeY/2;
-//            }
-//
-//            if (e2y-1 < chunk.data[0].length){
-//                e2y++;
-//                end2Y = chunk.posY + e2y*Controller.tilesizeY/2;                    
-//            } else {
-//                e2x++;
-//                end2X = chunk.posX + Chunk.WIDTH - e2x*Controller.tilesizeX/2;                   
-//            }
-//
-//            g.drawLine(
-//                start2X + (i%2)*Controller.tilesizeX/2,
-//                start2Y,
-//                end2X + (i%2)*Controller.tilesizeX/2,
-//                end2Y
-//            );
-//        }*/
-//        
-//     };
-
-    
+         
  /**
      * Filters every Block (and side) wich is not visible. Boosts rendering speed.
      */
@@ -189,7 +104,7 @@ public class View {
         for (int x=0;x < Chunk.BLOCKS_X*3;x++)
             for (int y=0;y < Chunk.BLOCKS_Y*3;y++)
                 for (int z=0;z < Chunk.BLOCKS_Z;z++)
-                    Controller.getMapData(x, y, z).setVisible(false);
+                    Controller.getMapDataUnsafe(x, y, z).setVisible(false);
                 
         //send rays through top of the map
         for (int x=0; x < Chunk.BLOCKS_X*3; x++)
@@ -247,8 +162,7 @@ public class View {
                     } else                 
                         if (side == 1) {//check top side
                             if (z < Chunk.BLOCKS_Z-1
-                                && ! Controller.getMapDataUnsafe(x, y, z+1).isTransparent()
-                                )
+                                && ! Controller.getMapDataUnsafe(x, y, z+1).isTransparent())
                                 break;   
 
                             //two 0- and 2-sides hiding the side 1
@@ -259,9 +173,10 @@ public class View {
                                 && ! Controller.getMapDataUnsafe(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent())
                                 right = false;
 
-                            if (left || right)
+                            if (left || right){
                                 Controller.getMapDataUnsafe(x, y, z).setSideVisibility(1, true);
-                            else break;
+                                Log.debug(x+","+y+","+z+" has a visible top");
+                            }else break;
                         } else
                             if (side==2){
                                 //block on right hiding the right side
