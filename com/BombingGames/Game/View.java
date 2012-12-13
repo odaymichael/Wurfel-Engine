@@ -175,7 +175,6 @@ public class View {
 
                             if (left || right){
                                 Controller.getMapDataUnsafe(x, y, z).setSideVisibility(1, true);
-                                Log.debug(x+","+y+","+z+" has a visible top");
                             }else break;
                         } else
                             if (side==2){
