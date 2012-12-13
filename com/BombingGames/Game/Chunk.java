@@ -14,45 +14,47 @@ import org.newdawn.slick.util.Log;
  */
 public class Chunk {
     /**
-     * 
-     */
-    public int coordX, coordY;
-
-    /**
      * The amount of blocks in X direction
      */
-    public static final int BLOCKS_X = 12;//16:9 => 12:27, 4:3=>12:36
+    public static final int BLOCKS_X = 20;//16:9 => 12:27, 4:3=>12:36
+    
     /**
      * The amount of blocks in y direction
      */
-    public static final int BLOCKS_Y = 28;//28
+    public static final int BLOCKS_Y = 60;//28
+    
     /**
      * The amount of blocks in Z direction
      */
-    public static final int BLOCKS_Z = 20;//20
+    public static final int BLOCKS_Z = 3;//20
+    
     /**
     *The size of a chunk in pixels
     */
-    public static int SizeX = BLOCKS_X*Block.WIDTH;
+    public static final int SIZE_X = BLOCKS_X*Block.WIDTH;
+    
     /**
     *The size of a chunk in pixels
     */
-    public static int SizeY = BLOCKS_Y*Block.HEIGHT/2;
+    public static final int SIZE_Y = BLOCKS_Y*Block.HEIGHT/2;
+    
     /**
      * The size of a chunk in pixels
      */
-    public static int SizeZ = BLOCKS_Z*Block.HEIGHT;
+    public static final int SIZE_Z = BLOCKS_Z*Block.HEIGHT;
 
     /**
-     * 
+     * The number of the mapgenerator used.
      */
-    public Block data[][][] = new Block[BLOCKS_X][BLOCKS_Y][BLOCKS_Z];
+    public static final int MAPGENERATOR = 2;
+    
+    private int coordX, coordY;
+    private Block data[][][] = new Block[BLOCKS_X][BLOCKS_Y][BLOCKS_Z];
   
     /**
      * Creates a Chunk filled with air
      */
     public Chunk() {
-        //fill everything with air
         for (int x=0; x < BLOCKS_X; x++)
             for (int y=0; y < BLOCKS_Y; y++)
                 for (int z=0; z < BLOCKS_Z; z++)
@@ -81,37 +83,45 @@ public class Chunk {
         //alternative to chunkdata.length ChunkBlocks
         Log.debug("Creating new chunk: "+ coordX + ", "+ coordY);
         Gameplay.MSGSYSTEM.add("Creating new chunk: "+coordX+", "+ coordY);
-        for (int x=0; x < BLOCKS_X; x++)
-            for (int y=0; y < BLOCKS_Y; y++){
-                //Dirt from 0 to 8
-                int height = (int) (Math.random()*BLOCKS_Z-1)+1;
-                //int HEIGHT = (int) Chunk.BLOCKS_Z / 2;
-                for (int z=0; z < height; z++){
-                    //for (int z=0; z < BLOCKS_Z-4; z++)
-                    data[x][y][z] = new Block(2);
-                    // if ((z>10) && (x>10) && (y>5))
-                    //  data[x][y][z] = new Block (9,0);
+        switch (MAPGENERATOR){
+            case 0:{
+                for (int x=0; x < BLOCKS_X; x++)
+                    for (int y=0; y < BLOCKS_Y; y++){
+                        int height = (int) (Math.random()*BLOCKS_Z-1)+1;
+                        //int HEIGHT = (int) Chunk.BLOCKS_Z / 2;
+                        for (int z=0; z < height; z++){
+                            //for (int z=0; z < BLOCKS_Z-4; z++)
+                            data[x][y][z] = new Block(2);
+                            // if ((z>10) && (x>10) && (y>5))
+                            //  data[x][y][z] = new Block (9,0);
+                            }
+                        data[x][y][height] = new Block(1);
                     }
-                data[x][y][height] = new Block(1);
-
-                //data[0][y][BLOCKS_Z / 2 - 1] = new Block(2,0);
-
-
-                //Gras on z=9
-                //if ((x > 0) && (x < BLOCKS_X-1) && (y>0))                        
-                //data[x][y][BLOCKS_Z/2-1] = new Block(1);
-                //data[x][y][BLOCKS_Z/2] = new Block(9);
-
-
-                /*
-                if (y == BLOCKS_Y-1)
-                    data[x][y][BLOCKS_Z/2-1] = new Block(0,0);
-
-                //air from z=10 to 19
-                for (int z = BLOCKS_Z / 2; z < BLOCKS_Z; z++)
-                    data[x][y][z] = new Block(0,0);   
-                */
+                break;
             }
+            case 1: {
+                int mountainx = (int) (Math.random()*BLOCKS_X-1);
+                int mountainy = (int) (Math.random()*BLOCKS_Y-1);
+                
+                for (int x=0; x < BLOCKS_X; x++)
+                    for (int y=0; y < BLOCKS_Y; y++){
+                        int height = BLOCKS_Z-1- Math.abs(mountainy-y)- Math.abs(mountainx-x);
+                        if (height<1) height=1;
+                        for (int z=0; z < height; z++){
+                            data[x][y][z] = new Block(2);
+                            }
+                        data[x][y][height] = new Block(1);
+                    }
+                break;
+            }
+            case 2: {
+               for (int x=0; x < BLOCKS_X; x++)
+                    for (int y=0; y < BLOCKS_Y; y++){
+                        data[x][y][0] = new Block(1);
+                    }
+                break;
+            }
+        }
     }
         
     private void loadChunk(){
@@ -212,5 +222,29 @@ public class Chunk {
         } catch (IOException ex) {
             Log.debug("Loading of chunk "+coordX+","+coordY + "failed: "+ex);
         }
+    }
+
+    public Block[][][] getData() {
+        return data;
+    }
+
+    public void setData(Block[][][] data) {
+        this.data = data;
+    }
+
+    public int getCoordX() {
+        return coordX;
+    }
+
+    public void setCoordX(int coordX) {
+        this.coordX = coordX;
+    }
+
+    public int getCoordY() {
+        return coordY;
+    }
+
+    public void setCoordY(int coordY) {
+        this.coordY = coordY;
     }
 }
