@@ -639,6 +639,26 @@ public class Block {
                 else if (side==2)
                     renderRight = visible;
     }
-
-
+    
+        /**
+     * Returns the field where the coordiantes are in. Counts clockwise startin with the top 0.
+     * 701
+     * 682
+     * 543
+     * @param x value in pixels
+     * @param y value in pixels
+     * @return Returns the corner of the coordinates. 8 is self.
+     * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int) 
+     */
+    protected int getCorner(int x, int y) {
+        if (x+y <= Block.WIDTH /2)
+            return 7;//top left
+        else if (x-y >= Block.WIDTH /2) 
+                return 1; //top right
+             else if (x+y >= 3*Block.WIDTH /2)
+                    return 3;//bottom right
+                else if (-x+y >= Block.WIDTH /2)
+                        return 5;//bottom left
+                    else return 8;//the middle
+    }
 }
