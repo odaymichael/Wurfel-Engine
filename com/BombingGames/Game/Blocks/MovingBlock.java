@@ -4,19 +4,16 @@
  */
 package com.BombingGames.Game.Blocks;
 
-import com.BombingGames.Game.Chunk;
 import com.BombingGames.Game.Controller;
-import com.BombingGames.Game.Gameplay;
 import org.newdawn.slick.SlickException;
 
 /**
- *
+ *A Block which can move himself around the map therefore it must also be  a SelfAwareBlock.
  * @author Benedikt
  */
 public abstract class MovingBlock extends SelfAwareBlock {
-     /*Value in pixels*/
     /**
-     * 
+     * Value in pixels
      */
     protected int posX = Block.WIDTH / 2;
    /**
@@ -42,9 +39,8 @@ public abstract class MovingBlock extends SelfAwareBlock {
     */
    protected float veloZ = 0;
    
-   //provides a factor for the vector
    /**
-    * 
+    * provides a factor for the vector
     */
    protected float speed;
    
@@ -62,46 +58,31 @@ public abstract class MovingBlock extends SelfAwareBlock {
     }
     
     /**
-     * 
+     * Returns the coodinates of the current position.
      * @return
+     * @see com.BombingGames.Game.Blocks.Block#getCorner(int, int) 
      */
     protected int getCorner() {
         return getCorner(posX,posY);
     }
         
-    /**
-     * 
-     * @param x
-     * @param y
-     * @return
-     */
-    protected int getCorner(int x, int y) {
-        if (x+y <= Block.WIDTH /2 && getRelCoordX() > 0)
-            return 7;//top left
-        else if (x-y >= Block.WIDTH /2 && getRelCoordX() > 0) 
-                return 1; //top right
-             else if (x+y >= 3*Block.WIDTH /2 && getRelCoordY() < Chunk.BLOCKS_Y*3-1)
-                    return 3;//bottom right
-                else if (-x+y >= Block.WIDTH /2 && getRelCoordY() < Chunk.BLOCKS_Y*3-1)
-                        return 5;//bottom left
-                    else return 8;//the middle
-    }
     
-        /**
+   /**
      * Lets the player walk.
      * @param up 
-     * @param down 
-     * @param delta time which has passed since last call
+     * @param down l
      * @param left 
-     * @param walkingspeed 
-     * @param right 
+     *  @param right 
+     * @param walkingspeed the higher the speed the bigger the steps
+     *  @param delta time which has passed since last cal
      * @throws SlickException
      */
     public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed, int delta) throws SlickException {
-        //if the player is walking move him
+        //if the player is walking then move him
         if (up || down || left || right) {
             speed = walkingspeed;
             
+            //update the movement vector
             veloX = 0;
             veloY = 0;
                
@@ -114,19 +95,23 @@ public abstract class MovingBlock extends SelfAwareBlock {
             veloX /= Math.sqrt(Math.abs(veloX) + Math.abs(veloY));
             veloY /= Math.sqrt(Math.abs(veloX) + Math.abs(veloY));
             
+            int newx = (int) (posX + delta*speed * veloX);
+            int newy = (int) (posY + delta*speed * veloY);
+            
             //check if movement is allowed
-            int corner = getCorner((int) (posX + delta*speed * veloX), (int) (posY + delta*speed * veloY));
+            int corner = getCorner(newx, newy);
+            
+            //goal of step is free?
             if (!getNeighbourBlock(corner, 0).isObstacle() && !getNeighbourBlock(corner, 1).isObstacle()) {                
                 //move player by speed*vector
-                posX += delta*speed * veloX;
-                posY += delta*speed * veloY;
+                posX = newx;
+                posY = newy;
             }
         }
         
-
+        
         //track the coordiante change
         if (getCorner() == 7){
-            Gameplay.MSGSYSTEM.add("top left");
             posY += Block.WIDTH/2;
             posX += Block.WIDTH/2;
             
@@ -138,7 +123,6 @@ public abstract class MovingBlock extends SelfAwareBlock {
             Controller.getMap().requestRecalc();
         } else {
             if (getCorner() == 1) {
-                Gameplay.MSGSYSTEM.add("top right");
                 posY += Block.WIDTH / 2;
                 posX -= Block.WIDTH / 2;
 
@@ -150,7 +134,6 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 Controller.getMap().requestRecalc();
             } else {
                 if (getCorner() == 5) {
-                    Gameplay.MSGSYSTEM.add("bottom left");
                     posY -= Block.WIDTH/2;
                     posX += Block.WIDTH/2;
 
@@ -162,7 +145,6 @@ public abstract class MovingBlock extends SelfAwareBlock {
                     Controller.getMap().requestRecalc();
                 } else {
                     if (getCorner() == 3) {
-                        Gameplay.MSGSYSTEM.add("bottom right");
                         posY -= Block.WIDTH/2;
                         posX -= Block.WIDTH/2;
 

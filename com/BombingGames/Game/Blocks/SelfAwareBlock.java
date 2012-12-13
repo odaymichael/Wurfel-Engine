@@ -11,15 +11,11 @@ import org.newdawn.slick.util.Log;
  */
 public abstract class SelfAwareBlock extends Block{
   /**
-    * CoordZ is always absolute and relative at the same time.
+    * CoordZ is always absolute and relative at the same time because there are no chunks in z direction.
     */
    public int coordZ;
    
-   private int absCoordX;
-
-   private int absCoordY;   
-   private int relCoordX;
-   private int relCoordY;
+   private int absCoordX,  absCoordY, relCoordX, relCoordY;
     
     SelfAwareBlock(){
         super();
@@ -146,7 +142,7 @@ public abstract class SelfAwareBlock extends Block{
     }    
    
     /**
-     * 
+     * Set the absolute Coordinates
      * @param X
      * @param Y
      * @param Z
@@ -155,13 +151,13 @@ public abstract class SelfAwareBlock extends Block{
         setAbsCoordX(X);
         setAbsCoordY(Y);
         coordZ = Z;
+        
         //if Z is too high set to highes possible position
         if (coordZ > Chunk.BLOCKS_Z-2) coordZ = Chunk.BLOCKS_Z -2;
     }
     
-    //how can you make that this methods are only avilable to extending classes?
     /**
-     * 
+     * Destroys the reference in the map.
      */
     protected void selfDestroy(){
         Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(0,0));
@@ -169,7 +165,7 @@ public abstract class SelfAwareBlock extends Block{
     }
     
     /**
-     * 
+     * Put the reference to this object at the coordinates inside the map
      */
     protected void selfRebuild(){
         Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, this);
@@ -177,12 +173,12 @@ public abstract class SelfAwareBlock extends Block{
     }
     
    /**
-     * Returns a block next to it
+     * Returns a block next to it.
      * 701
      * 682
      * 543
-     * @param side Clockwise starting from top
-     * @param relZ if you want to check another layer. relZ is added to coordZ.
+     * @param side Counts clockwise startin with the top 0.
+     * @param relZ if you want to check another layer. relZ is added to current Z coord.
      * @return The neighbour block
      */
     public Block getNeighbourBlock(int side, int relZ){

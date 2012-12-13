@@ -53,17 +53,6 @@ public class Player extends MovingBlock{
     @Override
     public void jump(){
         if (veloZ==0 && posZ==0) veloZ = 0.8f;
-        
-//       if (coordZ<Chunk.BLOCKS_Z-2){
-//           Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = new Block(0,0);
-//           Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1] = new Block(0,0);
-//           coordZ++;
-//           Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ] = new Block(40,0);
-//           Controller.map.data[getRelCoordX()][getRelCoordY()][coordZ+1] = new Block(40,1);
-//           
-//           Controller.map.requestRecalc();
-//       }
-       //GameplayState.iglog.add(getRelCoordX()+":"+getRelCoordY()+":"+coordZ);
     }
    
     /**
