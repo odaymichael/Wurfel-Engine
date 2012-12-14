@@ -29,7 +29,7 @@ public class Minimap {
     public void draw() {
         int z;
         if (Gameplay.controller.getPlayer()!=null)
-            z=Gameplay.controller.getPlayer().coordZ-1;
+            z=Gameplay.controller.getPlayer().getCoordZ()-1;
             else z=0;
         
         for (int pos=0;pos < 9;pos++){  
@@ -108,7 +108,7 @@ public class Minimap {
             Gameplay.view.g.drawRect(
                 X + scaleX * Gameplay.view.camera.getX() * Chunk.BLOCKS_X / Chunk.SIZE_X,
                 Y + scaleY * Gameplay.view.camera.getY() * Chunk.BLOCKS_Y /Chunk.SIZE_Y
-                + scaleY *2*(Gameplay.controller.getPlayer().coordZ * Block.HEIGHT) * (Chunk.BLOCKS_Z / (float) Chunk.SIZE_Z),
+                + scaleY *2*(Gameplay.controller.getPlayer().getCoordZ() * Block.HEIGHT) * (Chunk.BLOCKS_Z / (float) Chunk.SIZE_Z),
                 scaleX*Gameplay.view.camera.getWidth() * Chunk.BLOCKS_X / Chunk.SIZE_X,
                 scaleY*Gameplay.view.camera.getHeight() * Chunk.BLOCKS_Y/Chunk.SIZE_Y
             );
@@ -129,7 +129,7 @@ public class Minimap {
                     X + scaleX * Gameplay.view.camera.getX() * Chunk.BLOCKS_X / Chunk.SIZE_X
                     + scaleX*Gameplay.view.camera.getWidth() * Chunk.BLOCKS_X / Chunk.SIZE_X,
                     Y + scaleY * Gameplay.view.camera.getY() * Chunk.BLOCKS_Y /Chunk.SIZE_Y
-                    + scaleY *2*(Gameplay.controller.getPlayer().coordZ * Block.HEIGHT) * (Chunk.BLOCKS_Z / (float) Chunk.SIZE_Z)
+                    + scaleY *2*(Gameplay.controller.getPlayer().getCoordZ() * Block.HEIGHT) * (Chunk.BLOCKS_Z / (float) Chunk.SIZE_Z)
                     + scaleY*Gameplay.view.camera.getHeight() * Chunk.BLOCKS_Y/Chunk.SIZE_Y,
                     Gameplay.view.camera.getRightBorder() +" | "+ Gameplay.view.camera.getBottomBorder() ,
                     Color.black
@@ -140,7 +140,7 @@ public class Minimap {
             View.tTFont.drawString(
                 X + (Gameplay.controller.getPlayer().getRelCoordX() + (Gameplay.controller.getPlayer().getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
                 Y + Gameplay.controller.getPlayer().getRelCoordY() * scaleY - 50,
-                Gameplay.controller.getPlayer().getRelCoordX() +" | "+ Gameplay.controller.getPlayer().getRelCoordY() +" | "+ Gameplay.controller.getPlayer().coordZ,
+                Gameplay.controller.getPlayer().getRelCoordX() +" | "+ Gameplay.controller.getPlayer().getRelCoordY() +" | "+ Gameplay.controller.getPlayer().getCoordZ(),
                 Color.blue
             );
 

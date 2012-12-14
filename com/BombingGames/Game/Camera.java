@@ -63,7 +63,7 @@ public class Camera {
                 - Gameplay.view.camera.width / 2;
             
             y = (int) (
-                (player.getRelCoordY()/2f - player.coordZ) * Block.HEIGHT
+                (player.getRelCoordY()/2f - player.getCoordZ()) * Block.HEIGHT
                 - Gameplay.view.camera.height/2
                 + player.getOffsetY() * (1/Block.aspectRatio)
                 );

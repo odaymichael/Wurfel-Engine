@@ -10,12 +10,7 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public abstract class SelfAwareBlock extends Block{
-  /**
-    * CoordZ is always absolute and relative at the same time because there are no chunks in z direction.
-    */
-   public int coordZ;
-   
-   private int absCoordX,  absCoordY, relCoordX, relCoordY;
+   protected int absCoordX,  absCoordY, relCoordX, relCoordY, coordZ;
     
     SelfAwareBlock(){
         super();
@@ -46,7 +41,7 @@ public abstract class SelfAwareBlock extends Block{
     }
 
     /**
-     * 
+     *  CoordZ is always absolute and relative at the same time because there are no chunks in z direction.
      * @return
      */
     public int getCoordZ() {
@@ -54,8 +49,8 @@ public abstract class SelfAwareBlock extends Block{
     }
 
      /**
-      * 
-      * @param coordZ
+      *  CoordZ is always absolute and relative at the same time because there are no chunks in z direction.
+      * @param coordZ the new value for z
       */
      public void setCoordZ(int coordZ) {
         this.coordZ = coordZ;
