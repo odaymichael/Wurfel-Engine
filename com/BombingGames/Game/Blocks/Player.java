@@ -2,6 +2,7 @@ package com.BombingGames.Game.Blocks;
 
 import com.BombingGames.Game.Chunk;
 import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Map;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
@@ -52,7 +53,7 @@ public class Player extends MovingBlock{
      */
     @Override
     public void jump(){
-        if (veloZ==0 && posZ==0) veloZ = 0.8f;
+        if (veloZ==0 && posZ==0) veloZ = 8;
     }
    
     /**
@@ -65,29 +66,27 @@ public class Player extends MovingBlock{
         }  else runningsound.stop();
 
         //Gravity
-        float acc = -(9.81f/Block.WIDTH)/(delta);// this should be g=9.81 m/s^2
+        float a = -Map.GRAVITY;// this should be g=9.81 m/s^2
 
         //if (delta<1000) acc = Controller.map.gravity*delta;
 
         //land if standing in or under ground level and there is an obstacle
-        if (veloZ < 0
+        if (veloZ <= 0
             && posZ <= 0
-            && (
-                coordZ==0
-                ||
-                Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ-1).isObstacle()
-            )
-        ){
-            veloZ = 0;
+            && (coordZ==0 || Controller.getMapDataUnsafe(getRelCoordX(), getRelCoordY(), coordZ-1).isObstacle())
+        ) {
             fallsound.stop();
+            veloZ = 0;
             posZ = 0;
-            acc = 0;
+            a = 0;
+            //player stands now
         }
 
+        float t=delta/1000f;
         //move if delta is okay
         if (delta < 500) {
-            veloZ += acc;
-            posZ += veloZ*delta;
+            veloZ += a*t; //in m/s
+            posZ += veloZ*Block.WIDTH*t;//m
         }
 
 

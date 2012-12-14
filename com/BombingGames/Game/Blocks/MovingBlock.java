@@ -15,13 +15,13 @@ public abstract class MovingBlock extends SelfAwareBlock {
     /**
      * Value in pixels
      */
-    protected int posX = Block.WIDTH / 2;
+    private int posX = Block.WIDTH / 2;
    /**
-    * 
+    * Value in pixels
     */
    protected int posY = Block.WIDTH / 2;
    /**
-    * 
+    * Value in pixels
     */
    protected int posZ = 0;
    
@@ -159,7 +159,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
             }  
         }
         //enable this line to see where to player stands
-        Controller.getMapDataUnsafe(getRelCoordX(), getRelCoordY(), coordZ-1).setLightlevel(40);
+        Controller.getMapDataUnsafe(this.posX, this.posY, coordZ-1).setLightlevel(40);
 
         //set the offset for the rendering
         setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
@@ -169,6 +169,9 @@ public abstract class MovingBlock extends SelfAwareBlock {
         //System.out.println(getRelCoordX()+":"+getRelCoordY()+":"+coordZ);    
    }
    
+    /**
+     * These method should define how the object can jump.
+     */
     abstract void jump();
     
     /**
