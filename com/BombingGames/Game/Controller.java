@@ -51,68 +51,6 @@ public class Controller {
     public void update(int delta) throws SlickException{
         if (delta > 200) Log.warn("delta is too high to stay stable. d: "+delta);
          
-        //get input and do actions
-        Input input = gc.getInput();
-        
-        if (!Gameplay.MSGSYSTEM.isListeningForInput()) {
-            if (input.isKeyDown(Input.KEY_Q)) gc.exit();
-
-            //open menu
-            if (input.isKeyPressed(Input.KEY_ESCAPE)) openmenu();
-
-            //toggle fullscreen
-            if (input.isKeyPressed(Input.KEY_F)) gc.setFullscreen(!gc.isFullscreen()); 
-
-            //pause
-            if (input.isKeyDown(Input.KEY_P)) gc.setPaused(true);
-
-            //good graphics
-            if (input.isKeyPressed(Input.KEY_G)) {
-                goodgraphics = !goodgraphics;
-                Gameplay.MSGSYSTEM.add("Good Graphics is now "+goodgraphics);
-            }
-
-            //render method
-            if (input.isKeyPressed(Input.KEY_R)) {
-                renderSides = !renderSides;
-                Gameplay.MSGSYSTEM.add("Rendermethod changes "+renderSides);
-                Block.reloadSprites(Gameplay.view.camera.getZoom());
-            }
-
-            //toggle camera
-            //if (input.isKeyPressed(Input.KEY_C)) 
-
-            //restart
-            if (input.isKeyPressed(Input.KEY_N)) map = new Map(false);
-
-            //reset zoom
-            if (input.isKeyPressed(Input.KEY_Z)) {
-                Gameplay.view.camera.setZoom(1);
-                Gameplay.MSGSYSTEM.add("Zoom reset");
-            }        
-
-            //walk
-            if (player != null)
-                if ("WASD".equals(player.getControls())){
-                    player.walk(
-                        input.isKeyDown(Input.KEY_W),
-                        input.isKeyDown(Input.KEY_S),
-                        input.isKeyDown(Input.KEY_A),
-                        input.isKeyDown(Input.KEY_D),
-                        .25f+(input.isKeyDown(Input.KEY_LSHIFT)? 0.75f: 0),
-                        delta
-                    );
-                    if (input.isKeyPressed(Input.KEY_SPACE)) player.jump();
-                }
-            
-        } else {
-            //fetch input and write it down
-            //to-do!
-        }
-        
-        //toggle input for msgSystem
-        if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.MSGSYSTEM.listenForInput(!Gameplay.MSGSYSTEM.isListeningForInput());
-
         //earth to right
         if (Gameplay.view.camera.getLeftBorder() < Chunk.BLOCKS_X/3)
            map.setCenter(3);
@@ -228,7 +166,7 @@ public class Controller {
         }
     }
     
-    private void openmenu(){
+    protected void openmenu(){
         boolean openmenu = true;
     }
 
@@ -248,6 +186,10 @@ public class Controller {
         this.player = player;
     }
 
+    protected void setGoodgraphics(boolean goodgraphics) {
+        this.goodgraphics = goodgraphics;
+    }
+       
    /**
      * Should the graphic be a bit slower but better? Must be in Controller because is needed for e.g. the Block and there used as data
      * @return 
@@ -271,6 +213,12 @@ public class Controller {
     public static Map getMap() {
         return map;
     }
+
+    public static void setMap(Map map) {
+        Controller.map = map;
+    }
+    
+    
     
     /**
      * Returns a block inside the map. The same as "getMap().getData(x,y,z)"
@@ -296,5 +244,15 @@ public class Controller {
     public static Block getMapDataUnsafe(int x, int y, int z){
         return map.getDataUnsafe(x, y, z);
     }
+
+
+    public boolean getRenderSides() {
+        return renderSides;
+    }
+
+    protected void setRenderSides(boolean renderSides) {
+        this.renderSides = renderSides;
+    }
+    
     
 }

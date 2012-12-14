@@ -10,7 +10,6 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Map {
-    
     public static final float GRAVITY = 9.81f;
     private Block data[][][] = new Block[Chunk.BLOCKS_X*3][Chunk.BLOCKS_Y*3][Chunk.BLOCKS_Z];
     private boolean recalcRequested;
@@ -68,6 +67,10 @@ public class Map {
         }
         return copy;
     } 
+    
+    Block[][][] getData() {
+        return data;
+    }
     
     /**
      * Reorgnanises the map and sets the center to param center.
@@ -344,8 +347,22 @@ public class Map {
         }
         data[x][y][z] = block;    
     }
-
-    Block[][][] getData() {
-        return data;
+    
+    public void earthquake(){
+        int numberofblocks = 2000;
+        int[] x = new int[numberofblocks];
+        int[] y = new int[numberofblocks];
+        int[] z = new int[numberofblocks];
+        
+        //pick random blocks 
+        for (int i=0;i<numberofblocks;i++){
+            x[i] = (int) (Math.random()*Chunk.BLOCKS_X*3-1);
+            y[i] = (int) (Math.random()*Chunk.BLOCKS_Y*3-1);
+            z[i] = (int) (Math.random()*Chunk.BLOCKS_Z);
+        }
+        
+        for (int i=0;i<numberofblocks;i++){
+            data[x[i]][y[i]][z[i]].setOffset((int) (Math.random()*Block.WIDTH/2)-Block.WIDTH/2, (int) (Math.random()*Block.WIDTH/2)-Block.WIDTH/2);
+        }
     }
 }
