@@ -10,13 +10,12 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Map {
-    /**
-     * The map's data is stored inside here.
-     */
+    
+    public static final float GRAVITY = 9.81f;
     private Block data[][][] = new Block[Chunk.BLOCKS_X*3][Chunk.BLOCKS_Y*3][Chunk.BLOCKS_Z];
     private boolean recalcRequested;
     private int[] coordlistX = new int[9];
-    private int[] coordlistY = new int[9];;
+    private int[] coordlistY = new int[9];
     private Minimap minimap;
     
     
