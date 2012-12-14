@@ -199,7 +199,7 @@ public class View {
                                     Controller.getMapDataUnsafe(x, y, z).setSideVisibility(2, true);
                                 else break;
                             }
-            } while (y >= 2 && z >= 1 && Controller.getMapDataUnsafe(x, y, z).isTransparent());
+            } while (y >= 2 && z >= 1 && (Controller.getMapDataUnsafe(x, y, z).isTransparent() || Controller.getMapDataUnsafe(x, y, z).hasOffset()));
 //           Take the last block
 //            if (y >= 0 && z >= 0 && z < Chunk.BLOCKS_Z-1 && (mapdata[x][y][z+1].isTransparent())){
 //                renderarray[x][y][z] = mapgetData(x, y, z);
