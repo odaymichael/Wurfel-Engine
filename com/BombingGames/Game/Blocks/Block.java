@@ -657,4 +657,12 @@ public class Block {
                         return 5;//bottom left
                     else return 8;//the middle
     }
+
+    /**
+     * has the block an offset? if x or y is !=0 it is true.
+     * @return 
+     */
+    public boolean hasOffset() {
+        return offsetX!=0 || offsetY!=0;
+    }
 }
