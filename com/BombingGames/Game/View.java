@@ -98,7 +98,7 @@ public class View {
  /**
      * Filters every Block (and side) wich is not visible. Boosts rendering speed.
      */
-    public void raytracing(){
+    protected void raytracing(){
         Log.debug("doing raytracing");
         //set visibility of every block to false
         for (int x=0;x < Chunk.BLOCKS_X*3;x++)

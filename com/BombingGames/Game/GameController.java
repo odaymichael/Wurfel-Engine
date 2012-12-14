@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- *This COntrolelr is the extended Controller from the engine. Put game code here.
+ *The <i>GameController</i> is for the game code. Put engine code into <i>Controller</i>.
  * @author Benedikt
  */
 public class GameController extends Controller {

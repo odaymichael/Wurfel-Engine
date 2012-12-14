@@ -81,13 +81,9 @@ public class Block {
     
     private int lightlevel = 50;
     /**
-     * The offset of the image in X direction
+     * The offset of the image
      */
-    private int offsetX = 0;
-    /**
-     * The offset of the image in Y direction
-     */
-    private int offsetY = 0;
+    private int offsetX, offsetY;
     
     /**
      * The sprite image which contains every block image

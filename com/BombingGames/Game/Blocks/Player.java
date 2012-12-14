@@ -92,28 +92,27 @@ public class Player extends MovingBlock{
 
         //coordinate switch
         //down
-        if (posZ <= 0 && coordZ>0 && !Controller.getMapData(getRelCoordX(),getRelCoordY(),coordZ-1).isObstacle()){
+        if (posZ <= 0 && coordZ>0 && !Controller.getMapData(relCoordX,relCoordY,coordZ-1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
-            coordZ--;
             
-            Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+2, new Block(0,0));
-            Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).setValue(1);
-            Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(40,0));
+            selfDestroy();
+            coordZ--;
+            selfRebuild();
 
             posZ += Block.WIDTH;
+            Controller.getMap().requestRecalc();
         }
 
         //up
-        if (posZ >= Block.HEIGHT && coordZ < Chunk.BLOCKS_Z-2 && !Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).isObstacle()){
+        if (posZ >= Block.HEIGHT && coordZ < Chunk.BLOCKS_Z-2 && !Controller.getMapData(relCoordX, relCoordY, coordZ+1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
 
+            selfDestroy();
             coordZ++;
-
-            Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));
-            Controller.getMapData(getRelCoordX(),getRelCoordY(), coordZ).setValue(0);
-            Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ-1, new Block(0,0));
+            selfRebuild();
 
             posZ -= Block.WIDTH;
+            Controller.getMap().requestRecalc();
         } 
    }
     
@@ -122,5 +121,29 @@ public class Player extends MovingBlock{
         super.draw(x, y, z);
         //this line causes massive rendering problems
         //Gameplay.view.g.fillRect(500, 500, 900, 600);
-    } 
+    }
+     
+     /**
+      * Sets position of both player blocks
+      * @param x 
+      */
+     public void setPosX(int x){
+         
+     }
+     
+     /**
+      * Sets position of both player blocks
+      * @param y 
+      */
+     public void setPosY(int y){
+     
+     }
+     
+     /**
+      * Sets position of both player blocks
+      * @param z 
+      */
+     public void setPosZ(int z){
+     
+     }
 }

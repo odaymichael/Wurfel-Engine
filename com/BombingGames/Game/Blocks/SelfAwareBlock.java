@@ -10,7 +10,7 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public abstract class SelfAwareBlock extends Block{
-   protected int absCoordX,  absCoordY, relCoordX, relCoordY, coordZ;
+   protected int absCoordX, absCoordY, relCoordX, relCoordY, coordZ;
     
     SelfAwareBlock(){
         super();
@@ -155,16 +155,17 @@ public abstract class SelfAwareBlock extends Block{
      * Destroys the reference in the map.
      */
     protected void selfDestroy(){
-        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(0,0));
-        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(0,0));
+        Controller.getMap().setData(relCoordX, relCoordY, coordZ, new Block(0,0));
+        Controller.getMap().setData(relCoordX, relCoordY, coordZ+1, new Block(0,0));
     }
     
     /**
      * Put the reference to this object at the coordinates inside the map
      */
     protected void selfRebuild(){
-        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, this);
-        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));
+        Controller.getMap().setData(relCoordX, relCoordY, coordZ, this);
+        Controller.getMap().setData(relCoordX, relCoordY, coordZ+1, new Block(40,1));
+        Controller.getMapData(relCoordX, relCoordY, coordZ+1).setOffset(getOffsetX(), getOffsetY());
     }
     
    /**

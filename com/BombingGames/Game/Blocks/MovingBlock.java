@@ -159,11 +159,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
             }  
         }
         //enable this line to see where to player stands
-        Controller.getMapDataUnsafe(this.posX, this.posY, coordZ-1).setLightlevel(40);
+        Controller.getMapData(this.posX, this.posY, coordZ-1).setLightlevel(40);
 
         //set the offset for the rendering
         setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
-        Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).setOffset(getOffsetX(), getOffsetY());
+        Controller.getMapData(relCoordX, relCoordY, coordZ+1).setOffset(getOffsetX(), getOffsetY());
 
        //GameplayState.iglog.add(getRelCoordX()+":"+getRelCoordY()+":"+coordZ);
         //System.out.println(getRelCoordX()+":"+getRelCoordY()+":"+coordZ);    
