@@ -11,12 +11,20 @@ import org.newdawn.slick.util.Log;
  */
 public class Map {
     public static final float GRAVITY = 9.81f;
-    private Block data[][][] = new Block[Chunk.BLOCKS_X*3][Chunk.BLOCKS_Y*3][Chunk.BLOCKS_Z];
+    public static final int BLOCKS_X;
+    public static final int BLOCKS_Y;
+    public static final int BLOCKS_Z;
+    private Block data[][][] = new Block[Chunk.BLOCKS_X*3][Map.BLOCKS_Y][Chunk.BLOCKS_Z];
     private boolean recalcRequested;
     private int[] coordlistX = new int[9];
     private int[] coordlistY = new int[9];
     private Minimap minimap;
     
+    static {
+        BLOCKS_X = Chunk.BLOCKS_X*3;
+        BLOCKS_Y = Chunk.BLOCKS_Y*3;
+        BLOCKS_Z = Chunk.BLOCKS_Z;
+    }
     
     /**
      * Creates a map.
@@ -26,6 +34,7 @@ public class Map {
         Log.debug("Creating the map...");
         Log.debug("Should the Engine load a map: "+load);
         
+        //Fill the nine chunks
         Chunk tempchunk;
         int pos = 0;
         
@@ -218,20 +227,18 @@ public class Map {
     public void draw() {
         if (Gameplay.controller.hasGoodGraphics()) Block.Blocksheet.bind();
         if (Gameplay.controller.hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
+        
         Block.Blocksheet.startUse();
         //render vom bottom to top
         for (int z=0; z < Chunk.BLOCKS_Z; z++) {
-            for (int y = Gameplay.view.camera.getTopBorder(); y < Gameplay.view.camera.getBottomBorder(); y++) {//vertikal
-                for (int x = Gameplay.view.camera.getLeftBorder(); x < Gameplay.view.camera.getRightBorder(); x++){//horizontal
-                    if (
-                        (x < Chunk.BLOCKS_X*3-1 && data[x+1][y][z].renderorder == -1)
+            for (int y = Gameplay.view.getCamera().getTopBorder(); y < Gameplay.view.getCamera().getBottomBorder(); y++) {//vertikal
+                for (int x = Gameplay.view.getCamera().getLeftBorder(); x < Gameplay.view.getCamera().getRightBorder(); x++){//horizontal
+                    if ((x < Chunk.BLOCKS_X*3-1 && data[x+1][y][z].renderorder == -1)
                         ||
-                        data[x][y][z].renderorder == 1
-                       ) {
+                        data[x][y][z].renderorder == 1) {
                         x++;
                         data[x][y][z].draw(x,y,z);//draw the right block first
-                        data[x-1][y][z].draw(x-1,y,z);
-                        
+                        data[x-1][y][z].draw(x-1,y,z);    
                     } else data[x][y][z].draw(x,y,z);
                 }
             }
@@ -283,8 +290,8 @@ public class Map {
             //Log.warn("X too low!");
         }
         
-        if (y >= Chunk.BLOCKS_Y*3){
-            y = Chunk.BLOCKS_Y*3-1;
+        if (y >= Map.BLOCKS_Y){
+            y = Map.BLOCKS_Y-1;
            // Log.warn("Y too high!");
         } else if(y<0){
             y = 0;
@@ -330,8 +337,8 @@ public class Map {
            // Log.warn("X too low!");
         }
         
-        if (y >= Chunk.BLOCKS_Y*3){
-            y = Chunk.BLOCKS_Y*3-1;
+        if (y >= Map.BLOCKS_Y){
+            y = Map.BLOCKS_Y-1;
             //Log.warn("Y too high!");
         } else if(y<0){
             y = 0;
@@ -357,7 +364,7 @@ public class Map {
         //pick random blocks 
         for (int i=0;i<numberofblocks;i++){
             x[i] = (int) (Math.random()*Chunk.BLOCKS_X*3-1);
-            y[i] = (int) (Math.random()*Chunk.BLOCKS_Y*3-1);
+            y[i] = (int) (Math.random()*Map.BLOCKS_Y-1);
             z[i] = (int) (Math.random()*Chunk.BLOCKS_Z);
         }
         

@@ -3,6 +3,7 @@ package com.BombingGames.Game.Blocks;
 import com.BombingGames.Game.Chunk;
 import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Gameplay;
+import com.BombingGames.Game.Map;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -99,7 +100,7 @@ public abstract class SelfAwareBlock extends Block{
      * @param Y
      */
     public void setRelCoordY(int Y){
-        if (Y < Chunk.BLOCKS_Y*3){
+        if (Y < Map.BLOCKS_Y){
             relCoordY = Y;
         }else {
             relCoordY = 3*Chunk.BLOCKS_Y-1;
