@@ -11,22 +11,21 @@ import org.newdawn.slick.Color;
 public class Minimap {
     private int X;
     private int Y;
-    private final float scaleX = 2;//8
-    private final float scaleY = 1;//4
+    private final float scaleX = 6;//8
+    private final float scaleY = 3;//4
     
     /**
-     * Creates a Minimap. At the momen this is primary for development purposes.
+     * Creates a Minimap. At the momen it is primary for development purposes.
      */
     public Minimap() {
-        X = Gameplay.gc.getWidth() - (int) (3*Chunk.BLOCKS_X*scaleX) - 10;
-        Y = 10; //10 pixels from top
     } 
             
     /**
-     * 
-     *
+     * Draw the Minimap
      */
     public void draw() {
+        Y = Gameplay.view.getCamera().getScreenY() + 10;
+        X = Gameplay.view.getCamera().getScreenX() + Gameplay.view.getCamera().getScreenWidth() - (int) (3*Chunk.BLOCKS_X*scaleX) - 10;
         int z;
         if (Gameplay.controller.getPlayer()!=null)
             z=Gameplay.controller.getPlayer().getCoordZ()-1;
@@ -93,45 +92,45 @@ public class Minimap {
             );
         }
 
-        //bottom camera rectangle
+        //bottom getCamera() rectangle
         Gameplay.view.g.setColor(Color.green);
         Gameplay.view.g.drawRect(
-            X + scaleX * Gameplay.view.camera.getX() * Chunk.BLOCKS_X / Chunk.SIZE_X,
-            Y + scaleY * Gameplay.view.camera.getY() * Chunk.BLOCKS_Y /Chunk.SIZE_Y,
-            scaleX*Gameplay.view.camera.getWidth() * Chunk.BLOCKS_X / Chunk.SIZE_X,
-            scaleY*Gameplay.view.camera.getHeight() * Chunk.BLOCKS_Y/Chunk.SIZE_Y
+            X + scaleX * Gameplay.view.getCamera().getX() * Chunk.BLOCKS_X / Chunk.SIZE_X,
+            Y + scaleY * Gameplay.view.getCamera().getY() * Chunk.BLOCKS_Y /Chunk.SIZE_Y,
+            scaleX*Gameplay.view.getCamera().getWidth() * Chunk.BLOCKS_X / Chunk.SIZE_X,
+            scaleY*Gameplay.view.getCamera().getHeight() * Chunk.BLOCKS_Y/Chunk.SIZE_Y
         );
 
         if (Gameplay.controller.getPlayer()!=null){
-            //player level camera rectangle
+            //player level getCamera() rectangle
             Gameplay.view.g.setColor(Color.gray);
             Gameplay.view.g.drawRect(
-                X + scaleX * Gameplay.view.camera.getX() * Chunk.BLOCKS_X / Chunk.SIZE_X,
-                Y + scaleY * Gameplay.view.camera.getY() * Chunk.BLOCKS_Y /Chunk.SIZE_Y
+                X + scaleX * Gameplay.view.getCamera().getX() * Chunk.BLOCKS_X / Chunk.SIZE_X,
+                Y + scaleY * Gameplay.view.getCamera().getY() * Chunk.BLOCKS_Y /Chunk.SIZE_Y
                 + scaleY *2*(Gameplay.controller.getPlayer().getCoordZ() * Block.HEIGHT) * (Chunk.BLOCKS_Z / (float) Chunk.SIZE_Z),
-                scaleX*Gameplay.view.camera.getWidth() * Chunk.BLOCKS_X / Chunk.SIZE_X,
-                scaleY*Gameplay.view.camera.getHeight() * Chunk.BLOCKS_Y/Chunk.SIZE_Y
+                scaleX*Gameplay.view.getCamera().getWidth() * Chunk.BLOCKS_X / Chunk.SIZE_X,
+                scaleY*Gameplay.view.getCamera().getHeight() * Chunk.BLOCKS_Y/Chunk.SIZE_Y
             );
         }
 
-        //top level camera rectangle
+        //top level getCamera() rectangle
         Gameplay.view.g.setColor(Color.white);
         Gameplay.view.g.drawRect(
-            X + scaleX * Gameplay.view.camera.getX() * Chunk.BLOCKS_X / Chunk.SIZE_X,
-            Y + scaleY * Gameplay.view.camera.getY() * Chunk.BLOCKS_Y /Chunk.SIZE_Y
+            X + scaleX * Gameplay.view.getCamera().getX() * Chunk.BLOCKS_X / Chunk.SIZE_X,
+            Y + scaleY * Gameplay.view.getCamera().getY() * Chunk.BLOCKS_Y /Chunk.SIZE_Y
             + scaleY *2*(Chunk.BLOCKS_Z * Block.HEIGHT) * (Chunk.BLOCKS_Z / (float) Chunk.SIZE_Z),
-            scaleX*Gameplay.view.camera.getWidth() * Chunk.BLOCKS_X / Chunk.SIZE_X,
-            scaleY*Gameplay.view.camera.getHeight() * Chunk.BLOCKS_Y/Chunk.SIZE_Y
+            scaleX*Gameplay.view.getCamera().getWidth() * Chunk.BLOCKS_X / Chunk.SIZE_X,
+            scaleY*Gameplay.view.getCamera().getHeight() * Chunk.BLOCKS_Y/Chunk.SIZE_Y
         );
 
         if (Gameplay.controller.getPlayer()!=null){
             View.tTFont.drawString(
-                    X + scaleX * Gameplay.view.camera.getX() * Chunk.BLOCKS_X / Chunk.SIZE_X
-                    + scaleX*Gameplay.view.camera.getWidth() * Chunk.BLOCKS_X / Chunk.SIZE_X,
-                    Y + scaleY * Gameplay.view.camera.getY() * Chunk.BLOCKS_Y /Chunk.SIZE_Y
+                    X + scaleX * Gameplay.view.getCamera().getX() * Chunk.BLOCKS_X / Chunk.SIZE_X
+                    + scaleX*Gameplay.view.getCamera().getWidth() * Chunk.BLOCKS_X / Chunk.SIZE_X,
+                    Y + scaleY * Gameplay.view.getCamera().getY() * Chunk.BLOCKS_Y /Chunk.SIZE_Y
                     + scaleY *2*(Gameplay.controller.getPlayer().getCoordZ() * Block.HEIGHT) * (Chunk.BLOCKS_Z / (float) Chunk.SIZE_Z)
-                    + scaleY*Gameplay.view.camera.getHeight() * Chunk.BLOCKS_Y/Chunk.SIZE_Y,
-                    Gameplay.view.camera.getRightBorder() +" | "+ Gameplay.view.camera.getBottomBorder() ,
+                    + scaleY*Gameplay.view.getCamera().getHeight() * Chunk.BLOCKS_Y/Chunk.SIZE_Y,
+                    Gameplay.view.getCamera().getRightBorder() +" | "+ Gameplay.view.getCamera().getBottomBorder() ,
                     Color.black
                 );
 
@@ -154,11 +153,11 @@ public class Minimap {
             );
         }
 
-        //camera pos
+        //getCamera() pos
         View.tTFont.drawString(
-                Gameplay.gc.getWidth()- 100,
-                15,
-                Gameplay.view.camera.getX() +" | "+ Gameplay.view.camera.getY(),
+                X ,
+                Y + 3*Chunk.BLOCKS_Y*scaleY + 15,
+                Gameplay.view.getCamera().getX() +" | "+ Gameplay.view.getCamera().getY(),
                 Color.white
             );
         }

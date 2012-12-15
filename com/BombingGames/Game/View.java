@@ -14,7 +14,7 @@ public class View {
     /**
      * The camera which display everything
      */
-    public Camera camera;
+    private Camera camera;
     
     /**
      * The reference for the graphics context
@@ -32,6 +32,7 @@ public class View {
     
     private GameContainer gc;
     private Font baseFont;
+    private float equalizationScale;
 
     /**
      * Creates a View
@@ -47,19 +48,22 @@ public class View {
         //startFont = Font.createFont(Font.TRUETYPE_FONT,new BufferedInputStream(this.getClass().getResourceAsStream("Blox2.ttf")));
         UnicodeFont startFont = new UnicodeFont("com/BombingGames/Game/Blox2.ttf", 20, false, false);
         //baseFont = startFont.deriveFont(Font.PLAIN, 12);
-        baseFont = startFont.getFont().deriveFont(Font.PLAIN, 12);
+        baseFont = startFont.getFont().deriveFont(Font.PLAIN, 18);
         
         tTFont = new TrueTypeFont(baseFont, true);
+        
+        equalizationScale = gc.getHeight()*4 / (float)(Chunk.BLOCKS_Y* Block.HEIGHT*2);
+        Log.debug("Scale is:"+Float.toString(equalizationScale));
         
         camera = new Camera(
             0,//top
             0,//left
-            gc.getWidth(),//full WIDTH
-            gc.getHeight(),//full HEIGHT
-            gc.getHeight()*4 / (float)(Chunk.BLOCKS_Y* Block.HEIGHT*2)//zoom factor
+            gc.getWidth(),//full width
+            gc.getHeight(),//full height
+            equalizationScale
             );
         
-        //camera.FocusOnBlock(new Blockpointer(Chunk.BLOCKS_X*3/2,Chunk.BLOCKS_Y*3/2,Chunk.BLOCKS_Z/2));
+        //camera.FocusOnBlock(new Blockpointer(Chunk.BLOCKS_X*3/2,Map.BLOCKS_Y/2,Chunk.BLOCKS_Z/2));
         
         if (camera.getYzHeight() > Chunk.SIZE_Y) {
             Gameplay.MSGSYSTEM.add("The chunks are too small for this camera height/resolution", "Warning");
@@ -76,12 +80,13 @@ public class View {
         //update resolution things
         Gameplay.MSGSYSTEM.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
         
-        Block.reloadSprites(camera.getZoom()); 
+        Block.reloadSprites(camera.getZoom()*equalizationScale); 
         // Block.WIDTH = Block.HEIGHT;
         Gameplay.MSGSYSTEM.add("Blocks: "+Block.WIDTH+" x "+Block.HEIGHT);
         Gameplay.MSGSYSTEM.add("Zoom: "+ camera.getZoom());
+        Gameplay.MSGSYSTEM.add("AbsZoom: "+ camera.getZoom()*equalizationScale);
         Gameplay.MSGSYSTEM.add("chunk: "+ Chunk.SIZE_X+" x "+Chunk.SIZE_Y);
-        Gameplay.MSGSYSTEM.add("chunk w/ zoom: "+Chunk.SIZE_X*camera.getZoom()+" x "+Chunk.SIZE_Y*camera.getZoom());
+        Gameplay.MSGSYSTEM.add("chunk w/ zoom: "+Chunk.SIZE_X*camera.getZoom()*equalizationScale+" x "+Chunk.SIZE_Y*camera.getZoom()*equalizationScale);
     }
     
     /**
@@ -92,7 +97,9 @@ public class View {
      */
     public void render(StateBasedGame game, Graphics g) throws SlickException{
         this.g = g;
-        camera.draw();      
+        g.scale(equalizationScale, equalizationScale);
+        camera.draw(); 
+        Gameplay.MSGSYSTEM.draw(); 
     }
          
  /**
@@ -102,13 +109,13 @@ public class View {
         Log.debug("doing raytracing");
         //set visibility of every block to false
         for (int x=0;x < Chunk.BLOCKS_X*3;x++)
-            for (int y=0;y < Chunk.BLOCKS_Y*3;y++)
+            for (int y=0;y < Map.BLOCKS_Y;y++)
                 for (int z=0;z < Chunk.BLOCKS_Z;z++)
                     Controller.getMapDataUnsafe(x, y, z).setVisible(false);
                 
         //send rays through top of the map
         for (int x=0; x < Chunk.BLOCKS_X*3; x++)
-            for (int y=0; y < Chunk.BLOCKS_Y*3 + Chunk.BLOCKS_Z*2; y++)
+            for (int y=0; y < Map.BLOCKS_Y + Chunk.BLOCKS_Z*2; y++)
                 for (int side=0; side < 3; side++)
                     trace_ray(
                         x,
@@ -130,7 +137,7 @@ public class View {
             boolean left = true;
             boolean right = true;
             
-            while (y >= Chunk.BLOCKS_Y*3){
+            while (y >= Map.BLOCKS_Y){
                 y -= 2;
                 z--;
             }
@@ -143,16 +150,16 @@ public class View {
                     z--;
 
                     if (side == 0){
-                    //direct neighbour block on left hiding the complete left side
-                        if (x > 0 && y < Chunk.BLOCKS_Y-1
+                        //direct neighbour block on left hiding the complete left side
+                        if (x > 0 && y < Map.BLOCKS_Y-1
                             && ! Controller.getMapDataUnsafe(x - (y%2 == 0 ? 1:0), y+1, z).isTransparent())
                         break; //stop ray
 
                         //two blocks hiding the left side
-                        if (x > 0 && y < Chunk.BLOCKS_Y-1 && z < Chunk.BLOCKS_Z-1
+                        if (x > 0 && y < Map.BLOCKS_Y-1 && z < Map.BLOCKS_Z-1
                             && ! Controller.getMapDataUnsafe(x - (y%2 == 0 ? 1:0), y+1, z+1).isTransparent())
                             left = false;
-                        if (y < Chunk.BLOCKS_Y-2 &&
+                        if (y < Map.BLOCKS_Y-2 &&
                             ! Controller.getMapDataUnsafe(x, y+2, z).isTransparent())
                             right = false;
 
@@ -161,15 +168,15 @@ public class View {
                         else break;//if side is hidden stop ray
                     } else                 
                         if (side == 1) {//check top side
-                            if (z < Chunk.BLOCKS_Z-1
+                            if (z < Map.BLOCKS_Z-1
                                 && ! Controller.getMapDataUnsafe(x, y, z+1).isTransparent())
                                 break;   
 
                             //two 0- and 2-sides hiding the side 1
-                            if (x>0 && y < Chunk.BLOCKS_Y-1 && z < Chunk.BLOCKS_Z-1
+                            if (x>0 && y < Map.BLOCKS_Y-1 && z < Map.BLOCKS_Z-1
                                 && ! Controller.getMapDataUnsafe(x - (y%2 == 0 ? 1:0), y+1, z+1).isTransparent())
                                 left = false;
-                            if (x < Chunk.BLOCKS_X-1  && y < Chunk.BLOCKS_Y-1 && z < Chunk.BLOCKS_Z-1
+                            if (x < Map.BLOCKS_X-1  && y < Map.BLOCKS_Y-1 && z < Map.BLOCKS_Z-1
                                 && ! Controller.getMapDataUnsafe(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent())
                                 right = false;
 
@@ -179,17 +186,17 @@ public class View {
                         } else
                             if (side==2){
                                 //block on right hiding the right side
-                                if (x < Chunk.BLOCKS_X-1 && y < Chunk.BLOCKS_Y-1
+                                if (x < Map.BLOCKS_X-1 && y < Map.BLOCKS_Y-1
                                     && ! Controller.getMapDataUnsafe(x + (y%2 == 0 ? 0:1), y+1, z).isTransparent()
                                     )
                                     break;
 
                                 //two blocks hiding the rightside
-                                if (y < Chunk.BLOCKS_Y-2 &&
+                                if (y < Map.BLOCKS_Y-2 &&
                                     ! Controller.getMapDataUnsafe(x, y+2, z).isTransparent()
                                     )
                                     left = false;
-                                if (x < Chunk.BLOCKS_X-1 && y < Chunk.BLOCKS_Y-1 && z < Chunk.BLOCKS_Z-1
+                                if (x < Map.BLOCKS_X-1 && y < Map.BLOCKS_Y-1 && z < Map.BLOCKS_Z-1
                                     &&
                                     ! Controller.getMapDataUnsafe(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent()
                                     )
@@ -200,11 +207,6 @@ public class View {
                                 else break;
                             }
             } while (y >= 2 && z >= 1 && (Controller.getMapDataUnsafe(x, y, z).isTransparent() || Controller.getMapDataUnsafe(x, y, z).hasOffset()));
-//           Take the last block
-//            if (y >= 0 && z >= 0 && z < Chunk.BLOCKS_Z-1 && (mapdata[x][y][z+1].isTransparent())){
-//                renderarray[x][y][z] = mapgetData(x, y, z);
-//                renderarray[x][y][z].renderTop = true;
-//            }
         } else{
             //trace ray until it found a not isTransparent() block
             boolean leftHalfHidden = false;
@@ -245,9 +247,8 @@ public class View {
      */
     public void calc_light(){
         for (int x=0; x < Chunk.BLOCKS_X*3; x++){
-            for (int y=0; y < Chunk.BLOCKS_Y*3; y++) {
-                
-                //find top most Block
+            for (int y=0; y < Map.BLOCKS_Y; y++) {
+                //find top most block
                 int topmost = Chunk.BLOCKS_Z-1;
                 while (Controller.getMapData(x, y, topmost).isTransparent() == true && topmost > 0 ){
                     topmost--;
@@ -259,4 +260,12 @@ public class View {
             }
         }         
     }
+
+    public float getEqualizationScale() {
+        return equalizationScale;
+    }
+
+    public Camera getCamera() {
+        return camera;
+    } 
 }

@@ -57,10 +57,10 @@ public class GameController extends Controller {
             if (input.isKeyPressed(Input.KEY_R)) {
                 setRenderSides(!getRenderSides());
                 Gameplay.MSGSYSTEM.add("Rendermethod changes "+getRenderSides());
-                Block.reloadSprites(Gameplay.view.camera.getZoom());
+                Block.reloadSprites(Gameplay.view.getCamera().getAbsZoom());
             }
 
-            //toggle camera
+            //toggle getCamera()
             //if (input.isKeyPressed(Input.KEY_C)) 
 
             //restart
@@ -68,7 +68,7 @@ public class GameController extends Controller {
 
             //reset zoom
             if (input.isKeyPressed(Input.KEY_Z)) {
-                Gameplay.view.camera.setZoom(1);
+                Gameplay.view.getCamera().setZoom(1);
                 Gameplay.MSGSYSTEM.add("Zoom reset");
             }        
 

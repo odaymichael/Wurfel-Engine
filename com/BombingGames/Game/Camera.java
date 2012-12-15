@@ -3,7 +3,6 @@ package com.BombingGames.Game;
 import com.BombingGames.Game.Blocks.Block;
 import com.BombingGames.Game.Blocks.Blockpointer;
 import com.BombingGames.Game.Blocks.Player;
-import org.newdawn.slick.util.Log;
 
 /**
  *The camera locks to the player by default. It can be changed with <i>focusblock()</i>.
@@ -21,22 +20,20 @@ public class Camera {
     private final int screenX, screenY, screenWidth, screenHeight;
 
     /**
-     * Creates a camera.
+     * Creates a camera. Screen does refer to the output of the camera not the real size on the display.
      * @param x The screen coordinates
      * @param y The screen coordinate
-     * @param WIDTH The screen WIDTH of the camera
-     * @param HEIGHT The screen HEIGHT of the camera
-     * @param zoom The zoom factor.
+     * @param width The screen width of the camera
+     * @param height The screen height of the camera
+     * @param scale The zoom factor.
      */
-    Camera(int x, int y,int width, int height,float zoom) {
+    public Camera(int x, int y,int width, int height, float scale) {
         screenX = x;
         screenY = y;
-        screenWidth = width;
-        screenHeight = height;
-        this.zoom = zoom;
-        Log.debug("Zoom is:"+Float.toString(zoom));
-        this.width = (int) (screenWidth / zoom);
-        this.height = (int) (screenHeight / zoom);
+        screenWidth = (int) (width/scale);
+        screenHeight = (int) (height/scale);
+        this.width = (int) (screenWidth/this.zoom);
+        this.height = (int) (screenHeight/this.zoom);
     } 
        
     /**
@@ -47,11 +44,11 @@ public class Camera {
              x = focusblock.getX() * Block.WIDTH
                 + Block.WIDTH / 2 *(focusblock.getY() % 2)
                 + focusblock.getBlock().getOffsetX()
-                - Gameplay.view.camera.width / 2;
+                - Gameplay.view.getCamera().width / 2;
             
             y = (int) (
                 (focusblock.getY()/2f - focusblock.getZ()) * Block.HEIGHT
-                - Gameplay.view.camera.height/2
+                - Gameplay.view.getCamera().height/2
                 + focusblock.getBlock().getOffsetY() * (1/Block.aspectRatio)
                 );
             
@@ -60,11 +57,11 @@ public class Camera {
             x = player.getRelCoordX() * Block.WIDTH
                 + Block.WIDTH / 2 *(player.getRelCoordY() % 2)
                 + player.getOffsetX()
-                - Gameplay.view.camera.width / 2;
+                - Gameplay.view.getCamera().width / 2;
             
             y = (int) (
                 (player.getRelCoordY()/2f - player.getCoordZ()) * Block.HEIGHT
-                - Gameplay.view.camera.height/2
+                - Gameplay.view.getCamera().height/2
                 + player.getOffsetY() * (1/Block.aspectRatio)
                 );
         }
@@ -80,19 +77,18 @@ public class Camera {
         if (topborder < 0) topborder= 0;
         
         bottomborder = (y+height)/(Block.HEIGHT/2) + Chunk.BLOCKS_Z*2;
-        if (bottomborder >= Chunk.BLOCKS_Y*3) bottomborder = Chunk.BLOCKS_Y*3-1;
+        if (bottomborder >= Map.BLOCKS_Y) bottomborder = Map.BLOCKS_Y-1;
         
     }
     
-    void draw() {
+    public void draw() {
         Gameplay.view.g.scale(getZoom(), getZoom());
         Controller.getMap().draw();
         
         Gameplay.view.g.scale(1/getZoom(), 1/getZoom());
         //GUI
         if (Controller.getMap().getMinimap() != null)
-            Controller.getMap().getMinimap().draw();
-        Gameplay.MSGSYSTEM.draw();  
+            Controller.getMap().getMinimap().draw(); 
     }
     
     /**
@@ -112,6 +108,10 @@ public class Camera {
      */
     public float getZoom() {
         return zoom;
+    }
+    
+    public float getAbsZoom() {
+        return zoom*Gameplay.view.getEqualizationScale();
     }
 
     
@@ -232,18 +232,18 @@ public class Camera {
 
     
     /**
-     * Returns the HEIGHT of the camera output.
+     * Returns the height of the camera output.
      * @return
      */
-    public float getScreenHeight() {
+    public int getScreenHeight() {
         return screenHeight;
     }
 
     /**
-     * Returns the WIDTH of the camera output.
+     * Returns the width of the camera output.
      * @return
      */
-    public float getScreenWidth() {
+    public int getScreenWidth() {
         return screenWidth;
     }
 
@@ -262,4 +262,6 @@ public class Camera {
     public int getScreenY() {
         return screenY;
     }
+    
+    
 }
