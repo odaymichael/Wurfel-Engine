@@ -17,13 +17,13 @@ public abstract class SelfAwareBlock extends Block{
         super();
     }
     
-   SelfAwareBlock(int id){
+    SelfAwareBlock(int id){
        super(id);
-   }
+    }
    
-   SelfAwareBlock(int id,int value){
+    SelfAwareBlock(int id,int value){
        super(id, value);
-   }
+    }
    
    /**
     * 
@@ -70,10 +70,10 @@ public abstract class SelfAwareBlock extends Block{
      * @param X
      */
     public void setRelCoordX(int X){
-        if (X < Chunk.BLOCKS_X*3){
+        if (X < Map.BLOCKS_X){
             relCoordX = X;
         } else {
-            this.relCoordX = 3*Chunk.BLOCKS_X-1;
+            relCoordX = Map.BLOCKS_X-1;
             Gameplay.MSGSYSTEM.add("RelativeCoordX ist too high:"+X);
             Log.warn("RelativeCoordX ist too high:"+X);
         }
@@ -103,7 +103,7 @@ public abstract class SelfAwareBlock extends Block{
         if (Y < Map.BLOCKS_Y){
             relCoordY = Y;
         }else {
-            relCoordY = 3*Chunk.BLOCKS_Y-1;
+            relCoordY = Map.BLOCKS_Y-1;
             Gameplay.MSGSYSTEM.add("RelativeCoordY ist too high: "+Y);
             Log.warn("RelativeCoordY ist too high: "+Y);
         }
@@ -123,7 +123,8 @@ public abstract class SelfAwareBlock extends Block{
      */
     public void setAbsCoordX(int X){
         absCoordX = X;
-        setRelCoordX(X - Controller.getMap().getCoordlistX(4)  * Chunk.BLOCKS_X);
+        //also change rel coordinates
+        setRelCoordX(X - Controller.getMap().getCoordlist(4)[0]  * Chunk.BLOCKS_X);
     }
     
 
@@ -133,8 +134,8 @@ public abstract class SelfAwareBlock extends Block{
      */
     public void setAbsCoordY(int Y){
         absCoordY = Y;
-        //da das Map Coordinatensystem in y-Richtung in zwei unterschiedliche Richtungen geht (hier "+" ???)
-        setRelCoordY(Y + Controller.getMap().getCoordlistY(4) *Chunk.BLOCKS_Y);
+        //also change rel coordinates
+        setRelCoordY(Y - Controller.getMap().getCoordlist(4)[1] *Chunk.BLOCKS_Y);
     }    
    
     /**
@@ -146,10 +147,16 @@ public abstract class SelfAwareBlock extends Block{
     public void setAbsCoords(int X, int Y, int Z){
         setAbsCoordX(X);
         setAbsCoordY(Y);
-        coordZ = Z;
         
         //if Z is too high set to highes possible position
-        if (coordZ > Chunk.BLOCKS_Z-2) coordZ = Chunk.BLOCKS_Z -2;
+        if (coordZ > Map.BLOCKS_Z-2)
+            coordZ = Map.BLOCKS_Z -2;
+        else coordZ = Z;
+    }
+    
+    public void refreshRelCoords(){
+        setRelCoordY(absCoordX + Controller.getMap().getCoordlist(4)[1] *Chunk.BLOCKS_Y);
+        setRelCoordX(absCoordY - Controller.getMap().getCoordlist(4)[0]  * Chunk.BLOCKS_X);
     }
     
     /**

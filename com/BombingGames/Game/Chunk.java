@@ -65,14 +65,12 @@ public class Chunk {
     *Creates a chunk.
     * @param ChunkX
     * @param ChunkY
-    * @param startposX
-    * @param startposY
     * @param loadmap load from HD(true) or generate new (false)?
     */
-    public Chunk(int ChunkX, int ChunkY, int startposX, int startposY, boolean loadmap){
+    public Chunk(int coordX, int coordY, boolean loadmap){
         this();
-        coordX = ChunkX;
-        coordY = ChunkY;
+        this.coordX = coordX;
+        this.coordY = coordY;
 
         if (loadmap) loadChunk();
             else newChunk();

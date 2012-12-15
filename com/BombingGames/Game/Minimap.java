@@ -87,7 +87,7 @@ public class Minimap {
             View.tTFont.drawString(
                 X + 10 + pos%3*Chunk.BLOCKS_X*scaleX,
                 Y +10 + pos/3*(Chunk.BLOCKS_Y*scaleY),
-                Controller.getMap().getCoordlistX(pos) +" | "+ Controller.getMap().getCoordlistY(pos) ,
+                Controller.getMap().getCoordlist(pos)[0] +" | "+ Controller.getMap().getCoordlist(pos)[1] ,
                 Color.black
             );
         }

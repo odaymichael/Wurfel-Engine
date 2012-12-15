@@ -1,6 +1,7 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.Game.Blocks.Player;
 import com.BombingGames.MainMenu.MainMenuState;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.util.Log;
@@ -16,8 +17,7 @@ public class Map {
     public static final int BLOCKS_Z;
     private Block data[][][] = new Block[Chunk.BLOCKS_X*3][Map.BLOCKS_Y][Chunk.BLOCKS_Z];
     private boolean recalcRequested;
-    private int[] coordlistX = new int[9];
-    private int[] coordlistY = new int[9];
+    private int[][] coordlist = new int[9][2];
     private Minimap minimap;
     
     static {
@@ -38,15 +38,13 @@ public class Map {
         Chunk tempchunk;
         int pos = 0;
         
-        for (int y=1; y > - 2; y--)
+        for (int y=-1; y < 2; y++)
             for (int x=-1; x < 2; x++){
-                coordlistX[pos] = x;
-                coordlistY[pos] = y;
+                coordlist[pos][0] = x;
+                coordlist[pos][1] = y;
                 tempchunk = new Chunk(
                         x,
                         y,
-                        x*Chunk.SIZE_X,
-                        -y*Chunk.SIZE_Y,
                         load
                 );
                 setChunk(pos, tempchunk);
@@ -87,6 +85,7 @@ public class Map {
      * @param center center is 1,3,5 or 7
      */
     public void setCenter(int center){
+        Log.debug("ChunkSwitch:"+center);
         /*
                 |0|1|2|
                 -------------
@@ -96,17 +95,14 @@ public class Map {
                 */
         if (center==1 || center==3 || center==5 || center==7) {
         
-        //GameplayState.iglog.add("New Center: "+center);
-        //System.out.println("New Center: "+center);
-        
         //make a copy of the data
         Block data_copy[][][] = copyOf3Dim(data);
         
         for (int pos=0; pos<9; pos++){
-            coordlistX[pos] += (center == 3 ? -1 : (center == 5 ? 1 : 0));
-            coordlistY[pos] += (center == 1 ? 1 : (center == 7 ? -1 : 0));
+            coordlist[pos][0] += (center == 3 ? -1 : (center == 5 ? 1 : 0));
+            coordlist[pos][1] += (center == 1 ? -1 : (center == 7 ? 1 : 0));
             
-            if (isChunkSwitchPosibble(pos,center)){
+            if (isMovingChunkPossible(pos,center)){
                 //System.out.println("[" + pos + "] <- ["+ (pos + center - 4) +"] (old)");
                 setChunk(
                     pos,
@@ -116,31 +112,30 @@ public class Map {
                 setChunk(
                         pos,
                         new Chunk(
-                            coordlistX[pos],
-                            coordlistY[pos],
-                            coordlistX[pos] + (int) ((center == 3 ? -Chunk.SIZE_X : (center == 5 ?  Chunk.SIZE_X: 0))),
-                            coordlistY[pos] + (int) ((center == 1 ? -Chunk.SIZE_Y : (center == 7 ? Chunk.SIZE_Y : 0))),
+                            coordlist[pos][0],
+                            coordlist[pos][1],
                             MainMenuState.loadmap
                         )
                 );
-                //System.out.println("["+pos+"] new: "+ coordlistX[pos] +","+coordlistY[pos]);
             }
         }
-        //selfaware should be updated here, only player
-        if (Gameplay.controller.getPlayer() != null){ 
-            Gameplay.controller.getPlayer().setRelCoordX(Gameplay.controller.getPlayer().getRelCoordX() + (center == 3 ? 1 : (center == 5 ? -1 : 0))*Chunk.BLOCKS_X);
-            Gameplay.controller.getPlayer().setRelCoordY(Gameplay.controller.getPlayer().getRelCoordY() + (center == 1 ? 1 : (center == 7 ? -1 : 0))*Chunk.BLOCKS_Y);
-        }
+        //all selfaware objects should be updated here, atm only player
+        if (Gameplay.controller.getPlayer() != null) Gameplay.controller.getPlayer().refreshRelCoords();
         recalcRequested = true;
         } else {
             Log.error("setCenter was called with center:"+center);
         }
     }
     
-     private boolean isChunkSwitchPosibble(int pos, int movement){
-        //checks if the number can be reached by moving the net in a direction, very complicated
+    /**
+     * checks if the number can be reached by moving the net in a direction
+     * @param pos the position you want to check
+     * @param direction the direction the chunkswitch is made to
+     * @return 
+     */
+     private boolean isMovingChunkPossible(int pos, int direction){
         boolean result = true; 
-        switch (movement){
+        switch (direction){
             case 1: if ((pos==0) || (pos==1) || (pos==2)) result = false;
             break;
             
@@ -248,23 +243,13 @@ public class Map {
     }
 
    /**
-     *A list of the X coordinates of the current chunks. 
-     * @param i 
-     * @return 
+     *A list of the coordinates of the current chunks. 
+     * @param pos the position of the chunk
+     * @return the coordinates of the chunk
      */
-    public int getCoordlistX(int i) {
-        return coordlistX[i];
+    public int[] getCoordlist(int pos) {
+        return coordlist[pos];
     }
-  
-   /**
-     *A list for the y coordinates of the current chunks.
-     * @param i 
-     * @return 
-     */
-    public int getCoordlistY(int i) {
-        return coordlistY[i];
-    }
-   
 
     /**
      * 
