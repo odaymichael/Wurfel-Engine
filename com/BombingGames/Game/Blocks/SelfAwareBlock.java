@@ -2,9 +2,7 @@ package com.BombingGames.Game.Blocks;
 
 import com.BombingGames.Game.Chunk;
 import com.BombingGames.Game.Controller;
-import com.BombingGames.Game.Gameplay;
 import com.BombingGames.Game.Map;
-import org.newdawn.slick.util.Log;
 
 /**
  *A Block that knows his own position
@@ -25,7 +23,65 @@ public abstract class SelfAwareBlock extends Block{
        super(id, value);
     }
    
+
+  /**
+     * Sets the absolute X and relative X coord.
+     * @param X 
+     */
+    public void setAbsCoordX(int X){
+        absCoordX = X;
+    }
+    
+
+    /**
+     * Sets the absolute Y and relative Y coord.
+     * @param Y
+     */
+    public void setAbsCoordY(int Y){
+        absCoordY = Y;
+    } 
+    
    /**
+      *  CoordZ is always absolute and relative at the same time because there are no chunks in z direction.
+      * @param z the new value for z
+      */
+    public void setCoordZ(int z) {
+        coordZ = z;
+    }
+   
+    /**
+     * Set the absolute Coordinates
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void setAbsCoords(int x, int y, int z){
+        absCoordX = x;
+        absCoordY = y;
+        
+        //if Z is too high set to highes possible position
+        if (z > Map.BLOCKS_Z-2)
+            coordZ = Map.BLOCKS_Z -2;
+        else coordZ = z;
+    }
+   
+     /**
+      * 
+      * @return
+      */
+     public int getRelCoordX() {
+        return absCoordX - Controller.getMap().getCoordlist(4)[0]  * Chunk.BLOCKS_X;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public int getRelCoordY() {
+        return absCoordY - Controller.getMap().getCoordlist(4)[1] * Chunk.BLOCKS_Y;
+    }
+    
+    /**
     * 
     * @return
     */
@@ -49,131 +105,21 @@ public abstract class SelfAwareBlock extends Block{
         return coordZ;
     }
 
-     /**
-      *  CoordZ is always absolute and relative at the same time because there are no chunks in z direction.
-      * @param coordZ the new value for z
-      */
-     public void setCoordZ(int coordZ) {
-        this.coordZ = coordZ;
-    }
-
-     /**
-      * 
-      * @return
-      */
-     public int getRelCoordX() {
-        return relCoordX;
-    }
-
-     /**
-     * Set the relative X Coordinate.
-     * @param X
-     */
-    public void setRelCoordX(int X){
-        if (X < Map.BLOCKS_X){
-            relCoordX = X;
-        } else {
-            relCoordX = Map.BLOCKS_X-1;
-            Gameplay.MSGSYSTEM.add("RelativeCoordX ist too high:"+X);
-            Log.warn("RelativeCoordX ist too high:"+X);
-        }
-        
-        if (X >= 0) {
-            relCoordX = X;
-        } else {
-            relCoordX = 0;
-            Gameplay.MSGSYSTEM.add("RelativeCoordX ist too low:"+X);
-            Log.warn("RelativeCoordX ist too low:"+X);
-        }
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public int getRelCoordY() {
-        return relCoordY;
-    }
-
-  /**
-     * Set the relative Y Coordinate
-     * @param Y
-     */
-    public void setRelCoordY(int Y){
-        if (Y < Map.BLOCKS_Y){
-            relCoordY = Y;
-        }else {
-            relCoordY = Map.BLOCKS_Y-1;
-            Gameplay.MSGSYSTEM.add("RelativeCoordY ist too high: "+Y);
-            Log.warn("RelativeCoordY ist too high: "+Y);
-        }
-        
-        if (Y >= 0) {
-            relCoordY = Y;
-        }else {
-            relCoordY = 0;
-            Gameplay.MSGSYSTEM.add("RelativeCoordY ist too low: "+Y);
-            Log.warn("RelativeCoordY ist too low: "+Y);
-        }
-    }
-    
-     /**
-     * Sets the absolute X and relative X coord.
-     * @param X 
-     */
-    public void setAbsCoordX(int X){
-        absCoordX = X;
-        //also change rel coordinates
-        setRelCoordX(X - Controller.getMap().getCoordlist(4)[0]  * Chunk.BLOCKS_X);
-    }
-    
-
-    /**
-     * 
-     * @param Y
-     */
-    public void setAbsCoordY(int Y){
-        absCoordY = Y;
-        //also change rel coordinates
-        setRelCoordY(Y - Controller.getMap().getCoordlist(4)[1] *Chunk.BLOCKS_Y);
-    }    
-   
-    /**
-     * Set the absolute Coordinates
-     * @param X
-     * @param Y
-     * @param Z
-     */
-    public void setAbsCoords(int X, int Y, int Z){
-        setAbsCoordX(X);
-        setAbsCoordY(Y);
-        
-        //if Z is too high set to highes possible position
-        if (coordZ > Map.BLOCKS_Z-2)
-            coordZ = Map.BLOCKS_Z -2;
-        else coordZ = Z;
-    }
-    
-    public void refreshRelCoords(){
-        setRelCoordY(absCoordX + Controller.getMap().getCoordlist(4)[1] *Chunk.BLOCKS_Y);
-        setRelCoordX(absCoordY - Controller.getMap().getCoordlist(4)[0]  * Chunk.BLOCKS_X);
-    }
-    
     /**
      * Destroys the reference in the map.
      */
     protected void selfDestroy(){
-        Controller.getMap().setData(relCoordX, relCoordY, coordZ, new Block(0,0));
-        Controller.getMap().setData(relCoordX, relCoordY, coordZ+1, new Block(0,0));
+        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(0,0));
+        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(0,0));
     }
     
     /**
      * Put the reference to this object at the coordinates inside the map
      */
     protected void selfRebuild(){
-        Controller.getMap().setData(relCoordX, relCoordY, coordZ, this);
-        Controller.getMap().setData(relCoordX, relCoordY, coordZ+1, new Block(40,1));
-        Controller.getMapData(relCoordX, relCoordY, coordZ+1).setOffset(getOffsetX(), getOffsetY());
+        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, this);
+        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));
+        Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).setOffset(getOffsetX(), getOffsetY());
     }
     
    /**
@@ -185,27 +131,43 @@ public abstract class SelfAwareBlock extends Block{
      * @param relZ if you want to check another layer. relZ is added to current Z coord.
      * @return The neighbour block
      */
-    public Block getNeighbourBlock(int side, int relZ){
-       int z = coordZ+relZ;
+    public int[] getNeighbourCoords(int side, int relZ){
+       int result[] = new int[3];
+       result[2] = coordZ+relZ;
         switch(side){
             case 0:
-                return Controller.getMapData(getRelCoordX(),getRelCoordY()-2, z);
+                result[0] = getRelCoordX();
+                result[1] = getRelCoordY()-2;
             case 1:
-                return Controller.getMapData(getRelCoordX() -(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()-1, z);
+                result[0] = getRelCoordX() -(getRelCoordY() % 2 == 1 ? 1 : 0);
+                result[1] = getRelCoordY()-1;
             case 2:
-                return Controller.getMapData(getRelCoordX()+1, getRelCoordY(), z);
+                result[0] = getRelCoordX()+1;
+                result[1] = getRelCoordY();
             case 3:
-                return Controller.getMapData(getRelCoordX() +(getRelCoordY() % 2 == 1 ? 1 : 0), getRelCoordY()+1, z);
+                result[0] = getRelCoordX() +(getRelCoordY() % 2 == 1 ? 1 : 0);
+                result[1] = getRelCoordY()+1;
             case 4:
-                return Controller.getMapData(getRelCoordX(), getRelCoordY()+2, z);
+                result[0] = getRelCoordX();
+                result[1] = getRelCoordY()+2;
             case 5:
-                return Controller.getMapData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()+1, z);
+                result[0] = getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0);
+                result[1] = getRelCoordY()+1;;
             case 6:
-                return Controller.getMapData(getRelCoordX()-1, getRelCoordY(), z);         
+                result[0] = getRelCoordX()-1;
+                result[1] = getRelCoordY();        
             case 7:
-                return Controller.getMapData(getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0), getRelCoordY()-1, z);
+                result[0] = getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0);
+                result[1] = getRelCoordY()-1;
             default:
-                return Controller.getMapData(getRelCoordX(), getRelCoordY(), z);        
-        } 
+                result[0] = getRelCoordX();
+                result[1] = getRelCoordY();      
+        }
+        return result;
+    }
+    
+    public Block getNeighbourBlock(int side, int relZ){
+        int neighbour[] = getNeighbourCoords(side,relZ);
+        return Controller.getMapData(neighbour[0],neighbour[1],neighbour[2]);
     }
 }

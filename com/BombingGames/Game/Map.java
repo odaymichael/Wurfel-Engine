@@ -1,7 +1,6 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
-import com.BombingGames.Game.Blocks.Player;
 import com.BombingGames.MainMenu.MainMenuState;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.util.Log;
@@ -15,6 +14,7 @@ public class Map {
     public static final int BLOCKS_X;
     public static final int BLOCKS_Y;
     public static final int BLOCKS_Z;
+    
     private Block data[][][] = new Block[Chunk.BLOCKS_X*3][Map.BLOCKS_Y][Chunk.BLOCKS_Z];
     private boolean recalcRequested;
     private int[][] coordlist = new int[9][2];
@@ -120,7 +120,6 @@ public class Map {
             }
         }
         //all selfaware objects should be updated here, atm only player
-        if (Gameplay.controller.getPlayer() != null) Gameplay.controller.getPlayer().refreshRelCoords();
         recalcRequested = true;
         } else {
             Log.error("setCenter was called with center:"+center);

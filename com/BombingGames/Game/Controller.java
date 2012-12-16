@@ -51,36 +51,29 @@ public class Controller {
     public void update(int delta) throws SlickException{
         if (delta > 200) Log.warn("delta is too high to stay stable. d: "+delta);
          
-        //earth to right
-        if (Gameplay.view.getCamera().getLeftBorder() < Chunk.BLOCKS_X/3)
-           map.setCenter(3);
-        else {       
-            //earth to the left
-            if (Gameplay.view.getCamera().getRightBorder() > 8*Chunk.BLOCKS_X/3) 
-                map.setCenter(5); 
-        }
+//        //earth to right
+//        if (Gameplay.view.getCamera().getLeftBorder() < Chunk.BLOCKS_X/3)
+//           map.setCenter(3);
+//        else {       
+//            //earth to the left
+//            if (Gameplay.view.getCamera().getRightBorder() > 8*Chunk.BLOCKS_X/3) 
+//                map.setCenter(5); 
+//        }
+//        
+//       //scroll up, earth down            
+//        if (Gameplay.view.getCamera().getTopBorder()  <= 0) {
+//            map.setCenter(1);
+//        } else {
+//            //scroll down, earth up
+//            if (Gameplay.view.getCamera().getBottomBorder() > 8*Chunk.BLOCKS_Y/3)
+//                map.setCenter(7);
+//        }
         
-       //scroll up, earth down            
-        if (Gameplay.view.getCamera().getTopBorder()  <= 0) {
-            map.setCenter(1);
-        } else {
-            //scroll down, earth up
-            if (Gameplay.view.getCamera().getBottomBorder() > 8*Chunk.BLOCKS_Y/3)
-                map.setCenter(7);
-        }
-        
-        //getCamera()
-        //oldx = Gameplay.view.getCamera().x;
-        //oldy = Gameplay.view.getCamera().y;
-        if (player!=null)
+        if (player != null)
             player.update(delta);
         
         Gameplay.view.getCamera().update();
         
-        //map.data[player.getRelCoordX()][player.getRelCoordY()][player.coordZ] = player;
-        
-        //map.changePosX(- Gameplay.view.getCamera().x + oldx);
-        //map.changePosY(-Gameplay.view.getCamera().y + oldy);
             
         //recalculates the light if requested
         map.recalcIfRequested();      
@@ -216,8 +209,6 @@ public class Controller {
         Controller.map = map;
     }
     
-    
-    
     /**
      * Returns a block inside the map. The same as "getMap().getData(x,y,z)"
      * @param x
@@ -251,6 +242,5 @@ public class Controller {
     protected void setRenderSides(boolean renderSides) {
         this.renderSides = renderSides;
     }
-    
-    
+
 }

@@ -92,7 +92,7 @@ public class Player extends MovingBlock{
 
         //coordinate switch
         //down
-        if (posZ <= 0 && coordZ>0 && !Controller.getMapData(relCoordX,relCoordY,coordZ-1).isObstacle()){
+        if (posZ <= 0 && coordZ>0 && !Controller.getMapData(getRelCoordX(), getRelCoordY(),coordZ-1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
             
             selfDestroy();
@@ -104,7 +104,7 @@ public class Player extends MovingBlock{
         }
 
         //up
-        if (posZ >= Block.HEIGHT && coordZ < Chunk.BLOCKS_Z-2 && !Controller.getMapData(relCoordX, relCoordY, coordZ+1).isObstacle()){
+        if (posZ >= Block.HEIGHT && coordZ < Chunk.BLOCKS_Z-2 && !Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
 
             selfDestroy();

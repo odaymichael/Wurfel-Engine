@@ -16,17 +16,17 @@ public class Chunk {
     /**
      * The amount of blocks in X direction
      */
-    public static final int BLOCKS_X = 12;//16:9 => 12:27, 4:3=>12:36
+    public static final int BLOCKS_X = 6;//16:9 => 12:27, 4:3=>12:36
     
     /**
      * The amount of blocks in y direction
      */
-    public static final int BLOCKS_Y = 28;//28
+    public static final int BLOCKS_Y = 10;//28
     
     /**
      * The amount of blocks in Z direction
      */
-    public static final int BLOCKS_Z = 10;//20
+    public static final int BLOCKS_Z = 4;//20
     
     /**
     *The size of a chunk in pixels
@@ -46,7 +46,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 2;
+    public static final int MAPGENERATOR = 1;
     
     private int coordX, coordY;
     private Block data[][][] = new Block[BLOCKS_X][BLOCKS_Y][BLOCKS_Z];
@@ -116,7 +116,7 @@ public class Chunk {
                for (int x=0; x < BLOCKS_X; x++)
                     for (int y=0; y < BLOCKS_Y; y++){
                         data[x][y][0] = new Block(2);
-                        //data[x][y][1] = new Block(1);
+                        data[x][y][1] = new Block(1);
                     }
                 break;
             }

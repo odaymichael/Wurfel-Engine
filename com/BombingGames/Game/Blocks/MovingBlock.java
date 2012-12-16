@@ -107,66 +107,61 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 posX = newx;
                 posY = newy;
             }
-        }
-        
-        
-        //track the coordiante change
-        if (getCorner() == 7){
-            posY += Block.WIDTH/2;
-            posX += Block.WIDTH/2;
-            
-            selfDestroy();
-            setAbsCoordY(getAbsCoordY()-1);
-            if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
-            selfRebuild();
-            
-            Controller.getMap().requestRecalc();
-        } else {
-            if (getCorner() == 1) {
-                posY += Block.WIDTH / 2;
-                posX -= Block.WIDTH / 2;
+            //track the coordiante change
+            if (getCorner() == 7){
+                posY += Block.WIDTH/2;
+                posX += Block.WIDTH/2;
 
                 selfDestroy();
                 setAbsCoordY(getAbsCoordY()-1);
-                if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
-                selfRebuild(); 
-                
+                if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
+                selfRebuild();
+
                 Controller.getMap().requestRecalc();
             } else {
-                if (getCorner() == 5) {
-                    posY -= Block.WIDTH/2;
-                    posX += Block.WIDTH/2;
+                if (getCorner() == 1) {
+                    posY += Block.WIDTH / 2;
+                    posX -= Block.WIDTH / 2;
 
                     selfDestroy();
-                    setAbsCoordY(getAbsCoordY()+1);
-                    if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
-                    selfRebuild();
-                    
+                    setAbsCoordY(getAbsCoordY()-1);
+                    if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
+                    selfRebuild(); 
+
                     Controller.getMap().requestRecalc();
                 } else {
-                    if (getCorner() == 3) {
+                    if (getCorner() == 5) {
                         posY -= Block.WIDTH/2;
-                        posX -= Block.WIDTH/2;
+                        posX += Block.WIDTH/2;
 
                         selfDestroy();
                         setAbsCoordY(getAbsCoordY()+1);
-                        if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
+                        if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
                         selfRebuild();
-                        
+
                         Controller.getMap().requestRecalc();
+                    } else {
+                        if (getCorner() == 3) {
+                            posY -= Block.WIDTH/2;
+                            posX -= Block.WIDTH/2;
+
+                            selfDestroy();
+                            setAbsCoordY(getAbsCoordY()+1);
+                            if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
+                            selfRebuild();
+
+                            Controller.getMap().requestRecalc();
+                        }
                     }
-                }
-            }  
+                }  
+            }
         }
-        //enable this line to see where to player stands
-        Controller.getMapData(this.posX, this.posY, coordZ-1).setLightlevel(40);
+        //enable this line to see where to player stands:
+        Controller.getMapData(this.posX, this.posY, coordZ-1).setLightlevel(60);
 
         //set the offset for the rendering
         setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
-        Controller.getMapData(relCoordX, relCoordY, coordZ+1).setOffset(getOffsetX(), getOffsetY());
-
-       //GameplayState.iglog.add(getRelCoordX()+":"+getRelCoordY()+":"+coordZ);
-        //System.out.println(getRelCoordX()+":"+getRelCoordY()+":"+coordZ);    
+        Controller.getMapData(getRelCoordY(), getRelCoordY(), coordZ+1).setOffset(getOffsetX(), getOffsetY());
    }
    
     /**
