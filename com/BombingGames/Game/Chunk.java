@@ -26,7 +26,7 @@ public class Chunk {
     /**
      * The amount of blocks in Z direction
      */
-    public static final int BLOCKS_Z = 4;//20
+    public static final int BLOCKS_Z = 10;//20
     
     /**
     *The size of a chunk in pixels

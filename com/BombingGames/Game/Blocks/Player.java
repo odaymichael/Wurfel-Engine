@@ -14,6 +14,7 @@ public class Player extends MovingBlock{
    private Sound fallsound = new Sound("com/BombingGames/Game/Sounds/wind.wav");
    private Sound runningsound = new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav");
    private String controls = "WASD";
+   private Blockpointer topblock; 
    
     /**
      * Creates a player. The parameters are for the lower half of the player. The constructor automatically creates a block on top of it.
@@ -26,7 +27,8 @@ public class Player extends MovingBlock{
         super(40,0);
         setAbsCoords(X,Y,Z);
         //creates the top of the player
-        Controller.getMap().setData(X, Y, coordZ+1, new Block(40,1));
+        topblock = new Blockpointer(this, 0, 0, 1);
+        topblock.setBlock(new Block(40,1));
     }
     
   
@@ -73,7 +75,7 @@ public class Player extends MovingBlock{
         //land if standing in or under ground level and there is an obstacle
         if (veloZ <= 0
             && posZ <= 0
-            && (coordZ==0 || Controller.getMapDataUnsafe(getRelCoordX(), getRelCoordY(), coordZ-1).isObstacle())
+            && (getCoordZ() == 0 || Controller.getMapDataUnsafe(getRelCoordX(), getRelCoordY(), getCoordZ()-1).isObstacle())
         ) {
             fallsound.stop();
             veloZ = 0;
@@ -82,21 +84,24 @@ public class Player extends MovingBlock{
             //player stands now
         }
 
-        float t=delta/1000f;
+        //t = time in s
+        float t = delta/1000f;
         //move if delta is okay
         if (delta < 500) {
             veloZ += a*t; //in m/s
             posZ += veloZ*Block.WIDTH*t;//m
         }
 
-
+        //delete top
+        topblock.setBlock(new Block(0));
+        
         //coordinate switch
         //down
-        if (posZ <= 0 && coordZ>0 && !Controller.getMapData(getRelCoordX(), getRelCoordY(),coordZ-1).isObstacle()){
+        if (posZ <= 0 && getCoordZ() > 0 && !Controller.getMapData(getRelCoordX(), getRelCoordY(),getCoordZ()-1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
             
             selfDestroy();
-            coordZ--;
+            setCoordZ(getCoordZ()-1);
             selfRebuild();
 
             posZ += Block.WIDTH;
@@ -104,16 +109,23 @@ public class Player extends MovingBlock{
         }
 
         //up
-        if (posZ >= Block.HEIGHT && coordZ < Chunk.BLOCKS_Z-2 && !Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).isObstacle()){
+        if (posZ >= Block.HEIGHT && getCoordZ() < Chunk.BLOCKS_Z-2 && !Controller.getMapData(getRelCoordX(), getRelCoordY(), getCoordZ()+2).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
 
             selfDestroy();
-            coordZ++;
+            setCoordZ(getCoordZ()+1);
             selfRebuild();
 
             posZ -= Block.WIDTH;
             Controller.getMap().requestRecalc();
         } 
+        
+        //set the offset for the rendering
+        setOffset(getPosX() - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
+        
+        //create top at new position
+        topblock.setBlock(new Block(40,1));
+        topblock.getBlock().setOffset(getOffsetX(), getOffsetY());  
    }
     
      @Override
@@ -123,27 +135,15 @@ public class Player extends MovingBlock{
         //Gameplay.view.g.fillRect(500, 500, 900, 600);
     }
      
-     /**
-      * Sets position of both player blocks
-      * @param x 
-      */
-     public void setPosX(int x){
-         
-     }
-     
-     /**
-      * Sets position of both player blocks
-      * @param y 
-      */
-     public void setPosY(int y){
-     
-     }
-     
-     /**
-      * Sets position of both player blocks
-      * @param z 
-      */
-     public void setPosZ(int z){
-     
-     }
+    @Override
+    public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed, int delta) throws SlickException {
+        //delete top
+        topblock.setBlock(new Block(0));
+        //walk
+        super.walk(up, down, left, right, walkingspeed, delta);
+        
+        //create top at new position
+        topblock.setBlock(new Block(40,1));
+        topblock.getBlock().setOffset(getOffsetX(), getOffsetY());    
+    }
 }

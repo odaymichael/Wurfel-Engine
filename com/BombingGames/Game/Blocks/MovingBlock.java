@@ -107,6 +107,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 posX = newx;
                 posY = newy;
             }
+            
             //track the coordiante change
             if (getCorner() == 7){
                 posY += Block.WIDTH/2;
@@ -155,15 +156,15 @@ public abstract class MovingBlock extends SelfAwareBlock {
                     }
                 }  
             }
+             //set the offset for the rendering
+            setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
         }
         //enable this line to see where to player stands:
-        Controller.getMapData(this.posX, this.posY, coordZ-1).setLightlevel(60);
-
-        //set the offset for the rendering
-        setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
-        Controller.getMapData(getRelCoordY(), getRelCoordY(), coordZ+1).setOffset(getOffsetX(), getOffsetY());
+        Controller.getMapData(this.posX, this.posY, getCoordZ()-1).setLightlevel(30);
    }
    
+    
+    
     /**
      * These method should define how the object can jump.
      */

@@ -8,8 +8,8 @@ import com.BombingGames.Game.Map;
  *A Block that knows his own position
  * @author Benedikt
  */
-public abstract class SelfAwareBlock extends Block{
-   protected int absCoordX, absCoordY, relCoordX, relCoordY, coordZ;
+public class SelfAwareBlock extends Block{
+   private int absCoordX, absCoordY, coordZ;
     
     SelfAwareBlock(){
         super();
@@ -110,7 +110,6 @@ public abstract class SelfAwareBlock extends Block{
      */
     protected void selfDestroy(){
         Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(0,0));
-        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(0,0));
     }
     
     /**
@@ -118,8 +117,7 @@ public abstract class SelfAwareBlock extends Block{
      */
     protected void selfRebuild(){
         Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, this);
-        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ+1, new Block(40,1));
-        Controller.getMapData(getRelCoordX(), getRelCoordY(), coordZ+1).setOffset(getOffsetX(), getOffsetY());
+
     }
     
    /**
