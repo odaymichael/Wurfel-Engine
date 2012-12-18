@@ -11,8 +11,8 @@ import org.newdawn.slick.Color;
 public class Minimap {
     private int X;
     private int Y;
-    private final float scaleX = 6;//8
-    private final float scaleY = 3;//4
+    private final float scaleX = 12;//8
+    private final float scaleY = 6;//4
     
     /**
      * Creates a Minimap. At the momen it is primary for development purposes.
@@ -84,7 +84,7 @@ public class Minimap {
                 Chunk.BLOCKS_Y*scaleY
             );
 
-            View.tTFont.drawString(
+            View.baseFont.drawString(
                 X + 10 + pos%3*Chunk.BLOCKS_X*scaleX,
                 Y +10 + pos/3*(Chunk.BLOCKS_Y*scaleY),
                 Controller.getMap().getCoordlist(pos)[0] +" | "+ Controller.getMap().getCoordlist(pos)[1] ,
@@ -124,7 +124,7 @@ public class Minimap {
         );
 
         if (Gameplay.controller.getPlayer()!=null){
-            View.tTFont.drawString(
+            View.baseFont.drawString(
                     X + scaleX * Gameplay.view.getCamera().getX() * Chunk.BLOCKS_X / Chunk.SIZE_X
                     + scaleX*Gameplay.view.getCamera().getWidth() * Chunk.BLOCKS_X / Chunk.SIZE_X,
                     Y + scaleY * Gameplay.view.getCamera().getY() * Chunk.BLOCKS_Y /Chunk.SIZE_Y
@@ -136,7 +136,7 @@ public class Minimap {
 
             //player coord
             Gameplay.view.g.setColor(Color.blue);
-            View.tTFont.drawString(
+            View.baseFont.drawString(
                 X + (Gameplay.controller.getPlayer().getRelCoordX() + (Gameplay.controller.getPlayer().getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
                 Y + Gameplay.controller.getPlayer().getRelCoordY() * scaleY - 50,
                 Gameplay.controller.getPlayer().getRelCoordX() +" | "+ Gameplay.controller.getPlayer().getRelCoordY() +" | "+ Gameplay.controller.getPlayer().getCoordZ(),
@@ -145,7 +145,7 @@ public class Minimap {
             
             //player coord
             Gameplay.view.g.setColor(Color.blue);
-            View.tTFont.drawString(
+            View.baseFont.drawString(
                 X + (Gameplay.controller.getPlayer().getRelCoordX() + (Gameplay.controller.getPlayer().getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
                 Y + Gameplay.controller.getPlayer().getRelCoordY() * scaleY - 30,
                 Gameplay.controller.getPlayer().getAbsCoordX() +" | "+ Gameplay.controller.getPlayer().getAbsCoordY() +" | "+ Gameplay.controller.getPlayer().getCoordZ(),
@@ -154,7 +154,7 @@ public class Minimap {
 
 
             //player pos
-            View.tTFont.drawString(
+            View.baseFont.drawString(
                 X + (Gameplay.controller.getPlayer().getRelCoordX() + (Gameplay.controller.getPlayer().getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
                 Y + Gameplay.controller.getPlayer().getRelCoordY() * scaleY - 10,
                 Gameplay.controller.getPlayer().getPosX() +" | "+ Gameplay.controller.getPlayer().getPosY() +" | "+ Gameplay.controller.getPlayer().getPosZ(),
@@ -163,7 +163,7 @@ public class Minimap {
         }
 
         //getCamera() pos
-        View.tTFont.drawString(
+        View.baseFont.drawString(
                 X ,
                 Y + 3*Chunk.BLOCKS_Y*scaleY + 15,
                 Gameplay.view.getCamera().getX() +" | "+ Gameplay.view.getCamera().getY(),

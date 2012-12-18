@@ -76,7 +76,7 @@ public class MsgSystem extends ArrayList {
                 else if ("Warning".equals(msg.getSender())) clr = Color.red;
             
             //draw
-            View.tTFont.drawString(
+            View.baseFont.drawString(
                 10,
                 50+i*20,
                 msg.getMessage(),

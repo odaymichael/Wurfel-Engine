@@ -31,7 +31,7 @@ public class View {
     public static TrueTypeFont tTFont_small;
     
     private GameContainer gc;
-    private Font baseFont;
+    public static AngelCodeFont baseFont;
     private float equalizationScale;
 
     /**
@@ -43,16 +43,17 @@ public class View {
         this.gc = gc;  
        
         // initialise the font which CAUSES LONG LOADING TIME!!!
-        TrueTypeFont trueTypeFont;
+        //TrueTypeFont trueTypeFont;
 
         //startFont = Font.createFont(Font.TRUETYPE_FONT,new BufferedInputStream(this.getClass().getResourceAsStream("Blox2.ttf")));
-        UnicodeFont startFont = new UnicodeFont("com/BombingGames/Game/Blox2.ttf", 20, false, false);
+        //UnicodeFont startFont = new UnicodeFont("com/BombingGames/Game/Blox2.ttf", 20, false, false);
+        baseFont = new AngelCodeFont("com/BombingGames/Game/Blox.fnt","com/BombingGames/Game/Blox.png");
         //baseFont = startFont.deriveFont(Font.PLAIN, 12);
-        baseFont = startFont.getFont().deriveFont(Font.PLAIN, 18);
+        //baseFont = startFont.getFont().deriveFont(Font.PLAIN, 18);
         
-        tTFont = new TrueTypeFont(baseFont, true);
+        //tTFont = new TrueTypeFont(baseFont, true);
         
-        equalizationScale = gc.getHeight()*4 / (float)(Chunk.BLOCKS_Y* Block.HEIGHT*2);
+        equalizationScale = gc.getWidth()/1920f;
         Log.debug("Scale is:"+Float.toString(equalizationScale));
         
         camera = new Camera(
