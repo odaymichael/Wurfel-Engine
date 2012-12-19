@@ -107,7 +107,7 @@ var
 
 implementation
 
-uses mWelcome;
+uses mWelcome, mCreateMap;
 
 {$R *.dfm}
 
@@ -132,9 +132,9 @@ begin
     
     tilesizeX := 80;
     tilesizeY := 40;
-    ChunkSizeX := 12;
-    ChunkSizeY := 28;
-    ChunkSizeZ := 20;
+    ChunkSizeX := StrToInt(CreateMap.leChunkSizeX.Text);
+    ChunkSizeY := StrToInt(CreateMap.leChunkSizeY.Text);
+    ChunkSizeZ := StrToInt(CreateMap.leChunkSizeZ.Text);
     setLength(Chunkdata,ChunkSizeX,ChunkSizeY,ChunkSizeZ);
     
     changes := false;
@@ -172,7 +172,7 @@ begin
     
     if createmappath<>'' then begin
        //Neue Map anlegen
-       mappath := createmappath+name+'\';
+       mappath := createmappath;
        ShowMessage('Created at:'+mappath);
        
        //.otmi datei auf HD sichern

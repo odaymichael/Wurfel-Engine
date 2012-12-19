@@ -172,7 +172,7 @@ begin
     
     if createmappath<>'' then begin
        //Neue Map anlegen
-       mappath := createmappath+name+'';
+       mappath := createmappath;
        ShowMessage('Created at:'+mappath);
        
        //.otmi datei auf HD sichern

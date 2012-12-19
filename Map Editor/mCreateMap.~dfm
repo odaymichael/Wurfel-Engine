@@ -1,8 +1,8 @@
 object CreateMap: TCreateMap
-  Left = 668
-  Top = 279
-  Width = 270
-  Height = 190
+  Left = 394
+  Top = 600
+  Width = 503
+  Height = 240
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Create Map'
   Color = clBtnFace
@@ -42,44 +42,13 @@ object CreateMap: TCreateMap
   Position = poScreenCenter
   OnCreate = FormCreate
   DesignSize = (
-    254
-    155)
+    487
+    205)
   PixelsPerInch = 96
   TextHeight = 13
-  object btOK: TButton
-    Left = 174
-    Top = 125
-    Width = 75
-    Height = 25
-    Anchors = [akRight, akBottom]
-    Caption = 'OK'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Verdana'
-    Font.Style = [fsBold]
-    ParentFont = False
-    TabOrder = 3
-    OnClick = btOKClick
-  end
-  object edPath: TEdit
-    Left = 0
-    Top = 100
-    Width = 251
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -13
-    Font.Name = 'Verdana'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 2
-    Text = 'Error'
-  end
   object btPath: TButton
     Left = 0
-    Top = 70
+    Top = 80
     Width = 91
     Height = 21
     Caption = 'Select path'
@@ -92,10 +61,10 @@ object CreateMap: TCreateMap
     TabOrder = 1
     OnClick = btPathClick
   end
-  object laMapname: TLabeledEdit
+  object leMapname: TLabeledEdit
     Left = 0
     Top = 30
-    Width = 251
+    Width = 184
     Height = 24
     Anchors = [akLeft, akTop, akRight]
     EditLabel.Width = 78
@@ -116,7 +85,112 @@ object CreateMap: TCreateMap
     MaxLength = 100
     ParentFont = False
     TabOrder = 0
-    Text = 'Pleaseenteraname'
-    OnChange = laMapnameChange
+    Text = 'Fill mapname here'
+    OnChange = leMapnameChange
+  end
+  object lePath: TLabeledEdit
+    Left = 100
+    Top = 80
+    Width = 381
+    Height = 23
+    EditLabel.Width = 32
+    EditLabel.Height = 15
+    EditLabel.Caption = 'lePath'
+    EditLabel.Font.Charset = ANSI_CHARSET
+    EditLabel.Font.Color = clWindowText
+    EditLabel.Font.Height = -11
+    EditLabel.Font.Name = 'Lucida Sans Unicode'
+    EditLabel.Font.Style = []
+    EditLabel.ParentFont = False
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Lucida Sans Unicode'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+  end
+  object leChunksizeX: TLabeledEdit
+    Left = 0
+    Top = 130
+    Width = 61
+    Height = 23
+    EditLabel.Width = 63
+    EditLabel.Height = 15
+    EditLabel.Caption = 'ChunksizeX'
+    EditLabel.Font.Charset = ANSI_CHARSET
+    EditLabel.Font.Color = clWindowText
+    EditLabel.Font.Height = -11
+    EditLabel.Font.Name = 'Lucida Sans Unicode'
+    EditLabel.Font.Style = []
+    EditLabel.ParentFont = False
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Lucida Sans Unicode'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 3
+  end
+  object leChunksizeY: TLabeledEdit
+    Left = 70
+    Top = 130
+    Width = 61
+    Height = 23
+    EditLabel.Width = 63
+    EditLabel.Height = 15
+    EditLabel.Caption = 'ChunksizeY'
+    EditLabel.Font.Charset = ANSI_CHARSET
+    EditLabel.Font.Color = clWindowText
+    EditLabel.Font.Height = -11
+    EditLabel.Font.Name = 'Lucida Sans Unicode'
+    EditLabel.Font.Style = []
+    EditLabel.ParentFont = False
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Lucida Sans Unicode'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 4
+  end
+  object leChunksizeZ: TLabeledEdit
+    Left = 140
+    Top = 130
+    Width = 61
+    Height = 23
+    EditLabel.Width = 63
+    EditLabel.Height = 15
+    EditLabel.Caption = 'ChunksizeZ'
+    EditLabel.Font.Charset = ANSI_CHARSET
+    EditLabel.Font.Color = clWindowText
+    EditLabel.Font.Height = -11
+    EditLabel.Font.Name = 'Lucida Sans Unicode'
+    EditLabel.Font.Style = []
+    EditLabel.ParentFont = False
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Lucida Sans Unicode'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 5
+  end
+  object bbOK: TBitBtn
+    Left = 410
+    Top = 170
+    Width = 75
+    Height = 25
+    TabOrder = 6
+    OnClick = bbOKClick
+    Kind = bkOK
+  end
+  object bbClose: TBitBtn
+    Left = 320
+    Top = 170
+    Width = 81
+    Height = 25
+    TabOrder = 7
+    Kind = bkCancel
   end
 end

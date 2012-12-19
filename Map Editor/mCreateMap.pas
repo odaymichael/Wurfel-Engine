@@ -4,18 +4,22 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ComCtrls, XPMan, FileCtrl, ExtCtrls;
+  Dialogs, StdCtrls, ComCtrls, XPMan, FileCtrl, ExtCtrls, Buttons;
 
 type
   TCreateMap = class(TForm)
-    btOK: TButton;
-    edPath: TEdit;
     btPath: TButton;
-    laMapname: TLabeledEdit;
+    leMapname: TLabeledEdit;
+    lePath: TLabeledEdit;
+    leChunksizeX: TLabeledEdit;
+    leChunksizeY: TLabeledEdit;
+    leChunksizeZ: TLabeledEdit;
+    bbOK: TBitBtn;
+    bbClose: TBitBtn;
     procedure btPathClick(Sender: TObject);
-    procedure btOKClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure laMapnameChange(Sender: TObject);
+    procedure leMapnameChange(Sender: TObject);
+    procedure bbOKClick(Sender: TObject);
   private
     fAOwner: TComponent;
   public
@@ -51,31 +55,34 @@ begin
         sdPrompt],
         SELDIRHELP
       ) then
-     edPath.Text := dir;
+     lePath.Text := dir;
 end;
 
-procedure TCreateMap.btOKClick(Sender: TObject);
+
+procedure TCreateMap.FormCreate(Sender: TObject);
 begin
-   //if string name is ok
-   if (laMapname.Text<>'') and (edPath.Text<>'') then begin
-      if not DirectoryExists(edPath.Text+laMapname.Text+'\') then
-         CreateDir(edPath.Text+laMapname.Text);
-      Mapeditor := TMapeditor.Create(fAOwner,edPath.Text, laMapname.Text);
+  lePath.Text := ExtractFilePath(Application.Exename);
+end;
+
+procedure TCreateMap.leMapnameChange(Sender: TObject);
+begin
+   leMapname.Text := StringReplace(leMapname.Text, ' ', '', [rfReplaceAll]);
+end;
+
+procedure TCreateMap.bbOKClick(Sender: TObject);
+begin
+    //if string name is ok
+   if (leMapname.Text<>'') and (lePath.Text<>'') then begin
+      if not DirectoryExists(lePath.Text+'\') then
+         CreateDir(lePath.Text);
+      if leMapname.Text[length(leMapname.Text)-1]<>'\' then
+         Mapeditor := TMapeditor.Create(fAOwner,lePath.Text+'\', leMapname.Text)
+      else Mapeditor := TMapeditor.Create(fAOwner,lePath.Text, leMapname.Text);
       Mapeditor.Show;
       inherited destroy;
    end else begin
       ShowMessage('You are a f*****g idiot! You are too stupid for this simple formula. Check your fields again!');
    end;
-end;
-
-procedure TCreateMap.FormCreate(Sender: TObject);
-begin
-  edPath.Text := ExtractFilePath(Application.Exename);
-end;
-
-procedure TCreateMap.laMapnameChange(Sender: TObject);
-begin
-   laMapname.Text := StringReplace(laMapname.Text, ' ', '', [rfReplaceAll]);
 end;
 
 end.

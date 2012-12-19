@@ -7,7 +7,7 @@ object Welcome: TWelcome
   Caption = 'Welcome'
   ClientHeight = 267
   ClientWidth = 381
-  Color = 13421258
+  Color = 15131619
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -41,6 +41,7 @@ object Welcome: TWelcome
   OldCreateOrder = False
   Position = poScreenCenter
   OnActivate = FormActivate
+  OnClick = FormClick
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -571,9 +572,9 @@ object Welcome: TWelcome
   object laTitle: TLabel
     Left = 8
     Top = 40
-    Width = 225
+    Width = 261
     Height = 25
-    Caption = 'Out There Leveleditor'
+    Caption = 'Wurfelengine Leveleditor'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -21
@@ -639,5 +640,9 @@ object Welcome: TWelcome
     ParentFont = False
     TabOrder = 0
     OnClick = btNeuClick
+  end
+  object XPManifest1: TXPManifest
+    Left = 340
+    Top = 10
   end
 end

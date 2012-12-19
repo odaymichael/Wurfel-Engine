@@ -5,9 +5,9 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, mLeveleditor, StdCtrls, ExtCtrls, jpeg;
+  Dialogs, mLeveleditor, StdCtrls, ExtCtrls, jpeg, XPMan;
 
-const version = '0.10';
+const version = '0.11';
 type
   TWelcome = class(TForm)
     btOeffnen: TButton;
@@ -17,11 +17,13 @@ type
     shBackgroundColor: TShape;
     laBombingGames: TLabel;
     Image1: TImage;
+    XPManifest1: TXPManifest;
     function getVersion:String;
     procedure btNeuClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btOeffnenClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure FormClick(Sender: TObject);
   private
   public
   end;
@@ -62,6 +64,11 @@ end;
 
 
 procedure TWelcome.FormActivate(Sender: TObject);
+begin
+ AlphaBlend := False;
+end;
+
+procedure TWelcome.FormClick(Sender: TObject);
 begin
  AlphaBlend := False;
 end;
