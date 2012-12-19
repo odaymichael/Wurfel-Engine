@@ -69,7 +69,7 @@ public class SelfAwareBlock extends Block{
       * 
       * @return
       */
-     public int getRelCoordX() {
+     public int getCoordX() {
         return absCoordX - Controller.getMap().getCoordlist(4)[0]  * Chunk.BLOCKS_X;
     }
 
@@ -77,7 +77,7 @@ public class SelfAwareBlock extends Block{
      * 
      * @return
      */
-    public int getRelCoordY() {
+    public int getCoordY() {
         return absCoordY - Controller.getMap().getCoordlist(4)[1] * Chunk.BLOCKS_Y;
     }
     
@@ -109,14 +109,14 @@ public class SelfAwareBlock extends Block{
      * Destroys the reference in the map.
      */
     protected void selfDestroy(){
-        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, new Block(0,0));
+        Controller.getMap().setData(getCoordX(), getCoordY(), coordZ, new Block(0,0));
     }
     
     /**
      * Put the reference to this object at the coordinates inside the map
      */
     protected void selfRebuild(){
-        Controller.getMap().setData(getRelCoordX(), getRelCoordY(), coordZ, this);
+        Controller.getMap().setData(getCoordX(), getCoordY(), coordZ, this);
 
     }
     
@@ -134,32 +134,32 @@ public class SelfAwareBlock extends Block{
        result[2] = coordZ+relZ;
         switch(side){
             case 0:
-                result[0] = getRelCoordX();
-                result[1] = getRelCoordY()-2;
+                result[0] = getCoordX();
+                result[1] = getCoordY()-2;
             case 1:
-                result[0] = getRelCoordX() -(getRelCoordY() % 2 == 1 ? 1 : 0);
-                result[1] = getRelCoordY()-1;
+                result[0] = getCoordX() -(getCoordY() % 2 == 1 ? 1 : 0);
+                result[1] = getCoordY()-1;
             case 2:
-                result[0] = getRelCoordX()+1;
-                result[1] = getRelCoordY();
+                result[0] = getCoordX()+1;
+                result[1] = getCoordY();
             case 3:
-                result[0] = getRelCoordX() +(getRelCoordY() % 2 == 1 ? 1 : 0);
-                result[1] = getRelCoordY()+1;
+                result[0] = getCoordX() +(getCoordY() % 2 == 1 ? 1 : 0);
+                result[1] = getCoordY()+1;
             case 4:
-                result[0] = getRelCoordX();
-                result[1] = getRelCoordY()+2;
+                result[0] = getCoordX();
+                result[1] = getCoordY()+2;
             case 5:
-                result[0] = getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0);
-                result[1] = getRelCoordY()+1;;
+                result[0] = getCoordX() -(getCoordY() % 2 == 0 ? 1 : 0);
+                result[1] = getCoordY()+1;;
             case 6:
-                result[0] = getRelCoordX()-1;
-                result[1] = getRelCoordY();        
+                result[0] = getCoordX()-1;
+                result[1] = getCoordY();        
             case 7:
-                result[0] = getRelCoordX() -(getRelCoordY() % 2 == 0 ? 1 : 0);
-                result[1] = getRelCoordY()-1;
+                result[0] = getCoordX() -(getCoordY() % 2 == 0 ? 1 : 0);
+                result[1] = getCoordY()-1;
             default:
-                result[0] = getRelCoordX();
-                result[1] = getRelCoordY();      
+                result[0] = getCoordX();
+                result[1] = getCoordY();      
         }
         return result;
     }

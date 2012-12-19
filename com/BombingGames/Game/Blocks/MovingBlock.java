@@ -66,18 +66,33 @@ public abstract class MovingBlock extends SelfAwareBlock {
         return getCorner(posX,posY);
     }
         
+    /**
+     * Lets the player walk
+     * @param up
+     * @param down
+     * @param left
+     * @param right
+     * @param walkingspeed the higher the speed the bigger the steps
+     * @param delta time which has passed since last call
+     * @throws SlickException 
+     */
+    public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed, int delta) throws SlickException {
+        walk(up, down, left, right, walkingspeed,  delta, null);
+    }
+    
     
    /**
-     * Lets the player walk.
+     * Lets the player walk with a second block on top.
      * @param up 
-     * @param down l
+     * @param down
      * @param left 
      *  @param right 
      * @param walkingspeed the higher the speed the bigger the steps
-     *  @param delta time which has passed since last cal
+     *  @param delta time which has passed since last call
+     * @param topblock The block who should be on top.
      * @throws SlickException
      */
-    public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed, int delta) throws SlickException {
+    public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed, int delta, Blockpointer topblock) throws SlickException {
         //if the player is walking then move him
         if (up || down || left || right) {
             speed = walkingspeed;
@@ -114,9 +129,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 posX += Block.WIDTH/2;
 
                 selfDestroy();
+                if (topblock != null) topblock.setBlock(new Block(0));
                 setAbsCoordY(getAbsCoordY()-1);
                 if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
                 selfRebuild();
+                if (topblock != null) topblock.setBlock(new Block(40,1));
 
                 Controller.getMap().requestRecalc();
             } else {
@@ -125,9 +142,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
                     posX -= Block.WIDTH / 2;
 
                     selfDestroy();
+                    if (topblock != null) topblock.setBlock(new Block(0));
                     setAbsCoordY(getAbsCoordY()-1);
                     if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
-                    selfRebuild(); 
+                    selfRebuild();
+                    if (topblock != null) topblock.setBlock(new Block(40,1));
 
                     Controller.getMap().requestRecalc();
                 } else {
@@ -136,9 +155,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
                         posX += Block.WIDTH/2;
 
                         selfDestroy();
+                        if (topblock != null) topblock.setBlock(new Block(0));
                         setAbsCoordY(getAbsCoordY()+1);
                         if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
                         selfRebuild();
+                        if (topblock != null) topblock.setBlock(new Block(40,1));
 
                         Controller.getMap().requestRecalc();
                     } else {
@@ -147,9 +168,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
                             posX -= Block.WIDTH/2;
 
                             selfDestroy();
+                            if (topblock != null) topblock.setBlock(new Block(0));
                             setAbsCoordY(getAbsCoordY()+1);
                             if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
                             selfRebuild();
+                            if (topblock != null) topblock.setBlock(new Block(40,1));
 
                             Controller.getMap().requestRecalc();
                         }
@@ -158,9 +181,10 @@ public abstract class MovingBlock extends SelfAwareBlock {
             }
              //set the offset for the rendering
             setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
+            if (topblock != null) topblock.getBlock().setOffset(getOffsetX(), getOffsetY());
         }
         //enable this line to see where to player stands:
-        Controller.getMapData(this.posX, this.posY, getCoordZ()-1).setLightlevel(30);
+        Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()-1).setLightlevel(30);
    }
    
     

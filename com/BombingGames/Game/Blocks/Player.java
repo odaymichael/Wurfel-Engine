@@ -75,7 +75,7 @@ public class Player extends MovingBlock{
         //land if standing in or under ground level and there is an obstacle
         if (veloZ <= 0
             && posZ <= 0
-            && (getCoordZ() == 0 || Controller.getMapDataUnsafe(getRelCoordX(), getRelCoordY(), getCoordZ()-1).isObstacle())
+            && (getCoordZ() == 0 || Controller.getMapDataUnsafe(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
         ) {
             fallsound.stop();
             veloZ = 0;
@@ -92,39 +92,38 @@ public class Player extends MovingBlock{
             posZ += veloZ*Block.WIDTH*t;//m
         }
 
-        //delete top
-        topblock.setBlock(new Block(0));
         
         //coordinate switch
         //down
-        if (posZ <= 0 && getCoordZ() > 0 && !Controller.getMapData(getRelCoordX(), getRelCoordY(),getCoordZ()-1).isObstacle()){
+        if (posZ <= 0 && getCoordZ() > 0 && !Controller.getMapData(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
             if (! fallsound.playing()) fallsound.play();
             
             selfDestroy();
+            topblock.setBlock(new Block(0));
             setCoordZ(getCoordZ()-1);
             selfRebuild();
+            topblock.setBlock(new Block(40,1));
 
             posZ += Block.WIDTH;
             Controller.getMap().requestRecalc();
+        } else {
+            //up
+            if (posZ >= Block.HEIGHT && getCoordZ() < Chunk.BLOCKS_Z-2 && !Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
+                if (! fallsound.playing()) fallsound.play();
+
+                selfDestroy();
+                topblock.setBlock(new Block(0));
+                setCoordZ(getCoordZ()+1);
+                selfRebuild();
+                topblock.setBlock(new Block(40,1));
+
+                posZ -= Block.WIDTH;
+                Controller.getMap().requestRecalc();
+            } 
         }
-
-        //up
-        if (posZ >= Block.HEIGHT && getCoordZ() < Chunk.BLOCKS_Z-2 && !Controller.getMapData(getRelCoordX(), getRelCoordY(), getCoordZ()+2).isObstacle()){
-            if (! fallsound.playing()) fallsound.play();
-
-            selfDestroy();
-            setCoordZ(getCoordZ()+1);
-            selfRebuild();
-
-            posZ -= Block.WIDTH;
-            Controller.getMap().requestRecalc();
-        } 
         
         //set the offset for the rendering
         setOffset(getPosX() - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
-        
-        //create top at new position
-        topblock.setBlock(new Block(40,1));
         topblock.getBlock().setOffset(getOffsetX(), getOffsetY());  
    }
     
@@ -137,13 +136,6 @@ public class Player extends MovingBlock{
      
     @Override
     public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed, int delta) throws SlickException {
-        //delete top
-        topblock.setBlock(new Block(0));
-        //walk
-        super.walk(up, down, left, right, walkingspeed, delta);
-        
-        //create top at new position
-        topblock.setBlock(new Block(40,1));
-        topblock.getBlock().setOffset(getOffsetX(), getOffsetY());    
+        super.walk(up, down, left, right, walkingspeed, delta, topblock);
     }
 }

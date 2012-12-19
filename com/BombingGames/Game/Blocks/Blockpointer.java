@@ -48,7 +48,7 @@ public class Blockpointer{
      */
     public int getX() {
         if (block != null)
-            return block.getRelCoordX()+x;
+            return block.getCoordX()+x;
         else return x;
     }
 
@@ -66,7 +66,7 @@ public class Blockpointer{
      */
     public int getY() {
         if (block != null)
-            return block.getRelCoordY()+y;
+            return block.getCoordY()+y;
         else return y;
     }
 

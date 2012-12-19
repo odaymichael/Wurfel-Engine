@@ -54,13 +54,13 @@ public class Camera {
             
         } else {//focus on player
             Player player = Gameplay.controller.getPlayer();
-            x = player.getRelCoordX() * Block.WIDTH
-                + Block.WIDTH / 2 *(player.getRelCoordY() % 2)
+            x = player.getCoordX() * Block.WIDTH
+                + Block.WIDTH / 2 *(player.getCoordY() % 2)
                 + player.getOffsetX()
                 - Gameplay.view.getCamera().width / 2;
             
             y = (int) (
-                (player.getRelCoordY()/2f - player.getCoordZ()) * Block.HEIGHT
+                (player.getCoordY()/2f - player.getCoordZ()) * Block.HEIGHT
                 - Gameplay.view.getCamera().height/2
                 + player.getOffsetY() * (1/Block.aspectRatio)
                 );

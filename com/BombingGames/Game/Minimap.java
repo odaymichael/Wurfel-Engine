@@ -67,8 +67,8 @@ public class Minimap {
             if (Gameplay.controller.getPlayer()!=null){
                 Gameplay.view.g.setColor(Color.blue);
                 Gameplay.view.g.drawRect(
-                    X + (Gameplay.controller.getPlayer().getRelCoordX() + (Gameplay.controller.getPlayer().getRelCoordY()%2==1?0.5f:0) ) * scaleX,
-                    Y + Gameplay.controller.getPlayer().getRelCoordY() * scaleY,
+                    X + (Gameplay.controller.getPlayer().getCoordX() + (Gameplay.controller.getPlayer().getCoordY()%2==1?0.5f:0) ) * scaleX,
+                    Y + Gameplay.controller.getPlayer().getCoordY() * scaleY,
                     scaleX,
                     scaleY
                 );
@@ -137,17 +137,17 @@ public class Minimap {
             //player coord
             Gameplay.view.g.setColor(Color.blue);
             View.baseFont.drawString(
-                X + (Gameplay.controller.getPlayer().getRelCoordX() + (Gameplay.controller.getPlayer().getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
-                Y + Gameplay.controller.getPlayer().getRelCoordY() * scaleY - 50,
-                Gameplay.controller.getPlayer().getRelCoordX() +" | "+ Gameplay.controller.getPlayer().getRelCoordY() +" | "+ Gameplay.controller.getPlayer().getCoordZ(),
+                X + (Gameplay.controller.getPlayer().getCoordX() + (Gameplay.controller.getPlayer().getCoordY()%2==1?0.5f:0) ) * scaleX+20,
+                Y + Gameplay.controller.getPlayer().getCoordY() * scaleY - 50,
+                Gameplay.controller.getPlayer().getCoordX() +" | "+ Gameplay.controller.getPlayer().getCoordY() +" | "+ Gameplay.controller.getPlayer().getCoordZ(),
                 Color.blue
             );
             
             //player coord
             Gameplay.view.g.setColor(Color.blue);
             View.baseFont.drawString(
-                X + (Gameplay.controller.getPlayer().getRelCoordX() + (Gameplay.controller.getPlayer().getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
-                Y + Gameplay.controller.getPlayer().getRelCoordY() * scaleY - 30,
+                X + (Gameplay.controller.getPlayer().getCoordX() + (Gameplay.controller.getPlayer().getCoordY()%2==1?0.5f:0) ) * scaleX+20,
+                Y + Gameplay.controller.getPlayer().getCoordY() * scaleY - 30,
                 Gameplay.controller.getPlayer().getAbsCoordX() +" | "+ Gameplay.controller.getPlayer().getAbsCoordY() +" | "+ Gameplay.controller.getPlayer().getCoordZ(),
                 Color.blue
             );
@@ -155,8 +155,8 @@ public class Minimap {
 
             //player pos
             View.baseFont.drawString(
-                X + (Gameplay.controller.getPlayer().getRelCoordX() + (Gameplay.controller.getPlayer().getRelCoordY()%2==1?0.5f:0) ) * scaleX+20,
-                Y + Gameplay.controller.getPlayer().getRelCoordY() * scaleY - 10,
+                X + (Gameplay.controller.getPlayer().getCoordX() + (Gameplay.controller.getPlayer().getCoordY()%2==1?0.5f:0) ) * scaleX+20,
+                Y + Gameplay.controller.getPlayer().getCoordY() * scaleY - 10,
                 Gameplay.controller.getPlayer().getPosX() +" | "+ Gameplay.controller.getPlayer().getPosY() +" | "+ Gameplay.controller.getPlayer().getPosZ(),
                 Color.red
             );
