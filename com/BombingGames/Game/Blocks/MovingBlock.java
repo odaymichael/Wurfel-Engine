@@ -127,13 +127,8 @@ public abstract class MovingBlock extends SelfAwareBlock {
             if (getCorner() == 7){
                 posY += Block.WIDTH/2;
                 posX += Block.WIDTH/2;
-
-                selfDestroy();
-                if (topblock != null) topblock.setBlock(new Block(0));
-                setAbsCoordY(getAbsCoordY()-1);
-                if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
-                selfRebuild();
-                if (topblock != null) topblock.setBlock(new Block(40,1));
+                
+                makeStep(-1,-1,topblock);
 
                 Controller.getMap().requestRecalc();
             } else {
@@ -141,12 +136,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
                     posY += Block.WIDTH / 2;
                     posX -= Block.WIDTH / 2;
 
-                    selfDestroy();
-                    if (topblock != null) topblock.setBlock(new Block(0));
-                    setAbsCoordY(getAbsCoordY()-1);
-                    if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
-                    selfRebuild();
-                    if (topblock != null) topblock.setBlock(new Block(40,1));
+                    makeStep(1,-1, topblock);
 
                     Controller.getMap().requestRecalc();
                 } else {
@@ -154,12 +144,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
                         posY -= Block.WIDTH/2;
                         posX += Block.WIDTH/2;
 
-                        selfDestroy();
-                        if (topblock != null) topblock.setBlock(new Block(0));
-                        setAbsCoordY(getAbsCoordY()+1);
-                        if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
-                        selfRebuild();
-                        if (topblock != null) topblock.setBlock(new Block(40,1));
+                        makeStep(-1,1,topblock);
 
                         Controller.getMap().requestRecalc();
                     } else {
@@ -167,12 +152,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
                             posY -= Block.WIDTH/2;
                             posX -= Block.WIDTH/2;
 
-                            selfDestroy();
-                            if (topblock != null) topblock.setBlock(new Block(0));
-                            setAbsCoordY(getAbsCoordY()+1);
-                            if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
-                            selfRebuild();
-                            if (topblock != null) topblock.setBlock(new Block(40,1));
+                            makeStep(1,1, topblock);
 
                             Controller.getMap().requestRecalc();
                         }
@@ -216,5 +196,20 @@ public abstract class MovingBlock extends SelfAwareBlock {
      */
     public int getPosZ() {
         return posZ;
-    }      
+    }
+    
+    private void makeStep(int x, int y, Blockpointer topblock){
+        selfDestroy();
+        if (topblock != null) topblock.setBlock(new Block(0));
+        setAbsCoordY(getAbsCoordY()+y);
+        if (x<0){
+            if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
+        } else {
+            if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
+        }
+
+        selfRebuild();
+        if (topblock != null) topblock.setBlock(new Block(getId(),1));
+        
+    }
 }
