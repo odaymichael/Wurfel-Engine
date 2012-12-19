@@ -1,6 +1,6 @@
 object Mapinfo: TMapinfo
-  Left = 872
-  Top = 342
+  Left = 932
+  Top = 552
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Mapinfo'
@@ -69,6 +69,58 @@ object Mapinfo: TMapinfo
     Font.Style = []
     ParentFont = False
   end
+  object laChunksize: TLabel
+    Left = 10
+    Top = 60
+    Width = 75
+    Height = 16
+    Caption = 'Chunksize'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Lucida Sans Unicode'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object laChunksizeX: TLabel
+    Left = 10
+    Top = 80
+    Width = 7
+    Height = 15
+    Caption = 'X'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Lucida Sans Unicode'
+    Font.Style = []
+    ParentFont = False
+  end
+  object laChunksizeY: TLabel
+    Left = 50
+    Top = 80
+    Width = 7
+    Height = 15
+    Caption = 'Y'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Lucida Sans Unicode'
+    Font.Style = []
+    ParentFont = False
+  end
+  object laChunksizeZ: TLabel
+    Left = 90
+    Top = 80
+    Width = 7
+    Height = 15
+    Caption = 'Z'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Lucida Sans Unicode'
+    Font.Style = []
+    ParentFont = False
+  end
   object edMapname: TEdit
     Left = 8
     Top = 24
@@ -101,7 +153,7 @@ object Mapinfo: TMapinfo
   object edVersion: TEdit
     Left = 184
     Top = 24
-    Width = 121
+    Width = 77
     Height = 23
     Enabled = False
     Font.Charset = ANSI_CHARSET
@@ -113,5 +165,44 @@ object Mapinfo: TMapinfo
     ReadOnly = True
     TabOrder = 2
     Text = 'Error'
+  end
+  object edChunksizeX: TEdit
+    Left = 10
+    Top = 100
+    Width = 31
+    Height = 23
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Lucida Sans Unicode'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 3
+  end
+  object edChunksizeY: TEdit
+    Left = 50
+    Top = 100
+    Width = 31
+    Height = 23
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Lucida Sans Unicode'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 4
+  end
+  object edChunksizeZ: TEdit
+    Left = 90
+    Top = 100
+    Width = 31
+    Height = 23
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Lucida Sans Unicode'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 5
   end
 end

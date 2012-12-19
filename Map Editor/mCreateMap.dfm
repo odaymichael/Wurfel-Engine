@@ -1,6 +1,6 @@
 object CreateMap: TCreateMap
-  Left = 668
-  Top = 279
+  Left = 350
+  Top = 249
   Width = 270
   Height = 190
   BorderIcons = [biSystemMenu, biMinimize]
@@ -66,7 +66,7 @@ object CreateMap: TCreateMap
     Left = 0
     Top = 100
     Width = 251
-    Height = 21
+    Height = 24
     Anchors = [akLeft, akTop, akRight]
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText

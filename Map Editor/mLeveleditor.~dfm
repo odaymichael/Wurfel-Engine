@@ -1,6 +1,6 @@
 object Mapeditor: TMapeditor
-  Left = 434
-  Top = 221
+  Left = 615
+  Top = 721
   Width = 1263
   Height = 800
   HelpType = htKeyword

@@ -1,6 +1,6 @@
 object Welcome: TWelcome
-  Left = 463
-  Top = 393
+  Left = 379
+  Top = 314
   AlphaBlendValue = 170
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle

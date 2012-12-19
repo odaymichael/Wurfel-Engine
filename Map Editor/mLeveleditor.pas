@@ -74,8 +74,8 @@ type TMapeditor = class(TForm)
     procedure cbTwoLayersClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
   private
-         tilesizeX,tilesizeY,ChunkSizeX, ChunkSizeY, ChunkSizeZ, startHeight, startWidth:integer;
-         Chunkdata : array[0..12, 0..27,0..19] of TBlock;
+         tilesizeX,tilesizeY, startHeight, startWidth:integer;
+         Chunkdata : array of array of array of TBlock;
          last_X,last_Y,last_Z,lastblock:integer;
          changes, mousedown,resizeokay : boolean;
          bitmap:TBitmap;
@@ -94,11 +94,11 @@ type TMapeditor = class(TForm)
          procedure DrawGridOfBlock(x,y:integer);
          procedure FreeRam();
   public
+         ChunkSizeX, ChunkSizeY, ChunkSizeZ: integer; 
          mappath: String;
          path_exe : String;
-         mapinfopath: String;
-         mapname:String;
-         constructor Create(AOwner: TComponent;createmappath: string); overload;virtual;
+         mapname: String;
+         constructor create(AOwner: TComponent;createmappath: string; name: string); overload;virtual;
   end;
 
 var
@@ -116,7 +116,7 @@ begin
     if b then result := 'ja' else result := 'nein';
 end;
 
-constructor TMapeditor.create(AOwner: TComponent;createmappath: string);
+constructor TMapeditor.create(AOwner: TComponent;createmappath: string; name: string);
 var Stream: TFilestream;
     Writer: TWriter;
     Reader: TReader;
@@ -125,21 +125,25 @@ var Stream: TFilestream;
     fileversion,filepath:string;
 begin
     inherited Create(AOwner);
+    mapname := name;
+    
     path_exe := ExtractFilePath(Application.Exename);
-    mappath := createmappath;
     // programm-root: ExtractFilePath(ParamStr(0))
+    
     tilesizeX := 80;
     tilesizeY := 40;
     ChunkSizeX := 12;
     ChunkSizeY := 28;
     ChunkSizeZ := 20;
+    setLength(Chunkdata,ChunkSizeX,ChunkSizeY,ChunkSizeZ);
+    
     changes := false;
     mousedown := false;
     lastblock := 0;
     bitmap := TBitmap.Create;
     bitmap.Transparent := True;
     upEbene.Max := ChunkSizeZ-1; 
-    mapinfopath := '';
+    
     DoubleBuffered := True;
     startWidth := ChunkSizeX*tilesizeX + ChunkSizeX div 2;
     //startWidth := 1200;
@@ -166,12 +170,14 @@ begin
 
     end;
     
-    if mappath<>'' then begin
+    if createmappath<>'' then begin
        //Neue Map anlegen
-       mapinfopath := mappath+'map.otmi'; 
+       mappath := createmappath+name+'\';
+       ShowMessage('Created at:'+mappath);
+       
        //.otmi datei auf HD sichern
        try 
-           Stream := TFilestream.Create(mapinfopath,fmCreate);
+           Stream := TFilestream.Create(mappath+'map.otmi',fmCreate);
            Writer := TWriter.Create(Stream,500);
            Writer.WriteString('mapname' + CRLF);
            Writer.WriteString(Welcome.getVersion + CRLF);
@@ -187,15 +193,14 @@ begin
         OpenDialog.InitialDir := ExtractFilePath(ParamStr(0));
         if OpenDialog.Execute then begin
             //OTMI laden
-            mapinfopath := OpenDialog.FileName;
             //Pfad des Ordners der Map bestimmen
-            for i := Length(mapinfopath) downto 1 do
-                if mapinfopath[i] = '\' then begin
-                   mappath := Copy(mapinfopath,1,i);
+            for i := Length(OpenDialog.FileName) downto 1 do
+                if OpenDialog.FileName[i] = '\' then begin
+                   mappath := Copy(OpenDialog.FileName,1,i);
                    break;
-               end;
-             
-            Stream := TFilestream.Create(mapinfopath,fmOpenRead);
+               end; 
+            
+            Stream := TFilestream.Create(mappath+'map.otmi',fmOpenRead);
             Reader := TReader.Create(Stream,500);
             mapname := Reader.ReadString;
             fileversion := Reader.ReadString;
@@ -208,7 +213,7 @@ begin
         else Exit;
     end;
 
-    if mapinfopath<>''
+    if mappath<>''
        then draw(0,1)
        else Welcome.Show;
 

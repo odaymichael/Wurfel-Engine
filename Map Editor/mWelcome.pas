@@ -45,7 +45,7 @@ end;
 procedure TWelcome.btOeffnenClick(Sender: TObject);
 begin
    AlphaBlend := True;
-   Mapeditor := TMapeditor.Create(Self,'');
+   Mapeditor := TMapeditor.Create(Self,'','');
    Mapeditor.Show;
    
 end;

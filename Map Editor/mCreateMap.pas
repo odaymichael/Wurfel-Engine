@@ -51,7 +51,7 @@ begin
         sdPrompt],
         SELDIRHELP
       ) then
-     btPath.Caption := dir;
+     edPath.Text := dir;
 end;
 
 procedure TCreateMap.btOKClick(Sender: TObject);
@@ -60,7 +60,7 @@ begin
    if (laMapname.Text<>'') and (edPath.Text<>'') then begin
       if not DirectoryExists(edPath.Text+laMapname.Text+'\') then
          CreateDir(edPath.Text+laMapname.Text);
-      Mapeditor := TMapeditor.Create(fAOwner,edPath.Text+laMapname.Text);
+      Mapeditor := TMapeditor.Create(fAOwner,edPath.Text, laMapname.Text);
       Mapeditor.Show;
       inherited destroy;
    end else begin
