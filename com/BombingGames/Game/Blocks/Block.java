@@ -37,7 +37,7 @@ public class Block {
     /**
      * 
      */
-    public final String name;
+    private final String name;
 
     /**
        * WIDTH of the image
@@ -663,6 +663,11 @@ public class Block {
      * @return 
      */
     public boolean hasOffset() {
-        return offsetX!=0 || offsetY!=0;
+        return (offsetX != 0 || offsetY != 0);
     }
+
+    public String getName() {
+        return name;
+    }
+    
 }
