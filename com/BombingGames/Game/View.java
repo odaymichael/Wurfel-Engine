@@ -213,9 +213,9 @@ public class View {
             boolean rightHalfHidden = false;
             while ((y >= 0) && (z >= 0) && Controller.getMapData(x, y, z).isTransparent()) {
                 //check blocks hidden by 4 other halfs
-                if (! Controller.getMapData(x - (x%2 == 0? 1 : 0), y-1, z).isTransparent() )
+                if (! Controller.getMapData(x - (x%2 == 0 ? 1 : 0), y-1, z).isTransparent() )
                     leftHalfHidden = true;
-                if (! Controller.getMapData(x + (x%2==0?0:1), y-1, z).isTransparent())
+                if (! Controller.getMapData(x + (x%2==0 ? 0 : 1), y-1, z).isTransparent())
                     rightHalfHidden = true;        
 
                 if ((leftHalfHidden && rightHalfHidden)){
@@ -227,10 +227,10 @@ public class View {
 
                     //check if it has offset, not part of the original raytracing, but checking it here saves iteration. mapdata and renderarray are for the field with x,y,z equal
                     if (Controller.getMapData(x, y, z).getOffsetY() > 0)
-                        Controller.getMapData(x, y, z).renderorder = 1;
+                        Controller.getMapData(x, y, z).setRenderorder(1);
                     else if (Controller.getMapData(x, y, z).getOffsetX() < 0 && Controller.getMapData(x, y, z).getOffsetY() < 0)
-                            Controller.getMapData(x, y, z).renderorder = -1;
-                        else Controller.getMapData(x, y, z).renderorder = 0;
+                            Controller.getMapData(x, y, z).setRenderorder(-1);
+                        else Controller.getMapData(x, y, z).setRenderorder(0);
                 }
                 y -= 2;
                 z--;                       

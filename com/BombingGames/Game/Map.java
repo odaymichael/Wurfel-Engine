@@ -120,6 +120,7 @@ public class Map {
             }
         }
         //all selfaware objects should be updated here, atm only player
+        
         recalcRequested = true;
         } else {
             Log.error("setCenter was called with center:"+center);
@@ -227,9 +228,9 @@ public class Map {
         for (int z=0; z < Chunk.BLOCKS_Z; z++) {
             for (int y = Gameplay.view.getCamera().getTopBorder(); y < Gameplay.view.getCamera().getBottomBorder(); y++) {//vertikal
                 for (int x = Gameplay.view.getCamera().getLeftBorder(); x < Gameplay.view.getCamera().getRightBorder(); x++){//horizontal
-                    if ((x < Chunk.BLOCKS_X*3-1 && data[x+1][y][z].renderorder == -1)
+                    if ((x < Chunk.BLOCKS_X*3-1 && data[x+1][y][z].getRenderorder() == -1)
                         ||
-                        data[x][y][z].renderorder == 1) {
+                        data[x][y][z].getRenderorder() == 1) {
                         x++;
                         data[x][y][z].draw(x,y,z);//draw the right block first
                         data[x-1][y][z].draw(x-1,y,z);    

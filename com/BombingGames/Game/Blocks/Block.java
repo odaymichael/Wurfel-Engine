@@ -34,9 +34,6 @@ public class Block {
         * Is this Block an obstacle or can you pass through?
         */
     private boolean obstacle;
-    /**
-     * 
-     */
     private final String name;
 
     /**
@@ -51,11 +48,11 @@ public class Block {
     /**
      * The size the block is rendered at. You should only use this at rendering!
      */
-    public static int displWidth;
+    private static int displWidth;
     /**
      * The HEIGHT the block is rendered at. You should only use this at rendering!
      */
-    public static int displHeight;
+    private static int displHeight;
     
     /**
      * How much bigger is the WIDTH than the hight (block HEIGHT not image HEIGHT) of a block?
@@ -93,7 +90,7 @@ public class Block {
     /**
      * Changes the order the block is rendered. When renderorder = 1 the Block is drawn in front of the right block. When it is -1 it is draw behind the left block. 0 is default.
      */
-    public int renderorder = 0;
+    private int renderorder = 0;
     
     /**
      * Render top side?
@@ -532,7 +529,7 @@ public class Block {
                     + (y%2) * (int) (Block.WIDTH/2)
                     + getOffsetX()
                     ,
-                    -Gameplay.view.getCamera().getY()/2
+                    -Gameplay.view.getCamera().getY()
                     + y*Block.HEIGHT/2
                     - z*Block.HEIGHT
                     + getOffsetY() * (1/Block.aspectRatio)
@@ -669,5 +666,16 @@ public class Block {
     public String getName() {
         return name;
     }
+
+    public int getRenderorder() {
+        return renderorder;
+    }
+
+    public void setRenderorder(int renderorder) {
+        this.renderorder = renderorder;
+    }
+    
+    
+    
     
 }
