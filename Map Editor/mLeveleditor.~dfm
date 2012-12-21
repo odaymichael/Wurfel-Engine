@@ -1,6 +1,6 @@
 object Mapeditor: TMapeditor
-  Left = 615
-  Top = 721
+  Left = 784
+  Top = 398
   Width = 1263
   Height = 800
   HelpType = htKeyword
@@ -59,10 +59,10 @@ object Mapeditor: TMapeditor
   object laEbene: TLabel
     Left = 616
     Top = 0
-    Width = 69
+    Width = 104
     Height = 20
     Anchors = [akTop, akRight]
-    Caption = 'Ebene: 9'
+    Caption = 'Layer: ERROR'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16

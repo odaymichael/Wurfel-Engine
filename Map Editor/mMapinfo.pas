@@ -58,8 +58,9 @@ procedure TMapinfo.SaveInfo();
 var Stream: TFilestream;
     Writer: TWriter;
 begin
-   Stream := TFilestream.Create(Mapeditor.mappath,fmCreate);
+   Stream := TFilestream.Create(Mapeditor.mappath+'map.otmi',fmCreate);
    Writer := TWriter.Create(Stream,500);
+   Mapeditor.mapname := edMapname.Text;
    Writer.WriteString(edMapname.Text+#13#10);
    Writer.WriteString(edVersion.Text+#13#10);
    Writer.WriteString('0,0'+#13#10);

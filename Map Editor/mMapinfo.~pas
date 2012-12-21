@@ -42,10 +42,10 @@ procedure TMapinfo.btSaveNewClick(Sender: TObject);
 var i:integer;
 begin
     if Mapeditor.SaveDialog.Execute then begin
-       Mapeditor.mapinfopath := Mapeditor.SaveDialog.FileName;
-       for i:=Length(Mapeditor.mapinfopath) downto 1 do
-          if Mapeditor.mapinfopath[i] = '\' then begin
-             Mapeditor.mappath := Copy(Mapeditor.mapinfopath,1,i);
+       Mapeditor.mappath := Mapeditor.SaveDialog.FileName;
+       for i:=Length(Mapeditor.mappath) downto 1 do
+          if Mapeditor.mappath[i] = '\' then begin
+             Mapeditor.mappath := Copy(Mapeditor.mappath,1,i);
              break;
           end;
        SaveInfo();
@@ -58,7 +58,7 @@ procedure TMapinfo.SaveInfo();
 var Stream: TFilestream;
     Writer: TWriter;
 begin
-   Stream := TFilestream.Create(Mapeditor.mapinfopath,fmCreate);
+   Stream := TFilestream.Create(Mapeditor.mappath,fmCreate);
    Writer := TWriter.Create(Stream,500);
    Writer.WriteString(edMapname.Text+#13#10);
    Writer.WriteString(edVersion.Text+#13#10);

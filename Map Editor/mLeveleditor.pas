@@ -132,25 +132,18 @@ begin
     
     tilesizeX := 80;
     tilesizeY := 40;
-    ChunkSizeX := StrToInt(CreateMap.leChunkSizeX.Text);
-    ChunkSizeY := StrToInt(CreateMap.leChunkSizeY.Text);
-    ChunkSizeZ := StrToInt(CreateMap.leChunkSizeZ.Text);
-    setLength(Chunkdata,ChunkSizeX,ChunkSizeY,ChunkSizeZ);
     
     changes := false;
     mousedown := false;
     lastblock := 0;
     bitmap := TBitmap.Create;
     bitmap.Transparent := True;
-    upEbene.Max := ChunkSizeZ-1; 
+    
+   
+    mappath := createmappath;
     
     DoubleBuffered := True;
-    startWidth := ChunkSizeX*tilesizeX + ChunkSizeX div 2;
-    //startWidth := 1200;
-    scaleX := 1;
-    scaleY := 1;
-    //imMap.Width := startWidth div 2;
-    startHeight := (ChunkSizeY+1)*tilesizeY div 2;
+
     //startHeight:= 484;
     //imMap.Height := startHeight div 2;
 
@@ -164,23 +157,27 @@ begin
         imagelist[i][0] := TBitmap.Create();
         imagelist[i][0].Transparent := True;
         
-        filepath := path_exe+'./bmp/'+IntToStr(i)+'-0.bmp';
+        filepath := path_exe+'bmp\'+IntToStr(i)+'-0.bmp';
         if fileexists(filepath)
            then imagelist[i][0].LoadFromFile(filepath);
-
     end;
     
     if createmappath<>'' then begin
        //Neue Map anlegen
-       mappath := createmappath;
-       ShowMessage('Created at:'+mappath);
        
+       ChunkSizeX := StrToInt(CreateMap.leChunkSizeX.Text);
+       ChunkSizeY := StrToInt(CreateMap.leChunkSizeY.Text);
+       ChunkSizeZ := StrToInt(CreateMap.leChunkSizeZ.Text);
+       setLength(Chunkdata,ChunkSizeX,ChunkSizeY,ChunkSizeZ);
        //.otmi datei auf HD sichern
-       try 
+       try
            Stream := TFilestream.Create(mappath+'map.otmi',fmCreate);
            Writer := TWriter.Create(Stream,500);
            Writer.WriteString('mapname' + CRLF);
            Writer.WriteString(Welcome.getVersion + CRLF);
+           Writer.WriteString(IntToStr(ChunkSizeX));
+           Writer.WriteString(IntToStr(ChunkSizeY));
+           Writer.WriteString(IntToStr(ChunkSizeZ));
            Writer.Free;
            Stream.Free;
            //Chunk anlegen
@@ -193,19 +190,18 @@ begin
         OpenDialog.InitialDir := ExtractFilePath(ParamStr(0));
         if OpenDialog.Execute then begin
             //OTMI laden
-            //Pfad des Ordners der Map bestimmen
-            for i := Length(OpenDialog.FileName) downto 1 do
-                if OpenDialog.FileName[i] = '\' then begin
-                   mappath := Copy(OpenDialog.FileName,1,i);
-                   break;
-               end; 
             
             Stream := TFilestream.Create(mappath+'map.otmi',fmOpenRead);
             Reader := TReader.Create(Stream,500);
             mapname := Reader.ReadString;
             fileversion := Reader.ReadString;
-            setlength(fileversion,Pred(Pred(length(fileversion))));
-            if Welcome.getVersion <> fileversion then ShowMessage('The map version is different. There may be some problems.');
+            setlength(fileversion, Pred(Pred(length(fileversion))));
+            if Welcome.getVersion <> fileversion then ShowMessage('The map version is different. There may occur some problems.');
+            ChunkSizeX := StrToInt(Reader.ReadString);
+            ChunkSizeY := StrToInt(Reader.ReadString);
+            ChunkSizeZ := StrToInt(Reader.ReadString);
+            setLength(Chunkdata,ChunkSizeX,ChunkSizeY,ChunkSizeZ);
+            
             Reader.Destroy;
             Stream.Destroy;
             loadchunk(0,0);
@@ -213,9 +209,17 @@ begin
         else Exit;
     end;
 
-    if mappath<>''
-       then draw(0,1)
-       else Welcome.Show;
+    upEbene.Position := ChunkSizeZ div 2;
+    upEbene.Max := ChunkSizeZ-1;
+    laEbene.Caption := 'Layer:'+IntToStr(upEbene.Position);
+    startWidth := ChunkSizeX*tilesizeX + ChunkSizeX div 2;
+    //startWidth := 1200;
+    scaleX := 1;
+    scaleY := 1;
+    //imMap.Width := startWidth div 2;
+    startHeight := (ChunkSizeY+1)*tilesizeY div 2;
+
+    draw(0,1);
 
     resizeokay := true;
 end;
@@ -244,6 +248,7 @@ begin
      thecanvas.Pen.Width := 2;     
      for y := startY to ChunkSizeY-1 do
          for x :=0 to ChunkSizeX-1 do drawblock(x,y,z,thecanvas);
+         
      for y := startY to ChunkSizeY-1 do
          for x :=0 to ChunkSizeX-1 do DrawGridOfBlock(x,y);
              
@@ -256,7 +261,7 @@ var filepath :string;
  rect: TRect;
 begin
      //Coordinate allowed?
-     if (X < ChunkSizeX) and (Y < ChunkSizeY) then begin
+     if (X < ChunkSizeX) and (Y < ChunkSizeY) and (Z < ChunkSizeZ) then begin
          //if image with this value is not in list
          if Length(imagelist[Chunkdata[x][y][z].id]) < Chunkdata[x][y][z].value then begin
             filepath := path_exe+'./bmp/'+IntToStr(Chunkdata[x][y][z].id)+'-'+IntToStr(Chunkdata[x][y][z].value)+'.bmp';
@@ -302,7 +307,7 @@ end;
 
 procedure TMapeditor.upEbeneClick(Sender: TObject; Button: TUDBtnType);
 begin
-   laEbene.Caption := 'Ebene: ' + IntToStr(upEbene.Position);
+   laEbene.Caption := 'Layer: ' + IntToStr(upEbene.Position);
    draw(0,1);
 end;
 
@@ -683,7 +688,7 @@ end;
 
 procedure TMapeditor.FormResize(Sender: TObject);
 begin
-   if resizeokay then begin
+   if not resizeokay then begin
        imMap.Picture.Graphic.Width := imMap.Width;
        imMap.Picture.Graphic.Height := imMap.Height;
        if cbTwoLayers.Checked then begin
