@@ -644,15 +644,25 @@ public class Block {
      * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int) 
      */
     protected int getSideNumb(int x, int y) {
-        if (x+y <= Block.WIDTH /2)
-            return 7;//top left
-        else if (x-y >= Block.WIDTH /2) 
-                return 1; //top right
-             else if (x+y >= 3*Block.WIDTH /2)
-                    return 3;//bottom right
-                else if (-x+y >= Block.WIDTH /2)
-                        return 5;//bottom left
-                    else return 8;//the middle
+        int result = 8;
+        if (x+y <= Block.WIDTH /2)//top left
+            result = 7;
+        if (x-y >= Block.WIDTH /2) //top right
+            if (result==7) result=0; else result = 1;
+        if (x+y >= 3*Block.WIDTH /2)//bottom right
+            if (result==1) result=2; else result = 3;
+        if (-x+y >= Block.WIDTH /2) //bottom left
+            if (result==3) result=4; else if (result==7) result = 6; else result = 5;
+        return result;
+//        if (x+y <= Block.WIDTH /2)
+//            return 7;//top left
+//        else if (x-y >= Block.WIDTH /2) 
+//                return 1; //top right
+//             else if (x+y >= 3*Block.WIDTH /2)
+//                    return 3;//bottom right
+//                else if (-x+y >= Block.WIDTH /2)
+//                        return 5;//bottom left
+//                    else return 8;//the middle
     }
 
     /**

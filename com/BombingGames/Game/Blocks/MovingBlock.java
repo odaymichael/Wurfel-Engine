@@ -118,54 +118,114 @@ public abstract class MovingBlock extends SelfAwareBlock {
             
             
             //colision check
+            int oldx = posX;
+            int oldy = posY;
             int newx = (int) (posX + delta * speed * veloX);
             int newy = (int) (posY + delta * speed * veloY);
             
-            int sideNumb = getSideNumb(newx, newy);
             
+            boolean movementokay=true;
+            int sideNumber;
             
-            //is movement okay?
-            if (sideNumb == 8 || ! getNeighbourBlock(sideNumb, 0).isObstacle() && ! getNeighbourBlock(sideNumb, 1).isObstacle()) {                
-                //move player
-                posX = newx;
-                posY = newy;
-                int sidennumb = getSideNumb();
-            //track the coordiante change
-            switch(sidennumb){
-                case 1:
-                        posY += Block.WIDTH / 2;
-                        posX -= Block.WIDTH / 2;
-
-                        makeCoordinateStep(1,-1, topblock);
-                        break;
-                case 3:
-                        posY -= Block.WIDTH/2;
-                        posX -= Block.WIDTH/2;
-
-                        makeCoordinateStep(1,1, topblock);
-                    break;
-                case 5:
-                        posY -= Block.WIDTH/2;
-                        posX += Block.WIDTH/2;
-
-                        makeCoordinateStep(-1,1,topblock);
-                        break;
-                case 7:
-                        posY += Block.WIDTH/2;
-                        posX += Block.WIDTH/2;
+            if (oldx-newx > 0) {
+                //check left corner
+                sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy);
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                   movementokay = false;
                 
-                        makeCoordinateStep(-1,-1,topblock);
-                        break;    
+                sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1); 
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                    movementokay = false;
+                
+                sideNumber = getSideNumb(newx, newy + Block.WIDTH/2+1); 
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                    movementokay = false; 
+            } else {
+                //check right corner
+                sideNumber = getSideNumb(newx + Block.WIDTH/2+1, newy);
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                   movementokay = false;
+                
+                sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1); 
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                    movementokay = false; 
+                
+                sideNumber = getSideNumb(newx, newy + Block.WIDTH/2+1); 
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                    movementokay = false;
             }
             
-            //if there was a coordiante change recalc map.
-            if (sidennumb != 8) Controller.getMap().requestRecalc();
+                
+            if (oldy-newy > 0) {
+                //check top corner
+                sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1);
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                   movementokay = false;
+                
+                sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy); 
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                    movementokay = false;
+                
+                sideNumber = getSideNumb(newx + Block.WIDTH/2+1, newy); 
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                    movementokay = false;  
+            } else {
+                //check bottom corner
+                sideNumber = getSideNumb(newx, newy + Block.WIDTH/2+1);
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                   movementokay = false;
+                
+                sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy); 
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                    movementokay = false;
+                
+                sideNumber = getSideNumb(newx + Block.WIDTH/2+1, newy); 
+                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                    movementokay = false;
+            }
+               
+            if (movementokay) {                
+                //movement allowed => move player
+                posX = newx;
+                posY = newy;
+                
+                //track the coordiante change, if there is one
+                int sidennumb = getSideNumb();
+                switch(sidennumb){
+                    case 1:
+                            posY += Block.WIDTH / 2;
+                            posX -= Block.WIDTH / 2;
 
-             //set the offset for the rendering
-            setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
-            //copy offset to topblock
-            if (topblock != null) 
-               topblock.getBlock().setOffset(getOffsetX(), getOffsetY());
+                            makeCoordinateStep(1,-1, topblock);
+                            break;
+                    case 3:
+                            posY -= Block.WIDTH/2;
+                            posX -= Block.WIDTH/2;
+
+                            makeCoordinateStep(1,1, topblock);
+                        break;
+                    case 5:
+                            posY -= Block.WIDTH/2;
+                            posX += Block.WIDTH/2;
+
+                            makeCoordinateStep(-1,1, topblock);
+                            break;
+                    case 7:
+                            posY += Block.WIDTH/2;
+                            posX += Block.WIDTH/2;
+
+                            makeCoordinateStep(-1,-1, topblock);
+                            break;    
+                }
+
+                //if there was a coordiante change recalc map.
+                if (sidennumb != 8) Controller.getMap().requestRecalc();
+
+                //set the offset for the rendering
+                setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
+                //copy offset to topblock
+                if (topblock != null) 
+                    topblock.getBlock().setOffset(getOffsetX(), getOffsetY());
             }
         }
         //enable this line to see where to player stands:
