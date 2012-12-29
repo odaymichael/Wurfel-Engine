@@ -46,7 +46,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 1;
+    public static final int MAPGENERATOR = 3;
     
     private int coordX, coordY;
     private Block data[][][] = new Block[BLOCKS_X][BLOCKS_Y][BLOCKS_Z];
@@ -82,7 +82,7 @@ public class Chunk {
         Log.debug("Creating new chunk: "+ coordX + ", "+ coordY);
         Gameplay.MSGSYSTEM.add("Creating new chunk: "+coordX+", "+ coordY);
         switch (MAPGENERATOR){
-            case 0:{
+            case 0:{//random pillars
                 for (int x=0; x < BLOCKS_X; x++)
                     for (int y=0; y < BLOCKS_Y; y++){
                         int height = (int) (Math.random()*BLOCKS_Z-1)+1;
@@ -97,7 +97,7 @@ public class Chunk {
                     }
                 break;
             }
-            case 1: {
+            case 1: {//one mountain per chunk
                 int mountainx = (int) (Math.random()*BLOCKS_X-1);
                 int mountainy = (int) (Math.random()*BLOCKS_Y-1);
                 
@@ -112,7 +112,7 @@ public class Chunk {
                     }
                 break;
             }
-            case 2: {
+            case 2: {//flat gras
                for (int x=0; x < BLOCKS_X; x++)
                     for (int y=0; y < BLOCKS_Y; y++){
                         data[x][y][0] = new Block(2);
@@ -120,6 +120,18 @@ public class Chunk {
                     }
                 break;
             }
+            case 3: {//flat gras with one random pillar per chunk
+                int pillarx = (int) (Math.random()*BLOCKS_X-1);
+                int pillary = (int) (Math.random()*BLOCKS_Y-1);
+                for (int z=0; z < BLOCKS_Z; z++) data[pillarx][pillary][z] = new Block(1);
+                
+                for (int x=0; x < BLOCKS_X; x++)
+                    for (int y=0; y < BLOCKS_Y; y++){
+                        data[x][y][0] = new Block(2);
+                        data[x][y][1] = new Block(1);
+                    }
+                break;
+            }    
         }
     }
         
