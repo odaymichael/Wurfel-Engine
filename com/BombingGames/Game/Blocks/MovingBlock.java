@@ -125,10 +125,18 @@ public abstract class MovingBlock extends SelfAwareBlock {
             
             
             boolean movementokay=true;
-            int sideNumber;
             
             //Gegenkraft berechnen udn diese zum Richtungsvektor adddieren. Gibt neuen Richtungsvektor.
             //immer bei movementokay = false;
+            //movement in x
+            int sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1); 
+            if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                movementokay = false;
+
+            sideNumber = getSideNumb(newx, newy + Block.WIDTH/2+1); 
+            if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                movementokay = false; 
+            
             if (oldx-newx > 0) {
                 //check left corner
                 sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy);
@@ -141,14 +149,15 @@ public abstract class MovingBlock extends SelfAwareBlock {
                    movementokay = false;
             }
             
-            sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1); 
+            //movement in y
+            sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy); 
             if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                 movementokay = false;
 
-            sideNumber = getSideNumb(newx, newy + Block.WIDTH/2+1); 
+            sideNumber = getSideNumb(newx + Block.WIDTH/2+1, newy); 
             if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                movementokay = false; 
-                
+                movementokay = false;  
+            
             if (oldy-newy > 0) {
                 //check top corner
                 sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1);
@@ -161,13 +170,6 @@ public abstract class MovingBlock extends SelfAwareBlock {
                    movementokay = false;
             }
             
-            sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy); 
-            if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                movementokay = false;
-
-            sideNumber = getSideNumb(newx + Block.WIDTH/2+1, newy); 
-            if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                movementokay = false;  
                
             if (movementokay) {                
                 //movement allowed => move player
