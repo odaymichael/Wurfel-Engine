@@ -30,10 +30,10 @@ public class Camera {
     public Camera(int x, int y,int width, int height, float scale) {
         screenX = x;
         screenY = y;
-        screenWidth = (int) (width/scale);
-        screenHeight = (int) (height/scale);
-        this.width = (int) (screenWidth/this.zoom);
-        this.height = (int) (screenHeight/this.zoom);
+        screenWidth = (int) (width / scale);
+        screenHeight = (int) (height / scale);
+        this.width = (int) (screenWidth / zoom);
+        this.height = (int) (screenHeight / zoom);
     } 
        
     /**

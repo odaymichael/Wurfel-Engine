@@ -74,7 +74,7 @@ public class GameController extends Controller {
 
             //walk
             if (getPlayer() != null)
-                if ("WASD".equals(getPlayer().getControls())){
+                if ("WASD".equals(getPlayer().getControls()))
                     getPlayer().walk(
                         input.isKeyDown(Input.KEY_W),
                         input.isKeyDown(Input.KEY_S),
@@ -83,14 +83,14 @@ public class GameController extends Controller {
                         .25f+(input.isKeyDown(Input.KEY_LSHIFT)? 0.75f: 0),
                         delta
                     );
-                    if (input.isKeyPressed(Input.KEY_SPACE)) getPlayer().jump();
-                }
+                if (input.isKeyPressed(Input.KEY_SPACE)) getPlayer().jump();
             
         } else {
             //fetch input and write it down
             //to-do!
         }
-                //toggle input for msgSystem
+        
+        //toggle input for msgSystem
         if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.MSGSYSTEM.listenForInput(!Gameplay.MSGSYSTEM.isListeningForInput());
 
     }

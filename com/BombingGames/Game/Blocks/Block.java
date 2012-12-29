@@ -305,7 +305,7 @@ public class Block {
                     break;
             case 40:name = "player";
                     transparent = true;
-                    obstacle = false;
+                    obstacle = true;
                     spriteX[0]=2;
                     spriteY[0]=0;
                     break;
@@ -643,7 +643,7 @@ public class Block {
      * @return Returns the corner of the coordinates. 8 is self.
      * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int) 
      */
-    protected int getCorner(int x, int y) {
+    protected int getSideNumb(int x, int y) {
         if (x+y <= Block.WIDTH /2)
             return 7;//top left
         else if (x-y >= Block.WIDTH /2) 

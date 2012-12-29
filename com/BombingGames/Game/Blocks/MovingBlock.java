@@ -6,6 +6,7 @@ package com.BombingGames.Game.Blocks;
 
 import com.BombingGames.Game.Controller;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.util.Log;
 
 /**
  *A Block which can move himself around the map therefore it must also be  a SelfAwareBlock.
@@ -44,6 +45,10 @@ public abstract class MovingBlock extends SelfAwareBlock {
     */
    protected float speed;
    
+   /**
+     * These method should define how the object can jump.
+     */
+    abstract void jump();
    
     MovingBlock(){
         super();
@@ -57,13 +62,14 @@ public abstract class MovingBlock extends SelfAwareBlock {
         super(id, value);
     }
     
+    
     /**
-     * Returns the coodinates of the current position.
+     * Returns the side of the current position.
      * @return
-     * @see com.BombingGames.Game.Blocks.Block#getCorner(int, int) 
+     * @see com.BombingGames.Game.Blocks.Block#getSideNumb(int, int) 
      */
-    protected int getCorner() {
-        return getCorner(posX,posY);
+    protected int getSideNumb() {
+        return getSideNumb(posX,posY);
     }
         
     /**
@@ -106,74 +112,66 @@ public abstract class MovingBlock extends SelfAwareBlock {
             if (left)  veloX = -1;
             if (right) veloX = 1;
         
-            //scale that sqt(x^2+y^2)=1
+            //scale that absolute value of x and y is always the same so sqt(x^2+y^2)=1
             veloX /= Math.sqrt(Math.abs(veloX) + Math.abs(veloY));
             veloY /= Math.sqrt(Math.abs(veloX) + Math.abs(veloY));
             
-            int newx = (int) (posX + delta*speed * veloX);
-            int newy = (int) (posY + delta*speed * veloY);
             
-            //check if movement is allowed
-            int corner = getCorner(newx, newy);
+            //colision check
+            int newx = (int) (posX + delta * speed * veloX);
+            int newy = (int) (posY + delta * speed * veloY);
             
-            //goal of step is free?
-            if (!getNeighbourBlock(corner, 0).isObstacle() && !getNeighbourBlock(corner, 1).isObstacle()) {                
-                //move player by speed*vector
+            int sideNumb = getSideNumb(newx, newy);
+            
+            
+            //is movement okay?
+            if (sideNumb == 8 || ! getNeighbourBlock(sideNumb, 0).isObstacle() && ! getNeighbourBlock(sideNumb, 1).isObstacle()) {                
+                //move player
                 posX = newx;
                 posY = newy;
-            }
-            
+                int sidennumb = getSideNumb();
             //track the coordiante change
-            if (getCorner() == 7){
-                posY += Block.WIDTH/2;
-                posX += Block.WIDTH/2;
-                
-                makeStep(-1,-1,topblock);
+            switch(sidennumb){
+                case 1:
+                        posY += Block.WIDTH / 2;
+                        posX -= Block.WIDTH / 2;
 
-                Controller.getMap().requestRecalc();
-            } else {
-                if (getCorner() == 1) {
-                    posY += Block.WIDTH / 2;
-                    posX -= Block.WIDTH / 2;
+                        makeCoordinateStep(1,-1, topblock);
+                        break;
+                case 3:
+                        posY -= Block.WIDTH/2;
+                        posX -= Block.WIDTH/2;
 
-                    makeStep(1,-1, topblock);
-
-                    Controller.getMap().requestRecalc();
-                } else {
-                    if (getCorner() == 5) {
+                        makeCoordinateStep(1,1, topblock);
+                    break;
+                case 5:
                         posY -= Block.WIDTH/2;
                         posX += Block.WIDTH/2;
 
-                        makeStep(-1,1,topblock);
-
-                        Controller.getMap().requestRecalc();
-                    } else {
-                        if (getCorner() == 3) {
-                            posY -= Block.WIDTH/2;
-                            posX -= Block.WIDTH/2;
-
-                            makeStep(1,1, topblock);
-
-                            Controller.getMap().requestRecalc();
-                        }
-                    }
-                }  
+                        makeCoordinateStep(-1,1,topblock);
+                        break;
+                case 7:
+                        posY += Block.WIDTH/2;
+                        posX += Block.WIDTH/2;
+                
+                        makeCoordinateStep(-1,-1,topblock);
+                        break;    
             }
+            
+            //if there was a coordiante change recalc map.
+            if (sidennumb != 8) Controller.getMap().requestRecalc();
+
              //set the offset for the rendering
             setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
-            if (topblock != null) topblock.getBlock().setOffset(getOffsetX(), getOffsetY());
+            //copy offset to topblock
+            if (topblock != null) 
+               topblock.getBlock().setOffset(getOffsetX(), getOffsetY());
+            }
         }
         //enable this line to see where to player stands:
         Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()-1).setLightlevel(30);
    }
    
-    
-    
-    /**
-     * These method should define how the object can jump.
-     */
-    abstract void jump();
-    
     /**
      * 
      * @return
@@ -198,9 +196,16 @@ public abstract class MovingBlock extends SelfAwareBlock {
         return posZ;
     }
     
-    private void makeStep(int x, int y, Blockpointer topblock){
+    /**
+     * Make a step
+     * @param x left or right step
+     * @param y the coodinate steps
+     * @param topblock if you want to also move a block on top add a pointer to it. If not wanted null.
+     */
+    private void makeCoordinateStep(int x, int y, Blockpointer topblock){
         selfDestroy();
         if (topblock != null) topblock.setBlock(new Block(0));
+        
         setAbsCoordY(getAbsCoordY()+y);
         if (x<0){
             if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);

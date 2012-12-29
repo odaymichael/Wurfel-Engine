@@ -121,7 +121,7 @@ public class SelfAwareBlock extends Block{
     }
     
    /**
-     * Returns a block next to it.
+     * Returns a neighbour block.
      * 701
      * 682
      * 543
@@ -130,42 +130,51 @@ public class SelfAwareBlock extends Block{
      * @return The neighbour block
      */
     public int[] getNeighbourCoords(int side, int relZ){
-       int result[] = new int[3];
-       result[2] = coordZ+relZ;
+        int result[] = new int[3];
         switch(side){
             case 0:
                 result[0] = getCoordX();
                 result[1] = getCoordY()-2;
+                break;
             case 1:
-                result[0] = getCoordX() -(getCoordY() % 2 == 1 ? 1 : 0);
+                result[0] = getCoordX() + (getCoordY() % 2 == 1 ? 1 : 0);
                 result[1] = getCoordY()-1;
+                break;
             case 2:
                 result[0] = getCoordX()+1;
                 result[1] = getCoordY();
+                break;
             case 3:
-                result[0] = getCoordX() +(getCoordY() % 2 == 1 ? 1 : 0);
+                result[0] = getCoordX() + (getCoordY() % 2 == 1 ? 1 : 0);
                 result[1] = getCoordY()+1;
+                break;
             case 4:
                 result[0] = getCoordX();
                 result[1] = getCoordY()+2;
+                break;
             case 5:
-                result[0] = getCoordX() -(getCoordY() % 2 == 0 ? 1 : 0);
-                result[1] = getCoordY()+1;;
+                result[0] = getCoordX() - (getCoordY() % 2 == 0 ? 1 : 0);
+                result[1] = getCoordY()+1;
+                break;
             case 6:
                 result[0] = getCoordX()-1;
-                result[1] = getCoordY();        
+                result[1] = getCoordY();
+                break;
             case 7:
-                result[0] = getCoordX() -(getCoordY() % 2 == 0 ? 1 : 0);
+                result[0] = getCoordX() - (getCoordY() % 2 == 0 ? 1 : 0);
                 result[1] = getCoordY()-1;
+                break;
             default:
                 result[0] = getCoordX();
                 result[1] = getCoordY();      
         }
+        
+        result[2] = coordZ + relZ;
         return result;
     }
     
     public Block getNeighbourBlock(int side, int relZ){
-        int neighbour[] = getNeighbourCoords(side,relZ);
-        return Controller.getMapData(neighbour[0],neighbour[1],neighbour[2]);
+        int neighbourcoords[] = getNeighbourCoords(side,relZ);
+        return Controller.getMapData(neighbourcoords[0],neighbourcoords[1],neighbourcoords[2]);
     }
 }
