@@ -60,8 +60,8 @@ public class SelfAwareBlock extends Block{
         absCoordY = y;
         
         //if Z is too high set to highes possible position
-        if (z > Map.BLOCKS_Z-2)
-            coordZ = Map.BLOCKS_Z -2;
+        if (z > Map.getBlocksZ()-2)
+            coordZ = Map.getBlocksZ() -2;
         else coordZ = z;
     }
    
@@ -70,7 +70,7 @@ public class SelfAwareBlock extends Block{
       * @return
       */
      public int getCoordX() {
-        return absCoordX - Controller.getMap().getCoordlist(4)[0]  * Chunk.BLOCKS_X;
+        return absCoordX - Controller.getMap().getCoordlist(4)[0]  * Chunk.getBlocksX();
     }
 
     /**
@@ -78,7 +78,7 @@ public class SelfAwareBlock extends Block{
      * @return
      */
     public int getCoordY() {
-        return absCoordY - Controller.getMap().getCoordlist(4)[1] * Chunk.BLOCKS_Y;
+        return absCoordY - Controller.getMap().getCoordlist(4)[1] * Chunk.getBlocksY();
     }
     
     /**

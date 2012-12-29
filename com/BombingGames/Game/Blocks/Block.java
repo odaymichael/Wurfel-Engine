@@ -85,7 +85,7 @@ public class Block {
     /**
      * The sprite image which contains every block image
      */
-    public static SpriteSheet Blocksheet;
+    private static SpriteSheet Blocksheet;
     
     /**
      * Changes the order the block is rendered. When renderorder = 1 the Block is drawn in front of the right block. When it is -1 it is draw behind the left block. 0 is default.
@@ -494,14 +494,14 @@ public class Block {
      */
     public void draw(int x,int y, int z) {
         //draw every block except air
-        if (id != 0){
+        if (id != 0 && visible){
             //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
             //Block renderBlock = Controller.map.data[x][y][z]; 
             
-            if (Gameplay.controller.renderSides()){ 
-                if (renderTop) drawSide(x,y,z, 1);
-                if (renderLeft) drawSide(x,y,z, 0);
-                if (renderRight) drawSide(x,y,z, 2);
+            if (Gameplay.controller.renderSides()){
+                    if (renderTop) drawSide(x,y,z, 1);
+                    if (renderLeft) drawSide(x,y,z, 0);
+                    if (renderRight) drawSide(x,y,z, 2);
 
             } else {
                 Image temp = Block.Blocksheet.getSubImage(spriteX[0], spriteY[0]);
@@ -534,6 +534,7 @@ public class Block {
                     - z*Block.HEIGHT
                     + getOffsetY() * (1/Block.aspectRatio)
                 );
+
                 
 //                Block.Blocksheet.renderInUse(
 //                    (int) (zoom*Controller.map.posX) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
@@ -586,7 +587,7 @@ public class Block {
             - Gameplay.view.getCamera().getY()
             + y*Block.HEIGHT/2
             - z*Block.HEIGHT
-            + ( sidenumb == 1 ? -Block.HEIGHT/2:0)//the top is drawn /4 Blocks higher
+            + ( sidenumb != 1 ? Block.HEIGHT/2:0)//the top is drawn /4 Blocks higher
             + getOffsetY() * (1/Block.aspectRatio)
         );
     }
@@ -684,8 +685,8 @@ public class Block {
     public void setRenderorder(int renderorder) {
         this.renderorder = renderorder;
     }
-    
-    
-    
-    
+
+    public static SpriteSheet getBlocksheet() {
+        return Blocksheet;
+    }
 }

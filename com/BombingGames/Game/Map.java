@@ -11,21 +11,14 @@ import org.newdawn.slick.util.Log;
  */
 public class Map {
     public static final float GRAVITY = 9.81f;
-    public static final int BLOCKS_X;
-    public static final int BLOCKS_Y;
-    public static final int BLOCKS_Z;
+    private static int blocksX, blocksY, blocksZ;
     
-    private Block data[][][] = new Block[Chunk.BLOCKS_X*3][Map.BLOCKS_Y][Chunk.BLOCKS_Z];
+    private Block data[][][];
     private boolean recalcRequested;
     private int[][] coordlist = new int[9][2];
     private Minimap minimap;
     
-    static {
-        BLOCKS_X = Chunk.BLOCKS_X*3;
-        BLOCKS_Y = Chunk.BLOCKS_Y*3;
-        BLOCKS_Z = Chunk.BLOCKS_Z;
-    }
-    
+      
     /**
      * Creates a map.
      * @param load Should the map be generated or loaded from disk?
@@ -33,6 +26,12 @@ public class Map {
     public Map(boolean load) {
         Log.debug("Creating the map...");
         Log.debug("Should the Engine load a map: "+load);
+        if (load) Chunk.readMapInfo();
+        //save chunk size, which is now loaded
+        blocksX = Chunk.getBlocksX()*3;
+        blocksY = Chunk.getBlocksY()*3;
+        blocksZ = Chunk.getBlocksZ();
+        data = new Block[blocksX][blocksY][blocksZ];
         
         //Fill the nine chunks
         Chunk tempchunk;
@@ -158,20 +157,20 @@ public class Map {
      */ 
     private Chunk getChunk(Block[][][] data, int pos) {
         Chunk tmpChunk = new Chunk();
-        for (int x = Chunk.BLOCKS_X*(pos % 3);
-                x < Chunk.BLOCKS_X*(pos % 3+1);
+        for (int x = Chunk.getBlocksX()*(pos % 3);
+                x < Chunk.getBlocksX()*(pos % 3+1);
                 x++
             )
-                for (int y = Chunk.BLOCKS_Y*Math.abs(pos / 3);
-                        y < Chunk.BLOCKS_Y*Math.abs(pos / 3+1);
+                for (int y = Chunk.getBlocksY()*Math.abs(pos / 3);
+                        y < Chunk.getBlocksY()*Math.abs(pos / 3+1);
                         y++
                     ) {
                     System.arraycopy(
                         data[x][y],                
                         0,
-                        tmpChunk.getData()[x-Chunk.BLOCKS_X*(pos % 3)][y - Chunk.BLOCKS_Y*(pos / 3)],
+                        tmpChunk.getData()[x-Chunk.getBlocksX()*(pos % 3)][y - Chunk.getBlocksY()*(pos / 3)],
                         0,
-                        Chunk.BLOCKS_Z
+                        Chunk.getBlocksZ()
                     );
                 }
         return tmpChunk;
@@ -183,14 +182,14 @@ public class Map {
      * @param newchunk The chunk you want to insert
      */
     private void setChunk(int pos, Chunk newchunk) {
-        for (int x=0;x < Chunk.BLOCKS_X; x++)
-            for (int y=0;y < Chunk.BLOCKS_Y;y++) {
+        for (int x=0;x < Chunk.getBlocksX(); x++)
+            for (int y=0;y < Chunk.getBlocksY();y++) {
                 System.arraycopy(
                     newchunk.getData()[x][y],
                     0,
-                    data[x+ Chunk.BLOCKS_X*(pos%3)][y+ Chunk.BLOCKS_Y*Math.abs(pos/3)],
+                    data[x+ Chunk.getBlocksX()*(pos%3)][y+ Chunk.getBlocksY()*Math.abs(pos/3)],
                     0,
-                    Chunk.BLOCKS_Z
+                    Chunk.getBlocksZ()
                 );
             }
     }
@@ -220,15 +219,15 @@ public class Map {
      * Draws the map
      */
     public void draw() {
-        if (Gameplay.controller.hasGoodGraphics()) Block.Blocksheet.bind();
+        if (Gameplay.controller.hasGoodGraphics()) Block.getBlocksheet().bind();
         if (Gameplay.controller.hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
-        Block.Blocksheet.startUse();
+        Block.getBlocksheet().startUse();
         //render vom bottom to top
-        for (int z=0; z < Chunk.BLOCKS_Z; z++) {
+        for (int z=0; z < Chunk.getBlocksZ(); z++) {
             for (int y = Gameplay.view.getCamera().getTopBorder(); y < Gameplay.view.getCamera().getBottomBorder(); y++) {//vertikal
                 for (int x = Gameplay.view.getCamera().getLeftBorder(); x < Gameplay.view.getCamera().getRightBorder(); x++){//horizontal
-                    if ((x < Chunk.BLOCKS_X*3-1 && data[x+1][y][z].getRenderorder() == -1)
+                    if ((x < Chunk.getBlocksX()*3-1 && data[x+1][y][z].getRenderorder() == -1)
                         ||
                         data[x][y][z].getRenderorder() == 1) {
                         x++;
@@ -238,7 +237,7 @@ public class Map {
                 }
             }
        }
-       Block.Blocksheet.endUse(); 
+       Block.getBlocksheet().endUse(); 
        if (Gameplay.controller.hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
     }
 
@@ -267,24 +266,24 @@ public class Map {
      * @return A single block at the wanted coordinates.
      */
     public Block getData(int x, int y, int z){
-        if (x >= Chunk.BLOCKS_X*3){
-            x = Chunk.BLOCKS_X*3-1;
+        if (x >= Chunk.getBlocksX()*3){
+            x = Chunk.getBlocksX()*3-1;
             //Log.warn("X too high!");
         } else if(x<0){
             x = 0;
             //Log.warn("X too low!");
         }
         
-        if (y >= Map.BLOCKS_Y){
-            y = Map.BLOCKS_Y-1;
+        if (y >= Map.blocksY){
+            y = Map.blocksY-1;
            // Log.warn("Y too high!");
         } else if(y<0){
             y = 0;
             //Log.warn("Y too low!");
         }
         
-        if (z >= Chunk.BLOCKS_Z){
-            z = Chunk.BLOCKS_Z-1;
+        if (z >= Chunk.getBlocksZ()){
+            z = Chunk.getBlocksZ()-1;
             //Log.warn("Z too high!");
         } else if(z<0){
             z = 0;
@@ -314,24 +313,24 @@ public class Map {
      * @param block The block you want to set.
      */
     public void setData(int x, int y, int z, Block block){
-        if (x >= Chunk.BLOCKS_X*3){
-            x = Chunk.BLOCKS_X*3-1;
+        if (x >= Chunk.getBlocksX()*3){
+            x = Chunk.getBlocksX()*3-1;
            // Log.warn("X too high!");
         } else if(x<0){
             x = 0;
            // Log.warn("X too low!");
         }
         
-        if (y >= Map.BLOCKS_Y){
-            y = Map.BLOCKS_Y-1;
+        if (y >= Map.blocksY){
+            y = Map.blocksY-1;
             //Log.warn("Y too high!");
         } else if(y<0){
             y = 0;
            // Log.warn("Y too low!");
         }
         
-        if (z >= Chunk.BLOCKS_Z){
-            z = Chunk.BLOCKS_Z-1;
+        if (z >= Chunk.getBlocksZ()){
+            z = Chunk.getBlocksZ()-1;
             //Log.warn("Z too high!");
         } else if(z<0){
             z = 0;
@@ -348,13 +347,25 @@ public class Map {
         
         //pick random blocks 
         for (int i=0;i<numberofblocks;i++){
-            x[i] = (int) (Math.random()*Chunk.BLOCKS_X*3-1);
-            y[i] = (int) (Math.random()*Map.BLOCKS_Y-1);
-            z[i] = (int) (Math.random()*Chunk.BLOCKS_Z);
+            x[i] = (int) (Math.random()*Chunk.getBlocksX()*3-1);
+            y[i] = (int) (Math.random()*Map.blocksY-1);
+            z[i] = (int) (Math.random()*Chunk.getBlocksZ());
         }
         
         for (int i=0;i<numberofblocks;i++){
             data[x[i]][y[i]][z[i]].setOffset((int) (Math.random()*Block.WIDTH/2)-Block.WIDTH/2, (int) (Math.random()*Block.WIDTH/2)-Block.WIDTH/2);
         }
+    }
+
+    public static int getBlocksX() {
+        return blocksX;
+    }
+
+    public static int getBlocksY() {
+        return blocksY;
+    }
+
+    public static int getBlocksZ() {
+        return blocksZ;
     }
 }

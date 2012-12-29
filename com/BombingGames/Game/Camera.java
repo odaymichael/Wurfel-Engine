@@ -71,13 +71,13 @@ public class Camera {
         if (leftborder < 0) leftborder= 0;
         
         rightborder = (x+width)/Block.WIDTH+2;
-        if (rightborder >= Chunk.BLOCKS_X*3) rightborder = Chunk.BLOCKS_X*3-1;
+        if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
         
         topborder = 2*y/Block.HEIGHT;
         if (topborder < 0) topborder= 0;
         
-        bottomborder = (y+height)/(Block.HEIGHT/2) + Chunk.BLOCKS_Z*2;
-        if (bottomborder >= Map.BLOCKS_Y) bottomborder = Map.BLOCKS_Y-1;
+        bottomborder = (y+height)/(Block.HEIGHT/2) + Chunk.getBlocksZ()*2;
+        if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
         
     }
     
@@ -218,7 +218,7 @@ public class Camera {
      * @return
      */
     public int getYzHeight() {
-        return height + Block.HEIGHT*Chunk.BLOCKS_Z;
+        return height + Block.HEIGHT*Chunk.getBlocksZ();
     }
 
     

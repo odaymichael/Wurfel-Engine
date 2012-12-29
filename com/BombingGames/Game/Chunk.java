@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -13,35 +15,10 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Chunk {
-    /**
-     * The amount of blocks in X direction
-     */
-    public static final int BLOCKS_X = 6;//16:9 => 12:27, 4:3=>12:36
+    private static int blocksX = 6;//16:9 => 12:27, 4:3=>12:36
+    private static int blocksY = 10;//28
+    private static int blocksZ = 10;//20
     
-    /**
-     * The amount of blocks in y direction
-     */
-    public static final int BLOCKS_Y = 10;//28
-    
-    /**
-     * The amount of blocks in Z direction
-     */
-    public static final int BLOCKS_Z = 10;//20
-    
-    /**
-    *The size of a chunk in pixels
-    */
-    public static final int SIZE_X = BLOCKS_X*Block.WIDTH;
-    
-    /**
-    *The size of a chunk in pixels
-    */
-    public static final int SIZE_Y = BLOCKS_Y*Block.HEIGHT/2;
-    
-    /**
-     * The size of a chunk in pixels
-     */
-    public static final int SIZE_Z = BLOCKS_Z*Block.HEIGHT;
 
     /**
      * The number of the mapgenerator used.
@@ -49,15 +26,15 @@ public class Chunk {
     public static final int MAPGENERATOR = 3;
     
     private int coordX, coordY;
-    private Block data[][][] = new Block[BLOCKS_X][BLOCKS_Y][BLOCKS_Z];
+    private Block data[][][] = new Block[blocksX][blocksY][blocksZ];
   
     /**
      * Creates a Chunk filled with air
      */
     public Chunk() {
-        for (int x=0; x < BLOCKS_X; x++)
-            for (int y=0; y < BLOCKS_Y; y++)
-                for (int z=0; z < BLOCKS_Z; z++)
+        for (int x=0; x < blocksX; x++)
+            for (int y=0; y < blocksY; y++)
+                for (int z=0; z < blocksZ; z++)
                     data[x][y][z] = new Block(0,0);
     }
     
@@ -83,12 +60,12 @@ public class Chunk {
         Gameplay.MSGSYSTEM.add("Creating new chunk: "+coordX+", "+ coordY);
         switch (MAPGENERATOR){
             case 0:{//random pillars
-                for (int x=0; x < BLOCKS_X; x++)
-                    for (int y=0; y < BLOCKS_Y; y++){
-                        int height = (int) (Math.random()*BLOCKS_Z-1)+1;
-                        //int HEIGHT = (int) Chunk.BLOCKS_Z / 2;
+                for (int x=0; x < blocksX; x++)
+                    for (int y=0; y < blocksY; y++){
+                        int height = (int) (Math.random()*blocksZ-1)+1;
+                        //int HEIGHT = (int) Chunk.blocksZ / 2;
                         for (int z=0; z < height; z++){
-                            //for (int z=0; z < BLOCKS_Z-4; z++)
+                            //for (int z=0; z < blocksZ-4; z++)
                             data[x][y][z] = new Block(2);
                             // if ((z>10) && (x>10) && (y>5))
                             //  data[x][y][z] = new Block (9,0);
@@ -98,12 +75,12 @@ public class Chunk {
                 break;
             }
             case 1: {//one mountain per chunk
-                int mountainx = (int) (Math.random()*BLOCKS_X-1);
-                int mountainy = (int) (Math.random()*BLOCKS_Y-1);
+                int mountainx = (int) (Math.random()*blocksX-1);
+                int mountainy = (int) (Math.random()*blocksY-1);
                 
-                for (int x=0; x < BLOCKS_X; x++)
-                    for (int y=0; y < BLOCKS_Y; y++){
-                        int height = BLOCKS_Z-1- Math.abs(mountainy-y)- Math.abs(mountainx-x);
+                for (int x=0; x < blocksX; x++)
+                    for (int y=0; y < blocksY; y++){
+                        int height = blocksZ-1- Math.abs(mountainy-y)- Math.abs(mountainx-x);
                         if (height<1) height=1;
                         for (int z=0; z < height; z++){
                             data[x][y][z] = new Block(2);
@@ -113,20 +90,20 @@ public class Chunk {
                 break;
             }
             case 2: {//flat gras
-               for (int x=0; x < BLOCKS_X; x++)
-                    for (int y=0; y < BLOCKS_Y; y++){
+               for (int x=0; x < blocksX; x++)
+                    for (int y=0; y < blocksY; y++){
                         data[x][y][0] = new Block(2);
                         data[x][y][1] = new Block(1);
                     }
                 break;
             }
             case 3: {//flat gras with one random pillar per chunk
-                int pillarx = (int) (Math.random()*BLOCKS_X-1);
-                int pillary = (int) (Math.random()*BLOCKS_Y-1);
-                for (int z=0; z < BLOCKS_Z; z++) data[pillarx][pillary][z] = new Block(1);
+                int pillarx = (int) (Math.random()*blocksX-1);
+                int pillary = (int) (Math.random()*blocksY-1);
+                for (int z=0; z < blocksZ; z++) data[pillarx][pillary][z] = new Block(1);
                 
-                for (int x=0; x < BLOCKS_X; x++)
-                    for (int y=0; y < BLOCKS_Y; y++){
+                for (int x=0; x < blocksX; x++)
+                    for (int y=0; y < blocksY; y++){
                         data[x][y][0] = new Block(2);
                         data[x][y][1] = new Block(1);
                     }
@@ -186,7 +163,7 @@ public class Chunk {
                 int y;
                 String lastline;
 
-                //nimm einen Block auseinander
+                //finish a layer
                 do {
                     line = new StringBuilder();
                     line.append(bufRead.readLine());
@@ -215,13 +192,13 @@ public class Chunk {
                                         );
                             x++;
                             line.delete(0,posend+1);
-                        } while (x < BLOCKS_X);
+                        } while (x < blocksX);
 
                         line = new StringBuilder();
                         line.append(bufRead.readLine());
 
                         y++;
-                    } while (y < BLOCKS_Y);
+                    } while (y < blocksY);
                     lastline = bufRead.readLine();
                     z++;
                 } while (lastline != null);
@@ -233,6 +210,47 @@ public class Chunk {
         } catch (IOException ex) {
             Log.debug("Loading of chunk "+coordX+","+coordY + "failed: "+ex);
         }
+    }
+    
+    public static void readMapInfo(){
+        BufferedReader bufRead = null;
+        try {
+            File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/map.otmi");
+            Log.debug("Trying to load Map Info from \"" + path.getAbsolutePath() + "\"");
+            bufRead = new BufferedReader(new FileReader(path));
+            String mapname = bufRead.readLine();
+            mapname = mapname.substring(2, mapname.length());
+            Log.info("Loading map: "+mapname);
+            Gameplay.MSGSYSTEM.add("Loading map: "+mapname);   
+            
+            String mapversion = bufRead.readLine(); 
+            mapversion = mapversion.substring(2, mapversion.length());
+            Log.info("Map Version:"+mapversion);
+            
+            String blocksXString = bufRead.readLine();
+            Log.info("sizex:"+blocksXString);
+            blocksXString = blocksXString.substring(2, blocksXString.length());
+            blocksX = Integer.parseInt(blocksXString);
+            
+            String blocksYString = bufRead.readLine();
+            Log.info("sizey:"+blocksYString);
+            blocksYString = blocksYString.substring(2, blocksYString.length());
+            blocksY = Integer.parseInt(blocksYString);
+            
+            String blocksZString = bufRead.readLine();
+            Log.info("sizez:"+blocksZString);
+            blocksZString = blocksZString.substring(2, blocksZString.length());
+            blocksZ = Integer.parseInt(blocksZString);
+        } catch (IOException ex) {
+            Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                bufRead.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
     }
 
     public Block[][][] getData() {
@@ -257,5 +275,26 @@ public class Chunk {
 
     public void setCoordY(int coordY) {
         this.coordY = coordY;
+    }
+
+        /**
+     * The amount of blocks in X direction
+     */
+    public static int getBlocksX() {
+        return blocksX;
+    }
+
+        /**
+     * The amount of blocks in Y direction
+     */
+    public static int getBlocksY() {
+        return blocksY;
+    }
+
+        /**
+     * The amount of blocks in Z direction
+     */
+    public static int getBlocksZ() {
+        return blocksZ;
     }
 }

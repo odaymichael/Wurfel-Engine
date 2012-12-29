@@ -108,7 +108,7 @@ public class Player extends MovingBlock{
             Controller.getMap().requestRecalc();
         } else {
             //up
-            if (posZ >= Block.HEIGHT && getCoordZ() < Chunk.BLOCKS_Z-2 && !Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
+            if (posZ >= Block.HEIGHT && getCoordZ() < Chunk.getBlocksZ()-2 && !Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
                 if (! fallsound.playing()) fallsound.play();
 
                 selfDestroy();
