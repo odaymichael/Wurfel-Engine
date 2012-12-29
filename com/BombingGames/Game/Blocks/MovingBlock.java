@@ -127,62 +127,47 @@ public abstract class MovingBlock extends SelfAwareBlock {
             boolean movementokay=true;
             int sideNumber;
             
+            //Gegenkraft berechnen udn diese zum Richtungsvektor adddieren. Gibt neuen Richtungsvektor.
+            //immer bei movementokay = false;
             if (oldx-newx > 0) {
                 //check left corner
                 sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                    movementokay = false;
-                
-                sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1); 
-                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                    movementokay = false;
-                
-                sideNumber = getSideNumb(newx, newy + Block.WIDTH/2+1); 
-                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                    movementokay = false; 
             } else {
                 //check right corner
                 sideNumber = getSideNumb(newx + Block.WIDTH/2+1, newy);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                    movementokay = false;
-                
-                sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1); 
-                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                    movementokay = false; 
-                
-                sideNumber = getSideNumb(newx, newy + Block.WIDTH/2+1); 
-                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                    movementokay = false;
             }
             
+            sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1); 
+            if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                movementokay = false;
+
+            sideNumber = getSideNumb(newx, newy + Block.WIDTH/2+1); 
+            if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                movementokay = false; 
                 
             if (oldy-newy > 0) {
                 //check top corner
                 sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                    movementokay = false;
-                
-                sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy); 
-                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                    movementokay = false;
-                
-                sideNumber = getSideNumb(newx + Block.WIDTH/2+1, newy); 
-                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                    movementokay = false;  
             } else {
                 //check bottom corner
                 sideNumber = getSideNumb(newx, newy + Block.WIDTH/2+1);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                    movementokay = false;
-                
-                sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy); 
-                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                    movementokay = false;
-                
-                sideNumber = getSideNumb(newx + Block.WIDTH/2+1, newy); 
-                if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                    movementokay = false;
             }
+            
+            sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy); 
+            if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                movementokay = false;
+
+            sideNumber = getSideNumb(newx + Block.WIDTH/2+1, newy); 
+            if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
+                movementokay = false;  
                
             if (movementokay) {                
                 //movement allowed => move player
@@ -192,24 +177,28 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 //track the coordiante change, if there is one
                 int sidennumb = getSideNumb();
                 switch(sidennumb){
+                    case 0:
                     case 1:
                             posY += Block.WIDTH / 2;
                             posX -= Block.WIDTH / 2;
 
                             makeCoordinateStep(1,-1, topblock);
                             break;
+                    case 2:    
                     case 3:
                             posY -= Block.WIDTH/2;
                             posX -= Block.WIDTH/2;
 
                             makeCoordinateStep(1,1, topblock);
-                        break;
+                            break;
+                    case 4:
                     case 5:
                             posY -= Block.WIDTH/2;
                             posX += Block.WIDTH/2;
 
                             makeCoordinateStep(-1,1, topblock);
                             break;
+                    case 6:
                     case 7:
                             posY += Block.WIDTH/2;
                             posX += Block.WIDTH/2;
