@@ -133,9 +133,7 @@ public class Controller {
             
             //if the middle chunk is scrolled down over the middle line then 
             //GameplayState.iglog.add("Chunk.SIZE_X: "+String.valueOf(Chunk.SIZE_X));
-            //GameplayState.iglog.add("chunk: "+String.valueOf(chunklist[4].posX));
-            
-    
+            //GameplayState.iglog.add("chunk: "+String.valueOf(chunklist[4].posX));    
         }
 
         @Override
@@ -242,5 +240,4 @@ public class Controller {
     protected void setRenderSides(boolean renderSides) {
         this.renderSides = renderSides;
     }
-
 }

@@ -6,7 +6,6 @@ package com.BombingGames.Game.Blocks;
 
 import com.BombingGames.Game.Controller;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.util.Log;
 
 /**
  *A Block which can move himself around the map therefore it must also be  a SelfAwareBlock.
@@ -20,11 +19,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
    /**
     * Value in pixels
     */
-   protected int posY = Block.WIDTH / 2;
+   private int posY = Block.WIDTH / 2;
    /**
     * Value in pixels
     */
-   protected int posZ = 0;
+   private int posZ = 0;
    
    /*The three values together build a vector. Always one of them must be 1 to prevent a division with 0.*/
    /**
@@ -83,7 +82,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * @throws SlickException 
      */
     public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed, int delta) throws SlickException {
-        walk(up, down, left, right, walkingspeed,  delta, null);
+        walk(up, down, left, right, walkingspeed, delta, null);
     }
     
     
@@ -222,6 +221,27 @@ public abstract class MovingBlock extends SelfAwareBlock {
         //enable this line to see where to player stands:
         Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()-1).setLightlevel(30);
    }
+    
+   /**
+     * Make a step
+     * @param x left or right step
+     * @param y the coodinate steps
+     * @param topblock if you want to also move a block on top add a pointer to it. If not wanted null.
+     */
+    private void makeCoordinateStep(int x, int y, Blockpointer topblock){
+        selfDestroy();
+        if (topblock != null) topblock.setBlock(new Block(0));
+        
+        setAbsCoordY(getAbsCoordY()+y);
+        if (x<0){
+            if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
+        } else {
+            if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
+        }
+
+        selfRebuild();
+        if (topblock != null) topblock.setBlock(new Block(getId(),1));
+    }
    
     /**
      * 
@@ -246,26 +266,19 @@ public abstract class MovingBlock extends SelfAwareBlock {
     public int getPosZ() {
         return posZ;
     }
-    
-    /**
-     * Make a step
-     * @param x left or right step
-     * @param y the coodinate steps
-     * @param topblock if you want to also move a block on top add a pointer to it. If not wanted null.
-     */
-    private void makeCoordinateStep(int x, int y, Blockpointer topblock){
-        selfDestroy();
-        if (topblock != null) topblock.setBlock(new Block(0));
-        
-        setAbsCoordY(getAbsCoordY()+y);
-        if (x<0){
-            if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
-        } else {
-            if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
-        }
 
-        selfRebuild();
-        if (topblock != null) topblock.setBlock(new Block(getId(),1));
-        
+    public void setPosX(int posX) {
+        this.posX = posX;
     }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
+
+    public void setPosZ(int posZ) {
+        this.posZ = posZ;
+    }
+
+    
+
 }

@@ -74,7 +74,7 @@ public class GameController extends Controller {
 
             //walk
             if (getPlayer() != null)
-                if ("WASD".equals(getPlayer().getControls()))
+                if ("WASD".equals(getPlayer().getControlls()))
                     getPlayer().walk(
                         input.isKeyDown(Input.KEY_W),
                         input.isKeyDown(Input.KEY_S),
@@ -92,7 +92,6 @@ public class GameController extends Controller {
         
         //toggle input for msgSystem
         if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.MSGSYSTEM.listenForInput(!Gameplay.MSGSYSTEM.isListeningForInput());
-
     }
     
 }
