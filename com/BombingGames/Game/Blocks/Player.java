@@ -13,7 +13,7 @@ import org.newdawn.slick.Sound;
 public class Player extends MovingBlock{
    private Sound fallsound = new Sound("com/BombingGames/Game/Sounds/wind.wav");
    private Sound runningsound = new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav");
-   private String controls = "WASD";
+   private String controlls = "WASD";
    private Blockpointer topblock; 
    
     /**
@@ -33,12 +33,12 @@ public class Player extends MovingBlock{
     
   
     /**
-     * Set the controls.
-     * @param controls either "arrows" or "WASD".
+     * Set the controlls.
+     * @param controlls either "arrows" or "WASD".
      */
     public void setControls(String controls){
         if ("arrows".equals(controls) || "WASD".equals(controls))
-            this.controls = controls;
+            this.controlls = controls;
     }
     
     /**
@@ -46,7 +46,7 @@ public class Player extends MovingBlock{
      * @return either "arrows" or "WASD".
      */
     public String getControls(){
-        return controls;
+        return controlls;
     }
         
 
