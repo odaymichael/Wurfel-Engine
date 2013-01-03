@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data version="1.0">
     <struct type="Settings">
+        <key>fileFormatVersion</key>
+        <int>1</int>
         <key>variation</key>
         <string>main</string>
         <key>verbose</key>
@@ -17,8 +19,6 @@
         <false/>
         <key>dpi</key>
         <uint>72</uint>
-        <key>allowFreeSize</key>
-        <false/>
         <key>dataFormat</key>
         <string>slick2d</string>
         <key>textureFileName</key>
@@ -56,7 +56,7 @@
             <key>width</key>
             <int>1024</int>
             <key>height</key>
-            <int>2048</int>
+            <int>1024</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -73,6 +73,12 @@
             <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
+            <key>sizeConstraints</key>
+            <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
+            <key>forceSquared</key>
+            <false/>
+            <key>forceWordAligned</key>
+            <false/>
             <key>maxRects</key>
             <struct type="AlgorithmMaxRectsSettings">
                 <key>heuristic</key>
@@ -122,16 +128,14 @@
             <double>1</double>
             <key>scaleMode</key>
             <enum type="ScaleMode">Smooth</enum>
-            <key>crop</key>
-            <false/>
             <key>innerPadding</key>
             <uint>0</uint>
             <key>extrude</key>
             <uint>0</uint>
             <key>trimThreshold</key>
             <uint>1</uint>
-            <key>trim</key>
-            <false/>
+            <key>trimMode</key>
+            <enum type="SpriteSettings::TrimMode">None</enum>
             <key>heuristicMask</key>
             <false/>
         </struct>
@@ -149,36 +153,41 @@
             <filename>sides/4-0.png</filename>
             <filename>sides/4-1.png</filename>
             <filename>sides/4-2.png</filename>
-            <filename>sides/7-0.png</filename>
-            <filename>sides/7-1.png</filename>
-            <filename>sides/7-2.png</filename>
-            <filename>sides/8-0.png</filename>
-            <filename>sides/21-0-0.png</filename>
-            <filename>sides/21-0-1.png</filename>
-            <filename>sides/21-2-0.png</filename>
-            <filename>sides/21-2-1.png</filename>
-            <filename>sides/21-2-2.png</filename>
-            <filename>sides/21-2-3.png</filename>
-            <filename>sides/21-1-0.png</filename>
-            <filename>sides/8-0-1.png</filename>
-            <filename>sides/8-1-0.png</filename>
-            <filename>sides/8-1-1.png</filename>
-            <filename>sides/8-1-2.png</filename>
-            <filename>sides/8-2-0.png</filename>
-            <filename>sides/8-2-1.png</filename>
-            <filename>sides/8-2-2.png</filename>
             <filename>sides/5-0.png</filename>
             <filename>sides/5-1.png</filename>
             <filename>sides/5-2.png</filename>
             <filename>sides/6-0.png</filename>
             <filename>sides/6-1.png</filename>
             <filename>sides/6-2.png</filename>
+            <filename>sides/7-0.png</filename>
+            <filename>sides/7-1.png</filename>
+            <filename>sides/7-2.png</filename>
+            <filename>sides/8-0-1.png</filename>
+            <filename>sides/8-0.png</filename>
+            <filename>sides/8-1-0.png</filename>
+            <filename>sides/8-1-1.png</filename>
+            <filename>sides/8-1-2.png</filename>
+            <filename>sides/8-2-0.png</filename>
+            <filename>sides/8-2-1.png</filename>
+            <filename>sides/8-2-2.png</filename>
             <filename>sides/9-0.png</filename>
             <filename>sides/9-1.png</filename>
             <filename>sides/9-2.png</filename>
             <filename>sides/20-0.png</filename>
             <filename>sides/20-1.png</filename>
             <filename>sides/20-2.png</filename>
+            <filename>sides/21-0-0.png</filename>
+            <filename>sides/21-0-1.png</filename>
+            <filename>sides/21-1-0.png</filename>
+            <filename>sides/21-2-0.png</filename>
+            <filename>sides/21-2-1.png</filename>
+            <filename>sides/21-2-2.png</filename>
+            <filename>sides/21-2-3.png</filename>
+            <filename>sides/40-0.png</filename>
+            <filename>sides/40-1.png</filename>
+            <filename>sides/40-2.png</filename>
+            <filename>sides/40-3.png</filename>
+            <filename>sides/40-4.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

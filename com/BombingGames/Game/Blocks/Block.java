@@ -151,18 +151,19 @@ public class Block {
         SidesSprites[9][0][1][1] = 6;
         SidesSprites[9][0][2][0] = 5;
         SidesSprites[9][0][2][1] = 6;
-        SidesSprites[40][0][0][0] = 3;
-        SidesSprites[40][0][0][1] = 1;
-        SidesSprites[40][0][1][0] = 4;
-        SidesSprites[40][0][1][1] = 1;
-        SidesSprites[40][0][2][0] = 5;
-        SidesSprites[40][0][2][1] = 1;
-        SidesSprites[40][1][0][0] = 3;
-        SidesSprites[40][1][0][1] = 1;
-        SidesSprites[40][1][1][0] = 4;
-        SidesSprites[40][1][1][1] = 1;
+        //player
+        SidesSprites[40][0][0][0] = 1;
+        SidesSprites[40][0][0][1] = 4;
+        SidesSprites[40][0][1][0] = 0;
+        SidesSprites[40][0][1][1] = 0;
+        SidesSprites[40][0][2][0] = 2;
+        SidesSprites[40][0][2][1] = 4;
+        SidesSprites[40][1][0][0] = 4;
+        SidesSprites[40][1][0][1] = 3;
+        SidesSprites[40][1][1][0] = 0;
+        SidesSprites[40][1][1][1] = 4;
         SidesSprites[40][1][2][0] = 5;
-        SidesSprites[40][1][2][1] = 1;
+        SidesSprites[40][1][2][1] = 3;
         
         //pack-u-like
 //        SidesSprites[0][0][0] = "0-1.png";
