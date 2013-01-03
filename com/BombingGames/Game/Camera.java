@@ -49,7 +49,7 @@ public class Camera {
             y = (int) (
                 (focusblock.getY()/2f - focusblock.getZ()) * Block.HEIGHT
                 - Gameplay.view.getCamera().height/2
-                + focusblock.getBlock().getOffsetY() * (1/Block.aspectRatio)
+                + focusblock.getBlock().getOffsetY() * (1/Block.ASPECTRATIO)
                 );
             
         } else {//focus on player
@@ -62,7 +62,7 @@ public class Camera {
             y = (int) (
                 (player.getCoordY()/2f - player.getCoordZ()) * Block.HEIGHT
                 - Gameplay.view.getCamera().height/2
-                + player.getOffsetY() * (1/Block.aspectRatio)
+                + player.getOffsetY() * (1/Block.ASPECTRATIO)
                 );
         }
         
@@ -261,6 +261,14 @@ public class Camera {
      */
     public int getScreenY() {
         return screenY;
+    }
+    
+    public int getCenterXofBlock(int x, int y, int z){
+        return -Gameplay.view.getCamera().getX()+x*Block.WIDTH + (y%2) * (int) (Block.WIDTH/2) + Controller.getMapDataUnsafe(x, y, z).getOffsetX();
+    }
+
+    public int getCenterYofBlock(int x, int y, int z) {
+        return (int) (-Gameplay.view.getCamera().getY()+y*Block.HEIGHT/2 - z*Block.HEIGHT + Controller.getMapDataUnsafe(x, y, z).getOffsetY() * (1/Block.ASPECTRATIO));
     }
     
     
