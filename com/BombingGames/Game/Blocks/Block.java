@@ -21,19 +21,11 @@ public class Block {
         * the value which can be used for storing information about a sub version of the object
         */
     private int value = 0;
-    /**
-       * The Name of the Block.
-       */
-    
-        /**
-     * Can light travel throug block?
-     */
-    private boolean transparent;
 
     /**
         * Is this Block an obstacle or can you pass through?
         */
-    private boolean obstacle;
+    private boolean obstacle, transparent;
     private final String name;
 
     /**
@@ -41,23 +33,16 @@ public class Block {
        */
     public static final int WIDTH = 160;
     /**
-       *HEIGHT of the image 
+       *HEIGHT of the image. Shoudl be half of the width 
        */
     public static final int HEIGHT = 80;
     
-    /**
-     * The size the block is rendered at. You should only use this at rendering!
-     */
-    private static int displWidth;
-    /**
-     * The HEIGHT the block is rendered at. You should only use this at rendering!
-     */
-    private static int displHeight;
+
     
     /**
-     * How much bigger is the WIDTH than the hight (block HEIGHT not image HEIGHT) of a block?
+     * How much bigger is the WIDTH than the HEIGHT of a block?
      */
-    public static final float aspectRatio;
+    public static final float ASPECTRATIO;
     /**
      * The X positon of the Block sprite
      */
@@ -114,8 +99,8 @@ public class Block {
     
     
     static {
-        aspectRatio = WIDTH/HEIGHT;
-        Log.debug("Aspect ratio of blocks: "+ Float.toString(aspectRatio));
+        ASPECTRATIO = WIDTH/HEIGHT;
+        Log.debug("Aspect ratio of blocks: "+ Float.toString(ASPECTRATIO));
         SidesSprites[1][0][0][0] = 3;
         SidesSprites[1][0][0][1] = 0;
         SidesSprites[1][0][1][0] = 4;
@@ -328,7 +313,6 @@ public class Block {
         }
     }
     
-
     
     /**
      * returns the id of a block
@@ -437,7 +421,7 @@ public class Block {
     }
     
     /**
-     * 
+     * Can light travel through block?
      * @return
      */
     public boolean isTransparent() {
@@ -532,7 +516,7 @@ public class Block {
                     -Gameplay.view.getCamera().getY()
                     + y*Block.HEIGHT/2
                     - z*Block.HEIGHT
-                    + getOffsetY() * (1/Block.aspectRatio)
+                    + getOffsetY() * (1/Block.ASPECTRATIO)
                 );
 
                 
@@ -588,7 +572,7 @@ public class Block {
             + y*Block.HEIGHT/2
             - z*Block.HEIGHT
             + ( sidenumb != 1 ? Block.HEIGHT/2:0)//the top is drawn /4 Blocks higher
-            + getOffsetY() * (1/Block.aspectRatio)
+            + getOffsetY() * (1/Block.ASPECTRATIO)
         );
     }
         
@@ -597,22 +581,16 @@ public class Block {
      * @param zoom the zoom factor of the new image
      */
     public static void reloadSprites(float zoom) {
-        displWidth = (int) (WIDTH*zoom);
-        displHeight = (int) (HEIGHT*zoom);
         try {
             if (Gameplay.controller.renderSides()){//single sides
                 Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", WIDTH, (int) (HEIGHT*1.5f));
-            
-                Gameplay.MSGSYSTEM.add("displWidth: "+displWidth);
-                Log.debug("displWidth: "+displWidth);
-                Gameplay.MSGSYSTEM.add("displHeight: "+displHeight);
-                Log.debug("displHeight: "+displHeight);
-
             } else {//whole Blocks
                 Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Blocksprite.png", WIDTH, HEIGHT*2, 4);
-                
-                Gameplay.MSGSYSTEM.add("BlockWidth"+displWidth);
             }
+            Gameplay.MSGSYSTEM.add("displWidth: "+(int) (WIDTH*zoom));
+            Log.debug("displWidth: "+(int) (WIDTH*zoom));
+            Gameplay.MSGSYSTEM.add("displHeight: "+(int) (HEIGHT*zoom));
+            Log.debug("displHeight: "+(int) (HEIGHT*zoom));
         } catch (SlickException ex) {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
         }
