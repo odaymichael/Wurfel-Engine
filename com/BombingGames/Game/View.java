@@ -108,8 +108,15 @@ public class View {
         //set visibility of every block to false
         for (int x=0;x < Map.getBlocksX();x++)
             for (int y=0;y < Map.getBlocksY();y++)
-                for (int z=0;z < Chunk.getBlocksZ();z++)
-                    Controller.getMapDataUnsafe(x, y, z).setVisible(false);
+                for (int z=0;z < Chunk.getBlocksZ();z++) {
+                    Block block = Controller.getMapDataUnsafe(x, y, z);
+                    if (!block.hasOffset()) block.setVisible(false);
+                    else  {//Blocks with offset are not in the grid, so ignore them
+                        block.setSideVisibility(0, true);
+                        block.setSideVisibility(1, true);
+                        block.setSideVisibility(2, true);
+                    }
+                }
                 
         //send rays through top of the map
         for (int x=0; x < Map.getBlocksX(); x++)
