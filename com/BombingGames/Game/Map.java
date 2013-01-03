@@ -355,6 +355,7 @@ public class Map {
         for (int i=0;i<numberofblocks;i++){
             data[x[i]][y[i]][z[i]].setOffset((int) (Math.random()*Block.WIDTH/2)-Block.WIDTH/2, (int) (Math.random()*Block.WIDTH/2)-Block.WIDTH/2);
         }
+        requestRecalc();
     }
 
     public static int getBlocksX() {
