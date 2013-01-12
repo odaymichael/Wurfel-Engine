@@ -15,19 +15,6 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Block {
-    private final int id;
-    
-    /**
-        * the value which can be used for storing information about a sub version of the object
-        */
-    private int value = 0;
-
-    /**
-        * Is this Block an obstacle or can you pass through?
-        */
-    private boolean obstacle, transparent;
-    private final String name;
-
     /**
        * WIDTH of the image
        */
@@ -36,21 +23,15 @@ public class Block {
        *HEIGHT of the image. Shoudl be half of the width 
        */
     public static final int HEIGHT = 80;
-    
-
-    
     /**
      * How much bigger is the WIDTH than the HEIGHT of a block?
      */
     public static final float ASPECTRATIO;
+    
     /**
-     * The X positon of the Block sprite
+     * The positon of the Block sprite. [][0]=X, [][1]=Y
      */
-    public int[] spriteX = new int[9];
-    /**
-     * The Y position of the Block sprite
-     */
-    public int[] spriteY = new int[9];
+    public static final int[][][] BLOCKSPRITEPOS = new int[99][9][2];
     
     /**
      * Has the positions of the sprites for rendering with sides
@@ -59,37 +40,27 @@ public class Block {
      * 3. Dimension: Side
      * 4. Dimension: X- or Y-coordinate
      */
-    public static final int[][][][] SidesSprites = new int[99][9][3][2];
+    public static final int[][][][] SIDESPRITES = new int[99][9][3][2];
     
-    private int lightlevel = 50;
-    /**
-     * The offset of the image
-     */
-    private int offsetX, offsetY;
+    private final int id;
+    private final String name;
     
     /**
      * The sprite image which contains every block image
      */
     private static SpriteSheet Blocksheet;
     
+    private int value = 0;
+    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft;    
+    private int lightlevel = 50;
+    private int offsetX, offsetY;
+    
+    
     /**
      * Changes the order the block is rendered. When renderorder = 1 the Block is drawn in front of the right block. When it is -1 it is draw behind the left block. 0 is default.
      */
     private int renderorder = 0;
     
-    /**
-     * Render top side?
-     */
-    private boolean renderTop = false;
-    /**
-     * Render Left Side?
-     */
-    private boolean renderLeft = false;
-    /**
-     * Render Right Side
-     */
-    private boolean renderRight = false;
-    private boolean visible;
     
     /**
         * How much <b>h</b>ealth <b>p</b>oints has the block?
@@ -102,105 +73,106 @@ public class Block {
         ASPECTRATIO = WIDTH/HEIGHT;
         Log.debug("Aspect ratio of blocks: "+ Float.toString(ASPECTRATIO));
         //grass
-        SidesSprites[1][0][0][0] = 368;
-        SidesSprites[1][0][0][1] = 0;
-        SidesSprites[1][0][1][0] = 448;
-        SidesSprites[1][0][1][1] = 0;
-        SidesSprites[1][0][2][0] = 608;
-        SidesSprites[1][0][2][1] = 0;
-        //dirt
-        SidesSprites[2][0][0][0] = 688;
-        SidesSprites[2][0][0][1] = 0;
-        SidesSprites[2][0][1][0] = 768;
-        SidesSprites[2][0][1][1] = 0;
-        SidesSprites[2][0][2][0] = 920;
-        SidesSprites[2][0][2][1] = 0;
-        //asphalt
-        SidesSprites[4][0][0][0] = 1;
-        SidesSprites[4][0][0][1] = 3;
-        SidesSprites[4][0][1][0] = 2;
-        SidesSprites[4][0][1][1] = 3;
-        SidesSprites[4][0][2][0] = 3;
-        SidesSprites[4][0][2][1] = 3;
-        //concrete
-        SidesSprites[7][0][0][0] = 4;
-        SidesSprites[7][0][0][1] = 4;
-        SidesSprites[7][0][1][0] = 5;
-        SidesSprites[7][0][1][1] = 4;
-        SidesSprites[7][0][2][0] = 0;
-        SidesSprites[7][0][2][1] = 5;
-        SidesSprites[8][0][0][0] = 2;
-        SidesSprites[8][0][0][1] = 5;
-        SidesSprites[8][0][1][0] = 3;
-        SidesSprites[8][0][1][1] = 5;
-        SidesSprites[8][0][2][0] = 0;
-        SidesSprites[8][0][2][1] = 6;
-        SidesSprites[8][1][0][0] = 1;
-        SidesSprites[8][1][0][1] = 5;
-        SidesSprites[8][1][1][0] = 5;
-        SidesSprites[8][1][1][1] = 5;
-        SidesSprites[8][1][2][0] = 2;
-        SidesSprites[8][1][2][1] = 6;
-        SidesSprites[8][2][0][0] = 5;
-        SidesSprites[8][2][0][1] = 0;
-        SidesSprites[8][2][1][0] = 4;
-        SidesSprites[8][2][1][1] = 5;
-        SidesSprites[8][2][2][0] = 1;
-        SidesSprites[8][2][2][1] = 6;
-        SidesSprites[9][0][0][0] = 3;
-        SidesSprites[9][0][0][1] = 6;
-        SidesSprites[9][0][1][0] = 4;
-        SidesSprites[9][0][1][1] = 6;
-        SidesSprites[9][0][2][0] = 5;
-        SidesSprites[9][0][2][1] = 6;
-        //player
-        SidesSprites[40][0][0][0] = 1;
-        SidesSprites[40][0][0][1] = 4;
-        SidesSprites[40][0][1][0] = 0;
-        SidesSprites[40][0][1][1] = 0;
-        SidesSprites[40][0][2][0] = 2;
-        SidesSprites[40][0][2][1] = 4;
-        SidesSprites[40][1][0][0] = 4;
-        SidesSprites[40][1][0][1] = 3;
-        SidesSprites[40][1][1][0] = 0;
-        SidesSprites[40][1][1][1] = 4;
-        SidesSprites[40][1][2][0] = 5;
-        SidesSprites[40][1][2][1] = 3;
+        BLOCKSPRITEPOS[1][0][0] = 0;
+        BLOCKSPRITEPOS[1][0][1] = 1;
+        SIDESPRITES[1][0][0][0] = 368;
+        SIDESPRITES[1][0][0][1] = 0;
+        SIDESPRITES[1][0][1][0] = 448;
+        SIDESPRITES[1][0][1][1] = 0;
+        SIDESPRITES[1][0][2][0] = 608;
+        SIDESPRITES[1][0][2][1] = 0;
         
-        //pack-u-like
-//        SidesSprites[0][0][0] = "0-1.png";
-//        SidesSprites[0][0][1]= "0-1.png";
-//        SidesSprites[0][0][2]= "0-2.png";
-//        SidesSprites[1][0][0] = "1-0.png";
-//        SidesSprites[1][0][1]= "1-1.png";
-//        SidesSprites[1][0][2] = "1-2.png";
-//        SidesSprites[2][0][0] = "2-0.png";
-//        SidesSprites[2][0][1] = "2-1.png";
-//        SidesSprites[2][0][2] = "2-2.png";
-//        SidesSprites[4][0][0] = "4-0.png";
-//        SidesSprites[4][0][1] = "4-1.png";
-//        SidesSprites[4][0][2] = "4-2.png";
-//        SidesSprites[7][0][0] = "7-0.png";
-//        SidesSprites[7][0][1] = "7-1.png";
-//        SidesSprites[7][0][2] = "7-2.png";
-//        SidesSprites[8][0][0] = "8-0.png";
-//        SidesSprites[8][0][1] = "8-1-0.png";
-//        SidesSprites[8][0][2] = "8-2-0.png";
-//        SidesSprites[8][1][0] = "8-1-1.png";
-//        SidesSprites[8][1][1] = "8-1-1.png";
-//        SidesSprites[8][1][2] = "8-1-2.png";
-//        SidesSprites[8][2][0] = "8-2-0.png";
-//        SidesSprites[8][2][1] = "8-2-1.png";
-//        SidesSprites[8][2][2] = "8-2-2.png";
-//        SidesSprites[9][0][0] = "9-0.png";
-//        SidesSprites[9][0][1] = "9-1.png";
-//        SidesSprites[9][0][2] = "9-2.png";
-//        SidesSprites[40][0][0] = "20-0.png";
-//        SidesSprites[40][0][1] = "20-1.png";
-//        SidesSprites[40][0][2] = "20-2.png";
-//        SidesSprites[40][1][0] = "20-0.png";
-//        SidesSprites[40][1][1] = "20-1.png";
-//        SidesSprites[40][1][2] = "20-2.png";
+        //dirt
+        BLOCKSPRITEPOS[2][0][0] = 0;
+        BLOCKSPRITEPOS[2][0][1] = 2;
+        SIDESPRITES[2][0][0][0] = 688;
+        SIDESPRITES[2][0][0][1] = 0;
+        SIDESPRITES[2][0][1][0] = 768;
+        SIDESPRITES[2][0][1][1] = 0;
+        SIDESPRITES[2][0][2][0] = 920;
+        SIDESPRITES[2][0][2][1] = 0;
+        
+        //stone
+        BLOCKSPRITEPOS[3][0][0] = 1;
+        BLOCKSPRITEPOS[3][0][1] = 1;
+        
+        //asphalt
+        BLOCKSPRITEPOS[4][0][0] = 1;
+        BLOCKSPRITEPOS[4][0][1] = 2;
+        SIDESPRITES[4][0][0][0] = 1;
+        SIDESPRITES[4][0][0][1] = 3;
+        SIDESPRITES[4][0][1][0] = 2;
+        SIDESPRITES[4][0][1][1] = 3;
+        SIDESPRITES[4][0][2][0] = 3;
+        SIDESPRITES[4][0][2][1] = 3;
+       
+        //cobblestone
+        BLOCKSPRITEPOS[5][0][0] = 2;
+        BLOCKSPRITEPOS[5][0][1] = 1;
+        
+        //???
+        BLOCKSPRITEPOS[6][0][0] = 2;
+        BLOCKSPRITEPOS[6][0][1] = 2;
+       
+        //concrete
+        BLOCKSPRITEPOS[6][0][0] = 3;
+        BLOCKSPRITEPOS[6][0][1] = 0;
+        SIDESPRITES[7][0][0][0] = 4;
+        SIDESPRITES[7][0][0][1] = 4;
+        SIDESPRITES[7][0][1][0] = 5;
+        SIDESPRITES[7][0][1][1] = 4;
+        SIDESPRITES[7][0][2][0] = 0;
+        SIDESPRITES[7][0][2][1] = 5;
+        
+        BLOCKSPRITEPOS[8][0][0] = 3;
+        BLOCKSPRITEPOS[8][0][1] = 2;
+        SIDESPRITES[8][0][0][0] = 2;
+        SIDESPRITES[8][0][0][1] = 5;
+        SIDESPRITES[8][0][1][0] = 3;
+        SIDESPRITES[8][0][1][1] = 5;
+        SIDESPRITES[8][0][2][0] = 0;
+        SIDESPRITES[8][0][2][1] = 6;
+        SIDESPRITES[8][1][0][0] = 1;
+        SIDESPRITES[8][1][0][1] = 5;
+        SIDESPRITES[8][1][1][0] = 5;
+        SIDESPRITES[8][1][1][1] = 5;
+        SIDESPRITES[8][1][2][0] = 2;
+        SIDESPRITES[8][1][2][1] = 6;
+        SIDESPRITES[8][2][0][0] = 5;
+        SIDESPRITES[8][2][0][1] = 0;
+        SIDESPRITES[8][2][1][0] = 4;
+        SIDESPRITES[8][2][1][1] = 5;
+        SIDESPRITES[8][2][2][0] = 1;
+        SIDESPRITES[8][2][2][1] = 6;
+        
+        SIDESPRITES[9][0][0][0] = 3;
+        SIDESPRITES[9][0][0][1] = 6;
+        SIDESPRITES[9][0][1][0] = 4;
+        SIDESPRITES[9][0][1][1] = 6;
+        SIDESPRITES[9][0][2][0] = 5;
+        SIDESPRITES[9][0][2][1] = 6;
+        
+        BLOCKSPRITEPOS[20][0][0] = 1;
+        BLOCKSPRITEPOS[20][0][1] = 0;
+        
+        //player
+        BLOCKSPRITEPOS[40][0][0] = 2;
+        BLOCKSPRITEPOS[40][0][1] = 0;
+        SIDESPRITES[40][0][0][0] = 1;
+        SIDESPRITES[40][0][0][1] = 4;
+        SIDESPRITES[40][0][1][0] = 0;
+        SIDESPRITES[40][0][1][1] = 0;
+        SIDESPRITES[40][0][2][0] = 2;
+        SIDESPRITES[40][0][2][1] = 4;
+        SIDESPRITES[40][1][0][0] = 4;
+        SIDESPRITES[40][1][0][1] = 3;
+        SIDESPRITES[40][1][1][0] = 0;
+        SIDESPRITES[40][1][1][1] = 4;
+        SIDESPRITES[40][1][2][0] = 5;
+        SIDESPRITES[40][1][2][1] = 3;
+        
+        BLOCKSPRITEPOS[70][0][0] = 4;
+        BLOCKSPRITEPOS[70][0][1] = 0;
     }
 
     /**
@@ -236,50 +208,34 @@ public class Block {
             case 1: name = "gras";
                     transparent = false;
                     obstacle = true;
-                    spriteX[0]=0;
-                    spriteY[0]=1;
                     break;
             case 2: name = "dirt";
                     transparent = false;
                     obstacle = true;
-                    spriteX[0]=0;
-                    spriteY[0]=2;
                     break;
             case 3: name = "stone";
                     transparent = false;
                     obstacle = true;
-                    spriteX[0]=1;
-                    spriteY[0]=1;
                     break;
             case 4: name = "asphalt";
                     transparent = false;
                     obstacle = true;
-                    spriteX[0]=1;
-                    spriteY[0]=2;
                     break;
             case 5: name = "cobblestone";
                     transparent = false;
                     obstacle = true;
-                    spriteX[0]=2;
-                    spriteY[0]=1;
                     break;
             case 6: name = "pavement";
                     transparent = false;
                     obstacle = true;
-                    spriteX[0]=2;
-                    spriteY[0]=2;
                     break;
             case 7: name = "concrete";
                     transparent = false;
                     obstacle = true;
-                    spriteX[0]=3;
-                    spriteY[0]=0;
                     break;
             case 8: name = "sand";
                     transparent = false;
                     obstacle = true;
-                    spriteX[0]=3;
-                    spriteY[0]=2;
                     break;      
             case 9: name = "water";
                     transparent = false;
@@ -288,14 +244,10 @@ public class Block {
             case 20:name = "red brick wall";
                     transparent = false;
                     obstacle = true;
-                    spriteX[0]=1;
-                    spriteY[0]=0;
                     break;
             case 40:name = "player";
                     transparent = true;
                     obstacle = true;
-                    spriteX[0]=2;
-                    spriteY[0]=0;
                     break;
             case 50:name = "strewbed";
                     transparent = true;
@@ -304,14 +256,10 @@ public class Block {
             case 70:name = "campfire";
                     transparent = true;
                     obstacle = false;
-                    spriteX[0]=4;
-                    spriteY[0]=0;
                     break;
             default:name = "undefined";
                     transparent = true;
                     obstacle = true;
-                    spriteX[0]=4;
-                    spriteY[0]=0;
                     break; 
         }
     }
@@ -363,7 +311,7 @@ public class Block {
      * @return the X-Coodinate of the Sprite
      */
     public int getSideSpritePosX(int side){
-        return SidesSprites[id][value][side][0];        
+        return SIDESPRITES[id][value][side][0];        
     }
     
     /**
@@ -372,7 +320,7 @@ public class Block {
      * @return the Y-Coodinate of the Sprite
      */
     public int getSideSpritePosY(int side){
-        return SidesSprites[id][value][side][1];        
+        return SIDESPRITES[id][value][side][1];        
     }
     
     /**
@@ -382,9 +330,9 @@ public class Block {
      */
     public Image getSideSprite(int side){
         if (side==1)
-            return Blocksheet.getSubImage(SidesSprites[id][value][side][0], SidesSprites[id][value][side][1], WIDTH, HEIGHT);
+            return Blocksheet.getSubImage(SIDESPRITES[id][value][side][0], SIDESPRITES[id][value][side][1], WIDTH, HEIGHT);
         else
-            return Blocksheet.getSubImage(SidesSprites[id][value][side][0], SidesSprites[id][value][side][1], WIDTH/2, (int) (HEIGHT*3/2));    
+            return Blocksheet.getSubImage(SIDESPRITES[id][value][side][0], SIDESPRITES[id][value][side][1], WIDTH/2, (int) (HEIGHT*3/2));    
     }
     
 
@@ -411,7 +359,7 @@ public class Block {
     }
     
     /**
-     * 
+     * Is this Block an obstacle or can you pass through?
      * @return
      */
     public boolean isObstacle() {
@@ -492,7 +440,7 @@ public class Block {
                     if (renderLeft) drawSide(x,y,z, 0);
                     if (renderRight) drawSide(x,y,z, 2);
             } else {
-                Image temp = Blocksheet.getSubImage(spriteX[0], spriteY[0]);
+                Image temp = Blocksheet.getSubImage(BLOCKSPRITEPOS[id][value][0], BLOCKSPRITEPOS[id][value][1]);
 
                 //calc  brightness
                 float brightness = lightlevel / 100f;

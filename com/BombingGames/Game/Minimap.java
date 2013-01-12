@@ -9,8 +9,7 @@ import org.newdawn.slick.Color;
  * @author Benedikt
  */
 public class Minimap {
-    private int X;
-    private int Y;
+    private int X, Y;
     private final float scaleX = 12;//8
     private final float scaleY = 6;//4
     
@@ -38,16 +37,16 @@ public class Minimap {
                     if (Gameplay.controller.renderSides()){
                         Block block = Controller.getMapData(x, y, z);
                         temp = Block.getBlocksheet().getSubImage(
-                                Block.SidesSprites[block.getId()][block.getValue()][1][0],
-                                Block.SidesSprites[block.getId()][block.getValue()][1][1]
+                                Block.SIDESPRITES[block.getId()][block.getValue()][1][0],
+                                Block.SIDESPRITES[block.getId()][block.getValue()][1][1]
                             ).getColor(
                                 Block.WIDTH/2,
                                 Block.HEIGHT/2
                         );                
                     } else
                         temp = Block.getBlocksheet().getSubImage(
-                            Controller.getMapData(x, y, z).spriteX[0],
-                            Controller.getMapData(x, y, z).spriteY[0]
+                            Block.BLOCKSPRITEPOS[Controller.getMapData(x, y, z).getId()][Controller.getMapData(x, y, z).getValue()][0],
+                            Block.BLOCKSPRITEPOS[Controller.getMapData(x, y, z).getId()][Controller.getMapData(x, y, z).getValue()][1]
                         ).getColor(
                             Block.WIDTH/2,
                             Block.HEIGHT/2

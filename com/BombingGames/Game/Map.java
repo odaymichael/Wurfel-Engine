@@ -11,8 +11,8 @@ import org.newdawn.slick.util.Log;
  */
 public class Map {
     public static final float GRAVITY = 9.81f;
-    private static int blocksX, blocksY, blocksZ;
     
+    private static int blocksX, blocksY, blocksZ;    
     private Block data[][][];
     private boolean recalcRequested;
     private int[][] coordlist = new int[9][2];
