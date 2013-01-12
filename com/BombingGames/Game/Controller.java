@@ -117,8 +117,8 @@ public class Controller {
         public void mouseMoved(int oldx, int oldy, int newx, int newy) {
             Log.info(
                     Double.toString(Math.atan(
-                        Math.abs(Gameplay.view.getCamera().getCenterYofBlock(player.getCoordX(), player.getCoordY(), player.getCoordZ())-newy) /
-                        (float) Math.abs(Gameplay.view.getCamera().getCenterXofBlock(player.getCoordX(), player.getCoordY(), player.getCoordZ())-newx)
+                        Math.abs(Gameplay.view.getCamera().getCenterYofBlock(player.getCoordX(), player.getCoordY(), player.getCoordZ())-newy*Gameplay.view.getEqualizationScale()) /
+                        (float) Math.abs(Gameplay.view.getCamera().getCenterXofBlock(player.getCoordX(), player.getCoordY(), player.getCoordZ())-newx*Gameplay.view.getEqualizationScale())
                     )*180/Math.PI)+"°"
                 );
         }
