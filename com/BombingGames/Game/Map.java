@@ -51,7 +51,7 @@ public class Map {
             }
         recalcRequested = true;
        
-        minimap = new Minimap();
+        //minimap = new Minimap();
         Log.debug("...Finished creating the map");
     }
     
@@ -227,9 +227,12 @@ public class Map {
         for (int z=0; z < Chunk.getBlocksZ(); z++) {
             for (int y = Gameplay.view.getCamera().getTopBorder(); y < Gameplay.view.getCamera().getBottomBorder(); y++) {//vertikal
                 for (int x = Gameplay.view.getCamera().getLeftBorder(); x < Gameplay.view.getCamera().getRightBorder(); x++){//horizontal
-                    if ((x < Chunk.getBlocksX()*3-1 && data[x+1][y][z].getRenderorder() == -1)
+                    if (
+                        (x < Map.getBlocksX()-1 && data[x+1][y][z].getRenderorder() == -1)
                         ||
-                        data[x][y][z].getRenderorder() == 1) {
+                        data[x][y][z].getRenderorder() == 1
+                       ) 
+                    {
                         x++;
                         data[x][y][z].draw(x,y,z);//draw the right block first
                         data[x-1][y][z].draw(x-1,y,z);    

@@ -101,18 +101,20 @@ public class Block {
     static {
         ASPECTRATIO = WIDTH/HEIGHT;
         Log.debug("Aspect ratio of blocks: "+ Float.toString(ASPECTRATIO));
-        SidesSprites[1][0][0][0] = 3;
+        //grass
+        SidesSprites[1][0][0][0] = 368;
         SidesSprites[1][0][0][1] = 0;
-        SidesSprites[1][0][1][0] = 4;
+        SidesSprites[1][0][1][0] = 448;
         SidesSprites[1][0][1][1] = 0;
-        SidesSprites[1][0][2][0] = 5;
+        SidesSprites[1][0][2][0] = 608;
         SidesSprites[1][0][2][1] = 0;
-        SidesSprites[2][0][0][0] = 0;
-        SidesSprites[2][0][0][1] = 1;
-        SidesSprites[2][0][1][0] = 1;
-        SidesSprites[2][0][1][1] = 1;
-        SidesSprites[2][0][2][0] = 2;
-        SidesSprites[2][0][2][1] = 1;
+        //dirt
+        SidesSprites[2][0][0][0] = 688;
+        SidesSprites[2][0][0][1] = 0;
+        SidesSprites[2][0][1][0] = 768;
+        SidesSprites[2][0][1][1] = 0;
+        SidesSprites[2][0][2][0] = 920;
+        SidesSprites[2][0][2][1] = 0;
         //asphalt
         SidesSprites[4][0][0][0] = 1;
         SidesSprites[4][0][0][1] = 3;
@@ -379,7 +381,10 @@ public class Block {
      * @return a image ot the side
      */
     public Image getSideSprite(int side){
-        return Blocksheet.getSubImage(SidesSprites[id][value][side][0], SidesSprites[id][value][side][1]);
+        if (side==1)
+            return Blocksheet.getSubImage(SidesSprites[id][value][side][0], SidesSprites[id][value][side][1], WIDTH, HEIGHT);
+        else
+            return Blocksheet.getSubImage(SidesSprites[id][value][side][0], SidesSprites[id][value][side][1], WIDTH/2, (int) (HEIGHT*3/2));    
     }
     
 
@@ -473,23 +478,21 @@ public class Block {
     
     /**
      * Draws a block
-     * @param x
-     * @param y
-     * @param z
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
      */
-    public void draw(int x,int y, int z) {
-        //draw every block except air
+    public void draw(int x, int y, int z) {
+        //draw every visible block except air
         if (id != 0 && visible){
-            //System.out.println("X: "+x+" Y:"+y+" Z: "+z);
             //Block renderBlock = Controller.map.data[x][y][z]; 
             
             if (Gameplay.controller.renderSides()){
                     if (renderTop) drawSide(x,y,z, 1);
                     if (renderLeft) drawSide(x,y,z, 0);
                     if (renderRight) drawSide(x,y,z, 2);
-
             } else {
-                Image temp = Block.Blocksheet.getSubImage(spriteX[0], spriteY[0]);
+                Image temp = Blocksheet.getSubImage(spriteX[0], spriteY[0]);
 
                 //calc  brightness
                 float brightness = lightlevel / 100f;
@@ -567,6 +570,7 @@ public class Block {
             -  Gameplay.view.getCamera().getX()
             + x*Block.WIDTH
             + (y%2) * (int) (Block.WIDTH/2)
+            + ( sidenumb == 2 ? Block.WIDTH/2:0)
             + getOffsetX()
             ,            
             - Gameplay.view.getCamera().getY()
@@ -613,7 +617,7 @@ public class Block {
                     renderRight = visible;
     }
     
-        /**
+  /**
      * Returns the field where the coordiantes are in. Counts clockwise startin with the top 0.
      * 701
      * 682
@@ -634,15 +638,6 @@ public class Block {
         if (-x+y >= Block.WIDTH /2) //bottom left
             if (result==3) result=4; else if (result==7) result = 6; else result = 5;
         return result;
-//        if (x+y <= Block.WIDTH /2)
-//            return 7;//top left
-//        else if (x-y >= Block.WIDTH /2) 
-//                return 1; //top right
-//             else if (x+y >= 3*Block.WIDTH /2)
-//                    return 3;//bottom right
-//                else if (-x+y >= Block.WIDTH /2)
-//                        return 5;//bottom left
-//                    else return 8;//the middle
     }
 
     /**

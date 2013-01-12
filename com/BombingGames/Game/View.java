@@ -11,7 +11,7 @@ import org.newdawn.slick.util.Log;
  */
 public class View {
     /**
-     * The camera which display everything
+     * The camera which displays everything
      */
     private Camera camera;
     
@@ -106,9 +106,9 @@ public class View {
     protected void raytracing(){
         Log.debug("doing raytracing");
         //set visibility of every block to false
-        for (int x=0;x < Map.getBlocksX();x++)
-            for (int y=0;y < Map.getBlocksY();y++)
-                for (int z=0;z < Chunk.getBlocksZ();z++) {
+        for (int x=0; x < Map.getBlocksX(); x++)
+            for (int y=0; y < Map.getBlocksY(); y++)
+                for (int z=0; z < Chunk.getBlocksZ(); z++) {
                     Block block = Controller.getMapDataUnsafe(x, y, z);
                     if (!block.hasOffset()) block.setVisible(false);
                     else  {//Blocks with offset are not in the grid, so ignore them
