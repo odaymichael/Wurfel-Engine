@@ -435,7 +435,7 @@ public class Block {
         if (id != 0 && visible){
             //Block renderBlock = Controller.map.data[x][y][z]; 
             
-            if (Gameplay.controller.renderSides()){
+            if (Gameplay.getController().renderSides()){
                     if (renderTop) drawSide(x,y,z, 1);
                     if (renderLeft) drawSide(x,y,z, 0);
                     if (renderRight) drawSide(x,y,z, 2);
@@ -460,12 +460,12 @@ public class Block {
                 temp.setColor(3, brightness, brightness, brightness);
                 
                 temp.drawEmbedded(
-                    -Gameplay.view.getCamera().getX()
+                    -Gameplay.getView().getCamera().getX()
                     + x*Block.WIDTH
                     + (y%2) * (int) (Block.WIDTH/2)
                     + getOffsetX()
                     ,
-                    -Gameplay.view.getCamera().getY()
+                    -Gameplay.getView().getCamera().getY()
                     + y*Block.HEIGHT/2
                     - z*Block.HEIGHT
                     + getOffsetY() * (1/Block.ASPECTRATIO)
@@ -492,7 +492,7 @@ public class Block {
     private void drawSide(int x, int y, int z,int sidenumb){
         Image sideimage = getSideSprite(sidenumb);
         
-        if (Gameplay.controller.hasGoodGraphics()){
+        if (Gameplay.getController().hasGoodGraphics()){
                 GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
         
             if (sidenumb == 0){
@@ -515,13 +515,13 @@ public class Block {
         sideimage.setColor(3, brightness, brightness, brightness);
         
         sideimage.drawEmbedded(
-            -  Gameplay.view.getCamera().getX()
+            -  Gameplay.getView().getCamera().getX()
             + x*Block.WIDTH
             + (y%2) * (int) (Block.WIDTH/2)
             + ( sidenumb == 2 ? Block.WIDTH/2:0)
             + getOffsetX()
             ,            
-            - Gameplay.view.getCamera().getY()
+            - Gameplay.getView().getCamera().getY()
             + y*Block.HEIGHT/2
             - z*Block.HEIGHT
             + ( sidenumb != 1 ? Block.HEIGHT/2:0)//the top is drawn /4 Blocks higher
@@ -535,7 +535,7 @@ public class Block {
      */
     public static void reloadSprites(float zoom) {
         try {
-            if (Gameplay.controller.renderSides()){//single sides
+            if (Gameplay.getController().renderSides()){//single sides
                 Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", WIDTH, (int) (HEIGHT*1.5f));
             } else {//whole Blocks
                 Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Blocksprite.png", WIDTH, HEIGHT*2, 4);

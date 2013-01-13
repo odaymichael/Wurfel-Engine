@@ -11,23 +11,14 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Benedikt
  */
 public class Gameplay extends BasicGameState { 
-    /**
-     * 
-     */
-    public static View view = null;
-    /**
-     * 
-     */
-    public static Controller controller = null;
-    /**
+  /**
      * Contains the Message System
      */
-    public static final MsgSystem MSGSYSTEM;
-    /**
-     * 
-     */
-    public static GameContainer gc;
+    public static final MsgSystem MSGSYSTEM;    
     
+    private static View view = null;
+
+    private static Controller controller = null;
  
     static {
         MSGSYSTEM = new MsgSystem();
@@ -46,7 +37,6 @@ public class Gameplay extends BasicGameState {
      
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        Gameplay.gc = gc;
     }
     
     @Override 
@@ -65,5 +55,14 @@ public class Gameplay extends BasicGameState {
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         view.render(game, g);
     }
- 
+
+    public static Controller getController() {
+        return controller;
+    }
+
+    public static View getView() {
+        return view;
+    }
+    
+    
 }

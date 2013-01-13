@@ -44,24 +44,24 @@ public class Camera {
              x = focusblock.getX() * Block.WIDTH
                 + Block.WIDTH / 2 *(focusblock.getY() % 2)
                 + focusblock.getBlock().getOffsetX()
-                - Gameplay.view.getCamera().width / 2;
+                - Gameplay.getView().getCamera().width / 2;
             
             y = (int) (
                 (focusblock.getY()/2f - focusblock.getZ()) * Block.HEIGHT
-                - Gameplay.view.getCamera().height/2
+                - Gameplay.getView().getCamera().height/2
                 + focusblock.getBlock().getOffsetY() * (1/Block.ASPECTRATIO)
                 );
             
         } else {//focus on player
-            Player player = Gameplay.controller.getPlayer();
+            Player player = Gameplay.getController().getPlayer();
             x = player.getCoordX() * Block.WIDTH
                 + Block.WIDTH / 2 *(player.getCoordY() % 2)
                 + player.getOffsetX()
-                - Gameplay.view.getCamera().width / 2;
+                - Gameplay.getView().getCamera().width / 2;
             
             y = (int) (
                 (player.getCoordY()/2f - player.getCoordZ()) * Block.HEIGHT
-                - Gameplay.view.getCamera().height/2
+                - Gameplay.getView().getCamera().height/2
                 + player.getOffsetY() * (1/Block.ASPECTRATIO)
                 );
         }
@@ -82,10 +82,10 @@ public class Camera {
     }
     
     public void draw() {
-        Gameplay.view.g.scale(getZoom(), getZoom());
+        Gameplay.getView().g.scale(getZoom(), getZoom());
         Controller.getMap().draw();
         
-        Gameplay.view.g.scale(1/getZoom(), 1/getZoom());
+        Gameplay.getView().g.scale(1/getZoom(), 1/getZoom());
         //GUI
         if (Controller.getMap().getMinimap() != null)
             Controller.getMap().getMinimap().draw(); 
@@ -111,7 +111,7 @@ public class Camera {
     }
     
     public float getAbsZoom() {
-        return zoom*Gameplay.view.getEqualizationScale();
+        return zoom*Gameplay.getView().getEqualizationScale();
     }
 
     
@@ -264,11 +264,11 @@ public class Camera {
     }
     
     public int getCenterXofBlock(int x, int y, int z){
-        return -Gameplay.view.getCamera().getX()+x*Block.WIDTH + (y%2) * (int) (Block.WIDTH/2) + Controller.getMapDataUnsafe(x, y, z).getOffsetX();
+        return -Gameplay.getView().getCamera().getX()+x*Block.WIDTH + (y%2) * (int) (Block.WIDTH/2) + Controller.getMapDataUnsafe(x, y, z).getOffsetX();
     }
 
     public int getCenterYofBlock(int x, int y, int z) {
-        return (int) (-Gameplay.view.getCamera().getY()+y*Block.HEIGHT/2 - z*Block.HEIGHT + Controller.getMapDataUnsafe(x, y, z).getOffsetY() * (1/Block.ASPECTRATIO));
+        return (int) (-Gameplay.getView().getCamera().getY()+y*Block.HEIGHT/2 - z*Block.HEIGHT + Controller.getMapDataUnsafe(x, y, z).getOffsetY() * (1/Block.ASPECTRATIO));
     }
     
     

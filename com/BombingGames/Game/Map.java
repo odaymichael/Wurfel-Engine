@@ -208,8 +208,8 @@ public class Map {
     public void recalcIfRequested(){
         if (recalcRequested) {
            Log.debug("recalc start");
-            Gameplay.view.raytracing();
-            Gameplay.view.calc_light();
+            Gameplay.getView().raytracing();
+            Gameplay.getView().calc_light();
             recalcRequested = false;
             Log.debug("recalc finish");
         }
@@ -219,14 +219,14 @@ public class Map {
      * Draws the map
      */
     public void draw() {
-        if (Gameplay.controller.hasGoodGraphics()) Block.getBlocksheet().bind();
-        if (Gameplay.controller.hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
+        if (Gameplay.getController().hasGoodGraphics()) Block.getBlocksheet().bind();
+        if (Gameplay.getController().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
         Block.getBlocksheet().startUse();
         //render vom bottom to top
         for (int z=0; z < Chunk.getBlocksZ(); z++) {
-            for (int y = Gameplay.view.getCamera().getTopBorder(); y < Gameplay.view.getCamera().getBottomBorder(); y++) {//vertikal
-                for (int x = Gameplay.view.getCamera().getLeftBorder(); x < Gameplay.view.getCamera().getRightBorder(); x++){//horizontal
+            for (int y = Gameplay.getView().getCamera().getTopBorder(); y < Gameplay.getView().getCamera().getBottomBorder(); y++) {//vertikal
+                for (int x = Gameplay.getView().getCamera().getLeftBorder(); x < Gameplay.getView().getCamera().getRightBorder(); x++){//horizontal
                     if (
                         (x < Map.getBlocksX()-1 && data[x+1][y][z].getRenderorder() == -1)
                         ||
@@ -241,7 +241,7 @@ public class Map {
             }
        }
        Block.getBlocksheet().endUse(); 
-       if (Gameplay.controller.hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
+       if (Gameplay.getController().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
     }
 
    /**

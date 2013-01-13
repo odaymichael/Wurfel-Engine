@@ -52,27 +52,27 @@ public class Controller {
         if (delta > 200) Log.warn("delta is too high to stay stable. d: "+delta);
          
 //        //earth to right
-//        if (Gameplay.view.getCamera().getLeftBorder() < Chunk.BLOCKS_X/3)
+//        if (Gameplay.getView().getCamera().getLeftBorder() < Chunk.BLOCKS_X/3)
 //           map.setCenter(3);
 //        else {       
 //            //earth to the left
-//            if (Gameplay.view.getCamera().getRightBorder() > 8*Chunk.BLOCKS_X/3) 
+//            if (Gameplay.getView().getCamera().getRightBorder() > 8*Chunk.BLOCKS_X/3) 
 //                map.setCenter(5); 
 //        }
 //        
 //       //scroll up, earth down            
-//        if (Gameplay.view.getCamera().getTopBorder()  <= 0) {
+//        if (Gameplay.getView().getCamera().getTopBorder()  <= 0) {
 //            map.setCenter(1);
 //        } else {
 //            //scroll down, earth up
-//            if (Gameplay.view.getCamera().getBottomBorder() > 8*Chunk.BLOCKS_Y/3)
+//            if (Gameplay.getView().getCamera().getBottomBorder() > 8*Chunk.BLOCKS_Y/3)
 //                map.setCenter(7);
 //        }
         
         if (player != null)
             player.update(delta);
         
-        Gameplay.view.getCamera().update();
+        Gameplay.getView().getCamera().update();
         
             
         //recalculates the light if requested
@@ -90,7 +90,7 @@ public class Controller {
             gc.getInput().consumeEvent();
             
             zoomx = zoomx + change/1000f;
-            Gameplay.view.getCamera().setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
+            Gameplay.getView().getCamera().setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
             
             
            /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
@@ -98,7 +98,7 @@ public class Controller {
             Chunk.SIZE_X = (int) (Chunk.BlocksX*Block.width*zoom);
             Chunk.SIZE_Y = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
-            Gameplay.MSGSYSTEM.add("Zoom: "+Gameplay.view.getCamera().getZoom());   
+            Gameplay.MSGSYSTEM.add("Zoom: "+Gameplay.getView().getCamera().getZoom());   
         }
 
         @Override
@@ -117,8 +117,8 @@ public class Controller {
         public void mouseMoved(int oldx, int oldy, int newx, int newy) {
             Log.info(
                     Double.toString(Math.atan(
-                        Math.abs(Gameplay.view.getCamera().getCenterYofBlock(player.getCoordX(), player.getCoordY(), player.getCoordZ())-newy*Gameplay.view.getEqualizationScale()) /
-                        (float) Math.abs(Gameplay.view.getCamera().getCenterXofBlock(player.getCoordX(), player.getCoordY(), player.getCoordZ())-newx*Gameplay.view.getEqualizationScale())
+                        Math.abs(Gameplay.getView().getCamera().getCenterYofBlock(player.getCoordX(), player.getCoordY(), player.getCoordZ())-newy*Gameplay.getView().getEqualizationScale()) /
+                        (float) Math.abs(Gameplay.getView().getCamera().getCenterXofBlock(player.getCoordX(), player.getCoordY(), player.getCoordZ())-newx*Gameplay.getView().getEqualizationScale())
                     )*180/Math.PI)+"°"
                 );
         }
@@ -128,9 +128,9 @@ public class Controller {
             //workaround for the bug, because the event is called multiple times
             gc.getInput().consumeEvent();
             
-            if (Gameplay.view.getCamera().getFocus()) {
-                Gameplay.view.getCamera().setX(Gameplay.view.getCamera().getX()+newx-oldx);
-                Gameplay.view.getCamera().setY(Gameplay.view.getCamera().getY()+newx-oldy);
+            if (Gameplay.getView().getCamera().getFocus()) {
+                Gameplay.getView().getCamera().setX(Gameplay.getView().getCamera().getX()+newx-oldx);
+                Gameplay.getView().getCamera().setY(Gameplay.getView().getCamera().getY()+newx-oldy);
             }
             /*for (int i=0;i<9;i++){
                 chunklist[i].posX += newx - oldx;

@@ -1,5 +1,6 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;
 import org.newdawn.slick.Color;
 
@@ -67,7 +68,7 @@ public class MsgSystem extends ArrayList {
      * Draws the Messages
      */
     public void draw(){
-        if (waitforinput) Gameplay.view.g.drawString("MSG:", Gameplay.gc.getWidth()/2, 3*Gameplay.gc.getHeight()/4);
+        if (waitforinput) Gameplay.getView().g.drawString("MSG:", Wurfelengine.gc.getWidth()/2, 3*Wurfelengine.gc.getHeight()/4);
         
         for (int i=0; i < size(); i++){
             Msg msg = (Msg) get(i);
