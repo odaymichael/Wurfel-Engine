@@ -160,18 +160,18 @@ public class Block {
         //player
         BLOCKSPRITEPOS[40][0][0] = 2;
         BLOCKSPRITEPOS[40][0][1] = 0;
-        SIDESPRITES[40][0][0][0] = 1;
-        SIDESPRITES[40][0][0][1] = 4;
-        SIDESPRITES[40][0][1][0] = 0;
-        SIDESPRITES[40][0][1][1] = 0;
-        SIDESPRITES[40][0][2][0] = 2;
-        SIDESPRITES[40][0][2][1] = 4;
-        SIDESPRITES[40][1][0][0] = 4;
-        SIDESPRITES[40][1][0][1] = 3;
-        SIDESPRITES[40][1][1][0] = 0;
-        SIDESPRITES[40][1][1][1] = 4;
-        SIDESPRITES[40][1][2][0] = 5;
-        SIDESPRITES[40][1][2][1] = 3;
+        SIDESPRITES[40][0][0][0] = 640;
+        SIDESPRITES[40][0][0][1] = 384;
+        SIDESPRITES[40][0][1][0] = 640;
+        SIDESPRITES[40][0][1][1] = 384;
+        SIDESPRITES[40][0][2][0] = 880;
+        SIDESPRITES[40][0][2][1] = 384;
+        SIDESPRITES[40][1][0][0] = 160;
+        SIDESPRITES[40][1][0][1] = 384;
+        SIDESPRITES[40][1][1][0] = 480;
+        SIDESPRITES[40][1][1][1] = 384;
+        SIDESPRITES[40][1][2][0] = 400;
+        SIDESPRITES[40][1][2][1] = 384;
         
         BLOCKSPRITEPOS[70][0][0] = 4;
         BLOCKSPRITEPOS[70][0][1] = 0;
