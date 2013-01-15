@@ -42,6 +42,8 @@ public class Block {
      */
     public static final int[][][][] SIDESPRITES = new int[99][9][3][2];
     
+    private static Color[][] colorlist = new Color[99][9];
+    
     private final int id;
     private final String name;
     
@@ -304,35 +306,26 @@ public class Block {
                 renderorder = -1;
             else renderorder = 0;
     }
+        
     
     /**
-     * 
+     *  Returns a sprite image of a specific side of the block
      * @param side Which side? (0 - 2)
-     * @return the X-Coodinate of the Sprite
+     * @return an image of the side
      */
-    public int getSideSpritePosX(int side){
-        return SIDESPRITES[id][value][side][0];        
-    }
-    
-    /**
-     * 
-     * @param side Which side? (0 - 2)
-     * @return the Y-Coodinate of the Sprite
-     */
-    public int getSideSpritePosY(int side){
-        return SIDESPRITES[id][value][side][1];        
-    }
-    
-    /**
-     *  
-     * @param side Which side? (0 - 2)
-     * @return a image ot the side
-     */
-    public Image getSideSprite(int side){
+    public static Image getSideSprite(int id, int value, int side){
         if (side==1)
             return Blocksheet.getSubImage(SIDESPRITES[id][value][side][0], SIDESPRITES[id][value][side][1], WIDTH, HEIGHT);
         else
             return Blocksheet.getSubImage(SIDESPRITES[id][value][side][0], SIDESPRITES[id][value][side][1], WIDTH/2, (int) (HEIGHT*3/2));    
+    }
+    
+    /**
+     * Returns the block sprite
+     * @return the sprite image
+     */
+    public static Image getBlockSprite(int id, int value){
+        return Blocksheet.getSubImage(BLOCKSPRITEPOS[id][value][0], BLOCKSPRITEPOS[id][value][1], WIDTH, HEIGHT*2);
     }
     
 
@@ -490,7 +483,7 @@ public class Block {
      * @param renderBlock The block which gets rendered
      */
     private void drawSide(int x, int y, int z,int sidenumb){
-        Image sideimage = getSideSprite(sidenumb);
+        Image sideimage = getSideSprite(id,value,sidenumb);
         
         if (Gameplay.getController().hasGoodGraphics()){
                 GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
@@ -589,26 +582,49 @@ public class Block {
     }
 
     /**
-     * has the block an offset? if x or y is !=0 it is true.
+     * has the block an offset? if x or y is != 0 it is true.
      * @return 
      */
     public boolean hasOffset() {
         return (offsetX != 0 || offsetY != 0);
     }
 
+    /**
+     * Returns the name of the block
+     * @return the name of the block
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the renderorder
+     * @return 
+     */
     public int getRenderorder() {
         return renderorder;
     }
 
+    /**
+     * Sets the renderorder
+     * @param renderorder 
+     */
     public void setRenderorder(int renderorder) {
         this.renderorder = renderorder;
     }
 
+    /**
+     * Returns the spritesheet used for rendering
+     * @return the spritesheet used by the blocks
+     */
     public static SpriteSheet getBlocksheet() {
         return Blocksheet;
+    }
+    
+    public static Color getBlockColor(int id, int value){
+        if (colorlist[id][value] == null){
+            colorlist[id][value] = getSideSprite(id, value,1).getColor(WIDTH/2, HEIGHT/2);
+            return colorlist[id][value]; 
+        } else return colorlist[id][value];
     }
 }

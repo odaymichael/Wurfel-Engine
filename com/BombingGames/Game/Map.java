@@ -51,7 +51,7 @@ public class Map {
             }
         recalcRequested = true;
        
-        //minimap = new Minimap();
+        minimap = new Minimap();
         Log.debug("...Finished creating the map");
     }
     

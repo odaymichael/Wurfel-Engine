@@ -17,34 +17,26 @@ public class Minimap {
      * Draw the Minimap
      */
     public void draw() {
+        //refresh position
         Y = Gameplay.getView().getCamera().getScreenY() + 10;
         X = Gameplay.getView().getCamera().getScreenX() + Gameplay.getView().getCamera().getScreenWidth() - (int) (3*Chunk.getBlocksX()*scaleX) - 10;
         int z;
+        
+        //if there is no player => ground level
         if (Gameplay.getController().getPlayer()!=null)
-            z=Gameplay.getController().getPlayer().getCoordZ()-1;
-            else z=0;
+            z = Gameplay.getController().getPlayer().getCoordZ()-1;
+        else z = 0;
         
         for (int pos=0;pos < 9;pos++){  
             Color temp;
             for (int x = Chunk.getBlocksX()*(pos%3); x < Chunk.getBlocksX() * (pos%3+1); x++){
                 for (int y = Chunk.getBlocksY()*(pos/3); y < Chunk.getBlocksY() * (pos/3+1); y++){
+                    Block block = Controller.getMapData(x, y, z);
                     if (Gameplay.getController().renderSides()){
-                        Block block = Controller.getMapData(x, y, z);
-                        temp = Block.getBlocksheet().getSubImage(
-                                Block.SIDESPRITES[block.getId()][block.getValue()][1][0],
-                                Block.SIDESPRITES[block.getId()][block.getValue()][1][1]
-                            ).getColor(
-                                Block.WIDTH/2,
-                                Block.HEIGHT/2
-                        );                
-                    } else
-                        temp = Block.getBlocksheet().getSubImage(
-                            Block.BLOCKSPRITEPOS[Controller.getMapData(x, y, z).getId()][Controller.getMapData(x, y, z).getValue()][0],
-                            Block.BLOCKSPRITEPOS[Controller.getMapData(x, y, z).getId()][Controller.getMapData(x, y, z).getValue()][1]
-                        ).getColor(
-                            Block.WIDTH/2,
-                            Block.HEIGHT/2
-                    );
+                         temp = Block.getBlockColor(block.getId(), block.getValue());                          
+                    } else {
+                        temp = Block.getBlockColor(block.getId(), block.getValue());
+                    }
 
                     Gameplay.getView().g.setColor(temp);
                     Gameplay.getView().g.fillRect(

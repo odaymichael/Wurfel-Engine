@@ -1,51 +1,34 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.BombingGames.Game.Blocks;
 
+import com.BombingGames.Game.Chunk;
 import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Map;
 import org.newdawn.slick.SlickException;
 
 /**
- *A Block which can move himself around the map therefore it must also be  a SelfAwareBlock.
+ *A Block which can move himself around the map, therefore it must also be a SelfAwareBlock.
  * @author Benedikt
  */
 public abstract class MovingBlock extends SelfAwareBlock {
     /**
      * Value in pixels
      */
-    private int posX = Block.WIDTH / 2;
-   /**
-    * Value in pixels
-    */
+   private int posX = Block.WIDTH / 2;
    private int posY = Block.WIDTH / 2;
-   /**
-    * Value in pixels
-    */
    private int posZ = 0;
    
    /*The three values together build a vector. Always one of them must be 1 to prevent a division with 0.*/
-   /**
-    * 
-    */
-   protected float veloX = 1;
-   /**
-    * 
-    */
-   protected float veloY = 0;
-   /**
-    * 
-    */
-   protected float veloZ = 0;
+   private float veloX = 1;
+   private float veloY = 0;
+   private float veloZ = 0;
    
    /**
     * provides a factor for the vector
     */
-   protected float speed;
+   private float speed;
    
    /**
-     * These method should define how the object can jump.
+     * These method should define what happens when the object  jumps. Shoudl call jump(int velo)
      */
     abstract void jump();
    
@@ -111,10 +94,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
             if (left)  veloX = -1;
             if (right) veloX = 1;
         
-            //scale that absolute value of x and y is always the same so sqt(x^2+y^2)=1
-            veloX /= Math.sqrt(Math.abs(veloX) + Math.abs(veloY));
-            veloY /= Math.sqrt(Math.abs(veloX) + Math.abs(veloY));
-            
+            //scale that the velocity vector is always an unit vector
+            double vectorLenght = Math.sqrt(veloX*veloX+veloY*veloY+veloZ*veloZ);
+            veloX /= vectorLenght;
+            veloY /= vectorLenght;
+            veloZ /= vectorLenght;
             
             //colision check
             int oldx = posX;
@@ -260,7 +244,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
     }
 
     /**
-     * 
+     * Set the PosZ
      * @return
      */
     public int getPosZ() {
@@ -279,6 +263,83 @@ public abstract class MovingBlock extends SelfAwareBlock {
         this.posZ = posZ;
     }
 
-    
+    /**
+     * Updates the block.
+     * @param delta time since last update
+     * @param topblock the block on top, if there is none set it to null
+     */
+    protected void update(int delta, Blockpointer topblock) {
+        //Gravity
+        float a = -Map.GRAVITY;// this should be g=9.81 m/s^2
 
+        //if (delta<1000) acc = Controller.map.gravity*delta;
+
+        //land if standing in or under ground level and there is an obstacle
+        if (veloZ <= 0
+            && posZ <= 0
+            && (getCoordZ() == 0 || Controller.getMapDataUnsafe(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
+        ) {
+           // fallsound.stop();
+            veloZ = 0;
+            setPosZ(0);
+            a = 0;
+            //player stands now
+        }
+
+        //t = time in s
+        float t = delta/1000f;
+        //move if delta is okay
+        if (delta < 500) {
+            veloZ += a*t; //in m/s
+            setPosZ(posZ + (int) (veloZ*Block.WIDTH*t));//m
+        }
+        
+        //coordinate switch
+        //down
+        if (posZ <= 0 && getCoordZ() > 0 && !Controller.getMapData(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
+          //  if (! fallsound.playing()) fallsound.play();
+            
+            selfDestroy();
+            if (topblock != null) topblock.setBlock(new Block(0));
+            setCoordZ(getCoordZ()-1);
+            selfRebuild();
+            if (topblock != null) topblock.setBlock(new Block(40,1));
+
+            setPosZ(posZ + Block.WIDTH);
+            Controller.getMap().requestRecalc();
+        } else {
+            //up
+            if (posZ >= Block.HEIGHT && getCoordZ() < Chunk.getBlocksZ()-2 && !Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
+                //if (! fallsound.playing()) fallsound.play();
+
+                selfDestroy();
+                if (topblock != null) topblock.setBlock(new Block(0));
+                setCoordZ(getCoordZ()+1);
+                selfRebuild();
+                if (topblock != null) topblock.setBlock(new Block(40,1));
+
+                setPosZ(posZ - Block.WIDTH);
+                Controller.getMap().requestRecalc();
+            } 
+        }
+        
+        //set the offset for the rendering
+        setOffset(getPosX() - Block.WIDTH/2, getPosY() - posZ - Block.WIDTH/2);
+        if (topblock != null) topblock.getBlock().setOffset(getOffsetX(), getOffsetY());  
+    }
+    
+    /*
+     * Returns true if the player is standing on ground.
+     */
+    public boolean isStanding(){
+       return (veloZ == 0 && posZ == 0);
+    }
+
+    /**
+     * Jumpwith a specific speed
+     * @param height the velocity of the block 
+     */
+    public void jump(int velo) {
+        if (isStanding()) veloZ = velo;
+    }
 }

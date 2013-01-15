@@ -1,8 +1,5 @@
 package com.BombingGames.Game.Blocks;
 
-import com.BombingGames.Game.Chunk;
-import com.BombingGames.Game.Controller;
-import com.BombingGames.Game.Map;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
@@ -54,78 +51,21 @@ public class Player extends MovingBlock{
      * Jumps the player
      */
     @Override
-    public void jump(){
-        if (veloZ==0 && getPosZ()==0) veloZ = 8;
+    public void jump() {
+        super.jump(8);
     }
    
     /**
      * 
      * @param delta
      */
-    public void update(int delta){
-        if (speed > 0.5f){
+    public void update(int delta) {
+        /*if (speed > 0.5f){
             if (!runningsound.playing()) runningsound.play();
-        }  else runningsound.stop();
+        }  else runningsound.stop();*/
 
-        //Gravity
-        float a = -Map.GRAVITY;// this should be g=9.81 m/s^2
-
-        //if (delta<1000) acc = Controller.map.gravity*delta;
-
-        //land if standing in or under ground level and there is an obstacle
-        if (veloZ <= 0
-            && getPosZ() <= 0
-            && (getCoordZ() == 0 || Controller.getMapDataUnsafe(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
-        ) {
-            fallsound.stop();
-            veloZ = 0;
-            setPosZ(0);
-            a = 0;
-            //player stands now
-        }
-
-        //t = time in s
-        float t = delta/1000f;
-        //move if delta is okay
-        if (delta < 500) {
-            veloZ += a*t; //in m/s
-            setPosZ(getPosZ() + (int) (veloZ*Block.WIDTH*t));//m
-        }
-
-        
-        //coordinate switch
-        //down
-        if (getPosZ() <= 0 && getCoordZ() > 0 && !Controller.getMapData(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
-            if (! fallsound.playing()) fallsound.play();
-            
-            selfDestroy();
-            topblock.setBlock(new Block(0));
-            setCoordZ(getCoordZ()-1);
-            selfRebuild();
-            topblock.setBlock(new Block(40,1));
-
-            setPosZ(getPosZ() + Block.WIDTH);
-            Controller.getMap().requestRecalc();
-        } else {
-            //up
-            if (getPosZ() >= Block.HEIGHT && getCoordZ() < Chunk.getBlocksZ()-2 && !Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
-                if (! fallsound.playing()) fallsound.play();
-
-                selfDestroy();
-                topblock.setBlock(new Block(0));
-                setCoordZ(getCoordZ()+1);
-                selfRebuild();
-                topblock.setBlock(new Block(40,1));
-
-                setPosZ(getPosZ() - Block.WIDTH);
-                Controller.getMap().requestRecalc();
-            } 
-        }
-        
-        //set the offset for the rendering
-        setOffset(getPosX() - Block.WIDTH/2, getPosY() - getPosZ() - Block.WIDTH/2);
-        topblock.getBlock().setOffset(getOffsetX(), getOffsetY());  
-   }
+        super.update(delta, topblock);
+    }
     
      @Override
      public void draw(int x, int y, int z){ 
