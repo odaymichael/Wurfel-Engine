@@ -51,23 +51,23 @@ public class Controller {
     public void update(int delta) throws SlickException{
         if (delta > 200) Log.warn("delta is too high to stay stable. d: "+delta);
          
-//        //earth to right
-//        if (Gameplay.getView().getCamera().getLeftBorder() < Chunk.BLOCKS_X/3)
-//           map.setCenter(3);
-//        else {       
-//            //earth to the left
-//            if (Gameplay.getView().getCamera().getRightBorder() > 8*Chunk.BLOCKS_X/3) 
-//                map.setCenter(5); 
-//        }
-//        
-//       //scroll up, earth down            
-//        if (Gameplay.getView().getCamera().getTopBorder()  <= 0) {
-//            map.setCenter(1);
-//        } else {
-//            //scroll down, earth up
-//            if (Gameplay.getView().getCamera().getBottomBorder() > 8*Chunk.BLOCKS_Y/3)
-//                map.setCenter(7);
-//        }
+       //earth to right
+        if (Gameplay.getView().getCamera().getLeftBorder() <= 0)
+           map.setCenter(3);
+        else {       
+            //earth to the left
+            if (Gameplay.getView().getCamera().getRightBorder() >= Map.getBlocksX()-1) 
+                map.setCenter(5); 
+        }
+        
+       //scroll up, earth down            
+        if (Gameplay.getView().getCamera().getTopBorder()  <= 0) {
+            map.setCenter(1);
+        } else {
+            //scroll down, earth up
+            if (Gameplay.getView().getCamera().getBottomBorder() >= Map.getBlocksY()-1)
+                map.setCenter(7);
+        }
         
         if (player != null)
             player.update(delta);
@@ -94,7 +94,7 @@ public class Controller {
             
             
            /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
-            Block.height = (int) (4*gc.getHeight()*zoom / Chunk.BlocksY);
+            Block.height = (int) (4*gc.getGroundHeight()*zoom / Chunk.BlocksY);
             Chunk.SIZE_X = (int) (Chunk.BlocksX*Block.width*zoom);
             Chunk.SIZE_Y = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
             
