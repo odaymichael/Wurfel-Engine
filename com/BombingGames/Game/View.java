@@ -65,7 +65,7 @@ public class View {
         
         //camera.FocusOnBlock(new Blockpointer(Chunk.getBlocksX()*3/2,Map.getBlocksY()/2,Chunk.getBlocksZ()/2));
         
-        if (camera.getYzHeight() > Chunk.getBlocksY()*Block.HEIGHT/2) {
+        if (camera.getTotalHeight() > Chunk.getBlocksY()*Block.HEIGHT/2) {
             Gameplay.MSGSYSTEM.add("The chunks are too small for this camera height/resolution", "Warning");
             Log.warn("The chunks are too small for this camera height/resolution");
         }

@@ -73,10 +73,10 @@ public class Camera {
         rightborder = (x+width)/Block.WIDTH+2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
         
-        topborder = 2*y/Block.HEIGHT;
+        topborder = y / (Block.HEIGHT/2);
         if (topborder < 0) topborder= 0;
         
-        bottomborder = (y+height)/(Block.HEIGHT/2) + Chunk.getBlocksZ()*2;
+        bottomborder = (y+height) / (Block.HEIGHT/2) + Chunk.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
         
     }
@@ -199,7 +199,7 @@ public class Camera {
     * The amount of pixel which are visible in Y direction (game pixels). For screen pixels use <i>ScreenHeight()</i>.
     * @return
     */
-   public int getHeight() {
+   public int getGroundHeight() {
         return height;
     }
 
@@ -217,7 +217,7 @@ public class Camera {
      * Returns the amount of (game) pixels visible in Y direction. Ground level+ slope WIDTH.
      * @return
      */
-    public int getYzHeight() {
+    public int getTotalHeight() {
         return height + Block.HEIGHT*Chunk.getBlocksZ();
     }
 

@@ -81,17 +81,15 @@ public class Map {
     /**
      * Reorgnanises the map and sets the center to param center.
      * Move all chunks when loading or creating a new piece of the map
-     * @param center center is 1,3,5 or 7
+     *    |0|1|2|
+     *     -------------
+     *    |3|4|5|
+     *     -------------
+     *    |6|7|8|
+     * @param center center is 1, 3, 5 or 7
      */
     public void setCenter(int center){
         Log.debug("ChunkSwitch:"+center);
-        /*
-                |0|1|2|
-                -------------
-                |3|4|5|
-                -------------
-                |6|7|8|
-                */
         if (center==1 || center==3 || center==5 || center==7) {
         
         //make a copy of the data
@@ -207,7 +205,7 @@ public class Map {
      */
     public void recalcIfRequested(){
         if (recalcRequested) {
-           Log.debug("recalc");
+            Log.debug("recalc");
             Gameplay.getView().raytracing();
             Gameplay.getView().calc_light();
             recalcRequested = false;

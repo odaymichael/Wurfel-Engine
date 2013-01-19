@@ -15,15 +15,14 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Chunk {
-    private static int blocksX = 6;//16:9 => 12:27, 4:3=>12:36
-    private static int blocksY = 10;//28
-    private static int blocksZ = 10;//20
-    
-
-    /**
+        /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 3;
+    public static final int MAPGENERATOR = 1;
+    
+    private static int blocksX = 10;//16:9 => 12:27, 4:3=>12:36
+    private static int blocksY = 40;//28
+    private static int blocksZ = 10;//20
     
     private int coordX, coordY;
     private Block data[][][] = new Block[blocksX][blocksY][blocksZ];
@@ -52,7 +51,9 @@ public class Chunk {
         if (loadmap) loadChunk();
             else newChunk();
     }
-       
+    /**
+     * Generates new content for a chunk.
+     */  
     private void newChunk(){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
@@ -114,38 +115,13 @@ public class Chunk {
             }    
         }
     }
-        
+    
+    /**
+     * loads a chunk from
+     */
     private void loadChunk(){
-        /*//to find root path of project
-        File here = new File(".");
-        System.out.println(here.getAbsolutePath());*/
-
         //Reading map files test
         try {
-            /*
-                //the path may cause problems with other IDE's
-            FileReader input = new FileReader("build/classes/map1/map.otmi");
-            BufferedReader bufRead = new BufferedReader(input);
-
-            int count = 1;  // Line number of count 
-
-
-            String readstring = "";
-
-            // Read through file one line at time. Print line # and line
-            while (readstring != null){
-                readstring = bufRead.readLine();
-                StringBuilder line = new StringBuilder();
-                line.append(readstring);
-                line.deleteCharAt(0);
-
-                if (readstring != null) System.out.println(count+":"+line.toString());
-
-                count++;
-            }
-
-            bufRead.close();
-            */
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
             File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/chunk"+coordX+","+coordY+".otmc");
             Log.debug("Trying to load Chunk: "+ coordX + ", "+ coordY + " from \"" + path.getAbsolutePath() + "\"");
