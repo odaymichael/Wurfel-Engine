@@ -13,9 +13,9 @@ public abstract class MovingBlock extends SelfAwareBlock {
     /**
      * Value in pixels
      */
-   private int posX = Block.WIDTH / 2;
-   private int posY = Block.WIDTH / 2;
-   private int posZ = 0;
+   private float posX = Block.WIDTH / 2;
+   private float posY = Block.WIDTH / 2;
+   private float posZ = 0;
    
    /*The three values together build a vector. Always one of them must be 1 to prevent a division with 0.*/
    private float veloX = 1;
@@ -51,7 +51,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * @see com.BombingGames.Game.Blocks.Block#getSideNumb(int, int) 
      */
     protected int getSideNumb() {
-        return getSideNumb(posX,posY);
+        return getSideNumb((int) posX,(int) posY);
     }
         
     /**
@@ -95,67 +95,66 @@ public abstract class MovingBlock extends SelfAwareBlock {
             if (right) veloX = 1;
         
             //scale that the velocity vector is always an unit vector
-            double vectorLenght = Math.sqrt(veloX*veloX+veloY*veloY+veloZ*veloZ);
+            double vectorLenght = Math.sqrt(veloX*veloX+veloY*veloY);
             veloX /= vectorLenght;
             veloY /= vectorLenght;
-            veloZ /= vectorLenght;
+            //veloZ /= vectorLenght;
             
             //colision check
-            int oldx = posX;
-            int oldy = posY;
-            int newx = (int) (posX + delta * speed * veloX);
-            int newy = (int) (posY + delta * speed * veloY);
+            float oldx = posX;
+            float oldy = posY;
+            //calculate new position
+            float newx = posX + delta * speed * veloX;
+            float newy = posY + delta * speed * veloY;
             
+            //check if position is okay
+            boolean movementokay = true;
             
-            boolean movementokay=true;
-            
-            //Gegenkraft berechnen udn diese zum Richtungsvektor adddieren. Gibt neuen Richtungsvektor.
-            //immer bei movementokay = false;
-            //movement in x
-            int sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1); 
+            //check for movement in x
+            int sideNumber = getSideNumb((int) newx, (int) newy - Block.HEIGHT-1); 
             if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                 movementokay = false;
 
-            sideNumber = getSideNumb(newx, newy + Block.WIDTH/2+1); 
+            sideNumber = getSideNumb((int) newx, (int) newy + Block.HEIGHT+1); 
             if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                 movementokay = false; 
             
+            //find out the direction of the movement
             if (oldx-newx > 0) {
                 //check left corner
-                sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy);
+                sideNumber = getSideNumb((int) newx - Block.HEIGHT-1, (int) newy);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                    movementokay = false;
             } else {
                 //check right corner
-                sideNumber = getSideNumb(newx + Block.WIDTH/2+1, newy);
+                sideNumber = getSideNumb((int) newx + Block.HEIGHT+1, (int) newy);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                    movementokay = false;
             }
             
-            //movement in y
-            sideNumber = getSideNumb(newx - Block.WIDTH/2-1, newy); 
+            //check for movement in y
+            sideNumber = getSideNumb((int) newx - Block.WIDTH/2-1, (int) newy); 
             if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                 movementokay = false;
 
-            sideNumber = getSideNumb(newx + Block.WIDTH/2+1, newy); 
+            sideNumber = getSideNumb((int) newx + Block.WIDTH/2+1, (int) newy); 
             if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                 movementokay = false;  
             
             if (oldy-newy > 0) {
                 //check top corner
-                sideNumber = getSideNumb(newx, newy - Block.WIDTH/2-1);
+                sideNumber = getSideNumb((int) newx, (int) newy - Block.WIDTH/2-1);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                    movementokay = false;
             } else {
                 //check bottom corner
-                sideNumber = getSideNumb(newx, newy + Block.WIDTH/2+1);
+                sideNumber = getSideNumb((int) newx, (int) newy + Block.WIDTH/2+1);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
                    movementokay = false;
             }
             
-               
+            //if movement allowed => move player   
             if (movementokay) {                
-                //movement allowed => move player
                 posX = newx;
                 posY = newy;
                 
@@ -196,7 +195,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 if (sidennumb != 8) Controller.getMap().requestRecalc();
 
                 //set the offset for the rendering
-                setOffset(posX - Block.WIDTH/2, posY - posZ - Block.WIDTH/2);
+                setOffset((int) posX - Block.WIDTH/2, (int) posY - (int) posZ - Block.HEIGHT);
                 //copy offset to topblock
                 if (topblock != null) 
                     topblock.getBlock().setOffset(getOffsetX(), getOffsetY());
@@ -231,7 +230,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * 
      * @return
      */
-    public int getPosX() {
+    public float getPosX() {
         return posX;
     }
 
@@ -239,7 +238,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * 
      * @return
      */
-    public int getPosY() {
+    public float getPosY() {
         return posY;
     }
 
@@ -247,7 +246,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * Set the PosZ
      * @return
      */
-    public int getPosZ() {
+    public float getPosZ() {
         return posZ;
     }
 
@@ -291,7 +290,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
         //move if delta is okay
         if (delta < 500) {
             veloZ += a*t; //in m/s
-            setPosZ(posZ + (int) (veloZ*Block.WIDTH*t));//m
+            setPosZ((int) (posZ + veloZ*Block.WIDTH*t));//m
         }
         
         //coordinate switch
@@ -305,7 +304,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
             selfRebuild();
             if (topblock != null) topblock.setBlock(new Block(40,1));
 
-            setPosZ(posZ + Block.WIDTH);
+            setPosZ((int) posZ + Block.WIDTH);
             Controller.getMap().requestRecalc();
         } else {
             //up
@@ -318,13 +317,13 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 selfRebuild();
                 if (topblock != null) topblock.setBlock(new Block(40,1));
 
-                setPosZ(posZ - Block.WIDTH);
+                setPosZ((int) posZ - Block.WIDTH);
                 Controller.getMap().requestRecalc();
             } 
         }
         
         //set the offset for the rendering
-        setOffset(getPosX() - Block.WIDTH/2, getPosY() - posZ - Block.WIDTH/2);
+        setOffset((int) (getPosX() - Block.WIDTH/2), (int) (getPosY() - posZ - Block.WIDTH/2));
         if (topblock != null) topblock.getBlock().setOffset(getOffsetX(), getOffsetY());  
     }
     
