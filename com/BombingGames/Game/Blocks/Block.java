@@ -559,13 +559,13 @@ public class Block {
     }
     
   /**
-     * Returns the field where the coordiantes are in. Counts clockwise startin with the top 0.
+     * Returns the field where the coordiantes are in in relation to the current Block. Counts clockwise startin with the top 0.
      * 701
      * 682
      * 543
      * @param x value in pixels
      * @param y value in pixels
-     * @return Returns the corner of the coordinates. 8 is self.
+     * @return Returns the field of the coordinates. 8 is self.
      * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int) 
      */
     protected int getSideNumb(int x, int y) {

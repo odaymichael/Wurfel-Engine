@@ -28,11 +28,11 @@ public class Blockpointer{
     }
     
     /**
-     * Create a blockpointer who points at a SelfAwareBlock.
+     * Create a blockpointer who points at a SelfAwareBlock and follows him
      * @param block the block where you are pointing at.
-     * @param X add X to the coordinates of the coordiantes of the block
-     * @param Y add Y to the coordinates of the coordiantes of the block
-     * @param Z add Z to the coordinates of the coordiantes of the block 
+     * @param X add X to the coordinates of the coordinates of the block
+     * @param Y add Y to the coordinates of the coordinates of the block
+     * @param Z add Z to the coordinates of the coordinates of the block 
      */
     public Blockpointer(SelfAwareBlock block, int x, int y, int z){
         this.block = block;
@@ -95,7 +95,6 @@ public class Blockpointer{
     public void setZ(int Z) {
         this.z = Z;
     }
-    
     
     /**
      * Returns the Block the pointer is pointing to.

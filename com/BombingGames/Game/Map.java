@@ -195,7 +195,7 @@ public class Map {
     }
     
     /**
-     * Informs the map that a recalc is requested. It will do it in the next update. Thhis method exist to prevent exzessive updates.
+     * Informs the map that a recalc is requested. It will do it in the next update. This method exist to minimize updates.
      */
     public void requestRecalc(){
         recalcRequested = true;
@@ -207,11 +207,10 @@ public class Map {
      */
     public void recalcIfRequested(){
         if (recalcRequested) {
-           Log.debug("recalc start");
+           Log.debug("recalc");
             Gameplay.getView().raytracing();
             Gameplay.getView().calc_light();
             recalcRequested = false;
-            Log.debug("recalc finish");
         }
     }
     

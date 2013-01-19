@@ -74,6 +74,7 @@ public class Chunk {
                     }
                 break;
             }
+                
             case 1: {//one mountain per chunk
                 int mountainx = (int) (Math.random()*blocksX-1);
                 int mountainy = (int) (Math.random()*blocksY-1);
@@ -89,6 +90,7 @@ public class Chunk {
                     }
                 break;
             }
+                
             case 2: {//flat gras
                for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
@@ -97,6 +99,7 @@ public class Chunk {
                     }
                 break;
             }
+                
             case 3: {//flat gras with one random pillar per chunk
                 int pillarx = (int) (Math.random()*blocksX-1);
                 int pillary = (int) (Math.random()*blocksY-1);
@@ -206,7 +209,6 @@ public class Chunk {
                 Log.debug("...but it could not be found. Creating new.");
                 newChunk();
             }
-
         } catch (IOException ex) {
             Log.debug("Loading of chunk "+coordX+","+coordY + "failed: "+ex);
         }
@@ -250,9 +252,12 @@ public class Chunk {
                 Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
     }
 
+    /**
+     * Returns the data of the chunk
+     * @return 
+     */
     public Block[][][] getData() {
         return data;
     }
@@ -277,21 +282,21 @@ public class Chunk {
         this.coordY = coordY;
     }
 
-        /**
+    /**
      * The amount of blocks in X direction
      */
     public static int getBlocksX() {
         return blocksX;
     }
 
-        /**
+    /**
      * The amount of blocks in Y direction
      */
     public static int getBlocksY() {
         return blocksY;
     }
 
-        /**
+   /**
      * The amount of blocks in Z direction
      */
     public static int getBlocksZ() {
