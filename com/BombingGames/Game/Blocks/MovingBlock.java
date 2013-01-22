@@ -18,9 +18,9 @@ public abstract class MovingBlock extends SelfAwareBlock {
    private float posZ = 0;
    
    /*The three values together build a vector. Always one of them must be 1 to prevent a division with 0.*/
-   private float veloX = 1;
-   private float veloY = 0;
-   private float veloZ = 0;
+   private float dirX = 1;
+   private float dirY = 0;
+   private float dirZ = 0;
    
    /**
     * provides a factor for the vector
@@ -86,26 +86,26 @@ public abstract class MovingBlock extends SelfAwareBlock {
             speed = walkingspeed;
             
             //update the movement vector
-            veloX = 0;
-            veloY = 0;
+            dirX = 0;
+            dirY = 0;
                
-            if (up)    veloY = -1;
-            if (down)  veloY = 1;
-            if (left)  veloX = -1;
-            if (right) veloX = 1;
+            if (up)    dirY = -1;
+            if (down)  dirY = 1;
+            if (left)  dirX = -1;
+            if (right) dirX = 1;
         
             //scale that the velocity vector is always an unit vector
-            double vectorLenght = Math.sqrt(veloX*veloX+veloY*veloY);
-            veloX /= vectorLenght;
-            veloY /= vectorLenght;
+            double vectorLenght = Math.sqrt(dirX*dirX+dirY*dirY);
+            dirX /= vectorLenght;
+            dirY /= vectorLenght;
             //veloZ /= vectorLenght;
             
             //colision check
             float oldx = posX;
             float oldy = posY;
             //calculate new position
-            float newx = posX + delta * speed * veloX;
-            float newy = posY + delta * speed * veloY;
+            float newx = posX + delta * speed * dirX;
+            float newy = posY + delta * speed * dirY;
             
             //check if position is okay
             boolean movementokay = true;
@@ -274,12 +274,12 @@ public abstract class MovingBlock extends SelfAwareBlock {
         //if (delta<1000) acc = Controller.map.gravity*delta;
 
         //land if standing in or under ground level and there is an obstacle
-        if (veloZ <= 0
+        if (dirZ <= 0
             && posZ <= 0
             && (getCoordZ() == 0 || Controller.getMapDataUnsafe(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
         ) {
            // fallsound.stop();
-            veloZ = 0;
+            dirZ = 0;
             setPosZ(0);
             a = 0;
             //player stands now
@@ -289,8 +289,8 @@ public abstract class MovingBlock extends SelfAwareBlock {
         float t = delta/1000f;
         //move if delta is okay
         if (delta < 500) {
-            veloZ += a*t; //in m/s
-            setPosZ((int) (posZ + veloZ*Block.WIDTH*t));//m
+            dirZ += a*t; //in m/s
+            setPosZ((int) (posZ + dirZ*Block.WIDTH*t));//m
         }
         
         //coordinate switch
@@ -331,7 +331,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * Returns true if the player is standing on ground.
      */
     public boolean isStanding(){
-       return (veloZ == 0 && posZ == 0);
+       return (dirZ == 0 && posZ == 0);
     }
 
     /**
@@ -339,6 +339,14 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * @param height the velocity of the block 
      */
     public void jump(int velo) {
-        if (isStanding()) veloZ = velo;
+        if (isStanding()) dirZ = velo;
+    }
+    
+    /**
+     * Returns a normalized vector wich contains the direction of the block.
+     * @return R
+     */
+    public float[] getDirectionVector(){
+        return new float[] {dirX, dirY, dirZ};
     }
 }

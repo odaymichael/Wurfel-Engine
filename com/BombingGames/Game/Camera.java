@@ -110,6 +110,10 @@ public class Camera {
         return zoom;
     }
     
+    /**
+     * Returns the zoom multiplied by the EqualizationScale
+     * @return 
+     */
     public float getAbsZoom() {
         return zoom*Gameplay.getView().getEqualizationScale();
     }

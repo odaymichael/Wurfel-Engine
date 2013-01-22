@@ -213,7 +213,7 @@ public class Map {
      * Draws the map
      */
     public void draw() {
-        if (Gameplay.getController().hasGoodGraphics()) Block.getBlocksheet().bind();
+        //if (Gameplay.getController().hasGoodGraphics()) Block.getBlocksheet().bind();
         if (Gameplay.getController().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
         Block.getBlocksheet().startUse();
@@ -221,6 +221,7 @@ public class Map {
         for (int z=0; z < Chunk.getBlocksZ(); z++) {
             for (int y = Gameplay.getView().getCamera().getTopBorder(); y < Gameplay.getView().getCamera().getBottomBorder(); y++) {//vertikal
                 for (int x = Gameplay.getView().getCamera().getLeftBorder(); x < Gameplay.getView().getCamera().getRightBorder(); x++){//horizontal
+                    //check current and next block for special order
                     if (
                         (x < Map.getBlocksX()-1 && data[x+1][y][z].getRenderorder() == -1)
                         ||
@@ -229,7 +230,7 @@ public class Map {
                     {
                         x++;
                         data[x][y][z].draw(x,y,z);//draw the right block first
-                        data[x-1][y][z].draw(x-1,y,z);    
+                        data[x-1][y][z].draw(x-1,y,z); //then the left   
                     } else data[x][y][z].draw(x,y,z);
                 }
             }
@@ -299,7 +300,7 @@ public class Map {
      * @see com.BombingGames.Game.Map#getData(int, int, int) 
      */
     public Block getDataUnsafe(int x, int y, int z){
-            return data[x][y][z];  
+        return data[x][y][z];  
     }
     
     /**

@@ -53,7 +53,7 @@ public class Block {
     private static SpriteSheet Blocksheet;
     
     private int value = 0;
-    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft;    
+    private boolean nonBlock,obstacle, transparent, visible, renderRight, renderTop, renderLeft;    
     private int lightlevel = 50;
     private int offsetX, offsetY;
     
@@ -400,7 +400,7 @@ public class Block {
     }
 
         /** How bright is the block?
-     * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black.
+     * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black. Default 50.
      * @return 
      */
     public int getLightlevel() {
@@ -621,10 +621,24 @@ public class Block {
         return Blocksheet;
     }
     
+    /**
+     * Returns the color representing the block.
+     * @param id
+     * @param value
+     * @return a color
+     */
     public static Color getBlockColor(int id, int value){
         if (colorlist[id][value] == null){
             colorlist[id][value] = getSideSprite(id, value,1).getColor(WIDTH/2, HEIGHT/2);
             return colorlist[id][value]; 
         } else return colorlist[id][value];
+    }
+    
+    /**
+     * Is the block a true block or represents it another thing?
+     * @return 
+     */
+    public boolean isBlock(){
+        return !nonBlock;
     }
 }

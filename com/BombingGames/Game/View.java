@@ -11,16 +11,6 @@ import org.newdawn.slick.util.Log;
  */
 public class View {
     /**
-     * The camera which displays everything
-     */
-    private Camera camera;
-    
-    /**
-     * The reference for the graphics context
-     */
-    public Graphics g = null; 
-    private java.awt.Font font;
-    /**
      * Contains a bigger font.
      */
     public static TrueTypeFont tTFont;
@@ -28,9 +18,17 @@ public class View {
      * Contains a font
      */
     public static TrueTypeFont tTFont_small;
-    
-    private GameContainer gc;
     public static AngelCodeFont baseFont;
+    /**
+     * The reference for the graphics context
+     */
+    public Graphics g = null; 
+    /**
+     * The camera which displays everything
+     */
+    private Camera camera;
+    private GameContainer gc;
+    private java.awt.Font font;
     private float equalizationScale;
 
     /**
@@ -52,6 +50,7 @@ public class View {
         
         //tTFont = new TrueTypeFont(baseFont, true);
         
+        //defautl is Full-HD
         equalizationScale = gc.getWidth()/1920f;
         Log.debug("Scale is:"+Float.toString(equalizationScale));
         
@@ -61,13 +60,13 @@ public class View {
             gc.getWidth(),//full width
             gc.getHeight(),//full height
             equalizationScale
-            );
+        );
         
         //camera.FocusOnBlock(new Blockpointer(Chunk.getBlocksX()*3/2,Map.getBlocksY()/2,Chunk.getBlocksZ()/2));
         
         if (camera.getTotalHeight() > Chunk.getBlocksY()*Block.HEIGHT/2) {
-            Gameplay.MSGSYSTEM.add("The chunks are too small for this camera height/resolution", "Warning");
-            Log.warn("The chunks are too small for this camera height/resolution");
+            Gameplay.MSGSYSTEM.add("The chunks are too small for this camera height/resolution to grant a stable experience", "Warning");
+            Log.warn("The chunks are too small for this camera height/resolution to grant a stable experience");
         }
         
         
