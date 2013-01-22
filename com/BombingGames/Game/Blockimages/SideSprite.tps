@@ -76,7 +76,7 @@
             <key>sizeConstraints</key>
             <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
             <key>forceSquared</key>
-            <false/>
+            <true/>
             <key>forceWordAligned</key>
             <false/>
             <key>maxRects</key>
@@ -141,53 +141,18 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>sides/0-0.png</filename>
-            <filename>sides/0-1.png</filename>
-            <filename>sides/0-2.png</filename>
-            <filename>sides/1-0.png</filename>
-            <filename>sides/1-1.png</filename>
-            <filename>sides/1-2.png</filename>
-            <filename>sides/2-0.png</filename>
-            <filename>sides/2-1.png</filename>
-            <filename>sides/2-2.png</filename>
-            <filename>sides/4-0.png</filename>
-            <filename>sides/4-1.png</filename>
-            <filename>sides/4-2.png</filename>
-            <filename>sides/5-0.png</filename>
-            <filename>sides/5-1.png</filename>
-            <filename>sides/5-2.png</filename>
-            <filename>sides/6-0.png</filename>
-            <filename>sides/6-1.png</filename>
-            <filename>sides/6-2.png</filename>
-            <filename>sides/7-0.png</filename>
-            <filename>sides/7-1.png</filename>
-            <filename>sides/7-2.png</filename>
-            <filename>sides/8-0-1.png</filename>
-            <filename>sides/8-0.png</filename>
-            <filename>sides/8-1-0.png</filename>
-            <filename>sides/8-1-1.png</filename>
-            <filename>sides/8-1-2.png</filename>
-            <filename>sides/8-2-0.png</filename>
-            <filename>sides/8-2-1.png</filename>
-            <filename>sides/8-2-2.png</filename>
-            <filename>sides/9-0.png</filename>
-            <filename>sides/9-1.png</filename>
-            <filename>sides/9-2.png</filename>
-            <filename>sides/20-0.png</filename>
-            <filename>sides/20-1.png</filename>
-            <filename>sides/20-2.png</filename>
-            <filename>sides/21-0-0.png</filename>
-            <filename>sides/21-0-1.png</filename>
-            <filename>sides/21-1-0.png</filename>
-            <filename>sides/21-2-0.png</filename>
-            <filename>sides/21-2-1.png</filename>
-            <filename>sides/21-2-2.png</filename>
-            <filename>sides/21-2-3.png</filename>
-            <filename>sides/40-0.png</filename>
-            <filename>sides/40-1.png</filename>
-            <filename>sides/40-2.png</filename>
-            <filename>sides/40-3.png</filename>
-            <filename>sides/40-4.png</filename>
+            <filename>sprites/1-0.png</filename>
+            <filename>sprites/1-1.png</filename>
+            <filename>sprites/1-2.png</filename>
+            <filename>sprites/2-0.png</filename>
+            <filename>sprites/2-1.png</filename>
+            <filename>sprites/2-2.png</filename>
+            <filename>sprites/8-1.png</filename>
+            <filename>sprites/9-0.png</filename>
+            <filename>sprites/9-1.png</filename>
+            <filename>sprites/9-2.png</filename>
+            <filename>sprites/40-0.png</filename>
+            <filename>sprites/70-0.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

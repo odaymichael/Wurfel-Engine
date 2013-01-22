@@ -28,10 +28,7 @@ public class Block {
      */
     public static final float ASPECTRATIO;
     
-    /**
-     * The positon of the Block sprite. [][0]=X, [][1]=Y
-     */
-    public static final int[][][] BLOCKSPRITEPOS = new int[99][9][2];
+
     
     /**
      * Has the positions of the sprites for rendering with sides
@@ -40,7 +37,7 @@ public class Block {
      * 3. Dimension: Side
      * 4. Dimension: X- or Y-coordinate
      */
-    public static final int[][][][] SIDESPRITES = new int[99][9][3][2];
+    public static final int[][][][] SPRITEPOS = new int[99][9][3][2];
     
     private static Color[][] colorlist = new Color[99][9];
     
@@ -76,106 +73,81 @@ public class Block {
         ASPECTRATIO = WIDTH/HEIGHT;
         Log.debug("Aspect ratio of blocks: "+ Float.toString(ASPECTRATIO));
         //grass
-        BLOCKSPRITEPOS[1][0][0] = 0;
-        BLOCKSPRITEPOS[1][0][1] = 1;
-        SIDESPRITES[1][0][0][0] = 368;
-        SIDESPRITES[1][0][0][1] = 0;
-        SIDESPRITES[1][0][1][0] = 448;
-        SIDESPRITES[1][0][1][1] = 0;
-        SIDESPRITES[1][0][2][0] = 608;
-        SIDESPRITES[1][0][2][1] = 0;
+        SPRITEPOS[1][0][0][0] = 0;
+        SPRITEPOS[1][0][0][1] = 0;
+        SPRITEPOS[1][0][1][0] = 80;
+        SPRITEPOS[1][0][1][1] = 0;
+        SPRITEPOS[1][0][2][0] = 240;
+        SPRITEPOS[1][0][2][1] = 0;
         
         //dirt
-        BLOCKSPRITEPOS[2][0][0] = 0;
-        BLOCKSPRITEPOS[2][0][1] = 2;
-        SIDESPRITES[2][0][0][0] = 688;
-        SIDESPRITES[2][0][0][1] = 0;
-        SIDESPRITES[2][0][1][0] = 768;
-        SIDESPRITES[2][0][1][1] = 0;
-        SIDESPRITES[2][0][2][0] = 920;
-        SIDESPRITES[2][0][2][1] = 0;
+        SPRITEPOS[2][0][0][0] = 320;
+        SPRITEPOS[2][0][0][1] = 0;
+        SPRITEPOS[2][0][1][0] = 400;
+        SPRITEPOS[2][0][1][1] = 0;
+        SPRITEPOS[2][0][2][0] = 560;
+        SPRITEPOS[2][0][2][1] = 0;
         
         //stone
-        BLOCKSPRITEPOS[3][0][0] = 1;
-        BLOCKSPRITEPOS[3][0][1] = 1;
         
         //asphalt
-        BLOCKSPRITEPOS[4][0][0] = 1;
-        BLOCKSPRITEPOS[4][0][1] = 2;
-        SIDESPRITES[4][0][0][0] = 1;
-        SIDESPRITES[4][0][0][1] = 3;
-        SIDESPRITES[4][0][1][0] = 2;
-        SIDESPRITES[4][0][1][1] = 3;
-        SIDESPRITES[4][0][2][0] = 3;
-        SIDESPRITES[4][0][2][1] = 3;
+        SPRITEPOS[4][0][0][0] = 1;
+        SPRITEPOS[4][0][0][1] = 3;
+        SPRITEPOS[4][0][1][0] = 2;
+        SPRITEPOS[4][0][1][1] = 3;
+        SPRITEPOS[4][0][2][0] = 3;
+        SPRITEPOS[4][0][2][1] = 3;
        
         //cobblestone
-        BLOCKSPRITEPOS[5][0][0] = 2;
-        BLOCKSPRITEPOS[5][0][1] = 1;
+
         
         //???
-        BLOCKSPRITEPOS[6][0][0] = 2;
-        BLOCKSPRITEPOS[6][0][1] = 2;
+
        
         //concrete
-        BLOCKSPRITEPOS[6][0][0] = 3;
-        BLOCKSPRITEPOS[6][0][1] = 0;
-        SIDESPRITES[7][0][0][0] = 4;
-        SIDESPRITES[7][0][0][1] = 4;
-        SIDESPRITES[7][0][1][0] = 5;
-        SIDESPRITES[7][0][1][1] = 4;
-        SIDESPRITES[7][0][2][0] = 0;
-        SIDESPRITES[7][0][2][1] = 5;
+
+        SPRITEPOS[7][0][0][0] = 4;
+        SPRITEPOS[7][0][0][1] = 4;
+        SPRITEPOS[7][0][1][0] = 5;
+        SPRITEPOS[7][0][1][1] = 4;
+        SPRITEPOS[7][0][2][0] = 0;
+        SPRITEPOS[7][0][2][1] = 5;
         
-        BLOCKSPRITEPOS[8][0][0] = 3;
-        BLOCKSPRITEPOS[8][0][1] = 2;
-        SIDESPRITES[8][0][0][0] = 2;
-        SIDESPRITES[8][0][0][1] = 5;
-        SIDESPRITES[8][0][1][0] = 3;
-        SIDESPRITES[8][0][1][1] = 5;
-        SIDESPRITES[8][0][2][0] = 0;
-        SIDESPRITES[8][0][2][1] = 6;
-        SIDESPRITES[8][1][0][0] = 1;
-        SIDESPRITES[8][1][0][1] = 5;
-        SIDESPRITES[8][1][1][0] = 5;
-        SIDESPRITES[8][1][1][1] = 5;
-        SIDESPRITES[8][1][2][0] = 2;
-        SIDESPRITES[8][1][2][1] = 6;
-        SIDESPRITES[8][2][0][0] = 5;
-        SIDESPRITES[8][2][0][1] = 0;
-        SIDESPRITES[8][2][1][0] = 4;
-        SIDESPRITES[8][2][1][1] = 5;
-        SIDESPRITES[8][2][2][0] = 1;
-        SIDESPRITES[8][2][2][1] = 6;
+
+        SPRITEPOS[8][0][0][0] = 2;
+        SPRITEPOS[8][0][0][1] = 5;
+        SPRITEPOS[8][0][1][0] = 3;
+        SPRITEPOS[8][0][1][1] = 5;
+        SPRITEPOS[8][0][2][0] = 0;
+        SPRITEPOS[8][0][2][1] = 6;
+        SPRITEPOS[8][1][0][0] = 1;
+        SPRITEPOS[8][1][0][1] = 5;
+        SPRITEPOS[8][1][1][0] = 5;
+        SPRITEPOS[8][1][1][1] = 5;
+        SPRITEPOS[8][1][2][0] = 2;
+        SPRITEPOS[8][1][2][1] = 6;
+        SPRITEPOS[8][2][0][0] = 5;
+        SPRITEPOS[8][2][0][1] = 0;
+        SPRITEPOS[8][2][1][0] = 4;
+        SPRITEPOS[8][2][1][1] = 5;
+        SPRITEPOS[8][2][2][0] = 1;
+        SPRITEPOS[8][2][2][1] = 6;
         
-        SIDESPRITES[9][0][0][0] = 3;
-        SIDESPRITES[9][0][0][1] = 6;
-        SIDESPRITES[9][0][1][0] = 4;
-        SIDESPRITES[9][0][1][1] = 6;
-        SIDESPRITES[9][0][2][0] = 5;
-        SIDESPRITES[9][0][2][1] = 6;
+        SPRITEPOS[9][0][0][0] = 160;
+        SPRITEPOS[9][0][0][1] = 240;
+        SPRITEPOS[9][0][1][0] = 240;
+        SPRITEPOS[9][0][1][1] = 240;
+        SPRITEPOS[9][0][2][0] = 400;
+        SPRITEPOS[9][0][2][1] = 240;
         
-        BLOCKSPRITEPOS[20][0][0] = 1;
-        BLOCKSPRITEPOS[20][0][1] = 0;
         
         //player
-        BLOCKSPRITEPOS[40][0][0] = 2;
-        BLOCKSPRITEPOS[40][0][1] = 0;
-        SIDESPRITES[40][0][0][0] = 640;
-        SIDESPRITES[40][0][0][1] = 384;
-        SIDESPRITES[40][0][1][0] = 640;
-        SIDESPRITES[40][0][1][1] = 384;
-        SIDESPRITES[40][0][2][0] = 880;
-        SIDESPRITES[40][0][2][1] = 384;
-        SIDESPRITES[40][1][0][0] = 160;
-        SIDESPRITES[40][1][0][1] = 384;
-        SIDESPRITES[40][1][1][0] = 480;
-        SIDESPRITES[40][1][1][1] = 384;
-        SIDESPRITES[40][1][2][0] = 400;
-        SIDESPRITES[40][1][2][1] = 384;
+        SPRITEPOS[40][0][0][0] = 640;
+        SPRITEPOS[40][0][0][1] = 80;
+        SPRITEPOS[40][1][0][0] = 640;
+        SPRITEPOS[40][1][0][1] = 0;
+
         
-        BLOCKSPRITEPOS[70][0][0] = 4;
-        BLOCKSPRITEPOS[70][0][1] = 0;
     }
 
     /**
@@ -260,6 +232,7 @@ public class Block {
             case 70:name = "campfire";
                     transparent = true;
                     obstacle = false;
+                    isBlock = false;
                     break;
             default:name = "undefined";
                     transparent = true;
@@ -286,7 +259,7 @@ public class Block {
                 if (renderLeft) drawSide(x,y,z, 0);
                 if (renderRight) drawSide(x,y,z, 2);
             } else {
-                Image temp = Blocksheet.getSubImage(BLOCKSPRITEPOS[id][value][0], BLOCKSPRITEPOS[id][value][1]);
+                Image temp = getSprite(id, value);
 
                 //calc  brightness
                 float brightness = lightlevel / 100f;
@@ -316,14 +289,6 @@ public class Block {
                     - z*Block.HEIGHT
                     + getOffsetY() * (1/Block.ASPECTRATIO)
                 );
-
-                
-//                Block.Blocksheet.renderInUse(
-//                    (int) (zoom*Controller.map.posX) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
-//                    (int) (zoom*Controller.map.posY / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY(),
-//                    renderBlock.spritex,
-//                    renderBlock.spritey
-//                );
             }
         }
     }
@@ -336,7 +301,7 @@ public class Block {
      * @param renderBlock The block which gets rendered
      */
     private void drawSide(int x, int y, int z,int sidenumb){
-        Image sideimage = getSideSprite(id,value,sidenumb);
+        Image sideimage = getSprite(id,value,sidenumb);
         
         if (Gameplay.getController().hasGoodGraphics()){
                 GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
@@ -430,27 +395,29 @@ public class Block {
                 renderorder = -1;
             else renderorder = 0;
     }
-        
     
+    /**
+     * Returns a sprite image of non-block image
+     * @param id
+     * @param value
+     * @return 
+     */    
+    public static Image getSprite(int id, int value) {
+        return Blocksheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], WIDTH, HEIGHT*2);   
+    }
+        
     /**
      *  Returns a sprite image of a specific side of the block
      * @param side Which side? (0 - 2)
      * @return an image of the side
      */
-    public static Image getSideSprite(int id, int value, int side){
+    public static Image getSprite(int id, int value, int side){
         if (side==1)
-            return Blocksheet.getSubImage(SIDESPRITES[id][value][side][0], SIDESPRITES[id][value][side][1], WIDTH, HEIGHT);
+            return Blocksheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], WIDTH, HEIGHT);
         else
-            return Blocksheet.getSubImage(SIDESPRITES[id][value][side][0], SIDESPRITES[id][value][side][1], WIDTH/2, (int) (HEIGHT*3/2));    
+            return Blocksheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], WIDTH/2, (int) (HEIGHT*3/2));    
     }
     
-    /**
-     * Returns the block sprite
-     * @return the sprite image
-     */
-    public static Image getBlockSprite(int id, int value){
-        return Blocksheet.getSubImage(BLOCKSPRITEPOS[id][value][0], BLOCKSPRITEPOS[id][value][1], WIDTH, HEIGHT*2);
-    }
     
 
 
@@ -626,7 +593,7 @@ public class Block {
      */
     public static Color getBlockColor(int id, int value){
         if (colorlist[id][value] == null){
-            colorlist[id][value] = getSideSprite(id, value,1).getColor(WIDTH/2, HEIGHT/2);
+            colorlist[id][value] = getSprite(id, value,1).getColor(WIDTH/2, HEIGHT/2);
             return colorlist[id][value]; 
         } else return colorlist[id][value];
     }
@@ -638,4 +605,5 @@ public class Block {
     public boolean isBlock(){
         return isBlock;
     }
+
 }
