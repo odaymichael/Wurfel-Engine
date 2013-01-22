@@ -77,17 +77,24 @@ public class Chunk {
             }
                 
             case 1: {//one mountain per chunk
+                for (int x=0; x < blocksX; x++)
+                    for (int y=0; y < blocksY; y++){
+                        data[x][y][0] = new Block(9);
+                        data[x][y][1] = new Block(9);
+                    }
+                
                 int mountainx = (int) (Math.random()*blocksX-1);
                 int mountainy = (int) (Math.random()*blocksY-1);
                 
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         int height = blocksZ-1- Math.abs(mountainy-y)- Math.abs(mountainx-x);
-                        if (height<1) height=1;
-                        for (int z=0; z < height; z++){
-                            data[x][y][z] = new Block(2);
+                        if (height>1){
+                            for (int z=0; z < height; z++){
+                                data[x][y][z] = new Block(2);
                             }
-                        data[x][y][height] = new Block(1);
+                            data[x][y][height] = new Block(1);
+                        }
                     }
                 break;
             }
