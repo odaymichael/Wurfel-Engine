@@ -153,6 +153,8 @@
             <filename>sprites/9-2.png</filename>
             <filename>sprites/40-0.png</filename>
             <filename>sprites/70-0.png</filename>
+            <filename>sprites/40-1.png</filename>
+            <filename>sprites/40-3.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

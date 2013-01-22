@@ -133,11 +133,12 @@ public class Block {
         SPRITEPOS[8][2][2][0] = 1;
         SPRITEPOS[8][2][2][1] = 6;
         
-        SPRITEPOS[9][0][0][0] = 160;
+        //water
+        SPRITEPOS[9][0][0][0] = 480;
         SPRITEPOS[9][0][0][1] = 240;
-        SPRITEPOS[9][0][1][0] = 240;
+        SPRITEPOS[9][0][1][0] = 560;
         SPRITEPOS[9][0][1][1] = 240;
-        SPRITEPOS[9][0][2][0] = 400;
+        SPRITEPOS[9][0][2][0] = 720;
         SPRITEPOS[9][0][2][1] = 240;
         
         
@@ -147,6 +148,15 @@ public class Block {
         SPRITEPOS[40][1][0][0] = 640;
         SPRITEPOS[40][1][0][1] = 0;
 
+        SPRITEPOS[40][2][0][0] = 800;
+        SPRITEPOS[40][2][0][1] = 80;
+        SPRITEPOS[40][3][0][0] = 800;
+        SPRITEPOS[40][3][0][1] = 0;
+        
+        SPRITEPOS[40][4][0][0] = 0;
+        SPRITEPOS[40][4][0][1] = 320;
+        SPRITEPOS[40][5][0][0] = 0;
+        SPRITEPOS[40][5][0][1] = 240;
         
     }
 
@@ -213,7 +223,7 @@ public class Block {
                     obstacle = true;
                     break;      
             case 9: name = "water";
-                    transparent = false;
+                    transparent = true;
                     obstacle = false;
                     break;    
             case 20:name = "red brick wall";
@@ -486,7 +496,7 @@ public class Block {
      * Set the value of the block. 
      * @param value
      */
-    public void setValue(int value) {
+    protected void setValue(int value) {
         this.value = value;
     }
 

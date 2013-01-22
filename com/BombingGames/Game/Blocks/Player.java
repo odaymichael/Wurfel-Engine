@@ -72,14 +72,17 @@ public class Player extends MovingBlock{
      public void draw(int x, int y, int z){
         float[] dir = getDirectionVector();
         if (dir[0] < -Math.sin(Math.PI/3)){
-            Log.info("left");//2
+            setValue(2);
+            topblock.getBlock().setValue(3);//2
         } else {
             if (dir[0] < - 0.5){
                 //y
                 if (dir[1]<0){
-                    Log.info("top left");//3
+                    setValue(4);
+                    topblock.getBlock().setValue(5);//3
                 } else {
-                    Log.info("bottom left");//1
+                    setValue(0);
+                    topblock.getBlock().setValue(1);//1
                 }
             } else {
                 if (dir[0] <  0.5){
