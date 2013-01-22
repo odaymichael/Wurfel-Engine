@@ -53,7 +53,8 @@ public class Block {
     private static SpriteSheet Blocksheet;
     
     private int value = 0;
-    private boolean nonBlock,obstacle, transparent, visible, renderRight, renderTop, renderLeft;    
+    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft;  
+    private boolean isBlock = true;
     private int lightlevel = 50;
     private int offsetX, offsetY;
     
@@ -250,6 +251,7 @@ public class Block {
             case 40:name = "player";
                     transparent = true;
                     obstacle = true;
+                    isBlock = false;
                     break;
             case 50:name = "strewbed";
                     transparent = true;
@@ -267,7 +269,129 @@ public class Block {
     }
     
     
+   
+    
+    
     /**
+     * Draws a block
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
+     */
+    public void draw(int x, int y, int z) {
+        //draw every visible block except air
+        if (id != 0 && visible){            
+            if (isBlock){
+                if (renderTop) drawSide(x,y,z, 1);
+                if (renderLeft) drawSide(x,y,z, 0);
+                if (renderRight) drawSide(x,y,z, 2);
+            } else {
+                Image temp = Blocksheet.getSubImage(BLOCKSPRITEPOS[id][value][0], BLOCKSPRITEPOS[id][value][1]);
+
+                //calc  brightness
+                float brightness = lightlevel / 100f;
+                //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
+                
+                //or paint whole block with :
+                //int brightness = renderBlock.lightlevel * 255 / 100;
+                //new Color(brightness,brightness,brightness).bind(); 
+                
+                temp.setColor(0, brightness,brightness,brightness);
+                temp.setColor(1, brightness,brightness, brightness);
+
+                brightness -= .1f;
+                //System.out.println(lightlevel);
+
+                temp.setColor(2, brightness, brightness, brightness);
+                temp.setColor(3, brightness, brightness, brightness);
+                
+                temp.drawEmbedded(
+                    -Gameplay.getView().getCamera().getX()
+                    + x*Block.WIDTH
+                    + (y%2) * (int) (Block.WIDTH/2)
+                    + getOffsetX()
+                    ,
+                    -Gameplay.getView().getCamera().getY()
+                    + y*Block.HEIGHT/2
+                    - z*Block.HEIGHT
+                    + getOffsetY() * (1/Block.ASPECTRATIO)
+                );
+
+                
+//                Block.Blocksheet.renderInUse(
+//                    (int) (zoom*Controller.map.posX) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
+//                    (int) (zoom*Controller.map.posY / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY(),
+//                    renderBlock.spritex,
+//                    renderBlock.spritey
+//                );
+            }
+        }
+    }
+    /**
+     * Draws a side of a block
+     * @param x
+     * @param y
+     * @param z
+     * @param sidenumb The number of the side. 0 left, 1 top 2, right
+     * @param renderBlock The block which gets rendered
+     */
+    private void drawSide(int x, int y, int z,int sidenumb){
+        Image sideimage = getSideSprite(id,value,sidenumb);
+        
+        if (Gameplay.getController().hasGoodGraphics()){
+                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
+        
+            if (sidenumb == 0){
+                int brightness = lightlevel * 255 / 100;
+                new Color(brightness,brightness,brightness).bind();
+            } else {
+                Color.black.bind();
+            }
+        }
+        
+        //calc  brightness
+        float brightness = lightlevel / 50f;
+                
+        sideimage.setColor(0, brightness,brightness,brightness);
+        sideimage.setColor(1, brightness,brightness, brightness);
+
+        if (sidenumb!=1) brightness -= .3f;
+
+        sideimage.setColor(2, brightness, brightness, brightness);
+        sideimage.setColor(3, brightness, brightness, brightness);
+        
+        sideimage.drawEmbedded(
+            -  Gameplay.getView().getCamera().getX()
+            + x*Block.WIDTH
+            + (y%2) * (int) (Block.WIDTH/2)
+            + ( sidenumb == 2 ? Block.WIDTH/2:0)
+            + getOffsetX()
+            ,            
+            - Gameplay.getView().getCamera().getY()
+            + y*Block.HEIGHT/2
+            - z*Block.HEIGHT
+            + ( sidenumb != 1 ? Block.HEIGHT/2:0)//the top is drawn /4 Blocks higher
+            + getOffsetY() * (1/Block.ASPECTRATIO)
+        );
+    }
+        
+  /**
+     * creates the new sprite image at a specific zoom factor. Also calculates displWidth and displHeight which change with zooming.
+     * @param zoom the zoom factor of the new image
+     */
+    public static void reloadSprites(float zoom) {
+        try {
+            Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", WIDTH, (int) (HEIGHT*1.5f));
+            Gameplay.MSGSYSTEM.add("displWidth: "+(int) (WIDTH*zoom));
+            Log.debug("displWidth: "+(int) (WIDTH*zoom));
+            Gameplay.MSGSYSTEM.add("displHeight: "+(int) (HEIGHT*zoom));
+            Log.debug("displHeight: "+(int) (HEIGHT*zoom));
+        } catch (SlickException ex) {
+            Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+        /**
      * returns the id of a block
      * @return getId
      */
@@ -415,133 +539,6 @@ public class Block {
         this.lightlevel = lightlevel;
     }
     
-    
-    
-    /**
-     * Draws a block
-     * @param x x-coordinate
-     * @param y y-coordinate
-     * @param z z-coordinate
-     */
-    public void draw(int x, int y, int z) {
-        //draw every visible block except air
-        if (id != 0 && visible){
-            //Block renderBlock = Controller.map.data[x][y][z]; 
-            
-            if (Gameplay.getController().renderSides()){
-                    if (renderTop) drawSide(x,y,z, 1);
-                    if (renderLeft) drawSide(x,y,z, 0);
-                    if (renderRight) drawSide(x,y,z, 2);
-            } else {
-                Image temp = Blocksheet.getSubImage(BLOCKSPRITEPOS[id][value][0], BLOCKSPRITEPOS[id][value][1]);
-
-                //calc  brightness
-                float brightness = lightlevel / 100f;
-                //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
-                
-                //or paint whole block with :
-                //int brightness = renderBlock.lightlevel * 255 / 100;
-                //new Color(brightness,brightness,brightness).bind(); 
-                
-                temp.setColor(0, brightness,brightness,brightness);
-                temp.setColor(1, brightness,brightness, brightness);
-
-                brightness -= .1f;
-                //System.out.println(lightlevel);
-
-                temp.setColor(2, brightness, brightness, brightness);
-                temp.setColor(3, brightness, brightness, brightness);
-                
-                temp.drawEmbedded(
-                    -Gameplay.getView().getCamera().getX()
-                    + x*Block.WIDTH
-                    + (y%2) * (int) (Block.WIDTH/2)
-                    + getOffsetX()
-                    ,
-                    -Gameplay.getView().getCamera().getY()
-                    + y*Block.HEIGHT/2
-                    - z*Block.HEIGHT
-                    + getOffsetY() * (1/Block.ASPECTRATIO)
-                );
-
-                
-//                Block.Blocksheet.renderInUse(
-//                    (int) (zoom*Controller.map.posX) + x*Block.displWidth + (y%2) * (int) (Block.displWidth/2) + renderBlock.getOffsetX(),
-//                    (int) (zoom*Controller.map.posY / 2) + y*Block.displHeight/4 - z*Block.displHeight/2 + renderBlock.getOffsetY(),
-//                    renderBlock.spritex,
-//                    renderBlock.spritey
-//                );
-            }
-        }
-    }
-    /**
-     * Draws a side of a block
-     * @param x
-     * @param y
-     * @param z
-     * @param sidenumb The number of the side. 0 left, 1 top 2, right
-     * @param renderBlock The block which gets rendered
-     */
-    private void drawSide(int x, int y, int z,int sidenumb){
-        Image sideimage = getSideSprite(id,value,sidenumb);
-        
-        if (Gameplay.getController().hasGoodGraphics()){
-                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
-        
-            if (sidenumb == 0){
-                int brightness = lightlevel * 255 / 100;
-                new Color(brightness,brightness,brightness).bind();
-            } else {
-                Color.black.bind();
-            }
-        }
-        
-        //calc  brightness
-        float brightness = lightlevel / 50f;
-                
-        sideimage.setColor(0, brightness,brightness,brightness);
-        sideimage.setColor(1, brightness,brightness, brightness);
-
-        if (sidenumb!=1) brightness -= .3f;
-
-        sideimage.setColor(2, brightness, brightness, brightness);
-        sideimage.setColor(3, brightness, brightness, brightness);
-        
-        sideimage.drawEmbedded(
-            -  Gameplay.getView().getCamera().getX()
-            + x*Block.WIDTH
-            + (y%2) * (int) (Block.WIDTH/2)
-            + ( sidenumb == 2 ? Block.WIDTH/2:0)
-            + getOffsetX()
-            ,            
-            - Gameplay.getView().getCamera().getY()
-            + y*Block.HEIGHT/2
-            - z*Block.HEIGHT
-            + ( sidenumb != 1 ? Block.HEIGHT/2:0)//the top is drawn /4 Blocks higher
-            + getOffsetY() * (1/Block.ASPECTRATIO)
-        );
-    }
-        
-  /**
-     * creates the new sprite image at a specific zoom factor. Also calculates displWidth and displHeight which change with zooming.
-     * @param zoom the zoom factor of the new image
-     */
-    public static void reloadSprites(float zoom) {
-        try {
-            if (Gameplay.getController().renderSides()){//single sides
-                Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", WIDTH, (int) (HEIGHT*1.5f));
-            } else {//whole Blocks
-                Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Blocksprite.png", WIDTH, HEIGHT*2, 4);
-            }
-            Gameplay.MSGSYSTEM.add("displWidth: "+(int) (WIDTH*zoom));
-            Log.debug("displWidth: "+(int) (WIDTH*zoom));
-            Gameplay.MSGSYSTEM.add("displHeight: "+(int) (HEIGHT*zoom));
-            Log.debug("displHeight: "+(int) (HEIGHT*zoom));
-        } catch (SlickException ex) {
-            Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     /**
      * Make a side (in)visible. If one side is visible, the whole block is visible.
      * @param side 0 = left, 1 = top, 2 = right
@@ -639,6 +636,6 @@ public class Block {
      * @return 
      */
     public boolean isBlock(){
-        return !nonBlock;
+        return isBlock;
     }
 }

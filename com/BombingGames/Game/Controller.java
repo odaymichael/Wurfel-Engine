@@ -15,6 +15,7 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Controller {
+    private GameContainer gc;
     /**
      *The list which has all current nine chunks in it.
      */
@@ -22,12 +23,8 @@ public class Controller {
     private Player player;   
    
     private boolean goodgraphics = false;
-    private boolean renderSides = true;
     
-    /**
-     * 
-     */
-    public GameContainer gc;
+
     private float zoomx = 1;
     
     /**
@@ -194,14 +191,6 @@ public class Controller {
     }
 
     /**
-     * When true every side is rendered. When false the whole block is rendered.
-     * @return 
-     */
-    public boolean renderSides() {
-        return renderSides;
-    }
-
-    /**
      * Returns the currently loaded map.
      * @return the map
      */
@@ -236,14 +225,5 @@ public class Controller {
      */
     public static Block getMapDataUnsafe(int x, int y, int z){
         return map.getDataUnsafe(x, y, z);
-    }
-
-
-    public boolean getRenderSides() {
-        return renderSides;
-    }
-
-    protected void setRenderSides(boolean renderSides) {
-        this.renderSides = renderSides;
     }
 }

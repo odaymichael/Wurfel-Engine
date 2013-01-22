@@ -12,15 +12,16 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Benedikt
  */
 public class GameController extends Controller {
-    
+    private GameContainer gc;
     /**
      * 
      * @param container
      * @param game
      * @throws SlickException
      */
-    public GameController(GameContainer container, StateBasedGame game) throws SlickException{
-        super(container, game);
+    public GameController(GameContainer gc, StateBasedGame game) throws SlickException{
+        super(gc, game);
+        this.gc = gc;
         setPlayer(new Player((int) (Chunk.getBlocksX()*1.5),(int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2));
         getMap().setData((int) (Chunk.getBlocksX()*1.5), (int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2, getPlayer());
     }
@@ -51,13 +52,6 @@ public class GameController extends Controller {
             if (input.isKeyPressed(Input.KEY_G)) {
                 setGoodgraphics(!hasGoodGraphics());
                 Gameplay.MSGSYSTEM.add("Good Graphics is now "+hasGoodGraphics());
-            }
-
-            //render method
-            if (input.isKeyPressed(Input.KEY_R)) {
-                setRenderSides(!getRenderSides());
-                Gameplay.MSGSYSTEM.add("Rendermethod changes "+getRenderSides());
-                Block.reloadSprites(Gameplay.getView().getCamera().getAbsZoom());
             }
 
             //toggle getCamera()
