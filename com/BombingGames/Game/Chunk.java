@@ -15,7 +15,7 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Chunk {
-        /**
+    /**
      * The number of the mapgenerator used.
      */
     public static final int MAPGENERATOR = 1;

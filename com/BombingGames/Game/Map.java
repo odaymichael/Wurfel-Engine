@@ -96,15 +96,12 @@ public class Map {
         Block data_copy[][][] = copyOf3Dim(data);
         
         for (int pos=0; pos<9; pos++){
+            //refresh coordinates
             coordlist[pos][0] += (center == 3 ? -1 : (center == 5 ? 1 : 0));
             coordlist[pos][1] += (center == 1 ? -1 : (center == 7 ? 1 : 0));
             
-            if (isMovingChunkPossible(pos,center)){
-                //System.out.println("[" + pos + "] <- ["+ (pos + center - 4) +"] (old)");
-                setChunk(
-                    pos,
-                    getChunk(data_copy, pos -4 + center)
-                );
+            if (isMovingChunkPossible(pos, center)){
+                setChunk(pos, getChunk(data_copy, pos - 4 + center));
             } else {
                 setChunk(
                         pos,
@@ -116,7 +113,6 @@ public class Map {
                 );
             }
         }
-        //all selfaware objects should be updated here, atm only player
         
         recalcRequested = true;
         } else {
@@ -149,12 +145,13 @@ public class Map {
     }
      
     /**
-     * Get a chunk out of data (should be a copy of this.data)
-     * @param data
-     * @param pos
+     * Get a chunk out of a map (should be a copy of Map.data)
+     * @param src The map
+     * @param pos The chunk number
      */ 
-    private Chunk getChunk(Block[][][] data, int pos) {
+    private Chunk getChunk(Block[][][] src, int pos) {
         Chunk tmpChunk = new Chunk();
+        //copy the data in two loops and arraycopy
         for (int x = Chunk.getBlocksX()*(pos % 3);
                 x < Chunk.getBlocksX()*(pos % 3+1);
                 x++
@@ -164,7 +161,7 @@ public class Map {
                         y++
                     ) {
                     System.arraycopy(
-                        data[x][y],                
+                        src[x][y],                
                         0,
                         tmpChunk.getData()[x-Chunk.getBlocksX()*(pos % 3)][y - Chunk.getBlocksY()*(pos / 3)],
                         0,
