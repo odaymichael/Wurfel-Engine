@@ -50,10 +50,12 @@ public class Block {
     private static SpriteSheet Blocksheet;
     
     private int value = 0;
-    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft;  
+    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft, invisible; 
     private boolean isBlock = true;
     private int lightlevel = 50;
     private int offsetX, offsetY;
+    private int dimensionX = 1;
+    private int dimensionY = 1;
     
     
     /**
@@ -161,7 +163,7 @@ public class Block {
     }
 
     /**
-     * Creates an air block. 
+     * Creates a block of air. 
      */ 
     public Block(){
         this(0,0);
@@ -177,8 +179,8 @@ public class Block {
     
     /**
      * Creates a block (id) with value (value).
-     * @param id 
-     * @param value 
+     * @param id the id of the block
+     * @param value the sub-id called  value
      */    
     public Block(int id, int value){
         this.id = id;
@@ -234,6 +236,7 @@ public class Block {
                     transparent = true;
                     obstacle = true;
                     isBlock = false;
+                    dimensionY=2;
                     break;
             case 50:name = "strewbed";
                     transparent = true;
@@ -263,13 +266,13 @@ public class Block {
      */
     public void draw(int x, int y, int z) {
         //draw every visible block except air
-        if (id != 0 && visible){            
+        if (id != 0 && visible && !invisible){            
             if (isBlock){
                 if (renderTop) drawSide(x,y,z, 1);
                 if (renderLeft) drawSide(x,y,z, 0);
                 if (renderRight) drawSide(x,y,z, 2);
             } else {
-                Image temp = getSprite(id, value);
+                Image temp = getSprite(id, value, dimensionX, dimensionY);
 
                 //calc  brightness
                 float brightness = lightlevel / 100f;
@@ -298,6 +301,7 @@ public class Block {
                     + y*Block.HEIGHT/2
                     - z*Block.HEIGHT
                     + getOffsetY() * (1/Block.ASPECTRATIO)
+                    -(dimensionY-1)*Block.HEIGHT
                 );
             }
         }
@@ -311,7 +315,7 @@ public class Block {
      * @param renderBlock The block which gets rendered
      */
     private void drawSide(int x, int y, int z,int sidenumb){
-        Image sideimage = getSprite(id,value,sidenumb);
+        Image sideimage = getBlockSprite(id,value,sidenumb);
         
         if (Gameplay.getController().hasGoodGraphics()){
                 GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
@@ -351,16 +355,11 @@ public class Block {
     }
         
   /**
-     * creates the new sprite image at a specific zoom factor. Also calculates displWidth and displHeight which change with zooming.
-     * @param zoom the zoom factor of the new image
+     * Loads the spriteSheet
      */
-    public static void reloadSprites(float zoom) {
+    public static void loadSpriteSheet() {
         try {
             Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", WIDTH, (int) (HEIGHT*1.5f));
-            Gameplay.MSGSYSTEM.add("displWidth: "+(int) (WIDTH*zoom));
-            Log.debug("displWidth: "+(int) (WIDTH*zoom));
-            Gameplay.MSGSYSTEM.add("displHeight: "+(int) (HEIGHT*zoom));
-            Log.debug("displHeight: "+(int) (HEIGHT*zoom));
         } catch (SlickException ex) {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -412,8 +411,8 @@ public class Block {
      * @param value
      * @return 
      */    
-    public static Image getSprite(int id, int value) {
-        return Blocksheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], WIDTH, HEIGHT*2);   
+    public static Image getSprite(int id, int value, int dimX, int dimY) {
+        return Blocksheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], dimX*WIDTH, dimY*HEIGHT*2);   
     }
         
     /**
@@ -421,7 +420,7 @@ public class Block {
      * @param side Which side? (0 - 2)
      * @return an image of the side
      */
-    public static Image getSprite(int id, int value, int side){
+    public static Image getBlockSprite(int id, int value, int side){
         if (side==1)
             return Blocksheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], WIDTH, HEIGHT);
         else
@@ -603,7 +602,7 @@ public class Block {
      */
     public static Color getBlockColor(int id, int value){
         if (colorlist[id][value] == null){
-            colorlist[id][value] = getSprite(id, value,1).getColor(WIDTH/2, HEIGHT/2);
+            colorlist[id][value] = getBlockSprite(id, value,1).getColor(WIDTH/2, HEIGHT/2);
             return colorlist[id][value]; 
         } else return colorlist[id][value];
     }
@@ -614,6 +613,14 @@ public class Block {
      */
     public boolean isBlock(){
         return isBlock;
+    }
+
+    /**
+     * Is this block invisible?
+     * @return treu if invisible
+     */
+    public boolean isInvisible() {
+        return invisible;
     }
 
 }

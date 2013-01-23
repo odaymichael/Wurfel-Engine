@@ -34,7 +34,7 @@ public class Chunk {
         for (int x=0; x < blocksX; x++)
             for (int y=0; y < blocksY; y++)
                 for (int z=0; z < blocksZ; z++)
-                    data[x][y][z] = new Block(0,0);
+                    data[x][y][z] = new Block();
     }
     
     /**

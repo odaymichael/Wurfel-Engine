@@ -99,7 +99,6 @@ public class Camera {
         this.zoom = zoom;
         width = (int) (screenWidth / zoom);
         height = (int) (screenHeight / zoom);
-        Block.reloadSprites(zoom);
     }
     
     /**

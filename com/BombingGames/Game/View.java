@@ -79,9 +79,9 @@ public class View {
         //update resolution things
         Gameplay.MSGSYSTEM.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
         
-        Block.reloadSprites(camera.getZoom()*equalizationScale); 
+        Block.loadSpriteSheet(); 
         // Block.WIDTH = Block.HEIGHT;
-        Gameplay.MSGSYSTEM.add("Blocks: "+Block.WIDTH+" x "+Block.HEIGHT);
+        Gameplay.MSGSYSTEM.add("Blocks: "+ Block.WIDTH+" x "+Block.HEIGHT);
         Gameplay.MSGSYSTEM.add("Zoom: "+ camera.getZoom());
         Gameplay.MSGSYSTEM.add("AbsZoom: "+ camera.getZoom()*equalizationScale);
      }
@@ -104,17 +104,19 @@ public class View {
      */
     protected void raytracing(){
         Log.debug("doing raytracing");
-        //set visibility of every block to false
+        //set visibility of every block to false, except blocks with offset
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY(); y++)
                 for (int z=0; z < Chunk.getBlocksZ(); z++) {
+                    
                     Block block = Controller.getMapDataUnsafe(x, y, z);
-                    if (!block.hasOffset()) block.setVisible(false);
-                    else  {//Blocks with offset are not in the grid, so ignore them
-                        block.setSideVisibility(0, true);
-                        block.setSideVisibility(1, true);
-                        block.setSideVisibility(2, true);
+                    if (block.hasOffset()){
+                        block.setVisible(true);//Blocks with offset are not in the grid, so ignore them
+                        Controller.getMapData(x, y, z-1).setVisible(true);
+                    } else  {
+                        block.setVisible(false);
                     }
+                    
                 }
                 
         //send rays through top of the map
@@ -194,7 +196,7 @@ public class View {
                                 )
                                 break;
 
-                            //two blocks hiding the rightside
+                            //two blocks hiding the right side
                             if (y < Map.getBlocksY()-2 &&
                                 ! Controller.getMapDataUnsafe(x, y+2, z).isTransparent()
                                 )
