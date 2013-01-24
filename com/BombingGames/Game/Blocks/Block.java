@@ -50,10 +50,10 @@ public class Block {
     private static SpriteSheet Blocksheet;
     
     private int value = 0;
-    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft, invisible; 
+    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft; 
     private boolean isBlock = true;
     private int lightlevel = 50;
-    private int offsetX, offsetY;
+    private int offsetX, offsetY, depth;
     private int dimensionX = 1;
     private int dimensionY = 1;
     
@@ -266,7 +266,7 @@ public class Block {
      */
     public void draw(int x, int y, int z) {
         //draw every visible block except air
-        if (id != 0 && visible && !invisible){            
+        if (id != 0 && visible){            
             if (isBlock){
                 if (renderTop) drawSide(x,y,z, 1);
                 if (renderLeft) drawSide(x,y,z, 0);
@@ -616,11 +616,18 @@ public class Block {
     }
 
     /**
-     * Is this block invisible?
-     * @return treu if invisible
+     * Returns the depth of the block. The depth is an int value wich is needed for producing hte list of the renderorder.
+     * @return 
      */
-    public boolean isInvisible() {
-        return invisible;
+    public int getDepth() {
+        return depth;
     }
 
+    /**
+     * 
+     * @param depth 
+     */
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
 }

@@ -1,6 +1,7 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
+import java.util.ArrayList;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
@@ -19,17 +20,31 @@ public class View {
      */
     public static TrueTypeFont tTFont_small;
     public static AngelCodeFont baseFont;
+
+
+    private static class Renderblock {
+        protected int x,y,z;
+        protected int depth;
+
+        public Renderblock(int x, int y, int z, int depth) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.depth = depth;
+        }
+    }
+    
     /**
      * The reference for the graphics context
      */
     public Graphics g = null; 
-    /**
-     * The camera which displays everything
-     */
+    
     private Camera camera;
     private GameContainer gc;
     private java.awt.Font font;
     private float equalizationScale;
+    
+    private ArrayList<Renderblock> depthsort = new ArrayList();
 
     /**
      * Creates a View
@@ -38,7 +53,6 @@ public class View {
      */
     public View(GameContainer gc) throws SlickException {
         this.gc = gc;  
-       
         // initialise the font which CAUSES LONG LOADING TIME!!!
         //TrueTypeFont trueTypeFont;
 
@@ -47,18 +61,17 @@ public class View {
         baseFont = new AngelCodeFont("com/BombingGames/Game/Blox.fnt","com/BombingGames/Game/Blox.png");
         //baseFont = startFont.deriveFont(Font.PLAIN, 12);
         //baseFont = startFont.getFont().deriveFont(Font.PLAIN, 18);
-        
         //tTFont = new TrueTypeFont(baseFont, true);
         
         //defautl is Full-HD
         equalizationScale = gc.getWidth()/1920f;
-        Log.debug("Scale is:"+Float.toString(equalizationScale));
+        Log.debug("Scale is:" + Float.toString(equalizationScale));
         
         camera = new Camera(
-            0,//top
-            0,//left
-            gc.getWidth(),//full width
-            gc.getHeight(),//full height
+            0, //top
+            0, //left
+            gc.getWidth(), //full width
+            gc.getHeight(), //full height
             equalizationScale
         );
         
@@ -69,8 +82,7 @@ public class View {
             Log.warn("The chunks are too small for this camera height/resolution to grant a stable experience");
         }
         
-        
-        
+
         /*font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
         tTFont = new TrueTypeFont(font, true);
         font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 8);
@@ -98,12 +110,58 @@ public class View {
         camera.draw(); 
         Gameplay.MSGSYSTEM.draw(); 
     }
-         
+    
+    /**
+     * Fills the map into a list and sorts it, called the depthlist.
+     */
+    private void createSortedDepthList() {
+        depthsort.clear();
+        int position=0;
+        for (int x=0;x<Map.getBlocksX();x++)
+            for (int y=0;y<Map.getBlocksY();y++)
+                for (int z=0;z<Map.getBlocksZ();z++){
+                    Block block = Controller.getMapDataUnsafe(x, y, z); 
+                    if (block.isVisible()) {
+                        depthsort.add(new Renderblock(x,y,z,block.getDepth()));
+                    }
+                }
+        sortDepthList(0,position-1);
+    }
+    
+    /**
+     * Using sortDepthList to sort
+     * @param pLow
+     * @param pHigh 
+     */
+    private void sortDepthList(int pLow, int pHigh) {
+        int hLinks = pLow;
+        int hRechts = pHigh;
+
+        int middle = depthsort.get((pLow+pHigh)/2).depth;
+
+        while (hLinks <= hRechts){    
+            while(depthsort.get(hLinks).depth < middle) hLinks++; 
+            while(depthsort.get(hRechts).depth > middle) hRechts--;
+
+            if (hLinks <= hRechts) {
+                int tmp = depthsort.get(hLinks).depth;
+                depthsort.get(hLinks).depth = depthsort.get(hRechts).depth;
+                depthsort.get(hRechts).depth = tmp;
+                hLinks++; 
+                hRechts--;
+            }
+        }
+
+        if(pLow < hRechts) sortDepthList(pLow, hRechts);
+        if(hLinks < pHigh) sortDepthList(hLinks, pHigh);
+    }
+    
  /**
      * Filters every Block (and side) wich is not visible. Boosts rendering speed.
      */
     protected void raytracing(){
         Log.debug("doing raytracing");
+        
         //set visibility of every block to false, except blocks with offset
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY(); y++)
@@ -119,7 +177,7 @@ public class View {
                     
                 }
                 
-        //send rays through top of the map
+        //send the rays through top of the map
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY() + Chunk.getBlocksZ()*2; y++)
                 for (int side=0; side < 3; side++)
@@ -129,6 +187,8 @@ public class View {
                         Chunk.getBlocksZ()-1,
                         side
                     );
+        
+        createSortedDepthList();
     }
 
     /**
@@ -141,10 +201,13 @@ public class View {
     private void trace_ray(int x, int y, int z, int side){
         boolean left = true;
         boolean right = true;
+        int depth = (Map.getBlocksY() - y)*Block.HEIGHT/2;
 
+        //bring ray to start position
         while (y >= Map.getBlocksY()){
             y -= 2;
             z--;
+            depth+=Block.HEIGHT/2;
         }
 
         y += 2;
@@ -153,6 +216,7 @@ public class View {
             do {
                 y -= 2;
                 z--;
+                depth+=Block.HEIGHT/2;
 
                 if (side == 0){
                     //direct neighbour block on left hiding the complete left side
@@ -168,10 +232,12 @@ public class View {
                         ! Controller.getMapDataUnsafe(x, y+2, z).isTransparent())
                         right = false;
 
-                    if (left || right) //as long one part of the side is visible save it
-                        Controller.getMapDataUnsafe(x, y, z).setSideVisibility(0, true);
-                    else break;//if side is hidden stop ray
-                } else                 
+                    if (left || right){ //as long one part of the side is visible save it
+                        Block temp = Controller.getMapDataUnsafe(x, y, z);
+                        temp.setSideVisibility(0, true);
+                        temp.setDepth(depth-temp.getOffsetY());
+                    }else break;//if side is hidden stop ray
+                } else {              
                     if (side == 1) {//check top side
                         if (z < Map.getBlocksZ()-1
                             && ! Controller.getMapDataUnsafe(x, y, z+1).isTransparent())
@@ -186,9 +252,11 @@ public class View {
                             right = false;
 
                         if (left || right){
-                            Controller.getMapDataUnsafe(x, y, z).setSideVisibility(1, true);
+                            Block temp = Controller.getMapDataUnsafe(x, y, z);
+                            temp.setSideVisibility(1, true);
+                            temp.setDepth(depth-temp.getOffsetY());
                         }else break;
-                    } else
+                    } else {
                         if (side==2){
                             //block on right hiding the right side
                             if (x < Map.getBlocksX()-1 && y < Map.getBlocksY()-1
@@ -207,11 +275,15 @@ public class View {
                                 )
                                 right = false;
 
-                            if (left || right)
-                                Controller.getMapDataUnsafe(x, y, z).setSideVisibility(2, true);
-                            else break;
+                            if (left || right){
+                                Block temp = Controller.getMapDataUnsafe(x, y, z);
+                                temp.setSideVisibility(2, true);
+                                temp.setDepth(depth-temp.getOffsetY());
+                            }else break;
                         }
-        } while (y >= 2 && z >= 1 && (Controller.getMapDataUnsafe(x, y, z).isTransparent() || Controller.getMapDataUnsafe(x, y, z).hasOffset()));
+                    }
+                }
+            } while (y >= 2 && z >= 1 && (Controller.getMapDataUnsafe(x, y, z).isTransparent() || Controller.getMapDataUnsafe(x, y, z).hasOffset()));
     }
     
     /**
@@ -239,5 +311,19 @@ public class View {
 
     public Camera getCamera() {
         return camera;
-    } 
+    }
+
+    public int[] getDepthsortCoord(int i) {
+        Renderblock item = depthsort.get(i);
+        int[] triple = {item.x, item.y, item.z};
+        return triple;
+    }
+    
+    public int getDepthsortSize(){
+        return depthsort.size();
+    }
+    
+    
+    
+    
 }

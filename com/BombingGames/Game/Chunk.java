@@ -18,7 +18,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 1;
+    public static final int MAPGENERATOR = 3;
     
     private static int blocksX = 10;//16:9 => 12:27, 4:3=>12:36
     private static int blocksY = 40;//28
@@ -76,7 +76,7 @@ public class Chunk {
                 break;
             }
                 
-            case 1: {//one mountain per chunk
+            case 1: {//island
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         data[x][y][0] = new Block(9);

@@ -10,6 +10,9 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Map {
+    /**
+     * 
+     */
     public static final float GRAVITY = 9.81f;
     
     private static int blocksX, blocksY, blocksZ;    
@@ -217,24 +220,26 @@ public class Map {
         if (Gameplay.getController().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
         Block.getBlocksheet().startUse();
+        View view = Gameplay.getView();
         //render vom bottom to top
-        for (int z=0; z < Chunk.getBlocksZ(); z++) {
-            for (int y = Gameplay.getView().getCamera().getTopBorder(); y < Gameplay.getView().getCamera().getBottomBorder(); y++) {//vertikal
-                for (int x = Gameplay.getView().getCamera().getLeftBorder(); x < Gameplay.getView().getCamera().getRightBorder(); x++){//horizontal
-                    //check current and next block for special order
-                    if (
-                        (x < Map.getBlocksX()-1 && data[x+1][y][z].getRenderorder() == -1)
-                        ||
-                        data[x][y][z].getRenderorder() == 1
-                       ) 
-                    {
-                        x++;
-                        data[x][y][z].draw(x,y,z);//draw the right block first
-                        data[x-1][y][z].draw(x-1,y,z); //then the left   
-                    } else data[x][y][z].draw(x,y,z);
-                }
-            }
-       }
+        for (int i=0; i < view.getDepthsortSize();i++) {
+            int[] item = view.getDepthsortCoord(i);
+            data[item[0]][item[1]][item[2]].draw(item[0],item[1],item[2]);
+        }
+        
+//                    //check current and next block for special order
+//                    if (
+//                        (x < Map.getBlocksX()-1 && data[x+1][y][z].getRenderorder() == -1)
+//                        ||
+//                        data[x][y][z].getRenderorder() == 1
+//                       ) 
+//                    {
+//                        x++;
+//                        data[x][y][z].draw(x,y,z);//draw the right block first
+//                        data[x-1][y][z].draw(x-1,y,z); //then the left   
+//                    } else data[x][y][z].draw(x,y,z);
+//                }
+            
        Block.getBlocksheet().endUse(); 
        if (Gameplay.getController().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
     }
@@ -337,6 +342,9 @@ public class Map {
         data[x][y][z] = block;    
     }
     
+    /**
+     * 
+     */
     public void earthquake(){
         int numberofblocks = 2000;
         int[] x = new int[numberofblocks];
@@ -356,14 +364,26 @@ public class Map {
         requestRecalc();
     }
 
+    /**
+     * Returns the amount of Blocks inside the map in x-direction.
+     * @return
+     */
     public static int getBlocksX() {
         return blocksX;
     }
 
+    /**
+     * Returns the amount of Blocks inside the map in y-direction.
+     * @return
+     */
     public static int getBlocksY() {
         return blocksY;
     }
 
+    /**
+     * Returns the amount of Blocks inside the map in z-direction.
+     * @return 
+     */
     public static int getBlocksZ() {
         return blocksZ;
     }
