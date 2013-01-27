@@ -266,13 +266,17 @@ public class Camera {
         return screenY;
     }
     
-    public int getCenterXofBlock(int x, int y, int z){
-        return -Gameplay.getView().getCamera().getX()+x*Block.WIDTH + (y%2) * (int) (Block.WIDTH/2) + Controller.getMapDataUnsafe(x, y, z).getOffsetX();
+    /**
+     * Returns the pixel-coordinates (screen) of a block's center.
+     * @param x
+     * @param y
+     * @param z
+     * @return an array with [0]-x and [1]-y 
+     */
+    public int[] getCenterofBlock(int x, int y, int z){
+        int result[] = new int[2];
+        result[0] = -Gameplay.getView().getCamera().getX()+x*Block.WIDTH + (y%2) * (int) (Block.WIDTH/2) + Controller.getMapDataUnsafe(x, y, z).getOffsetX();
+        result[1] = (int) (-Gameplay.getView().getCamera().getY()+y*Block.HEIGHT/2 - z*Block.HEIGHT + Controller.getMapDataUnsafe(x, y, z).getOffsetY() * (1/Block.ASPECTRATIO));
+        return result;
     }
-
-    public int getCenterYofBlock(int x, int y, int z) {
-        return (int) (-Gameplay.getView().getCamera().getY()+y*Block.HEIGHT/2 - z*Block.HEIGHT + Controller.getMapDataUnsafe(x, y, z).getOffsetY() * (1/Block.ASPECTRATIO));
-    }
-    
-    
 }

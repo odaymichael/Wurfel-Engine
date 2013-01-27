@@ -50,18 +50,11 @@ public class Block {
     private static SpriteSheet Blocksheet;
     
     private int value = 0;
-    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft; 
+    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft, invisible, liquid; 
     private boolean isBlock = true;
     private int lightlevel = 50;
-    private int offsetX, offsetY, depth;
-    private int dimensionX = 1;
+    private int offsetX, offsetY;
     private int dimensionY = 1;
-    
-    
-    /**
-     * Changes the order the block is rendered. When renderorder = 1 the Block is drawn in front of the right block. When it is -1 it is draw behind the left block. 0 is default.
-     */
-    private int renderorder = 0;
     
     
     /**
@@ -136,29 +129,39 @@ public class Block {
         SPRITEPOS[8][2][2][1] = 6;
         
         //water
-        SPRITEPOS[9][0][0][0] = 480;
-        SPRITEPOS[9][0][0][1] = 240;
-        SPRITEPOS[9][0][1][0] = 560;
-        SPRITEPOS[9][0][1][1] = 240;
-        SPRITEPOS[9][0][2][0] = 720;
-        SPRITEPOS[9][0][2][1] = 240;
+        SPRITEPOS[9][0][0][0] = 320;
+        SPRITEPOS[9][0][0][1] = 480;
+        SPRITEPOS[9][0][1][0] = 400;
+        SPRITEPOS[9][0][1][1] = 480;
+        SPRITEPOS[9][0][2][0] = 560;
+        SPRITEPOS[9][0][2][1] = 480;
         
         
         //player
-        SPRITEPOS[40][0][0][0] = 640;
-        SPRITEPOS[40][0][0][1] = 80;
+        //sw
         SPRITEPOS[40][1][0][0] = 640;
         SPRITEPOS[40][1][0][1] = 0;
-
+        //w
         SPRITEPOS[40][2][0][0] = 800;
-        SPRITEPOS[40][2][0][1] = 80;
-        SPRITEPOS[40][3][0][0] = 800;
-        SPRITEPOS[40][3][0][1] = 0;
-        
-        SPRITEPOS[40][4][0][0] = 0;
-        SPRITEPOS[40][4][0][1] = 320;
-        SPRITEPOS[40][5][0][0] = 0;
+        SPRITEPOS[40][2][0][1] = 0;
+        //nw
+        SPRITEPOS[40][3][0][0] = 0;
+        SPRITEPOS[40][3][0][1] = 240;
+        //n
+        SPRITEPOS[40][4][0][0] = 160;
+        SPRITEPOS[40][4][0][1] = 240;
+        //ne
+        SPRITEPOS[40][5][0][0] = 320;
         SPRITEPOS[40][5][0][1] = 240;
+        //e
+        SPRITEPOS[40][6][0][0] = 480;
+        SPRITEPOS[40][6][0][1] = 240;
+        //se
+        SPRITEPOS[40][7][0][0] = 640;
+        SPRITEPOS[40][7][0][1] = 240;
+        //s
+        SPRITEPOS[40][8][0][0] = 800;
+        SPRITEPOS[40][8][0][1] = 240;
         
     }
 
@@ -191,6 +194,7 @@ public class Block {
             case 0: name = "air";
                     transparent = true;
                     obstacle = false;
+                    invisible = true;
                     break;
             case 1: name = "gras";
                     transparent = false;
@@ -227,6 +231,7 @@ public class Block {
             case 9: name = "water";
                     transparent = true;
                     obstacle = false;
+                    liquid=true;
                     break;    
             case 20:name = "red brick wall";
                     transparent = false;
@@ -237,6 +242,8 @@ public class Block {
                     obstacle = true;
                     isBlock = false;
                     dimensionY=2;
+                    if (value==0)
+                        invisible = true;
                     break;
             case 50:name = "strewbed";
                     transparent = true;
@@ -255,9 +262,6 @@ public class Block {
     }
     
     
-   
-    
-    
     /**
      * Draws a block
      * @param x x-coordinate
@@ -272,7 +276,7 @@ public class Block {
                 if (renderLeft) drawSide(x,y,z, 0);
                 if (renderRight) drawSide(x,y,z, 2);
             } else {
-                Image temp = getSprite(id, value, dimensionX, dimensionY);
+                Image temp = getSprite(id, value,dimensionY);
 
                 //calc  brightness
                 float brightness = lightlevel / 100f;
@@ -286,23 +290,20 @@ public class Block {
                 temp.setColor(1, brightness,brightness, brightness);
 
                 brightness -= .1f;
-                //System.out.println(lightlevel);
 
                 temp.setColor(2, brightness, brightness, brightness);
                 temp.setColor(3, brightness, brightness, brightness);
                 
-                temp.drawEmbedded(
-                    -Gameplay.getView().getCamera().getX()
+                int xpos = -Gameplay.getView().getCamera().getX()
                     + x*Block.WIDTH
                     + (y%2) * (int) (Block.WIDTH/2)
-                    + getOffsetX()
-                    ,
-                    -Gameplay.getView().getCamera().getY()
-                    + y*Block.HEIGHT/2
-                    - z*Block.HEIGHT
-                    + getOffsetY() * (1/Block.ASPECTRATIO)
-                    -(dimensionY-1)*Block.HEIGHT
-                );
+                    + offsetX; 
+                int ypos = -Gameplay.getView().getCamera().getY()
+                    + y*Block.HEIGHT/2 - z*Block.HEIGHT
+                    + (int) (offsetY* (1/Block.ASPECTRATIO))
+                    -(dimensionY-1)*Block.HEIGHT;
+                
+                temp.drawEmbedded(xpos,ypos);
             }
         }
     }
@@ -339,19 +340,17 @@ public class Block {
         sideimage.setColor(2, brightness, brightness, brightness);
         sideimage.setColor(3, brightness, brightness, brightness);
         
-        sideimage.drawEmbedded(
-            -  Gameplay.getView().getCamera().getX()
+        int xpos =  -  Gameplay.getView().getCamera().getX()
             + x*Block.WIDTH
             + (y%2) * (int) (Block.WIDTH/2)
             + ( sidenumb == 2 ? Block.WIDTH/2:0)
-            + getOffsetX()
-            ,            
-            - Gameplay.getView().getCamera().getY()
+            + getOffsetX();
+        int ypos = - Gameplay.getView().getCamera().getY()
             + y*Block.HEIGHT/2
             - z*Block.HEIGHT
-            + ( sidenumb != 1 ? Block.HEIGHT/2:0)//the top is drawn /4 Blocks higher
-            + getOffsetY() * (1/Block.ASPECTRATIO)
-        );
+            + (sidenumb != 1 ? Block.HEIGHT/2:0)//the top is drawn /4 Blocks higher
+            + (int) (getOffsetY() * (1/Block.ASPECTRATIO));
+        sideimage.drawEmbedded(xpos,ypos);
     }
         
   /**
@@ -398,11 +397,6 @@ public class Block {
     public void setOffset(int x, int y){
        offsetX = x;
        offsetY = y;
-       if (offsetY > 0)
-            renderorder = 1;
-       else if (offsetX < 0 && offsetY < 0)
-                renderorder = -1;
-            else renderorder = 0;
     }
     
     /**
@@ -411,8 +405,8 @@ public class Block {
      * @param value
      * @return 
      */    
-    public static Image getSprite(int id, int value, int dimX, int dimY) {
-        return Blocksheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], dimX*WIDTH, dimY*HEIGHT*2);   
+    public static Image getSprite(int id, int value, int dimY) {
+        return Blocksheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], WIDTH, dimY*HEIGHT+HEIGHT);   
     }
         
     /**
@@ -570,21 +564,6 @@ public class Block {
         return name;
     }
 
-    /**
-     * Returns the renderorder
-     * @return 
-     */
-    public int getRenderorder() {
-        return renderorder;
-    }
-
-    /**
-     * Sets the renderorder
-     * @param renderorder 
-     */
-    public void setRenderorder(int renderorder) {
-        this.renderorder = renderorder;
-    }
 
     /**
      * Returns the spritesheet used for rendering
@@ -611,23 +590,31 @@ public class Block {
      * Is the block a true block or represents it another thing?
      * @return 
      */
-    public boolean isBlock(){
+    public boolean isBlock() {
         return isBlock;
+    }    
+
+    /**
+     * Returns the depth of the block. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
+     * @return the depth
+     */
+    public int getDepth(int y, int z) {
+        return WIDTH*y/4 + HEIGHT*z + offsetY + (dimensionY-1)*HEIGHT*2;
     }
 
     /**
-     * Returns the depth of the block. The depth is an int value wich is needed for producing hte list of the renderorder.
+     * Returns true, when invisible.
      * @return 
      */
-    public int getDepth() {
-        return depth;
+    public boolean isInvisible() {
+        return invisible;
     }
 
     /**
-     * 
-     * @param depth 
+     * Check if the block is liquid.
+     * @return true if liquid, false if not 
      */
-    public void setDepth(int depth) {
-        this.depth = depth;
+    public boolean isLiquid() {
+        return liquid;
     }
 }

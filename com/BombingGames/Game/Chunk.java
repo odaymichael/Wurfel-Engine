@@ -18,7 +18,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 3;
+    public static final int MAPGENERATOR = 1;
     
     private static int blocksX = 10;//16:9 => 12:27, 4:3=>12:36
     private static int blocksY = 40;//28

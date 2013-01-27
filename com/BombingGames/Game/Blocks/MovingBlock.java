@@ -2,6 +2,7 @@ package com.BombingGames.Game.Blocks;
 
 import com.BombingGames.Game.Chunk;
 import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Gameplay;
 import com.BombingGames.Game.Map;
 import org.newdawn.slick.SlickException;
 
@@ -209,7 +210,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * Make a step
      * @param x left or right step
      * @param y the coodinate steps
-     * @param topblock if you want to also move a block on top add a pointer to it. If not wanted null.
+     * @param topblock if you want to also move a block on top add a pointer to it. If not wanted: null.
      */
     private void makeCoordinateStep(int x, int y, Blockpointer topblock){
         selfDestroy();
@@ -223,7 +224,76 @@ public abstract class MovingBlock extends SelfAwareBlock {
         }
 
         selfRebuild();
-        if (topblock != null) topblock.setBlock(new Block(getId(),1));
+        if (topblock != null) topblock.setBlock(new Block(getId()));
+    }
+    
+       /**
+     * Updates the block.
+     * @param delta time since last update
+     * @param topblock the block on top, if there is none set it to null
+     */
+    protected void update(int delta, Blockpointer topblock) {
+        //Gravity
+        float a = -Map.GRAVITY;// this should be g=9.81 m/s^2
+
+        //if (delta<1000) acc = Controller.map.gravity*delta;
+
+        //land if standing in or under ground level and there is an obstacle
+        if (dirZ <= 0
+            && posZ <= 0
+            && (getCoordZ() == 0 || Controller.getMapDataUnsafe(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
+        ) {
+           // fallsound.stop();
+            dirZ = 0;
+            setPosZ(0);
+            a = 0;
+            //player stands now
+        }
+
+        //t = time in s
+        float t = delta/1000f;
+        //move if delta is okay
+        if (delta < 500) {
+            dirZ += a*t; //in m/s
+            setPosZ((int) (posZ + dirZ*Block.WIDTH*t));//m
+        }
+        
+        //coordinate switch
+        //down
+        if (posZ < 0
+            && getCoordZ() > 0
+            && ! Controller.getMapData(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
+          //  if (! fallsound.playing()) fallsound.play();
+            
+            selfDestroy();
+            if (topblock != null) topblock.setBlock(new Block(0));
+            setCoordZ(getCoordZ()-1);
+            selfRebuild();
+            if (topblock != null) topblock.setBlock(new Block(getId()));
+
+            setPosZ((int) posZ + Block.WIDTH);
+            Controller.getMap().requestRecalc();
+        } else {
+            //up
+            if (posZ >= Block.WIDTH
+                && getCoordZ() < Chunk.getBlocksZ()-2
+                && !Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
+                //if (! fallsound.playing()) fallsound.play();
+
+                selfDestroy();
+                if (topblock != null) topblock.setBlock(new Block(0));
+                setCoordZ(getCoordZ()+1);
+                selfRebuild();
+                if (topblock != null) topblock.setBlock(new Block(getId()));
+
+                setPosZ((int) posZ - Block.WIDTH);
+                Controller.getMap().requestRecalc();
+            } 
+        }
+        
+        //set the offset for the rendering
+        setOffset((int) (getPosX() - Block.WIDTH/2), (int) (getPosY() - posZ - Block.WIDTH/2));
+        if (topblock != null) topblock.getBlock().setOffset(getOffsetX(), getOffsetY());  
     }
    
     /**
@@ -262,70 +332,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
         this.posZ = posZ;
     }
 
-    /**
-     * Updates the block.
-     * @param delta time since last update
-     * @param topblock the block on top, if there is none set it to null
-     */
-    protected void update(int delta, Blockpointer topblock) {
-        //Gravity
-        float a = -Map.GRAVITY;// this should be g=9.81 m/s^2
-
-        //if (delta<1000) acc = Controller.map.gravity*delta;
-
-        //land if standing in or under ground level and there is an obstacle
-        if (dirZ <= 0
-            && posZ <= 0
-            && (getCoordZ() == 0 || Controller.getMapDataUnsafe(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
-        ) {
-           // fallsound.stop();
-            dirZ = 0;
-            setPosZ(0);
-            a = 0;
-            //player stands now
-        }
-
-        //t = time in s
-        float t = delta/1000f;
-        //move if delta is okay
-        if (delta < 500) {
-            dirZ += a*t; //in m/s
-            setPosZ((int) (posZ + dirZ*Block.WIDTH*t));//m
-        }
-        
-        //coordinate switch
-        //down
-        if (posZ <= 0 && getCoordZ() > 0 && !Controller.getMapData(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
-          //  if (! fallsound.playing()) fallsound.play();
-            
-            selfDestroy();
-            if (topblock != null) topblock.setBlock(new Block(0));
-            setCoordZ(getCoordZ()-1);
-            selfRebuild();
-            if (topblock != null) topblock.setBlock(new Block(40,1));
-
-            setPosZ((int) posZ + Block.WIDTH);
-            Controller.getMap().requestRecalc();
-        } else {
-            //up
-            if (posZ >= Block.HEIGHT && getCoordZ() < Chunk.getBlocksZ()-2 && !Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
-                //if (! fallsound.playing()) fallsound.play();
-
-                selfDestroy();
-                if (topblock != null) topblock.setBlock(new Block(0));
-                setCoordZ(getCoordZ()+1);
-                selfRebuild();
-                if (topblock != null) topblock.setBlock(new Block(40,1));
-
-                setPosZ((int) posZ - Block.WIDTH);
-                Controller.getMap().requestRecalc();
-            } 
-        }
-        
-        //set the offset for the rendering
-        setOffset((int) (getPosX() - Block.WIDTH/2), (int) (getPosY() - posZ - Block.WIDTH/2));
-        if (topblock != null) topblock.getBlock().setOffset(getOffsetX(), getOffsetY());  
-    }
+ 
     
     /*
      * Returns true if the player is standing on ground.

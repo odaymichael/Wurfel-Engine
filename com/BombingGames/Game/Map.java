@@ -222,9 +222,9 @@ public class Map {
         Block.getBlocksheet().startUse();
         View view = Gameplay.getView();
         //render vom bottom to top
-        for (int i=0; i < view.getDepthsortSize();i++) {
+        for (int i=0; i <view.getDepthsortlistSize() ;i++) {
             int[] item = view.getDepthsortCoord(i);
-            data[item[0]][item[1]][item[2]].draw(item[0],item[1],item[2]);
+            data[item[0]][item[1]][item[2]].draw(item[0],item[1],item[2]);            
         }
         
 //                    //check current and next block for special order
