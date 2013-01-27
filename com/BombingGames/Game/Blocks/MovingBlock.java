@@ -2,7 +2,6 @@ package com.BombingGames.Game.Blocks;
 
 import com.BombingGames.Game.Chunk;
 import com.BombingGames.Game.Controller;
-import com.BombingGames.Game.Gameplay;
 import com.BombingGames.Game.Map;
 import org.newdawn.slick.SlickException;
 
