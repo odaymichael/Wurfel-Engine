@@ -232,30 +232,21 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * @param topblock the block on top, if there is none set it to null
      */
     protected void update(int delta, Blockpointer topblock) {
-        //Gravity
-        float a = -Map.GRAVITY;// this should be g=9.81 m/s^2
+        //calculate movement
+        float t = delta/1000f; //t = time in s
+        dirZ += -Map.GRAVITY*t; //in m/s
+        float newposZ = posZ + dirZ*Block.WIDTH*t; //m
 
-        //if (delta<1000) acc = Controller.map.gravity*delta;
-
-        //land if standing in or under ground level and there is an obstacle
+        //land if standing in or under 0-level and there is an obstacle
         if (dirZ <= 0
-            && posZ <= 0
+            && newposZ <= 0
             && (getCoordZ() == 0 || Controller.getMapDataUnsafe(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
         ) {
-           // fallsound.stop();
+            // fallsound.stop();
             dirZ = 0;
-            setPosZ(0);
-            a = 0;
-            //player stands now
+            newposZ=0;
         }
-
-        //t = time in s
-        float t = delta/1000f;
-        //move if delta is okay
-        if (delta < 500) {
-            dirZ += a*t; //in m/s
-            setPosZ((int) (posZ + dirZ*Block.WIDTH*t));//m
-        }
+        posZ = newposZ;
         
         //coordinate switch
         //down
@@ -270,7 +261,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
             selfRebuild();
             if (topblock != null) topblock.setBlock(new Block(getId()));
 
-            setPosZ((int) posZ + Block.WIDTH);
+            posZ += Block.WIDTH;
             Controller.getMap().requestRecalc();
         } else {
             //up
@@ -285,7 +276,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 selfRebuild();
                 if (topblock != null) topblock.setBlock(new Block(getId()));
 
-                setPosZ((int) posZ - Block.WIDTH);
+                posZ -= Block.WIDTH;
                 Controller.getMap().requestRecalc();
             } 
         }
@@ -319,15 +310,15 @@ public abstract class MovingBlock extends SelfAwareBlock {
         return posZ;
     }
 
-    public void setPosX(int posX) {
+    public void setPosX(float posX) {
         this.posX = posX;
     }
 
-    public void setPosY(int posY) {
+    public void setPosY(float posY) {
         this.posY = posY;
     }
 
-    public void setPosZ(int posZ) {
+    public void setPosZ(float posZ) {
         this.posZ = posZ;
     }
 
@@ -344,7 +335,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * Jumpwith a specific speed
      * @param height the velocity of the block 
      */
-    public void jump(int velo) {
+    public void jump(float velo) {
         if (isStanding()) dirZ = velo;
     }
     
