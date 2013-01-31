@@ -2,6 +2,7 @@ package com.BombingGames.Game.Blocks;
 
 import com.BombingGames.Game.Chunk;
 import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Gameplay;
 import com.BombingGames.Game.Map;
 
 /**
@@ -117,7 +118,7 @@ public class SelfAwareBlock extends Block{
      */
     protected void selfRebuild(){
         Controller.getMap().setData(getCoordX(), getCoordY(), coordZ, this);
-
+        Gameplay.getView().traceRayTo(getCoordX(), getCoordY(), getCoordZ(), false);
     }
     
    /**

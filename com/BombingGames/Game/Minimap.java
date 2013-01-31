@@ -28,14 +28,13 @@ public class Minimap {
         else z = 0;
         
         for (int pos=0;pos < 9;pos++){  
-            Color temp;
             for (int x = Chunk.getBlocksX()*(pos%3); x < Chunk.getBlocksX() * (pos%3+1); x++){
                 for (int y = Chunk.getBlocksY()*(pos/3); y < Chunk.getBlocksY() * (pos/3+1); y++){
                     Block block = Controller.getMapData(x, y, z);               
 
                     Gameplay.getView().g.setColor(Block.getBlockColor(block.getId(), block.getValue()));
                     Gameplay.getView().g.fillRect(
-                        X + (x + (y%2==1?0.5f:0) ) * scaleX,
+                        X + (x + (y%2==1 ? 0.5f : 0) ) * scaleX,
                         Y + y*scaleY,
                         scaleX,
                         scaleY

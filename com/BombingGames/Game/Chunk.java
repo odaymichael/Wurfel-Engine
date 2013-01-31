@@ -76,7 +76,7 @@ public class Chunk {
                 break;
             }
                 
-            case 1: {//one mountain per chunk
+            case 1: {//island
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         data[x][y][0] = new Block(9);

@@ -8,7 +8,7 @@ import org.newdawn.slick.Color;
  *The message system can manage&show messages (Msg).
  * @author Benedikt
  */
-public class MsgSystem extends ArrayList {
+public class MsgSystem extends ArrayList<Msg> {
     private int timelastupdate = 0;
     private boolean waitforinput = false;
         
@@ -56,7 +56,7 @@ public class MsgSystem extends ArrayList {
        if (timelastupdate >= 30) {
             timelastupdate = 0;
             for (int i=0; i < size(); i++) {
-                Msg temp = (Msg) get(i);
+                Msg temp = get(i);
                 if (temp.getImportance()>0)
                     temp.setImportance(temp.getImportance()-1); 
                     else remove(i);
@@ -71,7 +71,7 @@ public class MsgSystem extends ArrayList {
         if (waitforinput) Gameplay.getView().g.drawString("MSG:", Wurfelengine.gc.getWidth()/2, 3*Wurfelengine.gc.getHeight()/4);
         
         for (int i=0; i < size(); i++){
-            Msg msg = (Msg) get(i);
+            Msg msg = get(i);
             Color clr = Color.blue;
             if ("System".equals(msg.getSender())) clr = Color.green;
                 else if ("Warning".equals(msg.getSender())) clr = Color.red;
