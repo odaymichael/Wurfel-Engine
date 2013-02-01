@@ -599,7 +599,7 @@ public class Block {
      * @return the depth
      */
     public int getDepth(int y, int z) {
-        return WIDTH*y/4 + HEIGHT*z + offsetY + (dimensionY-1)*HEIGHT*2;
+        return WIDTH*y +(y % 2)*WIDTH/2 + WIDTH*z + offsetY + (dimensionY-1)*HEIGHT*2;
     }
 
     /**

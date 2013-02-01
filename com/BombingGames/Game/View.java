@@ -74,8 +74,8 @@ public class View {
         //camera.FocusOnBlock(new Blockpointer(Chunk.getBlocksX()*3/2,Map.getBlocksY()/2,Chunk.getBlocksZ()/2));
         
         if (camera.getTotalHeight() > Chunk.getBlocksY()*Block.HEIGHT/2) {
-            Gameplay.MSGSYSTEM.add("The chunks are too small for this camera height/resolution to grant a stable experience", "Warning");
-            Log.warn("The chunks are too small for this camera height/resolution to grant a stable experience");
+            Gameplay.MSGSYSTEM.add("The chunks are maybe too small for this camera height/resolution to grant a stable experience", "Warning");
+            Log.warn("The chunks are maybe too small for this camera height/resolution to grant a stable experience");
         }
         
      /*font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
@@ -112,9 +112,9 @@ public class View {
      */
     private void createSortedDepthList() {
         depthsort.clear();
-        for (int x=camera.getLeftBorder(); x<camera.getRightBorder();x++)
-            for (int y=camera.getTopBorder(); y<camera.getBottomBorder();y++)
-                for (int z=0;z<Map.getBlocksZ();z++){
+        for (int x = camera.getLeftBorder(); x < camera.getRightBorder();x++)
+            for (int y = camera.getTopBorder(); y < camera.getBottomBorder();y++)
+                for (int z=0; z < Map.getBlocksZ(); z++){
                     
                     Block block = Controller.getMapDataUnsafe(x, y, z); 
                     if (!block.isInvisible() && block.isVisible()) {
@@ -122,7 +122,7 @@ public class View {
                     }
                     
                 }
-        sortDepthList(0,depthsort.size()-1);
+        sortDepthList(0, depthsort.size()-1);
     }
     
     /**
@@ -173,6 +173,7 @@ public class View {
         //send the rays through top of the map
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY() + Chunk.getBlocksZ()*2; y++)
+                
                 for (int side=0; side < 3; side++)
                     traceRay(
                         x,
@@ -197,9 +198,12 @@ public class View {
         boolean liquidfilter = false;
 
         //bring ray to start position
-        while (y >= Map.getBlocksY()){
-            y -= 2;
-            z--;
+        if (y >= Map.getBlocksY()) {
+            z-= (y-Map.getBlocksY())/2;
+            if (y % 2 == 0)
+                y=Map.getBlocksY()-1;
+            else
+                y = Map.getBlocksY()-2;
         }
 
         y += 2;
@@ -301,7 +305,7 @@ public class View {
                                     Controller.getMapDataUnsafe(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
                                     rightliquid = false;
                                 
-                                if (!leftliquid && !rightliquid) liquidfilter=true;
+                                if (!leftliquid && !rightliquid) liquidfilter = true;
                             }
 
                             //two blocks hiding the right side

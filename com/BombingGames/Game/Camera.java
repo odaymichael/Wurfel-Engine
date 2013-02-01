@@ -73,7 +73,7 @@ public class Camera {
         rightborder = (x+width)/Block.WIDTH+2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
         
-        topborder = y / (Block.HEIGHT/2);
+        topborder = y / (Block.HEIGHT/2)-1;
         if (topborder < 0) topborder= 0;
         
         bottomborder = (y+height) / (Block.HEIGHT/2) + Chunk.getBlocksZ()*2;
@@ -217,7 +217,7 @@ public class Camera {
 
 
     /**
-     * Returns the amount of (game) pixels visible in Y direction. Ground level+ slope WIDTH.
+     * Returns the amount of (game) pixels visible in Y direction. Ground level+ the width of the slope.
      * @return
      */
     public int getTotalHeight() {
