@@ -54,9 +54,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>1024</int>
+            <int>2048</int>
             <key>height</key>
-            <int>1024</int>
+            <int>2048</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -147,19 +147,39 @@
             <filename>sprites/2-0.png</filename>
             <filename>sprites/2-1.png</filename>
             <filename>sprites/2-2.png</filename>
+            <filename>sprites/3-0.png</filename>
+            <filename>sprites/3-1.png</filename>
+            <filename>sprites/3-2.png</filename>
+            <filename>sprites/4-0.png</filename>
+            <filename>sprites/4-1.png</filename>
+            <filename>sprites/4-2.png</filename>
+            <filename>sprites/5-0.png</filename>
+            <filename>sprites/5-1.png</filename>
+            <filename>sprites/5-2.png</filename>
+            <filename>sprites/6-0.png</filename>
+            <filename>sprites/6-1.png</filename>
+            <filename>sprites/6-2.png</filename>
+            <filename>sprites/7-0.png</filename>
+            <filename>sprites/7-1.png</filename>
+            <filename>sprites/7-2.png</filename>
+            <filename>sprites/8-0.png</filename>
             <filename>sprites/8-1.png</filename>
+            <filename>sprites/8-2.png</filename>
             <filename>sprites/9-0.png</filename>
             <filename>sprites/9-1.png</filename>
             <filename>sprites/9-2.png</filename>
+            <filename>sprites/20-0.png</filename>
+            <filename>sprites/20-1.png</filename>
+            <filename>sprites/20-2.png</filename>
             <filename>sprites/40-0.png</filename>
-            <filename>sprites/70-0.png</filename>
             <filename>sprites/40-1.png</filename>
-            <filename>sprites/40-3.png</filename>
             <filename>sprites/40-2.png</filename>
+            <filename>sprites/40-3.png</filename>
             <filename>sprites/40-4.png</filename>
             <filename>sprites/40-5.png</filename>
             <filename>sprites/40-6.png</filename>
             <filename>sprites/40-7.png</filename>
+            <filename>sprites/70-0.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

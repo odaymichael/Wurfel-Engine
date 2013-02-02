@@ -76,7 +76,7 @@ public class Block {
         SPRITEPOS[1][0][2][1] = 0;
         
         //dirt
-        SPRITEPOS[2][0][0][0] = 320;
+        SPRITEPOS[2][0][0][0] = 0;
         SPRITEPOS[2][0][0][1] = 0;
         SPRITEPOS[2][0][1][0] = 400;
         SPRITEPOS[2][0][1][1] = 0;
@@ -84,84 +84,92 @@ public class Block {
         SPRITEPOS[2][0][2][1] = 0;
         
         //stone
+        SPRITEPOS[3][0][0][0] = 0;
+        SPRITEPOS[3][0][0][1] = 120;
+        SPRITEPOS[3][0][1][0] = 80;
+        SPRITEPOS[3][0][1][1] = 120;
+        SPRITEPOS[3][0][2][0] = 240;
+        SPRITEPOS[3][0][2][1] = 120;
         
         //asphalt
-        SPRITEPOS[4][0][0][0] = 1;
-        SPRITEPOS[4][0][0][1] = 3;
-        SPRITEPOS[4][0][1][0] = 2;
-        SPRITEPOS[4][0][1][1] = 3;
-        SPRITEPOS[4][0][2][0] = 3;
-        SPRITEPOS[4][0][2][1] = 3;
+        SPRITEPOS[4][0][0][0] = 320;
+        SPRITEPOS[4][0][0][1] = 120;
+        SPRITEPOS[4][0][1][0] = 400;
+        SPRITEPOS[4][0][1][1] = 120;
+        SPRITEPOS[4][0][2][0] = 560;
+        SPRITEPOS[4][0][2][1] = 120;
        
         //cobblestone
+        SPRITEPOS[5][0][0][0] = 0;
+        SPRITEPOS[5][0][0][1] = 600;
+        SPRITEPOS[5][0][1][0] = 80;
+        SPRITEPOS[5][0][1][1] = 600;
+        SPRITEPOS[5][0][2][0] = 240;
+        SPRITEPOS[5][0][2][1] = 600;
 
         
-        //???
-
+        //pavement
+        SPRITEPOS[6][0][0][0] = 240;
+        SPRITEPOS[6][0][0][1] = 600;
+        SPRITEPOS[6][0][1][0] = 320;
+        SPRITEPOS[6][0][1][1] = 600;
+        SPRITEPOS[6][0][2][0] = 560;
+        SPRITEPOS[6][0][2][1] = 600;
        
         //concrete
-
-        SPRITEPOS[7][0][0][0] = 4;
-        SPRITEPOS[7][0][0][1] = 4;
-        SPRITEPOS[7][0][1][0] = 5;
-        SPRITEPOS[7][0][1][1] = 4;
-        SPRITEPOS[7][0][2][0] = 0;
-        SPRITEPOS[7][0][2][1] = 5;
+        SPRITEPOS[7][0][0][0] = 640;
+        SPRITEPOS[7][0][0][1] = 600;
+        SPRITEPOS[7][0][1][0] = 720;
+        SPRITEPOS[7][0][1][1] = 600;
+        SPRITEPOS[7][0][2][0] = 880;
+        SPRITEPOS[7][0][2][1] = 600;
         
-
-        SPRITEPOS[8][0][0][0] = 2;
-        SPRITEPOS[8][0][0][1] = 5;
-        SPRITEPOS[8][0][1][0] = 3;
-        SPRITEPOS[8][0][1][1] = 5;
-        SPRITEPOS[8][0][2][0] = 0;
-        SPRITEPOS[8][0][2][1] = 6;
-        SPRITEPOS[8][1][0][0] = 1;
-        SPRITEPOS[8][1][0][1] = 5;
-        SPRITEPOS[8][1][1][0] = 5;
-        SPRITEPOS[8][1][1][1] = 5;
-        SPRITEPOS[8][1][2][0] = 2;
-        SPRITEPOS[8][1][2][1] = 6;
-        SPRITEPOS[8][2][0][0] = 5;
-        SPRITEPOS[8][2][0][1] = 0;
-        SPRITEPOS[8][2][1][0] = 4;
-        SPRITEPOS[8][2][1][1] = 5;
-        SPRITEPOS[8][2][2][0] = 1;
-        SPRITEPOS[8][2][2][1] = 6;
+        //sand
+        SPRITEPOS[8][0][0][0] = 160;
+        SPRITEPOS[8][0][0][1] = 720;
+        SPRITEPOS[8][0][1][0] = 240;
+        SPRITEPOS[8][0][1][1] = 720;
+        SPRITEPOS[8][0][2][0] = 400;
+        SPRITEPOS[8][0][2][1] = 720;
         
         //water
-        SPRITEPOS[9][0][0][0] = 320;
-        SPRITEPOS[9][0][0][1] = 480;
-        SPRITEPOS[9][0][1][0] = 400;
-        SPRITEPOS[9][0][1][1] = 480;
-        SPRITEPOS[9][0][2][0] = 560;
-        SPRITEPOS[9][0][2][1] = 480;
+        SPRITEPOS[9][0][0][0] = 480;
+        SPRITEPOS[9][0][0][1] = 720;
+        SPRITEPOS[9][0][1][0] = 560;
+        SPRITEPOS[9][0][1][1] = 720;
+        SPRITEPOS[9][0][2][0] = 720;
+        SPRITEPOS[9][0][2][1] = 720;
         
         
         //player
         //sw
         SPRITEPOS[40][1][0][0] = 640;
-        SPRITEPOS[40][1][0][1] = 0;
+        SPRITEPOS[40][1][0][1] = 120;
         //w
         SPRITEPOS[40][2][0][0] = 800;
-        SPRITEPOS[40][2][0][1] = 0;
+        SPRITEPOS[40][2][0][1] = 120;
         //nw
         SPRITEPOS[40][3][0][0] = 0;
-        SPRITEPOS[40][3][0][1] = 240;
+        SPRITEPOS[40][3][0][1] = 360;
         //n
         SPRITEPOS[40][4][0][0] = 160;
-        SPRITEPOS[40][4][0][1] = 240;
+        SPRITEPOS[40][4][0][1] = 360;
         //ne
         SPRITEPOS[40][5][0][0] = 320;
-        SPRITEPOS[40][5][0][1] = 240;
+        SPRITEPOS[40][5][0][1] = 360;
         //e
         SPRITEPOS[40][6][0][0] = 480;
-        SPRITEPOS[40][6][0][1] = 240;
+        SPRITEPOS[40][6][0][1] = 360;
         //se
         SPRITEPOS[40][7][0][0] = 640;
-        SPRITEPOS[40][7][0][1] = 240;
+        SPRITEPOS[40][7][0][1] = 360;
         //s
         SPRITEPOS[40][8][0][0] = 800;
-        SPRITEPOS[40][8][0][1] = 240;
+        SPRITEPOS[40][8][0][1] = 360;
+        
+        //fire
+        SPRITEPOS[70][0][0][0] = 0;
+        SPRITEPOS[70][0][0][1] = 720;
         
     }
 
