@@ -68,7 +68,7 @@ public class MsgSystem extends ArrayList<Msg> {
      * Draws the Messages
      */
     public void draw(){
-        if (waitforinput) Gameplay.getView().g.drawString("MSG:", Wurfelengine.gc.getWidth()/2, 3*Wurfelengine.gc.getHeight()/4);
+        if (waitforinput) Wurfelengine.getGraphics().drawString("MSG:", Wurfelengine.getGc().getWidth()/2, 3*Wurfelengine.getGc().getHeight()/4);
         
         for (int i=0; i < size(); i++){
             Msg msg = get(i);

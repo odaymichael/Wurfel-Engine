@@ -1,7 +1,6 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
-import java.util.ArrayList;
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -19,36 +18,15 @@ public class View {
      */
     public static AngelCodeFont baseFont;
 
-    private static class Renderblock {
-        protected int x,y,z;
-        protected int depth;
-
-        public Renderblock(int x, int y, int z, int depth) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.depth = depth;
-        }
-    }
-    
-    /**
-     * The reference for the graphics context
-     */
-    public Graphics g = null; 
-    
     private Camera camera;
-    private GameContainer gc;
-    private float equalizationScale;
+    private float equalizationScale;    
     
-    private ArrayList<Renderblock> depthsort = new ArrayList();
-
     /**
      * Creates a View
      * @param gc
      * @throws SlickException
      */
     public View(GameContainer gc) throws SlickException {
-        this.gc = gc;  
         // initialise the font which CAUSES LONG LOADING TIME!!!
         //TrueTypeFont trueTypeFont;
 
@@ -59,7 +37,7 @@ public class View {
         //baseFont = startFont.getFont().deriveFont(Font.PLAIN, 18);
         //tTFont = new TrueTypeFont(baseFont, true);
         
-        //defautl is Full-HD
+        //default rendering size is FullHD
         equalizationScale = gc.getWidth()/1920f;
         Log.debug("Scale is:" + Float.toString(equalizationScale));
         
@@ -87,7 +65,6 @@ public class View {
         Gameplay.MSGSYSTEM.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
         
         Block.loadSpriteSheet(); 
-        // Block.WIDTH = Block.HEIGHT;
         Gameplay.MSGSYSTEM.add("Blocks: "+ Block.WIDTH+" x "+Block.HEIGHT);
         Gameplay.MSGSYSTEM.add("Zoom: "+ camera.getZoom());
         Gameplay.MSGSYSTEM.add("AbsZoom: "+ camera.getZoom()*equalizationScale);
@@ -100,55 +77,9 @@ public class View {
      * @throws SlickException
      */
     public void render(StateBasedGame game, Graphics g) throws SlickException{
-        this.g = g;
         g.scale(equalizationScale, equalizationScale);
-        createSortedDepthList();
-        camera.draw(); 
+        camera.draw();
         Gameplay.MSGSYSTEM.draw(); 
-    }
-    
-    /**
-     * Fills the map into a list and sorts it, called the depthlist.
-     */
-    private void createSortedDepthList() {
-        depthsort.clear();
-        for (int x = camera.getLeftBorder(); x < camera.getRightBorder();x++)
-            for (int y = camera.getTopBorder(); y < camera.getBottomBorder();y++)
-                for (int z=0; z < Map.getBlocksZ(); z++){
-                    
-                    Block block = Controller.getMapDataUnsafe(x, y, z); 
-                    if (!block.isInvisible() && block.isVisible()) {
-                        depthsort.add(new Renderblock(x, y, z, block.getDepth(y,z)));
-                    }
-                    
-                }
-        sortDepthList(0, depthsort.size()-1);
-    }
-    
-    /**
-     * Using Quicksort to sort. From big to small values.
-     * @param low the lower border
-     * @param high the higher border
-     */
-    private void sortDepthList(int low, int high) {
-        int left = low;
-        int right = high;
-        int middle = depthsort.get((low+high)/2).depth;
-
-        while (left <= right){    
-            while(depthsort.get(left).depth < middle) left++; 
-            while(depthsort.get(right).depth > middle) right--;
-
-            if (left <= right) {
-                Renderblock tmp = depthsort.set(left, depthsort.get(right));
-                depthsort.set(right, tmp);
-                left++; 
-                right--;
-            }
-        }
-
-        if(low < right) sortDepthList(low, right);
-        if(left < high) sortDepthList(left, high);
     }
        
     /**
@@ -339,11 +270,7 @@ public class View {
      * @param allsides 
      */
     public void traceRayTo(int x, int y, int z, boolean allsides){
-        int startx = x;
-        int starty = y;
-        int startz = z;
-        
-        //find start position
+       //find start position
         while (z < Map.getBlocksZ()-1){
             y += 2;
             z++;
@@ -384,26 +311,5 @@ public class View {
     public Camera getCamera() {
         return camera;
     }
-
-    /**
-     * Returns a coordiante triple of an ranking for the rendering order
-     * @param index the index
-     * @return the coordinate triple with x,y,z
-     */
-    public int[] getDepthsortCoord(int index) {
-        Renderblock item = depthsort.get(index);
-        int[] triple = {item.x, item.y, item.z};
-        return triple;
-    }
-    
-    /**
-     * Returns the lenght of list of ranking for the rendering order
-     * @return length of the render list
-     */
-    public int getDepthsortlistSize(){
-        return depthsort.size();
-    }
-    
-   
 
 }

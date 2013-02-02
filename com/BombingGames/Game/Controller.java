@@ -23,8 +23,7 @@ public class Controller {
     private Player player;   
    
     private boolean goodgraphics = false;
-    
-
+   
     private float zoomx = 1;
     
     /**

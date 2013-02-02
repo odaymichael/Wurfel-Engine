@@ -7,7 +7,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- * 
+ * The Gameplay State. This is state where the magic happens.
  * @author Benedikt
  */
 public class Gameplay extends BasicGameState { 
@@ -17,14 +17,8 @@ public class Gameplay extends BasicGameState {
     public static final MsgSystem MSGSYSTEM = new MsgSystem();    
     
     private static View view = null;
-
     private static Controller controller = null;
      
-    /**
-     * The Gameplay State. This is state where the magic happens.
-     */
-    public Gameplay(){
-    }
     
     @Override
     public int getID() {
@@ -39,8 +33,7 @@ public class Gameplay extends BasicGameState {
     public void enter(GameContainer container, StateBasedGame game) throws SlickException{
         controller = new GameController(container, game);
         view = new View(container);
-    }
-    
+    }    
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {

@@ -215,15 +215,15 @@ public class Map {
     /**
      * Draws the map
      */
-    public void draw() {
+    public void draw(Camera camera) {
         //if (Gameplay.getController().hasGoodGraphics()) Block.getBlocksheet().bind();
         if (Gameplay.getController().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
         Block.getBlocksheet().startUse();
         View view = Gameplay.getView();
         //render vom bottom to top
-        for (int i=0; i <view.getDepthsortlistSize() ;i++) {
-            int[] item = view.getDepthsortCoord(i);
+        for (int i=0; i < camera.getDepthsortlistSize() ;i++) {
+            int[] item = camera.getDepthsortCoord(i);
             data[item[0]][item[1]][item[2]].draw(item[0],item[1],item[2]);            
         }
         
