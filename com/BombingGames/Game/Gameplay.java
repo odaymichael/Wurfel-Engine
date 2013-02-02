@@ -14,16 +14,12 @@ public class Gameplay extends BasicGameState {
   /**
      * Contains the Message System
      */
-    public static final MsgSystem MSGSYSTEM;    
+    public static final MsgSystem MSGSYSTEM = new MsgSystem();    
     
     private static View view = null;
 
     private static Controller controller = null;
- 
-    static {
-        MSGSYSTEM = new MsgSystem();
-    }
-    
+     
     /**
      * The Gameplay State. This is state where the magic happens.
      */

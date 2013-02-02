@@ -3,13 +3,14 @@ package com.BombingGames.Game;
 import com.BombingGames.Game.Blocks.Block;
 import com.BombingGames.Game.Blocks.Blockpointer;
 import com.BombingGames.Game.Blocks.Player;
+import com.BombingGames.Wurfelengine;
 
 /**
  *The camera locks to the player by default. It can be changed with <i>focusblock()</i>.
  * @author Benedikt
  */
 public class Camera {
-    private int x, y, width, height;
+    private int x, y, gameWidth, gameHeight;
     private int leftborder, topborder, rightborder, bottomborder;
     
     private boolean focus = false;
@@ -23,8 +24,8 @@ public class Camera {
      * Creates a camera. Screen does refer to the output of the camera not the real size on the display.
      * @param x The screen coordinates
      * @param y The screen coordinate
-     * @param width The screen width of the camera
-     * @param height The screen height of the camera
+     * @param gameWidth The screen gameWidth of the camera
+     * @param gameHeight The screen gameHeight of the camera
      * @param scale The zoom factor.
      */
     public Camera(int x, int y,int width, int height, float scale) {
@@ -32,8 +33,9 @@ public class Camera {
         screenY = y;
         screenWidth = (int) (width / scale);
         screenHeight = (int) (height / scale);
-        this.width = (int) (screenWidth / zoom);
-        this.height = (int) (screenHeight / zoom);
+        gameWidth = (int) (screenWidth / zoom);
+        gameHeight = (int) (screenHeight / zoom);
+      //  Gameplay.getView().g.setWorldClip(x, y, width, height);
     } 
        
     /**
@@ -44,11 +46,11 @@ public class Camera {
              x = focusblock.getX() * Block.WIDTH
                 + Block.WIDTH / 2 *(focusblock.getY() % 2)
                 + focusblock.getBlock().getOffsetX()
-                - Gameplay.getView().getCamera().width / 2;
+                - Gameplay.getView().getCamera().gameWidth / 2;
             
             y = (int) (
                 (focusblock.getY()/2f - focusblock.getZ()) * Block.HEIGHT
-                - Gameplay.getView().getCamera().height/2
+                - Gameplay.getView().getCamera().gameHeight/2
                 + focusblock.getBlock().getOffsetY() * (1/Block.ASPECTRATIO)
                 );
             
@@ -57,11 +59,11 @@ public class Camera {
             x = player.getCoordX() * Block.WIDTH
                 + Block.WIDTH / 2 *(player.getCoordY() % 2)
                 + player.getOffsetX()
-                - Gameplay.getView().getCamera().width / 2;
+                - Gameplay.getView().getCamera().gameWidth / 2;
             
             y = (int) (
                 (player.getCoordY()/2f - player.getCoordZ()) * Block.HEIGHT
-                - Gameplay.getView().getCamera().height/2
+                - Gameplay.getView().getCamera().gameHeight/2
                 + player.getOffsetY() * (1/Block.ASPECTRATIO)
                 );
         }
@@ -70,13 +72,13 @@ public class Camera {
         leftborder = x/Block.WIDTH -1;
         if (leftborder < 0) leftborder= 0;
         
-        rightborder = (x+width)/Block.WIDTH+2;
+        rightborder = (x+gameWidth)/Block.WIDTH+2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
         
         topborder = y / (Block.HEIGHT/2)-1;
         if (topborder < 0) topborder= 0;
         
-        bottomborder = (y+height) / (Block.HEIGHT/2) + Chunk.getBlocksZ()*2;
+        bottomborder = (y+gameHeight) / (Block.HEIGHT/2) + Chunk.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
         
     }
@@ -97,8 +99,8 @@ public class Camera {
      */
     public void setZoom(float zoom) {
         this.zoom = zoom;
-        width = (int) (screenWidth / zoom);
-        height = (int) (screenHeight / zoom);
+        gameWidth = (int) (screenWidth / zoom);
+        gameHeight = (int) (screenHeight / zoom);
     }
     
     /**
@@ -203,7 +205,7 @@ public class Camera {
     * @return
     */
    public int getGroundHeight() {
-        return height;
+        return gameHeight;
     }
 
 
@@ -212,16 +214,16 @@ public class Camera {
      * @return
      */
     public int getWidth() {
-        return width;
+        return gameWidth;
     }
 
 
     /**
-     * Returns the amount of (game) pixels visible in Y direction. Ground level+ the width of the slope.
+     * Returns the amount of (game) pixels visible in Y direction. Ground level+ the gameWidth of the slope.
      * @return
      */
     public int getTotalHeight() {
-        return height + Block.HEIGHT*Chunk.getBlocksZ();
+        return gameHeight + Block.HEIGHT*Chunk.getBlocksZ();
     }
 
     
@@ -235,7 +237,7 @@ public class Camera {
 
     
     /**
-     * Returns the height of the camera output.
+     * Returns the gameHeight of the camera output.
      * @return
      */
     public int getScreenHeight() {
@@ -243,7 +245,7 @@ public class Camera {
     }
 
     /**
-     * Returns the width of the camera output.
+     * Returns the gameWidth of the camera output.
      * @return
      */
     public int getScreenWidth() {
