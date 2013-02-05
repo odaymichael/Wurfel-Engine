@@ -535,12 +535,13 @@ public class Block {
     
   /**
      * Returns the field where the coordiantes are in in relation to the current Block. Counts clockwise startin with the top 0.
+     * If you want to get the neighbour you have to use a SelfAwareBlock and the method getNeighbourBlock
      * 701
      * 682
      * 543
      * @param x value in pixels
      * @param y value in pixels
-     * @return Returns the field of the coordinates. 8 is self.
+     * @return Returns the fieldnumber of the coordinates. 8 is self.
      * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int) 
      */
     protected int getSideNumb(int x, int y) {
@@ -583,9 +584,9 @@ public class Block {
     
     /**
      * Returns the color representing the block.
-     * @param id
-     * @param value
-     * @return a color
+     * @param id id of the Block
+     * @param value the value of the block.
+     * @return a color representing the block
      */
     public static Color getBlockColor(int id, int value){
         if (colorlist[id][value] == null){
@@ -611,7 +612,7 @@ public class Block {
     }
 
     /**
-     * Returns true, when invisible.
+     * Returns true, when invisible. Invisible blocks are not rendered.
      * @return 
      */
     public boolean isInvisible() {

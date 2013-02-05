@@ -160,34 +160,22 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 
                 //track the coordiante change, if there is one
                 int sidennumb = getSideNumb();
-                switch(sidennumb){
+                switch(sidennumb) {
                     case 0:
                     case 1:
-                            posY += Block.WIDTH / 2;
-                            posX -= Block.WIDTH / 2;
-
-                            makeCoordinateStep(1,-1, topblock);
+                            makeCoordinateStep(1, -1, topblock);
                             break;
                     case 2:    
                     case 3:
-                            posY -= Block.WIDTH/2;
-                            posX -= Block.WIDTH/2;
-
-                            makeCoordinateStep(1,1, topblock);
+                            makeCoordinateStep(1, 1, topblock);
                             break;
                     case 4:
                     case 5:
-                            posY -= Block.WIDTH/2;
-                            posX += Block.WIDTH/2;
-
-                            makeCoordinateStep(-1,1, topblock);
+                            makeCoordinateStep(-1, 1, topblock);
                             break;
                     case 6:
                     case 7:
-                            posY += Block.WIDTH/2;
-                            posX += Block.WIDTH/2;
-
-                            makeCoordinateStep(-1,-1, topblock);
+                            makeCoordinateStep(-1, -1, topblock);
                             break;    
                 }
 
@@ -206,12 +194,16 @@ public abstract class MovingBlock extends SelfAwareBlock {
    }
     
    /**
-     * Make a step
+     * Make a step on the coordinate grid.
      * @param x left or right step
      * @param y the coodinate steps
      * @param topblock if you want to also move a block on top add a pointer to it. If not wanted: null.
      */
     private void makeCoordinateStep(int x, int y, Blockpointer topblock){
+        //mirror the position around the center
+        posY += -1*y*Block.WIDTH/2;
+        posX += -1*x*Block.WIDTH/2;
+        
         selfDestroy();
         if (topblock != null) topblock.setBlock(new Block(0));
         
@@ -221,7 +213,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
         } else {
             if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
         }
-
+         
         selfRebuild();
         if (topblock != null) topblock.setBlock(new Block(getId()));
     }
