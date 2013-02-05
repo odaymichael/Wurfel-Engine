@@ -108,53 +108,53 @@ public abstract class MovingBlock extends SelfAwareBlock {
             float newy = posY + delta * speed * dirY;
             
             //check if position is okay
-            boolean movementokay = true;
+            boolean validmovement = true;
             
             //check for movement in x
             int sideNumber = getSideNumb((int) newx, (int) newy - Block.HEIGHT-1); 
             if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                movementokay = false;
+                validmovement = false;
 
             sideNumber = getSideNumb((int) newx, (int) newy + Block.HEIGHT+1); 
             if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                movementokay = false; 
+                validmovement = false; 
             
             //find out the direction of the movement
             if (oldx-newx > 0) {
                 //check left corner
                 sideNumber = getSideNumb((int) newx - Block.HEIGHT-1, (int) newy);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                   movementokay = false;
+                   validmovement = false;
             } else {
                 //check right corner
                 sideNumber = getSideNumb((int) newx + Block.HEIGHT+1, (int) newy);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                   movementokay = false;
+                   validmovement = false;
             }
             
             //check for movement in y
             sideNumber = getSideNumb((int) newx - Block.WIDTH/2-1, (int) newy); 
             if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                movementokay = false;
+                validmovement = false;
 
             sideNumber = getSideNumb((int) newx + Block.WIDTH/2+1, (int) newy); 
             if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                movementokay = false;  
+                validmovement = false;  
             
             if (oldy-newy > 0) {
                 //check top corner
                 sideNumber = getSideNumb((int) newx, (int) newy - Block.WIDTH/2-1);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                   movementokay = false;
+                   validmovement = false;
             } else {
                 //check bottom corner
                 sideNumber = getSideNumb((int) newx, (int) newy + Block.WIDTH/2+1);
                 if (sideNumber != 8 && getNeighbourBlock(sideNumber, 0).isObstacle())
-                   movementokay = false;
+                   validmovement = false;
             }
             
             //if movement allowed => move player   
-            if (movementokay) {                
+            if (validmovement) {                
                 posX = newx;
                 posY = newy;
                 
