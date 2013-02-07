@@ -4,8 +4,6 @@ import com.BombingGames.Game.Blocks.Block;
 import com.BombingGames.Game.Blocks.Player;
 import com.BombingGames.MainMenu.MainMenuState;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
@@ -15,16 +13,10 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Controller {
-    private GameContainer gc;
-    /**
-     *The list which has all current nine chunks in it.
-     */
     private static Map map;
     private Player player;   
-   
     private boolean goodgraphics = false;
-   
-    private float zoomx = 1;
+  
     
     /**
      * Constructor is called when entering the gamemode.
@@ -32,20 +24,24 @@ public class Controller {
      * @param game
      * @throws SlickException
      */
-    public Controller(GameContainer container, StateBasedGame game) throws SlickException{
-        gc = container;
-          
-        gc.getInput().addMouseListener(new MouseDraggedListener());
+    public Controller(GameContainer container, StateBasedGame game) throws SlickException{        
         map = new Map(MainMenuState.loadmap);
     }
 
     /**
-     * Main method which is called the whole time
+     * Creates a new Map.
+     */
+    public static void newMap(){
+        map = new Map(MainMenuState.loadmap);
+    }
+    
+    /**
+     * Main method which is called every refresh
      * @param delta
      * @throws SlickException
      */
     public void update(int delta) throws SlickException{
-        if (delta > 200) Log.warn("delta is too high to stay stable. d: "+delta);
+        if (delta > 200) Log.warn("delta is too high for a stable game. d: "+delta);
          
        //earth to right
         if (Gameplay.getView().getCamera().getLeftBorder() <= 0)
@@ -78,87 +74,39 @@ public class Controller {
         Gameplay.MSGSYSTEM.update(delta);
     }
     
-    
-  
-    class MouseDraggedListener implements MouseListener{
-        @Override
-        public void mouseWheelMoved(int change) {
-            gc.getInput().consumeEvent();
-            
-            zoomx = zoomx + change/1000f;
-            Gameplay.getView().getCamera().setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
-            
-            
-           /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
-            Block.height = (int) (4*gc.getGroundHeight()*zoom / Chunk.BlocksY);
-            Chunk.SIZE_X = (int) (Chunk.BlocksX*Block.width*zoom);
-            Chunk.SIZE_Y = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
-            
-            Gameplay.MSGSYSTEM.add("Zoom: "+Gameplay.getView().getCamera().getZoom());   
-        }
-
-        @Override
-        public void mouseClicked(int button, int x, int y, int clickCount) {
-        }
-
-        @Override
-        public void mousePressed(int button, int x, int y) {
-        }
-
-        @Override
-        public void mouseReleased(int button, int x, int y) {   
-        }
-
-        @Override
-        public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-            Log.info(
-                    Double.toString(Math.atan(
-                        Math.abs(Gameplay.getView().getCamera().getCenterofBlock(player.getCoordX(), player.getCoordY(), player.getCoordZ())[1 ]- newy * Gameplay.getView().getEqualizationScale()) /
-                        (float) Math.abs(Gameplay.getView().getCamera().getCenterofBlock(player.getCoordX(), player.getCoordY(), player.getCoordZ())[0] - newx * Gameplay.getView().getEqualizationScale())
-                    )*180/Math.PI)+"°"
-                );
-        }
-
-        @Override
-        public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-            //workaround for the bug, because the event is called multiple times
-            gc.getInput().consumeEvent();
-            
-            if (Gameplay.getView().getCamera().getFocus()) {
-                Gameplay.getView().getCamera().setX(Gameplay.getView().getCamera().getX()+newx-oldx);
-                Gameplay.getView().getCamera().setY(Gameplay.getView().getCamera().getY()+newx-oldy);
-            }
-            /*for (int i=0;i<9;i++){
-                chunklist[i].posX += newx - oldx;
-                chunklist[i].posY += newy - oldy ;
-            }*/
-            
-            //if the middle chunk is scrolled down over the middle line then 
-            //GameplayState.iglog.add("Chunk.SIZE_X: "+String.valueOf(Chunk.SIZE_X));
-            //GameplayState.iglog.add("chunk: "+String.valueOf(chunklist[4].posX));    
-        }
-
-        @Override
-        public void setInput(Input input) {
-        }
-
-        @Override
-        public boolean isAcceptingInput() {
-            return true;
-        }
-
-        @Override
-        public void inputEnded() {
-          
-        }
-
-        @Override
-        public void inputStarted() {
-        }
+    /**
+     * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
+     * @param x the x position on the screen
+     * @return game coordinate
+     */
+    public int ScreenXtoGame(int x){
+        Log.debug("ScreenXtoGame("+x+")");
+        return (int) ((x + Gameplay.getView().getCamera().getX()) / Gameplay.getView().getCamera().getAbsZoom());
     }
     
-    protected void openmenu(){
-        boolean openmenu = true;
+   /**
+     * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
+     * @param y the y position on the screen
+     * @return game coordinate
+     */
+    public int ScreenYtoGame(int y){
+        Log.debug("ScreenYtoGame("+y+")");
+        return (int) ((y + Gameplay.getView().getCamera().getY()) / Gameplay.getView().getCamera().getAbsZoom() * 2);
+    }
+    
+    /**
+     * Returns the coordinates belonging to a point on the screen
+     * @param x the x position on the screen
+     * @param y the y position on the screen
+     * @return map coordinates
+     */
+    public int[] ScreenToGameCoords(int x, int y){
+        int[] coords = new int[3];
+        Log.debug("ScreenXtoGame(x): "+ScreenXtoGame(x));
+        coords[0] = ScreenXtoGame(x) / Block.WIDTH;
+        coords[1] = ScreenYtoGame(y) / Block.WIDTH;
+        coords[2] = Map.getBlocksZ()/2;
+        return coords;
     }
 
     /**
@@ -197,9 +145,6 @@ public class Controller {
         return map;
     }
     
-    public static void newMap(){
-        map = new Map(MainMenuState.loadmap);
-    }
     
     /**
      * Returns a block inside the map. The same as "getMap().getDataSafe(x,y,z)"
@@ -214,7 +159,7 @@ public class Controller {
     }
     
     /**
-     * Same as "Map.getData(int, int, int)"
+     * Same as "Map.getDataSafe(int, int, int)"
      * @param x
      * @param y
      * @param z
@@ -223,5 +168,17 @@ public class Controller {
      */
     public static Block getMapData(int x, int y, int z){
         return map.getData(x, y, z);
+    }
+    
+    /**
+     * Same as "Map.getDataSafe(int, int, int)"
+     * @param x
+     * @param y
+     * @param z
+     * @return the wanted block
+     * @see com.BombingGames.Game.Map#getData(int, int, int) 
+     */
+    public static void setMapData(int x, int y, int z, Block block){
+        map.setData(x, y, z, block);
     }
 }

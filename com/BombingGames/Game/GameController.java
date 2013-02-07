@@ -4,8 +4,10 @@ import com.BombingGames.Game.Blocks.Block;
 import com.BombingGames.Game.Blocks.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
 
 /**
  *The <i>GameController</i> is for the game code. Put engine code into <i>Controller</i>.
@@ -14,7 +16,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class GameController extends Controller {
     private GameContainer gc;
     /**
-     * 
+     * The custom game code belongs here
      * @param container
      * @param game
      * @throws SlickException
@@ -24,6 +26,7 @@ public class GameController extends Controller {
         this.gc = gc;
         setPlayer(new Player((int) (Chunk.getBlocksX()*1.5),(int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2));
         getMap().setData((int) (Chunk.getBlocksX()*1.5), (int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2, getPlayer());
+        gc.getInput().addMouseListener(new MouseDraggedListener());
     }
     
     @Override
@@ -88,4 +91,77 @@ public class GameController extends Controller {
         if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.MSGSYSTEM.listenForInput(!Gameplay.MSGSYSTEM.isListeningForInput());
     }
     
+    class MouseDraggedListener implements MouseListener{
+        private float zoomx = 1;
+        
+        @Override
+        public void mouseWheelMoved(int change) {
+            gc.getInput().consumeEvent();
+            
+            zoomx = zoomx + change/1000f;
+            Gameplay.getView().getCamera().setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
+            
+            
+           /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
+            Block.height = (int) (4*gc.getGroundHeight()*zoom / Chunk.BlocksY);
+            Chunk.SIZE_X = (int) (Chunk.BlocksX*Block.width*zoom);
+            Chunk.SIZE_Y = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
+            
+            Gameplay.MSGSYSTEM.add("Zoom: "+Gameplay.getView().getCamera().getZoom());   
+        }
+
+        @Override
+        public void mouseClicked(int button, int x, int y, int clickCount) {
+            int coords[] = ScreenToGameCoords(x,y);
+            setMapData(coords[0], coords[1], coords[2]+1,new Block(1));
+            Log.debug("made block at"+coords[0]+","+coords[1]+","+coords[2]);
+        }
+
+        @Override
+        public void mousePressed(int button, int x, int y) {
+        }
+
+        @Override
+        public void mouseReleased(int button, int x, int y) {   
+        }
+
+        @Override
+        public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+//            Log.info(
+//                    Double.toString(Math.atan(
+//                        Math.abs(Gameplay.getView().getCamera().getCenterofBlock(getPlayer().getCoordX(), getPlayer().getCoordY(), getPlayer().getCoordZ())[1 ]- newy * Gameplay.getView().getEqualizationScale()) /
+//                        (float) Math.abs(Gameplay.getView().getCamera().getCenterofBlock(getPlayer().getCoordX(), getPlayer().getCoordY(), getPlayer().getCoordZ())[0] - newx * Gameplay.getView().getEqualizationScale())
+//                    )*180/Math.PI)+"°"
+//                );
+        }
+
+        @Override
+        public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+            //workaround for the bug, because the event is called multiple times
+            gc.getInput().consumeEvent();
+            
+            if (Gameplay.getView().getCamera().getFocus()) {
+                Gameplay.getView().getCamera().setX(Gameplay.getView().getCamera().getX()+newx-oldx);
+                Gameplay.getView().getCamera().setY(Gameplay.getView().getCamera().getY()+newx-oldy);
+            }
+        }
+
+        @Override
+        public void setInput(Input input) {
+        }
+
+        @Override
+        public boolean isAcceptingInput() {
+            return true;
+        }
+
+        @Override
+        public void inputEnded() {
+          
+        }
+
+        @Override
+        public void inputStarted() {
+        }
+    }
 }

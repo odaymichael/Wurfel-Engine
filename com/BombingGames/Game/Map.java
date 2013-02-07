@@ -18,6 +18,9 @@ public class Map {
     private static int blocksX, blocksY, blocksZ;    
     private Block data[][][];
     private boolean recalcRequested;
+       /**
+     *The list which has all current nine chunks in it.
+     */
     private int[][] coordlist = new int[9][2];
     private Minimap minimap;
     
