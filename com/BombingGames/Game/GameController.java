@@ -58,7 +58,7 @@ public class GameController extends Controller {
             //if (input.isKeyPressed(Input.KEY_C)) 
 
             //restart
-            if (input.isKeyPressed(Input.KEY_N)) setMap(new Map(false));
+            if (input.isKeyPressed(Input.KEY_N)) newMap();
 
             //reset zoom
             if (input.isKeyPressed(Input.KEY_Z)) {

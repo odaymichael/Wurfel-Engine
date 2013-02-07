@@ -196,13 +196,25 @@ public class Controller {
     public static Map getMap() {
         return map;
     }
-
-    public static void setMap(Map map) {
-        Controller.map = map;
+    
+    public static void newMap(){
+        map = new Map(MainMenuState.loadmap);
     }
     
     /**
-     * Returns a block inside the map. The same as "getMap().getData(x,y,z)"
+     * Returns a block inside the map. The same as "getMap().getDataSafe(x,y,z)"
+     * @param x
+     * @param y
+     * @param z
+     * @return the wanted block
+     * @see com.BombingGames.Game.Map#getDataSafe(int, int, int) 
+     */
+    public static Block getMapDataSafe(int x, int y, int z){
+        return map.getDataSafe(x, y, z);
+    }
+    
+    /**
+     * Same as "Map.getData(int, int, int)"
      * @param x
      * @param y
      * @param z
@@ -211,17 +223,5 @@ public class Controller {
      */
     public static Block getMapData(int x, int y, int z){
         return map.getData(x, y, z);
-    }
-    
-    /**
-     * Same as "Map.getDataUnsafe(int, int, int)"
-     * @param x
-     * @param y
-     * @param z
-     * @return the wanted block
-     * @see com.BombingGames.Game.Map#getDataUnsafe(int, int, int) 
-     */
-    public static Block getMapDataUnsafe(int x, int y, int z){
-        return map.getDataUnsafe(x, y, z);
     }
 }

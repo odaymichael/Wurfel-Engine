@@ -294,8 +294,8 @@ public class Camera {
      */
     public int[] getCenterofBlock(int x, int y, int z){
         int result[] = new int[2];
-        result[0] = -getX()+x*Block.WIDTH + (y%2) * (int) (Block.WIDTH/2) + Controller.getMapDataUnsafe(x, y, z).getOffsetX();
-        result[1] = (int) (-getY()+y*Block.HEIGHT/2 - z*Block.HEIGHT + Controller.getMapDataUnsafe(x, y, z).getOffsetY() * (1/Block.ASPECTRATIO));
+        result[0] = -getX()+x*Block.WIDTH + (y%2) * (int) (Block.WIDTH/2) + Controller.getMapData(x, y, z).getOffsetX();
+        result[1] = (int) (-getY()+y*Block.HEIGHT/2 - z*Block.HEIGHT + Controller.getMapData(x, y, z).getOffsetY() * (1/Block.ASPECTRATIO));
         return result;
     }
     
@@ -308,7 +308,7 @@ public class Camera {
             for (int y = getTopBorder(); y < getBottomBorder();y++)
                 for (int z=0; z < Map.getBlocksZ(); z++){
                     
-                    Block block = Controller.getMapDataUnsafe(x, y, z); 
+                    Block block = Controller.getMapData(x, y, z); 
                     if (!block.isInvisible() && block.isVisible()) {
                         depthsort.add(new Renderblock(x, y, z, block.getDepth(y,z)));
                     }

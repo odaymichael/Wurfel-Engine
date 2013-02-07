@@ -190,7 +190,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
             }
         }
         //enable this line to see where to player stands:
-        Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()-1).setLightlevel(30);
+        Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()-1).setLightlevel(30);
    }
     
    /**
@@ -232,7 +232,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
         //land if standing in or under 0-level and there is an obstacle
         if (dirZ <= 0
             && newposZ <= 0
-            && (getCoordZ() == 0 || Controller.getMapDataUnsafe(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
+            && (getCoordZ() == 0 || Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
         ) {
             // fallsound.stop();
             dirZ = 0;
@@ -244,7 +244,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
         //down
         if (posZ < 0
             && getCoordZ() > 0
-            && ! Controller.getMapData(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
+            && ! Controller.getMapDataSafe(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
           //  if (! fallsound.playing()) fallsound.play();
             
             selfDestroy();
@@ -259,7 +259,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
             //up
             if (posZ >= Block.WIDTH
                 && getCoordZ() < Chunk.getBlocksZ()-2
-                && !Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
+                && !Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
                 //if (! fallsound.playing()) fallsound.play();
 
                 selfDestroy();

@@ -101,7 +101,7 @@ public class Blockpointer{
      * @return
      */
     public Block getBlock() {
-        return Controller.getMapData(getX(), getY(), getZ());
+        return Controller.getMapDataSafe(getX(), getY(), getZ());
     }
     
     /**

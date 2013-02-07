@@ -11,7 +11,7 @@ import org.newdawn.slick.util.Log;
  */
 public class Map {
     /**
-     * 
+     * The gravity constant in m/s^2
      */
     public static final float GRAVITY = 9.81f;
     
@@ -52,6 +52,7 @@ public class Map {
                 setChunk(pos, tempchunk);
                 pos++;               
             }
+        
         recalcRequested = true;
        
         minimap = new Minimap();
@@ -268,7 +269,7 @@ public class Map {
      * @param z If too high or too low, it takes the highest/deepest value possible
      * @return A single block at the wanted coordinates.
      */
-    public Block getData(int x, int y, int z){
+    public Block getDataSafe(int x, int y, int z){
         if (x >= Chunk.getBlocksX()*3){
             x = Chunk.getBlocksX()*3-1;
             //Log.warn("X too high!");
@@ -302,9 +303,9 @@ public class Map {
      * @param y 
      * @param z 
      * @return the single block
-     * @see com.BombingGames.Game.Map#getData(int, int, int) 
+     * @see com.BombingGames.Game.Map#getDataSafe(int, int, int) 
      */
-    public Block getDataUnsafe(int x, int y, int z){
+    public Block getData(int x, int y, int z){
         return data[x][y][z];  
     }
     

@@ -31,7 +31,7 @@ public class Minimap {
         for (int pos=0;pos < 9;pos++){  
             for (int x = Chunk.getBlocksX()*(pos%3); x < Chunk.getBlocksX() * (pos%3+1); x++){
                 for (int y = Chunk.getBlocksY()*(pos/3); y < Chunk.getBlocksY() * (pos/3+1); y++){
-                    Block block = Controller.getMapData(x, y, z);               
+                    Block block = Controller.getMapDataSafe(x, y, z);               
 
                     Wurfelengine.getGraphics().setColor(Block.getBlockColor(block.getId(), block.getValue()));
                     Wurfelengine.getGraphics().fillRect(

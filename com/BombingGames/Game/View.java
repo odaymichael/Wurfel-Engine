@@ -91,10 +91,10 @@ public class View {
             for (int y=0; y < Map.getBlocksY(); y++)
                 for (int z=0; z < Chunk.getBlocksZ(); z++) {
                     
-                    Block block = Controller.getMapDataUnsafe(x, y, z);
+                    Block block = Controller.getMapData(x, y, z);
                     if (block.hasOffset()){
                         block.setVisible(true);//Blocks with offset are not in the grid, so ignore them
-                        Controller.getMapData(x, y, z-1).setVisible(true);
+                        Controller.getMapDataSafe(x, y, z-1).setVisible(true);
                     } else {
                         block.setVisible(false);
                     }
@@ -147,33 +147,33 @@ public class View {
                 if (side == 0){
                     //direct neighbour block on left hiding the complete left side
                     if (x > 0 && y < Map.getBlocksY()-1
-                        && ! Controller.getMapDataUnsafe(x - (y%2 == 0 ? 1:0), y+1, z).isTransparent())
+                        && ! Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z).isTransparent())
                     break; //stop ray
                     
                     //liquid
-                    if (Controller.getMapDataUnsafe(x, y, z).isLiquid()){
+                    if (Controller.getMapData(x, y, z).isLiquid()){
                         if (x > 0 && y < Map.getBlocksY()-1
-                        && Controller.getMapDataUnsafe(x - (y%2 == 0 ? 1:0), y+1, z).isLiquid())
+                        && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z).isLiquid())
                             liquidfilter=true;
                         if (x > 0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                            && Controller.getMapDataUnsafe(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
+                            && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
                             leftliquid = false;
                         if (y < Map.getBlocksY()-2 &&
-                            Controller.getMapDataUnsafe(x, y+2, z).isLiquid())
+                            Controller.getMapData(x, y+2, z).isLiquid())
                             rightliquid = false;
                         if (!leftliquid && !rightliquid) liquidfilter=true;
                     } 
 
                     //two blocks hiding the left side
                     if (x > 0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                        && ! Controller.getMapDataUnsafe(x - (y%2 == 0 ? 1:0), y+1, z+1).isTransparent())
+                        && ! Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isTransparent())
                         left = false;
                     if (y < Map.getBlocksY()-2 &&
-                        ! Controller.getMapDataUnsafe(x, y+2, z).isTransparent())
+                        ! Controller.getMapData(x, y+2, z).isTransparent())
                         right = false;
 
                     if (left || right){ //as long one part of the side is visible save it
-                        Block temp = Controller.getMapDataUnsafe(x, y, z);
+                        Block temp = Controller.getMapData(x, y, z);
                         if (!(liquidfilter && temp.isLiquid())){
                             temp.setSideVisibility(0, true);
                         }else liquidfilter=false;
@@ -181,19 +181,19 @@ public class View {
                 } else {              
                     if (side == 1) {//check top side
                         if (z < Map.getBlocksZ()-1
-                            && ! Controller.getMapDataUnsafe(x, y, z+1).isTransparent())
+                            && ! Controller.getMapData(x, y, z+1).isTransparent())
                             break;
                         
                         //liquid
-                        if (Controller.getMapDataUnsafe(x, y, z).isLiquid()){
-                            if (z < Map.getBlocksZ()-1 && Controller.getMapDataUnsafe(x, y, z+1).isLiquid())
+                        if (Controller.getMapData(x, y, z).isLiquid()){
+                            if (z < Map.getBlocksZ()-1 && Controller.getMapData(x, y, z+1).isLiquid())
                                 break;
                             if (x>0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                                && Controller.getMapDataUnsafe(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
+                                && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
                                 leftliquid = false;
                             
                             if (x < Map.getBlocksX()-1  && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                                &&  Controller.getMapDataUnsafe(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
+                                &&  Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
                                 rightliquid = false;
                             
                             if (!leftliquid && !rightliquid) liquidfilter=true;
@@ -201,15 +201,15 @@ public class View {
                     
                         //two 0- and 2-sides hiding the side 1
                         if (x>0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                            && ! Controller.getMapDataUnsafe(x - (y%2 == 0 ? 1:0), y+1, z+1).isTransparent())
+                            && ! Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isTransparent())
                             left = false;
                         
                         if (x < Map.getBlocksX()-1  && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                            && ! Controller.getMapDataUnsafe(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent())
+                            && ! Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent())
                             right = false;
                           
                         if (left || right){ //as long one part of the side is visible save it
-                            Block temp = Controller.getMapDataUnsafe(x, y, z);
+                            Block temp = Controller.getMapData(x, y, z);
                             if (!(liquidfilter && temp.isLiquid())){
                                 temp.setSideVisibility(1, true);
                             }else liquidfilter=false;
@@ -218,22 +218,22 @@ public class View {
                         if (side==2){
                             //block on right hiding the right side
                             if (x < Map.getBlocksX()-1 && y < Map.getBlocksY()-1
-                                && ! Controller.getMapDataUnsafe(x + (y%2 == 0 ? 0:1), y+1, z).isTransparent())
+                                && ! Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).isTransparent())
                                 break;
                             
                             //liquid
-                            if (Controller.getMapDataUnsafe(x, y, z).isLiquid()){
+                            if (Controller.getMapData(x, y, z).isLiquid()){
                                if (x < Map.getBlocksX()-1 && y < Map.getBlocksY()-1
-                                && Controller.getMapDataUnsafe(x + (y%2 == 0 ? 0:1), y+1, z).isLiquid())
+                                && Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).isLiquid())
                                     break;
                                 if (y < Map.getBlocksY()-2
                                     &&
-                                    Controller.getMapDataUnsafe(x, y+2, z).isLiquid())
+                                    Controller.getMapData(x, y+2, z).isLiquid())
                                     leftliquid = false;
                                 
                                 if (x < Map.getBlocksX()-1 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
                                     &&
-                                    Controller.getMapDataUnsafe(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
+                                    Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
                                     rightliquid = false;
                                 
                                 if (!leftliquid && !rightliquid) liquidfilter = true;
@@ -242,16 +242,16 @@ public class View {
                             //two blocks hiding the right side
                             if (y < Map.getBlocksY()-2
                                 &&
-                                ! Controller.getMapDataUnsafe(x, y+2, z).isTransparent())
+                                ! Controller.getMapData(x, y+2, z).isTransparent())
                                 left = false;
                             
                             if (x < Map.getBlocksX()-1 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
                                 &&
-                                ! Controller.getMapDataUnsafe(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent())
+                                ! Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent())
                                 right = false;
                             
                             if (left || right){ //as long one part of the side is visible save it
-                                Block temp = Controller.getMapDataUnsafe(x, y, z);
+                                Block temp = Controller.getMapData(x, y, z);
                                 if (!(liquidfilter && temp.isLiquid())){
                                     temp.setSideVisibility(2, true);
                                 }else liquidfilter=false;
@@ -259,7 +259,7 @@ public class View {
                         }
                     }
                 }
-            } while (y >= 2 && z >= 1 && (Controller.getMapDataUnsafe(x, y, z).isTransparent() || Controller.getMapDataUnsafe(x, y, z).hasOffset()));
+            } while (y >= 2 && z >= 1 && (Controller.getMapData(x, y, z).isTransparent() || Controller.getMapData(x, y, z).hasOffset()));
     }
     
     /**
@@ -291,14 +291,14 @@ public class View {
                 
                 //find top most block
                 int topmost = Chunk.getBlocksZ()-1;
-                while (Controller.getMapData(x, y, topmost).isTransparent() == true && topmost > 0 ){
+                while (Controller.getMapDataSafe(x, y, topmost).isTransparent() == true && topmost > 0 ){
                     topmost--;
                 }
                 
                 if (topmost>0) {
                     //start at topmost block and go down. Every step make it a bit darker
                     for (int level=topmost; level >= 0; level--)
-                        Controller.getMapData(x, y, level).setLightlevel(level*50 / topmost);
+                        Controller.getMapDataSafe(x, y, level).setLightlevel(level*50 / topmost);
                 }
             }
         }         

@@ -176,6 +176,6 @@ public class SelfAwareBlock extends Block{
     
     public Block getNeighbourBlock(int side, int relZ){
         int neighbourcoords[] = getNeighbourCoords(side,relZ);
-        return Controller.getMapData(neighbourcoords[0], neighbourcoords[1], neighbourcoords[2]);
+        return Controller.getMapDataSafe(neighbourcoords[0], neighbourcoords[1], neighbourcoords[2]);
     }
 }
