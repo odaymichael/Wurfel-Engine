@@ -5,6 +5,56 @@ import java.util.ArrayList;
 import org.newdawn.slick.Color;
 
 /**
+ * A message is put into the MsgSystem. It contains the message, the sender and the importance.
+ * @author Benedikt
+ */
+class Msg {
+    private String fmessage;
+    private String sender = "System";
+    private int importance = 1;
+    
+    
+    Msg(String pmessage, String psender, int imp) {
+        fmessage = pmessage;
+        sender = psender;
+        importance = imp;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public String getMessage(){
+        return fmessage;    
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public String getSender(){
+        return sender;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public int getImportance(){
+        return importance;
+    }
+  
+    /**
+     * Sets the importance
+     * @param imp
+     */
+    public void setImportance(int imp){
+        if ((imp>=0) && (imp<=100))
+            importance = imp;    
+    }
+}
+
+/**
  *The message system can manage&show messages (Msg).
  * @author Benedikt
  */
@@ -93,6 +143,4 @@ public class MsgSystem extends ArrayList<Msg> {
     boolean isListeningForInput() {
         return waitforinput;
     }
-    
-    
 }

@@ -5,6 +5,7 @@ import com.BombingGames.Game.Blocks.Blockpointer;
 import com.BombingGames.Game.Blocks.Player;
 import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;
+import org.newdawn.slick.util.Log;
 
 /**
  *The camera locks to the player by default. It can be changed with <i>focusblock()</i>.
@@ -36,10 +37,10 @@ public class Camera {
 
     /**
      * Creates a camera. Screen does refer to the output of the camera not the real size on the display.
-     * @param xPos The screen coordinates
-     * @param yPos The screen coordinate
-     * @param gameWidth The screen gameWidth of the camera
-     * @param gameHeight The screen gameHeight of the camera
+     * @param x 
+     * @param y 
+     * @param width 
+     * @param height 
      * @param scale The zoom factor.
      */
     public Camera(int x, int y,int width, int height, float scale) {
@@ -99,12 +100,19 @@ public class Camera {
         
     }
     
-    public void draw() {
-        createSortedDepthList();
-        Wurfelengine.getGraphics().scale(getZoom(), getZoom());
-        Controller.getMap().draw(this);
+    /**
+     * 
+     */
+    public void render() {
+        if (Controller.getMap() != null) {
         
-        Wurfelengine.getGraphics().scale(1/getZoom(), 1/getZoom());
+            Wurfelengine.getGraphics().scale(getZoom(), getZoom());
+            
+            createSortedDepthList();
+            Controller.getMap().render(this);
+        
+            Wurfelengine.getGraphics().scale(1/getZoom(), 1/getZoom());
+        }
         //GUI
         if (Controller.getMap().getMinimap() != null)
             Controller.getMap().getMinimap().draw(); 
@@ -195,7 +203,7 @@ public class Camera {
 
     /**
      * The Camera Position in the game world.
-     * @param xPos
+     * @param x 
      */
     public void setX(int x) {
         this.xPos = x;
@@ -211,7 +219,7 @@ public class Camera {
 
     /**
      * The Camera Position in the game world.
-     * @param yPos
+     * @param y 
      */
     public void setY(int y) {
         this.yPos = y;
@@ -287,8 +295,8 @@ public class Camera {
     
     /**
      * Returns the pixel-coordinates (screen) of a block's center.
-     * @param xPos
-     * @param yPos
+     * @param x 
+     * @param y 
      * @param z
      * @return an array with [0]-xPos and [1]-yPos 
      */
@@ -314,7 +322,9 @@ public class Camera {
                     }
                     
                 }
-        sortDepthList(0, depthsort.size()-1);
+        if (!depthsort.isEmpty())
+            sortDepthList(0, depthsort.size()-1);
+        else Log.debug("LOLNOOB!");
     }
     
     /**

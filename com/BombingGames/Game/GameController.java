@@ -17,7 +17,7 @@ public class GameController extends Controller {
     private GameContainer gc;
     /**
      * The custom game code belongs here
-     * @param container
+     * @param gc 
      * @param game
      * @throws SlickException
      */
@@ -31,16 +31,11 @@ public class GameController extends Controller {
     
     @Override
     public void update(int delta) throws SlickException{
-        super.update(delta);
-        
         //get input and do actions
         Input input = gc.getInput();
         
         if (!Gameplay.MSGSYSTEM.isListeningForInput()) {
             if (input.isKeyDown(Input.KEY_Q)) gc.exit();
-
-            //open menu
-            if (input.isKeyPressed(Input.KEY_ESCAPE)) openmenu();
 
             //toggle fullscreen
             if (input.isKeyPressed(Input.KEY_F)) gc.setFullscreen(!gc.isFullscreen()); 
@@ -89,6 +84,8 @@ public class GameController extends Controller {
         
         //toggle input for msgSystem
         if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.MSGSYSTEM.listenForInput(!Gameplay.MSGSYSTEM.isListeningForInput());
+        
+        super.update(delta);
     }
     
     class MouseDraggedListener implements MouseListener{
@@ -101,20 +98,15 @@ public class GameController extends Controller {
             zoomx = zoomx + change/1000f;
             Gameplay.getView().getCamera().setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
             
-            
-           /* Block.width =(int) (gc.getWidth() *zoom / Chunk.BlocksX);
-            Block.height = (int) (4*gc.getGroundHeight()*zoom / Chunk.BlocksY);
-            Chunk.SIZE_X = (int) (Chunk.BlocksX*Block.width*zoom);
-            Chunk.SIZE_Y = (int) (Chunk.BlocksY*Block.height*zoom/2);*/
-            
             Gameplay.MSGSYSTEM.add("Zoom: "+Gameplay.getView().getCamera().getZoom());   
         }
 
         @Override
         public void mouseClicked(int button, int x, int y, int clickCount) {
-            int coords[] = ScreenToGameCoords(x,y);
+            int coords[] = Gameplay.getView().ScreenToGameCoords(x,y);
             setMapData(coords[0], coords[1], coords[2]+1,new Block(1));
             Log.debug("made block at"+coords[0]+","+coords[1]+","+coords[2]);
+            Gameplay.getView().traceRayTo(coords[0], coords[1], coords[2], true);
         }
 
         @Override

@@ -174,6 +174,12 @@ public class SelfAwareBlock extends Block{
         return result;
     }
     
+    /**
+     * 
+     * @param side
+     * @param relZ
+     * @return
+     */
     public Block getNeighbourBlock(int side, int relZ){
         int neighbourcoords[] = getNeighbourCoords(side,relZ);
         return Controller.getMapDataSafe(neighbourcoords[0], neighbourcoords[1], neighbourcoords[2]);

@@ -36,6 +36,51 @@ public class Controller {
     }
     
     /**
+     * Returns the currently loaded map.
+     * @return the map
+     */
+    public static Map getMap() {
+        return map;
+    }
+    
+    
+    /**
+     * Returns a block inside the map. The same as "getMap().getDataSafe(x,y,z)"
+     * @param x
+     * @param y
+     * @param z
+     * @return the wanted block
+     * @see com.BombingGames.Game.Map#getDataSafe(int, int, int) 
+     */
+    public static Block getMapDataSafe(int x, int y, int z){
+        return map.getDataSafe(x, y, z);
+    }
+    
+    /**
+     * Same as "Map.getDataSafe(int, int, int)"
+     * @param x
+     * @param y
+     * @param z
+     * @return the wanted block
+     * @see com.BombingGames.Game.Map#getData(int, int, int) 
+     */
+    public static Block getMapData(int x, int y, int z){
+        return map.getData(x, y, z);
+    }
+    
+    /**
+     * Shortcut to  "Map.getDataSafe(int, int, int)"
+     * @param x
+     * @param y
+     * @param z
+     * @param block 
+     * @see com.BombingGames.Game.Map#getData(int, int, int) 
+     */
+    public static void setMapData(int x, int y, int z, Block block){
+        map.setData(x, y, z, block);
+    }
+    
+    /**
      * Main method which is called every refresh
      * @param delta
      * @throws SlickException
@@ -75,41 +120,6 @@ public class Controller {
     }
     
     /**
-     * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
-     * @param x the x position on the screen
-     * @return game coordinate
-     */
-    public int ScreenXtoGame(int x){
-        Log.debug("ScreenXtoGame("+x+")");
-        return (int) ((x + Gameplay.getView().getCamera().getX()) / Gameplay.getView().getCamera().getAbsZoom());
-    }
-    
-   /**
-     * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
-     * @param y the y position on the screen
-     * @return game coordinate
-     */
-    public int ScreenYtoGame(int y){
-        Log.debug("ScreenYtoGame("+y+")");
-        return (int) ((y + Gameplay.getView().getCamera().getY()) / Gameplay.getView().getCamera().getAbsZoom() * 2);
-    }
-    
-    /**
-     * Returns the coordinates belonging to a point on the screen
-     * @param x the x position on the screen
-     * @param y the y position on the screen
-     * @return map coordinates
-     */
-    public int[] ScreenToGameCoords(int x, int y){
-        int[] coords = new int[3];
-        Log.debug("ScreenXtoGame(x): "+ScreenXtoGame(x));
-        coords[0] = ScreenXtoGame(x) / Block.WIDTH;
-        coords[1] = ScreenYtoGame(y) / Block.WIDTH;
-        coords[2] = Map.getBlocksZ()/2;
-        return coords;
-    }
-
-    /**
      * Returns the player
      * @return the player
      */
@@ -125,6 +135,10 @@ public class Controller {
         this.player = player;
     }
 
+    /**
+     * 
+     * @param goodgraphics
+     */
     protected void setGoodgraphics(boolean goodgraphics) {
         this.goodgraphics = goodgraphics;
     }
@@ -135,50 +149,5 @@ public class Controller {
      */
     public boolean hasGoodGraphics() {
         return goodgraphics;
-    }
-
-    /**
-     * Returns the currently loaded map.
-     * @return the map
-     */
-    public static Map getMap() {
-        return map;
-    }
-    
-    
-    /**
-     * Returns a block inside the map. The same as "getMap().getDataSafe(x,y,z)"
-     * @param x
-     * @param y
-     * @param z
-     * @return the wanted block
-     * @see com.BombingGames.Game.Map#getDataSafe(int, int, int) 
-     */
-    public static Block getMapDataSafe(int x, int y, int z){
-        return map.getDataSafe(x, y, z);
-    }
-    
-    /**
-     * Same as "Map.getDataSafe(int, int, int)"
-     * @param x
-     * @param y
-     * @param z
-     * @return the wanted block
-     * @see com.BombingGames.Game.Map#getData(int, int, int) 
-     */
-    public static Block getMapData(int x, int y, int z){
-        return map.getData(x, y, z);
-    }
-    
-    /**
-     * Same as "Map.getDataSafe(int, int, int)"
-     * @param x
-     * @param y
-     * @param z
-     * @return the wanted block
-     * @see com.BombingGames.Game.Map#getData(int, int, int) 
-     */
-    public static void setMapData(int x, int y, int z, Block block){
-        map.setData(x, y, z, block);
     }
 }

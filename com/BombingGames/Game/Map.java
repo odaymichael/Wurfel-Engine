@@ -62,6 +62,31 @@ public class Map {
         Log.debug("...Finished creating the map");
     }
     
+     /**
+     * Returns the amount of Blocks inside the map in x-direction.
+     * @return
+     */
+    public static int getBlocksX() {
+        return blocksX;
+    }
+
+    /**
+     * Returns the amount of Blocks inside the map in y-direction.
+     * @return
+     */
+    public static int getBlocksY() {
+        return blocksY;
+    }
+
+    /**
+     * Returns the amount of Blocks inside the map in z-direction.
+     * @return 
+     */
+    public static int getBlocksZ() {
+        return blocksZ;
+    }
+    
+    
     /**
      * Copies an array with three dimensions. Code by Kevin Brock from http://stackoverflow.com/questions/2068370/efficient-system-arraycopy-on-multidimensional-arrays
      * @param array
@@ -81,34 +106,38 @@ public class Map {
         return copy;
     } 
     
-    Block[][][] getData() {
+    /**
+     * 
+     * @return
+     */
+    public Block[][][] getData() {
         return data;
     }
     
     /**
-     * Reorgnanises the map and sets the center to param center.
+     * Reorgnanises the map and sets the new middle chunk to param newmiddle.
      * Move all chunks when loading or creating a new piece of the map
      *    |0|1|2|
      *     -------------
      *    |3|4|5|
      *     -------------
      *    |6|7|8|
-     * @param center center is 1, 3, 5 or 7
+     * @param newmiddle newmiddle is 1, 3, 5 or 7
      */
-    public void setCenter(int center){
-        Log.debug("ChunkSwitch:"+center);
-        if (center==1 || center==3 || center==5 || center==7) {
+    public void setCenter(int newmiddle){
+        Log.debug("ChunkSwitch:"+newmiddle);
+        if (newmiddle==1 || newmiddle==3 || newmiddle==5 || newmiddle==7) {
         
         //make a copy of the data
         Block data_copy[][][] = copyOf3Dim(data);
         
         for (int pos=0; pos<9; pos++){
             //refresh coordinates
-            coordlist[pos][0] += (center == 3 ? -1 : (center == 5 ? 1 : 0));
-            coordlist[pos][1] += (center == 1 ? -1 : (center == 7 ? 1 : 0));
+            coordlist[pos][0] += (newmiddle == 3 ? -1 : (newmiddle == 5 ? 1 : 0));
+            coordlist[pos][1] += (newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0));
             
-            if (isMovingChunkPossible(pos, center)){
-                setChunk(pos, getChunk(data_copy, pos - 4 + center));
+            if (isMovingChunkPossible(pos, newmiddle)){
+                setChunk(pos, getChunk(data_copy, pos - 4 + newmiddle));
             } else {
                 setChunk(
                         pos,
@@ -123,19 +152,19 @@ public class Map {
         
         recalcRequested = true;
         } else {
-            Log.error("setCenter was called with center:"+center);
+            Log.error("setCenter was called with center:"+newmiddle);
         }
     }
     
     /**
-     * checks if the number can be reached by moving the net in a direction
+     * checks if the number can be reached by moving the net in a newmiddle
      * @param pos the position you want to check
-     * @param direction the direction the chunkswitch is made to
+     * @param newmiddle the newmiddle the chunkswitch is made to
      * @return 
      */
-     private boolean isMovingChunkPossible(int pos, int direction){
+     private boolean isMovingChunkPossible(int pos, int newmiddle){
         boolean result = true; 
-        switch (direction){
+        switch (newmiddle){
             case 1: if ((pos==0) || (pos==1) || (pos==2)) result = false;
             break;
             
@@ -218,8 +247,9 @@ public class Map {
     
     /**
      * Draws the map
+     * @param camera 
      */
-    public void draw(Camera camera) {
+    public void render(Camera camera) {
         //if (Gameplay.getController().hasGoodGraphics()) Block.getBlocksheet().bind();
         if (Gameplay.getController().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
@@ -228,7 +258,7 @@ public class Map {
         //render vom bottom to top
         for (int i=0; i < camera.getDepthsortlistSize() ;i++) {
             int[] item = camera.getDepthsortCoord(i);
-            data[item[0]][item[1]][item[2]].draw(item[0],item[1],item[2]);            
+            data[item[0]][item[1]][item[2]].render(item[0],item[1],item[2]);            
         }
         
 //                    //check current and next block for special order
@@ -239,9 +269,9 @@ public class Map {
 //                       ) 
 //                    {
 //                        x++;
-//                        data[x][y][z].draw(x,y,z);//draw the right block first
-//                        data[x-1][y][z].draw(x-1,y,z); //then the left   
-//                    } else data[x][y][z].draw(x,y,z);
+//                        data[x][y][z].render(x,y,z);//draw the right block first
+//                        data[x-1][y][z].render(x-1,y,z); //then the left   
+//                    } else data[x][y][z].render(x,y,z);
 //                }
             
        Block.getBlocksheet().endUse(); 
@@ -343,7 +373,8 @@ public class Map {
             z = 0;
             //Log.warn("Z too low!");
         }
-        data[x][y][z] = block;    
+        data[x][y][z] = block;
+       // Gameplay.getView().traceRayTo(x, y, z, true);
     }
     
     /**
@@ -366,29 +397,5 @@ public class Map {
             data[x[i]][y[i]][z[i]].setOffset((int) (Math.random()*Block.WIDTH/2)-Block.WIDTH/2, (int) (Math.random()*Block.WIDTH/2)-Block.WIDTH/2);
         }
         requestRecalc();
-    }
-
-    /**
-     * Returns the amount of Blocks inside the map in x-direction.
-     * @return
-     */
-    public static int getBlocksX() {
-        return blocksX;
-    }
-
-    /**
-     * Returns the amount of Blocks inside the map in y-direction.
-     * @return
-     */
-    public static int getBlocksY() {
-        return blocksY;
-    }
-
-    /**
-     * Returns the amount of Blocks inside the map in z-direction.
-     * @return 
-     */
-    public static int getBlocksZ() {
-        return blocksZ;
     }
 }

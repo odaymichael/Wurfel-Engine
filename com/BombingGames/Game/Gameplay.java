@@ -42,13 +42,21 @@ public class Gameplay extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        view.render(game, g);
+        view.render(g);
     }
 
+    /**
+     * 
+     * @return
+     */
     public static Controller getController() {
         return controller;
     }
 
+    /**
+     * 
+     * @return
+     */
     public static View getView() {
         return view;
     }

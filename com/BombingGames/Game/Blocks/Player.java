@@ -2,10 +2,9 @@ package com.BombingGames.Game.Blocks;
 
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
-import org.newdawn.slick.util.Log;
 
 /**
- *The Player is a character who can walk. absCooords are the coordiantes which are absolute to the map. Relative is relative to the currently loaded chunks (map).
+ *The Player is a character who can walk.
  * @author Benedikt
  */
 public class Player extends MovingBlock{
@@ -69,7 +68,7 @@ public class Player extends MovingBlock{
     }
     
      @Override
-     public void draw(int x, int y, int z){
+     public void render(int x, int y, int z){
         float[] dir = getDirectionVector();
         if (dir[0] < -Math.sin(Math.PI/3)){
             //west
@@ -111,7 +110,7 @@ public class Player extends MovingBlock{
                 }
             }
         }
-        super.draw(x, y, z);
+        super.render(x, y, z);
         //this line causes massive rendering problems
         //Gameplay.view.g.fillRect(500, 500, 900, 600);
     }

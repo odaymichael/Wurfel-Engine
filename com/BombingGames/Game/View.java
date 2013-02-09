@@ -72,13 +72,12 @@ public class View {
     
     /**
      * Main method which is called every time
-     * @param game
      * @param g 
      * @throws SlickException
      */
-    public void render(StateBasedGame game, Graphics g) throws SlickException{
+    public void render(Graphics g) throws SlickException{
         g.scale(equalizationScale, equalizationScale);
-        camera.draw();
+        camera.render();
         Gameplay.MSGSYSTEM.draw(); 
     }
        
@@ -267,7 +266,7 @@ public class View {
      * @param x
      * @param y
      * @param z
-     * @param allsides 
+     * @param allsides True when every side should be traced?
      */
     public void traceRayTo(int x, int y, int z, boolean allsides){
        //find start position
@@ -304,12 +303,56 @@ public class View {
         }         
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getEqualizationScale() {
         return equalizationScale;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Camera getCamera() {
         return camera;
     }
-
+    
+        /**
+     * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
+     * @param x the x position on the screen
+     * @return game coordinate
+     */
+    public int ScreenXtoGame(int x){
+        Log.debug("ScreenXtoGame("+x+")");
+        return (int) ((x + Gameplay.getView().getCamera().getX()) / Gameplay.getView().getCamera().getAbsZoom());
+    }
+    
+   /**
+     * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
+     * @param y the y position on the screen
+     * @return game coordinate
+     */
+    public int ScreenYtoGame(int y){
+        Log.debug("ScreenYtoGame("+y+")");
+        return (int) ((y + Gameplay.getView().getCamera().getY()) / Gameplay.getView().getCamera().getAbsZoom() * 2);
+    }
+    
+    /**
+     * Returns the coordinates belonging to a point on the screen
+     * @param x the x position on the screen
+     * @param y the y position on the screen
+     * @return map coordinates
+     */
+    public int[] ScreenToGameCoords(int x, int y){
+        int[] coords = new int[3];
+        Log.debug("ScreenXtoGame(x): "+ScreenXtoGame(x));
+        coords[0] = ScreenXtoGame(x) / Block.WIDTH;
+        coords[1] = (int) (((y + Gameplay.getView().getCamera().getY()) / Gameplay.getView().getCamera().getAbsZoom())
+            / (Block.WIDTH/4)
+            +Map.getBlocksZ()-1);
+        coords[2] = Map.getBlocksZ()-1;
+        return coords;
+    }
 }

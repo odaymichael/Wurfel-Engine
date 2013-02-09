@@ -3,6 +3,10 @@ package com.BombingGames;
 
 import java.io.File;
 
+/**
+ * A class which helps getting OS specific information
+ * @author Martin Brunokowsky
+ */
 class WorkingDirectory {
     public static File getWorkingDirectory(String applicationName) {
         String userHome = System.getProperty("user.home", ".");

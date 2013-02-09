@@ -39,8 +39,8 @@ public class Chunk {
     
     /**
     *Creates a chunk.
-    * @param ChunkX
-    * @param ChunkY
+    * @param coordX 
+    * @param coordY 
     * @param loadmap load from HD(true) or generate new (false)?
     */
     public Chunk(int coordX, int coordY, boolean loadmap){
@@ -197,6 +197,9 @@ public class Chunk {
         }
     }
     
+    /**
+     * 
+     */
     public static void readMapInfo(){
         BufferedReader bufRead = null;
         try {
@@ -245,28 +248,49 @@ public class Chunk {
         return data;
     }
 
+    /**
+     * 
+     * @param data
+     */
     public void setData(Block[][][] data) {
         this.data = data;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getCoordX() {
         return coordX;
     }
 
+    /**
+     * 
+     * @param coordX
+     */
     public void setCoordX(int coordX) {
         this.coordX = coordX;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getCoordY() {
         return coordY;
     }
 
+    /**
+     * 
+     * @param coordY
+     */
     public void setCoordY(int coordY) {
         this.coordY = coordY;
     }
 
     /**
      * The amount of blocks in X direction
+     * @return 
      */
     public static int getBlocksX() {
         return blocksX;
@@ -274,6 +298,7 @@ public class Chunk {
 
     /**
      * The amount of blocks in Y direction
+     * @return 
      */
     public static int getBlocksY() {
         return blocksY;
@@ -281,6 +306,7 @@ public class Chunk {
 
    /**
      * The amount of blocks in Z direction
+     * @return 
      */
     public static int getBlocksZ() {
         return blocksZ;

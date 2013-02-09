@@ -160,27 +160,26 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 
                 //track the coordiante change, if there is one
                 int sidennumb = getSideNumb();
-                switch(sidennumb) {
-                    case 0:
-                    case 1:
-                            makeCoordinateStep(1, -1, topblock);
-                            break;
-                    case 2:    
-                    case 3:
-                            makeCoordinateStep(1, 1, topblock);
-                            break;
-                    case 4:
-                    case 5:
-                            makeCoordinateStep(-1, 1, topblock);
-                            break;
-                    case 6:
-                    case 7:
-                            makeCoordinateStep(-1, -1, topblock);
-                            break;    
+                if (sidennumb != 8){                
+                    switch(sidennumb) {
+                        case 0:
+                        case 1:
+                                makeCoordinateStep(1, -1, topblock);
+                                break;
+                        case 2:    
+                        case 3:
+                                makeCoordinateStep(1, 1, topblock);
+                                break;
+                        case 4:
+                        case 5:
+                                makeCoordinateStep(-1, 1, topblock);
+                                break;
+                        case 6:
+                        case 7:
+                                makeCoordinateStep(-1, -1, topblock);
+                                break;    
+                    }
                 }
-
-                //if there was a coordiante change recalc map.
-                if (sidennumb != 8) Controller.getMap().requestRecalc();
 
                 //set the offset for the rendering
                 setOffset((int) posX - Block.WIDTH/2, (int) posY - (int) posZ - Block.HEIGHT);
@@ -216,6 +215,9 @@ public abstract class MovingBlock extends SelfAwareBlock {
          
         selfRebuild();
         if (topblock != null) topblock.setBlock(new Block(getId()));
+        
+        //if there was a coordiante change recalc map.
+        Controller.getMap().requestRecalc();
     }
     
        /**
@@ -302,14 +304,26 @@ public abstract class MovingBlock extends SelfAwareBlock {
         return posZ;
     }
 
+    /**
+     * 
+     * @param posX
+     */
     public void setPosX(float posX) {
         this.posX = posX;
     }
 
+    /**
+     * 
+     * @param posY
+     */
     public void setPosY(float posY) {
         this.posY = posY;
     }
 
+    /**
+     * 
+     * @param posZ
+     */
     public void setPosZ(float posZ) {
         this.posZ = posZ;
     }
@@ -319,13 +333,17 @@ public abstract class MovingBlock extends SelfAwareBlock {
     /*
      * Returns true if the player is standing on ground.
      */
+    /**
+     * 
+     * @return
+     */
     public boolean isStanding(){
        return (dirZ == 0 && posZ == 0);
     }
 
     /**
      * Jumpwith a specific speed
-     * @param height the velocity of the block 
+     * @param velo 
      */
     public void jump(float velo) {
         if (isStanding()) dirZ = velo;

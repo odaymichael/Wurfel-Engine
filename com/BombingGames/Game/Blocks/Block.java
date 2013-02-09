@@ -47,7 +47,7 @@ public class Block {
     /**
      * The sprite image which contains every block image
      */
-    private static SpriteSheet Blocksheet;
+    private static Image spritesheet;
     
     private int value = 0;
     private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft, invisible, liquid; 
@@ -276,7 +276,7 @@ public class Block {
      * @param y y-coordinate
      * @param z z-coordinate
      */
-    public void draw(int x, int y, int z) {
+    public void render(int x, int y, int z) {
         //draw every visible block except air
         if (id != 0 && visible){            
             if (isBlock){
@@ -366,7 +366,7 @@ public class Block {
      */
     public static void loadSpriteSheet() {
         try {
-            Blocksheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", WIDTH, (int) (HEIGHT*1.5f));
+            spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", WIDTH, (int) (HEIGHT*1.5f));
         } catch (SlickException ex) {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -411,22 +411,25 @@ public class Block {
      * Returns a sprite image of non-block image
      * @param id
      * @param value
+     * @param dimY 
      * @return 
      */    
     public static Image getSprite(int id, int value, int dimY) {
-        return Blocksheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], WIDTH, dimY*HEIGHT+HEIGHT);   
+        return spritesheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], WIDTH, dimY*HEIGHT+HEIGHT);   
     }
         
     /**
      *  Returns a sprite image of a specific side of the block
+     * @param id 
      * @param side Which side? (0 - 2)
+     * @param value 
      * @return an image of the side
      */
     public static Image getBlockSprite(int id, int value, int side){
         if (side==1)
-            return Blocksheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], WIDTH, HEIGHT);
+            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], WIDTH, HEIGHT);
         else
-            return Blocksheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], WIDTH/2, (int) (HEIGHT*3/2));    
+            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], WIDTH/2, (int) (HEIGHT*3/2));    
     }
     
     
@@ -578,8 +581,8 @@ public class Block {
      * Returns the spritesheet used for rendering
      * @return the spritesheet used by the blocks
      */
-    public static SpriteSheet getBlocksheet() {
-        return Blocksheet;
+    public static Image getBlocksheet() {
+        return spritesheet;
     }
     
     /**
@@ -605,6 +608,8 @@ public class Block {
 
     /**
      * Returns the depth of the block. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
+     * @param y 
+     * @param z 
      * @return the depth
      */
     public int getDepth(int y, int z) {

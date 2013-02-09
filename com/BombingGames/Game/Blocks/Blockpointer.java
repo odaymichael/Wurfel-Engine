@@ -16,9 +16,9 @@ public class Blockpointer{
     
     /**
      * Create a pointer to field in the coordinate system.
-     * @param X
-     * @param Y
-     * @param Z
+     * @param x 
+     * @param y 
+     * @param z 
      */
     public Blockpointer(int x, int y, int z) {
         //here the coordinates are values which are written/read
@@ -30,9 +30,9 @@ public class Blockpointer{
     /**
      * Create a blockpointer who points at a SelfAwareBlock and follows him
      * @param block the block where you are pointing at.
-     * @param X add X to the coordinates of the coordinates of the block
-     * @param Y add Y to the coordinates of the coordinates of the block
-     * @param Z add Z to the coordinates of the coordinates of the block 
+     * @param x
+     * @param y 
+     * @param z  
      */
     public Blockpointer(SelfAwareBlock block, int x, int y, int z){
         this.block = block;
