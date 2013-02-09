@@ -13,7 +13,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
     /**
      * Value in pixels
      */
-   private float[] pos = {Block.MIDDLEWIDTH / 2, Block.MIDDLEWIDTH / 2, 0};
+   private float[] pos = {Block.DIM2, Block.DIM2, 0};
    
    /* Always one of them must be 1 to prevent a division with 0.*/
    private float[] dir = {1,0,0};
@@ -108,46 +108,46 @@ public abstract class MovingBlock extends SelfAwareBlock {
             
             //check for movement in x
             //top corner
-            int neighbourNumber = getSideNumb((int) newx, (int) newy - Block.MIDDLEWIDTH/2); 
+            int neighbourNumber = getSideNumb((int) newx, (int) newy - Block.DIM2); 
             if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
                 validmovement = false;
             //bottom corner
-            neighbourNumber = getSideNumb((int) newx, (int) newy + Block.MIDDLEWIDTH/2); 
+            neighbourNumber = getSideNumb((int) newx, (int) newy + Block.DIM2); 
             if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
                 validmovement = false; 
             
             //find out the direction of the movement
             if (oldx-newx > 0) {
                 //check left corner
-                neighbourNumber = getSideNumb((int) newx - Block.MIDDLEWIDTH/2, (int) newy);
+                neighbourNumber = getSideNumb((int) newx - Block.DIM2, (int) newy);
                 if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
                    validmovement = false;
             } else {
                 //check right corner
-                neighbourNumber = getSideNumb((int) newx + Block.MIDDLEWIDTH/2, (int) newy);
+                neighbourNumber = getSideNumb((int) newx + Block.DIM2, (int) newy);
                 if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
                    validmovement = false;
             }
             
             //check for movement in y
             //left corner
-            neighbourNumber = getSideNumb((int) newx - Block.MIDDLEWIDTH/2, (int) newy); 
+            neighbourNumber = getSideNumb((int) newx - Block.DIM2, (int) newy); 
             if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
                 validmovement = false;
 
             //right corner
-            neighbourNumber = getSideNumb((int) newx + Block.MIDDLEWIDTH/2, (int) newy); 
+            neighbourNumber = getSideNumb((int) newx + Block.DIM2, (int) newy); 
             if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
                 validmovement = false;  
             
             if (oldy-newy > 0) {
                 //check top corner
-                neighbourNumber = getSideNumb((int) newx, (int) newy - Block.MIDDLEWIDTH/2);
+                neighbourNumber = getSideNumb((int) newx, (int) newy - Block.DIM2);
                 if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
                    validmovement = false;
             } else {
                 //check bottom corner
-                neighbourNumber = getSideNumb((int) newx, (int) newy + Block.MIDDLEWIDTH/2);
+                neighbourNumber = getSideNumb((int) newx, (int) newy + Block.GAMEDIMENSION/2);
                 if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
                    validmovement = false;
             }
@@ -181,10 +181,9 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 }
 
                 //set the offset for the rendering
-                setOffset((int) pos[0] - Block.DIMENSION/2, (int) pos[1] - (int) pos[2] - Block.DIM2);
+                setOffset((int) pos[0] - Block.DIM2, (int) (pos[1] - pos[2]) - Block.DIM2);
                 //copy offset to topblock
-                if (topblock != null) 
-                    topblock.getBlock().setOffset(getOffsetX(), getOffsetY());
+                if (topblock != null) topblock.getBlock().setOffset(getOffsetX(), getOffsetY());
             }
         }
         //enable this line to see where to player stands:
@@ -199,8 +198,8 @@ public abstract class MovingBlock extends SelfAwareBlock {
      */
     private void makeCoordinateStep(int x, int y, Blockpointer topblock){
         //mirror the position around the center
-        pos[1] += -1*y*Block.DIMENSION/2;
-        pos[0] += -1*x*Block.DIMENSION/2;
+        pos[1] += -1*y*Block.DIM2;
+        pos[0] += -1*x*Block.DIM2;
         
         selfDestroy();
         if (topblock != null) topblock.setBlock(new Block(0));
@@ -228,7 +227,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
         //calculate movement
         float t = delta/1000f; //t = time in s
         dir[2] += -Map.GRAVITY*t; //in m/s
-        float newposZ = pos[2] + dir[2]*Block.DIMENSION*t; //m
+        float newposZ = pos[2] + dir[2]*Block.GAMEDIMENSION*t; //m
 
         //land if standing in or under 0-level and there is an obstacle
         if (dir[2] <= 0
@@ -254,11 +253,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
             selfRebuild();
             if (topblock != null) topblock.setBlock(new Block(getId()));
 
-            pos[2] += Block.DIMENSION;
+            pos[2] += Block.GAMEDIMENSION;
             Controller.getMap().requestRecalc();
         } else {
             //up
-            if (pos[2] >= Block.DIMENSION
+            if (pos[2] >= Block.GAMEDIMENSION
                 && getCoordZ() < Chunk.getBlocksZ()-2
                 && !Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
                 //if (! fallsound.playing()) fallsound.play();
@@ -269,13 +268,13 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 selfRebuild();
                 if (topblock != null) topblock.setBlock(new Block(getId()));
 
-                pos[2] -= Block.DIMENSION;
+                pos[2] -= Block.GAMEDIMENSION;
                 Controller.getMap().requestRecalc();
             } 
         }
         
         //set the offset for the rendering
-        setOffset((int) (getPosX() - Block.DIMENSION/2), (int) (getPosY() - pos[2] - Block.DIMENSION/2));
+        setOffset((int) pos[0] - Block.DIM2, (int) (pos[1] - pos[2]) - Block.DIM2);
         if (topblock != null) topblock.getBlock().setOffset(getOffsetX(), getOffsetY());  
     }
    

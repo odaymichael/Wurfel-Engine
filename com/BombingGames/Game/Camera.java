@@ -61,7 +61,7 @@ public class Camera {
     public void update() {
         if (focus) {//focus on block
              xPos = focusblock.getX() * Block.DIMENSION
-                + Block.DIMENSION / 2 *(focusblock.getY() % 2)
+                + Block.DIM2 *(focusblock.getY() % 2)
                 + focusblock.getBlock().getOffsetX()
                 - gameWidth / 2;
             
@@ -74,7 +74,7 @@ public class Camera {
         } else {//focus on player
             Player player = Gameplay.getController().getPlayer();
             xPos = player.getCoordX() * Block.DIMENSION
-                + Block.DIMENSION / 2 *(player.getCoordY() % 2)
+                + Block.DIM2 *(player.getCoordY() % 2)
                 + player.getOffsetX()
                 - gameWidth / 2;
             
@@ -92,10 +92,10 @@ public class Camera {
         rightborder = (xPos+gameWidth)/Block.DIMENSION+2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
         
-        topborder = yPos / (Block.DIM2/2)-1;
+        topborder = yPos / (Block.DIM4)-1;
         if (topborder < 0) topborder= 0;
         
-        bottomborder = (yPos+gameHeight) / (Block.DIM2/2) + Chunk.getBlocksZ()*2;
+        bottomborder = (yPos+gameHeight) / (Block.DIM4) + Chunk.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
         
     }
@@ -302,7 +302,7 @@ public class Camera {
      */
     public int[] getCenterofBlock(int x, int y, int z){
         int result[] = new int[2];
-        result[0] = -getX()+x*Block.DIMENSION + (y%2) * (int) (Block.DIMENSION/2) + Controller.getMapData(x, y, z).getOffsetX();
+        result[0] = -getX()+x*Block.DIMENSION + (y%2) * (int) (Block.DIM2) + Controller.getMapData(x, y, z).getOffsetX();
         result[1] = (int) (-getY()+y*Block.DIM4 - z*Block.DIM2 + Controller.getMapData(x, y, z).getOffsetY()/2);
         return result;
     }
@@ -322,9 +322,7 @@ public class Camera {
                     }
                     
                 }
-        if (!depthsort.isEmpty())
-            sortDepthList(0, depthsort.size()-1);
-        else Log.debug("LOLNOOB!");
+        sortDepthList(0, depthsort.size()-1);
     }
     
     /**

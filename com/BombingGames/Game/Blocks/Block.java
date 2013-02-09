@@ -15,7 +15,7 @@ import org.newdawn.slick.SpriteSheet;
  */
 public class Block {
     /**
-       * DIMENSION of the Block in pixels
+       * Screen DIMENSION of the Block in pixels. This is the length of the side, when you cut the block in the middle
        */
     public static final int DIMENSION = 160;
     
@@ -31,9 +31,9 @@ public class Block {
 
     
     /**
-     * The length when you cut a block in half. It is Dimension*sqrt(2)
+     * The real game world dimension in pixel It is Dimension/sqrt(2)
      */
-    public static int MIDDLEWIDTH = (int) (1.414213562373095*DIMENSION);
+    public static int GAMEDIMENSION = (int) (DIMENSION/1.414213562373095f);
 
     
     /**
@@ -299,10 +299,10 @@ public class Block {
                 
                 int xpos = -Gameplay.getView().getCamera().getX()
                     + x*DIMENSION
-                    + (y%2) * DIMENSION/2
+                    + (y%2) * DIM2
                     + offsetX; 
                 int ypos = -Gameplay.getView().getCamera().getY()
-                    + y*DIMENSION/4 - z*DIMENSION/2
+                    + y*DIM4 - z*DIM2
                     + offsetY/2
                     -(dimensionY-1)*DIM2;
                 
@@ -345,13 +345,13 @@ public class Block {
         
         int xpos =  -  Gameplay.getView().getCamera().getX()
             + x*DIMENSION
-            + (y%2) * (int) (DIMENSION/2)
-            + ( sidenumb == 2 ? DIMENSION/2:0)
+            + (y%2) * (int) (DIM2)
+            + ( sidenumb == 2 ? DIM2:0)
             + offsetX;
         int ypos = - Gameplay.getView().getCamera().getY()
-            + y*DIMENSION/4
-            - z*DIMENSION/2
-            + (sidenumb != 1 ? DIM2/2:0)//the top is drawn /4 Blocks higher
+            + y*DIM4
+            - z*DIM2
+            + (sidenumb != 1 ? DIM4:0)//the top is drawn /4 Blocks higher
             + offsetY/2;
         sideimage.drawEmbedded(xpos,ypos);
     }
@@ -424,11 +424,9 @@ public class Block {
         if (side==1)
             return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIMENSION, DIM2);
         else
-            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIMENSION/2, (int) (DIM2*3/2));    
+            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIM2, (int) (DIM2*3/2));    
     }
     
-    
-
 
     /**
      * Hide this block and prevent it from beeing rendered.
@@ -608,7 +606,7 @@ public class Block {
      * @return the depth
      */
     public int getDepth(int y, int z) {
-        return DIMENSION*y +(y % 2)*DIMENSION/2 + DIMENSION*z + offsetY + (dimensionY-1)*DIM2*2;
+        return DIMENSION*y +(y % 2)*DIM2 + DIMENSION*z + offsetY + (dimensionY-1)*DIMENSION;
     }
 
     /**
