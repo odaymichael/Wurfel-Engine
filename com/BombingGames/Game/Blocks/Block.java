@@ -28,6 +28,7 @@ public class Block {
      */
     public static final float ASPECTRATIO;
     
+    public static int MIDDLEWIDTH = (int) (1.414213562373095*WIDTH);
 
     
     /**
