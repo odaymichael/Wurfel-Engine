@@ -8,7 +8,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.util.Log;
 
 /**
  * A Block is a wonderfull piece of information and a geometrical object.
@@ -16,19 +15,25 @@ import org.newdawn.slick.util.Log;
  */
 public class Block {
     /**
-       * WIDTH of the image
+       * DIMENSION of the Block in pixels
        */
-    public static final int WIDTH = 160;
-    /**
-       *HEIGHT of the image. Shoudl be half of the width 
-       */
-    public static final int HEIGHT = 80;
-    /**
-     * How much bigger is the WIDTH than the HEIGHT of a block?
-     */
-    public static final float ASPECTRATIO;
+    public static final int DIMENSION = 160;
     
-    public static int MIDDLEWIDTH = (int) (1.414213562373095*WIDTH);
+    /**
+     * The half of DIMENSION.
+     */
+    public static final int DIM2 = DIMENSION/2;
+    
+    /**
+     * A quarter of DIMENSION.
+     */
+    public static final int DIM4 = DIMENSION/4;
+
+    
+    /**
+     * The length when you cut a block in half. It is Dimension*sqrt(2)
+     */
+    public static int MIDDLEWIDTH = (int) (1.414213562373095*DIMENSION);
 
     
     /**
@@ -42,32 +47,21 @@ public class Block {
     
     private static Color[][] colorlist = new Color[99][9];
     
-    private final int id;
-    private final String name;
-    
     /**
      * The sprite image which contains every block image
      */
     private static Image spritesheet;
     
-    private int value = 0;
+    private final int id;
+    private final String name;    
+    private int value;
     private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft, invisible, liquid; 
     private boolean isBlock = true;
     private int lightlevel = 50;
     private int offsetX, offsetY;
-    private int dimensionY = 1;
-    
-    
-    /**
-        * How much <b>h</b>ealth <b>p</b>oints has the block?
-        * When it is 0 it get's destroyed.
-        */
-    private int hp = 100;
-    
+    private int dimensionY = 1;    
     
     static {
-        ASPECTRATIO = WIDTH/HEIGHT;
-        Log.debug("Aspect ratio of blocks: "+ Float.toString(ASPECTRATIO));
         //grass
         SPRITEPOS[1][0][0][0] = 0;
         SPRITEPOS[1][0][0][1] = 0;
@@ -304,13 +298,13 @@ public class Block {
                 temp.setColor(3, brightness, brightness, brightness);
                 
                 int xpos = -Gameplay.getView().getCamera().getX()
-                    + x*Block.WIDTH
-                    + (y%2) * (int) (Block.WIDTH/2)
+                    + x*DIMENSION
+                    + (y%2) * DIMENSION/2
                     + offsetX; 
                 int ypos = -Gameplay.getView().getCamera().getY()
-                    + y*Block.HEIGHT/2 - z*Block.HEIGHT
-                    + (int) (offsetY* (1/Block.ASPECTRATIO))
-                    -(dimensionY-1)*Block.HEIGHT;
+                    + y*DIMENSION/4 - z*DIMENSION/2
+                    + offsetY/2
+                    -(dimensionY-1)*DIM2;
                 
                 temp.drawEmbedded(xpos,ypos);
             }
@@ -350,15 +344,15 @@ public class Block {
         sideimage.setColor(3, brightness, brightness, brightness);
         
         int xpos =  -  Gameplay.getView().getCamera().getX()
-            + x*Block.WIDTH
-            + (y%2) * (int) (Block.WIDTH/2)
-            + ( sidenumb == 2 ? Block.WIDTH/2:0)
-            + getOffsetX();
+            + x*DIMENSION
+            + (y%2) * (int) (DIMENSION/2)
+            + ( sidenumb == 2 ? DIMENSION/2:0)
+            + offsetX;
         int ypos = - Gameplay.getView().getCamera().getY()
-            + y*Block.HEIGHT/2
-            - z*Block.HEIGHT
-            + (sidenumb != 1 ? Block.HEIGHT/2:0)//the top is drawn /4 Blocks higher
-            + (int) (getOffsetY() * (1/Block.ASPECTRATIO));
+            + y*DIMENSION/4
+            - z*DIMENSION/2
+            + (sidenumb != 1 ? DIM2/2:0)//the top is drawn /4 Blocks higher
+            + offsetY/2;
         sideimage.drawEmbedded(xpos,ypos);
     }
         
@@ -367,7 +361,7 @@ public class Block {
      */
     public static void loadSpriteSheet() {
         try {
-            spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", WIDTH, (int) (HEIGHT*1.5f));
+            spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", DIMENSION, (int) (DIM2*1.5f));
         } catch (SlickException ex) {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -416,7 +410,7 @@ public class Block {
      * @return 
      */    
     public static Image getSprite(int id, int value, int dimY) {
-        return spritesheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], WIDTH, dimY*HEIGHT+HEIGHT);   
+        return spritesheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], DIMENSION, dimY*DIM2+DIM2);   
     }
         
     /**
@@ -428,9 +422,9 @@ public class Block {
      */
     public static Image getBlockSprite(int id, int value, int side){
         if (side==1)
-            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], WIDTH, HEIGHT);
+            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIMENSION, DIM2);
         else
-            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], WIDTH/2, (int) (HEIGHT*3/2));    
+            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIMENSION/2, (int) (DIM2*3/2));    
     }
     
     
@@ -550,13 +544,13 @@ public class Block {
      */
     protected int getSideNumb(int x, int y) {
         int result = 8;
-        if (x+y <= Block.WIDTH /2)//top left
+        if (x+y <= DIM2)//top left
             result = 7;
-        if (x-y >= Block.WIDTH /2) //top right
+        if (x-y >= DIM2) //top right
             if (result==7) result=0; else result = 1;
-        if (x+y >= 3*Block.WIDTH /2)//bottom right
+        if (x+y >= 3*DIM2)//bottom right
             if (result==1) result=2; else result = 3;
-        if (-x+y >= Block.WIDTH /2) //bottom left
+        if (-x+y >= DIM2) //bottom left
             if (result==3) result=4; else if (result==7) result = 6; else result = 5;
         return result;
     }
@@ -594,7 +588,7 @@ public class Block {
      */
     public static Color getBlockColor(int id, int value){
         if (colorlist[id][value] == null){
-            colorlist[id][value] = getBlockSprite(id, value,1).getColor(WIDTH/2, HEIGHT/2);
+            colorlist[id][value] = getBlockSprite(id, value,1).getColor(DIM2, DIM4);
             return colorlist[id][value]; 
         } else return colorlist[id][value];
     }
@@ -614,7 +608,7 @@ public class Block {
      * @return the depth
      */
     public int getDepth(int y, int z) {
-        return WIDTH*y +(y % 2)*WIDTH/2 + WIDTH*z + offsetY + (dimensionY-1)*HEIGHT*2;
+        return DIMENSION*y +(y % 2)*DIMENSION/2 + DIMENSION*z + offsetY + (dimensionY-1)*DIM2*2;
     }
 
     /**

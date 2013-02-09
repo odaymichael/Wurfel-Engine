@@ -60,42 +60,42 @@ public class Camera {
      */
     public void update() {
         if (focus) {//focus on block
-             xPos = focusblock.getX() * Block.WIDTH
-                + Block.WIDTH / 2 *(focusblock.getY() % 2)
+             xPos = focusblock.getX() * Block.DIMENSION
+                + Block.DIMENSION / 2 *(focusblock.getY() % 2)
                 + focusblock.getBlock().getOffsetX()
                 - gameWidth / 2;
             
             yPos = (int) (
-                (focusblock.getY()/2f - focusblock.getZ()) * Block.HEIGHT
+                (focusblock.getY()/2f - focusblock.getZ()) * Block.DIM2
                 - gameHeight/2
-                + focusblock.getBlock().getOffsetY() * (1/Block.ASPECTRATIO)
+                + focusblock.getBlock().getOffsetY()/2
                 );
             
         } else {//focus on player
             Player player = Gameplay.getController().getPlayer();
-            xPos = player.getCoordX() * Block.WIDTH
-                + Block.WIDTH / 2 *(player.getCoordY() % 2)
+            xPos = player.getCoordX() * Block.DIMENSION
+                + Block.DIMENSION / 2 *(player.getCoordY() % 2)
                 + player.getOffsetX()
                 - gameWidth / 2;
             
             yPos = (int) (
-                (player.getCoordY()/2f - player.getCoordZ()) * Block.HEIGHT
+                (player.getCoordY()/2f - player.getCoordZ()) * Block.DIM2
                 - gameHeight/2
-                + player.getOffsetY() * (1/Block.ASPECTRATIO)
+                + player.getOffsetY()/2
                 );
         }
         
         //update borders
-        leftborder = xPos/Block.WIDTH -1;
+        leftborder = xPos/Block.DIMENSION -1;
         if (leftborder < 0) leftborder= 0;
         
-        rightborder = (xPos+gameWidth)/Block.WIDTH+2;
+        rightborder = (xPos+gameWidth)/Block.DIMENSION+2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
         
-        topborder = yPos / (Block.HEIGHT/2)-1;
+        topborder = yPos / (Block.DIM2/2)-1;
         if (topborder < 0) topborder= 0;
         
-        bottomborder = (yPos+gameHeight) / (Block.HEIGHT/2) + Chunk.getBlocksZ()*2;
+        bottomborder = (yPos+gameHeight) / (Block.DIM2/2) + Chunk.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
         
     }
@@ -248,7 +248,7 @@ public class Camera {
      * @return
      */
     public int getTotalHeight() {
-        return gameHeight + Block.HEIGHT*Chunk.getBlocksZ();
+        return gameHeight + Block.DIM2*Chunk.getBlocksZ();
     }
 
     
@@ -302,8 +302,8 @@ public class Camera {
      */
     public int[] getCenterofBlock(int x, int y, int z){
         int result[] = new int[2];
-        result[0] = -getX()+x*Block.WIDTH + (y%2) * (int) (Block.WIDTH/2) + Controller.getMapData(x, y, z).getOffsetX();
-        result[1] = (int) (-getY()+y*Block.HEIGHT/2 - z*Block.HEIGHT + Controller.getMapData(x, y, z).getOffsetY() * (1/Block.ASPECTRATIO));
+        result[0] = -getX()+x*Block.DIMENSION + (y%2) * (int) (Block.DIMENSION/2) + Controller.getMapData(x, y, z).getOffsetX();
+        result[1] = (int) (-getY()+y*Block.DIM4 - z*Block.DIM2 + Controller.getMapData(x, y, z).getOffsetY()/2);
         return result;
     }
     

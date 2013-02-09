@@ -51,7 +51,7 @@ public class View {
         
         //camera.FocusOnBlock(new Blockpointer(Chunk.getBlocksX()*3/2,Map.getBlocksY()/2,Chunk.getBlocksZ()/2));
         
-        if (camera.getTotalHeight() > Chunk.getBlocksY()*Block.HEIGHT/2) {
+        if (camera.getTotalHeight() > Chunk.getBlocksY()*Block.DIM2/2) {
             Gameplay.MSGSYSTEM.add("The chunks are maybe too small for this camera height/resolution to grant a stable experience", "Warning");
             Log.warn("The chunks are maybe too small for this camera height/resolution to grant a stable experience");
         }
@@ -65,7 +65,7 @@ public class View {
         Gameplay.MSGSYSTEM.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
         
         Block.loadSpriteSheet(); 
-        Gameplay.MSGSYSTEM.add("Blocks: "+ Block.WIDTH+" x "+Block.HEIGHT);
+        Gameplay.MSGSYSTEM.add("Blocks: "+ Block.DIMENSION+" x "+Block.DIM2);
         Gameplay.MSGSYSTEM.add("Zoom: "+ camera.getZoom());
         Gameplay.MSGSYSTEM.add("AbsZoom: "+ camera.getZoom()*equalizationScale);
      }
@@ -348,9 +348,9 @@ public class View {
     public int[] ScreenToGameCoords(int x, int y){
         int[] coords = new int[3];
         Log.debug("ScreenXtoGame(x): "+ScreenXtoGame(x));
-        coords[0] = ScreenXtoGame(x) / Block.WIDTH;
+        coords[0] = ScreenXtoGame(x) / Block.DIMENSION;
         coords[1] = (int) (((y + Gameplay.getView().getCamera().getY()) / Gameplay.getView().getCamera().getAbsZoom())
-            / (Block.WIDTH/4)
+            / (Block.DIMENSION/4)
             +Map.getBlocksZ()-1);
         coords[2] = Map.getBlocksZ()-1;
         return coords;

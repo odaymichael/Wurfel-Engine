@@ -181,7 +181,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 }
 
                 //set the offset for the rendering
-                setOffset((int) pos[0] - Block.WIDTH/2, (int) pos[1] - (int) pos[2] - Block.HEIGHT);
+                setOffset((int) pos[0] - Block.DIMENSION/2, (int) pos[1] - (int) pos[2] - Block.DIM2);
                 //copy offset to topblock
                 if (topblock != null) 
                     topblock.getBlock().setOffset(getOffsetX(), getOffsetY());
@@ -199,8 +199,8 @@ public abstract class MovingBlock extends SelfAwareBlock {
      */
     private void makeCoordinateStep(int x, int y, Blockpointer topblock){
         //mirror the position around the center
-        pos[1] += -1*y*Block.WIDTH/2;
-        pos[0] += -1*x*Block.WIDTH/2;
+        pos[1] += -1*y*Block.DIMENSION/2;
+        pos[0] += -1*x*Block.DIMENSION/2;
         
         selfDestroy();
         if (topblock != null) topblock.setBlock(new Block(0));
@@ -228,7 +228,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
         //calculate movement
         float t = delta/1000f; //t = time in s
         dir[2] += -Map.GRAVITY*t; //in m/s
-        float newposZ = pos[2] + dir[2]*Block.WIDTH*t; //m
+        float newposZ = pos[2] + dir[2]*Block.DIMENSION*t; //m
 
         //land if standing in or under 0-level and there is an obstacle
         if (dir[2] <= 0
@@ -254,11 +254,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
             selfRebuild();
             if (topblock != null) topblock.setBlock(new Block(getId()));
 
-            pos[2] += Block.WIDTH;
+            pos[2] += Block.DIMENSION;
             Controller.getMap().requestRecalc();
         } else {
             //up
-            if (pos[2] >= Block.WIDTH
+            if (pos[2] >= Block.DIMENSION
                 && getCoordZ() < Chunk.getBlocksZ()-2
                 && !Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
                 //if (! fallsound.playing()) fallsound.play();
@@ -269,13 +269,13 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 selfRebuild();
                 if (topblock != null) topblock.setBlock(new Block(getId()));
 
-                pos[2] -= Block.WIDTH;
+                pos[2] -= Block.DIMENSION;
                 Controller.getMap().requestRecalc();
             } 
         }
         
         //set the offset for the rendering
-        setOffset((int) (getPosX() - Block.WIDTH/2), (int) (getPosY() - pos[2] - Block.WIDTH/2));
+        setOffset((int) (getPosX() - Block.DIMENSION/2), (int) (getPosY() - pos[2] - Block.DIMENSION/2));
         if (topblock != null) topblock.getBlock().setOffset(getOffsetX(), getOffsetY());  
     }
    
