@@ -64,7 +64,6 @@ public class View {
         //update resolution things
         Gameplay.MSGSYSTEM.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
         
-        Block.loadSpriteSheet(); 
         Gameplay.MSGSYSTEM.add("Blocks: "+ Block.DIMENSION+" x "+Block.DIM2);
         Gameplay.MSGSYSTEM.add("Zoom: "+ camera.getZoom());
         Gameplay.MSGSYSTEM.add("AbsZoom: "+ camera.getZoom()*equalizationScale);

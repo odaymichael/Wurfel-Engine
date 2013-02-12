@@ -138,7 +138,7 @@ public class Minimap {
             View.baseFont.drawString(
                 X + (Gameplay.getController().getPlayer().getCoordX() + (Gameplay.getController().getPlayer().getCoordY()%2==1?0.5f:0) ) * scaleX+20,
                 Y + Gameplay.getController().getPlayer().getCoordY() * scaleY - 10,
-                Gameplay.getController().getPlayer().getPosX() +" | "+ Gameplay.getController().getPlayer().getPosY() +" | "+ Gameplay.getController().getPlayer().getPosZ(),
+                Gameplay.getController().getPlayer().getPos()[0] +" | "+ Gameplay.getController().getPlayer().getPos()[1] +" | "+ Gameplay.getController().getPlayer().getPos()[2],
                 Color.red
             );
         }

@@ -46,7 +46,7 @@ public class Blockpointer{
      * 
      * @return
      */
-    public int getX() {
+    public int getCoordX() {
         if (block != null)
             return block.getCoordX()+x;
         else return x;
@@ -56,7 +56,7 @@ public class Blockpointer{
      * Set the summand (pointer to SelfAwareBlock) or the value (pointer to coordinate triple)
      * @param X
      */
-    public void setX(int X) {
+    public void setCoordX(int X) {
         this.x = X;
     }
 
@@ -64,7 +64,7 @@ public class Blockpointer{
      * 
      * @return
      */
-    public int getY() {
+    public int getCoordY() {
         if (block != null)
             return block.getCoordY()+y;
         else return y;
@@ -74,7 +74,7 @@ public class Blockpointer{
      * Set the summand (pointer to SelfAwareBlock) or the value (pointer to coordinate triple)
      * @param Y
      */
-    public void setY(int Y) {
+    public void setCoordY(int Y) {
         this.y = Y;
     }
 
@@ -82,7 +82,7 @@ public class Blockpointer{
      * 
      * @return
      */
-    public int getZ() {
+    public int getCoordZ() {
         if (block != null)
             return block.getCoordZ()+z;
         else return z;
@@ -92,7 +92,7 @@ public class Blockpointer{
      * Set the summand (pointer to SelfAwareBlock) or the value (pointer to coordinate triple)
      * @param Z
      */
-    public void setZ(int Z) {
+    public void setCoordZ(int Z) {
         this.z = Z;
     }
     
@@ -101,7 +101,7 @@ public class Blockpointer{
      * @return
      */
     public Block getBlock() {
-        return Controller.getMapDataSafe(getX(), getY(), getZ());
+        return Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ());
     }
     
     /**
@@ -109,6 +109,6 @@ public class Blockpointer{
      * @param block 
      */
     public void setBlock(Block block) {
-        Controller.getMap().setData(getX(), getY(), getZ(), block);
+        Controller.getMap().setData(getCoordX(), getCoordY(), getCoordZ(), block);
     }
 }

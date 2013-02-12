@@ -10,10 +10,6 @@ import org.newdawn.slick.SlickException;
  * @author Benedikt
  */
 public abstract class MovingBlock extends SelfAwareBlock {
-    /**
-     * Value in pixels
-     */
-   private float[] pos = {Block.DIM2, Block.DIM2, 0};
    
    /* Always one of them must be 1 to prevent a division with 0.*/
    private float[] dir = {1,0,0};
@@ -47,7 +43,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * @see com.BombingGames.Game.Blocks.Block#getSideNumb(int, int) 
      */
     protected int getSideNumb() {
-        return getSideNumb((int) pos[0],(int) pos[1]);
+        return getSideNumb((int) getPos()[0],(int) getPos()[1]);
     }
         
     /**
@@ -97,11 +93,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
             //veloZ /= vectorLenght;
             
             //colision check
-            float oldx = pos[0];
-            float oldy = pos[1];
+            float oldx = getPos()[0];
+            float oldy = getPos()[1];
             //calculate new position
-            float newx = pos[0] + delta * speed * dir[0];
-            float newy = pos[1] + delta * speed * dir[1];
+            float newx = getPos()[0] + delta * speed * dir[0];
+            float newy = getPos()[1] + delta * speed * dir[1];
             
             //check if position is okay
             boolean validmovement = true;
@@ -154,8 +150,8 @@ public abstract class MovingBlock extends SelfAwareBlock {
             
             //if movement allowed => move player   
             if (validmovement) {                
-                pos[0] = newx;
-                pos[1] = newy;
+                setPos(0, newx);
+                setPos(1, newy);
                 
                 //track the coordiante change, if there is one
                 int sidennumb = getSideNumb();
@@ -180,10 +176,9 @@ public abstract class MovingBlock extends SelfAwareBlock {
                     }
                 }
 
-                //set the offset for the rendering
-                setOffset((int) pos[0] - Block.DIM2, (int) (pos[1] - pos[2]) - Block.DIM2);
+
                 //copy offset to topblock
-                if (topblock != null) topblock.getBlock().setOffset(getOffsetX(), getOffsetY());
+                if (topblock != null) topblock.getBlock().setPos(getPos());
             }
         }
         //enable this line to see where to player stands:
@@ -198,8 +193,8 @@ public abstract class MovingBlock extends SelfAwareBlock {
      */
     private void makeCoordinateStep(int x, int y, Blockpointer topblock){
         //mirror the position around the center
-        pos[1] += -1*y*Block.DIM2;
-        pos[0] += -1*x*Block.DIM2;
+        setPos(1,getPos()[1] -1*y*Block.DIM2);
+        setPos(0, getPos()[0] -1*x*Block.DIM2);
         
         selfDestroy();
         if (topblock != null) topblock.setBlock(new Block(0));
@@ -227,7 +222,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
         //calculate movement
         float t = delta/1000f; //t = time in s
         dir[2] += -Map.GRAVITY*t; //in m/s
-        float newposZ = pos[2] + dir[2]*Block.GAMEDIMENSION*t; //m
+        float newposZ = getPos()[2] + dir[2]*Block.GAMEDIMENSION*t; //m
 
         //land if standing in or under 0-level and there is an obstacle
         if (dir[2] <= 0
@@ -238,11 +233,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
             dir[2] = 0;
             newposZ=0;
         }
-        pos[2] = newposZ;
+        setPos(2, newposZ);
         
         //coordinate switch
         //down
-        if (pos[2] < 0
+        if (getPos()[2] < 0
             && getCoordZ() > 0
             && ! Controller.getMapDataSafe(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
           //  if (! fallsound.playing()) fallsound.play();
@@ -253,11 +248,11 @@ public abstract class MovingBlock extends SelfAwareBlock {
             selfRebuild();
             if (topblock != null) topblock.setBlock(new Block(getId()));
 
-            pos[2] += Block.GAMEDIMENSION;
+            setPos(2, getPos()[2]+ Block.GAMEDIMENSION);
             Controller.getMap().requestRecalc();
         } else {
             //up
-            if (pos[2] >= Block.GAMEDIMENSION
+            if (getPos()[2] >= Block.GAMEDIMENSION
                 && getCoordZ() < Chunk.getBlocksZ()-2
                 && !Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
                 //if (! fallsound.playing()) fallsound.play();
@@ -268,47 +263,15 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 selfRebuild();
                 if (topblock != null) topblock.setBlock(new Block(getId()));
 
-                pos[2] -= Block.GAMEDIMENSION;
+                setPos(2, getPos()[2]- Block.GAMEDIMENSION);
                 Controller.getMap().requestRecalc();
             } 
         }
         
         //set the offset for the rendering
-        setOffset((int) pos[0] - Block.DIM2, (int) (pos[1] - pos[2]) - Block.DIM2);
-        if (topblock != null) topblock.getBlock().setOffset(getOffsetX(), getOffsetY());  
+        if (topblock != null) topblock.getBlock().setPos(getPos());  
     }
    
-    /**
-     * 
-     * @return
-     */
-    public float getPosX() {
-        return pos[0];
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public float getPosY() {
-        return pos[1];
-    }
-
-    /**
-     * Set the pos[2]
-     * @return
-     */
-    public float getPosZ() {
-        return pos[2];
-    }
-
-    /**
-     * 
-     * @param pos[0]
-     */
-    public void setPos(float[] pos) {
-        this.pos = pos;
-    }
 
     
     /*
@@ -319,7 +282,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * @return
      */
     public boolean isStanding(){
-       return (dir[2] == 0 && pos[2] == 0);
+       return (dir[2] == 0 && getPos()[2] == 0);
     }
 
     /**

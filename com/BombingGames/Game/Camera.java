@@ -5,7 +5,6 @@ import com.BombingGames.Game.Blocks.Blockpointer;
 import com.BombingGames.Game.Blocks.Player;
 import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;
-import org.newdawn.slick.util.Log;
 
 /**
  *The camera locks to the player by default. It can be changed with <i>focusblock()</i>.
@@ -60,36 +59,20 @@ public class Camera {
      */
     public void update() {
         if (focus) {//focus on block
-             xPos = focusblock.getX() * Block.DIMENSION
-                + Block.DIM2 *(focusblock.getY() % 2)
-                + focusblock.getBlock().getOffsetX()
-                - gameWidth / 2;
-            
-            yPos = (int) (
-                (focusblock.getY()/2f - focusblock.getZ()) * Block.DIM2
-                - gameHeight/2
-                + focusblock.getBlock().getOffsetY()/2
-                );
+            xPos = focusblock.getBlock().getScreenPosX(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), this) - gameWidth / 2; 
+            yPos = focusblock.getBlock().getScreenPosY(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), this) - gameHeight / 2; 
             
         } else {//focus on player
             Player player = Gameplay.getController().getPlayer();
-            xPos = player.getCoordX() * Block.DIMENSION
-                + Block.DIM2 *(player.getCoordY() % 2)
-                + player.getOffsetX()
-                - gameWidth / 2;
-            
-            yPos = (int) (
-                (player.getCoordY()/2f - player.getCoordZ()) * Block.DIM2
-                - gameHeight/2
-                + player.getOffsetY()/2
-                );
+            xPos = player.getScreenPosX(player.getCoordX(), player.getCoordY(), player.getCoordZ(), this) - gameWidth / 2 + xPos;            
+            yPos = player.getScreenPosY(player.getCoordX(), player.getCoordY(), player.getCoordZ(), this) - gameHeight / 2 + yPos;
         }
         
         //update borders
         leftborder = xPos/Block.DIMENSION -1;
         if (leftborder < 0) leftborder= 0;
         
-        rightborder = (xPos+gameWidth)/Block.DIMENSION+2;
+        rightborder = (xPos + gameWidth)/Block.DIMENSION+2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
         
         topborder = yPos / (Block.DIM4)-1;
@@ -302,8 +285,8 @@ public class Camera {
      */
     public int[] getCenterofBlock(int x, int y, int z){
         int result[] = new int[2];
-        result[0] = -getX()+x*Block.DIMENSION + (y%2) * (int) (Block.DIM2) + Controller.getMapData(x, y, z).getOffsetX();
-        result[1] = (int) (-getY()+y*Block.DIM4 - z*Block.DIM2 + Controller.getMapData(x, y, z).getOffsetY()/2);
+        result[0] = (int) (-getX() +x*Block.DIMENSION + (y%2) * (int) (Block.DIM2) + Controller.getMapData(x, y, z).getPos()[0]);
+        result[1] = (int) (-getY()+y*Block.DIM4 - z*Block.DIM2 + Controller.getMapData(x, y, z).getPos()[1]/2);
         return result;
     }
     

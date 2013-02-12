@@ -258,7 +258,7 @@ public class Map {
         //render vom bottom to top
         for (int i=0; i < camera.getDepthsortlistSize() ;i++) {
             int[] item = camera.getDepthsortCoord(i);
-            data[item[0]][item[1]][item[2]].render(item[0],item[1],item[2]);            
+            data[item[0]][item[1]][item[2]].render(item[0],item[1],item[2], camera);            
         }
         
 //                    //check current and next block for special order
@@ -394,7 +394,8 @@ public class Map {
         }
         
         for (int i=0;i<numberofblocks;i++){
-            data[x[i]][y[i]][z[i]].setOffset((int) (Math.random()*Block.DIMENSION/2)-Block.DIMENSION/2, (int) (Math.random()*Block.DIMENSION/2)-Block.DIMENSION/2);
+            float[] pos = {(float) (Math.random()*Block.DIM2), (float) (Math.random()*Block.DIM2), (float) (Math.random()*Block.GAMEDIMENSION)};
+            data[x[i]][y[i]][z[i]].setPos(pos);
         }
         requestRecalc();
     }

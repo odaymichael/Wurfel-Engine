@@ -1,5 +1,6 @@
 package com.BombingGames.Game.Blocks;
 
+import com.BombingGames.Game.Camera;
 import com.BombingGames.Game.Gameplay;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +34,7 @@ public class Block {
     /**
      * The real game world dimension in pixel It is Dimension/sqrt(2)
      */
-    public static int GAMEDIMENSION = (int) (DIMENSION/1.414213562373095f);
+    public static int GAMEDIMENSION = (int) (DIMENSION/Math.sqrt(2));
 
     
     /**
@@ -55,10 +56,10 @@ public class Block {
     private final int id;
     private final String name;    
     private int value;
+    private float[] pos = {Block.DIM2, Block.DIM2, 0};
     private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft, invisible, liquid; 
     private boolean isBlock = true;
     private int lightlevel = 50;
-    private int offsetX, offsetY;
     private int dimensionY = 1;    
     
     static {
@@ -166,6 +167,11 @@ public class Block {
         SPRITEPOS[70][0][0][0] = 0;
         SPRITEPOS[70][0][0][1] = 720;
         
+        try {
+            spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", DIMENSION, (int) (DIM2*1.5f));
+        } catch (SlickException ex) {
+            Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -271,13 +277,13 @@ public class Block {
      * @param y y-coordinate
      * @param z z-coordinate
      */
-    public void render(int x, int y, int z) {
+    public void render(int x, int y, int z, Camera camera) {
         //draw every visible block except air
         if (id != 0 && visible){            
             if (isBlock){
-                if (renderTop) drawSide(x,y,z, 1);
-                if (renderLeft) drawSide(x,y,z, 0);
-                if (renderRight) drawSide(x,y,z, 2);
+                if (renderTop) renderSide(x,y,z, 1, camera);
+                if (renderLeft) renderSide(x,y,z, 0, camera);
+                if (renderRight) renderSide(x,y,z, 2, camera);
             } else {
                 Image temp = getSprite(id, value,dimensionY);
 
@@ -297,13 +303,14 @@ public class Block {
                 temp.setColor(2, brightness, brightness, brightness);
                 temp.setColor(3, brightness, brightness, brightness);
                 
-                int xpos = -Gameplay.getView().getCamera().getX()
+                int xpos = -camera.getX()
                     + x*DIMENSION
                     + (y%2) * DIM2
-                    + offsetX; 
-                int ypos = -Gameplay.getView().getCamera().getY()
+                    + (int) (pos[0]);
+                int ypos = -camera.getY()
                     + y*DIM4 - z*DIM2
-                    + offsetY/2
+                    + (int) (pos[1]/2)
+                    - (int) (pos[2]/Math.sqrt(2))
                     -(dimensionY-1)*DIM2;
                 
                 temp.drawEmbedded(xpos,ypos);
@@ -318,7 +325,7 @@ public class Block {
      * @param sidenumb The number of the side. 0 left, 1 top 2, right
      * @param renderBlock The block which gets rendered
      */
-    private void drawSide(int x, int y, int z,int sidenumb){
+    private void renderSide(int x, int y, int z, int sidenumb, Camera camera){
         Image sideimage = getBlockSprite(id,value,sidenumb);
         
         if (Gameplay.getController().hasGoodGraphics()){
@@ -343,28 +350,18 @@ public class Block {
         sideimage.setColor(2, brightness, brightness, brightness);
         sideimage.setColor(3, brightness, brightness, brightness);
         
-        int xpos =  -  Gameplay.getView().getCamera().getX()
+        int xpos =  - camera.getX()
             + x*DIMENSION
             + (y%2) * (int) (DIM2)
             + ( sidenumb == 2 ? DIM2:0)
-            + offsetX;
-        int ypos = - Gameplay.getView().getCamera().getY()
+            + (int) pos[0];
+        int ypos = - camera.getY()
             + y*DIM4
             - z*DIM2
             + (sidenumb != 1 ? DIM4:0)//the top is drawn /4 Blocks higher
-            + offsetY/2;
+            + (int) (pos[1]/2)
+            - (int) (pos[2]/Math.sqrt(2));
         sideimage.drawEmbedded(xpos,ypos);
-    }
-        
-  /**
-     * Loads the spriteSheet
-     */
-    public static void loadSpriteSheet() {
-        try {
-            spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", DIMENSION, (int) (DIM2*1.5f));
-        } catch (SlickException ex) {
-            Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
         /**
@@ -376,30 +373,67 @@ public class Block {
     }
     
     
-    /**
-     * 
-     * @return
-     */
-    public int getOffsetX(){
-        return offsetX;
+//    /**
+//     * 
+//     * @return
+//     */
+//    public int getOffsetX(){
+//        return offsetX;
+//    }
+//    
+//    /**
+//     * 
+//     * @return
+//     */
+//    public int getOffsetY(){
+//        return offsetY;
+//    }
+    
+//    /**
+//     * Set the offset in screen coordinates (top left corner)
+//     * @param x the x-position of the blocks top left corner in screen coordiantes
+//     * @param y the y-position of the blocks  top left cornerin screen coordiantes
+//     */
+//    public void setOffset(int x, int y){
+//       offsetX = x;
+//       offsetY = y;
+//    }
+    
+//    /**
+//     * Set the offset in screen coordinates by giving the game coordinates of the blocks center
+//     * @param x the x-position of the blocks center in game coordiantes
+//     * @param y the y-position of the blocks center in game coordiantes
+//     * @param z the z-position of the blocks center in game coordiantes
+//     */
+//    public void setOffset(int x, int y, int z){
+//       offsetX = x - Block.DIM2;
+//       offsetY = y/8 - Block.DIM4 - (int) (z/Math.sqrt(2));
+//    }
+
+    public float[] getPos() {
+        return pos;
     }
     
-    /**
-     * 
-     * @return
-     */
-    public int getOffsetY(){
-        return offsetY;
+    public float getPos(int i) {
+        return pos[i];
+    }
+
+    public void setPos(float[] pos) {
+        this.pos = pos;
     }
     
-    /**
-     * 
-     * @param x
-     * @param y
+    public void setPos(int i, float value) {
+        pos[i]= value;
+    }
+   
+    
+    
+   /**
+     * has the block an offset? if x or y is != 0 it is true.
+     * @return 
      */
-    public void setOffset(int x, int y){
-       offsetX = x;
-       offsetY = y;
+    public boolean hasOffset() {
+        return (pos[0] != 0 || pos[1] != 0 || pos[2] != 0);
     }
     
     /**
@@ -553,13 +587,7 @@ public class Block {
         return result;
     }
 
-    /**
-     * has the block an offset? if x or y is != 0 it is true.
-     * @return 
-     */
-    public boolean hasOffset() {
-        return (offsetX != 0 || offsetY != 0);
-    }
+
 
     /**
      * Returns the name of the block
@@ -579,7 +607,7 @@ public class Block {
     }
     
     /**
-     * Returns the color representing the block.
+     * Returns a color representing the block. Picks from the sprite image.
      * @param id id of the Block
      * @param value the value of the block.
      * @return a color representing the block
@@ -606,7 +634,7 @@ public class Block {
      * @return the depth
      */
     public int getDepth(int y, int z) {
-        return DIMENSION*y +(y % 2)*DIM2 + DIMENSION*z + offsetY + (dimensionY-1)*DIMENSION;
+        return (int) (DIMENSION*y +(y % 2)*DIM2 + DIMENSION*z + pos[0] + (dimensionY-1)*DIMENSION);
     }
 
     /**
@@ -623,5 +651,19 @@ public class Block {
      */
     public boolean isLiquid() {
         return liquid;
+    }
+    
+    public int getScreenPosX(int x, int y, int z, Camera camera){
+        return -camera.getX()
+               + x*DIMENSION
+               + (y%2) * DIM2
+               + (int) (pos[0]);    
+    }
+    
+    public int getScreenPosY(int x, int y, int z, Camera camera){
+        return -camera.getY()
+                + y*DIM4 - z*DIM2
+                + (int) (pos[1]/2)
+                - (int) (pos[2]/Math.sqrt(2));    
     }
 }
