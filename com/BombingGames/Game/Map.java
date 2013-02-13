@@ -239,8 +239,8 @@ public class Map {
     public void recalcIfRequested(){
         if (recalcRequested) {
             Log.debug("recalc");
-            Gameplay.getView().raytracing();
-            Gameplay.getView().calc_light();
+            Gameplay.getView().getCamera().raytracing();
+            calc_light();
             recalcRequested = false;
         }
     }
@@ -254,7 +254,6 @@ public class Map {
         if (Gameplay.getController().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
         Block.getBlocksheet().startUse();
-        View view = Gameplay.getView();
         //render vom bottom to top
         for (int i=0; i < camera.getDepthsortlistSize() ;i++) {
             int[] item = camera.getDepthsortCoord(i);
@@ -303,26 +302,26 @@ public class Map {
      * @return A single block at the wanted coordinates.
      */
     public Block getDataSafe(int x, int y, int z){
-        if (x >= Chunk.getBlocksX()*3){
-            x = Chunk.getBlocksX()*3-1;
+        if (x >= blocksX){
+            x = blocksX-1;
             //Log.warn("X too high!");
-        } else if(x<0){
+        } else if( x<0 ){
             x = 0;
             //Log.warn("X too low!");
         }
         
-        if (y >= Map.blocksY){
-            y = Map.blocksY-1;
+        if (y >= blocksY){
+            y = blocksY-1;
            // Log.warn("Y too high!");
-        } else if(y<0){
+        } else if( y<0 ){
             y = 0;
             //Log.warn("Y too low!");
         }
         
-        if (z >= Chunk.getBlocksZ()){
-            z = Chunk.getBlocksZ()-1;
+        if (z >= blocksZ){
+            z = blocksZ-1;
             //Log.warn("Z too high!");
-        } else if(z<0){
+        } else if( z<0 ){
             z = 0;
             //Log.warn("Z too low!");
         }
@@ -358,8 +357,8 @@ public class Map {
            // Log.warn("X too low!");
         }
         
-        if (y >= Map.blocksY){
-            y = Map.blocksY-1;
+        if (y >= blocksY){
+            y = blocksY-1;
             //Log.warn("Y too high!");
         } else if(y<0){
             y = 0;
@@ -388,9 +387,9 @@ public class Map {
         
         //pick random blocks 
         for (int i=0;i<numberofblocks;i++){
-            x[i] = (int) (Math.random()*Chunk.getBlocksX()*3-1);
-            y[i] = (int) (Math.random()*Map.blocksY-1);
-            z[i] = (int) (Math.random()*Chunk.getBlocksZ());
+            x[i] = (int) (Math.random()*blocksX-1);
+            y[i] = (int) (Math.random()*blocksY-1);
+            z[i] = (int) (Math.random()*blocksZ-1);
         }
         
         for (int i=0;i<numberofblocks;i++){
@@ -398,5 +397,27 @@ public class Map {
             data[x[i]][y[i]][z[i]].setPos(pos);
         }
         requestRecalc();
+    }
+    
+    /**
+     * Calculates the light level based on the sun shining straight from the top
+     */
+    public void calc_light(){
+        for (int x=0; x < blocksX; x++){
+            for (int y=0; y < blocksY; y++) {
+                
+                //find top most block
+                int topmost = Chunk.getBlocksZ()-1;
+                while (data[x][y][topmost].isTransparent() == true && topmost > 0 ){
+                    topmost--;
+                }
+                
+                if (topmost>0) {
+                    //start at topmost block and go down. Every step make it a bit darker
+                    for (int level=topmost; level >= 0; level--)
+                        data[x][y][level].setLightlevel(level*50 / topmost);
+                }
+            }
+        }         
     }
 }

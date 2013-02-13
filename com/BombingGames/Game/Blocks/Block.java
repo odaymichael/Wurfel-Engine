@@ -276,6 +276,7 @@ public class Block {
      * @param x x-coordinate
      * @param y y-coordinate
      * @param z z-coordinate
+     * @param camera  
      */
     public void render(int x, int y, int z, Camera camera) {
         //draw every visible block except air
@@ -371,57 +372,37 @@ public class Block {
     public int getId(){
         return this.id;
     }
-    
-    
-//    /**
-//     * 
-//     * @return
-//     */
-//    public int getOffsetX(){
-//        return offsetX;
-//    }
-//    
-//    /**
-//     * 
-//     * @return
-//     */
-//    public int getOffsetY(){
-//        return offsetY;
-//    }
-    
-//    /**
-//     * Set the offset in screen coordinates (top left corner)
-//     * @param x the x-position of the blocks top left corner in screen coordiantes
-//     * @param y the y-position of the blocks  top left cornerin screen coordiantes
-//     */
-//    public void setOffset(int x, int y){
-//       offsetX = x;
-//       offsetY = y;
-//    }
-    
-//    /**
-//     * Set the offset in screen coordinates by giving the game coordinates of the blocks center
-//     * @param x the x-position of the blocks center in game coordiantes
-//     * @param y the y-position of the blocks center in game coordiantes
-//     * @param z the z-position of the blocks center in game coordiantes
-//     */
-//    public void setOffset(int x, int y, int z){
-//       offsetX = x - Block.DIM2;
-//       offsetY = y/8 - Block.DIM4 - (int) (z/Math.sqrt(2));
-//    }
 
+    /**
+     *  Gets the positon of the block. Coordinate system starting at bottom rear.
+     * @return an array with three fields. [x,y,z]
+     */
     public float[] getPos() {
         return pos;
     }
     
+    /**
+     *  Get a coordinate value. Coordinate system starting at bottom rear.
+     * @param i the index of the field,  0=>x, y=>1, z=>2
+     * @return the position
+     */
     public float getPos(int i) {
         return pos[i];
     }
 
+    /**
+     * Set a whole new array containing the positon of the block. Coordinate system starting at bottom rear.
+     * @param pos the new positon array
+     */
     public void setPos(float[] pos) {
         this.pos = pos;
     }
     
+    /**
+     * Sets the position of the block. Coordinate system starting at bottom rear.
+     * @param i Select the field you want to write 0=>x, y=>1, z=>2
+     * @param value the value you want to set it to.
+     */
     public void setPos(int i, float value) {
         pos[i]= value;
     }
@@ -531,7 +512,7 @@ public class Block {
         this.value = value;
     }
 
-        /** How bright is the block?
+    /** How bright is the block?
      * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black. Default 50.
      * @return 
      */
@@ -539,7 +520,7 @@ public class Block {
         return lightlevel;
     }
 
-        /** Set the brightness of the Block.
+   /** Set the brightness of the Block.
      * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black.
      * @param lightlevel 
      */
@@ -653,6 +634,14 @@ public class Block {
         return liquid;
     }
     
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param z
+     * @param camera
+     * @return
+     */
     public int getScreenPosX(int x, int y, int z, Camera camera){
         return -camera.getX()
                + x*DIMENSION
@@ -660,6 +649,14 @@ public class Block {
                + (int) (pos[0]);    
     }
     
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param z
+     * @param camera
+     * @return
+     */
     public int getScreenPosY(int x, int y, int z, Camera camera){
         return -camera.getY()
                 + y*DIM4 - z*DIM2

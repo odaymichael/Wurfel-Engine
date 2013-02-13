@@ -118,7 +118,7 @@ public class SelfAwareBlock extends Block{
      */
     protected void selfRebuild(){
         Controller.getMap().setData(getCoordX(), getCoordY(), coordZ, this);
-        Gameplay.getView().traceRayTo(getCoordX(), getCoordY(), getCoordZ(), false);
+        Gameplay.getView().getCamera().traceRayTo(getCoordX(), getCoordY(), getCoordZ(), false);
     }
     
    /**

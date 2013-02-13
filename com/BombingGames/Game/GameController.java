@@ -106,7 +106,7 @@ public class GameController extends Controller {
             int coords[] = Gameplay.getView().ScreenToGameCoords(x,y);
             setMapData(coords[0], coords[1], coords[2]+1,new Block(1));
             Log.debug("made block at"+coords[0]+","+coords[1]+","+coords[2]);
-            Gameplay.getView().traceRayTo(coords[0], coords[1], coords[2], true);
+            Gameplay.getView().getCamera().traceRayTo(coords[0], coords[1], coords[2], true);
         }
 
         @Override
