@@ -11,6 +11,8 @@ import java.util.ArrayList;
  * @author Benedikt
  */
 public class Camera {
+    private final int screenX, screenY, screenWidth, screenHeight;
+        
     private int xPos, yPos, gameWidth, gameHeight;
     private int leftborder, topborder, rightborder, bottomborder;
     
@@ -20,8 +22,8 @@ public class Camera {
     private float zoom = 1;
     
    private static class Renderblock {
-        protected int x,y,z;
-        protected int depth;
+        protected final int x,y,z;
+        protected final int depth;
 
         public Renderblock(int x, int y, int z, int depth) {
             this.x = x;
@@ -31,7 +33,6 @@ public class Camera {
         }
     }
         
-    private final int screenX, screenY, screenWidth, screenHeight;
     private ArrayList<Renderblock> depthsort = new ArrayList();
 
     /**
@@ -59,13 +60,13 @@ public class Camera {
      */
     public void update() {
         if (focus) {//focus on block
-            xPos = focusblock.getBlock().getScreenPosX(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), this) - gameWidth / 2; 
-            yPos = focusblock.getBlock().getScreenPosY(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), this) - gameHeight / 2; 
+            xPos = Block.getScreenPosX(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), this) - gameWidth / 2; 
+            yPos = Block.getScreenPosY(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), this) - gameHeight / 2; 
             
         } else {//focus on player
             Player player = Gameplay.getController().getPlayer();
-            xPos = player.getScreenPosX(player.getCoordX(), player.getCoordY(), player.getCoordZ(), this) - gameWidth / 2 + xPos;            
-            yPos = player.getScreenPosY(player.getCoordX(), player.getCoordY(), player.getCoordZ(), this) - gameHeight / 2 + yPos;
+            xPos = Player.getScreenPosX(player.getCoordX(), player.getCoordY(), player.getCoordZ(), this) - gameWidth / 2 + xPos;            
+            yPos = Player.getScreenPosY(player.getCoordX(), player.getCoordY(), player.getCoordZ(), this) - gameHeight / 2 + yPos;
         }
         
         //update borders
@@ -276,19 +277,6 @@ public class Camera {
         return screenY;
     }
     
-    /**
-     * Returns the pixel-coordinates (screen) of a block's center.
-     * @param x 
-     * @param y 
-     * @param z
-     * @return an array with [0]-xPos and [1]-yPos 
-     */
-    public int[] getCenterofBlock(int x, int y, int z){
-        int result[] = new int[2];
-        result[0] = (int) (-getX() +x*Block.DIMENSION + (y%2) * (int) (Block.DIM2) + Controller.getMapData(x, y, z).getPos()[0]);
-        result[1] = (int) (-getY()+y*Block.DIM4 - z*Block.DIM2 + Controller.getMapData(x, y, z).getPos()[1]/2);
-        return result;
-    }
     
      /**
      * Fills the map into a list and sorts it, called the depthlist.
@@ -349,7 +337,7 @@ public class Camera {
      * Returns the lenght of list of ranking for the rendering order
      * @return length of the render list
      */
-    public int getDepthsortlistSize(){
+    public int depthsortlistSize(){
         return depthsort.size();
     }
     

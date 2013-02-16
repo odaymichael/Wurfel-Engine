@@ -1,6 +1,7 @@
 package com.BombingGames.Game.Blocks;
 
 import com.BombingGames.Game.Camera;
+import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Gameplay;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -270,6 +271,39 @@ public class Block {
         }
     }
     
+      /**
+     * Returns the spritesheet used for rendering
+     * @return the spritesheet used by the blocks
+     */
+    public static Image getBlocksheet() {
+        return spritesheet;
+    }
+    
+   /**
+     * Returns a sprite image of non-block image
+     * @param id
+     * @param value
+     * @param dimY 
+     * @return 
+     */    
+    public static Image getSprite(int id, int value, int dimY) {
+        return spritesheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], DIMENSION, dimY*DIM2+DIM2);   
+    }
+        
+    /**
+     *  Returns a sprite image of a specific side of the block
+     * @param id 
+     * @param side Which side? (0 - 2)
+     * @param value 
+     * @return an image of the side
+     */
+    public static Image getBlockSprite(int id, int value, int side){
+        if (side == 1)
+            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIMENSION, DIM2);
+        else
+            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIM2, (int) (DIM2*3/2));    
+    }
+    
    /**
      * Get the screen X-position where to block is rendered
      * @param x block coord
@@ -278,11 +312,11 @@ public class Block {
      * @param camera the camera which renders the scene
      * @return the screen X-position in pixels
      */
-    public int getScreenPosX(int x, int y, int z, Camera camera){
+    public static int getScreenPosX(int x, int y, int z, Camera camera){
         return -camera.getX()
                + x*DIMENSION
                + (y%2) * DIM2
-               + (int) (pos[0]);
+               + (int) (Controller.getMapData(x, y, z).getPos(0));
     }
     
     /**
@@ -293,98 +327,33 @@ public class Block {
      * @param camera the camera which renders the scene
      * @return the screen Y-position in pixels
      */
-    public int getScreenPosY(int x, int y, int z, Camera camera){
+    public static int getScreenPosY(int x, int y, int z, Camera camera){
         return - camera.getY()
             + y*DIM4
             - z*DIM2
-            + (int) (pos[1]/2)
-            - (int) (pos[2]/Math.sqrt(2));   
+            + (int) (Controller.getMapData(x, y, z).getPos(1)/2)
+            - (int) (Controller.getMapData(x, y, z).getPos(2)/Math.sqrt(2));   
     }
     
-    /**
-     * Draws a block
-     * @param x x-coordinate
-     * @param y y-coordinate
-     * @param z z-coordinate
-     * @param camera  
+    
+   /**
+     * Returns a color representing the block. Picks from the sprite image.
+     * @param id id of the Block
+     * @param value the value of the block.
+     * @return a color representing the block
      */
-    public void render(int x, int y, int z, Camera camera) {
-        //draw every visible block except air
-        if (id != 0 && visible){            
-            if (isBlock){
-                if (renderTop) renderSide(x,y,z, 1, camera);
-                if (renderLeft) renderSide(x,y,z, 0, camera);
-                if (renderRight) renderSide(x,y,z, 2, camera);
-            } else {
-                Image image = getSprite(id, value,dimensionY);
-
-                //calc  brightness
-                float brightness = lightlevel / 100f;
-                //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
-                
-                //or paint whole block with :
-                //int brightness = renderBlock.lightlevel * 255 / 100;
-                //new Color(brightness,brightness,brightness).bind(); 
-                
-                image.setColor(0, brightness,brightness,brightness);
-                image.setColor(1, brightness,brightness, brightness);
-
-                brightness -= .1f;
-
-                image.setColor(2, brightness, brightness, brightness);
-                image.setColor(3, brightness, brightness, brightness);
-                
-                int xpos = getScreenPosX(x,y,z,camera);
-                
-                int ypos = getScreenPosY(x,y,z,camera) - (dimensionY-1)*DIM2;
-                
-                image.drawEmbedded(xpos, ypos);
-            }
-        }
+    public static Color getBlockColor(int id, int value){
+        if (colorlist[id][value] == null){
+            colorlist[id][value] = getBlockSprite(id, value,1).getColor(DIM2, DIM4);
+            return colorlist[id][value]; 
+        } else return colorlist[id][value];
     }
-    /**
-     * Draws a side of a block
-     * @param x
-     * @param y
-     * @param z
-     * @param sidenumb The number of the side. 0 left, 1 top 2, right
-     * @param renderBlock The block which gets rendered
-     */
-    private void renderSide(int x, int y, int z, int sidenumb, Camera camera){
-        Image image = getBlockSprite(id,value,sidenumb);
         
-        if (Gameplay.getController().hasGoodGraphics()){
-                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
-        
-            if (sidenumb == 0){
-                int brightness = lightlevel * 255 / 100;
-                new Color(brightness,brightness,brightness).bind();
-            } else {
-                Color.black.bind();
-            }
-        }
-        
-        //calc  brightness
-        float brightness = lightlevel / 50f;
-                
-        image.setColor(0, brightness,brightness,brightness);
-        image.setColor(1, brightness,brightness, brightness);
+    
 
-        if (sidenumb != 1) brightness -= .3f;
-
-        image.setColor(2, brightness, brightness, brightness);
-        image.setColor(3, brightness, brightness, brightness);
-        
-        //right side is  half a block more to the right
-        int xpos = getScreenPosX(x,y,z,camera) + ( sidenumb == 2 ? DIM2 : 0);
-        
-        //the top is drawn a quarter blocks higher
-        int ypos = getScreenPosY(x,y,z,camera) + (sidenumb != 1 ? DIM4 : 0);
-        
-        image.drawEmbedded(xpos, ypos);
-    }
-
-        /**
+    //getter & setter
+    
+   /**
      * returns the id of a block
      * @return getId
      */
@@ -427,39 +396,14 @@ public class Block {
     }
    
     
-    
    /**
-     * has the block an offset? if x or y is != 0 it is true.
-     * @return 
+     * Has the block an offset (pos vector)? 
+     * @return when it has offset true, else false
      */
     public boolean hasOffset() {
         return (pos[0] != 0 || pos[1] != 0 || pos[2] != 0);
     }
     
-    /**
-     * Returns a sprite image of non-block image
-     * @param id
-     * @param value
-     * @param dimY 
-     * @return 
-     */    
-    public static Image getSprite(int id, int value, int dimY) {
-        return spritesheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], DIMENSION, dimY*DIM2+DIM2);   
-    }
-        
-    /**
-     *  Returns a sprite image of a specific side of the block
-     * @param id 
-     * @param side Which side? (0 - 2)
-     * @param value 
-     * @return an image of the side
-     */
-    public static Image getBlockSprite(int id, int value, int side){
-        if (side==1)
-            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIMENSION, DIM2);
-        else
-            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIM2, (int) (DIM2*3/2));    
-    }
     
 
     /**
@@ -547,6 +491,30 @@ public class Block {
         this.lightlevel = lightlevel;
     }
     
+   /**
+     * Returns true, when invisible. Invisible blocks are not rendered.
+     * @return 
+     */
+    public boolean isInvisible() {
+        return invisible;
+    }
+
+    /**
+     * Check if the block is liquid.
+     * @return true if liquid, false if not 
+     */
+    public boolean isLiquid() {
+        return liquid;
+    } 
+    
+    /**
+     * Is the block a true block or represents it another thing?
+     * @return 
+     */
+    public boolean isBlock() {
+        return isBlock;
+    }   
+    
     /**
      * Make a side (in)visible. If one side is visible, the whole block is visible.
      * @param side 0 = left, 1 = top, 2 = right
@@ -587,8 +555,6 @@ public class Block {
         return result;
     }
 
-
-
     /**
      * Returns the name of the block
      * @return the name of the block
@@ -596,36 +562,7 @@ public class Block {
     public String getName() {
         return name;
     }
-
-
-    /**
-     * Returns the spritesheet used for rendering
-     * @return the spritesheet used by the blocks
-     */
-    public static Image getBlocksheet() {
-        return spritesheet;
-    }
-    
-    /**
-     * Returns a color representing the block. Picks from the sprite image.
-     * @param id id of the Block
-     * @param value the value of the block.
-     * @return a color representing the block
-     */
-    public static Color getBlockColor(int id, int value){
-        if (colorlist[id][value] == null){
-            colorlist[id][value] = getBlockSprite(id, value,1).getColor(DIM2, DIM4);
-            return colorlist[id][value]; 
-        } else return colorlist[id][value];
-    }
-    
-    /**
-     * Is the block a true block or represents it another thing?
-     * @return 
-     */
-    public boolean isBlock() {
-        return isBlock;
-    }    
+ 
 
     /**
      * Returns the depth of the block. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
@@ -636,22 +573,87 @@ public class Block {
     public int getDepth(int y, int z) {
         return (int) (DIMENSION*y +(y % 2)*DIM2 + DIMENSION*z + pos[0] + (dimensionY-1)*DIMENSION);
     }
-
-    /**
-     * Returns true, when invisible. Invisible blocks are not rendered.
-     * @return 
-     */
-    public boolean isInvisible() {
-        return invisible;
-    }
-
-    /**
-     * Check if the block is liquid.
-     * @return true if liquid, false if not 
-     */
-    public boolean isLiquid() {
-        return liquid;
-    }
     
- 
+    /**
+     * Draws a block
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
+     * @param camera  
+     */
+    public void render(int x, int y, int z, Camera camera) {
+        //draw every visible block except air
+        if (id != 0 && visible){            
+            if (isBlock){
+                if (renderTop) renderSide(x,y,z, 1, camera);
+                if (renderLeft) renderSide(x,y,z, 0, camera);
+                if (renderRight) renderSide(x,y,z, 2, camera);
+            } else {
+                Image image = getSprite(id, value,dimensionY);
+
+                //calc  brightness
+                float brightness = lightlevel / 100f;
+                //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
+                
+                //or paint whole block with :
+                //int brightness = renderBlock.lightlevel * 255 / 100;
+                //new Color(brightness,brightness,brightness).bind(); 
+                
+                image.setColor(0, brightness,brightness,brightness);
+                image.setColor(1, brightness,brightness, brightness);
+
+                brightness -= .1f;
+
+                image.setColor(2, brightness, brightness, brightness);
+                image.setColor(3, brightness, brightness, brightness);
+                
+                int xpos = getScreenPosX(x,y,z,camera);
+                
+                int ypos = getScreenPosY(x,y,z,camera) - (dimensionY-1)*DIM2;
+                
+                image.drawEmbedded(xpos, ypos);
+            }
+        }
+    }
+    /**
+     * Draws a side of a block
+     * @param x
+     * @param y
+     * @param z
+     * @param sidenumb The number of the side. 0 left, 1 top 2, right
+     * @param renderBlock The block which gets rendered
+     */
+    private void renderSide(int x, int y, int z, int sidenumb, Camera camera){
+        Image image = getBlockSprite(id,value,sidenumb);
+        
+        if (Gameplay.getController().hasGoodGraphics()){
+                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
+        
+            if (sidenumb == 0){
+                int brightness = lightlevel * 255 / 100;
+                new Color(brightness,brightness,brightness).bind();
+            } else {
+                Color.black.bind();
+            }
+        }
+        
+        //calc  brightness
+        float brightness = lightlevel / 50f;
+                
+        image.setColor(0, brightness,brightness,brightness);
+        image.setColor(1, brightness,brightness, brightness);
+
+        if (sidenumb != 1) brightness -= .3f;
+
+        image.setColor(2, brightness, brightness, brightness);
+        image.setColor(3, brightness, brightness, brightness);
+        
+        //right side is  half a block more to the right
+        int xpos = getScreenPosX(x,y,z,camera) + ( sidenumb == 2 ? DIM2 : 0);
+        
+        //the top is drawn a quarter blocks higher
+        int ypos = getScreenPosY(x,y,z,camera) + (sidenumb != 1 ? DIM4 : 0);
+        
+        image.drawEmbedded(xpos, ypos);
+    }
 }

@@ -255,7 +255,7 @@ public class Map {
         
         Block.getBlocksheet().startUse();
         //render vom bottom to top
-        for (int i=0; i < camera.getDepthsortlistSize() ;i++) {
+        for (int i=0; i < camera.depthsortlistSize() ;i++) {
             int[] item = camera.getDepthsortCoord(i);
             data[item[0]][item[1]][item[2]].render(item[0],item[1],item[2], camera);            
         }

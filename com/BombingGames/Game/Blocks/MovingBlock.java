@@ -6,7 +6,7 @@ import com.BombingGames.Game.Map;
 import org.newdawn.slick.SlickException;
 
 /**
- *A Block which can move himself around the map, therefore it must also be a SelfAwareBlock.
+ *A block which can move himself around the map, therefore it must also be a SelfAwareBlock.
  * @author Benedikt
  */
 public abstract class MovingBlock extends SelfAwareBlock {
@@ -272,13 +272,8 @@ public abstract class MovingBlock extends SelfAwareBlock {
         if (topblock != null) topblock.getBlock().setPos(getPos());  
     }
    
-
-    
-    /*
-     * Returns true if the player is standing on ground.
-     */
     /**
-     * 
+     * Returns true if the player is standing on ground.
      * @return
      */
     public boolean isStanding(){
