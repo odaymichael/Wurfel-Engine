@@ -17,10 +17,10 @@ public class Minimap {
     /**
      * Draw the Minimap
      */
-    public void draw() {
+    public void render() {
         //refresh position
         Y = Gameplay.getView().getCamera().getScreenY() + 10;
-        X = Gameplay.getView().getCamera().getScreenX() + Gameplay.getView().getCamera().getScreenWidth() - (int) (3*Chunk.getBlocksX()*scaleX) - 10;
+        X = (int) (Gameplay.getView().getCamera().getScreenX() + Gameplay.getView().getCamera().getScreenWidth() - Map.getBlocksX()*scaleX - 10);
         int z;
         
         //if there is no player => ground level
@@ -28,6 +28,7 @@ public class Minimap {
             z = Gameplay.getController().getPlayer().getCoordZ()-1;
         else z = 0;
         
+        //render a chunk
         for (int pos=0; pos < 9; pos++){  
             for (int x = Chunk.getBlocksX()*(pos%3); x < Chunk.getBlocksX() * (pos%3+1); x++){
                 for (int y = Chunk.getBlocksY()*(pos/3); y < Chunk.getBlocksY() * (pos/3+1); y++){

@@ -12,27 +12,24 @@ import java.util.ArrayList;
  */
 public class Camera {
     private final int screenX, screenY, screenWidth, screenHeight;
-        
-    private int xPos, yPos, gameWidth, gameHeight;
-    private int leftborder, topborder, rightborder, bottomborder;
-    
-    private boolean focus = false;
-    private Blockpointer focusblock;
-    
-    private float zoom = 1;
-    
-   private static class Renderblock {
+     
+    private static class Renderblock {
         protected final int x,y,z;
         protected final int depth;
 
-        public Renderblock(int x, int y, int z, int depth) {
+        protected Renderblock(int x, int y, int z, int depth) {
             this.x = x;
             this.y = y;
             this.z = z;
             this.depth = depth;
         }
     }
-        
+    
+    private int xPos, yPos, gameWidth, gameHeight;
+    private int leftborder, topborder, rightborder, bottomborder;
+    private boolean focus = false;
+    private Blockpointer focusblock;
+    private float zoom = 1;
     private ArrayList<Renderblock> depthsort = new ArrayList();
 
     /**
@@ -81,11 +78,10 @@ public class Camera {
         
         bottomborder = (yPos+gameHeight) / (Block.DIM4) + Chunk.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
-        
     }
     
     /**
-     * 
+     * Renders the viewport
      */
     public void render() {
         if (Controller.getMap() != null) {
@@ -99,7 +95,7 @@ public class Camera {
         }
         //GUI
         if (Controller.getMap().getMinimap() != null)
-            Controller.getMap().getMinimap().draw(); 
+            Controller.getMap().getMinimap().render(); 
     }
     
     /**

@@ -65,7 +65,7 @@ public class View {
         
         Gameplay.MSGSYSTEM.add("Blocks: "+ Block.DIMENSION+" x "+Block.DIM2);
         Gameplay.MSGSYSTEM.add("Zoom: "+ camera.getZoom());
-        Gameplay.MSGSYSTEM.add("AbsZoom: "+ camera.getZoom()*equalizationScale);
+        Gameplay.MSGSYSTEM.add("AbsZoom: "+ camera.getAbsZoom());
      }
     
     /**
@@ -80,11 +80,8 @@ public class View {
     }
        
 
-    
-    
-
     /**
-     * 
+     * The equalizationScale is a factor which the image is scaled by to have the same size on different resolutions.
      * @return
      */
     public float getEqualizationScale() {
@@ -92,14 +89,14 @@ public class View {
     }
 
     /**
-     * 
+     * Returns the camera
      * @return
      */
     public Camera getCamera() {
         return camera;
     }
     
-        /**
+   /**
      * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
      * @param x the x position on the screen
      * @return game coordinate
