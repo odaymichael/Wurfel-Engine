@@ -270,6 +270,36 @@ public class Block {
         }
     }
     
+   /**
+     * Get the screen X-position where to block is rendered
+     * @param x block coord
+     * @param y block coord
+     * @param z block coord
+     * @param camera the camera which renders the scene
+     * @return the screen X-position in pixels
+     */
+    public int getScreenPosX(int x, int y, int z, Camera camera){
+        return -camera.getX()
+               + x*DIMENSION
+               + (y%2) * DIM2
+               + (int) (pos[0]);
+    }
+    
+    /**
+     * Get the screen Y-position where to block is rendered
+     * @param x block coord
+     * @param y block coord
+     * @param z block coord
+     * @param camera the camera which renders the scene
+     * @return the screen Y-position in pixels
+     */
+    public int getScreenPosY(int x, int y, int z, Camera camera){
+        return - camera.getY()
+            + y*DIM4
+            - z*DIM2
+            + (int) (pos[1]/2)
+            - (int) (pos[2]/Math.sqrt(2));   
+    }
     
     /**
      * Draws a block
@@ -286,7 +316,7 @@ public class Block {
                 if (renderLeft) renderSide(x,y,z, 0, camera);
                 if (renderRight) renderSide(x,y,z, 2, camera);
             } else {
-                Image temp = getSprite(id, value,dimensionY);
+                Image image = getSprite(id, value,dimensionY);
 
                 //calc  brightness
                 float brightness = lightlevel / 100f;
@@ -296,25 +326,19 @@ public class Block {
                 //int brightness = renderBlock.lightlevel * 255 / 100;
                 //new Color(brightness,brightness,brightness).bind(); 
                 
-                temp.setColor(0, brightness,brightness,brightness);
-                temp.setColor(1, brightness,brightness, brightness);
+                image.setColor(0, brightness,brightness,brightness);
+                image.setColor(1, brightness,brightness, brightness);
 
                 brightness -= .1f;
 
-                temp.setColor(2, brightness, brightness, brightness);
-                temp.setColor(3, brightness, brightness, brightness);
+                image.setColor(2, brightness, brightness, brightness);
+                image.setColor(3, brightness, brightness, brightness);
                 
-                int xpos = -camera.getX()
-                    + x*DIMENSION
-                    + (y%2) * DIM2
-                    + (int) (pos[0]);
-                int ypos = -camera.getY()
-                    + y*DIM4 - z*DIM2
-                    + (int) (pos[1]/2)
-                    - (int) (pos[2]/Math.sqrt(2))
-                    -(dimensionY-1)*DIM2;
+                int xpos = getScreenPosX(x,y,z,camera);
                 
-                temp.drawEmbedded(xpos,ypos);
+                int ypos = getScreenPosY(x,y,z,camera) - (dimensionY-1)*DIM2;
+                
+                image.drawEmbedded(xpos, ypos);
             }
         }
     }
@@ -327,7 +351,7 @@ public class Block {
      * @param renderBlock The block which gets rendered
      */
     private void renderSide(int x, int y, int z, int sidenumb, Camera camera){
-        Image sideimage = getBlockSprite(id,value,sidenumb);
+        Image image = getBlockSprite(id,value,sidenumb);
         
         if (Gameplay.getController().hasGoodGraphics()){
                 GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
@@ -343,26 +367,21 @@ public class Block {
         //calc  brightness
         float brightness = lightlevel / 50f;
                 
-        sideimage.setColor(0, brightness,brightness,brightness);
-        sideimage.setColor(1, brightness,brightness, brightness);
+        image.setColor(0, brightness,brightness,brightness);
+        image.setColor(1, brightness,brightness, brightness);
 
-        if (sidenumb!=1) brightness -= .3f;
+        if (sidenumb != 1) brightness -= .3f;
 
-        sideimage.setColor(2, brightness, brightness, brightness);
-        sideimage.setColor(3, brightness, brightness, brightness);
+        image.setColor(2, brightness, brightness, brightness);
+        image.setColor(3, brightness, brightness, brightness);
         
-        int xpos =  - camera.getX()
-            + x*DIMENSION
-            + (y%2) * (int) (DIM2)
-            + ( sidenumb == 2 ? DIM2:0)
-            + (int) pos[0];
-        int ypos = - camera.getY()
-            + y*DIM4
-            - z*DIM2
-            + (sidenumb != 1 ? DIM4:0)//the top is drawn /4 Blocks higher
-            + (int) (pos[1]/2)
-            - (int) (pos[2]/Math.sqrt(2));
-        sideimage.drawEmbedded(xpos,ypos);
+        //right side is  half a block more to the right
+        int xpos = getScreenPosX(x,y,z,camera) + ( sidenumb == 2 ? DIM2 : 0);
+        
+        //the top is drawn a quarter blocks higher
+        int ypos = getScreenPosY(x,y,z,camera) + (sidenumb != 1 ? DIM4 : 0);
+        
+        image.drawEmbedded(xpos, ypos);
     }
 
         /**
@@ -634,33 +653,5 @@ public class Block {
         return liquid;
     }
     
-    /**
-     * 
-     * @param x
-     * @param y
-     * @param z
-     * @param camera
-     * @return
-     */
-    public int getScreenPosX(int x, int y, int z, Camera camera){
-        return -camera.getX()
-               + x*DIMENSION
-               + (y%2) * DIM2
-               + (int) (pos[0]);    
-    }
-    
-    /**
-     * 
-     * @param x
-     * @param y
-     * @param z
-     * @param camera
-     * @return
-     */
-    public int getScreenPosY(int x, int y, int z, Camera camera){
-        return -camera.getY()
-                + y*DIM4 - z*DIM2
-                + (int) (pos[1]/2)
-                - (int) (pos[2]/Math.sqrt(2));    
-    }
+ 
 }
