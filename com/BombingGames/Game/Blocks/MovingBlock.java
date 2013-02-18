@@ -193,7 +193,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      */
     private void makeCoordinateStep(int x, int y, Blockpointer topblock){
         //mirror the position around the center
-        setPos(1,getPos()[1] -1*y*Block.DIM2);
+        setPos(1, getPos()[1] -1*y*Block.DIM2);
         setPos(0, getPos()[0] -1*x*Block.DIM2);
         
         selfDestroy();

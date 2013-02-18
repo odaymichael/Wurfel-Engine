@@ -67,9 +67,9 @@ public class Minimap {
             );
 
             View.baseFont.drawString(
-                X + 10 + pos%3*Chunk.getBlocksX()*scaleX,
-                Y +10 + pos/3*(Chunk.getBlocksY()*scaleY),
-                Controller.getMap().getCoordlist(pos)[0] +" | "+ Controller.getMap().getCoordlist(pos)[1] ,
+                X + 10 + pos%3 *Chunk.getBlocksX()*scaleX,
+                Y + 10 + pos/3 *(Chunk.getBlocksY()*scaleY),
+                Controller.getMap().getChunkCoords(pos)[0] +" | "+ Controller.getMap().getChunkCoords(pos)[1] ,
                 Color.black
             );
         }

@@ -20,7 +20,7 @@ public class SelfAwareBlock extends Block{
        super(id);
     }
    
-    SelfAwareBlock(int id,int value){
+    SelfAwareBlock(int id, int value){
        super(id, value);
     }
    
@@ -47,7 +47,10 @@ public class SelfAwareBlock extends Block{
       * @param z the new value for z
       */
     public void setCoordZ(int z) {
-        coordZ = z;
+        //if Z is too high set to highes possible position
+        if (z > Map.getBlocksZ()-2)
+            coordZ = Map.getBlocksZ() -2;
+        else coordZ = z;
     }
    
     /**
@@ -59,11 +62,7 @@ public class SelfAwareBlock extends Block{
     public void setAbsCoords(int x, int y, int z){
         absCoordX = x;
         absCoordY = y;
-        
-        //if Z is too high set to highes possible position
-        if (z > Map.getBlocksZ()-2)
-            coordZ = Map.getBlocksZ() -2;
-        else coordZ = z;
+        setCoordZ(z);
     }
    
      /**
@@ -71,7 +70,7 @@ public class SelfAwareBlock extends Block{
       * @return
       */
      public int getCoordX() {
-        return absCoordX - Controller.getMap().getCoordlist(4)[0]  * Chunk.getBlocksX();
+        return absCoordX - Controller.getMap().getChunkCoords(4)[0]  * Chunk.getBlocksX();
     }
 
     /**
@@ -79,7 +78,7 @@ public class SelfAwareBlock extends Block{
      * @return
      */
     public int getCoordY() {
-        return absCoordY - Controller.getMap().getCoordlist(4)[1] * Chunk.getBlocksY();
+        return absCoordY - Controller.getMap().getChunkCoords(4)[1] * Chunk.getBlocksY();
     }
     
     /**

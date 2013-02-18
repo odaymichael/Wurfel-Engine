@@ -18,7 +18,7 @@ public class Map {
     private static int blocksX, blocksY, blocksZ;    
     private Block data[][][];
     private boolean recalcRequested;
-       /**
+    /**
      *The list which has all current nine chunks in it.
      */
     private int[][] coordlist = new int[9][2];
@@ -47,11 +47,7 @@ public class Map {
             for (int x=-1; x < 2; x++){
                 coordlist[pos][0] = x;
                 coordlist[pos][1] = y;
-                tempchunk = new Chunk(
-                        x,
-                        y,
-                        load
-                );
+                tempchunk = new Chunk(x, y, load);
                 setChunk(pos, tempchunk);
                 pos++;               
             }
@@ -133,12 +129,13 @@ public class Map {
         
         for (int pos=0; pos<9; pos++){
             //refresh coordinates
-            coordlist[pos][0] += (newmiddle == 3 ? -1 : (newmiddle == 5 ? 1 : 0));
-            coordlist[pos][1] += (newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0));
+            coordlist[pos][0] += newmiddle == 3 ? -1 : (newmiddle == 5 ? 1 : 0);
+            coordlist[pos][1] += newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0);
             
             if (isMovingChunkPossible(pos, newmiddle)){
                 setChunk(pos, getChunk(data_copy, pos - 4 + newmiddle));
             } else {
+                
                 setChunk(
                         pos,
                         new Chunk(
@@ -147,6 +144,7 @@ public class Map {
                             MainMenuState.loadmap
                         )
                 );
+                
             }
         }
         
@@ -258,30 +256,17 @@ public class Map {
             int[] item = camera.getDepthsortCoord(i);
             data[item[0]][item[1]][item[2]].render(item[0],item[1],item[2], camera);            
         }
-        
-//                    //check current and next block for special order
-//                    if (
-//                        (x < Map.getBlocksX()-1 && data[x+1][y][z].getRenderorder() == -1)
-//                        ||
-//                        data[x][y][z].getRenderorder() == 1
-//                       ) 
-//                    {
-//                        x++;
-//                        data[x][y][z].render(x,y,z);//draw the right block first
-//                        data[x-1][y][z].render(x-1,y,z); //then the left   
-//                    } else data[x][y][z].render(x,y,z);
-//                }
             
        Block.getBlocksheet().endUse(); 
        if (Gameplay.getController().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
     }
 
    /**
-     *A list of the coordinates of the current chunks. 
+     *Get the coordinates of a chunk. 
      * @param pos the position of the chunk
      * @return the coordinates of the chunk
      */
-    public int[] getCoordlist(int pos) {
+    public int[] getChunkCoords(int pos) {
         return coordlist[pos];
     }
 

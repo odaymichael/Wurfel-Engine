@@ -21,10 +21,10 @@ public class Chunk {
     public static final int MAPGENERATOR = 1;
     
     private static int blocksX = 10;//16:9 => 12:27, 4:3=>12:36
+    //blocksY must be even number
     private static int blocksY = 40;//28
     private static int blocksZ = 10;//20
     
-    private int coordX, coordY;
     private Block data[][][] = new Block[blocksX][blocksY][blocksZ];
   
     /**
@@ -45,16 +45,14 @@ public class Chunk {
     */
     public Chunk(int coordX, int coordY, boolean loadmap){
         this();
-        this.coordX = coordX;
-        this.coordY = coordY;
 
-        if (loadmap) loadChunk();
-            else newChunk();
+        if (loadmap) loadChunk(coordX, coordY);
+            else newChunk(coordX, coordY);
     }
     /**
      * Generates new content for a chunk.
      */  
-    private void newChunk(){
+    private void newChunk(int coordX, int coordY){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
         Log.debug("Creating new chunk: "+ coordX + ", "+ coordY);
@@ -90,7 +88,7 @@ public class Chunk {
                     for (int y=0; y < blocksY; y++){
                         int height = blocksZ-1- Math.abs(mountainy-y)- Math.abs(mountainx-x);
                         if (height>1){
-                            for (int z=0; z < height; z++){
+                            for (int z=0; z < height; z++) {
                                 data[x][y][z] = new Block(2);
                             }
                             data[x][y][height] = new Block(1);
@@ -126,7 +124,7 @@ public class Chunk {
     /**
      * loads a chunk from
      */
-    private void loadChunk(){
+    private void loadChunk(int coordX, int coordY){
         //Reading map files test
         try {
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
@@ -190,7 +188,7 @@ public class Chunk {
                 } while (lastline != null);
             } else {
                 Log.debug("...but it could not be found. Creating new.");
-                newChunk();
+                newChunk(coordX, coordY);
             }
         } catch (IOException ex) {
             Log.debug("Loading of chunk "+coordX+","+coordY + "failed: "+ex);
@@ -256,37 +254,8 @@ public class Chunk {
         this.data = data;
     }
 
-    /**
-     * 
-     * @return
-     */
-    public int getCoordX() {
-        return coordX;
-    }
 
-    /**
-     * 
-     * @param coordX
-     */
-    public void setCoordX(int coordX) {
-        this.coordX = coordX;
-    }
 
-    /**
-     * 
-     * @return
-     */
-    public int getCoordY() {
-        return coordY;
-    }
-
-    /**
-     * 
-     * @param coordY
-     */
-    public void setCoordY(int coordY) {
-        this.coordY = coordY;
-    }
 
     /**
      * The amount of blocks in X direction
