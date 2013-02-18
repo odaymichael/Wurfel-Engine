@@ -59,13 +59,6 @@ public class View {
         tTFont = new TrueTypeFont(font, true);
         font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 8);
         tTFont_small = new TrueTypeFont(font, true);*/
-        
-        //update resolution things
-        Gameplay.MSGSYSTEM.add("Resolution: " + gc.getWidth() + " x " +gc.getHeight());
-        
-        Gameplay.MSGSYSTEM.add("Blocks: "+ Block.DIMENSION+" x "+Block.DIM2);
-        Gameplay.MSGSYSTEM.add("Zoom: "+ camera.getZoom());
-        Gameplay.MSGSYSTEM.add("AbsZoom: "+ camera.getAbsZoom());
      }
     
     /**

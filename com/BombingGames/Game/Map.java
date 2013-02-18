@@ -238,7 +238,6 @@ public class Map {
      */
     public void recalcIfRequested(){
         if (recalcRequested) {
-            Log.debug("recalc");
             Gameplay.getView().getCamera().raytracing();
             calc_light();
             recalcRequested = false;

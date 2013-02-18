@@ -76,7 +76,7 @@ public class Camera {
         topborder = yPos / (Block.DIM4)-1;
         if (topborder < 0) topborder= 0;
         
-        bottomborder = (yPos+gameHeight) / (Block.DIM4) + Chunk.getBlocksZ()*2;
+        bottomborder = (yPos+gameHeight) / (Block.DIM4) + Map.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
     }
     
@@ -228,7 +228,7 @@ public class Camera {
      * @return
      */
     public int getTotalHeight() {
-        return gameHeight + Block.DIM2*Chunk.getBlocksZ();
+        return gameHeight + Block.DIM2*Map.getBlocksZ();
     }
 
     
@@ -344,29 +344,25 @@ public class Camera {
         //set visibility of every block to false, except blocks with offset
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY(); y++)
-                for (int z=0; z < Chunk.getBlocksZ(); z++) {
+                for (int z=0; z < Map.getBlocksZ(); z++) {
                     
                     Block block = Controller.getMapData(x, y, z);
+                    
+                    //Blocks with offset are not in the grid, so can not be calculated => always visible
                     if (block.hasOffset()){
-                        block.setVisible(true);//Blocks with offset are not in the grid, so ignore them
-                        Controller.getMapDataSafe(x, y, z-1).setVisible(true);
+                        block.setVisible(true);
                     } else {
                         block.setVisible(false);
                     }
-                    
                 }
                 
         //send the rays through top of the map
         for (int x=0; x < Map.getBlocksX(); x++)
-            for (int y=0; y < Map.getBlocksY() + Chunk.getBlocksZ()*2; y++)
-                
-                for (int side=0; side < 3; side++)
-                    traceRay(
-                        x,
-                        y,
-                        Chunk.getBlocksZ()-1,
-                        side
-                    );
+            for (int y=0; y < Map.getBlocksY() + Map.getBlocksZ()*2; y++){
+                traceRay(x, y, Map.getBlocksZ()-1, 0);
+                traceRay(x, y, Map.getBlocksZ()-1, 1);
+                traceRay(x, y, Map.getBlocksZ()-1, 2);
+            }     
     }
     
         /**
@@ -385,9 +381,9 @@ public class Camera {
 
         //bring ray to start position
         if (y >= Map.getBlocksY()) {
-            z-= (y-Map.getBlocksY())/2;
+            z -= (y-Map.getBlocksY())/2;
             if (y % 2 == 0)
-                y=Map.getBlocksY()-1;
+                y = Map.getBlocksY()-1;
             else
                 y = Map.getBlocksY()-2;
         }
