@@ -30,7 +30,7 @@ public class Camera {
     private boolean focus = false;
     private Blockpointer focusblock;
     private float zoom = 1;
-    private ArrayList<Renderblock> depthsort = new ArrayList();
+    private ArrayList<Renderblock> depthsort = new ArrayList<Renderblock>();
 
     /**
      * Creates a camera. Screen does refer to the output of the camera not the real size on the display.
@@ -67,16 +67,16 @@ public class Camera {
         }
         
         //update borders
-        leftborder = xPos/Block.DIMENSION -1;
+        leftborder = xPos / Block.DIMENSION - 1;
         if (leftborder < 0) leftborder= 0;
         
-        rightborder = (xPos + gameWidth)/Block.DIMENSION+2;
+        rightborder = (xPos + gameWidth) / Block.DIMENSION + 2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
         
-        topborder = yPos / (Block.DIM4)-1;
+        topborder = yPos / Block.DIM4 - 3;
         if (topborder < 0) topborder= 0;
         
-        bottomborder = (yPos+gameHeight) / (Block.DIM4) + Map.getBlocksZ()*2;
+        bottomborder = (yPos+gameHeight) / Block.DIM4 + Map.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
     }
     
@@ -365,8 +365,8 @@ public class Camera {
             }     
     }
     
-        /**
-     * Traces a single ray-
+    /**
+    * Traces a single ray-
      * @param x The starting x-coordinate.
      * @param y The starting y-coordinate.
      * @param z The starting z-coordinate.
@@ -399,19 +399,22 @@ public class Camera {
                     //direct neighbour block on left hiding the complete left side
                     if (x > 0 && y < Map.getBlocksY()-1
                         && ! Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z).isTransparent())
-                    break; //stop ray
+                        break; //stop ray
                     
                     //liquid
                     if (Controller.getMapData(x, y, z).isLiquid()){
-                        if (x > 0 && y < Map.getBlocksY()-1
+                        if (x > 0 && y+1 < Map.getBlocksY()
                         && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z).isLiquid())
-                            liquidfilter=true;
+                            liquidfilter = true;
+                        
                         if (x > 0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
                             && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
                             leftliquid = false;
+                        
                         if (y < Map.getBlocksY()-2 &&
                             Controller.getMapData(x, y+2, z).isLiquid())
                             rightliquid = false;
+                        
                         if (!leftliquid && !rightliquid) liquidfilter=true;
                     } 
 
@@ -419,16 +422,11 @@ public class Camera {
                     if (x > 0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
                         && ! Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isTransparent())
                         left = false;
-                    if (y < Map.getBlocksY()-2 &&
-                        ! Controller.getMapData(x, y+2, z).isTransparent())
+                    if (y < Map.getBlocksY()-2
+                        && ! Controller.getMapData(x, y+2, z).isTransparent()
+                        )
                         right = false;
-
-                    if (left || right){ //as long one part of the side is visible save it
-                        Block temp = Controller.getMapData(x, y, z);
-                        if (!(liquidfilter && temp.isLiquid())){
-                            temp.setSideVisibility(0, true);
-                        }else liquidfilter=false;
-                    } else break;//if side is hidden stop ray
+                    
                 } else {              
                     if (side == 1) {//check top side
                         if (z < Map.getBlocksZ()-1
@@ -438,7 +436,8 @@ public class Camera {
                         //liquid
                         if (Controller.getMapData(x, y, z).isLiquid()){
                             if (z < Map.getBlocksZ()-1 && Controller.getMapData(x, y, z+1).isLiquid())
-                                break;
+                                liquidfilter = true;
+                            
                             if (x>0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
                                 && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
                                 leftliquid = false;
@@ -447,7 +446,7 @@ public class Camera {
                                 &&  Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
                                 rightliquid = false;
                             
-                            if (!leftliquid && !rightliquid) liquidfilter=true;
+                            if (!leftliquid && !rightliquid) liquidfilter = true;
                         }
                     
                         //two 0- and 2-sides hiding the side 1
@@ -456,61 +455,59 @@ public class Camera {
                             left = false;
                         
                         if (x < Map.getBlocksX()-1  && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                            && ! Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent())
+                            && ! Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent()
+                            )
                             right = false;
                           
-                        if (left || right){ //as long one part of the side is visible save it
-                            Block temp = Controller.getMapData(x, y, z);
-                            if (!(liquidfilter && temp.isLiquid())){
-                                temp.setSideVisibility(1, true);
-                            }else liquidfilter=false;
-                        } else break;//if side is hidden stop ray
                     } else {
                         if (side==2){
-                            //block on right hiding the right side
-                            if (x < Map.getBlocksX()-1 && y < Map.getBlocksY()-1
-                                && ! Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).isTransparent())
-                                break;
+                            //block on right hiding the whole right side
+                            if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY()
+                                && ! Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).isTransparent()
+                                ) break;
                             
                             //liquid
                             if (Controller.getMapData(x, y, z).isLiquid()){
                                if (x < Map.getBlocksX()-1 && y < Map.getBlocksY()-1
-                                && Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).isLiquid())
-                                    break;
-                                if (y < Map.getBlocksY()-2
+                                    && Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).isLiquid()
+                                   ) liquidfilter = true;
+                               
+                                if (y+2 < Map.getBlocksY()
                                     &&
                                     Controller.getMapData(x, y+2, z).isLiquid())
                                     leftliquid = false;
                                 
-                                if (x < Map.getBlocksX()-1 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
+                                if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY() && z+1 < Map.getBlocksZ()
                                     &&
                                     Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
                                     rightliquid = false;
                                 
-                                if (!leftliquid && !rightliquid) liquidfilter = true;
+                                if (!leftliquid && !rightliquid) liquidfilter=true;
                             }
 
                             //two blocks hiding the right side
-                            if (y < Map.getBlocksY()-2
+                            if (y+2 < Map.getBlocksY()
                                 &&
                                 ! Controller.getMapData(x, y+2, z).isTransparent())
                                 left = false;
                             
-                            if (x < Map.getBlocksX()-1 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
+                            if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY() && z+1 < Map.getBlocksZ()
                                 &&
                                 ! Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent())
                                 right = false;
-                            
-                            if (left || right){ //as long one part of the side is visible save it
-                                Block temp = Controller.getMapData(x, y, z);
-                                if (!(liquidfilter && temp.isLiquid())){
-                                    temp.setSideVisibility(2, true);
-                                }else liquidfilter=false;
-                            } else break;//if side is hidden stop ray
                         }
                     }
                 }
-            } while (y >= 2 && z >= 1 && (Controller.getMapData(x, y, z).isTransparent() || Controller.getMapData(x, y, z).hasOffset()));
+                
+                if (left || right){ //as long one part of the side is visible save it
+                    Block temp = Controller.getMapData(x, y, z);
+
+                    if (!(liquidfilter && temp.isLiquid())){
+                        liquidfilter = false;
+                        temp.setSideVisibility(side, true);  
+                    }                                
+                }                
+            } while (y >= 2 && z >= 1  && (left || right) && (Controller.getMapData(x, y, z).isTransparent() || Controller.getMapData(x, y, z).hasOffset()));
     }
     
     /**
