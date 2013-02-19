@@ -31,7 +31,7 @@ public class View {
 
         //startFont = Font.createFont(Font.TRUETYPE_FONT,new BufferedInputStream(this.getClass().getResourceAsStream("Blox2.ttf")));
         //UnicodeFont startFont = new UnicodeFont("com/BombingGames/Game/Blox2.ttf", 20, false, false);
-        baseFont = new AngelCodeFont("com/BombingGames/Game/Blox.fnt","com/BombingGames/Game/Blox.png");
+        baseFont = new AngelCodeFont("com/BombingGames/Game/arial.fnt","com/BombingGames/Game/arial.png");
         //baseFont = startFont.deriveFont(Font.PLAIN, 12);
         //baseFont = startFont.getFont().deriveFont(Font.PLAIN, 18);
         //tTFont = new TrueTypeFont(baseFont, true);
