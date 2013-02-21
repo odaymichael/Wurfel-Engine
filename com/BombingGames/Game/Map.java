@@ -103,7 +103,7 @@ public class Map {
     } 
     
     /**
-     * 
+     * Get the data of the map
      * @return
      */
     public Block[][][] getData() {
@@ -148,7 +148,7 @@ public class Map {
             }
         }
         
-        recalcRequested = true;
+        requestRecalc();
         } else {
             Log.error("setCenter was called with center:"+newmiddle);
         }
@@ -399,7 +399,7 @@ public class Map {
                 if (topmost>0) {
                     //start at topmost block and go down. Every step make it a bit darker
                     for (int level=topmost; level >= 0; level--)
-                        data[x][y][level].setLightlevel(level*50 / topmost);
+                        data[x][y][level].setLightlevel(50* level / topmost);
                 }
             }
         }         

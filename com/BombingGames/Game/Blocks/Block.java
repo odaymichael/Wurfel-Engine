@@ -168,6 +168,9 @@ public class Block {
         SPRITEPOS[70][0][0][0] = 0;
         SPRITEPOS[70][0][0][1] = 720;
         
+        SPRITEPOS[71][0][0][0] = 0;
+        SPRITEPOS[71][0][0][1] = 720;
+        
         try {
             spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", DIMENSION, (int) (DIM2*1.5f));
         } catch (SlickException ex) {
@@ -262,6 +265,11 @@ public class Block {
             case 70:name = "campfire";
                     transparent = true;
                     obstacle = false;
+                    isBlock = false;
+                    break;
+            case 71:name = "explosiveBarrel";
+                    transparent = false;
+                    obstacle = true;
                     isBlock = false;
                     break;
             default:name = "undefined";

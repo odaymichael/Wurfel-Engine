@@ -1,6 +1,7 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.Game.Blocks.ExplosiveBarrel;
 import com.BombingGames.Wurfelengine;
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,7 +19,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 1;
+    public static final int MAPGENERATOR = 4;
     
     private static int blocksX = 10;//16:9 => 12:27, 4:3=>12:36
     //blocksY must be even number
@@ -117,7 +118,22 @@ public class Chunk {
                         data[x][y][1] = new Block(1);
                     }
                 break;
-            }    
+            }
+                
+            case 4: {//flat gras with one random pillar per chunk
+                
+                for (int x=0; x < blocksX; x++)
+                    for (int y=0; y < blocksY; y++){
+                        data[x][y][2] = new Block(1);
+                        data[x][y][1] = new Block(2);
+                        data[x][y][0] = new Block(2);
+                    }
+                data[5][5][3] = new ExplosiveBarrel(5,5,3);
+                data[5][5][2] = new Block(2);
+                
+                break;
+                
+            }   
         }
     }
     

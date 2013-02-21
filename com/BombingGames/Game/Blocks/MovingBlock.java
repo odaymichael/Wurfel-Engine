@@ -24,16 +24,16 @@ public abstract class MovingBlock extends SelfAwareBlock {
      */
     abstract void jump();
    
-    MovingBlock(){
-        super();
+    MovingBlock(int x,int y, int z){
+        super(x,y,z);
     }
     
-    MovingBlock(int id){
-        super(id);
+    MovingBlock(int id,int x,int y, int z){
+        super(id,x,y,z);
     }
    
-    MovingBlock(int id,int value){
-        super(id, value);
+    MovingBlock(int id,int value,int x,int y, int z){
+        super(id, value,x,y,z);
     }
     
     

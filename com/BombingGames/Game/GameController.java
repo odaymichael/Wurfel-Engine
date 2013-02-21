@@ -1,6 +1,7 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.Game.Blocks.ExplosiveBarrel;
 import com.BombingGames.Game.Blocks.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
@@ -24,8 +25,10 @@ public class GameController extends Controller {
     public GameController(GameContainer gc, StateBasedGame game) throws SlickException{
         super(gc, game);
         this.gc = gc;
+        
         setPlayer(new Player((int) (Chunk.getBlocksX()*1.5),(int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2));
         getMap().setData((int) (Chunk.getBlocksX()*1.5), (int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2, getPlayer());
+        
         gc.getInput().addMouseListener(new MouseDraggedListener());
     }
     
@@ -41,7 +44,8 @@ public class GameController extends Controller {
             if (input.isKeyPressed(Input.KEY_F)) gc.setFullscreen(!gc.isFullscreen()); 
 
             //toggle fullscreen
-            if (input.isKeyPressed(Input.KEY_E)) getMap().earthquake(); 
+            if (input.isKeyPressed(Input.KEY_E)) ((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
+            //getMap().earthquake(); 
             
             //pause
             if (input.isKeyDown(Input.KEY_P)) gc.setPaused(true);

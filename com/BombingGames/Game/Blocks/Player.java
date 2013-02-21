@@ -21,9 +21,8 @@ public class Player extends MovingBlock{
      * @param Z Absolute Z-Pos of lower half
      * @throws SlickException
      */
-    public Player(int X, int Y, int Z) throws SlickException {
-        super(40,1);
-        setAbsCoords(X,Y,Z);
+    public Player(int x, int y, int z) throws SlickException {
+        super(40,1,x,y,z);
         //creates the top of the player
         topblock = new Blockpointer(this, 0, 0, 1);
         topblock.setBlock(new Block(40));
