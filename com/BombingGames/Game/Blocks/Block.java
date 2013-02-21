@@ -130,11 +130,11 @@ public class Block {
         SPRITEPOS[8][0][2][1] = 720;
         
         //water
-        SPRITEPOS[9][0][0][0] = 480;
+        SPRITEPOS[9][0][0][0] = 640;
         SPRITEPOS[9][0][0][1] = 720;
-        SPRITEPOS[9][0][1][0] = 560;
+        SPRITEPOS[9][0][1][0] = 720;
         SPRITEPOS[9][0][1][1] = 720;
-        SPRITEPOS[9][0][2][0] = 720;
+        SPRITEPOS[9][0][2][0] = 880;
         SPRITEPOS[9][0][2][1] = 720;
         
         
