@@ -193,17 +193,18 @@ public abstract class MovingBlock extends SelfAwareBlock {
      */
     private void makeCoordinateStep(int x, int y, Blockpointer topblock){
         //mirror the position around the center
-        setPos(1, getPos()[1] -1*y*Block.DIM2);
         setPos(0, getPos()[0] -1*x*Block.DIM2);
+        setPos(1, getPos()[1] -1*y*Block.DIM2);
+        
         
         selfDestroy();
         if (topblock != null) topblock.setBlock(new Block(0));
         
         setAbsCoordY(getAbsCoordY()+y);
         if (x<0){
-            if (getAbsCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
+            if (getCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
         } else {
-            if (getAbsCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
+            if (getCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
         }
          
         selfRebuild();
