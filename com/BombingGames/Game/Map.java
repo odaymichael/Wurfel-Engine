@@ -398,7 +398,7 @@ public class Map {
                 
                 if (topmost>0) {
                     //start at topmost block and go down. Every step make it a bit darker
-                    for (int level=topmost; level >= 0; level--)
+                    for (int level=topmost; level > 0; level--)
                         data[x][y][level].setLightlevel(50* level / topmost);
                 }
             }
