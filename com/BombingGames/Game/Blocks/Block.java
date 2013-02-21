@@ -33,7 +33,7 @@ public class Block {
 
     
     /**
-     * The real game world dimension in pixel It is Dimension/sqrt(2)
+     * The real game world dimension in pixel. It is Dimension/sqrt(2)
      */
     public static int GAMEDIMENSION = (int) (DIMENSION/Math.sqrt(2));
 
@@ -169,6 +169,10 @@ public class Block {
         SPRITEPOS[70][0][0][1] = 720;
         
         SPRITEPOS[71][0][0][0] = 0;
+        SPRITEPOS[71][0][0][1] = 720;
+        
+        //explosive barrel
+        SPRITEPOS[71][0][0][0] = 160;
         SPRITEPOS[71][0][0][1] = 720;
         
         try {
