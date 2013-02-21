@@ -172,7 +172,7 @@ public class Block {
         SPRITEPOS[71][0][0][1] = 720;
         
         try {
-            spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", DIMENSION, (int) (DIM2*1.5f));
+            spritesheet = new SpriteSheet("com/BombingGames/Game/Blocks/Blockimages/SideSprite.png", DIMENSION, (int) (DIM2*1.5f));
         } catch (SlickException ex) {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
         }
