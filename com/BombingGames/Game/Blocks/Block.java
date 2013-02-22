@@ -22,18 +22,18 @@ public class Block {
     public static final int DIMENSION = 160;
     
     /**
-     * The half of DIMENSION.
+     * The half (2) of DIMENSION. The short form of DIMENSION/2
      */
     public static final int DIM2 = DIMENSION/2;
     
     /**
-     * A quarter of DIMENSION.
+     * A quarter (4) of DIMENSION. The short form of DIMENSION/4
      */
     public static final int DIM4 = DIMENSION/4;
 
     
     /**
-     * The real game world dimension in pixel. It is Dimension/sqrt(2)
+     * The real game world dimension in pixel. Usually DIMENSION should be enough becaue of the map format. The value is DIMENSION/sqrt(2).
      */
     public static int GAMEDIMENSION = (int) (DIMENSION/Math.sqrt(2));
 
