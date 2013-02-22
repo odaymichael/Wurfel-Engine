@@ -391,47 +391,55 @@ public class Block {
         return result;
     }
     
-    public static int[] sideNumbToNeighbourCoords (int xcoord, int ycoord, int zcoord, int sidenumb){
+    /**
+     * Get the neighbour coordinates of the neighbour of the coords you give
+     * @param xcoord
+     * @param ycoord
+     * @param zcoord
+     * @param sidenumb the side number of the given coordinates
+     * @return coordinates of the neighbour
+     */
+    public static int[] sideNumbToNeighbourCoords (int[] coords, int sidenumb){
         int result[] = new int[3];
         switch(sidenumb){
             case 0:
-                result[0] = xcoord;
-                result[1] = ycoord - 2;
+                result[0] = coords[0];
+                result[1] = coords[1] - 2;
                 break;
             case 1:
-                result[0] = xcoord + (ycoord % 2 == 1 ? 1 : 0);
-                result[1] = ycoord - 1;
+                result[0] = coords[0] + (coords[1] % 2 == 1 ? 1 : 0);
+                result[1] = coords[1] - 1;
                 break;
             case 2:
-                result[0] = xcoord + 1;
-                result[1] = ycoord;
+                result[0] = coords[0] + 1;
+                result[1] = coords[1];
                 break;
             case 3:
-                result[0] = xcoord + (ycoord % 2 == 1 ? 1 : 0);
-                result[1] = xcoord + 1;
+                result[0] = coords[0] + (coords[1] % 2 == 1 ? 1 : 0);
+                result[1] = coords[1] + 1;
                 break;
             case 4:
-                result[0] = xcoord;
-                result[1] = ycoord + 2;
+                result[0] = coords[0];
+                result[1] = coords[1] + 2;
                 break;
             case 5:
-                result[0] = xcoord - (ycoord % 2 == 0 ? 1 : 0);
-                result[1] = ycoord + 1;
+                result[0] = coords[0] - (coords[1] % 2 == 0 ? 1 : 0);
+                result[1] = coords[1] + 1;
                 break;
             case 6:
-                result[0] = xcoord - 1;
-                result[1] = ycoord;
+                result[0] = coords[0] - 1;
+                result[1] = coords[1];
                 break;
             case 7:
-                result[0] = xcoord - (ycoord % 2 == 0 ? 1 : 0);
-                result[1] = ycoord - 1;
+                result[0] = coords[0] - (coords[1] % 2 == 0 ? 1 : 0);
+                result[1] = coords[1] - 1;
                 break;
             default:
-                result[0] = xcoord;
-                result[1] = ycoord;      
+                result[0] = coords[0];
+                result[1] = coords[1];      
         }
         
-        result[2] = zcoord;
+        result[2] = coords[2];
         return result;
     }
     
@@ -444,8 +452,8 @@ public class Block {
      * @param ypos The y-position inside/outside this field 
      * @return The neighbour block or itself
      */
-    public static int[] posToNeighbourCoords (int xcoord, int ycoord, int zcoord, int xpos, int ypos){
-        return sideNumbToNeighbourCoords(xcoord, ycoord, zcoord, sideNumb(xpos, ypos));
+    public static int[] posToNeighbourCoords (int[] coords, int xpos, int ypos){
+        return sideNumbToNeighbourCoords(coords, sideNumb(xpos, ypos));
     }
     
 

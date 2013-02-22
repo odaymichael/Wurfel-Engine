@@ -26,8 +26,8 @@ public class GameController extends Controller {
         super(gc, game);
         this.gc = gc;
         
-        setPlayer(new Player((int) (Chunk.getBlocksX()*1.5),(int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2));
-        getMap().setData((int) (Chunk.getBlocksX()*1.5), (int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2, getPlayer());
+        //setPlayer(new Player((int) (Chunk.getBlocksX()*1.5),(int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2));
+        //getMap().setData((int) (Chunk.getBlocksX()*1.5), (int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2, getPlayer());
         
         gc.getInput().addMouseListener(new MouseDraggedListener());
     }
@@ -107,14 +107,12 @@ public class GameController extends Controller {
 
         @Override
         public void mouseClicked(int button, int x, int y, int clickCount) {
-            int coords[] = Gameplay.getView().ScreenToGameCoords(x,y);
-            setMapDataSafe(coords[0], coords[1], coords[2]+1,new Block(1));
-            Log.debug("made block at"+coords[0]+","+coords[1]+","+coords[2]);
-            Gameplay.getView().getCamera().traceRayTo(coords[0], coords[1], coords[2], true);
+
         }
 
         @Override
         public void mousePressed(int button, int x, int y) {
+            
         }
 
         @Override
@@ -135,6 +133,10 @@ public class GameController extends Controller {
         public void mouseDragged(int oldx, int oldy, int newx, int newy) {
             //workaround for the bug in slick, because the event is called multiple times
             gc.getInput().consumeEvent();
+            int coords[] = Gameplay.getView().ScreenToGameCoords(newx,newy);
+            setMapDataSafe(coords[0], coords[1], coords[2]-2,new Block(1));
+            Log.debug("made block at "+coords[0]+","+coords[1]+","+coords[2]);
+            Gameplay.getView().getCamera().traceRayTo(coords[0], coords[1], coords[2], true);
         }
 
         @Override

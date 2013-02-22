@@ -19,12 +19,12 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 1;
+    public static final int MAPGENERATOR = 2;
     
-    private static int blocksX = 10;//16:9 => 12:27, 4:3=>12:36
+    private static int blocksX = 10;//16:9 => 12:27, 4:3=>12:36 //10
     //blocksY must be even number
-    private static int blocksY = 40;//28
-    private static int blocksZ = 10;//20
+    private static int blocksY = 40;//40
+    private static int blocksZ = 1;//10
     
     private Block data[][][] = new Block[blocksX][blocksY][blocksZ];
   
@@ -101,11 +101,6 @@ public class Chunk {
             case 2: {//flat gras
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        int z;
-                        for (z=0; z < blocksZ/2; z++){
-                            data[x][y][z] = new Block(2);
-                        }
-                        data[x][y][z-1] = new Block(3);
                         if (blocksZ>1){
                             int z;
                             for (z=0; z < blocksZ/2; z++){

@@ -42,7 +42,8 @@ public class View {
         Log.debug("Scale is:" + Float.toString(equalizationScale));
         
         camera = new Camera(
-            new Blockpointer(Gameplay.getController().getPlayer(), 0, 0, 0),
+            new Blockpointer(Map.getBlocksX()/2, Map.getBlocksY()/2, 0),
+            //new Blockpointer(Gameplay.getController().getPlayer(), 0, 0, 0),
             0, //top
             0, //left
             gc.getWidth(), //full width
@@ -112,7 +113,7 @@ public class View {
     }
     
     /**
-     * Returns the coordinates belonging to a point on the screen
+     * Returns the coordinates belonging to a point on the screen. ATTENTION! this is just 2d and the topmost layer is taken. no depth-check.
      * @param x the x position on the screen
      * @param y the y position on the screen
      * @return map coordinates
@@ -121,19 +122,19 @@ public class View {
         int[] coords = new int[3];  
         
         //reverse y to game niveau, first the zoom:
-        y=(int) ((Gameplay.getView().getCamera().getY() + y) / Gameplay.getView().getCamera().getAbsZoom());
-        //then the axis shortening:
-        y*=2;        
+        Log.debug("ScreenToGameCoords("+x+","+y+")");
+        y = ScreenYtoGame(y);
+        x = ScreenXtoGame(x);
               
-        coords[0] = ScreenXtoGame(x) / Block.DIMENSION;
+        coords[0] = x / Block.DIMENSION-1;
         
-        coords[1] = (int) ( y / Block.DIM2 + Map.getBlocksZ());
-        
+        coords[1] = (int) (y / Block.DIMENSION)*2-1;
+            
         coords[2] = Map.getBlocksZ()-1;
         
-        int[] tmpcoords = Block.posToNeighbourCoords(coords[0], coords[1], coords[2], x % Block.DIMENSION, y % Block.DIM2);
+        int[] tmpcoords = Block.posToNeighbourCoords(coords, x % Block.DIMENSION, y % Block.DIMENSION);
         coords[0] = tmpcoords[0];
-        coords[1] = tmpcoords[1];
+        coords[1] = tmpcoords[1] + coords[2]*2;
         
         return coords;
     }

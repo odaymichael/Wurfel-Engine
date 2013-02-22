@@ -512,5 +512,16 @@ public class Camera {
              traceRay(x,y,z,2);
         }
         traceRay(x,y,z,1);
+        //find top most block
+        int topmost = Chunk.getBlocksZ()-1;
+        while (Controller.getMapData(x, y, topmost).isTransparent() == true && topmost > 0 ){
+            topmost--;
+        }
+                
+        if (topmost>0) {
+            //start at topmost block and go down. Every step make it a bit darker
+            for (int level = topmost; level > 0; level--)
+                Controller.getMapData(x, y, level).setLightlevel(50* level / topmost);
+        }
     }
 }
