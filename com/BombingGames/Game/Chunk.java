@@ -106,6 +106,13 @@ public class Chunk {
                             data[x][y][z] = new Block(2);
                         }
                         data[x][y][z-1] = new Block(3);
+                        if (blocksZ>1){
+                            int z;
+                            for (z=0; z < blocksZ/2; z++){
+                                data[x][y][z] = new Block(2);
+                            }
+                            data[x][y][z-1] = new Block(1);
+                        }else data[x][y][0] = new Block(2);
                     }
                 break;
             }
