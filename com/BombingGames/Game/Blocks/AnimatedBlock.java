@@ -15,10 +15,12 @@ public abstract class AnimatedBlock extends Block {
     
     public void updateGFX(){
         delta++;
-        if (delta>2000)
-            setValue(2);
-            else
+        if (delta>50)
             setValue(1);
+        if (delta>100) {
+            setValue(0);
+            delta=0;
+        }
         
     }
 

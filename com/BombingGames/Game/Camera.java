@@ -1,5 +1,6 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.Game.Blocks.AnimatedBlock;
 import com.BombingGames.Game.Blocks.Block;
 import com.BombingGames.Game.Blocks.Blockpointer;
 import com.BombingGames.Wurfelengine;

@@ -1,5 +1,6 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.Game.Blocks.AnimatedTest;
 import com.BombingGames.Game.Blocks.Block;
 import com.BombingGames.Game.Blocks.ExplosiveBarrel;
 import com.BombingGames.Wurfelengine;
@@ -19,7 +20,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 2;
+    public static final int MAPGENERATOR = 5;
     
     private static int blocksX = 10;//16:9 => 12:27, 4:3=>12:36 //10
     //blocksY must be even number
@@ -125,8 +126,7 @@ public class Chunk {
                 break;
             }
                 
-            case 4: {//flat gras with one random pillar per chunk
-                
+            case 4: {//explosive barrel test                
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         data[x][y][2] = new Block(1);
@@ -137,8 +137,19 @@ public class Chunk {
                 data[5][5][2] = new Block(2);
                 
                 break;
+            }
                 
-            }   
+            case 5: {//animation test                
+                for (int x=0; x < blocksX; x++)
+                    for (int y=0; y < blocksY; y++){
+                        data[x][y][1] = new Block(2);
+                        data[x][y][0] = new Block(2);
+                    }
+                data[blocksX/2][blocksY/2][2] = new AnimatedTest();
+                data[blocksX/2][blocksY/2][1] = new Block(2);
+                
+                break;
+            } 
         }
     }
     
