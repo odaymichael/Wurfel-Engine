@@ -99,10 +99,13 @@ public class Chunk {
             }
                 
             case 2: {//flat gras
-               for (int x=0; x < blocksX; x++)
+                for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = new Block(2);
-                        data[x][y][1] = new Block(1);
+                        int z;
+                        for (z=0; z < blocksZ/2; z++){
+                            data[x][y][z] = new Block(2);
+                        }
+                        data[x][y][z-1] = new Block(3);
                     }
                 break;
             }
