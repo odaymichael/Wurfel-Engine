@@ -57,11 +57,6 @@ public class View {
             Gameplay.MSGSYSTEM.add("The chunks are maybe too small for this camera height/resolution to grant a stable experience", "Warning");
             Log.warn("The chunks are maybe too small for this camera height/resolution to grant a stable experience");
         }
-        
-     /*font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 12);
-        tTFont = new TrueTypeFont(font, true);
-        font = new java.awt.Font("Verdana", java.awt.Font.BOLD, 8);
-        tTFont_small = new TrueTypeFont(font, true);*/
      }
     
     /**
