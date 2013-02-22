@@ -12,17 +12,17 @@ import com.BombingGames.Game.Map;
 public class SelfAwareBlock extends Block{
    private int absCoordX, absCoordY, coordZ;
     
-    SelfAwareBlock(int x,int y, int z){
+    public SelfAwareBlock(int x,int y, int z) {
         super();
         setAbsCoords(x,y,z);
     }
     
-    SelfAwareBlock(int id,int x,int y, int z){
+    public SelfAwareBlock(int id,int x,int y, int z) {
        super(id);
        setAbsCoords(x,y,z);
     }
    
-    SelfAwareBlock(int id, int value,int x,int y, int z){
+    public SelfAwareBlock(int id, int value,int x,int y, int z) {
        super(id, value);
        setAbsCoords(x,y,z);
     }
@@ -123,58 +123,6 @@ public class SelfAwareBlock extends Block{
         Gameplay.getView().getCamera().traceRayTo(getCoordX(), getCoordY(), getCoordZ(), false);
     }
     
-   /**
-     * Returns a neighbour block.
-     * 701
-     * 682
-     * 543
-     * @param side Counts clockwise startin with the top 0.
-     * @param relZ if you want to check another layer. relZ is added to current Z coord.
-     * @return The neighbour block
-     */
-    public int[] getNeighbourCoords(int side, int relZ){
-        int result[] = new int[3];
-        switch(side){
-            case 0:
-                result[0] = getCoordX();
-                result[1] = getCoordY()-2;
-                break;
-            case 1:
-                result[0] = getCoordX() + (getCoordY() % 2 == 1 ? 1 : 0);
-                result[1] = getCoordY()-1;
-                break;
-            case 2:
-                result[0] = getCoordX()+1;
-                result[1] = getCoordY();
-                break;
-            case 3:
-                result[0] = getCoordX() + (getCoordY() % 2 == 1 ? 1 : 0);
-                result[1] = getCoordY()+1;
-                break;
-            case 4:
-                result[0] = getCoordX();
-                result[1] = getCoordY()+2;
-                break;
-            case 5:
-                result[0] = getCoordX() - (getCoordY() % 2 == 0 ? 1 : 0);
-                result[1] = getCoordY()+1;
-                break;
-            case 6:
-                result[0] = getCoordX()-1;
-                result[1] = getCoordY();
-                break;
-            case 7:
-                result[0] = getCoordX() - (getCoordY() % 2 == 0 ? 1 : 0);
-                result[1] = getCoordY()-1;
-                break;
-            default:
-                result[0] = getCoordX();
-                result[1] = getCoordY();      
-        }
-        
-        result[2] = coordZ + relZ;
-        return result;
-    }
     
     /**
      * 
@@ -182,8 +130,8 @@ public class SelfAwareBlock extends Block{
      * @param relZ
      * @return
      */
-    public Block getNeighbourBlock(int side, int relZ){
-        int neighbourcoords[] = getNeighbourCoords(side,relZ);
+    public Block getNeighbourBlock(int side){
+        int neighbourcoords[] = Block.sideNumbToNeighbourCoords(getCoordX(), getCoordY(), coordZ, side);
         return Controller.getMapDataSafe(neighbourcoords[0], neighbourcoords[1], neighbourcoords[2]);
     }
 }

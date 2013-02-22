@@ -366,7 +366,87 @@ public class Block {
             return colorlist[id][value]; 
         } else return colorlist[id][value];
     }
+    
+      /**
+     * Returns the field-number where the coordiantes are in in relation to the current Block. Counts clockwise startin with the top 0.
+     * If you want to get the neighbour you have to use a SelfAwareBlock and the method getNeighbourBlock
+     * 701
+     * 682
+     * 543
+     * @param x value in pixels
+     * @param y value in pixels
+     * @return Returns the fieldnumber of the coordinates. 8 is self.
+     * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int) 
+     */
+    public static int sideNumb(int x, int y) {
+        int result = 8;
+        if (x+y <= DIM2)//top left
+            result = 7;
+        if (x-y >= DIM2) //top right
+            if (result==7) result=0; else result = 1;
+        if (x+y >= 3*DIM2)//bottom right
+            if (result==1) result=2; else result = 3;
+        if (-x+y >= DIM2) //bottom left
+            if (result==3) result=4; else if (result==7) result = 6; else result = 5;
+        return result;
+    }
+    
+    public static int[] sideNumbToNeighbourCoords (int xcoord, int ycoord, int zcoord, int sidenumb){
+        int result[] = new int[3];
+        switch(sidenumb){
+            case 0:
+                result[0] = xcoord;
+                result[1] = ycoord-2;
+                break;
+            case 1:
+                result[0] = xcoord + (ycoord % 2 == 1 ? 1 : 0);
+                result[1] = ycoord-1;
+                break;
+            case 2:
+                result[0] = xcoord+1;
+                result[1] = ycoord;
+                break;
+            case 3:
+                result[0] = xcoord + (ycoord % 2 == 1 ? 1 : 0);
+                result[1] = xcoord+1;
+                break;
+            case 4:
+                result[0] = xcoord;
+                result[1] = ycoord+2;
+                break;
+            case 5:
+                result[0] = xcoord - (ycoord % 2 == 0 ? 1 : 0);
+                result[1] = ycoord+1;
+                break;
+            case 6:
+                result[0] = xcoord-1;
+                result[1] = ycoord;
+                break;
+            case 7:
+                result[0] = xcoord - (ycoord % 2 == 0 ? 1 : 0);
+                result[1] = ycoord-1;
+                break;
+            default:
+                result[0] = xcoord;
+                result[1] = ycoord;      
+        }
         
+        result[2] = zcoord;
+        return result;
+    }
+    
+    /**
+     * Get the coordinates correct coordiantes when you have coordiantes and a position laying outside this field.
+     * @param xcoord The coordinate of your field
+     * @param ycoord The coordinate of your field
+     * @param zcoord The coordinate of your field
+     *  @param xpos The x-position inside/outside this field
+     * @param ypos The y-position inside/outside this field 
+     * @return The neighbour block or itself
+     */
+    public static int[] posToNeighbourCoords (int xcoord, int ycoord, int zcoord, int xpos, int ypos){
+        return sideNumbToNeighbourCoords(xcoord, ycoord, zcoord, sideNumb(xpos, ypos));
+    }
     
 
     //getter & setter
@@ -549,29 +629,7 @@ public class Block {
                     renderRight = visible;
     }
     
-  /**
-     * Returns the field where the coordiantes are in in relation to the current Block. Counts clockwise startin with the top 0.
-     * If you want to get the neighbour you have to use a SelfAwareBlock and the method getNeighbourBlock
-     * 701
-     * 682
-     * 543
-     * @param x value in pixels
-     * @param y value in pixels
-     * @return Returns the fieldnumber of the coordinates. 8 is self.
-     * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int) 
-     */
-    protected int getSideNumb(int x, int y) {
-        int result = 8;
-        if (x+y <= DIM2)//top left
-            result = 7;
-        if (x-y >= DIM2) //top right
-            if (result==7) result=0; else result = 1;
-        if (x+y >= 3*DIM2)//bottom right
-            if (result==1) result=2; else result = 3;
-        if (-x+y >= DIM2) //bottom left
-            if (result==3) result=4; else if (result==7) result = 6; else result = 5;
-        return result;
-    }
+
 
     /**
      * Returns the name of the block

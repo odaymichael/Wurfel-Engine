@@ -118,13 +118,23 @@ public class View {
      * @return map coordinates
      */
     public int[] ScreenToGameCoords(int x, int y){
-        int[] coords = new int[3];
-        Log.debug("ScreenXtoGame(x): "+ScreenXtoGame(x));
+        int[] coords = new int[3];  
+        
+        //reverse y to game niveau, first the zoom:
+        y=(int) ((Gameplay.getView().getCamera().getY() + y) / Gameplay.getView().getCamera().getAbsZoom());
+        //then the axis shortening:
+        y*=2;        
+              
         coords[0] = ScreenXtoGame(x) / Block.DIMENSION;
-        coords[1] = (int) (((y + Gameplay.getView().getCamera().getY()) / Gameplay.getView().getCamera().getAbsZoom())
-            / (Block.DIMENSION/4)
-            +Map.getBlocksZ()-1);
+        
+        coords[1] = (int) ( y / Block.DIM2 + Map.getBlocksZ());
+        
         coords[2] = Map.getBlocksZ()-1;
+        
+        int[] tmpcoords = Block.posToNeighbourCoords(coords[0], coords[1], coords[2], x % Block.DIMENSION, y % Block.DIM2);
+        coords[0] = tmpcoords[0];
+        coords[1] = tmpcoords[1];
+        
         return coords;
     }
 }

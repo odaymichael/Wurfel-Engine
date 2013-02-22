@@ -43,7 +43,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
      * @see com.BombingGames.Game.Blocks.Block#getSideNumb(int, int) 
      */
     protected int getSideNumb() {
-        return getSideNumb((int) getPos()[0],(int) getPos()[1]);
+        return Block.sideNumb((int) getPos()[0],(int) getPos()[1]);
     }
         
     /**
@@ -104,47 +104,47 @@ public abstract class MovingBlock extends SelfAwareBlock {
             
             //check for movement in x
             //top corner
-            int neighbourNumber = getSideNumb((int) newx, (int) newy - Block.DIM2); 
-            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
+            int neighbourNumber = Block.sideNumb((int) newx, (int) newy - Block.DIM2); 
+            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                 validmovement = false;
             //bottom corner
-            neighbourNumber = getSideNumb((int) newx, (int) newy + Block.DIM2); 
-            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
+            neighbourNumber = Block.sideNumb((int) newx, (int) newy + Block.DIM2); 
+            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                 validmovement = false; 
             
             //find out the direction of the movement
             if (oldx-newx > 0) {
                 //check left corner
-                neighbourNumber = getSideNumb((int) newx - Block.DIM2, (int) newy);
-                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
+                neighbourNumber = Block.sideNumb((int) newx - Block.DIM2, (int) newy);
+                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                    validmovement = false;
             } else {
                 //check right corner
-                neighbourNumber = getSideNumb((int) newx + Block.DIM2, (int) newy);
-                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
+                neighbourNumber = Block.sideNumb((int) newx + Block.DIM2, (int) newy);
+                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                    validmovement = false;
             }
             
             //check for movement in y
             //left corner
-            neighbourNumber = getSideNumb((int) newx - Block.DIM2, (int) newy); 
-            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
+            neighbourNumber = Block.sideNumb((int) newx - Block.DIM2, (int) newy); 
+            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                 validmovement = false;
 
             //right corner
-            neighbourNumber = getSideNumb((int) newx + Block.DIM2, (int) newy); 
-            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
+            neighbourNumber = Block.sideNumb((int) newx + Block.DIM2, (int) newy); 
+            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                 validmovement = false;  
             
             if (oldy-newy > 0) {
                 //check top corner
-                neighbourNumber = getSideNumb((int) newx, (int) newy - Block.DIM2);
-                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
+                neighbourNumber = Block.sideNumb((int) newx, (int) newy - Block.DIM2);
+                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                    validmovement = false;
             } else {
                 //check bottom corner
-                neighbourNumber = getSideNumb((int) newx, (int) newy + Block.GAMEDIMENSION/2);
-                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber, 0).isObstacle())
+                neighbourNumber = Block.sideNumb((int) newx, (int) newy + Block.GAMEDIMENSION/2);
+                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                    validmovement = false;
             }
             
