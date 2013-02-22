@@ -69,6 +69,18 @@ public class Controller {
     }
     
     /**
+     * Shortcut to  "Map.setDataSafe(int, int, int, Block block)"
+     * @param x
+     * @param y
+     * @param z
+     * @param block 
+     * 
+     */
+    public static void setMapData(int x, int y, int z, Block block){
+        map.setData(x, y, z, block);
+    }
+    
+    /**
      * Shortcut to  "Map.getDataSafe(int, int, int)"
      * @param x
      * @param y
@@ -76,8 +88,8 @@ public class Controller {
      * @param block 
      * @see com.BombingGames.Game.Map#getData(int, int, int) 
      */
-    public static void setMapData(int x, int y, int z, Block block){
-        map.setData(x, y, z, block);
+    public static void setMapDataSafe(int x, int y, int z, Block block){
+        map.setDataSafe(x, y, z, block);
     }
     
     /**

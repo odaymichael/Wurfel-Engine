@@ -1,6 +1,7 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.Game.Blocks.Blockpointer;
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -26,7 +27,7 @@ public class View {
      * @throws SlickException
      */
     public View(GameContainer gc) throws SlickException {
-        // initialise the font which CAUSES LONG LOADING TIME!!!
+        // initialise the ttF font which CAUSES LONG LOADING TIME!!!
         //TrueTypeFont trueTypeFont;
 
         //startFont = Font.createFont(Font.TRUETYPE_FONT,new BufferedInputStream(this.getClass().getResourceAsStream("Blox2.ttf")));
@@ -41,6 +42,7 @@ public class View {
         Log.debug("Scale is:" + Float.toString(equalizationScale));
         
         camera = new Camera(
+            new Blockpointer(Gameplay.getController().getPlayer(), 0, 0, 0),
             0, //top
             0, //left
             gc.getWidth(), //full width
@@ -48,7 +50,7 @@ public class View {
             equalizationScale
         );
         
-        //camera.FocusOnBlock(new Blockpointer(Chunk.getBlocksX()*3/2,Map.getBlocksY()/2,Chunk.getBlocksZ()/2));
+        //camera.focusOnBlock(new Blockpointer(Chunk.getBlocksX()*3/2,Map.getBlocksY()/2,Chunk.getBlocksZ()/2));
         
         if (camera.getTotalHeight() > Chunk.getBlocksY()*Block.DIM2/2) {
             Gameplay.MSGSYSTEM.add("The chunks are maybe too small for this camera height/resolution to grant a stable experience", "Warning");

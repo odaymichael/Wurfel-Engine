@@ -317,34 +317,40 @@ public class Block {
     }
     
    /**
-     * Get the screen X-position where to block is rendered
+     * Get the screen X-position where to block is rendered. if camera = null the position of it get's not calculated
      * @param x block coord
      * @param y block coord
      * @param z block coord
-     * @param camera the camera which renders the scene
+     * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen X-position in pixels
      */
-    public static int getScreenPosX(int x, int y, int z, Camera camera){
-        return -camera.getX()
+    public static int getScreenPosX(int x, int y, int z, Camera camera) {
+        int camerax = 0;
+        if (camera != null) camerax = camera.getX();
+        
+        return - camerax
                + x*DIMENSION
                + (y%2) * DIM2
                + (int) (Controller.getMapData(x, y, z).getPos(0));
     }
     
     /**
-     * Get the screen Y-position where to block is rendered
+     * Get the screen Y-position where to block is rendered.  if camera = null the position of it get's not calculated
      * @param x block coord
      * @param y block coord
      * @param z block coord
-     * @param camera the camera which renders the scene
+     * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen Y-position in pixels
      */
     public static int getScreenPosY(int x, int y, int z, Camera camera){
-        return - camera.getY()
-            + y*DIM4
-            - z*DIM2
-            + (int) (Controller.getMapData(x, y, z).getPos(1)/2)
-            - (int) (Controller.getMapData(x, y, z).getPos(2)/Math.sqrt(2));   
+        int cameray = 0;
+        if (camera != null) cameray = camera.getY();
+        
+        return - cameray
+               + y*DIM4
+               - z*DIM2
+               + (int) (Controller.getMapData(x, y, z).getPos(1)/2)
+               - (int) (Controller.getMapData(x, y, z).getPos(2)/Math.sqrt(2));   
     }
     
     

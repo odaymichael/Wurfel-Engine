@@ -108,7 +108,7 @@ public class GameController extends Controller {
         @Override
         public void mouseClicked(int button, int x, int y, int clickCount) {
             int coords[] = Gameplay.getView().ScreenToGameCoords(x,y);
-            setMapData(coords[0], coords[1], coords[2]+1,new Block(1));
+            setMapDataSafe(coords[0], coords[1], coords[2]+1,new Block(1));
             Log.debug("made block at"+coords[0]+","+coords[1]+","+coords[2]);
             Gameplay.getView().getCamera().traceRayTo(coords[0], coords[1], coords[2], true);
         }
@@ -133,13 +133,8 @@ public class GameController extends Controller {
 
         @Override
         public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-            //workaround for the bug, because the event is called multiple times
+            //workaround for the bug in slick, because the event is called multiple times
             gc.getInput().consumeEvent();
-            
-            if (Gameplay.getView().getCamera().getFocus()) {
-                Gameplay.getView().getCamera().setX(Gameplay.getView().getCamera().getX()+newx-oldx);
-                Gameplay.getView().getCamera().setY(Gameplay.getView().getCamera().getY()+newx-oldy);
-            }
         }
 
         @Override

@@ -129,8 +129,8 @@ public class Map {
         
         for (int pos=0; pos<9; pos++){
             //refresh coordinates
-            coordlist[pos][0] += newmiddle == 3 ? -1 : (newmiddle == 5 ? 1 : 0);
-            coordlist[pos][1] += newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0);
+            coordlist[pos][0] += (newmiddle == 3 ? -1 : (newmiddle == 5 ? 1 : 0));
+            coordlist[pos][1] += (newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0));
             
             if (isMovingChunkPossible(pos, newmiddle)){
                 setChunk(pos, getChunk(data_copy, pos - 4 + newmiddle));
@@ -271,7 +271,7 @@ public class Map {
     }
 
     /**
-     * 
+     * The minimap is a 2d representation of the map.
      * @return the minimap of this map
      */
     public Minimap getMinimap() {
@@ -284,30 +284,25 @@ public class Map {
      * @param y If too high or too low, it takes the highest/deepest value possible
      * @param z If too high or too low, it takes the highest/deepest value possible
      * @return A single block at the wanted coordinates.
+     * @see com.BombingGames.Game.Map#getData(int, int, int) 
      */
     public Block getDataSafe(int x, int y, int z){
         if (x >= blocksX){
             x = blocksX-1;
-            //Log.warn("X too high!");
         } else if( x<0 ){
             x = 0;
-            //Log.warn("X too low!");
         }
         
         if (y >= blocksY){
             y = blocksY-1;
-           // Log.warn("Y too high!");
-        } else if( y<0 ){
+        } else if( y < 0 ){
             y = 0;
-            //Log.warn("Y too low!");
         }
         
         if (z >= blocksZ){
             z = blocksZ-1;
-            //Log.warn("Z too high!");
-        } else if( z<0 ){
+        } else if( z < 0 ){
             z = 0;
-            //Log.warn("Z too low!");
         }
         
         return data[x][y][z];    
@@ -315,11 +310,10 @@ public class Map {
     
     /**
      * Returns  a Block without checking the parameters first. Good for debugging and also faster.
-     * @param x 
-     * @param y 
-     * @param z 
-     * @return the single block
-     * @see com.BombingGames.Game.Map#getDataSafe(int, int, int) 
+     * @param x position
+     * @param y position
+     * @param z position
+     * @return the single block you wanted
      */
     public Block getData(int x, int y, int z){
         return data[x][y][z];  
@@ -327,44 +321,52 @@ public class Map {
     
     /**
      * Set a block at a specific coordinate
-     * @param x
-     * @param y
-     * @param z
+     * @param x position
+     * @param y position
+     * @param z position
      * @param block The block you want to set.
      */
     public void setData(int x, int y, int z, Block block){
-        if (x >= Chunk.getBlocksX()*3){
-            x = Chunk.getBlocksX()*3-1;
-           // Log.warn("X too high!");
-        } else if(x<0){
-            x = 0;
-           // Log.warn("X too low!");
-        }
-        
-        if (y >= blocksY){
-            y = blocksY-1;
-            //Log.warn("Y too high!");
-        } else if(y<0){
-            y = 0;
-           // Log.warn("Y too low!");
-        }
-        
-        if (z >= Chunk.getBlocksZ()){
-            z = Chunk.getBlocksZ()-1;
-            //Log.warn("Z too high!");
-        } else if(z<0){
-            z = 0;
-            //Log.warn("Z too low!");
-        }
         data[x][y][z] = block;
        // Gameplay.getView().traceRayTo(x, y, z, true);
     }
     
     /**
-     * 
+     * Set a block at a specific coordinate
+     * @param x position
+     * @param y position
+     * @param z position
+     * @param block The block you want to set.
+     * @see com.BombingGames.Game.Map#setData(int x, int y, int z, Block block)
      */
-    public void earthquake(){
-        int numberofblocks = 2000;
+    public void setDataSafe(int x, int y, int z, Block block){
+        if (x >= blocksX){
+            x = blocksX-1;
+        } else if( x<0 ){
+            x = 0;
+        }
+        
+        if (y >= blocksY){
+            y = blocksY-1;
+        } else if( y < 0 ){
+            y = 0;
+        }
+        
+        if (z >= blocksZ){
+            z = blocksZ-1;
+        } else if( z < 0 ){
+            z = 0;
+        }
+        
+        data[x][y][z] = block;
+    }
+    
+    
+    /**
+     * a method who gives random blocks offset
+     * @param numberofblocks the amount of moved blocks
+     */
+    public void earthquake(int numberofblocks){
         int[] x = new int[numberofblocks];
         int[] y = new int[numberofblocks];
         int[] z = new int[numberofblocks];
@@ -376,8 +378,12 @@ public class Map {
             z[i] = (int) (Math.random()*blocksZ-1);
         }
         
-        for (int i=0;i<numberofblocks;i++){
-            float[] pos = {(float) (Math.random()*Block.DIM2), (float) (Math.random()*Block.DIM2), (float) (Math.random()*Block.GAMEDIMENSION)};
+        for (int i=0;i < numberofblocks; i++){
+            float[] pos = {
+                (float) (Math.random()*Block.DIM2),
+                (float) (Math.random()*Block.DIM2),
+                (float) (Math.random()*Block.GAMEDIMENSION)
+            };
             data[x[i]][y[i]][z[i]].setPos(pos);
         }
         requestRecalc();
@@ -398,7 +404,7 @@ public class Map {
                 
                 if (topmost>0) {
                     //start at topmost block and go down. Every step make it a bit darker
-                    for (int level=topmost; level > 0; level--)
+                    for (int level = topmost; level > 0; level--)
                         data[x][y][level].setLightlevel(50* level / topmost);
                 }
             }

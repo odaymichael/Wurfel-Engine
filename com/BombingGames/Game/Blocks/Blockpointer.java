@@ -1,8 +1,6 @@
 package com.BombingGames.Game.Blocks;
 
 import com.BombingGames.Game.Controller;
-
-
   
 /**
  *The pointer can point to a SelfAwareBlock or to a fixed coordinate.

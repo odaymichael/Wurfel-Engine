@@ -2,7 +2,6 @@ package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
 import com.BombingGames.Game.Blocks.Blockpointer;
-import com.BombingGames.Game.Blocks.Player;
 import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;
 
@@ -27,44 +26,43 @@ public class Camera {
     
     private int xPos, yPos, gameWidth, gameHeight;
     private int leftborder, topborder, rightborder, bottomborder;
-    private boolean focus = false;
     private Blockpointer focusblock;
     private float zoom = 1;
     private ArrayList<Renderblock> depthsort = new ArrayList<Renderblock>();
 
-    /**
+    
+     /**
      * Creates a camera. Screen does refer to the output of the camera not the real size on the display.
-     * @param x 
-     * @param y 
-     * @param width 
-     * @param height 
-     * @param scale The zoom factor.
+     * @param focusblock the block in the focus
+     * @param x the position of the camera
+     * @param y the position of the camera
+     * @param width the screen width
+     * @param height the screen width
+     * @param scale the zoom factor.
      */
-    public Camera(int x, int y,int width, int height, float scale) {
+    public Camera(Blockpointer focusblock, int x, int y,int width, int height, float scale) {
         screenX = x;
         screenY = y;
         //to achieve the wanted size it must be scaled in the other direction
         screenWidth = (int) (width / scale);
         screenHeight = (int) (height / scale);
         
+        this.focusblock = focusblock;
+        
         gameWidth = (int) (screenWidth / zoom);
         gameHeight = (int) (screenHeight / zoom);
         Wurfelengine.getGraphics().setWorldClip(x, y, screenWidth, screenHeight);
-    } 
-       
+        
+        update();
+    }
+
+    
     /**
      * Updates the camera
      */
-    public void update() {
-        if (focus) {//focus on block
-            xPos = Block.getScreenPosX(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), this) - gameWidth / 2; 
-            yPos = Block.getScreenPosY(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), this) - gameHeight / 2; 
-            
-        } else {//focus on player
-            Player player = Gameplay.getController().getPlayer();
-            xPos = Player.getScreenPosX(player.getCoordX(), player.getCoordY(), player.getCoordZ(), this) - gameWidth / 2 + xPos;            
-            yPos = Player.getScreenPosY(player.getCoordX(), player.getCoordY(), player.getCoordZ(), this) - gameHeight / 2 + yPos;
-        }
+    public final void update() {
+        xPos = Block.getScreenPosX(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), null) - gameWidth / 2;            
+        yPos = Block.getScreenPosY(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), null) - gameHeight / 2 ;
         
         //update borders
         leftborder = xPos / Block.DIMENSION - 1;
@@ -129,17 +127,10 @@ public class Camera {
      * Use this if you want to focus on a special block
      * @param blockpointer
      */
-    public void FocusOnBlock(Blockpointer blockpointer){
-        focus = true;
+    public void focusOnBlock(Blockpointer blockpointer){
         focusblock = blockpointer;        
     }
     
-    /**
-     * The camera now follows the player
-     */
-    public void FocusOnPlayer(){
-        focus = false;
-    }
     
     /**
      * Returns the left border of the visible area.
@@ -231,14 +222,6 @@ public class Camera {
         return gameHeight + Block.DIM2*Map.getBlocksZ();
     }
 
-    
-    /**
-     * False= Focus on player, true= Focus is on a block
-     * @return
-     */
-    public boolean getFocus(){
-        return focus;
-    }
 
     
     /**
