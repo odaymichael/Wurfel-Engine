@@ -42,8 +42,8 @@ public class View {
         Log.debug("Scale is:" + Float.toString(equalizationScale));
         
         camera = new Camera(
-            new Blockpointer(Map.getBlocksX()/2, Map.getBlocksY()/2, 0),
-            //new Blockpointer(Gameplay.getController().getPlayer(), 0, 0, 0),
+            //new Blockpointer(Map.getBlocksX()/2, Map.getBlocksY()/2, 0),
+            new Blockpointer(Gameplay.getController().getPlayer(), 0, 0, 0),
             0, //top
             0, //left
             gc.getWidth(), //full width

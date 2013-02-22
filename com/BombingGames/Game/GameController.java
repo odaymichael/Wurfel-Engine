@@ -26,8 +26,7 @@ public class GameController extends Controller {
         super(gc, game);
         this.gc = gc;
         
-        //setPlayer(new Player((int) (Chunk.getBlocksX()*1.5),(int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2));
-        //getMap().setData((int) (Chunk.getBlocksX()*1.5), (int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2, getPlayer());
+        setPlayer(new Player((int) (Chunk.getBlocksX()*1.5),(int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2));
         
         gc.getInput().addMouseListener(new MouseDraggedListener());
     }

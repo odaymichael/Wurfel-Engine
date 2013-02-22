@@ -145,6 +145,7 @@ public class Controller {
      */
     public void setPlayer(Player player) {
         this.player = player;
+        getMap().setData(player.getCoordX(), player.getCoordY(), player.getCoordZ(), player);
     }
 
     /**

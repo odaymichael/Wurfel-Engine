@@ -130,9 +130,7 @@ public class SelfAwareBlock extends Block{
      * @return the neighbour block
      */
     public Block getNeighbourBlock(int side){
-        int neighbourcoords[] = Block.sideNumbToNeighbourCoords(
-            new int[]{getCoordX(), getCoordY(), coordZ},
-            side);
+        int neighbourcoords[] = Block.sideNumbToNeighbourCoords(new int[]{getCoordX(), getCoordY(), coordZ}, side);
         return Controller.getMapDataSafe(neighbourcoords[0], neighbourcoords[1], neighbourcoords[2]);
     }
 }

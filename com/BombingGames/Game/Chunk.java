@@ -24,7 +24,7 @@ public class Chunk {
     private static int blocksX = 10;//16:9 => 12:27, 4:3=>12:36 //10
     //blocksY must be even number
     private static int blocksY = 40;//40
-    private static int blocksZ = 1;//10
+    private static int blocksZ = 10;//10
     
     private Block data[][][] = new Block[blocksX][blocksY][blocksZ];
   
