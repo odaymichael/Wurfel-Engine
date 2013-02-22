@@ -14,9 +14,9 @@ public class Blockpointer{
     
     /**
      * Create a pointer to field in the coordinate system.
-     * @param x 
-     * @param y 
-     * @param z 
+     * @param x the coordinates of the block you are pointing to
+     * @param y the coordinates of the block you are pointing to
+     * @param z the coordinates of the block you are pointing to
      */
     public Blockpointer(int x, int y, int z) {
         //here the coordinates are values which are written/read
@@ -26,11 +26,11 @@ public class Blockpointer{
     }
     
     /**
-     * Create a blockpointer who points at a SelfAwareBlock and follows him
+     * Create a blockpointer who points at a SelfAwareBlock and follows him. You can add a coordainte offset.
      * @param block the block where you are pointing at.
-     * @param x
-     * @param y 
-     * @param z  
+     * @param x the amount of x added to the coordiantes of the block
+     * @param y the amount of x added to the coordiantes of the block
+     * @param z the amount of x added to the coordiantes of the block 
      */
     public Blockpointer(SelfAwareBlock block, int x, int y, int z){
         this.block = block;
@@ -41,7 +41,7 @@ public class Blockpointer{
     }
 
     /**
-     * 
+     * Returns the coorinates of the block.
      * @return
      */
     public int getCoordX() {
@@ -51,7 +51,7 @@ public class Blockpointer{
     }
 
     /**
-     * Set the summand (pointer to SelfAwareBlock) or the value (pointer to coordinate triple)
+     * Set the x-coordainte-offset (when pointer to SelfAwareBlock) or the value (pointer to coordinate triple)
      * @param X
      */
     public void setCoordX(int X) {
@@ -69,7 +69,7 @@ public class Blockpointer{
     }
 
     /**
-     * Set the summand (pointer to SelfAwareBlock) or the value (pointer to coordinate triple)
+     * Set the y-coordainte-offset (pointer to SelfAwareBlock) or the value (pointer to coordinate triple)
      * @param Y
      */
     public void setCoordY(int Y) {
@@ -77,7 +77,7 @@ public class Blockpointer{
     }
 
     /**
-     * 
+     * Returns the coorinates of the block.
      * @return
      */
     public int getCoordZ() {
@@ -87,7 +87,7 @@ public class Blockpointer{
     }
 
     /**
-     * Set the summand (pointer to SelfAwareBlock) or the value (pointer to coordinate triple)
+     * Set the z-coordainte-offset (when pointer to SelfAwareBlock) or the value (pointer to coordinate triple)
      * @param Z
      */
     public void setCoordZ(int Z) {
@@ -103,7 +103,7 @@ public class Blockpointer{
     }
     
     /**
-     * Set a block at the reference
+     * Set a block at the reference.
      * @param block 
      */
     public void setBlock(Block block) {

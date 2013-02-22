@@ -396,35 +396,35 @@ public class Block {
         switch(sidenumb){
             case 0:
                 result[0] = xcoord;
-                result[1] = ycoord-2;
+                result[1] = ycoord - 2;
                 break;
             case 1:
                 result[0] = xcoord + (ycoord % 2 == 1 ? 1 : 0);
-                result[1] = ycoord-1;
+                result[1] = ycoord - 1;
                 break;
             case 2:
-                result[0] = xcoord+1;
+                result[0] = xcoord + 1;
                 result[1] = ycoord;
                 break;
             case 3:
                 result[0] = xcoord + (ycoord % 2 == 1 ? 1 : 0);
-                result[1] = xcoord+1;
+                result[1] = xcoord + 1;
                 break;
             case 4:
                 result[0] = xcoord;
-                result[1] = ycoord+2;
+                result[1] = ycoord + 2;
                 break;
             case 5:
                 result[0] = xcoord - (ycoord % 2 == 0 ? 1 : 0);
-                result[1] = ycoord+1;
+                result[1] = ycoord + 1;
                 break;
             case 6:
-                result[0] = xcoord-1;
+                result[0] = xcoord - 1;
                 result[1] = ycoord;
                 break;
             case 7:
                 result[0] = xcoord - (ycoord % 2 == 0 ? 1 : 0);
-                result[1] = ycoord-1;
+                result[1] = ycoord - 1;
                 break;
             default:
                 result[0] = xcoord;

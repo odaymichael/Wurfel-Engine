@@ -125,10 +125,9 @@ public class SelfAwareBlock extends Block{
     
     
     /**
-     * 
-     * @param side
-     * @param relZ
-     * @return
+     * Get the neighbour block to a side
+     * @param side the id of the side
+     * @return the neighbour block
      */
     public Block getNeighbourBlock(int side){
         int neighbourcoords[] = Block.sideNumbToNeighbourCoords(getCoordX(), getCoordY(), coordZ, side);
