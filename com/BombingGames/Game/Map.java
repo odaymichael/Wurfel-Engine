@@ -1,6 +1,6 @@
 package com.BombingGames.Game;
 
-import com.BombingGames.Game.Blocks.AnimatedBlock;
+import com.BombingGames.Game.Blocks.AbstractAnimatedBlock;
 import com.BombingGames.Game.Blocks.Block;
 import com.BombingGames.MainMenu.MainMenuState;
 import org.lwjgl.opengl.GL11;
@@ -257,8 +257,8 @@ public class Map {
             int[] item = camera.getDepthsortCoord(i);
             
             Block block = data[item[0]][item[1]][item[2]];
-            if (block instanceof AnimatedBlock)
-                ((AnimatedBlock) block).updateGFX();
+            if (block instanceof AbstractAnimatedBlock)
+                ((AbstractAnimatedBlock) block).updateGFX();
             
             block.render(item[0],item[1],item[2], camera);            
         }

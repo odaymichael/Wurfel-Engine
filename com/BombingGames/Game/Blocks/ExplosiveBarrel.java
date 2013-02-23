@@ -9,11 +9,14 @@ import com.BombingGames.Game.Controller;
 public class ExplosiveBarrel extends SelfAwareBlock {
     public static int RADIUS = 2;
 
+    protected ExplosiveBarrel() {
+    }
+    
     /**
-     * Creates a barrel, needs id 71
+     * Creates a barrel
      */
-    public ExplosiveBarrel(int x, int y, int z) {
-        super(71, x,y,z);
+    protected ExplosiveBarrel(int x, int y, int z) {
+        super(x,y,z);
     }
     
     

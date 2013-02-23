@@ -8,7 +8,7 @@ import org.newdawn.slick.Sound;
  *The Player is a character who can walk.
  * @author Benedikt
  */
-public class Player extends MovingBlock{
+public class Player extends AbstractMovingBlock{
    private Sound fallsound = new Sound("com/BombingGames/Game/Sounds/wind.wav");
    private Sound runningsound = new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav");
    private String controlls = "WASD";
@@ -22,10 +22,10 @@ public class Player extends MovingBlock{
      * @throws SlickException
      */
     public Player(int x, int y, int z) throws SlickException {
-        super(40,1,x,y,z);
+        super(x,y,z);
         //creates the top of the player
-        topblock = new Blockpointer(this, 0, 0, 1);
-        topblock.setBlock(new Block(40));
+        //topblock = new Blockpointer(this, 0, 0, 1);
+        //topblock.setBlock(Block.create(40));
     }
     
   

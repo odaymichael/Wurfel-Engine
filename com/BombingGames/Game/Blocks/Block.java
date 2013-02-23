@@ -47,6 +47,12 @@ public class Block {
      */
     public static final int[][][][] SPRITEPOS = new int[99][9][3][2];
     
+    /**
+     * Containts the names of the blocks. index=id
+     */
+    public static final String[] NAMELIST = new String[99];   
+    
+    
     private static Color[][] colorlist = new Color[99][9];
     
     /**
@@ -54,8 +60,7 @@ public class Block {
      */
     private static Image spritesheet;
     
-    private final int id;
-    private final String name;    
+    private int id; 
     private int value;
     private float[] pos = {Block.DIM2, Block.DIM2, 0};
     private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft, invisible, liquid; 
@@ -182,7 +187,7 @@ public class Block {
         SPRITEPOS[72][1][0][1] = 720;
         
         try {
-            spritesheet = new SpriteSheet("com/BombingGames/Game/Blocks/Blockimages/SideSprite.png", DIMENSION, (int) (DIM2*1.5f));
+            spritesheet = new SpriteSheet("com/BombingGames/Game/Blocks/Blockimages/SideSprite.png", DIMENSION, (int) (DIM2*1.5));
         } catch (SlickException ex) {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -191,107 +196,134 @@ public class Block {
     /**
      * Creates a block of air. 
      */ 
-    public Block(){
-        this(0,0);
+    protected Block(){
+       // this(0,0);
     }
     
-    /**
-     * Creates a block (id) with value 0. 
-     *  @param id 
-     */ 
-    public Block(int id){
-        this(id,0);
-    }    
+   
+  
     
-    /**
-     * Creates a block (id) with value (value).
-     * @param id the id of the block
-     * @param value the sub-id called  value
-     */    
-    public Block(int id, int value){
-        this.id = id;
-        this.value = value;
-        
+    public static Block create(){
+        return create(0,0,0,0,0);
+    }
+    
+    public static Block create(int id){
+        return create(id,0,0,0,0);
+    }
+    
+    public static Block create(int id, int value){
+        return create(id,value,0,0,0);
+    }
+    
+    public static Block create(int id, int value,int x, int y, int z){
+        Block block = null;
         //define the default SideSprites
         switch (id){
-            case 0: name = "air";
-                    transparent = true;
-                    obstacle = false;
-                    invisible = true;
+            case 0: NAMELIST[id] = "air";
+                    block = new Block();
+                    block.transparent = true;
+                    block.obstacle = false;
+                    block.invisible = true;
                     break;
-            case 1: name = "gras";
-                    transparent = false;
-                    obstacle = true;
+            case 1:block = new Block(); 
+                    NAMELIST[id] = "gras";
+                    block.transparent = false;
+                    block.obstacle = true;
                     break;
-            case 2: name = "dirt";
-                    transparent = false;
-                    obstacle = true;
+            case 2: NAMELIST[id] = "dirt";
+                    block = new Block(); 
+                    block.transparent = false;
+                    block.obstacle = true;
                     break;
-            case 3: name = "stone";
-                    transparent = false;
-                    obstacle = true;
+            case 3: NAMELIST[id] = "stone";
+                    block = new Block(); 
+                    block.transparent = false;
+                    block.obstacle = true;
                     break;
-            case 4: name = "asphalt";
-                    transparent = false;
-                    obstacle = true;
+            case 4: NAMELIST[id] = "asphalt";
+                    block = new Block(); 
+                    block.transparent = false;
+                    block.obstacle = true;
                     break;
-            case 5: name = "cobblestone";
-                    transparent = false;
-                    obstacle = true;
+            case 5: NAMELIST[id] = "cobblestone";
+                    block = new Block(); 
+                    block.transparent = false;
+                    block.obstacle = true;
                     break;
-            case 6: name = "pavement";
-                    transparent = false;
-                    obstacle = true;
+            case 6: NAMELIST[id] = "pavement";
+                    block = new Block(); 
+                    block.transparent = false;
+                    block.obstacle = true;
                     break;
-            case 7: name = "concrete";
-                    transparent = false;
-                    obstacle = true;
+            case 7: NAMELIST[id] = "concrete";
+                    block = new Block(); 
+                    block.transparent = false;
+                    block.obstacle = true;
                     break;
-            case 8: name = "sand";
-                    transparent = false;
-                    obstacle = true;
+            case 8: NAMELIST[id] = "sand";
+                    block = new Block(); 
+                    block.transparent = false;
+                    block.obstacle = true;
                     break;      
-            case 9: name = "water";
-                    transparent = true;
-                    obstacle = false;
-                    liquid=true;
+            case 9: NAMELIST[id] = "water";
+                    block = new Block(); 
+                    block.transparent = true;
+                    block.obstacle = false;
+                    block.liquid=true;
                     break;    
-            case 20:name = "red brick wall";
-                    transparent = false;
-                    obstacle = true;
+            case 20:NAMELIST[id] = "red brick wall";
+                    block = new Block(); 
+                    block.transparent = false;
+                    block.obstacle = true;
                     break;
-            case 40:name = "player";
-                    transparent = true;
-                    obstacle = true;
-                    isBlock = false;
-                    dimensionY=2;
-                    if (value==0)
-                        invisible = true;
+            case 40:
+                    NAMELIST[id] = "player";
+                    try {
+                        block = new Player(x,y,z);
+                        block.transparent = true;
+                        block.obstacle = true;
+                        block.isBlock = false;
+                        block.dimensionY=2;
+                        if (value==0)
+                            block.invisible = true;
+                    } catch (SlickException ex) {
+                        Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
                     break;
-            case 50:name = "strewbed";
-                    transparent = true;
-                    obstacle = false;
+            case 50:NAMELIST[id] = "strewbed";
+                    block = new Block(); 
+                    block.transparent = true;
+                    block.obstacle = false;
                     break;
-            case 70:name = "campfire";
-                    transparent = true;
-                    obstacle = false;
-                    isBlock = false;
+            case 70:NAMELIST[id] = "campfire";
+                    block = new Block(); 
+                    block.transparent = true;
+                    block.obstacle = false;
+                    block.isBlock = false;
                     break;
-            case 71:name = "explosiveBarrel";
-                    transparent = false;
-                    obstacle = true;
-                    isBlock = false;
+            case 71:NAMELIST[id] = "explosiveBarrel";
+                    block = new ExplosiveBarrel(x,y,z); 
+                    block.transparent = false;
+                    block.obstacle = true;
+                    block.isBlock = false;
                     break;
-            case 72:name = "AnimationTest";
-                    transparent = false;
-                    obstacle = true;
-                    isBlock = false;
+            case 72:NAMELIST[id] = "AnimationTest";
+                    block = new AnimatedTest();
+                    block.transparent = false;
+                    block.obstacle = true;
+                    block.isBlock = false;
                     break;
-            default:name = "undefined";
-                    transparent = true;
-                    obstacle = true;
+            default:
+                    block = new Block(); 
+                    block.transparent = true;
+                    block.obstacle = true;
                     break; 
         }
+        
+        block.id = id;
+        block.value = value;
+        return block;
     }
     
       /**
@@ -655,7 +687,7 @@ public class Block {
      * @return the name of the block
      */
     public String getName() {
-        return name;
+        return NAMELIST[getId()];
     }
  
 

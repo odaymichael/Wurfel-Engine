@@ -9,7 +9,7 @@ import org.newdawn.slick.SlickException;
  *A block which can move himself around the map, therefore it must also be a SelfAwareBlock.
  * @author Benedikt
  */
-public abstract class MovingBlock extends SelfAwareBlock {
+public abstract class AbstractMovingBlock extends SelfAwareBlock {
    
    /* Always one of them must be 1 to prevent a division with 0.*/
    private float[] dir = {1,0,0};
@@ -24,17 +24,10 @@ public abstract class MovingBlock extends SelfAwareBlock {
      */
     abstract void jump();
    
-    MovingBlock(int x,int y, int z){
+    AbstractMovingBlock(int x,int y, int z){
         super(x,y,z);
     }
     
-    MovingBlock(int id,int x,int y, int z){
-        super(id,x,y,z);
-    }
-   
-    MovingBlock(int id,int value,int x,int y, int z){
-        super(id, value,x,y,z);
-    }
     
     
     /**
@@ -198,7 +191,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
         
         
         selfDestroy();
-        if (topblock != null) topblock.setBlock(new Block(0));
+        if (topblock != null) topblock.setBlock(Block.create());
         
         setAbsCoordY(getAbsCoordY()+y);
         if (x<0){
@@ -208,7 +201,7 @@ public abstract class MovingBlock extends SelfAwareBlock {
         }
          
         selfRebuild();
-        if (topblock != null) topblock.setBlock(new Block(getId()));
+        if (topblock != null) topblock.setBlock(Block.create(getId()));
         
         //if there was a coordiante change recalc map.
         Controller.getMap().requestRecalc();
@@ -244,10 +237,10 @@ public abstract class MovingBlock extends SelfAwareBlock {
           //  if (! fallsound.playing()) fallsound.play();
             
             selfDestroy();
-            if (topblock != null) topblock.setBlock(new Block(0));
+            if (topblock != null) topblock.setBlock(Block.create());
             setCoordZ(getCoordZ()-1);
             selfRebuild();
-            if (topblock != null) topblock.setBlock(new Block(getId()));
+            if (topblock != null) topblock.setBlock(Block.create(getId()));
 
             setPos(2, getPos()[2]+ Block.GAMEDIMENSION);
             Controller.getMap().requestRecalc();
@@ -259,10 +252,10 @@ public abstract class MovingBlock extends SelfAwareBlock {
                 //if (! fallsound.playing()) fallsound.play();
 
                 selfDestroy();
-                if (topblock != null) topblock.setBlock(new Block(0));
+                if (topblock != null) topblock.setBlock(Block.create());
                 setCoordZ(getCoordZ()+1);
                 selfRebuild();
-                if (topblock != null) topblock.setBlock(new Block(getId()));
+                if (topblock != null) topblock.setBlock(Block.create(getId()));
 
                 setPos(2, getPos()[2]- Block.GAMEDIMENSION);
                 Controller.getMap().requestRecalc();

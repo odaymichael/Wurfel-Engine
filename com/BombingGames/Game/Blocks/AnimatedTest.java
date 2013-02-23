@@ -4,9 +4,7 @@ package com.BombingGames.Game.Blocks;
  *
  * @author Benedikt
  */
-public class AnimatedTest extends AnimatedBlock {
+public class AnimatedTest extends AbstractAnimatedBlock {
 
-    public AnimatedTest() {
-        super(72);
-    }
+    protected AnimatedTest(){}
 }

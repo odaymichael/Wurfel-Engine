@@ -12,20 +12,13 @@ import com.BombingGames.Game.Map;
 public class SelfAwareBlock extends Block{
    private int absCoordX, absCoordY, coordZ;
     
-    public SelfAwareBlock(int x,int y, int z) {
-        super();
+   protected SelfAwareBlock() {
+   }
+   
+    protected SelfAwareBlock(int x,int y, int z) {
         setAbsCoords(x,y,z);
     }
     
-    public SelfAwareBlock(int id,int x,int y, int z) {
-       super(id);
-       setAbsCoords(x,y,z);
-    }
-   
-    public SelfAwareBlock(int id, int value,int x,int y, int z) {
-       super(id, value);
-       setAbsCoords(x,y,z);
-    }
    
 
   /**

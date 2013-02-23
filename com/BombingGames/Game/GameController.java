@@ -133,7 +133,7 @@ public class GameController extends Controller {
             //workaround for the bug in slick, because the event is called multiple times
             gc.getInput().consumeEvent();
             int coords[] = Gameplay.getView().ScreenToGameCoords(newx,newy);
-            setMapDataSafe(coords[0], coords[1], coords[2]-2,new Block(1));
+            setMapDataSafe(coords[0], coords[1], coords[2]-2,Block.create(1));
             Log.debug("made block at "+coords[0]+","+coords[1]+","+coords[2]);
             Gameplay.getView().getCamera().traceRayTo(coords[0], coords[1], coords[2], true);
         }

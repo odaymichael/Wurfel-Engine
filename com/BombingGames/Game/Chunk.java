@@ -1,8 +1,6 @@
 package com.BombingGames.Game;
 
-import com.BombingGames.Game.Blocks.AnimatedTest;
 import com.BombingGames.Game.Blocks.Block;
-import com.BombingGames.Game.Blocks.ExplosiveBarrel;
 import com.BombingGames.Wurfelengine;
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,7 +34,7 @@ public class Chunk {
         for (int x=0; x < blocksX; x++)
             for (int y=0; y < blocksY; y++)
                 for (int z=0; z < blocksZ; z++)
-                    data[x][y][z] = new Block();
+                    data[x][y][z] = Block.create();
     }
     
     /**
@@ -67,11 +65,11 @@ public class Chunk {
                         //int HEIGHT = (int) Chunk.blocksZ / 2;
                         for (int z=0; z < height; z++){
                             //for (int z=0; z < blocksZ-4; z++)
-                            data[x][y][z] = new Block(2);
+                            data[x][y][z] = Block.create(2);
                             // if ((z>10) && (x>10) && (y>5))
                             //  data[x][y][z] = new Block (9,0);
                             }
-                        data[x][y][height] = new Block(1);
+                        data[x][y][height] = Block.create(1);
                     }
                 break;
             }
@@ -79,8 +77,8 @@ public class Chunk {
             case 1: {//island
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = new Block(9);
-                        data[x][y][1] = new Block(9);
+                        data[x][y][0] = Block.create(9);
+                        data[x][y][1] = Block.create(9);
                     }
                 
                 int mountainx = (int) (Math.random()*blocksX-1);
@@ -91,9 +89,9 @@ public class Chunk {
                         int height = blocksZ-1- Math.abs(mountainy-y)- Math.abs(mountainx-x);
                         if (height>1){
                             for (int z=0; z < height; z++) {
-                                data[x][y][z] = new Block(2);
+                                data[x][y][z] = Block.create(2);
                             }
-                            data[x][y][height] = new Block(1);
+                            data[x][y][height] = Block.create(1);
                         }
                     }
                 break;
@@ -105,10 +103,10 @@ public class Chunk {
                         if (blocksZ>1){
                             int z;
                             for (z=0; z < blocksZ/2; z++){
-                                data[x][y][z] = new Block(2);
+                                data[x][y][z] = Block.create(2);
                             }
-                            data[x][y][z-1] = new Block(1);
-                        }else data[x][y][0] = new Block(2);
+                            data[x][y][z-1] = Block.create(1);
+                        }else data[x][y][0] = Block.create(2);
                     }
                 break;
             }
@@ -116,12 +114,12 @@ public class Chunk {
             case 3: {//flat gras with one random pillar per chunk
                 int pillarx = (int) (Math.random()*blocksX-1);
                 int pillary = (int) (Math.random()*blocksY-1);
-                for (int z=0; z < blocksZ; z++) data[pillarx][pillary][z] = new Block(1);
+                for (int z=0; z < blocksZ; z++) data[pillarx][pillary][z] = Block.create(1);
                 
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = new Block(2);
-                        data[x][y][1] = new Block(1);
+                        data[x][y][0] = Block.create(2);
+                        data[x][y][1] = Block.create(1);
                     }
                 break;
             }
@@ -129,12 +127,12 @@ public class Chunk {
             case 4: {//explosive barrel test                
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][2] = new Block(1);
-                        data[x][y][1] = new Block(2);
-                        data[x][y][0] = new Block(2);
+                        data[x][y][2] = Block.create(1);
+                        data[x][y][1] = Block.create(2);
+                        data[x][y][0] = Block.create(2);
                     }
-                data[5][5][3] = new ExplosiveBarrel(5,5,3);
-                data[5][5][2] = new Block(2);
+                data[5][5][3] = Block.create(72,0,5,5,3);
+                data[5][5][2] = Block.create(2);
                 
                 break;
             }
@@ -142,11 +140,11 @@ public class Chunk {
             case 5: {//animation test                
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][1] = new Block(2);
-                        data[x][y][0] = new Block(2);
+                        data[x][y][1] = Block.create(2);
+                        data[x][y][0] = Block.create(2);
                     }
-                data[blocksX/2][blocksY/2][2] = new AnimatedTest();
-                data[blocksX/2][blocksY/2][1] = new Block(2);
+                data[blocksX/2][blocksY/2][2] = Block.create(72);//animation test
+                data[blocksX/2][blocksY/2][1] = Block.create(2);
                 
                 break;
             } 
@@ -202,7 +200,7 @@ public class Chunk {
                                 posend++;
                             }
 
-                            data[x][y][z] = new Block(
+                            data[x][y][z] = Block.create(
                                         Integer.parseInt(line.substring(0,posdots)),
                                         Integer.parseInt(line.substring(posdots+1, posend))
                                         );
