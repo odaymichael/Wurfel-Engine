@@ -21,7 +21,7 @@ public class Player extends AbstractMovingBlock{
      * @param Z Absolute Z-Pos of lower half
      * @throws SlickException
      */
-    public Player(int x, int y, int z) throws SlickException {
+    protected Player(int x, int y, int z) throws SlickException {
         super(x,y,z);
         //creates the top of the player
         //topblock = new Blockpointer(this, 0, 0, 1);

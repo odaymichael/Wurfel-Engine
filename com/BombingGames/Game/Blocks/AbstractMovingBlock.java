@@ -24,7 +24,7 @@ public abstract class AbstractMovingBlock extends SelfAwareBlock {
      */
     abstract void jump();
    
-    AbstractMovingBlock(int x,int y, int z){
+    protected AbstractMovingBlock(int x,int y, int z){
         super(x,y,z);
     }
     
