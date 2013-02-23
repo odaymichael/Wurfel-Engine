@@ -62,11 +62,7 @@ public class MsgSystem extends ArrayList<Msg> {
     private int timelastupdate = 0;
     private boolean waitforinput = false;
         
-    /**
-     * 
-     */
-    public MsgSystem(){
-    }
+
         
     /**
      * Adds a message with the sender "System"
