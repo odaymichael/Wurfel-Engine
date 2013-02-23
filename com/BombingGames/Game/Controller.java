@@ -148,19 +148,5 @@ public class Controller {
         getMap().setData(player.getCoordX(), player.getCoordY(), player.getCoordZ(), player);
     }
 
-    /**
-     * 
-     * @param goodgraphics
-     */
-    protected void setGoodgraphics(boolean goodgraphics) {
-        this.goodgraphics = goodgraphics;
-    }
-       
-   /**
-     * Should the graphic be a bit slower but better? Must be in Controller because is needed for e.g. the Block and there used as data
-     * @return 
-     */
-    public boolean hasGoodGraphics() {
-        return goodgraphics;
     }
 }

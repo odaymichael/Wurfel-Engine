@@ -753,7 +753,7 @@ public class Block {
     private void renderSide(int x, int y, int z, int sidenumb, Camera camera){
         Image image = getBlockSprite(id,value,sidenumb);
         
-        if (Gameplay.getController().hasGoodGraphics()){
+        if (Gameplay.getView().hasGoodGraphics()){
                 GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
         
             if (sidenumb == 0){

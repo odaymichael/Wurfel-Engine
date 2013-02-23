@@ -51,8 +51,8 @@ public class GameController extends Controller {
 
             //good graphics
             if (input.isKeyPressed(Input.KEY_G)) {
-                setGoodgraphics(!hasGoodGraphics());
-                Gameplay.MSGSYSTEM.add("Good Graphics is now "+hasGoodGraphics());
+                Gameplay.getView().setGoodgraphics(!Gameplay.getView().hasGoodGraphics());
+                Gameplay.MSGSYSTEM.add("Good Graphics is now "+Gameplay.getView().hasGoodGraphics());
             }
 
             //toggle getCamera()

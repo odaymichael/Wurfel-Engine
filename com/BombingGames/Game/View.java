@@ -20,6 +20,7 @@ public class View {
 
     private Camera camera;
     private float equalizationScale;    
+    private boolean goodgraphics = false;
     
     /**
      * Creates a View
@@ -132,5 +133,21 @@ public class View {
         coords[1] = tmpcoords[1] + coords[2]*2;
         
         return coords;
+    }
+    
+        /**
+     * 
+     * @param goodgraphics
+     */
+    protected void setGoodgraphics(boolean goodgraphics) {
+        this.goodgraphics = goodgraphics;
+    }
+       
+   /**
+     * Should the graphic be a bit slower but better? Must be in Controller because is needed for e.g. the Block and there used as data
+     * @return 
+     */
+    public boolean hasGoodGraphics() {
+        return goodgraphics;
     }
 }
