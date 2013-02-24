@@ -8,6 +8,7 @@ import com.BombingGames.Game.Chunk;
 import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Map;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 
 /**
  *
@@ -21,6 +22,9 @@ public abstract class AbstractCharacter extends AbstractEntity{
     * provides a factor for the vector
     */
    private float speed;
+   
+   private Sound fallingSound;
+   private Sound runningSound;
    
    /**
      * These method should define what happens when the object  jumps. Shoudl call jump(int velo)
@@ -64,15 +68,14 @@ public abstract class AbstractCharacter extends AbstractEntity{
             if (left)  dir[0] = -1;
             if (right) dir[0] = 1;
         
-            //scale that the velocity vector is always an unit vector
+            //scale that the velocity vector is always an unit vector (only x and y)
             double vectorLenght = Math.sqrt(dir[0]*dir[0]+dir[1]*dir[1]);
             dir[0] /= vectorLenght;
             dir[1] /= vectorLenght;
             //veloZ /= vectorLenght;
             
             //colision check
-            float oldx = getPos()[0];
-            float oldy = getPos()[1];
+            float[] oldpos = getPos();
             //calculate new position
             float newx = getPos()[0] + delta * speed * dir[0];
             float newy = getPos()[1] + delta * speed * dir[1];
@@ -91,7 +94,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
                 validmovement = false; 
             
             //find out the direction of the movement
-            if (oldx-newx > 0) {
+            if (oldpos[0] - newx > 0) {
                 //check left corner
                 neighbourNumber = Block.sideNumb(newx - Block.DIM2, newy);
                 if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
@@ -114,7 +117,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
             if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                 validmovement = false;  
             
-            if (oldy-newy > 0) {
+            if (oldpos[1] - newy > 0) {
                 //check top corner
                 neighbourNumber = Block.sideNumb(newx, newy - Block.DIM2);
                 if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
@@ -170,7 +173,6 @@ public abstract class AbstractCharacter extends AbstractEntity{
         setPos(0, getPos()[0] -1*x*Block.DIM2);
         
         
-        
         setAbsCoordY(getAbsCoordY()+y);
         if (x<0){
             if (getCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
@@ -188,6 +190,11 @@ public abstract class AbstractCharacter extends AbstractEntity{
      * @param delta time since last update
      */
     public void update(int delta) {
+        if (runningSound != null)
+            if (speed > 0.5f){
+                if (!runningSound.playing()) runningSound.play();
+            }  else runningSound.stop();
+        
         //calculate movement
         float t = delta/1000f; //t = time in s
         dir[2] += -Map.GRAVITY*t; //in m/s
@@ -198,7 +205,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
             && newposZ <= 0
             && (getCoordZ() == 0 || Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
         ) {
-            // fallsound.stop();
+            if (fallingSound != null) fallingSound.stop();
             dir[2] = 0;
             newposZ=0;
         }
@@ -209,7 +216,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
         if (getPos()[2] < 0
             && getCoordZ() > 0
             && ! Controller.getMapDataSafe(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
-          //  if (! fallsound.playing()) fallsound.play();
+            if (fallingSound != null && ! fallingSound.playing()) fallingSound.play();
             
           
             setCoordZ(getCoordZ()-1);
@@ -221,7 +228,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
             if (getPos()[2] >= Block.GAMEDIMENSION
                 && getCoordZ() < Chunk.getBlocksZ()-2
                 && !Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
-                //if (! fallsound.playing()) fallsound.play();
+                if (fallingSound != null && ! fallingSound.playing()) fallingSound.play();
 
                
                 setCoordZ(getCoordZ()+1);
@@ -254,5 +261,13 @@ public abstract class AbstractCharacter extends AbstractEntity{
      */
     public float[] getDirectionVector(){
         return dir;
+    }
+
+    public void setFallingSound(Sound fallingSound) {
+        this.fallingSound = fallingSound;
+    }
+
+    public void setRunningSound(Sound runningSound) {
+        this.runningSound = runningSound;
     }
 }

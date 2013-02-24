@@ -9,8 +9,6 @@ import org.newdawn.slick.Sound;
  * @author Benedikt
  */
 public class Player extends AbstractCharacter{
-   private Sound fallsound = new Sound("com/BombingGames/Game/Sounds/wind.wav");
-   private Sound runningsound = new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav");
    private String controlls = "WASD";
    
     /**
@@ -22,6 +20,8 @@ public class Player extends AbstractCharacter{
      */
     protected Player(int x, int y, int z) throws SlickException {
         super(x,y,z);
+        setFallingSound(new Sound("com/BombingGames/Game/Sounds/wind.wav"));
+        setRunningSound(new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav"));
     }
     
   
@@ -49,19 +49,6 @@ public class Player extends AbstractCharacter{
     @Override
     public void jump() {
         super.jump(8);
-    }
-   
-    /**
-     * 
-     * @param delta
-     */
-    @Override
-    public void update(int delta) {
-        /*if (speed > 0.5f){
-            if (!runningsound.playing()) runningsound.play();
-        }  else runningsound.stop();*/
-
-        super.update(delta);
     }
     
      @Override
