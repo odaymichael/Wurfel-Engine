@@ -5,7 +5,6 @@ import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.Blockpointer;
 import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *The camera locks to the player by default. It can be changed with <i>focusblock()</i>.

@@ -1,7 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
 /**
- *A block which can move himself around the map, therefore it must also be a SelfAwareBlock.
+ *An entity is a game object wich is selfaware.
  * @author Benedikt
  */
 public abstract class AbstractEntity extends SelfAwareBlock {

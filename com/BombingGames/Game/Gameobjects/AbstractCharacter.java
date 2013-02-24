@@ -37,7 +37,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
      * @see com.BombingGames.Game.Blocks.Block#getSideNumb(int, int) 
      */
     protected int getSideNumb() {
-        return Block.sideNumb((int) getPos()[0],(int) getPos()[1]);
+        return Block.sideNumb(getPos()[0], getPos()[1]);
     }  
     
    /**
@@ -82,46 +82,46 @@ public abstract class AbstractCharacter extends AbstractEntity{
             
             //check for movement in x
             //top corner
-            int neighbourNumber = Block.sideNumb((int) newx, (int) newy - Block.DIM2); 
+            int neighbourNumber = Block.sideNumb(newx, newy - Block.DIM2); 
             if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                 validmovement = false;
             //bottom corner
-            neighbourNumber = Block.sideNumb((int) newx, (int) newy + Block.DIM2); 
+            neighbourNumber = Block.sideNumb(newx, newy + Block.DIM2); 
             if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                 validmovement = false; 
             
             //find out the direction of the movement
             if (oldx-newx > 0) {
                 //check left corner
-                neighbourNumber = Block.sideNumb((int) newx - Block.DIM2, (int) newy);
+                neighbourNumber = Block.sideNumb(newx - Block.DIM2, newy);
                 if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                    validmovement = false;
             } else {
                 //check right corner
-                neighbourNumber = Block.sideNumb((int) newx + Block.DIM2, (int) newy);
+                neighbourNumber = Block.sideNumb(newx + Block.DIM2, newy);
                 if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                    validmovement = false;
             }
             
             //check for movement in y
             //left corner
-            neighbourNumber = Block.sideNumb((int) newx - Block.DIM2, (int) newy); 
+            neighbourNumber = Block.sideNumb(newx - Block.DIM2, newy); 
             if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                 validmovement = false;
 
             //right corner
-            neighbourNumber = Block.sideNumb((int) newx + Block.DIM2, (int) newy); 
+            neighbourNumber = Block.sideNumb(newx + Block.DIM2, newy); 
             if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                 validmovement = false;  
             
             if (oldy-newy > 0) {
                 //check top corner
-                neighbourNumber = Block.sideNumb((int) newx, (int) newy - Block.DIM2);
+                neighbourNumber = Block.sideNumb(newx, newy - Block.DIM2);
                 if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                    validmovement = false;
             } else {
                 //check bottom corner
-                neighbourNumber = Block.sideNumb((int) newx, (int) newy + Block.GAMEDIMENSION/2);
+                neighbourNumber = Block.sideNumb(newx, newy + Block.GAMEDIMENSION/2);
                 if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
                    validmovement = false;
             }

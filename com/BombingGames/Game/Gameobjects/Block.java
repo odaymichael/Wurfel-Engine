@@ -1,7 +1,6 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Camera;
-import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Gameplay;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,8 +62,8 @@ public class Block {
     private int id; 
     private int value;
     private float[] pos = {Block.DIM2, Block.DIM2, 0};
-    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft, invisible, liquid; 
-    private boolean isBlock = true;
+    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft, lockedInvisibility, liquid; 
+    private boolean hasSides = true;
     private int lightlevel = 50;
     private int dimensionY = 1;    
     
@@ -194,10 +193,9 @@ public class Block {
     }
 
     /**
-     * Creates a block of air. 
-     */ 
+     * Create a block with the static <i>create</i> methods.
+     */
     protected Block(){
-       // this(0,0);
     }
     
    
@@ -212,7 +210,7 @@ public class Block {
     }
     
     /**
-     * 
+     *  Create a block. If the block needs to know it's position you have to use <i>create(int id, int value,int x, int y, int z)</i>
      * @param id
      * @return
      */
@@ -221,7 +219,7 @@ public class Block {
     }
     
     /**
-     * 
+     * Create a block. If the block needs to know it's position you have to use <i>create(int id, int value,int x, int y, int z)</i>
      * @param id
      * @param value
      * @return
@@ -231,13 +229,13 @@ public class Block {
     }
     
     /**
-     * 
-     * @param id
-     * @param value
-     * @param x
-     * @param y
-     * @param z
-     * @return
+     * Create a block. If the block needs to know it's position you have to use this method and give the coordinates.
+     * @param id the id of the block
+     * @param value the value of the block, it's like a sub-id
+     * @param x the x-coordinate
+     * @param y the y-coordinate
+     * @param z the z-coordinate
+     * @return the Block
      */
     public static Block create(int id, int value,int x, int y, int z){
         Block block = null;
@@ -247,7 +245,7 @@ public class Block {
                     block = new Block();
                     block.transparent = true;
                     block.obstacle = false;
-                    block.invisible = true;
+                    block.lockedInvisibility = true;
                     break;
             case 1:block = new Block(); 
                     NAMELIST[id] = "gras";
@@ -306,10 +304,10 @@ public class Block {
                         block = new Player(x,y,z);
                         block.transparent = true;
                         block.obstacle = true;
-                        block.isBlock = false;
+                        block.hasSides = false;
                         block.dimensionY=2;
                         if (value==0)
-                            block.invisible = true;
+                            block.lockedInvisibility = true;
                     } catch (SlickException ex) {
                         Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -324,19 +322,19 @@ public class Block {
                     block = new Block(); 
                     block.transparent = true;
                     block.obstacle = false;
-                    block.isBlock = false;
+                    block.hasSides = false;
                     break;
             case 71:NAMELIST[id] = "explosiveBarrel";
                     block = new ExplosiveBarrel(x,y,z); 
                     block.transparent = false;
                     block.obstacle = true;
-                    block.isBlock = false;
+                    block.hasSides = false;
                     break;
             case 72:NAMELIST[id] = "AnimationTest";
                     block = new AnimatedTest();
                     block.transparent = false;
                     block.obstacle = true;
-                    block.isBlock = false;
+                    block.hasSides = false;
                     break;
             default:
                     block = new Block(); 
@@ -449,7 +447,7 @@ public class Block {
      * @return Returns the fieldnumber of the coordinates. 8 is self.
      * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int) 
      */
-    public static int sideNumb(int x, int y) {
+    public static int sideNumb(float x, float y) {
         int result = 8;
         if (x+y <= DIM2)//top left
             result = 7;
@@ -581,7 +579,7 @@ public class Block {
 
     /**
      * Hide this block and prevent it from beeing rendered.
-     * @param visible Sets the visibility. When it is false, every side will also get invisible
+     * @param visible Sets the visibility. When it is false, every side will also get lockedInvisibility
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
@@ -633,7 +631,7 @@ public class Block {
     }
 
     /**
-     * Get the value.
+     * Get the value. It is like a sub-id and can identify the status.
      * @return
      */
     public int getValue() {
@@ -648,15 +646,17 @@ public class Block {
         this.value = value;
     }
 
-    /** How bright is the block?
-     * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black. Default 50.
+    /** 
+     * How bright is the block?
+     * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black. Default is 50.
      * @return 
      */
     public int getLightlevel() {
         return lightlevel;
     }
 
-   /** Set the brightness of the Block.
+   /**
+    * Set the brightness of the Block.
      * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black.
      * @param lightlevel 
      */
@@ -665,11 +665,11 @@ public class Block {
     }
     
    /**
-     * Returns true, when invisible. Invisible blocks are not rendered.
-     * @return 
+     * Returns true, when locked as invisibility. Invisible blocks are not rendered even when they are visible (by the meaning of the raytracing).
+     * @return the locked visiblity
      */
     public boolean isInvisible() {
-        return invisible;
+        return lockedInvisibility;
     }
 
     /**
@@ -681,11 +681,11 @@ public class Block {
     } 
     
     /**
-     * Is the block a true block or represents it another thing?
+     * Is the block a true block with sides or represents it another thing like a flower?
      * @return 
      */
-    public boolean isBlock() {
-        return isBlock;
+    public boolean hasSides() {
+        return hasSides;
     }   
     
     /**
@@ -703,8 +703,6 @@ public class Block {
                 else if (side==2)
                     renderRight = visible;
     }
-    
-
 
     /**
      * Returns the name of the block
@@ -735,7 +733,7 @@ public class Block {
     public void render(int x, int y, int z, Camera camera) {
         //draw every visible block except air
         if (id != 0 && visible){            
-            if (isBlock){
+            if (hasSides){
                 if (renderTop) renderSide(x,y,z, 1, camera);
                 if (renderLeft) renderSide(x,y,z, 0, camera);
                 if (renderRight) renderSide(x,y,z, 2, camera);
