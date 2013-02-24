@@ -68,7 +68,9 @@ public class Block {
     private int dimensionY = 1;    
     
     static {
-        //grass
+        NAMELIST[0] = "air";
+        
+        NAMELIST[1] = "grass";
         SPRITEPOS[1][0][0][0] = 0;
         SPRITEPOS[1][0][0][1] = 0;
         SPRITEPOS[1][0][1][0] = 80;
@@ -76,7 +78,7 @@ public class Block {
         SPRITEPOS[1][0][2][0] = 240;
         SPRITEPOS[1][0][2][1] = 0;
         
-        //dirt
+        NAMELIST[2] = "dirt";
         SPRITEPOS[2][0][0][0] = 0;
         SPRITEPOS[2][0][0][1] = 0;
         SPRITEPOS[2][0][1][0] = 400;
@@ -84,7 +86,7 @@ public class Block {
         SPRITEPOS[2][0][2][0] = 560;
         SPRITEPOS[2][0][2][1] = 0;
         
-        //stone
+        NAMELIST[3] = "stone";
         SPRITEPOS[3][0][0][0] = 0;
         SPRITEPOS[3][0][0][1] = 120;
         SPRITEPOS[3][0][1][0] = 80;
@@ -92,7 +94,7 @@ public class Block {
         SPRITEPOS[3][0][2][0] = 240;
         SPRITEPOS[3][0][2][1] = 120;
         
-        //asphalt
+        NAMELIST[4] = "asphalt";
         SPRITEPOS[4][0][0][0] = 320;
         SPRITEPOS[4][0][0][1] = 120;
         SPRITEPOS[4][0][1][0] = 400;
@@ -100,7 +102,7 @@ public class Block {
         SPRITEPOS[4][0][2][0] = 560;
         SPRITEPOS[4][0][2][1] = 120;
        
-        //cobblestone
+        NAMELIST[5] = "cobblestone";
         SPRITEPOS[5][0][0][0] = 0;
         SPRITEPOS[5][0][0][1] = 600;
         SPRITEPOS[5][0][1][0] = 80;
@@ -108,8 +110,7 @@ public class Block {
         SPRITEPOS[5][0][2][0] = 240;
         SPRITEPOS[5][0][2][1] = 600;
 
-        
-        //pavement
+        NAMELIST[6] = "pavement";
         SPRITEPOS[6][0][0][0] = 240;
         SPRITEPOS[6][0][0][1] = 600;
         SPRITEPOS[6][0][1][0] = 320;
@@ -117,7 +118,7 @@ public class Block {
         SPRITEPOS[6][0][2][0] = 560;
         SPRITEPOS[6][0][2][1] = 600;
        
-        //concrete
+        NAMELIST[7] = "concrete";
         SPRITEPOS[7][0][0][0] = 640;
         SPRITEPOS[7][0][0][1] = 600;
         SPRITEPOS[7][0][1][0] = 720;
@@ -125,7 +126,7 @@ public class Block {
         SPRITEPOS[7][0][2][0] = 880;
         SPRITEPOS[7][0][2][1] = 600;
         
-        //sand
+        NAMELIST[8] = "sand";
         SPRITEPOS[8][0][0][0] = 160;
         SPRITEPOS[8][0][0][1] = 720;
         SPRITEPOS[8][0][1][0] = 240;
@@ -133,7 +134,7 @@ public class Block {
         SPRITEPOS[8][0][2][0] = 400;
         SPRITEPOS[8][0][2][1] = 720;
         
-        //water
+        NAMELIST[9] = "water";
         SPRITEPOS[9][0][0][0] = 640;
         SPRITEPOS[9][0][0][1] = 720;
         SPRITEPOS[9][0][1][0] = 720;
@@ -142,7 +143,7 @@ public class Block {
         SPRITEPOS[9][0][2][1] = 720;
         
         
-        //player
+        NAMELIST[40] = "player";
         //sw
         SPRITEPOS[40][1][0][0] = 640;
         SPRITEPOS[40][1][0][1] = 120;
@@ -168,32 +169,29 @@ public class Block {
         SPRITEPOS[40][8][0][0] = 800;
         SPRITEPOS[40][8][0][1] = 360;
         
-        //fire
+        NAMELIST[70] = "fire";
         SPRITEPOS[70][0][0][0] = 0;
         SPRITEPOS[70][0][0][1] = 720;
         
-        SPRITEPOS[71][0][0][0] = 0;
-        SPRITEPOS[71][0][0][1] = 720;
-        
-        //explosive barrel
+        NAMELIST[71] = "explosive barrel";
         SPRITEPOS[71][0][0][0] = 160;
         SPRITEPOS[71][0][0][1] = 720;
         
-        //explosive barrel
+        NAMELIST[72] = "animation test";
         SPRITEPOS[72][0][0][0] = 160;
         SPRITEPOS[72][0][0][1] = 720;
         SPRITEPOS[72][1][0][0] = 0;
         SPRITEPOS[72][1][0][1] = 720;
         
         try {
-            spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/SideSprite.png", DIMENSION, (int) (DIM2*1.5));
+            spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Spritesheet.png", DIMENSION, (int) (DIM2*1.5));
         } catch (SlickException ex) {
             Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     /**
-     * Create a block with the static <i>create</i> methods.
+     * Create a block with the static <i>create</i> methods not with the constructor.
      */
     protected Block(){
     }
@@ -202,7 +200,7 @@ public class Block {
   
     
     /**
-     * 
+     * Creates an air block.
      * @return
      */
     public static Block create(){
@@ -241,65 +239,54 @@ public class Block {
         Block block = null;
         //define the default SideSprites
         switch (id){
-            case 0: NAMELIST[id] = "air";
+            case 0: 
                     block = new Block();
                     block.transparent = true;
                     block.obstacle = false;
                     block.lockedInvisibility = true;
                     break;
             case 1:block = new Block(); 
-                    NAMELIST[id] = "gras";
                     block.transparent = false;
                     block.obstacle = true;
                     break;
-            case 2: NAMELIST[id] = "dirt";
-                    block = new Block(); 
+            case 2: block = new Block(); 
                     block.transparent = false;
                     block.obstacle = true;
                     break;
-            case 3: NAMELIST[id] = "stone";
-                    block = new Block(); 
+            case 3: block = new Block(); 
                     block.transparent = false;
                     block.obstacle = true;
                     break;
-            case 4: NAMELIST[id] = "asphalt";
-                    block = new Block(); 
+            case 4: block = new Block(); 
                     block.transparent = false;
                     block.obstacle = true;
                     break;
-            case 5: NAMELIST[id] = "cobblestone";
-                    block = new Block(); 
+            case 5: block = new Block(); 
                     block.transparent = false;
                     block.obstacle = true;
                     break;
-            case 6: NAMELIST[id] = "pavement";
-                    block = new Block(); 
+            case 6: block = new Block(); 
                     block.transparent = false;
                     block.obstacle = true;
                     break;
-            case 7: NAMELIST[id] = "concrete";
-                    block = new Block(); 
+            case 7: block = new Block(); 
                     block.transparent = false;
                     block.obstacle = true;
                     break;
-            case 8: NAMELIST[id] = "sand";
-                    block = new Block(); 
+            case 8: block = new Block(); 
                     block.transparent = false;
                     block.obstacle = true;
                     break;      
-            case 9: NAMELIST[id] = "water";
-                    block = new Block(); 
+            case 9: block = new Block(); 
                     block.transparent = true;
                     block.obstacle = false;
                     block.liquid=true;
                     break;    
-            case 20:NAMELIST[id] = "red brick wall";
-                    block = new Block(); 
+            case 20:block = new Block(); 
                     block.transparent = false;
                     block.obstacle = true;
                     break;
             case 40:
-                    NAMELIST[id] = "player";
                     try {
                         block = new Player(x,y,z);
                         block.transparent = true;
@@ -313,25 +300,21 @@ public class Block {
                     }
                     
                     break;
-            case 50:NAMELIST[id] = "strewbed";
-                    block = new Block(); 
+            case 50:block = new Block(); 
                     block.transparent = true;
                     block.obstacle = false;
                     break;
-            case 70:NAMELIST[id] = "campfire";
-                    block = new Block(); 
+            case 70:block = new Block(); 
                     block.transparent = true;
                     block.obstacle = false;
                     block.hasSides = false;
                     break;
-            case 71:NAMELIST[id] = "explosiveBarrel";
-                    block = new ExplosiveBarrel(x,y,z); 
+            case 71:block = new ExplosiveBarrel(x,y,z); 
                     block.transparent = false;
                     block.obstacle = true;
                     block.hasSides = false;
                     break;
-            case 72:NAMELIST[id] = "AnimationTest";
-                    block = new AnimatedTest();
+            case 72:block = new AnimatedTest();
                     block.transparent = false;
                     block.obstacle = true;
                     block.hasSides = false;
