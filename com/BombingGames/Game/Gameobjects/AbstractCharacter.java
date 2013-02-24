@@ -211,12 +211,13 @@ public abstract class AbstractCharacter extends AbstractEntity{
         }
         setPos(2, newposZ);
         
+        if (fallingSound != null && dir[2]<-1f &&! fallingSound.playing()) fallingSound.play();
+        
         //coordinate switch
         //down
         if (getPos()[2] < 0
             && getCoordZ() > 0
             && ! Controller.getMapDataSafe(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
-            if (fallingSound != null && ! fallingSound.playing()) fallingSound.play();
             
           
             setCoordZ(getCoordZ()-1);
@@ -228,7 +229,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
             if (getPos()[2] >= Block.GAMEDIMENSION
                 && getCoordZ() < Chunk.getBlocksZ()-2
                 && !Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
-                if (fallingSound != null && ! fallingSound.playing()) fallingSound.play();
+                
 
                
                 setCoordZ(getCoordZ()+1);
