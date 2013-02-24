@@ -203,18 +203,42 @@ public class Block {
    
   
     
+    /**
+     * 
+     * @return
+     */
     public static Block create(){
         return create(0,0,0,0,0);
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     */
     public static Block create(int id){
         return create(id,0,0,0,0);
     }
     
+    /**
+     * 
+     * @param id
+     * @param value
+     * @return
+     */
     public static Block create(int id, int value){
         return create(id,value,0,0,0);
     }
     
+    /**
+     * 
+     * @param id
+     * @param value
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
     public static Block create(int id, int value,int x, int y, int z){
         Block block = null;
         //define the default SideSprites
@@ -361,40 +385,44 @@ public class Block {
     
    /**
      * Get the screen X-position where to block is rendered. if camera = null the position of it get's not calculated
-     * @param x block coord
-     * @param y block coord
-     * @param z block coord
+     * @param block the block of wich you want the position
+     * @param x the blocks coord
+     * @param y the blocks coord
+     * @param z the blocks coord
      * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen X-position in pixels
      */
-    public static int getScreenPosX(int x, int y, int z, Camera camera) {
+    public static int getScreenPosX(Block block, int x, int y, int z, Camera camera) {
         int camerax = 0;
         if (camera != null) camerax = camera.getX();
         
         return - camerax
                + x*DIMENSION
                + (y%2) * DIM2
-               + (int) (Controller.getMapData(x, y, z).getPos(0));
+               + (int) (block.getPos(0));
     }
+    
     
     /**
      * Get the screen Y-position where to block is rendered.  if camera = null the position of it get's not calculated
-     * @param x block coord
-     * @param y block coord
-     * @param z block coord
+     * @param block the block of wich you want the position
+     * @param x the blocks coord
+     * @param y the blocks coord
+     * @param z the blocks coord
      * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen Y-position in pixels
      */
-    public static int getScreenPosY(int x, int y, int z, Camera camera){
+    public static int getScreenPosY(Block block, int x, int y, int z, Camera camera){
         int cameray = 0;
         if (camera != null) cameray = camera.getY();
         
         return - cameray
                + y*DIM4
                - z*DIM2
-               + (int) (Controller.getMapData(x, y, z).getPos(1)/2)
-               - (int) (Controller.getMapData(x, y, z).getPos(2)/Math.sqrt(2));   
+               + (int) (block.getPos(1)/2)
+               - (int) (block.getPos(2)/Math.sqrt(2));   
     }
+    
     
     
    /**
@@ -436,9 +464,7 @@ public class Block {
     
     /**
      * Get the neighbour coordinates of the neighbour of the coords you give
-     * @param xcoord
-     * @param ycoord
-     * @param zcoord
+     * @param coords 
      * @param sidenumb the side number of the given coordinates
      * @return coordinates of the neighbour
      */
@@ -488,9 +514,7 @@ public class Block {
     
     /**
      * Get the coordinates correct coordiantes when you have coordiantes and a position laying outside this field.
-     * @param xcoord The coordinate of your field
-     * @param ycoord The coordinate of your field
-     * @param zcoord The coordinate of your field
+     * @param coords 
      *  @param xpos The x-position inside/outside this field
      * @param ypos The y-position inside/outside this field 
      * @return The neighbour block or itself
@@ -734,9 +758,9 @@ public class Block {
                 image.setColor(2, brightness, brightness, brightness);
                 image.setColor(3, brightness, brightness, brightness);
                 
-                int xpos = getScreenPosX(x,y,z,camera);
+                int xpos = getScreenPosX(this, x, y, z, camera);
                 
-                int ypos = getScreenPosY(x,y,z,camera) - (dimensionY-1)*DIM2;
+                int ypos = getScreenPosY(this, x, y, z, camera) - (dimensionY-1)*DIM2;
                 
                 image.drawEmbedded(xpos, ypos);
             }
@@ -776,10 +800,10 @@ public class Block {
         image.setColor(3, brightness, brightness, brightness);
         
         //right side is  half a block more to the right
-        int xpos = getScreenPosX(x,y,z,camera) + ( sidenumb == 2 ? DIM2 : 0);
+        int xpos = getScreenPosX(this, x,y,z, camera) + ( sidenumb == 2 ? DIM2 : 0);
         
         //the top is drawn a quarter blocks higher
-        int ypos = getScreenPosY(x,y,z,camera) + (sidenumb != 1 ? DIM4 : 0);
+        int ypos = getScreenPosY(this, x,y,z, camera) + (sidenumb != 1 ? DIM4 : 0);
         
         image.drawEmbedded(xpos, ypos);
     }

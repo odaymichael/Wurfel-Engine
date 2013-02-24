@@ -13,26 +13,36 @@ import java.util.Arrays;
  */
 public class Camera {
     private final int screenX, screenY, screenWidth, screenHeight;
+    
      
     private static class Renderblock {
         protected final int x,y,z;
         protected final int depth;
-        protected final int entitynumber;
+        protected final int entityindex;
 
         protected Renderblock(int x, int y, int z, int depth, int entitynumber) {
             this.x = x;
             this.y = y;
             this.z = z;
             this.depth = depth;
-            this.entitynumber = entitynumber;
+            this.entityindex = entitynumber;
         }
     }
     
     private int xPos, yPos, gameWidth, gameHeight;
     private int leftborder, topborder, rightborder, bottomborder;
+    
+    private enum Focustype {
+        BLOCK, ENTITY
+    } 
+    
+    private Focustype focus;
     private Blockpointer focusblock;
+    private AbstractEntity focusentity;
+    
     private float zoom = 1;
     private ArrayList<Renderblock> depthsort = new ArrayList<Renderblock>();
+    
 
     
      /**
@@ -51,7 +61,34 @@ public class Camera {
         screenWidth = (int) (width / scale);
         screenHeight = (int) (height / scale);
         
+        focus = Focustype.BLOCK;
         this.focusblock = focusblock;
+        
+        gameWidth = (int) (screenWidth / zoom);
+        gameHeight = (int) (screenHeight / zoom);
+        Wurfelengine.getGraphics().setWorldClip(x, y, screenWidth, screenHeight);
+        
+        update();
+    }
+    
+   /**
+     * Creates a camera. Screen does refer to the output of the camera not the real size on the display.
+     * @param focusentity 
+     * @param x the position of the camera
+     * @param y the position of the camera
+     * @param width the screen width
+     * @param height the screen width
+     * @param scale the zoom factor.
+     */
+    public Camera(AbstractEntity focusentity, int x, int y,int width, int height, float scale) {
+        screenX = x;
+        screenY = y;
+        //to achieve the wanted size it must be scaled in the other direction
+        screenWidth = (int) (width / scale);
+        screenHeight = (int) (height / scale);
+        
+        focus = Focustype.ENTITY;
+        this.focusentity = focusentity;
         
         gameWidth = (int) (screenWidth / zoom);
         gameHeight = (int) (screenHeight / zoom);
@@ -65,8 +102,13 @@ public class Camera {
      * Updates the camera
      */
     public final void update() {
-        xPos = Block.getScreenPosX(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), null) - gameWidth / 2;            
-        yPos = Block.getScreenPosY(focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), null) - gameHeight / 2 ;
+        if (focus == Focustype.BLOCK) {
+            xPos = Block.getScreenPosX(focusblock.getBlock(), focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), null) - gameWidth / 2;            
+            yPos = Block.getScreenPosY(focusblock.getBlock(), focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), null) - gameHeight / 2 ;
+        } else {
+            xPos = Block.getScreenPosX(focusentity, focusentity.getCoordX(), focusentity.getCoordY(), focusentity.getCoordZ(), null) - gameWidth / 2;            
+            yPos = Block.getScreenPosY(focusentity, focusentity.getCoordX(), focusentity.getCoordY(), focusentity.getCoordZ(), null) - gameHeight / 2 ;
+        }
         
         //update borders
         leftborder = xPos / Block.DIMENSION - 1;
@@ -132,7 +174,8 @@ public class Camera {
      * @param blockpointer
      */
     public void focusOnBlock(Blockpointer blockpointer){
-        focusblock = blockpointer;        
+       focus = Focustype.BLOCK;
+        focusblock = blockpointer;
     }
     
     
@@ -312,28 +355,40 @@ public class Camera {
         if(left < high) sortDepthList(left, high);
     }
     
-        /**
-     * Returns a coordiante triple of an ranking for the rendering order
-     * @param index the index
-     * @return the coordinate triple with x,y,z
-     */
-    public int[] getDepthsortCoord(int index) {
-        Renderblock item = depthsort.get(index);
-        int[] triple = {item.x, item.y, item.z};
-        return triple;
-    }
-    
-   public int getEntityNumber(int i) {
-        return depthsort.get(i).entitynumber;
-    }
-    
     /**
-     * Returns the lenght of list of ranking for the rendering order
-     * @return length of the render list
+     * Depthsort list
      */
-    public int depthsortlistSize(){
-        return depthsort.size();
-    }
+    
+        /**
+                * Returns a coordiante triple of an ranking for the rendering order
+                * @param index the index
+                * @return the coordinate triple with x,y,z
+                */
+        public int[] getDepthsortCoord(int index) {
+            Renderblock item = depthsort.get(index);
+            int[] triple = {item.x, item.y, item.z};
+            return triple;
+        }
+
+        /**
+                * Returns the entetyindex of a element i in the depthsort list.
+                * @param i index of the depthsort list
+                * @return the entityindex
+                */
+        public int getEntityIndex(int i) {
+            return depthsort.get(i).entityindex;
+        }
+
+        /**
+                * Returns the lenght of list of ranking for the rendering order
+                * @return length of the render list
+                */
+        public int depthsortlistSize(){
+            return depthsort.size();
+        }
+    
+    
+    
     
     /**
      * Filters every Block (and side) wich is not visible. Boosts rendering speed.

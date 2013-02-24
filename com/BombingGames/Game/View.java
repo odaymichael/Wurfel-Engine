@@ -1,7 +1,6 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Blocks.Block;
-import com.BombingGames.Game.Blocks.Blockpointer;
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -44,7 +43,7 @@ public class View {
         
         camera = new Camera(
             //new Blockpointer(Map.getBlocksX()/2, Map.getBlocksY()/2, 0),
-            new Blockpointer(Gameplay.getController().getPlayer(), 0, 0, 0),
+            Gameplay.getController().getPlayer(),
             0, //top
             0, //left
             gc.getWidth(), //full width

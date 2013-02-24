@@ -22,9 +22,6 @@ public class Player extends AbstractEntity{
      */
     protected Player(int x, int y, int z) throws SlickException {
         super(x,y,z);
-        //creates the top of the player
-        //topblock = new Blockpointer(this, 0, 0, 1);
-        //topblock.setBlock(Block.create(40));
     }
     
   
@@ -71,41 +68,33 @@ public class Player extends AbstractEntity{
      public void render(int x, int y, int z, Camera camera){
         float[] dir = getDirectionVector();
         if (dir[0] < -Math.sin(Math.PI/3)){
-            //west
-            setValue(2);
+            setValue(2);//west
         } else {
             if (dir[0] < - 0.5){
                 //y
                 if (dir[1]<0){
-                    //north-west
-                    setValue(3);
+                    setValue(3);//north-west
                 } else {
-                    //south-east
-                    setValue(1);
+                    setValue(1);//south-east
                 }
             } else {
                 if (dir[0] <  0.5){
                     //y
                     if (dir[1]<0){
-                            //north
-                            setValue(4);
+                            setValue(4);//north
                     }else{
-                            //south
-                            setValue(8);
-                            }
+                        setValue(8);//south
+                         }
                 }else {
                     if (dir[0] < Math.sin(Math.PI/3)) {
                         //y
                         if (dir[1] < 0){
-                            //north-east
-                            setValue(5);
+                            setValue(5);//north-east
                         } else{
-                            //sout-east
-                            setValue(7);
+                            setValue(7);//sout-east
                         }
                     } else{
-                        //east
-                        setValue(6);
+                        setValue(6);//east
                     }
                 }
             }

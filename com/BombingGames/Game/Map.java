@@ -255,7 +255,7 @@ public class Map {
         //render vom bottom to top
         for (int i=0; i < camera.depthsortlistSize() ;i++) {
             int[] coords = camera.getDepthsortCoord(i);
-            int entitynumber = camera.getEntityNumber(i);
+            int entitynumber = camera.getEntityIndex(i);
             
             Block block;
             if (entitynumber == -1)
