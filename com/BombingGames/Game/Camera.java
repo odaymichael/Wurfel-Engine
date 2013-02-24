@@ -13,8 +13,18 @@ import java.util.Arrays;
  */
 public class Camera {
     private final int screenX, screenY, screenWidth, screenHeight;
+    private int xPos, yPos, gameWidth, gameHeight;
+    private int leftborder, topborder, rightborder, bottomborder;
+    private float zoom = 1;
     
-     
+    private enum Focustype {
+        BLOCK, ENTITY
+    } 
+    
+    private Focustype focus;
+    private Blockpointer focusblock;
+    private AbstractEntity focusentity;
+    
     private static class Renderblock {
         protected final int x,y,z;
         protected final int depth;
@@ -29,18 +39,6 @@ public class Camera {
         }
     }
     
-    private int xPos, yPos, gameWidth, gameHeight;
-    private int leftborder, topborder, rightborder, bottomborder;
-    
-    private enum Focustype {
-        BLOCK, ENTITY
-    } 
-    
-    private Focustype focus;
-    private Blockpointer focusblock;
-    private AbstractEntity focusentity;
-    
-    private float zoom = 1;
     private ArrayList<Renderblock> depthsort = new ArrayList<Renderblock>();
     
 
@@ -317,15 +315,23 @@ public class Camera {
                     if (!block.isInvisible() && block.isVisible()) {
                         depthsort.add(new Renderblock(x, y, z, block.getDepth(y,z),-1));
                     }
-                    
-                    for (int i=0;i<Gameplay.getController().getEntitylist().size();i++){
-                        
-                        AbstractEntity entity = Gameplay.getController().getEntitylist().get(i);
-                        if (Arrays.equals(entity.getCoords(), new int[]{x,y,z}))
-                            depthsort.add(new Renderblock(x, y, z, entity.getDepth(y, z),i));
-                        
-                    }
                 }
+        
+        //add entitys
+        for (int i=0; i<Gameplay.getController().getEntitylist().size(); i++){
+            AbstractEntity entity = Gameplay.getController().getEntitylist().get(i);
+            depthsort.add(
+                new Renderblock(
+                    entity.getCoordX(),
+                    entity.getCoordY(),
+                    entity.getCoordZ(),
+                    entity.getDepth(entity.getCoordY(), entity.getCoordZ()),
+                    i
+                )
+             );
+        }
+        
+        
         sortDepthList(0, depthsort.size()-1);
     }
     
