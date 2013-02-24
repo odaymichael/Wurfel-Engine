@@ -22,7 +22,7 @@
         <key>dataFormat</key>
         <string>slick2d</string>
         <key>textureFileName</key>
-        <filename>SideSprite.png</filename>
+        <filename>Spritesheet.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -111,7 +111,7 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>SideSprite.def</filename>
+        <filename>Spritesheet.def</filename>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
