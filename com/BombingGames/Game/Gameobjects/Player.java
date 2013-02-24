@@ -8,7 +8,7 @@ import org.newdawn.slick.Sound;
  *The Player is a character who can walk.
  * @author Benedikt
  */
-public class Player extends AbstractEntity{
+public class Player extends AbstractCharacter{
    private Sound fallsound = new Sound("com/BombingGames/Game/Sounds/wind.wav");
    private Sound runningsound = new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav");
    private String controlls = "WASD";
