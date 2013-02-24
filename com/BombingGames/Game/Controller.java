@@ -1,8 +1,8 @@
 package com.BombingGames.Game;
 
-import com.BombingGames.Game.Blocks.AbstractEntity;
-import com.BombingGames.Game.Blocks.Block;
-import com.BombingGames.Game.Blocks.Player;
+import com.BombingGames.Game.Gameobjects.AbstractEntity;
+import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Gameobjects.Player;
 import com.BombingGames.MainMenu.MainMenuState;
 import java.util.ArrayList;
 import org.newdawn.slick.GameContainer;

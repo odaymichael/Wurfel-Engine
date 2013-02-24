@@ -1,8 +1,8 @@
 package com.BombingGames.Game;
 
-import com.BombingGames.Game.Blocks.Block;
-import com.BombingGames.Game.Blocks.ExplosiveBarrel;
-import com.BombingGames.Game.Blocks.Player;
+import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Gameobjects.ExplosiveBarrel;
+import com.BombingGames.Game.Gameobjects.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;

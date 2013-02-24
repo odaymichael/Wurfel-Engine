@@ -1,6 +1,6 @@
 package com.BombingGames.Game;
 
-import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.Game.Gameobjects.Block;
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

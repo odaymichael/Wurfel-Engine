@@ -1,8 +1,8 @@
 package com.BombingGames.Game;
 
-import com.BombingGames.Game.Blocks.AbstractEntity;
-import com.BombingGames.Game.Blocks.Block;
-import com.BombingGames.Game.Blocks.Blockpointer;
+import com.BombingGames.Game.Gameobjects.AbstractEntity;
+import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Gameobjects.Blockpointer;
 import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;
 import java.util.Arrays;

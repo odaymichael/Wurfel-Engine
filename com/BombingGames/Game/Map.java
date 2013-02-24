@@ -1,7 +1,7 @@
 package com.BombingGames.Game;
 
-import com.BombingGames.Game.Blocks.AbstractAnimatedBlock;
-import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.Game.Gameobjects.AbstractAnimatedBlock;
+import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.MainMenu.MainMenuState;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.util.Log;

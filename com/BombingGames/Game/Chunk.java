@@ -1,6 +1,6 @@
 package com.BombingGames.Game;
 
-import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Wurfelengine;
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,7 +18,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 5;
+    public static final int MAPGENERATOR = 1;
     
     private static int blocksX = 10;//16:9 => 12:27, 4:3=>12:36 //10
     //blocksY must be even number
@@ -74,7 +74,7 @@ public class Chunk {
                 break;
             }
                 
-            case 1: {//island
+            case 1: {//islands
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         data[x][y][0] = Block.create(9);

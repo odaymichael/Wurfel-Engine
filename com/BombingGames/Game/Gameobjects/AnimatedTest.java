@@ -1,4 +1,4 @@
-package com.BombingGames.Game.Blocks;
+package com.BombingGames.Game.Gameobjects;
 
 /**
  *

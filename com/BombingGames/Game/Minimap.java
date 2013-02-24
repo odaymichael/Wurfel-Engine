@@ -1,7 +1,7 @@
 package com.BombingGames.Game;
    
 
-import com.BombingGames.Game.Blocks.Block;
+import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Wurfelengine;
 import org.newdawn.slick.Color;
 
