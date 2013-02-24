@@ -1,8 +1,10 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.Game.Blocks.AbstractEntity;
 import com.BombingGames.Game.Blocks.Block;
 import com.BombingGames.Game.Blocks.Player;
 import com.BombingGames.MainMenu.MainMenuState;
+import java.util.ArrayList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -15,8 +17,7 @@ import org.newdawn.slick.util.Log;
 public class Controller {
     private static Map map;
     private Player player;   
-    private boolean goodgraphics = false;
-  
+    private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
     
     /**
      * Constructor is called when entering the gamemode.
@@ -145,8 +146,12 @@ public class Controller {
      */
     public void setPlayer(Player player) {
         this.player = player;
-        getMap().setData(player.getCoordX(), player.getCoordY(), player.getCoordZ(), player);
+        entitylist.add(player);
     }
 
+
+
+    public ArrayList<AbstractEntity> getEntitylist() {
+        return entitylist;
     }
 }

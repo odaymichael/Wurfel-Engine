@@ -8,11 +8,10 @@ import org.newdawn.slick.Sound;
  *The Player is a character who can walk.
  * @author Benedikt
  */
-public class Player extends AbstractMovingBlock{
+public class Player extends AbstractEntity{
    private Sound fallsound = new Sound("com/BombingGames/Game/Sounds/wind.wav");
    private Sound runningsound = new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav");
    private String controlls = "WASD";
-   private Blockpointer topblock; 
    
     /**
      * Creates a player. The parameters are for the lower half of the player. The constructor automatically creates a block on top of it.
@@ -59,12 +58,13 @@ public class Player extends AbstractMovingBlock{
      * 
      * @param delta
      */
+    @Override
     public void update(int delta) {
         /*if (speed > 0.5f){
             if (!runningsound.playing()) runningsound.play();
         }  else runningsound.stop();*/
 
-        super.update(delta, topblock);
+        super.update(delta);
     }
     
      @Override
@@ -113,10 +113,5 @@ public class Player extends AbstractMovingBlock{
         super.render(x, y, z, camera);
         //this line causes massive rendering problems
         //Gameplay.view.g.fillRect(500, 500, 900, 600);
-    }
-     
-    @Override
-    public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed, int delta) throws SlickException {
-        super.walk(up, down, left, right, walkingspeed, delta, topblock);
     }
 }

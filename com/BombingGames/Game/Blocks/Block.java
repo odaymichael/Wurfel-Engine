@@ -693,8 +693,8 @@ public class Block {
 
     /**
      * Returns the depth of the block. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
-     * @param y 
-     * @param z 
+     * @param y the y-coordinate
+     * @param z  the z-coordinate
      * @return the depth
      */
     public int getDepth(int y, int z) {

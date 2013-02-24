@@ -255,8 +255,13 @@ public class Map {
         //render vom bottom to top
         for (int i=0; i < camera.depthsortlistSize() ;i++) {
             int[] coords = camera.getDepthsortCoord(i);
+            int entitynumber = camera.getEntityNumber(i);
             
-            Block block = data[coords[0]][coords[1]][coords[2]];
+            Block block;
+            if (entitynumber == -1)
+                block = data[coords[0]][coords[1]][coords[2]];
+            else block = Gameplay.getController().getEntitylist().get(entitynumber);
+            
             if (block instanceof AbstractAnimatedBlock)
                 ((AbstractAnimatedBlock) block).updateGFX();
                             

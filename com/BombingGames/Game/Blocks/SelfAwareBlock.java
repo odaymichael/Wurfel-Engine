@@ -10,7 +10,7 @@ import com.BombingGames.Game.Map;
  * @author Benedikt
  */
 public class SelfAwareBlock extends Block{
-   private int absCoordX, absCoordY, coordZ;
+   private int[] absCoords = new int[3];
     
     protected SelfAwareBlock() {
     }
@@ -26,7 +26,7 @@ public class SelfAwareBlock extends Block{
      * @param X 
      */
     public void setAbsCoordX(int X){
-        absCoordX = X;
+        absCoords[0] = X;
     }
     
 
@@ -35,7 +35,7 @@ public class SelfAwareBlock extends Block{
      * @param Y
      */
     public void setAbsCoordY(int Y){
-        absCoordY = Y;
+        absCoords[1] = Y;
     } 
     
    /**
@@ -45,8 +45,8 @@ public class SelfAwareBlock extends Block{
     public void setCoordZ(int z) {
         //if Z is too high set to highes possible position
         if (z > Map.getBlocksZ()-2)
-            coordZ = Map.getBlocksZ() -2;
-        else coordZ = z;
+            absCoords[2] = Map.getBlocksZ() -2;
+        else absCoords[2] = z;
     }
    
     /**
@@ -56,17 +56,21 @@ public class SelfAwareBlock extends Block{
      * @param z
      */
     public final void setAbsCoords(int x, int y, int z){
-        absCoordX = x;
-        absCoordY = y;
+        absCoords[0] = x;
+        absCoords[1] = y;
         setCoordZ(z);
     }
    
+    public int[] getCoords(){
+        return new int[]{getCoordX(), getCoordY(), absCoords[2]};
+    }
+    
      /**
       * 
       * @return
       */
      public int getCoordX() {
-        return absCoordX - Controller.getMap().getChunkCoords(4)[0]  * Chunk.getBlocksX();
+        return absCoords[0] - Controller.getMap().getChunkCoords(4)[0]  * Chunk.getBlocksX();
     }
 
     /**
@@ -74,7 +78,7 @@ public class SelfAwareBlock extends Block{
      * @return
      */
     public int getCoordY() {
-        return absCoordY - Controller.getMap().getChunkCoords(4)[1] * Chunk.getBlocksY();
+        return absCoords[1] - Controller.getMap().getChunkCoords(4)[1] * Chunk.getBlocksY();
     }
     
     /**
@@ -82,7 +86,7 @@ public class SelfAwareBlock extends Block{
     * @return
     */
    public int getAbsCoordX() {
-        return absCoordX;
+        return absCoords[0];
     }
 
    /**
@@ -90,7 +94,7 @@ public class SelfAwareBlock extends Block{
     * @return
     */
    public int getAbsCoordY() {
-        return absCoordY;
+        return absCoords[1];
     }
 
     /**
@@ -98,21 +102,21 @@ public class SelfAwareBlock extends Block{
      * @return
      */
     public int getCoordZ() {
-        return coordZ;
+        return absCoords[2];
     }
 
     /**
      * Destroys the reference in the map.
      */
     protected void selfDestroy(){
-        Controller.getMap().setData(getCoordX(), getCoordY(), coordZ, new Block());
+        Controller.getMap().setData(getCoordX(), getCoordY(), absCoords[2], Block.create());
     }
     
     /**
      * Put the reference to this object at the coordinates inside the map
      */
     protected void selfRebuild(){
-        Controller.getMap().setData(getCoordX(), getCoordY(), coordZ, this);
+        Controller.getMap().setData(getCoordX(), getCoordY(), absCoords[2], this);
         Gameplay.getView().getCamera().traceRayTo(getCoordX(), getCoordY(), getCoordZ(), false);
     }
     
@@ -123,7 +127,7 @@ public class SelfAwareBlock extends Block{
      * @return the neighbour block
      */
     public Block getNeighbourBlock(int side){
-        int neighbourcoords[] = Block.sideNumbToNeighbourCoords(new int[]{getCoordX(), getCoordY(), coordZ}, side);
+        int neighbourcoords[] = Block.sideNumbToNeighbourCoords(new int[]{getCoordX(), getCoordY(), absCoords[2]}, side);
         return Controller.getMapDataSafe(neighbourcoords[0], neighbourcoords[1], neighbourcoords[2]);
     }
 }

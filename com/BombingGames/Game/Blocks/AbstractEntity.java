@@ -9,7 +9,7 @@ import org.newdawn.slick.SlickException;
  *A block which can move himself around the map, therefore it must also be a SelfAwareBlock.
  * @author Benedikt
  */
-public abstract class AbstractMovingBlock extends SelfAwareBlock {
+public abstract class AbstractEntity extends SelfAwareBlock {
    
    /* Always one of them must be 1 to prevent a division with 0.*/
    private float[] dir = {1,0,0};
@@ -24,8 +24,9 @@ public abstract class AbstractMovingBlock extends SelfAwareBlock {
      */
     abstract void jump();
    
-    protected AbstractMovingBlock(int x,int y, int z){
+    protected AbstractEntity(int x,int y, int z){
         super(x,y,z);
+        setVisible(true);
     }
     
     
@@ -152,19 +153,19 @@ public abstract class AbstractMovingBlock extends SelfAwareBlock {
                     switch(sidennumb) {
                         case 0:
                         case 1:
-                                makeCoordinateStep(1, -1, topblock);
+                                makeCoordinateStep(1, -1);
                                 break;
                         case 2:    
                         case 3:
-                                makeCoordinateStep(1, 1, topblock);
+                                makeCoordinateStep(1, 1);
                                 break;
                         case 4:
                         case 5:
-                                makeCoordinateStep(-1, 1, topblock);
+                                makeCoordinateStep(-1, 1);
                                 break;
                         case 6:
                         case 7:
-                                makeCoordinateStep(-1, -1, topblock);
+                                makeCoordinateStep(-1, -1);
                                 break;    
                     }
                 }
@@ -182,16 +183,13 @@ public abstract class AbstractMovingBlock extends SelfAwareBlock {
      * Make a step on the coordinate grid.
      * @param x left or right step
      * @param y the coodinate steps
-     * @param topblock if you want to also move a block on top add a pointer to it. If not wanted: null.
      */
-    private void makeCoordinateStep(int x, int y, Blockpointer topblock){
+    private void makeCoordinateStep(int x, int y){
         //mirror the position around the center
         setPos(1, getPos()[1] -1*y*Block.DIM2);
         setPos(0, getPos()[0] -1*x*Block.DIM2);
         
         
-        selfDestroy();
-        if (topblock != null) topblock.setBlock(Block.create());
         
         setAbsCoordY(getAbsCoordY()+y);
         if (x<0){
@@ -200,8 +198,6 @@ public abstract class AbstractMovingBlock extends SelfAwareBlock {
             if (getCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
         }
          
-        selfRebuild();
-        if (topblock != null) topblock.setBlock(Block.create(getId()));
         
         //if there was a coordiante change recalc map.
         Controller.getMap().requestRecalc();
@@ -210,9 +206,8 @@ public abstract class AbstractMovingBlock extends SelfAwareBlock {
        /**
      * Updates the block.
      * @param delta time since last update
-     * @param topblock the block on top, if there is none set it to null
      */
-    protected void update(int delta, Blockpointer topblock) {
+    public void update(int delta) {
         //calculate movement
         float t = delta/1000f; //t = time in s
         dir[2] += -Map.GRAVITY*t; //in m/s
@@ -236,11 +231,8 @@ public abstract class AbstractMovingBlock extends SelfAwareBlock {
             && ! Controller.getMapDataSafe(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
           //  if (! fallsound.playing()) fallsound.play();
             
-            selfDestroy();
-            if (topblock != null) topblock.setBlock(Block.create());
+          
             setCoordZ(getCoordZ()-1);
-            selfRebuild();
-            if (topblock != null) topblock.setBlock(Block.create(getId()));
 
             setPos(2, getPos()[2]+ Block.GAMEDIMENSION);
             Controller.getMap().requestRecalc();
@@ -251,19 +243,13 @@ public abstract class AbstractMovingBlock extends SelfAwareBlock {
                 && !Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
                 //if (! fallsound.playing()) fallsound.play();
 
-                selfDestroy();
-                if (topblock != null) topblock.setBlock(Block.create());
+               
                 setCoordZ(getCoordZ()+1);
-                selfRebuild();
-                if (topblock != null) topblock.setBlock(Block.create(getId()));
 
                 setPos(2, getPos()[2]- Block.GAMEDIMENSION);
                 Controller.getMap().requestRecalc();
             } 
         }
-        
-        //set the offset for the rendering
-        if (topblock != null) topblock.getBlock().setPos(getPos());  
     }
    
     /**

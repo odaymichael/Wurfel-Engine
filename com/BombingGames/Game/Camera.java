@@ -1,9 +1,11 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.Game.Blocks.AbstractEntity;
 import com.BombingGames.Game.Blocks.Block;
 import com.BombingGames.Game.Blocks.Blockpointer;
 import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *The camera locks to the player by default. It can be changed with <i>focusblock()</i>.
@@ -15,12 +17,14 @@ public class Camera {
     private static class Renderblock {
         protected final int x,y,z;
         protected final int depth;
+        protected final int entitynumber;
 
-        protected Renderblock(int x, int y, int z, int depth) {
+        protected Renderblock(int x, int y, int z, int depth, int entitynumber) {
             this.x = x;
             this.y = y;
             this.z = z;
             this.depth = depth;
+            this.entitynumber = entitynumber;
         }
     }
     
@@ -268,9 +272,16 @@ public class Camera {
                     
                     Block block = Controller.getMapData(x, y, z); 
                     if (!block.isInvisible() && block.isVisible()) {
-                        depthsort.add(new Renderblock(x, y, z, block.getDepth(y,z)));
+                        depthsort.add(new Renderblock(x, y, z, block.getDepth(y,z),-1));
                     }
                     
+                    for (int i=0;i<Gameplay.getController().getEntitylist().size();i++){
+                        
+                        AbstractEntity entity = Gameplay.getController().getEntitylist().get(i);
+                        if (Arrays.equals(entity.getCoords(), new int[]{x,y,z}))
+                            depthsort.add(new Renderblock(x, y, z, entity.getDepth(y, z),i));
+                        
+                    }
                 }
         sortDepthList(0, depthsort.size()-1);
     }
@@ -310,6 +321,10 @@ public class Camera {
         Renderblock item = depthsort.get(index);
         int[] triple = {item.x, item.y, item.z};
         return triple;
+    }
+    
+   public int getEntityNumber(int i) {
+        return depthsort.get(i).entitynumber;
     }
     
     /**
