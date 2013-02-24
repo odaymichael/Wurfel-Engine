@@ -254,13 +254,13 @@ public class Map {
         Block.getBlocksheet().startUse();
         //render vom bottom to top
         for (int i=0; i < camera.depthsortlistSize() ;i++) {
-            int[] item = camera.getDepthsortCoord(i);
+            int[] coords = camera.getDepthsortCoord(i);
             
-            Block block = data[item[0]][item[1]][item[2]];
+            Block block = data[coords[0]][coords[1]][coords[2]];
             if (block instanceof AbstractAnimatedBlock)
                 ((AbstractAnimatedBlock) block).updateGFX();
-            
-            block.render(item[0],item[1],item[2], camera);            
+                            
+            block.render(coords[0],coords[1],coords[2], camera);            
         }
             
        Block.getBlocksheet().endUse(); 
