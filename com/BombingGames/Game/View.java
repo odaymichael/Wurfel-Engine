@@ -51,6 +51,7 @@ public class View {
             equalizationScale
         );
         
+        Block.loadSheet();
         //camera.focusOnBlock(new Blockpointer(Chunk.getBlocksX()*3/2,Map.getBlocksY()/2,Chunk.getBlocksZ()/2));
         
         if (camera.getTotalHeight() > Chunk.getBlocksY()*Block.DIM2/2) {

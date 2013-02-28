@@ -11,7 +11,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 /**
- * A Block is a wonderfull piece of information and a geometrical object.
+ * A Block is a wonderful piece of information and a geometrical object.
  * @author Benedikt
  */
 public class Block {
@@ -183,11 +183,7 @@ public class Block {
         SPRITEPOS[72][1][0][0] = 0;
         SPRITEPOS[72][1][0][1] = 720;
         
-        try {
-            spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Spritesheet.png", DIMENSION, (int) (DIM2*1.5));
-        } catch (SlickException ex) {
-            Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
-        }
+      
     }
 
     /**
@@ -197,7 +193,6 @@ public class Block {
     }
     
    
-  
     
     /**
      * Creates an air block.
@@ -788,4 +783,8 @@ public class Block {
         
         image.drawEmbedded(xpos, ypos);
     }
+    
+    public static void loadSheet() throws SlickException{
+        spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Spritesheet.png", DIMENSION, (int) (DIM2*1.5));
+    } 
 }
