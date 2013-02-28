@@ -25,8 +25,8 @@ public class MainMenuState extends BasicGameState{
      */
     public static StateBasedGame sbg;
  
-    View View = null;
-    Controller Controller = null;
+    private static View View;
+    private static Controller Controller;
     
     /**
      * 
@@ -43,11 +43,11 @@ public class MainMenuState extends BasicGameState{
     }
  
     @Override
-    public void init(GameContainer pgc, StateBasedGame psbg) throws SlickException {
-        gc = pgc;
-        sbg = psbg;
-        View = new View(pgc);
-        Controller = new Controller(View); 
+    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        MainMenuState.gc = gc;
+        MainMenuState.sbg = sbg;
+        Controller = new Controller(); 
+        View = new View(gc);
     }
   
     @Override
@@ -57,7 +57,14 @@ public class MainMenuState extends BasicGameState{
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-        View.render(Controller);
-        
+        View.render(Controller); 
+    }
+
+    public static com.BombingGames.MainMenu.Controller getController() {
+        return Controller;
+    }
+
+    public static com.BombingGames.MainMenu.View getView() {
+        return View;
     }
 }

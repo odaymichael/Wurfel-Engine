@@ -11,16 +11,18 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Benedikt
  */
 public class Controller {
-    View View = null;
-    Sound fx = null;
+    private Sound fx;
+    
+    private final MenuItem startGameOption = new MenuItem(0);
+    private final MenuItem loadGameOption = new MenuItem(1);
+    private final MenuItem exitOption = new MenuItem(2);
     
     /**
      * Creates a new Controller
      * @param pView
      * @throws SlickException
      */
-    public Controller(View pView) throws SlickException{
-        View = pView;
+    public Controller() throws SlickException{
         fx = new Sound("com/BombingGames/MainMenu/click2.wav");
     }
     
@@ -33,20 +35,32 @@ public class Controller {
     public void update(GameContainer gc, StateBasedGame sbg, int delta){
         Input input = gc.getInput();
          
-        if (View.startGameOption.isClicked(input)){
+        if (startGameOption.isClicked(input)){
             MainMenuState.loadmap = false;
             fx.play(); 
             sbg.enterState(2);            
-        } else if (View.loadGameOption.isClicked(input)) { 
+        } else if (loadGameOption.isClicked(input)) { 
                 MainMenuState.loadmap = true;
                 fx.play();
                 //fade in is a bad idea because afer the fade in is a lag.
                 //sbg.enterState(2, new FadeInTransition(), new FadeInTransition());
                 sbg.enterState(2); 
-        }else if (View.exitOption.isClicked(input)){
+        }else if (exitOption.isClicked(input)){
             gc.exit();
         }
     }
-   
+
+    public MenuItem getExitOption() {
+        return exitOption;
+    }
+
+    public MenuItem getLoadGameOption() {
+        return loadGameOption;
+    }
+
+    public MenuItem getStartGameOption() {
+        return startGameOption;
+    }
+ 
    
 }

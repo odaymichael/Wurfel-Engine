@@ -2,29 +2,17 @@ package com.BombingGames.MainMenu;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 
 /**
  * The View manages ouput
  * @author Benedikt
  */
 public class View {
-    float startGameScale = 1;
-    float exitScale = 1;
-    private Image background = null;
-    /**
-     * 
-     */
-    protected MenuItem startGameOption = new MenuItem();
-    /**
-     * 
-     */
-    protected MenuItem loadGameOption = new MenuItem();
-    /**
-     * 
-     */
-    protected MenuItem exitOption = new MenuItem();
+    //private float startGameScale = 1;
+    //private float exitScale = 1;
+    private final Image background;
     
     
     /**
@@ -33,22 +21,21 @@ public class View {
      * @throws SlickException
      */
     public View(GameContainer gc) throws SlickException{
-        background = new Image("com/BombingGames/MainMenu/Images/Logo.png");
- 
-        // load the menu images
-        Image menuOptions = new Image("com/BombingGames/MainMenu/Images/MainMenu.png");
-
-        startGameOption.image = menuOptions.getSubImage(0, 0, 400, 50);
-        startGameOption.X = (gc.getWidth() - startGameOption.image.getWidth())/2;
-        startGameOption.Y = 50;
+        background = new Image("com/BombingGames/MainMenu/Images/Lettering.png"); 
+        MenuItem.spritesheet = new SpriteSheet("com/BombingGames/MainMenu/Images/MainMenu.png",400,50);
         
-        loadGameOption.image = menuOptions.getSubImage(0,50,400,50);
-        loadGameOption.X = (gc.getWidth()-loadGameOption.image.getWidth())/2;
-        loadGameOption.Y = 100;
+        MenuItem startgame = MainMenuState.getController().getStartGameOption();
+        startgame.setX((gc.getWidth() - MenuItem.spritesheet.getWidth())/2);
+        startgame.setY(gc.getHeight()/2 - 100);
         
-        exitOption.image = menuOptions.getSubImage(0, 100, 400, 50);
-        exitOption.X = 300;
-        exitOption.Y = 300;
+        MenuItem loadgame = MainMenuState.getController().getLoadGameOption();
+        loadgame.setX((gc.getWidth()- MenuItem.spritesheet.getWidth())/2);
+        loadgame.setY(gc.getHeight()/2);
+        
+        MenuItem exit = MainMenuState.getController().getExitOption();
+        exit.setX((gc.getWidth()- MenuItem.spritesheet.getWidth())/2);
+        exit.setY(gc.getHeight()/2 + 100);
+        
     }
 
     /**
@@ -58,53 +45,13 @@ public class View {
     public void render(Controller pController){
         // render the background
         background.draw(0,0);
-        // Draw menu
-
-        startGameOption.draw();
-        loadGameOption.draw();
-        exitOption.draw();
-    }
-    /*private static int window_width(){
-        int value;
-        Dimension size = window.getSize();
-        insets = window.getInsets();
-        value = size.width - insets.left - insets.right;
-        //Controller.ChunkSizeX = value ;
-        return value;
-   }
-   
-    private static int window_height(){
-        int value;
-        Dimension size = window.getSize();
-        insets = window.getInsets();
-        value = size.height - insets.top - insets.bottom;
-        //Controller.ChunkSizeY = value ;
-        return value;
-   }*/
-}
-
-class MenuItem{
-    public int X = 0;
-    public int Y = 0;
-    public Image image;
-    
-    public void draw(){
-        image.draw(X,Y);
-    }
-
-    boolean isClicked(Input input) {
-        int mouseX = input.getMouseX();
-        int mouseY = input.getMouseY();
         
-        if (
-            (mouseX >= X && mouseX <= X + image.getWidth()) &&
-            (mouseY >= Y && mouseY <= Y + image.getHeight()) &&
-            (input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
-           )
-            return true;
-       else
-            return false;
+        // Draw menu
+        MenuItem.spritesheet.startUse();
+        MainMenuState.getController().getStartGameOption().draw();
+        MainMenuState.getController().getLoadGameOption().draw();
+        MainMenuState.getController().getExitOption().draw();
+        MenuItem.spritesheet.endUse();
     }
-    
-
 }
+
