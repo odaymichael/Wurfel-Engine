@@ -58,7 +58,7 @@ public class Controller {
     }
     
     /**
-     * Same as "Map.getDataSafe(int, int, int)"
+     * Same as "Map.getDataSafe(int, int, int)". This is a shortcut.
      * @param x
      * @param y
      * @param z
@@ -67,6 +67,16 @@ public class Controller {
      */
     public static Block getMapData(int x, int y, int z){
         return map.getData(x, y, z);
+    }
+    
+    /**
+     * Shortcut to "Map.getDataSafe(int, int, int)"
+     * @param coords the coordinates in an array (vector)
+     * @return the wanted block
+     * @see com.BombingGames.Game.Map#getData(int, int, int) 
+     */
+    public static Block getMapData(int[] coords){
+        return map.getData(coords[0], coords[1], coords[2]);
     }
     
     /**
@@ -151,6 +161,10 @@ public class Controller {
 
 
 
+    /**
+     * 
+     * @return
+     */
     public ArrayList<AbstractEntity> getEntitylist() {
         return entitylist;
     }

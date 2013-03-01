@@ -92,14 +92,14 @@ public class GameController extends Controller {
     }
     
     class MouseDraggedListener implements MouseListener{
-        private float zoomx = 1;
+        private float zoom = 1;
         
         @Override
         public void mouseWheelMoved(int change) {
             gc.getInput().consumeEvent();
             
-            zoomx = zoomx + change/1000f;
-            Gameplay.getView().getCamera().setZoom((float) (3f*Math.sin(zoomx-1.5f)+3.5f));
+            zoom = zoom + change/1000f;
+            Gameplay.getView().getCamera().setZoom((float) (3f*Math.sin(zoom-1.5f)+3.5f));
             
             Gameplay.MSGSYSTEM.add("Zoom: "+Gameplay.getView().getCamera().getZoom());   
         }
@@ -132,6 +132,7 @@ public class GameController extends Controller {
         public void mouseDragged(int oldx, int oldy, int newx, int newy) {
             //workaround for the bug in slick, because the event is called multiple times
             gc.getInput().consumeEvent();
+            
             int coords[] = Gameplay.getView().ScreenToGameCoords(newx,newy);
             setMapDataSafe(coords[0], coords[1], coords[2]-2,Block.create(1));
             Log.debug("made block at "+coords[0]+","+coords[1]+","+coords[2]);

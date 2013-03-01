@@ -62,7 +62,7 @@ public class Block {
     private int id; 
     private int value;
     private float[] pos = {Block.DIM2, Block.DIM2, 0};
-    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft, lockedInvisibility, liquid; 
+    private boolean obstacle, transparent, visible, renderRight, renderTop, renderLeft, hidden, liquid; 
     private boolean hasSides = true;
     private int lightlevel = 50;
     private int dimensionY = 1;    
@@ -238,7 +238,7 @@ public class Block {
                     block = new Block();
                     block.transparent = true;
                     block.obstacle = false;
-                    block.lockedInvisibility = true;
+                    block.hidden = true;
                     break;
             case 1:block = new Block(); 
                     block.transparent = false;
@@ -289,7 +289,7 @@ public class Block {
                         block.hasSides = false;
                         block.dimensionY=2;
                         if (value==0)
-                            block.lockedInvisibility = true;
+                            block.hidden = true;
                     } catch (SlickException ex) {
                         Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -557,7 +557,7 @@ public class Block {
 
     /**
      * Hide this block and prevent it from beeing rendered.
-     * @param visible Sets the visibility. When it is false, every side will also get lockedInvisibility
+     * @param visible Sets the visibility. When it is false, every side will also get hidden
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
@@ -643,11 +643,11 @@ public class Block {
     }
     
    /**
-     * Returns true, when locked as invisibility. Invisible blocks are not rendered even when they are visible (by the meaning of the raytracing).
+     * Returns true, when set as hidden. Hidden blocks are not rendered even when they are visible ("visible" by the meaning of the raytracing).
      * @return the locked visiblity
      */
-    public boolean isInvisible() {
-        return lockedInvisibility;
+    public boolean isHidden() {
+        return hidden;
     }
 
     /**

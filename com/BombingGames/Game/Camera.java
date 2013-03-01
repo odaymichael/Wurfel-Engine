@@ -11,44 +11,29 @@ import java.util.ArrayList;
  * @author Benedikt
  */
 public class Camera {
+    private enum Focustype {
+        BLOCK, ENTITY
+    }
+        
     private final int screenX, screenY, screenWidth, screenHeight;
     private int xPos, yPos, gameWidth, gameHeight;
     private int leftborder, topborder, rightborder, bottomborder;
     private float zoom = 1;
     
-    private enum Focustype {
-        BLOCK, ENTITY
-    } 
-    
     private Focustype focus;
     private Blockpointer focusblock;
     private AbstractEntity focusentity;
-    
-    private static class Renderblock {
-        protected final int x,y,z;
-        protected final int depth;
-        protected final int entityindex;
-
-        protected Renderblock(int x, int y, int z, int depth, int entitynumber) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.depth = depth;
-            this.entityindex = entitynumber;
-        }
-    }
-    
     private ArrayList<Renderblock> depthsort = new ArrayList<Renderblock>();
     
 
     
      /**
-     * Creates a camera. Screen does refer to the output of the camera not the real size on the display.
+     * Creates a virtual camera wich displays the game world. Screen size does refer to the output of the camera not the real size on the display.
      * @param focusblock the block in the focus
      * @param x the position of the camera
      * @param y the position of the camera
-     * @param width the screen width
-     * @param height the screen width
+     * @param width the width of the output. it can be different than the output on the display because it gets scaled later again.
+     * @param height the height of the output. it can be different than the output on the display because it gets scaled later again.
      * @param scale the zoom factor.
      */
     public Camera(Blockpointer focusblock, int x, int y,int width, int height, float scale) {
@@ -127,12 +112,12 @@ public class Camera {
     public void render() {
         if (Controller.getMap() != null) {
         
-            Wurfelengine.getGraphics().scale(getZoom(), getZoom());
+            Wurfelengine.getGraphics().scale(zoom, zoom);
             
             createSortedDepthList();
             Controller.getMap().render(this);
         
-            Wurfelengine.getGraphics().scale(1/getZoom(), 1/getZoom());
+            Wurfelengine.getGraphics().scale(1/zoom, 1/zoom);
         }
         //GUI
         if (Controller.getMap().getMinimap() != null)
@@ -171,7 +156,7 @@ public class Camera {
      * @param blockpointer
      */
     public void focusOnBlock(Blockpointer blockpointer){
-       focus = Focustype.BLOCK;
+        focus = Focustype.BLOCK;
         focusblock = blockpointer;
     }
     
@@ -311,7 +296,7 @@ public class Camera {
                 for (int z=0; z < Map.getBlocksZ(); z++){
                     
                     Block block = Controller.getMapData(x, y, z); 
-                    if (!block.isInvisible() && block.isVisible()) {
+                    if (!block.isHidden() && block.isVisible()) {
                         depthsort.add(new Renderblock(x, y, z, block.getDepth(y,z),-1));
                     }
                 }
