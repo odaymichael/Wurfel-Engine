@@ -133,8 +133,16 @@ public class Controller {
             player.update(delta);
         
         Gameplay.getView().getCamera().update();
+        //update every block
+        //////////////////////////////////
         
-            
+        
+        Block[][][] mapdata = map.getData();
+        for (int x=0; x < Map.getBlocksX(); x++)
+            for (int y=0; y < Map.getBlocksY(); y++)
+                for (int z=0; z < Map.getBlocksZ(); z++)
+                    mapdata[x][y][z].update();
+        
         //recalculates the light if requested
         map.recalcIfRequested();      
        
@@ -162,7 +170,7 @@ public class Controller {
 
 
     /**
-     * 
+     * Returns the entitylist
      * @return
      */
     public ArrayList<AbstractEntity> getEntitylist() {

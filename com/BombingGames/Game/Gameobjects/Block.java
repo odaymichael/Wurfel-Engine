@@ -701,6 +701,10 @@ public class Block {
         return (int) (DIMENSION*y +(y % 2)*DIM2 + DIMENSION*z + pos[0] + (dimensionY-1)*DIMENSION);
     }
     
+    public  void update(){
+    
+    };
+    
     /**
      * Draws a block
      * @param x x-coordinate

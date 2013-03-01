@@ -261,9 +261,6 @@ public class Map {
             if (entitynumber == -1)
                 block = data[coords[0]][coords[1]][coords[2]];
             else block = Gameplay.getController().getEntitylist().get(entitynumber);
-            
-            if (block instanceof AbstractAnimatedBlock)
-                ((AbstractAnimatedBlock) block).updateGFX();
                             
             block.render(coords[0],coords[1],coords[2], camera);            
         }
