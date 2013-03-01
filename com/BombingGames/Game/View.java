@@ -121,16 +121,29 @@ public class View {
         Log.debug("ScreenToGameCoords("+x+","+y+")");
         y = ScreenYtoGame(y);
         x = ScreenXtoGame(x);
-              
+        
+        //find out where the click went
         coords[0] = x / Block.DIMENSION-1;
         
         coords[1] = (int) (y / Block.DIMENSION)*2-1;
             
         coords[2] = Map.getBlocksZ()-1;
         
+        //specific the block
         int[] tmpcoords = Block.posToNeighbourCoords(coords, x % Block.DIMENSION, y % Block.DIMENSION);
         coords[0] = tmpcoords[0];
         coords[1] = tmpcoords[1] + coords[2]*2;
+        
+        if (Controller.getMapData(coords).getId() == 0){
+            //trace ray down to bottom
+            do {
+                coords[1] = coords[1]-2;
+                coords[2] = coords[2]-1;
+            } while (Controller.getMapData(coords).getId() == 0);
+
+            coords[1] = coords[1]+2;
+            coords[2] = coords[2]+1;
+        }
         
         return coords;
     }
