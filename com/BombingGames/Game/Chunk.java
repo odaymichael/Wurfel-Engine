@@ -131,7 +131,7 @@ public class Chunk {
                         data[x][y][1] = Block.create(2);
                         data[x][y][0] = Block.create(2);
                     }
-                data[5][5][3] = Block.create(72,0,5,5,3);
+                data[5][5][3] = Block.create(71,0,5,5,3);
                 data[5][5][2] = Block.create(2);
                 
                 break;
