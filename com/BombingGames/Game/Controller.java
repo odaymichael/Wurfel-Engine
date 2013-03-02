@@ -26,14 +26,14 @@ public class Controller {
      * @throws SlickException
      */
     public Controller(GameContainer container, StateBasedGame game) throws SlickException{        
-        map = new Map(MainMenuState.loadmap);
+        map = new Map(MainMenuState.shouldLoadMap());
     }
 
     /**
      * Creates a new Map.
      */
     public static void newMap(){
-        map = new Map(MainMenuState.loadmap);
+        map = new Map(MainMenuState.shouldLoadMap());
     }
     
     /**
@@ -129,19 +129,20 @@ public class Controller {
                 map.setCenter(7);
         }
         
-        if (player != null)
-            player.update(delta);
         
         Gameplay.getView().getCamera().update();
-        //update every block
-        //////////////////////////////////
+
         
-        
+        //update every block on the map
         Block[][][] mapdata = map.getData();
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY(); y++)
                 for (int z=0; z < Map.getBlocksZ(); z++)
                     mapdata[x][y][z].update(delta);
+        
+        //update every entity
+        for (AbstractEntity entity : entitylist)
+            entity.update(delta);
         
         //recalculates the light if requested
         map.recalcIfRequested();      
@@ -166,8 +167,6 @@ public class Controller {
         this.player = player;
         entitylist.add(player);
     }
-
-
 
     /**
      * Returns the entitylist

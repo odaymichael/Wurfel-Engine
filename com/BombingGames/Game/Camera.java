@@ -23,7 +23,7 @@ public class Camera {
     private Focustype focus;
     private Blockpointer focusblock;
     private AbstractEntity focusentity;
-    private ArrayList<Renderblock> depthsort = new ArrayList<Renderblock>();
+    private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
     
 
     
@@ -297,7 +297,7 @@ public class Camera {
                     
                     Block block = Controller.getMapData(x, y, z); 
                     if (!block.isHidden() && block.isVisible()) {
-                        depthsort.add(new Renderblock(x, y, z, block.getDepth(y,z),-1));
+                        depthsort.add(new Renderobject(x, y, z, block.getDepth(y,z),-1));
                     }
                 }
         
@@ -305,7 +305,7 @@ public class Camera {
         for (int i=0; i<Gameplay.getController().getEntitylist().size(); i++){
             AbstractEntity entity = Gameplay.getController().getEntitylist().get(i);
             depthsort.add(
-                new Renderblock(
+                new Renderobject(
                     entity.getCoordX(),
                     entity.getCoordY(),
                     entity.getCoordZ(),
@@ -327,14 +327,14 @@ public class Camera {
     private void sortDepthList(int low, int high) {
         int left = low;
         int right = high;
-        int middle = depthsort.get((low+high)/2).depth;
+        int middle = depthsort.get((low+high)/2).getDepth();
 
         while (left <= right){    
-            while(depthsort.get(left).depth < middle) left++; 
-            while(depthsort.get(right).depth > middle) right--;
+            while(depthsort.get(left).getDepth() < middle) left++; 
+            while(depthsort.get(right).getDepth() > middle) right--;
 
             if (left <= right) {
-                Renderblock tmp = depthsort.set(left, depthsort.get(right));
+                Renderobject tmp = depthsort.set(left, depthsort.get(right));
                 depthsort.set(right, tmp);
                 left++; 
                 right--;
@@ -355,8 +355,8 @@ public class Camera {
                 * @return the coordinate triple with x,y,z
                 */
         public int[] getDepthsortCoord(int index) {
-            Renderblock item = depthsort.get(index);
-            int[] triple = {item.x, item.y, item.z};
+            Renderobject item = depthsort.get(index);
+            int[] triple = item.getCoords();
             return triple;
         }
 
@@ -366,7 +366,7 @@ public class Camera {
                 * @return the entityindex
                 */
         public int getEntityIndex(int i) {
-            return depthsort.get(i).entityindex;
+            return depthsort.get(i).getEntityindex();
         }
 
         /**

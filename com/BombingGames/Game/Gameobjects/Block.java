@@ -30,6 +30,10 @@ public class Block {
      */
     public static final int DIM4 = DIMENSION/4;
 
+    public static final int LEFTSIDE=0;
+    public static final int TOPSIDE=1;
+    public static final int RIGHTSIDE=2;
+    
     
     /**
      * The real game world dimension in pixel. Usually DIMENSION should be enough becaue of the map format. The value is DIMENSION/sqrt(2).
@@ -241,15 +245,15 @@ public class Block {
         //define the default SideSprites
         switch (id){
             case 0: 
-                    block = new Block();
+                    block = new Block();//air
                     block.transparent = true;
                     block.obstacle = false;
                     block.hidden = true;
                     break;
-            case 1: block = new Block(); 
+            case 1: block = new Block(); //grass
                     block.obstacle = true;
                     break;
-            case 2: block = new Block(); 
+            case 2: block = new Block(); //dirt
                     block.obstacle = true;
                     break;
             case 3: block = new Block(); 
@@ -268,10 +272,10 @@ public class Block {
             case 7: block = new Block(); 
                     block.obstacle = true;
                     break;
-            case 8: block = new Block(); 
+            case 8: block = new Block(); //sand
                     block.obstacle = true;
                     break;      
-            case 9: block = new Block(); 
+            case 9: block = new Block(); //water
                     block.transparent = true;
                     block.obstacle = false;
                     block.liquid=true;
@@ -306,7 +310,7 @@ public class Block {
                     block.obstacle = true;
                     block.hasSides = true;
                     break;
-            case 72:block = new AnimatedTest();
+            case 72:block = new AnimatedBlock(new int[]{1000,1000});
                     block.obstacle = true;
                     break;
             default:
@@ -709,9 +713,9 @@ public class Block {
         //draw every visible block except air
         if (id != 0 && visible){            
             if (hasSides){
-                if (renderTop) renderSide(x,y,z, 1, camera);
-                if (renderLeft) renderSide(x,y,z, 0, camera);
-                if (renderRight) renderSide(x,y,z, 2, camera);
+                if (renderTop) renderSide(x,y,z, TOPSIDE, camera);
+                if (renderLeft) renderSide(x,y,z, LEFTSIDE, camera);
+                if (renderRight) renderSide(x,y,z, RIGHTSIDE, camera);
             } else {
                 Image image = getSprite(id, value,dimensionY);
 
@@ -744,7 +748,7 @@ public class Block {
      * @param x
      * @param y
      * @param z
-     * @param sidenumb The number of the side. 0 left, 1 top 2, right
+     * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      * @param renderBlock The block which gets rendered
      */
     private void renderSide(int x, int y, int z, int sidenumb, Camera camera){
@@ -781,11 +785,19 @@ public class Block {
         image.drawEmbedded(xpos, ypos);
     }
     
+    /**
+     * Load the spritesheet from memory.
+     * @throws SlickException
+     */
     public static void loadSheet() throws SlickException{
         spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Spritesheet.png", DIMENSION, (int) (DIM2*1.5));
     }
 
+    /**
+     * updates teh logic of the block.
+     * @param delta time since last update
+     */
     public void update(int delta) {
-        
+        //the normal (parent) block has no logic. 
     }
 }

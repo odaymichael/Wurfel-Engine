@@ -1,6 +1,5 @@
 package com.BombingGames.Game;
 
-import com.BombingGames.Game.Gameobjects.AbstractAnimatedBlock;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.MainMenu.MainMenuState;
 import org.lwjgl.opengl.GL11;
@@ -142,7 +141,7 @@ public class Map {
                         new Chunk(
                             coordlist[pos][0],
                             coordlist[pos][1],
-                            MainMenuState.loadmap
+                            MainMenuState.shouldLoadMap()
                         )
                 );
                 

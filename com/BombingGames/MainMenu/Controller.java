@@ -7,7 +7,7 @@ import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- * 
+ * The controlelr of the main Menu manages the data.
  * @author Benedikt
  */
 public class Controller {
@@ -19,7 +19,6 @@ public class Controller {
     
     /**
      * Creates a new Controller
-     * @param pView
      * @throws SlickException
      */
     public Controller() throws SlickException{
@@ -36,11 +35,11 @@ public class Controller {
         Input input = gc.getInput();
          
         if (startGameOption.isClicked(input)){
-            MainMenuState.loadmap = false;
+            MainMenuState.setLoadMap(false);
             fx.play(); 
             sbg.enterState(2);            
         } else if (loadGameOption.isClicked(input)) { 
-                MainMenuState.loadmap = true;
+                MainMenuState.setLoadMap(true);
                 fx.play();
                 //fade in is a bad idea because afer the fade in is a lag.
                 //sbg.enterState(2, new FadeInTransition(), new FadeInTransition());
@@ -50,14 +49,26 @@ public class Controller {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public MenuItem getExitOption() {
         return exitOption;
     }
 
+    /**
+     * 
+     * @return
+     */
     public MenuItem getLoadGameOption() {
         return loadGameOption;
     }
 
+    /**
+     * 
+     * @return
+     */
     public MenuItem getStartGameOption() {
         return startGameOption;
     }

@@ -13,10 +13,11 @@ public class Player extends AbstractCharacter{
    
     /**
      * Creates a player. The parameters are for the lower half of the player. The constructor automatically creates a block on top of it.
-     * @param X Absolute X-Pos of lower half
-     * @param Y Absolute Y-Pos of lower half
-     * @param Z Absolute Z-Pos of lower half
+     * @param x 
+     * @param y 
+     * @param z 
      * @throws SlickException
+     * @see com.BombingGames.Game.Gameobjects.Block#create(int) 
      */
     protected Player(int x, int y, int z) throws SlickException {
         super(x,y,z);

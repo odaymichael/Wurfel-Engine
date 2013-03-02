@@ -22,18 +22,18 @@ public class View {
      */
     public View(GameContainer gc) throws SlickException{
         background = new Image("com/BombingGames/MainMenu/Images/Lettering.png"); 
-        MenuItem.spritesheet = new SpriteSheet("com/BombingGames/MainMenu/Images/MainMenu.png",400,50);
+        MenuItem.setSpritesheet(new SpriteSheet("com/BombingGames/MainMenu/Images/MainMenu.png",400,50));
         
         MenuItem startgame = MainMenuState.getController().getStartGameOption();
-        startgame.setX((gc.getWidth() - MenuItem.spritesheet.getWidth())/2);
+        startgame.setX((gc.getWidth() - MenuItem.getSpritesheet().getWidth())/2);
         startgame.setY(gc.getHeight()/2 - 100);
         
         MenuItem loadgame = MainMenuState.getController().getLoadGameOption();
-        loadgame.setX((gc.getWidth()- MenuItem.spritesheet.getWidth())/2);
+        loadgame.setX((gc.getWidth()- MenuItem.getSpritesheet().getWidth())/2);
         loadgame.setY(gc.getHeight()/2);
         
         MenuItem exit = MainMenuState.getController().getExitOption();
-        exit.setX((gc.getWidth()- MenuItem.spritesheet.getWidth())/2);
+        exit.setX((gc.getWidth()- MenuItem.getSpritesheet().getWidth())/2);
         exit.setY(gc.getHeight()/2 + 100);
         
     }
@@ -47,11 +47,11 @@ public class View {
         background.draw(0,0);
         
         // Draw menu
-        MenuItem.spritesheet.startUse();
+        MenuItem.getSpritesheet().startUse();
         MainMenuState.getController().getStartGameOption().draw();
         MainMenuState.getController().getLoadGameOption().draw();
         MainMenuState.getController().getExitOption().draw();
-        MenuItem.spritesheet.endUse();
+        MenuItem.getSpritesheet().endUse();
     }
 }
 

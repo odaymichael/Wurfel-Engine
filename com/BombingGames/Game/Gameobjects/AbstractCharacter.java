@@ -27,11 +27,19 @@ public abstract class AbstractCharacter extends AbstractEntity{
    private Sound runningSound;
    
    /**
-     * These method should define what happens when the object  jumps. Shoudl call jump(int velo)
+     * These method should define what happens when the object  jumps. It should call super.jump(int velo)
+     * @see com.BombingGames.Game.Gameobjects.AbstractCharacter#jump(float)
      */
     abstract void jump();
     
-   protected AbstractCharacter(int x,int y, int z){
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param z
+     * @see com.BombingGames.Game.Gameobjects.Block#create(int) 
+     */
+    protected AbstractCharacter(int x,int y, int z){
         super(x,y,z);
     }
     
@@ -185,10 +193,11 @@ public abstract class AbstractCharacter extends AbstractEntity{
         Controller.getMap().requestRecalc();
     }
     
-       /**
+   /**
      * Updates the block.
      * @param delta time since last update
      */
+    @Override
     public void update(int delta) {
         if (runningSound != null)
             if (speed > 0.5f){
@@ -264,10 +273,18 @@ public abstract class AbstractCharacter extends AbstractEntity{
         return dir;
     }
 
+    /**
+     * Sets the sound to be played when falling
+     * @param fallingSound
+     */
     public void setFallingSound(Sound fallingSound) {
         this.fallingSound = fallingSound;
     }
 
+    /**
+     * Set the sound to be played when running.
+     * @param runningSound
+     */
     public void setRunningSound(Sound runningSound) {
         this.runningSound = runningSound;
     }

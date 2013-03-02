@@ -7,29 +7,20 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
  
 /**
- * The game state of the Main Menu
+ * The game state of the Main Menu.
  * @author Benedikt
  */
 public class MainMenuState extends BasicGameState{
-    /**
-     * 
-     */
-    public static boolean loadmap = false;
-    int stateID = 1;
-    /**
-     * 
-     */
-    public static GameContainer gc;
-    /**
-     * 
-     */
-    public static StateBasedGame sbg;
+    private static boolean loadMap = false;
+    private int stateID = 1;
+    private static GameContainer gc;
+    private static StateBasedGame sbg;
  
     private static View View;
     private static Controller Controller;
     
     /**
-     * 
+     * Creates the main Menu
      * @param stateID
      */
     public MainMenuState( int stateID) {
@@ -60,11 +51,30 @@ public class MainMenuState extends BasicGameState{
         View.render(Controller); 
     }
 
+    /**
+     * 
+     * @return
+     */
     public static com.BombingGames.MainMenu.Controller getController() {
         return Controller;
     }
 
+    /**
+     * 
+     * @return
+     */
     public static com.BombingGames.MainMenu.View getView() {
         return View;
     }
+
+    public static boolean shouldLoadMap() {
+        return loadMap;
+    }
+
+    public static void setLoadMap(boolean loadmap) {
+        MainMenuState.loadMap = loadmap;
+    }
+    
+    
+
 }

@@ -7,13 +7,24 @@ import com.BombingGames.Game.Controller;
  * @author Benedikt
  */
 public class ExplosiveBarrel extends SelfAwareBlock {
+    /**
+     * the radius of the explosion
+     */
     public static int RADIUS = 2;
 
+    /**
+     * 
+     *  @see com.BombingGames.Game.Gameobjects.Block#create(int) 
+     */
     protected ExplosiveBarrel() {
     }
     
     /**
      * Creates a barrel
+     * @param x 
+     * @param y 
+     * @param z 
+     * @see com.BombingGames.Game.Gameobjects.Block#create(int) 
      */
     protected ExplosiveBarrel(int x, int y, int z) {
         super(x,y,z);
@@ -27,7 +38,7 @@ public class ExplosiveBarrel extends SelfAwareBlock {
         for (int x=-RADIUS;x<RADIUS;x++)
             for (int y=-RADIUS*2;y<RADIUS*2;y++)
                 for (int z=-RADIUS;z<RADIUS;z++)
-                    Controller.setMapData(getCoordX()+x, getCoordY()+y, getCoordZ()+z, Block.create());
+                    Controller.setMapDataSafe(getCoordX()+x, getCoordY()+y, getCoordZ()+z, Block.create());
          Controller.getMap().requestRecalc();
     }
     
