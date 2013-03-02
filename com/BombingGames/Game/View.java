@@ -94,7 +94,6 @@ public class View {
      * @return game coordinate
      */
     public int ScreenXtoGame(int x){
-        Log.debug("ScreenXtoGame("+x+")");
         return (int) ((x + Gameplay.getView().getCamera().getX()) / Gameplay.getView().getCamera().getAbsZoom());
     }
     
@@ -104,7 +103,6 @@ public class View {
      * @return game coordinate
      */
     public int ScreenYtoGame(int y){
-        Log.debug("ScreenYtoGame("+y+")");
         return (int) ((y + Gameplay.getView().getCamera().getY()) / Gameplay.getView().getCamera().getAbsZoom() * 2);
     }
     
@@ -129,26 +127,24 @@ public class View {
             
         coords[2] = Map.getBlocksZ()-1;
         
-        //specific the block
+        //find the block
         int[] tmpcoords = Block.posToNeighbourCoords(coords, x % Block.DIMENSION, y % Block.DIMENSION);
         coords[0] = tmpcoords[0];
         coords[1] = tmpcoords[1] + coords[2]*2;
         
+        //if selection is not found by that specify it
         if (Controller.getMapData(coords).getId() == 0){
             //trace ray down to bottom
             do {
                 coords[1] = coords[1]-2;
                 coords[2] = coords[2]-1;
             } while (Controller.getMapData(coords).getId() == 0);
-
-            coords[1] = coords[1]+2;
-            coords[2] = coords[2]+1;
         }
         
         return coords;
     }
     
-        /**
+   /**
      * 
      * @param goodgraphics
      */

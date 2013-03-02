@@ -552,7 +552,7 @@ public class Block {
      * @return when it has offset true, else false
      */
     public boolean hasOffset() {
-        return (pos[0] != 0 || pos[1] != 0 || pos[2] != 0);
+        return (pos[0] != 80 || pos[1] != 80 || pos[2] != 0);
     }
     
     
@@ -787,7 +787,6 @@ public class Block {
         
         image.drawEmbedded(xpos, ypos);
     }
-    
 
 
     /**

@@ -134,8 +134,8 @@ public class GameController extends Controller {
             gc.getInput().consumeEvent();
             
             int coords[] = Gameplay.getView().ScreenToGameCoords(newx,newy);
-            setMapDataSafe(coords[0], coords[1], coords[2]-2,Block.getInstance(1));
-            Log.debug("made block at "+coords[0]+","+coords[1]+","+coords[2]);
+            if (coords[2] < Map.getBlocksZ()-1) coords[2]++; 
+            setMapDataSafe(coords[0], coords[1], coords[2], Block.getInstance(1));
             Gameplay.getView().getCamera().traceRayTo(coords[0], coords[1], coords[2], true);
         }
 

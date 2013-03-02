@@ -392,8 +392,8 @@ public class Camera {
                     Block block = mapdata[x][y][z];
                     
                     //Blocks with offset are not in the grid, so can not be calculated => always visible
-                   block.setVisible(
-                       block.hasSides() || block.hasOffset()
+                    block.setVisible(
+                       !block.hasSides() || block.hasOffset()
                        );
                 }
                 
@@ -559,17 +559,27 @@ public class Camera {
      * @param allsides True when every side should be traced?
      */
     public void traceRayTo(int x, int y, int z, boolean allsides){
+        Block block = Controller.getMapData(x,y,z);
+                    
+        //Blocks with offset are not in the grid, so can not be calculated => always visible
+        block.setVisible(
+            !block.hasSides() || block.hasOffset()
+        );
+                    
        //find start position
-        while (z < Map.getBlocksZ()-2){
+        while (z < Map.getBlocksZ()-1){
             y += 2;
             z++;
         }
         
+        //trace rays
         if (allsides){
-             traceRay(x,y,z,0);
-             traceRay(x,y,z,2);
+             traceRay(x,y,z, Block.LEFTSIDE);
+             traceRay(x,y,z, Block.RIGHTSIDE);
         }
-        traceRay(x,y,z,1);
+        traceRay(x,y,z, Block.TOPSIDE);
+        
+        //calculate light
         //find top most block
         int topmost = Chunk.getBlocksZ()-1;
         while (Controller.getMapData(x, y, topmost).isTransparent() == true && topmost > 0 ){

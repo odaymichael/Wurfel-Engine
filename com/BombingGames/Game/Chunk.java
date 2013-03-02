@@ -18,7 +18,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 5;
+    public static final int MAPGENERATOR = 3;
     
     private static int blocksX = 10;
     private static int blocksY = 40;//blocksY must be even number
@@ -109,12 +109,14 @@ public class Chunk {
             case 3: {//flat gras with one random pillar per chunk
                 int pillarx = (int) (Math.random()*blocksX-1);
                 int pillary = (int) (Math.random()*blocksY-1);
+                //pillar
                 for (int z=0; z < blocksZ; z++) data[pillarx][pillary][z] = Block.getInstance(1);
                 
+                //flat grass
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         data[x][y][0] = Block.getInstance(2);
-                        data[x][y][1] = Block.getInstance(1);
+                        data[x][y][1] = Block.getInstance(3);
                     }
                 break;
             }
