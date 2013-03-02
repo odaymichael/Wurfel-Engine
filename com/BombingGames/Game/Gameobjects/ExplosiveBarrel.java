@@ -27,7 +27,7 @@ public class ExplosiveBarrel extends SelfAwareBlock {
         for (int x=-RADIUS;x<RADIUS;x++)
             for (int y=-RADIUS*2;y<RADIUS*2;y++)
                 for (int z=-RADIUS;z<RADIUS;z++)
-                    Controller.setMapData(getCoordX()+x, getCoordY()+y, getCoordZ()+z, new Block());
+                    Controller.setMapData(getCoordX()+x, getCoordY()+y, getCoordZ()+z, Block.create());
          Controller.getMap().requestRecalc();
     }
     
