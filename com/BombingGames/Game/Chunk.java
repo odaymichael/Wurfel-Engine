@@ -147,7 +147,7 @@ public class Chunk {
     }
     
     /**
-     * loads a chunk from
+     * loads a chunk from memory
      */
     private void loadChunk(int coordX, int coordY){
         //Reading map files test
@@ -221,7 +221,7 @@ public class Chunk {
     }
     
     /**
-     * 
+     * reads the map info file and sets the size of the chunk
      */
     public static void readMapInfo(){
         BufferedReader bufRead = null;
@@ -262,27 +262,8 @@ public class Chunk {
             }
         }
     }
-
-    /**
-     * Returns the data of the chunk
-     * @return 
-     */
-    public Block[][][] getData() {
-        return data;
-    }
-
-    /**
-     * 
-     * @param data
-     */
-    public void setData(Block[][][] data) {
-        this.data = data;
-    }
-
-
-
-
-    /**
+    
+        /**
      * The amount of blocks in X direction
      * @return 
      */
@@ -305,4 +286,23 @@ public class Chunk {
     public static int getBlocksZ() {
         return blocksZ;
     }
+    
+
+    /**
+     * Returns the data of the chunk
+     * @return 
+     */
+    public Block[][][] getData() {
+        return data;
+    }
+
+    /**
+     * 
+     * @param data
+     */
+    public void setData(Block[][][] data) {
+        this.data = data;
+    }
+
+
 }

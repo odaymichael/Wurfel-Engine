@@ -8,31 +8,12 @@ import com.BombingGames.Game.Controller;
  */
 public class ExplosiveBarrel extends SelfAwareBlock {
     /**
-     * the radius of the explosion
+     * Defines the radius of the explosion.
      */
-    public static int RADIUS = 2;
-
-    /**
-     * 
-     *  @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
-     */
-    protected ExplosiveBarrel() {
-    }
+    public static int RADIUS = 2;   
     
     /**
-     * Creates a barrel
-     * @param x 
-     * @param y 
-     * @param z 
-     * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
-     */
-    protected ExplosiveBarrel(int x, int y, int z) {
-        super(x,y,z);
-    }
-    
-    
-    /**
-     * explodes the barrel. No safety checks so pay attention!
+     * Explodes the barrel.
      */
     public void explode(){
         for (int x=-RADIUS;x<RADIUS;x++)

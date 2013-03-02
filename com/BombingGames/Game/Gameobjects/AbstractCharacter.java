@@ -11,7 +11,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 /**
- *
+ *A character is an entity wich can walk around.
  * @author Benedikt
  */
 public abstract class AbstractCharacter extends AbstractEntity{
@@ -30,18 +30,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
      * These method should define what happens when the object  jumps. It should call super.jump(int velo)
      * @see com.BombingGames.Game.Gameobjects.AbstractCharacter#jump(float)
      */
-    abstract void jump();
-    
-    /**
-     * 
-     * @param x
-     * @param y
-     * @param z
-     * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
-     */
-    protected AbstractCharacter(int x,int y, int z){
-        super(x,y,z);
-    }
+    public abstract void jump();
     
     /**
      * Returns the side of the current position.

@@ -11,13 +11,13 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
 
 /**
- *
+ *A controlelr manages the map and the game data.
  * @author Benedikt
  */
 public class Controller {
     private static Map map;
+    private static ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
     private Player player;   
-    private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
     
     /**
      * Constructor is called when entering the gamemode.
@@ -103,6 +103,14 @@ public class Controller {
         map.setDataSafe(x, y, z, block);
     }
     
+   /**
+     * Returns the entitylist
+     * @return
+     */
+    public static ArrayList<AbstractEntity> getEntitylist() {
+        return entitylist;
+    }
+    
     /**
      * Main method which is called every refresh
      * @param delta
@@ -168,11 +176,5 @@ public class Controller {
         entitylist.add(player);
     }
 
-    /**
-     * Returns the entitylist
-     * @return
-     */
-    public ArrayList<AbstractEntity> getEntitylist() {
-        return entitylist;
-    }
+
 }

@@ -7,7 +7,7 @@ import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;
 
 /**
- *The camera locks to the player by default. It can be changed with <i>focusblock()</i>.
+ *Creates a virtual camera wich displays the game world.  
  * @author Benedikt
  */
 public class Camera {
@@ -28,7 +28,7 @@ public class Camera {
 
     
      /**
-     * Creates a virtual camera wich displays the game world. Screen size does refer to the output of the camera not the real size on the display.
+     * The camera locks to the player by default. It can be changed with <i>focusblock()</i>. Screen size does refer to the output of the camera not the real size on the display.
      * @param focusblock the block in the focus
      * @param x the position of the camera
      * @param y the position of the camera
@@ -302,8 +302,8 @@ public class Camera {
                 }
         
         //add entitys
-        for (int i=0; i<Gameplay.getController().getEntitylist().size(); i++){
-            AbstractEntity entity = Gameplay.getController().getEntitylist().get(i);
+        for (int i=0; i<Controller.getEntitylist().size(); i++){
+            AbstractEntity entity = Controller.getEntitylist().get(i);
             depthsort.add(
                 new Renderobject(
                     entity.getCoordX(),
@@ -354,7 +354,7 @@ public class Camera {
                 * @param index the index
                 * @return the coordinate triple with x,y,z
                 */
-        public int[] getDepthsortCoord(int index) {
+        protected int[] getDepthsortCoord(int index) {
             Renderobject item = depthsort.get(index);
             int[] triple = item.getCoords();
             return triple;
@@ -365,7 +365,7 @@ public class Camera {
                 * @param i index of the depthsort list
                 * @return the entityindex
                 */
-        public int getEntityIndex(int i) {
+        protected int getEntityIndex(int i) {
             return depthsort.get(i).getEntityindex();
         }
 
@@ -373,7 +373,7 @@ public class Camera {
                 * Returns the lenght of list of ranking for the rendering order
                 * @return length of the render list
                 */
-        public int depthsortlistSize(){
+        protected int depthsortlistSize(){
             return depthsort.size();
         }
     
@@ -560,7 +560,7 @@ public class Camera {
      */
     public void traceRayTo(int x, int y, int z, boolean allsides){
        //find start position
-        while (z < Map.getBlocksZ()-1){
+        while (z < Map.getBlocksZ()-2){
             y += 2;
             z++;
         }

@@ -13,14 +13,10 @@ public class Player extends AbstractCharacter{
    
     /**
      * Creates a player. The parameters are for the lower half of the player. The constructor automatically creates a block on top of it.
-     * @param x 
-     * @param y 
-     * @param z 
      * @throws SlickException
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
      */
-    protected Player(int x, int y, int z) throws SlickException {
-        super(x,y,z);
+    protected Player() throws SlickException {
         setFallingSound(new Sound("com/BombingGames/Game/Sounds/wind.wav"));
         setRunningSound(new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav"));
     }

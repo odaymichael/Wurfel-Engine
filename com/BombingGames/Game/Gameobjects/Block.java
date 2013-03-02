@@ -197,7 +197,8 @@ public class Block {
     }
 
     /**
-     * Create a block with the static <i>getInstance</i> methods not with the constructor.
+     *Don't use this constructor to get a new block. Use the static <i>getInstance</i> methods instead.
+     * @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
     protected Block(){
     }
@@ -206,7 +207,7 @@ public class Block {
     
     /**
      * Creates an air block.
-     * @return
+     * @return a block of air.
      */
     public static Block getInstance(){
         return create(0,0,0,0,0);
@@ -214,8 +215,8 @@ public class Block {
     
     /**
      *  Create a block. If the block needs to know it's position you have to use <i>getInstance(int id, int value,int x, int y, int z)</i>
-     * @param id
-     * @return
+     * @param id the block's id
+     * @return the wanted block.
      */
     public static Block getInstance(int id){
         return create(id,0,0,0,0);
@@ -223,9 +224,9 @@ public class Block {
     
     /**
      * Create a block. If the block needs to know it's position you have to use <i>getInstance(int id, int value,int x, int y, int z)</i>
-     * @param id
-     * @param value
-     * @return
+     * @param id the block's id
+     * @param value it's value
+     * @return the wanted block.
      */
     public static Block getInstance(int id, int value){
         return create(id,value,0,0,0);
@@ -234,7 +235,7 @@ public class Block {
     /**
      * Create a block. If the block needs to know it's position you have to use this method and give the coordinates.
      * @param id the id of the block
-     * @param value the value of the block, it's like a sub-id
+     * @param value the value of the block, which is like a sub-id
      * @param x the x-coordinate
      * @param y the y-coordinate
      * @param z the z-coordinate
@@ -285,7 +286,8 @@ public class Block {
                     break;
             case 40:
                     try {
-                        block = new Player(x,y,z);
+                        block = new Player();
+                        ((SelfAwareBlock)block).setAbsCoords(new int[]{x,y,z});
                         block.transparent = true;
                         block.obstacle = true;
                         block.hasSides = false;
@@ -306,7 +308,8 @@ public class Block {
                     block.obstacle = false;
                     block.hasSides = false;
                     break;
-            case 71:block = new ExplosiveBarrel(x,y,z); 
+            case 71:block = new ExplosiveBarrel();
+                    ((SelfAwareBlock)block).setAbsCoords(new int[]{x,y,z});
                     block.obstacle = true;
                     block.hasSides = true;
                     break;
@@ -325,7 +328,7 @@ public class Block {
         return block;
     }
     
-      /**
+    /**
      * Returns the spritesheet used for rendering
      * @return the spritesheet used by the blocks
      */
@@ -374,7 +377,7 @@ public class Block {
         return - camerax
                + x*DIMENSION
                + (y%2) * DIM2
-               + (int) (block.getPos(0));
+               + (int) (block.pos[0]);
     }
     
     
@@ -394,8 +397,8 @@ public class Block {
         return - cameray
                + y*DIM4
                - z*DIM2
-               + (int) (block.getPos(1)/2)
-               - (int) (block.getPos(2)/Math.sqrt(2));   
+               + (int) (block.pos[1] / 2)
+               - (int) (block.pos[2] / Math.sqrt(2));   
     }
     
     
@@ -498,6 +501,14 @@ public class Block {
         return sideNumbToNeighbourCoords(coords, sideNumb(xpos, ypos));
     }
     
+   /**
+     * Load the spritesheet from memory.
+     * @throws SlickException
+     */
+    public static void loadSheet() throws SlickException{
+        spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Spritesheet.png", DIMENSION, (int) (DIM2*1.5));
+    }
+    
 
     //getter & setter
     
@@ -510,21 +521,13 @@ public class Block {
     }
 
     /**
-     *  Gets the positon of the block. Coordinate system starting at bottom rear.
+     *  Gets the positon of the block inside it's coordinate field. Coordinate system starting at bottom rear.
      * @return an array with three fields. [x,y,z]
      */
     public float[] getPos() {
         return pos;
     }
     
-    /**
-     *  Get a coordinate value. Coordinate system starting at bottom rear.
-     * @param i the index of the field,  0=>x, y=>1, z=>2
-     * @return the position
-     */
-    public float getPos(int i) {
-        return pos[i];
-    }
 
     /**
      * Set a whole new array containing the positon of the block. Coordinate system starting at bottom rear.
@@ -569,7 +572,7 @@ public class Block {
     
     /**
      * Is the Block visible?
-     * @return
+     * @return true when visible
      */
     public boolean isVisible(){
         return visible;
@@ -584,8 +587,8 @@ public class Block {
     }
 
     /**
-     * Make the block to an obstacle
-     * @param obstacle
+     * Make the block to an obstacle or passable.
+     * @param obstacle true when obstacle. False when passable.
      */
     public void setObstacle(boolean obstacle) {
         this.obstacle = obstacle;
@@ -785,13 +788,7 @@ public class Block {
         image.drawEmbedded(xpos, ypos);
     }
     
-    /**
-     * Load the spritesheet from memory.
-     * @throws SlickException
-     */
-    public static void loadSheet() throws SlickException{
-        spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Spritesheet.png", DIMENSION, (int) (DIM2*1.5));
-    }
+
 
     /**
      * updates teh logic of the block.
