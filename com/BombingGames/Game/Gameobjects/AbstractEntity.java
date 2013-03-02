@@ -7,11 +7,11 @@ package com.BombingGames.Game.Gameobjects;
 public abstract class AbstractEntity extends SelfAwareBlock {
    
     /**
-     * Create an abstractEntity. You should use Block.create(int) 
+     * Create an abstractEntity. You should use Block.getInstance(int) 
      * @param x
      * @param y
      * @param z
-     * @see com.BombingGames.Game.Gameobjects.Block#create(int) 
+     * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
      */
     protected AbstractEntity(int x,int y, int z){
         super(x,y,z);

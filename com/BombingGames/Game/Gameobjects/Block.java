@@ -197,7 +197,7 @@ public class Block {
     }
 
     /**
-     * Create a block with the static <i>create</i> methods not with the constructor.
+     * Create a block with the static <i>getInstance</i> methods not with the constructor.
      */
     protected Block(){
     }
@@ -208,26 +208,26 @@ public class Block {
      * Creates an air block.
      * @return
      */
-    public static Block create(){
+    public static Block getInstance(){
         return create(0,0,0,0,0);
     }
     
     /**
-     *  Create a block. If the block needs to know it's position you have to use <i>create(int id, int value,int x, int y, int z)</i>
+     *  Create a block. If the block needs to know it's position you have to use <i>getInstance(int id, int value,int x, int y, int z)</i>
      * @param id
      * @return
      */
-    public static Block create(int id){
+    public static Block getInstance(int id){
         return create(id,0,0,0,0);
     }
     
     /**
-     * Create a block. If the block needs to know it's position you have to use <i>create(int id, int value,int x, int y, int z)</i>
+     * Create a block. If the block needs to know it's position you have to use <i>getInstance(int id, int value,int x, int y, int z)</i>
      * @param id
      * @param value
      * @return
      */
-    public static Block create(int id, int value){
+    public static Block getInstance(int id, int value){
         return create(id,value,0,0,0);
     }
     

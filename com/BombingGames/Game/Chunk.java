@@ -33,7 +33,7 @@ public class Chunk {
         for (int x=0; x < blocksX; x++)
             for (int y=0; y < blocksY; y++)
                 for (int z=0; z < blocksZ; z++)
-                    data[x][y][z] = Block.create();
+                    data[x][y][z] = Block.getInstance();
     }
     
     /**
@@ -46,12 +46,12 @@ public class Chunk {
         this();
 
         if (loadmap) loadChunk(coordX, coordY);
-            else newChunk(coordX, coordY);
+            else fillChunk(coordX, coordY);
     }
     /**
      * Generates new content for a chunk.
      */  
-    private void newChunk(int coordX, int coordY){
+    private void fillChunk(int coordX, int coordY){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
         Log.debug("Creating new chunk: "+ coordX + ", "+ coordY);
@@ -61,14 +61,10 @@ public class Chunk {
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         int height = (int) (Math.random()*blocksZ-1)+1;
-                        //int HEIGHT = (int) Chunk.blocksZ / 2;
                         for (int z=0; z < height; z++){
-                            //for (int z=0; z < blocksZ-4; z++)
-                            data[x][y][z] = Block.create(2);
-                            // if ((z>10) && (x>10) && (y>5))
-                            //  data[x][y][z] = new Block (9,0);
+                            data[x][y][z] = Block.getInstance(2);
                             }
-                        data[x][y][height] = Block.create(1);
+                        data[x][y][height] = Block.getInstance(1);
                     }
                 break;
             }
@@ -76,8 +72,8 @@ public class Chunk {
             case 1: {//islands
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = Block.create(9);
-                        data[x][y][1] = Block.create(9);
+                        data[x][y][0] = Block.getInstance(9);
+                        data[x][y][1] = Block.getInstance(9);
                     }
                 
                 int mountainx = (int) (Math.random()*blocksX-1);
@@ -88,9 +84,9 @@ public class Chunk {
                         int height = blocksZ-1- Math.abs(mountainy-y)- Math.abs(mountainx-x);
                         if (height>1){
                             for (int z=0; z < height; z++) {
-                                data[x][y][z] = Block.create(2);
+                                data[x][y][z] = Block.getInstance(2);
                             }
-                            data[x][y][height] = Block.create(1);
+                            data[x][y][height] = Block.getInstance(1);
                         }
                     }
                 break;
@@ -102,10 +98,10 @@ public class Chunk {
                         if (blocksZ>1){
                             int z;
                             for (z=0; z < blocksZ/2; z++){
-                                data[x][y][z] = Block.create(2);
+                                data[x][y][z] = Block.getInstance(2);
                             }
-                            data[x][y][z-1] = Block.create(1);
-                        }else data[x][y][0] = Block.create(2);
+                            data[x][y][z-1] = Block.getInstance(1);
+                        }else data[x][y][0] = Block.getInstance(2);
                     }
                 break;
             }
@@ -113,12 +109,12 @@ public class Chunk {
             case 3: {//flat gras with one random pillar per chunk
                 int pillarx = (int) (Math.random()*blocksX-1);
                 int pillary = (int) (Math.random()*blocksY-1);
-                for (int z=0; z < blocksZ; z++) data[pillarx][pillary][z] = Block.create(1);
+                for (int z=0; z < blocksZ; z++) data[pillarx][pillary][z] = Block.getInstance(1);
                 
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = Block.create(2);
-                        data[x][y][1] = Block.create(1);
+                        data[x][y][0] = Block.getInstance(2);
+                        data[x][y][1] = Block.getInstance(1);
                     }
                 break;
             }
@@ -126,12 +122,12 @@ public class Chunk {
             case 4: {//explosive barrel test                
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][2] = Block.create(1);
-                        data[x][y][1] = Block.create(2);
-                        data[x][y][0] = Block.create(2);
+                        data[x][y][2] = Block.getInstance(1);
+                        data[x][y][1] = Block.getInstance(2);
+                        data[x][y][0] = Block.getInstance(2);
                     }
                 data[5][5][3] = Block.create(71,0,5,5,3);
-                data[5][5][2] = Block.create(2);
+                data[5][5][2] = Block.getInstance(2);
                 
                 break;
             }
@@ -139,11 +135,11 @@ public class Chunk {
             case 5: {//animation test                
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][1] = Block.create(72);
-                        data[x][y][0] = Block.create(2);
+                        data[x][y][1] = Block.getInstance(72);
+                        data[x][y][0] = Block.getInstance(2);
                     }
-                //data[blocksX/2][blocksY/2][2] = Block.create(72);//animation test
-                //data[blocksX/2][blocksY/2][1] = Block.create(2);
+                //data[blocksX/2][blocksY/2][2] = Block.getInstance(72);//animation test
+                //data[blocksX/2][blocksY/2][1] = Block.getInstance(2);
                 
                 break;
             } 
@@ -199,7 +195,7 @@ public class Chunk {
                                 posend++;
                             }
 
-                            data[x][y][z] = Block.create(
+                            data[x][y][z] = Block.getInstance(
                                         Integer.parseInt(line.substring(0,posdots)),
                                         Integer.parseInt(line.substring(posdots+1, posend))
                                         );
@@ -217,7 +213,7 @@ public class Chunk {
                 } while (lastline != null);
             } else {
                 Log.debug("...but it could not be found. Creating new.");
-                newChunk(coordX, coordY);
+                fillChunk(coordX, coordY);
             }
         } catch (IOException ex) {
             Log.debug("Loading of chunk "+coordX+","+coordY + "failed: "+ex);

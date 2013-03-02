@@ -14,7 +14,7 @@ public class ExplosiveBarrel extends SelfAwareBlock {
 
     /**
      * 
-     *  @see com.BombingGames.Game.Gameobjects.Block#create(int) 
+     *  @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
      */
     protected ExplosiveBarrel() {
     }
@@ -24,7 +24,7 @@ public class ExplosiveBarrel extends SelfAwareBlock {
      * @param x 
      * @param y 
      * @param z 
-     * @see com.BombingGames.Game.Gameobjects.Block#create(int) 
+     * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
      */
     protected ExplosiveBarrel(int x, int y, int z) {
         super(x,y,z);
@@ -38,7 +38,7 @@ public class ExplosiveBarrel extends SelfAwareBlock {
         for (int x=-RADIUS;x<RADIUS;x++)
             for (int y=-RADIUS*2;y<RADIUS*2;y++)
                 for (int z=-RADIUS;z<RADIUS;z++)
-                    Controller.setMapDataSafe(getCoordX()+x, getCoordY()+y, getCoordZ()+z, Block.create());
+                    Controller.setMapDataSafe(getCoordX()+x, getCoordY()+y, getCoordZ()+z, Block.getInstance());
          Controller.getMap().requestRecalc();
     }
     

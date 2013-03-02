@@ -122,7 +122,7 @@ public class SelfAwareBlock extends Block{
      * Destroys the reference in the map.
      */
     protected void selfDestroy(){
-        Controller.getMap().setData(getCoordX(), getCoordY(), absCoords[2], Block.create());
+        Controller.getMap().setData(getCoordX(), getCoordY(), absCoords[2], Block.getInstance());
     }
     
     /**

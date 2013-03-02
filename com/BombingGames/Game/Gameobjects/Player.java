@@ -17,7 +17,7 @@ public class Player extends AbstractCharacter{
      * @param y 
      * @param z 
      * @throws SlickException
-     * @see com.BombingGames.Game.Gameobjects.Block#create(int) 
+     * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
      */
     protected Player(int x, int y, int z) throws SlickException {
         super(x,y,z);

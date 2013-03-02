@@ -9,7 +9,7 @@ public class AnimatedBlock extends Block {
     private int timer = 0;
 
     /**
-     * create this Block with an array wich has the time of every animation step in ms in it.
+     * getInstance this Block with an array wich has the time of every animation step in ms in it.
      * @param animationinformation 
      */
     protected AnimatedBlock(int[] animationinformation) {

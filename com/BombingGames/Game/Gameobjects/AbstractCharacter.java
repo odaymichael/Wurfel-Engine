@@ -37,7 +37,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
      * @param x
      * @param y
      * @param z
-     * @see com.BombingGames.Game.Gameobjects.Block#create(int) 
+     * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
      */
     protected AbstractCharacter(int x,int y, int z){
         super(x,y,z);
