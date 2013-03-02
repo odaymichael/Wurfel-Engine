@@ -8,7 +8,7 @@ public abstract class AbstractAnimatedBlock extends Block {
     
 
     @Override
-    public abstract void update();
+    public abstract void update(int delta);
 
     
 }

@@ -178,12 +178,18 @@ public class Block {
         SPRITEPOS[71][0][0][1] = 720;
         
         NAMELIST[72] = "animation test";
-        SPRITEPOS[72][0][0][0] = 160;
-        SPRITEPOS[72][0][0][1] = 720;
+        SPRITEPOS[72][0][0][0] = 0;
+        SPRITEPOS[72][0][0][1] = 120;
+        SPRITEPOS[72][0][1][0] = 80;
+        SPRITEPOS[72][0][1][1] = 120;
+        SPRITEPOS[72][0][2][0] = 240;
+        SPRITEPOS[72][0][2][1] = 120;
         SPRITEPOS[72][1][0][0] = 0;
-        SPRITEPOS[72][1][0][1] = 720;
-        
-      
+        SPRITEPOS[72][1][0][1] = 0;
+        SPRITEPOS[72][1][1][0] = 80;
+        SPRITEPOS[72][1][1][1] = 0;
+        SPRITEPOS[72][1][2][0] = 240;
+        SPRITEPOS[72][1][2][1] = 0;
     }
 
     /**
@@ -240,12 +246,10 @@ public class Block {
                     block.obstacle = false;
                     block.hidden = true;
                     break;
-            case 1:block = new Block(); 
-                    block.transparent = false;
+            case 1: block = new Block(); 
                     block.obstacle = true;
                     break;
             case 2: block = new Block(); 
-                    block.transparent = false;
                     block.obstacle = true;
                     break;
             case 3: block = new Block(); 
@@ -253,23 +257,18 @@ public class Block {
                     block.obstacle = true;
                     break;
             case 4: block = new Block(); 
-                    block.transparent = false;
                     block.obstacle = true;
                     break;
             case 5: block = new Block(); 
-                    block.transparent = false;
                     block.obstacle = true;
                     break;
             case 6: block = new Block(); 
-                    block.transparent = false;
                     block.obstacle = true;
                     break;
             case 7: block = new Block(); 
-                    block.transparent = false;
                     block.obstacle = true;
                     break;
             case 8: block = new Block(); 
-                    block.transparent = false;
                     block.obstacle = true;
                     break;      
             case 9: block = new Block(); 
@@ -278,7 +277,6 @@ public class Block {
                     block.liquid=true;
                     break;    
             case 20:block = new Block(); 
-                    block.transparent = false;
                     block.obstacle = true;
                     break;
             case 40:
@@ -305,14 +303,11 @@ public class Block {
                     block.hasSides = false;
                     break;
             case 71:block = new ExplosiveBarrel(x,y,z); 
-                    block.transparent = false;
                     block.obstacle = true;
-                    block.hasSides = false;
+                    block.hasSides = true;
                     break;
             case 72:block = new AnimatedTest();
-                    block.transparent = false;
                     block.obstacle = true;
-                    block.hasSides = false;
                     break;
             default:
                     block = new Block(); 
@@ -701,9 +696,7 @@ public class Block {
         return (int) (DIMENSION*y +(y % 2)*DIM2 + DIMENSION*z + pos[0] + (dimensionY-1)*DIMENSION);
     }
     
-    public  void update(){
-    
-    };
+
     
     /**
      * Draws a block
@@ -790,5 +783,9 @@ public class Block {
     
     public static void loadSheet() throws SlickException{
         spritesheet = new SpriteSheet("com/BombingGames/Game/Blockimages/Spritesheet.png", DIMENSION, (int) (DIM2*1.5));
-    } 
+    }
+
+    public void update(int delta) {
+        
+    }
 }

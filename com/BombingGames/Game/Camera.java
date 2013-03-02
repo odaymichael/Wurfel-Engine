@@ -383,20 +383,18 @@ public class Camera {
     /**
      * Filters every Block (and side) wich is not visible. Boosts rendering speed.
      */
-    protected void raytracing(){        
+    protected void raytracing(){ 
         //set visibility of every block to false, except blocks with offset
+        Block[][][] mapdata = Controller.getMap().getData();
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY(); y++)
                 for (int z=0; z < Map.getBlocksZ(); z++) {
-                    
-                    Block block = Controller.getMapData(x, y, z);
+                    Block block = mapdata[x][y][z];
                     
                     //Blocks with offset are not in the grid, so can not be calculated => always visible
-                    if (block.hasOffset()){
-                        block.setVisible(true);
-                    } else {
-                        block.setVisible(false);
-                    }
+                   block.setVisible(
+                       block.hasSides() || block.hasOffset()
+                       );
                 }
                 
         //send the rays through top of the map
@@ -418,8 +416,8 @@ public class Camera {
     private void traceRay(int x, int y, int z, int side){
         boolean left = true;
         boolean right = true;
-        boolean leftliquid = true;
-        boolean rightliquid = true;
+        boolean leftliquid = false;
+        boolean rightliquid = false;
         boolean liquidfilter = false;
 
         //bring ray to start position
@@ -452,13 +450,13 @@ public class Camera {
                         
                         if (x > 0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
                             && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
-                            leftliquid = false;
+                            leftliquid = true;
                         
                         if (y < Map.getBlocksY()-2 &&
                             Controller.getMapData(x, y+2, z).isLiquid())
-                            rightliquid = false;
+                            rightliquid = true;
                         
-                        if (!leftliquid && !rightliquid) liquidfilter=true;
+                        if (leftliquid && rightliquid) liquidfilter=true;
                     } 
 
                     //two blocks hiding the left side
@@ -483,13 +481,13 @@ public class Camera {
                             
                             if (x>0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
                                 && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
-                                leftliquid = false;
+                                leftliquid = true;
                             
                             if (x < Map.getBlocksX()-1  && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
                                 &&  Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
-                                rightliquid = false;
+                                rightliquid = true;
                             
-                            if (!leftliquid && !rightliquid) liquidfilter = true;
+                            if (leftliquid && rightliquid) liquidfilter = true;
                         }
                     
                         //two 0- and 2-sides hiding the side 1
@@ -518,14 +516,14 @@ public class Camera {
                                 if (y+2 < Map.getBlocksY()
                                     &&
                                     Controller.getMapData(x, y+2, z).isLiquid())
-                                    leftliquid = false;
+                                    leftliquid = true;
                                 
                                 if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY() && z+1 < Map.getBlocksZ()
                                     &&
                                     Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
-                                    rightliquid = false;
+                                    rightliquid = true;
                                 
-                                if (!leftliquid && !rightliquid) liquidfilter=true;
+                                if (leftliquid && rightliquid) liquidfilter = true;
                             }
 
                             //two blocks hiding the right side

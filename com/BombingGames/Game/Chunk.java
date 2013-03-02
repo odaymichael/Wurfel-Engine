@@ -18,12 +18,11 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 1;
+    public static final int MAPGENERATOR = 5;
     
-    private static int blocksX = 10;//16:9 => 12:27, 4:3=>12:36 //10
-    //blocksY must be even number
-    private static int blocksY = 40;//40
-    private static int blocksZ = 10;//10
+    private static int blocksX = 10;
+    private static int blocksY = 40;//blocksY must be even number
+    private static int blocksZ = 10;
     
     private Block data[][][] = new Block[blocksX][blocksY][blocksZ];
   
@@ -140,11 +139,11 @@ public class Chunk {
             case 5: {//animation test                
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][1] = Block.create(2);
+                        data[x][y][1] = Block.create(72);
                         data[x][y][0] = Block.create(2);
                     }
-                data[blocksX/2][blocksY/2][2] = Block.create(72);//animation test
-                data[blocksX/2][blocksY/2][1] = Block.create(2);
+                //data[blocksX/2][blocksY/2][2] = Block.create(72);//animation test
+                //data[blocksX/2][blocksY/2][1] = Block.create(2);
                 
                 break;
             } 
