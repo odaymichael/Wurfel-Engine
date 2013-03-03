@@ -15,7 +15,7 @@ public class View {
     /**
      * Contains a font
      */
-    public static AngelCodeFont baseFont;
+    private static  AngelCodeFont baseFont;
 
     private Camera camera;
     private float equalizationScale;    
@@ -159,4 +159,9 @@ public class View {
     public boolean hasGoodGraphics() {
         return goodgraphics;
     }
+
+    public static AngelCodeFont getFont() {
+        return baseFont;
+    }
+    
 }

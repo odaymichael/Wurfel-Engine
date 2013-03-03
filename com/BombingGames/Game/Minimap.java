@@ -66,7 +66,7 @@ public class Minimap {
                 Chunk.getBlocksY()*scaleY
             );
 
-            View.baseFont.drawString(
+            View.getFont().drawString(
                 X + 10 + pos%3 *Chunk.getBlocksX()*scaleX,
                 Y + 10 + pos/3 *(Chunk.getBlocksY()*scaleY),
                 Controller.getMap().getChunkCoords(pos)[0] +" | "+ Controller.getMap().getChunkCoords(pos)[1] ,
@@ -106,7 +106,7 @@ public class Minimap {
         );
 
         if (Gameplay.getController().getPlayer()!=null){
-            View.baseFont.drawString(
+            View.getFont().drawString(
                     X + scaleX * Gameplay.getView().getCamera().getX() / Block.DIMENSION
                     + scaleX*Gameplay.getView().getCamera().getWidth() / Block.DIMENSION,
                     Y + scaleY * Gameplay.getView().getCamera().getY() / Block.DIM2
@@ -118,7 +118,7 @@ public class Minimap {
 
             //player coord
             Wurfelengine.getGraphics().setColor(Color.blue);
-            View.baseFont.drawString(
+            View.getFont().drawString(
                 X + (Gameplay.getController().getPlayer().getCoordX() + (Gameplay.getController().getPlayer().getCoordY()%2==1?0.5f:0) ) * scaleX+20,
                 Y + Gameplay.getController().getPlayer().getCoordY() * scaleY - 50,
                 Gameplay.getController().getPlayer().getCoordX() +" | "+ Gameplay.getController().getPlayer().getCoordY() +" | "+ Gameplay.getController().getPlayer().getCoordZ(),
@@ -127,7 +127,7 @@ public class Minimap {
             
             //player coord
             Wurfelengine.getGraphics().setColor(Color.blue);
-            View.baseFont.drawString(
+            View.getFont().drawString(
                 X + (Gameplay.getController().getPlayer().getCoordX() + (Gameplay.getController().getPlayer().getCoordY()%2==1?0.5f:0) ) * scaleX+20,
                 Y + Gameplay.getController().getPlayer().getCoordY() * scaleY - 30,
                 Gameplay.getController().getPlayer().getAbsCoordX() +" | "+ Gameplay.getController().getPlayer().getAbsCoordY() +" | "+ Gameplay.getController().getPlayer().getCoordZ(),
@@ -136,7 +136,7 @@ public class Minimap {
 
 
             //player pos
-            View.baseFont.drawString(
+            View.getFont().drawString(
                 X + (Gameplay.getController().getPlayer().getCoordX() + (Gameplay.getController().getPlayer().getCoordY()%2==1?0.5f:0) ) * scaleX+20,
                 Y + Gameplay.getController().getPlayer().getCoordY() * scaleY - 10,
                 Gameplay.getController().getPlayer().getPos()[0] +" | "+ Gameplay.getController().getPlayer().getPos()[1] +" | "+ Gameplay.getController().getPlayer().getPos()[2],
@@ -145,7 +145,7 @@ public class Minimap {
         }
 
         //getCamera() pos
-        View.baseFont.drawString(
+        View.getFont().drawString(
                 X ,
                 Y + 3*Chunk.getBlocksY()*scaleY + 15,
                 Gameplay.getView().getCamera().getX() +" | "+ Gameplay.getView().getCamera().getY(),

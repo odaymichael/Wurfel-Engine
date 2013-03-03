@@ -123,7 +123,7 @@ public class MsgSystem extends ArrayList<Msg> {
                 else if ("Warning".equals(msg.getSender())) clr = Color.red;
             
             //draw
-            View.baseFont.drawString(
+            View.getFont().drawString(
                 10,
                 50+i*20,
                 msg.getMessage(),
