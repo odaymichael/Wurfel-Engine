@@ -302,8 +302,8 @@ public class Camera {
                 }
         
         //add entitys
-        for (int i=0; i<Controller.getEntitylist().size(); i++){
-            AbstractEntity entity = Controller.getEntitylist().get(i);
+        for (int i=0; i< Controller.getMap().getEntitylist().size(); i++){
+            AbstractEntity entity = Controller.getMap().getEntitylist().get(i);
             depthsort.add(
                 new Renderobject(
                     entity.getCoordX(),
