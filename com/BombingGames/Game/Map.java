@@ -1,7 +1,9 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.MainMenu.MainMenuState;
+import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.util.Log;
 
@@ -18,6 +20,8 @@ public class Map {
     private static int blocksX, blocksY, blocksZ;    
     private Block data[][][];
     private boolean recalcRequested;
+    private static ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
+        
     /**
      *The list which has all current nine chunks in it.
      */
@@ -253,15 +257,16 @@ public class Map {
         Block.getBlocksheet().startUse();
         //render vom bottom to top
         for (int i=0; i < camera.depthsortlistSize() ;i++) {
-            int[] coords = camera.getDepthsortCoord(i);
-            int entitynumber = camera.getEntityIndex(i);
+            int[] coords = camera.getDepthsortCoord(i);//get the coords of the current renderobject
+            int entitynumber = camera.getEntityIndex(i); //get the entityindex to check if it is an entity
             
-            Block block;
-            if (entitynumber == -1)
-                block = data[coords[0]][coords[1]][coords[2]];
-            else block = Gameplay.getController().getEntitylist().get(entitynumber);
+            Block renderobject;
+            if (entitynumber == -1) //if a block get it
+                renderobject = data[coords[0]][coords[1]][coords[2]];
+            else //if an entity get it
+                renderobject = entitylist.get(entitynumber);
                             
-            block.render(coords[0],coords[1],coords[2], camera);            
+            renderobject.render(coords[0],coords[1],coords[2], camera);            
         }
             
        Block.getBlocksheet().endUse(); 
@@ -286,11 +291,11 @@ public class Map {
     }
     
     /**
-     * Returns a block of the map.
+     * Returns a renderobject of the map.
      * @param x If too high or too low, it takes the highest/deepest value possible
      * @param y If too high or too low, it takes the highest/deepest value possible
      * @param z If too high or too low, it takes the highest/deepest value possible
-     * @return A single block at the wanted coordinates.
+     * @return A single renderobject at the wanted coordinates.
      * @see com.BombingGames.Game.Map#getData(int, int, int) 
      */
     public Block getDataSafe(int x, int y, int z){
@@ -320,18 +325,18 @@ public class Map {
      * @param x position
      * @param y position
      * @param z position
-     * @return the single block you wanted
+     * @return the single renderobject you wanted
      */
     public Block getData(int x, int y, int z){
         return data[x][y][z];  
     }
     
     /**
-     * Set a block at a specific coordinate
+     * Set a renderobject at a specific coordinate
      * @param x position
      * @param y position
      * @param z position
-     * @param block The block you want to set.
+     * @param renderobject The renderobject you want to set.
      */
     public void setData(int x, int y, int z, Block block){
         data[x][y][z] = block;
@@ -339,12 +344,12 @@ public class Map {
     }
     
     /**
-     * Set a block at a specific coordinate
+     * Set a renderobject at a specific coordinate
      * @param x position
      * @param y position
      * @param z position
-     * @param block The block you want to set.
-     * @see com.BombingGames.Game.Map#setData(int x, int y, int z, Block block)
+     * @param renderobject The renderobject you want to set.
+     * @see com.BombingGames.Game.Map#setData(int x, int y, int z, Block renderobject)
      */
     public void setDataSafe(int x, int y, int z, Block block){
         if (x >= blocksX){
@@ -403,18 +408,26 @@ public class Map {
         for (int x=0; x < blocksX; x++){
             for (int y=0; y < blocksY; y++) {
                 
-                //find top most block
+                //find top most renderobject
                 int topmost = Chunk.getBlocksZ()-1;
                 while (data[x][y][topmost].isTransparent() == true && topmost > 0 ){
                     topmost--;
                 }
                 
                 if (topmost>0) {
-                    //start at topmost block and go down. Every step make it a bit darker
+                    //start at topmost renderobject and go down. Every step make it a bit darker
                     for (int level = topmost; level > 0; level--)
                         data[x][y][level].setLightlevel(50* level / topmost);
                 }
             }
         }         
+    }
+    
+    /**
+     * Returns the entitylist
+     * @return
+     */
+    public ArrayList<AbstractEntity> getEntitylist() {
+        return entitylist;
     }
 }

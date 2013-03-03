@@ -16,7 +16,6 @@ import org.newdawn.slick.util.Log;
  */
 public class Controller {
     private static Map map;
-    private static ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
     private Player player;   
     
     /**
@@ -103,13 +102,6 @@ public class Controller {
         map.setDataSafe(x, y, z, block);
     }
     
-   /**
-     * Returns the entitylist
-     * @return
-     */
-    public static ArrayList<AbstractEntity> getEntitylist() {
-        return entitylist;
-    }
     
     /**
      * Main method which is called every refresh
@@ -149,7 +141,7 @@ public class Controller {
                     mapdata[x][y][z].update(delta);
         
         //update every entity
-        for (AbstractEntity entity : entitylist)
+        for (AbstractEntity entity : map.getEntitylist())
             entity.update(delta);
         
         //recalculates the light if requested
@@ -167,14 +159,15 @@ public class Controller {
         return player;
     }
 
-    /**
+   /**
      * Sets a player 
      * @param player 
      */
     public void setPlayer(Player player) {
         this.player = player;
-        entitylist.add(player);
+        map.getEntitylist().add(player);
     }
+
 
 
 }
