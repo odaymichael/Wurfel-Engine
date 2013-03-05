@@ -45,8 +45,12 @@ public class Wurfelengine extends StateBasedGame {
         //you can start the game with a custom resolution
         if (args.length == 0)
            game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), false);
-        else
-            game.setDisplayMode(Integer.parseInt(args[0]), Integer.parseInt(args[1]), false);
+        else{
+            boolean fullscreen = true;
+            if (args.length >= 3)
+                fullscreen = ("true".equals(args[2]));
+            game.setDisplayMode(Integer.parseInt(args[0]), Integer.parseInt(args[1]), fullscreen);
+        }
         //System.out.println(game.isVSyncRequested());
         game.start();
     }
