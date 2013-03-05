@@ -114,7 +114,7 @@ public class Camera {
         
             Wurfelengine.getGraphics().scale(zoom, zoom);
             
-            createSortedDepthList();
+            createDepthList();
             Controller.getMap().render(this);
         
             Wurfelengine.getGraphics().scale(1/zoom, 1/zoom);
@@ -288,7 +288,7 @@ public class Camera {
      /**
      * Fills the map into a list and sorts it in the order of the rendering, called the depthlist.
      */
-    private void createSortedDepthList() {
+    private void createDepthList() {
         depthsort.clear();
         for (int x = getLeftBorder(); x < getRightBorder();x++)
             for (int y = getTopBorder(); y < getBottomBorder();y++)
