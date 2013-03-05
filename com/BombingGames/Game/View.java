@@ -133,12 +133,12 @@ public class View {
         coords[1] = tmpcoords[1] + coords[2]*2;
         
         //if selection is not found by that specify it
-        if (Controller.getMapData(coords).getId() == 0){
+        if (Controller.getMapData(coords).isHidden()){
             //trace ray down to bottom
             do {
                 coords[1] = coords[1]-2;
                 coords[2] = coords[2]-1;
-            } while (Controller.getMapData(coords).getId() == 0);
+            } while (Controller.getMapData(coords).isHidden());
         }
         
         return coords;

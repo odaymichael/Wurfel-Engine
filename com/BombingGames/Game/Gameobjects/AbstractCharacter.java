@@ -47,6 +47,11 @@ public abstract class AbstractCharacter extends AbstractEntity{
      * @param down
      * @param left 
      *  @param right 
+     * Lets the player walk.
+     * @param up move up?
+     * @param down move down?
+     * @param left move left?
+     *  @param right move right?
      * @param walkingspeed the higher the speed the bigger the steps
      *  @param delta time which has passed since last call
      * @throws SlickException
@@ -176,9 +181,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
         } else {
             if (getCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
         }
-         
         
-        //if there was a coordiante change recalc map.
         Controller.getMap().requestRecalc();
     }
     
@@ -187,40 +190,36 @@ public abstract class AbstractCharacter extends AbstractEntity{
      * @param delta time since last update
      */
     @Override
-    public void update(int delta) {
-        if (runningSound != null)
-            if (speed > 0.5f){
-                if (!runningSound.playing()) runningSound.play();
-            }  else runningSound.stop();
-        
+    public void update(int delta) { 
         //calculate movement
         float t = delta/1000f; //t = time in s
         dir[2] += -Map.GRAVITY*t; //in m/s
-        float newposZ = getPos()[2] + dir[2]*Block.GAMEDIMENSION*t; //m
+        float newPosZ = getPos()[2] + dir[2] * Block.GAMEDIMENSION * t; //in m
 
-        //land if standing in or under 0-level and there is an obstacle
+        //land if standing in or under 0-level or there is an obstacle
         if (dir[2] <= 0
-            && newposZ <= 0
+            && newPosZ <= 0
             && (getCoordZ() == 0 || Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
         ) {
+            //stop sound
             if (fallingSound != null) fallingSound.stop();
             dir[2] = 0;
-            newposZ=0;
+            newPosZ = 0;
         }
-        setPos(2, newposZ);
         
-        if (fallingSound != null && dir[2]<-1f &&! fallingSound.playing()) fallingSound.play();
+        //set position to calculated new position
+        setPos(2, newPosZ);
         
         //coordinate switch
         //down
         if (getPos()[2] < 0
             && getCoordZ() > 0
-            && ! Controller.getMapDataSafe(getCoordX(), getCoordY(),getCoordZ()-1).isObstacle()){
+            && ! Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle()){
             
-          
+            //coord switch
             setCoordZ(getCoordZ()-1);
 
-            setPos(2, getPos()[2]+ Block.GAMEDIMENSION);
+            setPos(2, getPos()[2] + Block.GAMEDIMENSION);
             Controller.getMap().requestRecalc();
         } else {
             //up
@@ -228,14 +227,26 @@ public abstract class AbstractCharacter extends AbstractEntity{
                 && getCoordZ() < Chunk.getBlocksZ()-2
                 && !Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
                 
-
-               
+                //coord switch
                 setCoordZ(getCoordZ()+1);
-
-                setPos(2, getPos()[2]- Block.GAMEDIMENSION);
+                
+                setPos(2, getPos()[2] - Block.GAMEDIMENSION);
                 Controller.getMap().requestRecalc();
-            } 
+            } else dir[2] = 0;
         }
+        
+        //should the runningsound be played?
+        if (runningSound != null)
+            if (speed > 0.5f){
+                if (!runningSound.playing()) runningSound.play();
+            }  else runningSound.stop();
+        
+        //should the fallingsound be played?
+        if (fallingSound != null
+            && dir[2] < -1
+            &&! fallingSound.playing()
+           )
+            fallingSound.play();
     }
    
     /**
@@ -247,7 +258,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
     }
 
     /**
-     * Jumpwith a specific speed
+     * Jump with a specific speed
      * @param velo 
      */
     public void jump(float velo) {
@@ -256,7 +267,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
     
     /**
      * Returns a normalized vector wich contains the direction of the block.
-     * @return R
+     * @return 
      */
     public float[] getDirectionVector(){
         return dir;

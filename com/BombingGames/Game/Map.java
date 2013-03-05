@@ -23,7 +23,7 @@ public class Map {
     private static ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
     /**
-     *The list which has all current nine chunks in it.
+     *The list which has all current nine chunk coordinates in it.
      */
     private int[][] coordlist = new int[9][2];
     private Minimap minimap;
@@ -37,7 +37,7 @@ public class Map {
         Log.debug("Creating the map...");
         Log.debug("Should the Engine load a map: "+load);
         if (load) Chunk.readMapInfo();
-        //save chunk size, which is now loaded
+        //save chunk size, which are now loaded
         blocksX = Chunk.getBlocksX()*3;
         blocksY = Chunk.getBlocksY()*3;
         blocksZ = Chunk.getBlocksZ();

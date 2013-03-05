@@ -454,7 +454,7 @@ public class Camera {
                             Controller.getMapData(x, y+2, z).isLiquid())
                             rightliquid = true;
                         
-                        if (leftliquid && rightliquid) liquidfilter=true;
+                        if (leftliquid && rightliquid) liquidfilter = true;
                     } 
 
                     //two blocks hiding the left side
@@ -582,7 +582,7 @@ public class Camera {
             topmost--;
         }
                 
-        if (topmost>0) {
+        if (topmost > 0) {
             //start at topmost block and go down. Every step make it a bit darker
             for (int level = topmost; level > 0; level--)
                 Controller.getMapData(coords[0], coords[1], level).setLightlevel(50* level / topmost);
