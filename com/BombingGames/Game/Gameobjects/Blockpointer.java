@@ -3,12 +3,12 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.Game.Controller;
   
 /**
- *The pointer can point to a SelfAwareBlock or to a fixed coordinate.
+ *The pointer can point to a ISelfAware or to a fixed coordinate.
  * @author Benedikt
  */
 public class Blockpointer{
     private int[] vector;
-    private SelfAwareBlock block;
+    private ISelfAware block;
     
     /**
      * Create a pointer to field in the coordinate system.
@@ -21,14 +21,14 @@ public class Blockpointer{
     }
     
     /**
-     * Create a blockpointer who points at a SelfAwareBlock and follows him.
+     * Create a blockpointer who points at a ISelfAware and follows him.
      * You can add a coordinate offset.
      * @param block the block where you are pointing at.
      * @param x the amount of x added to the coordiantes of the block
      * @param y the amount of x added to the coordiantes of the block
      * @param z the amount of x added to the coordiantes of the block 
      */
-    public Blockpointer(SelfAwareBlock block, int[] offsetvector){
+    public Blockpointer(ISelfAware block, int[] offsetvector){
         this.block = block;
         //here the coordinates have the function to add it
         this.vector = offsetvector;

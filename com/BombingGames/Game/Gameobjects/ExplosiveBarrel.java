@@ -6,11 +6,17 @@ import com.BombingGames.Game.Controller;
  *An example for a special block: barrel block which can explode
  * @author Benedikt
  */
-public class ExplosiveBarrel extends SelfAwareBlock {
+public class ExplosiveBarrel extends Block implements ISelfAware {
     /**
      * Defines the radius of the explosion.
      */
-    public static int RADIUS = 2;   
+    public static int RADIUS = 2;
+    
+    private int[] coords;
+
+    protected ExplosiveBarrel(int id) {
+        super(id);
+    }
     
     /**
      * Explodes the barrel.
@@ -19,8 +25,27 @@ public class ExplosiveBarrel extends SelfAwareBlock {
         for (int x=-RADIUS;x<RADIUS;x++)
             for (int y=-RADIUS*2;y<RADIUS*2;y++)
                 for (int z=-RADIUS;z<RADIUS;z++)
-                    Controller.setMapDataSafe(getCoordX()+x, getCoordY()+y, getCoordZ()+z, Block.getInstance());
+                    Controller.setMapDataSafe(coords[0]+x, coords[1]+y, coords[2]+z, Block.getInstance());
          Controller.getMap().requestRecalc();
     }
-    
+
+    @Override
+    public int[] getAbsCoords() {
+      return coords; 
+    }
+
+    @Override
+    public void setAbsCoords(int[] coords) {
+        this.coords = coords;
+    }
+
+    @Override
+    public int[] getRelCoords() {
+        return Controller.getMap().AbsoluteToRelativeCoords(coords);
+    }
+
+    @Override
+    public void addToAbsCoords(int x, int y, int z) {
+        setAbsCoords(new int[]{getAbsCoords()[0]+x, getAbsCoords()[1]+y, getAbsCoords()[2]+z});
+    }
 }

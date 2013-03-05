@@ -171,6 +171,12 @@ public class Controller {
         map.getEntitylist().add(player);
     }
 
-
-
+    /**
+     * Get the neighbour block to a side
+     * @param side the id of the side
+     * @return the neighbour block
+     */
+    public static Block getNeighbourBlock(int[] coords, int side){
+        return Controller.getMapDataSafe(Block.sideNumbToNeighbourCoords(coords, side));
+    }
 }

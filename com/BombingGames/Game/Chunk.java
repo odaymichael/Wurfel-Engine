@@ -18,7 +18,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 1;
+    public static final int MAPGENERATOR = 5;
     
     private static int blocksX = 10;
     private static int blocksY = 40;//blocksY must be even number
@@ -128,7 +128,7 @@ public class Chunk {
                         data[x][y][1] = Block.getInstance(2);
                         data[x][y][0] = Block.getInstance(2);
                     }
-                data[5][5][3] = Block.create(71,0,5,5,3);
+                data[5][5][3] = Block.getInstance(71,0,5,5,3);
                 data[5][5][2] = Block.getInstance(2);
                 
                 break;

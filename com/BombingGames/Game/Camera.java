@@ -88,8 +88,8 @@ public class Camera {
             xPos = Block.getScreenPosX(focusblock.getBlock(), focusblock.getCoords(), null) - gameWidth / 2;            
             yPos = Block.getScreenPosY(focusblock.getBlock(), focusblock.getCoords(), null) - gameHeight / 2 ;
         } else {
-            xPos = Block.getScreenPosX(focusentity, focusentity.getCoords(), null) - gameWidth / 2;            
-            yPos = Block.getScreenPosY(focusentity, focusentity.getCoords(), null) - gameHeight / 2 ;
+            xPos = Block.getScreenPosX(focusentity, focusentity.getRelCoords(), null) - gameWidth / 2;            
+            yPos = Block.getScreenPosY(focusentity, focusentity.getRelCoords(), null) - gameHeight / 2 ;
         }
         
         //update borders
@@ -296,7 +296,7 @@ public class Camera {
                     
                     Block block = Controller.getMapData(x, y, z); 
                     if (!block.isHidden() && block.isVisible()) {
-                        depthsort.add(new Renderobject(x, y, z, block.getDepth(y,z),-1));
+                        depthsort.add(new Renderobject(new int[]{x, y, z}, block.getDepth(y,z),-1));
                     }
                 }
         
@@ -305,10 +305,8 @@ public class Camera {
             AbstractEntity entity = Controller.getMap().getEntitylist().get(i);
             depthsort.add(
                 new Renderobject(
-                    entity.getCoordX(),
-                    entity.getCoordY(),
-                    entity.getCoordZ(),
-                    entity.getDepth(entity.getCoordY(), entity.getCoordZ()),
+                    entity.getRelCoords(),
+                    entity.getDepth(entity.getRelCoords()[1], entity.getRelCoords()[2]),
                     i
                 )
              );

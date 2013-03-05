@@ -1,10 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Chunk;
 import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Map;
 import org.newdawn.slick.SlickException;
@@ -14,9 +9,13 @@ import org.newdawn.slick.Sound;
  *A character is an entity wich can walk around.
  * @author Benedikt
  */
-public abstract class AbstractCharacter extends AbstractEntity{
+public abstract class AbstractCharacter extends AbstractEntity {
    /* Always one of them must be 1 to prevent a division with 0.*/
    private float[] dir = {1,0,0};
+
+    public AbstractCharacter(int id) {
+        super(id);
+    }
    
    /**
     * provides a factor for the vector
@@ -83,47 +82,47 @@ public abstract class AbstractCharacter extends AbstractEntity{
             //check for movement in x
             //top corner
             int neighbourNumber = Block.sideNumb(newx, newy - Block.DIM2); 
-            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
                 validmovement = false;
             //bottom corner
             neighbourNumber = Block.sideNumb(newx, newy + Block.DIM2); 
-            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
-                validmovement = false; 
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+                validmovement = false;
             
             //find out the direction of the movement
             if (oldpos[0] - newx > 0) {
                 //check left corner
                 neighbourNumber = Block.sideNumb(newx - Block.DIM2, newy);
-                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
-                   validmovement = false;
+                if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+                    validmovement = false;
             } else {
                 //check right corner
                 neighbourNumber = Block.sideNumb(newx + Block.DIM2, newy);
-                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
-                   validmovement = false;
+                if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+                    validmovement = false;
             }
             
             //check for movement in y
             //left corner
             neighbourNumber = Block.sideNumb(newx - Block.DIM2, newy); 
-            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
                 validmovement = false;
 
             //right corner
             neighbourNumber = Block.sideNumb(newx + Block.DIM2, newy); 
-            if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
-                validmovement = false;  
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+                validmovement = false; 
             
             if (oldpos[1] - newy > 0) {
                 //check top corner
                 neighbourNumber = Block.sideNumb(newx, newy - Block.DIM2);
-                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
-                   validmovement = false;
+                if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+                    validmovement = false;
             } else {
                 //check bottom corner
                 neighbourNumber = Block.sideNumb(newx, newy + Block.GAMEDIMENSION/2);
-                if (neighbourNumber != 8 && getNeighbourBlock(neighbourNumber).isObstacle())
-                   validmovement = false;
+                if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+                    validmovement = false;
             }
             
             //if movement allowed => move player   
@@ -156,7 +155,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
             }
         }
         //enable this line to see where to player stands:
-        Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()-1).setLightlevel(30);
+        Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
    }
     
    /**
@@ -170,11 +169,11 @@ public abstract class AbstractCharacter extends AbstractEntity{
         setPos(0, getPos()[0] -1*x*Block.DIM2);
         
         
-        setAbsCoordY(getAbsCoordY()+y);
+        addToAbsCoords(0, y, 0);
         if (x<0){
-            if (getCoordY() % 2 == 1) setAbsCoordX(getAbsCoordX()-1);
+            if (getRelCoords()[1] % 2 == 1) addToAbsCoords(-1, 0, 0);
         } else {
-            if (getCoordY() % 2 == 0) setAbsCoordX(getAbsCoordX()+1);
+            if (getRelCoords()[1] % 2 == 0) addToAbsCoords(1, 0, 0);
         }
         
         Controller.getMap().requestRecalc();
@@ -194,7 +193,7 @@ public abstract class AbstractCharacter extends AbstractEntity{
         //land if standing in or under 0-level or there is an obstacle
         if (dir[2] <= 0
             && newPosZ <= 0
-            && (getCoordZ() == 0 || Controller.getMapData(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle())
+            && (getRelCoords()[2] == 0 || Controller.getMapData(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).isObstacle())
         ) {
             //stop sound
             if (fallingSound != null) fallingSound.stop();
@@ -208,22 +207,22 @@ public abstract class AbstractCharacter extends AbstractEntity{
         //coordinate switch
         //down
         if (getPos()[2] < 0
-            && getCoordZ() > 0
-            && ! Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()-1).isObstacle()){
+            && getRelCoords()[2] > 0
+            && ! Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).isObstacle()){
             
             //coord switch
-            setCoordZ(getCoordZ()-1);
+            addToAbsCoords(0, 0, -1);
             setPos(2, getPos()[2] + Block.GAMEDIMENSION);
             
             Controller.getMap().requestRecalc();
         } else {
             //up
-            if (! Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()) {
+            if (! Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]+2).isObstacle()) {
                 if (getPos()[2] >= Block.GAMEDIMENSION
-                    && getCoordZ()+1 < Chunk.getBlocksZ()
+                    && getRelCoords()[2]+1 < Map.getBlocksZ()
                     ){
                     //coord switch
-                    setCoordZ(getCoordZ()+1);
+                    addToAbsCoords(0, 0, 1);
                     setPos(2, getPos()[2] - Block.GAMEDIMENSION);
 
                     Controller.getMap().requestRecalc();

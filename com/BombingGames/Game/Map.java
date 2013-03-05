@@ -260,13 +260,10 @@ public class Map {
             int[] coords = camera.getDepthsortCoord(i);//get the coords of the current renderobject
             int entitynumber = camera.getEntityIndex(i); //get the entityindex to check if it is an entity
             
-            Block renderobject;
             if (entitynumber == -1) //if a block get it
-                renderobject = data[coords[0]][coords[1]][coords[2]];
+                data[coords[0]][coords[1]][coords[2]].render(coords, camera);
             else //if an entity get it
-                renderobject = entitylist.get(entitynumber);
-                            
-            renderobject.render(coords, camera);            
+                entitylist.get(entitynumber).render(coords, camera);        
         }
             
        Block.getBlocksheet().endUse(); 
@@ -436,6 +433,14 @@ public class Map {
      */
     public ArrayList<AbstractEntity> getEntitylist() {
         return entitylist;
+    }
+    
+    public int[] AbsoluteToRelativeCoords(int[] coords){
+        return new int[]{
+            coords[0] - getChunkCoords(4)[0]  * Chunk.getBlocksX(),
+            coords[1] - getChunkCoords(4)[1] * Chunk.getBlocksY(),
+            coords[2]
+        };
     }
 
 

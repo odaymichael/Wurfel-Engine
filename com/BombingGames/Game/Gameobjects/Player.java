@@ -1,6 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Camera;
+import com.BombingGames.Game.Controller;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
@@ -9,26 +10,29 @@ import org.newdawn.slick.Sound;
  * @author Benedikt
  */
 public class Player extends AbstractCharacter{
-   private String controlls = "WASD";
+   private String controls = "WASD";
+   private int[] coords;
    
     /**
      * Creates a player. The parameters are for the lower half of the player. The constructor automatically creates a block on top of it.
      * @throws SlickException
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
      */
-    protected Player() throws SlickException {
+    public Player(int id) throws SlickException {
+        super(id);
         setFallingSound(new Sound("com/BombingGames/Game/Sounds/wind.wav"));
         setRunningSound(new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav"));
     }
+
     
   
     /**
-     * Set the controlls.
-     * @param controlls either "arrows" or "WASD".
+     * Set the controls.
+     * @param controls either "arrows" or "WASD".
      */
-    public void setControlls(String controlls){
-        if ("arrows".equals(controlls) || "WASD".equals(controlls))
-            this.controlls = controlls;
+    public void setControlls(String controls){
+        if ("arrows".equals(controls) || "WASD".equals(controls))
+            this.controls = controls;
     }
     
     /**
@@ -36,7 +40,7 @@ public class Player extends AbstractCharacter{
      * @return either "arrows" or "WASD".
      */
     public String getControlls(){
-        return controlls;
+        return controls;
     }
         
 
@@ -84,7 +88,25 @@ public class Player extends AbstractCharacter{
             }
         }
         super.render(coords, camera);
-        //this line causes massive rendering problems
-        //Gameplay.view.g.fillRect(500, 500, 900, 600);
+    }
+
+    @Override
+    public int[] getAbsCoords() {
+      return coords; 
+    }
+
+    @Override
+    public void setAbsCoords(int[] coords) {
+        this.coords = coords;
+    }
+
+    @Override
+    public int[] getRelCoords() {
+        return Controller.getMap().AbsoluteToRelativeCoords(coords);
+    }
+
+    @Override
+    public void addToAbsCoords(int x, int y, int z) {
+        setAbsCoords(new int[]{getAbsCoords()[0]+x, getAbsCoords()[1]+y, getAbsCoords()[2]+z});
     }
 }

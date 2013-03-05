@@ -1,5 +1,6 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.ExplosiveBarrel;
 import com.BombingGames.Game.Gameobjects.Player;
@@ -8,7 +9,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.Log;
 
 /**
  *The <i>GameController</i> is for the game code. Put engine code into <i>Controller</i>.
@@ -26,7 +26,7 @@ public class GameController extends Controller {
         super(gc, game);
         this.gc = gc;
         
-        setPlayer((Player) Block.create(40,0,(int) (Chunk.getBlocksX()*1.5),(int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2));
+        setPlayer((Player) AbstractEntity.getInstance(40, 0, new int[]{(int) (Chunk.getBlocksX()*1.5), (int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2}));
         
         gc.getInput().addMouseListener(new MouseDraggedListener());
     }
