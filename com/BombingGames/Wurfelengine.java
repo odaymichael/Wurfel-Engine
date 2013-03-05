@@ -18,7 +18,7 @@ public class Wurfelengine extends StateBasedGame {
     /**
      * The Version of the Engine
      */
-    public static final String VERSION = "0.3";
+    public static final String VERSION = "0.4";
     
     private static AppGameContainer game;    
     private static File workingDirectory;
@@ -45,7 +45,8 @@ public class Wurfelengine extends StateBasedGame {
         //you can start the game with a custom resolution
         if (args.length == 0)
            game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), false);
-        else game.setDisplayMode(Integer.parseInt(args[0]), Integer.parseInt(args[1]), false);
+        else
+            game.setDisplayMode(Integer.parseInt(args[0]), Integer.parseInt(args[1]), false);
         //System.out.println(game.isVSyncRequested());
         game.start();
     }
