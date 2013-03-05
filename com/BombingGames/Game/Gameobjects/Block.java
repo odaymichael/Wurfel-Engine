@@ -370,13 +370,13 @@ public class Block {
      * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen X-position in pixels
      */
-    public static int getScreenPosX(Block block, int x, int y, int z, Camera camera) {
+    public static int getScreenPosX(Block block, int[] coords, Camera camera) {
         int camerax = 0;
-        if (camera != null) camerax = camera.getX();
+        if (camera != null) camerax = camera.getGamePosX();
         
         return - camerax
-               + x*DIMENSION
-               + (y%2) * DIM2
+               + coords[0]*DIMENSION
+               + (coords[1]%2) * DIM2
                + (int) (block.pos[0]);
     }
     
@@ -390,13 +390,13 @@ public class Block {
      * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen Y-position in pixels
      */
-    public static int getScreenPosY(Block block, int x, int y, int z, Camera camera){
+    public static int getScreenPosY(Block block, int[] coords, Camera camera){
         int cameray = 0;
-        if (camera != null) cameray = camera.getY();
+        if (camera != null) cameray = camera.getGamePosY();
         
         return - cameray
-               + y*DIM4
-               - z*DIM2
+               + coords[1]*DIM4
+               - coords[2]*DIM2
                + (int) (block.pos[1] / 2)
                - (int) (block.pos[2] / Math.sqrt(2));   
     }
@@ -712,13 +712,13 @@ public class Block {
      * @param z z-coordinate
      * @param camera  
      */
-    public void render(int x, int y, int z, Camera camera) {
+    public void render(int[] coords, Camera camera) {
         //draw every visible block except air
         if (id != 0 && visible){            
             if (hasSides){
-                if (renderTop) renderSide(x,y,z, TOPSIDE, camera);
-                if (renderLeft) renderSide(x,y,z, LEFTSIDE, camera);
-                if (renderRight) renderSide(x,y,z, RIGHTSIDE, camera);
+                if (renderTop) renderSide(coords, TOPSIDE, camera);
+                if (renderLeft) renderSide(coords, LEFTSIDE, camera);
+                if (renderRight) renderSide(coords, RIGHTSIDE, camera);
             } else {
                 Image image = getSprite(id, value,dimensionY);
 
@@ -738,9 +738,9 @@ public class Block {
                 image.setColor(2, brightness, brightness, brightness);
                 image.setColor(3, brightness, brightness, brightness);
                 
-                int xpos = getScreenPosX(this, x, y, z, camera);
+                int xpos = getScreenPosX(this, coords, camera);
                 
-                int ypos = getScreenPosY(this, x, y, z, camera) - (dimensionY-1)*DIM2;
+                int ypos = getScreenPosY(this, coords, camera) - (dimensionY-1)*DIM2;
                 
                 image.drawEmbedded(xpos, ypos);
             }
@@ -754,7 +754,7 @@ public class Block {
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      * @param renderBlock The block which gets rendered
      */
-    private void renderSide(int x, int y, int z, int sidenumb, Camera camera){
+    private void renderSide(int[] coords, int sidenumb, Camera camera){
         Image image = getBlockSprite(id,value,sidenumb);
         
         if (Gameplay.getView().hasGoodGraphics()){
@@ -780,10 +780,10 @@ public class Block {
         image.setColor(3, brightness, brightness, brightness);
         
         //right side is  half a block more to the right
-        int xpos = getScreenPosX(this, x,y,z, camera) + ( sidenumb == 2 ? DIM2 : 0);
+        int xpos = getScreenPosX(this, coords, camera) + ( sidenumb == 2 ? DIM2 : 0);
         
         //the top is drawn a quarter blocks higher
-        int ypos = getScreenPosY(this, x,y,z, camera) + (sidenumb != 1 ? DIM4 : 0);
+        int ypos = getScreenPosY(this, coords, camera) + (sidenumb != 1 ? DIM4 : 0);
         
         image.drawEmbedded(xpos, ypos);
     }

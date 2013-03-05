@@ -20,18 +20,17 @@ public class Camera {
     private int leftborder, topborder, rightborder, bottomborder;
     private float zoom = 1;
     
-    private Focustype focus;
+    private Camera.Focustype focus;
     private Blockpointer focusblock;
     private AbstractEntity focusentity;
     private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
     
 
-    
      /**
      * The camera locks to the player by default. It can be changed with <i>focusblock()</i>. Screen size does refer to the output of the camera not the real size on the display.
      * @param focusblock the block in the focus
-     * @param x the position of the camera
-     * @param y the position of the camera
+     * @param x the position of the output
+     * @param y the position of the output
      * @param width the width of the output. it can be different than the output on the display because it gets scaled later again.
      * @param height the height of the output. it can be different than the output on the display because it gets scaled later again.
      * @param scale the zoom factor.
@@ -43,7 +42,7 @@ public class Camera {
         screenWidth = (int) (width / scale);
         screenHeight = (int) (height / scale);
         
-        focus = Focustype.BLOCK;
+        focus = Camera.Focustype.BLOCK;
         this.focusblock = focusblock;
         
         gameWidth = (int) (screenWidth / zoom);
@@ -54,10 +53,11 @@ public class Camera {
     }
     
    /**
-     * Creates a camera. Screen does refer to the output of the camera not the real size on the display.
-     * @param focusentity 
-     * @param x the position of the camera
-     * @param y the position of the camera
+     * Creates a camera.
+     * The values are sceen-size and do refer to the output of the camera not the real display size.
+     * @param focusentity the entity wich the camera focuses
+     * @param x the position of the output
+     * @param y the position of the output
      * @param width the screen width
      * @param height the screen width
      * @param scale the zoom factor.
@@ -69,7 +69,7 @@ public class Camera {
         screenWidth = (int) (width / scale);
         screenHeight = (int) (height / scale);
         
-        focus = Focustype.ENTITY;
+        focus = Camera.Focustype.ENTITY;
         this.focusentity = focusentity;
         
         gameWidth = (int) (screenWidth / zoom);
@@ -84,12 +84,12 @@ public class Camera {
      * Updates the camera
      */
     public final void update() {
-        if (focus == Focustype.BLOCK) {
-            xPos = Block.getScreenPosX(focusblock.getBlock(), focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), null) - gameWidth / 2;            
-            yPos = Block.getScreenPosY(focusblock.getBlock(), focusblock.getCoordX(), focusblock.getCoordY(), focusblock.getCoordZ(), null) - gameHeight / 2 ;
+        if (focus == Camera.Focustype.BLOCK) {
+            xPos = Block.getScreenPosX(focusblock.getBlock(), focusblock.getCoords(), null) - gameWidth / 2;            
+            yPos = Block.getScreenPosY(focusblock.getBlock(), focusblock.getCoords(), null) - gameHeight / 2 ;
         } else {
-            xPos = Block.getScreenPosX(focusentity, focusentity.getCoordX(), focusentity.getCoordY(), focusentity.getCoordZ(), null) - gameWidth / 2;            
-            yPos = Block.getScreenPosY(focusentity, focusentity.getCoordX(), focusentity.getCoordY(), focusentity.getCoordZ(), null) - gameHeight / 2 ;
+            xPos = Block.getScreenPosX(focusentity, focusentity.getCoords(), null) - gameWidth / 2;            
+            yPos = Block.getScreenPosY(focusentity, focusentity.getCoords(), null) - gameHeight / 2 ;
         }
         
         //update borders
@@ -156,7 +156,7 @@ public class Camera {
      * @param blockpointer
      */
     public void focusOnBlock(Blockpointer blockpointer){
-        focus = Focustype.BLOCK;
+        focus = Camera.Focustype.BLOCK;
         focusblock = blockpointer;
     }
     
@@ -194,34 +194,34 @@ public class Camera {
     }
     
   /**
-     * The Camera Position in the game world.
+     * The Camera left Position in the game world.
      * @return 
      */
-    public int getX() {
+    public int getGamePosX() {
         return xPos;
     }
 
     /**
-     * The Camera Position in the game world.
+     * The Camera left Position in the game world.
      * @param x 
      */
-    public void setX(int x) {
+    public void setGamePosX(int x) {
         this.xPos = x;
     }
 
     /**
-     * The Camera Position in the game world.
-     * @return
+     * The Camera top-position in the game world.
+     * @return in camera position game space
      */
-    public int getY() {
+    public int getGamePosY() {
         return yPos;
     }
 
     /**
-     * The Camera Position in the game world.
-     * @param y 
+     * The Camera top-position in the game world.
+     * @param y in game space
      */
-    public void setY(int y) {
+    public void setGamePosY(int y) {
         this.yPos = y;
     }
 
@@ -233,28 +233,27 @@ public class Camera {
         return gameHeight;
     }
 
-
     /**
-     * The amount of pixel which are visible in xPos direction (game pixels). For screen pixels use <i>ScreenWidth()</i>.
+     * The amount of pixel which are visible in xPos direction (game pixels).
+     * For screen pixels use <i>ScreenWidth()</i>.
      * @return
      */
-    public int getWidth() {
+    public int getGameWidth() {
         return gameWidth;
     }
 
-
     /**
-     * Returns the amount of (game) pixels visible in Y direction. Ground level+ the gameWidth of the slope.
+     * Returns the amount of (game) pixels visible in Y direction.
+     * Ground level+ the gameWidth of the slope.
      * @return
      */
-    public int getTotalHeight() {
+    public int getGameTotalHeight() {
         return gameHeight + Block.DIM2*Map.getBlocksZ();
     }
 
-
-    
     /**
-     * Returns the height of the camera output. To get the real value multiply it with scale value.
+     * Returns the height of the camera output.
+     * To get the real display size multiply it with scale values.
      * @return the value before scaling
      */
     public int getScreenHeight() {
@@ -262,7 +261,8 @@ public class Camera {
     }
 
     /**
-     * Returns the width of the camera output before scale. To get the real value multiply it with scale value.
+     * Returns the width of the camera output before scale.
+     * To get the real value multiply it with scale value.
      * @return the value before scaling
      */
     public int getScreenWidth() {
@@ -273,7 +273,7 @@ public class Camera {
      * Returns the position of the cameras output.
      * @return
      */
-    public int getScreenX() {
+    public int getScreenPosX() {
         return screenX;
     }
 
@@ -281,13 +281,12 @@ public class Camera {
      * Returns the position of the camera
      * @return
      */
-    public int getScreenY() {
+    public int getScreenPosY() {
         return screenY;
     }
     
-    
      /**
-     * Fills the map into a list and sorts it, called the depthlist.
+     * Fills the map into a list and sorts it in the order of the rendering, called the depthlist.
      */
     private void createSortedDepthList() {
         depthsort.clear();
@@ -314,13 +313,13 @@ public class Camera {
                 )
              );
         }
-        
-        
+        //sort the list
         sortDepthList(0, depthsort.size()-1);
     }
     
     /**
-     * Using Quicksort to sort. From big to small values.
+     * Using Quicksort to sort.
+     * From big to small values.
      * @param low the lower border
      * @param high the higher border
      */
@@ -346,14 +345,10 @@ public class Camera {
     }
     
     /**
-     * Depthsort list
-     */
-    
-        /**
-                * Returns a coordiante triple of an ranking for the rendering order
-                * @param index the index
-                * @return the coordinate triple with x,y,z
-                */
+        * Returns a coordiante triple of an ranking for the rendering order
+        * @param index the index
+        * @return the coordinate triple with x,y,z
+        */
         protected int[] getDepthsortCoord(int index) {
             Renderobject item = depthsort.get(index);
             int[] triple = item.getCoords();
@@ -361,23 +356,21 @@ public class Camera {
         }
 
         /**
-                * Returns the entetyindex of a element i in the depthsort list.
-                * @param i index of the depthsort list
-                * @return the entityindex
-                */
+        * Returns the entityindex of a element i in the depthsort list.
+        * @param i index of the depthsort list
+        * @return the entityindex
+        */
         protected int getEntityIndex(int i) {
             return depthsort.get(i).getEntityindex();
         }
 
         /**
-                * Returns the lenght of list of ranking for the rendering order
-                * @return length of the render list
-                */
+        * Returns the lenght of list of ranking for the rendering order
+        * @return length of the render list
+        */
         protected int depthsortlistSize(){
             return depthsort.size();
         }
-    
-    
     
     
     /**
@@ -400,20 +393,25 @@ public class Camera {
         //send the rays through top of the map
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY() + Map.getBlocksZ()*2; y++){
-                traceRay(x, y, Map.getBlocksZ()-1, 0);
-                traceRay(x, y, Map.getBlocksZ()-1, 1);
-                traceRay(x, y, Map.getBlocksZ()-1, 2);
+                traceRay(new int[]{x,y, Map.getBlocksZ()-1}, 0);
+                traceRay(new int[]{x,y, Map.getBlocksZ()-1}, 1);
+                traceRay(new int[]{x,y, Map.getBlocksZ()-1}, 2);
             }     
     }
     
     /**
-    * Traces a single ray-
+    * Traces a single ray.
+    * This costs less performance than a whole raytracing.
      * @param x The starting x-coordinate.
      * @param y The starting y-coordinate.
      * @param z The starting z-coordinate.
-     * @param side The side the ray traces
+     * @param side The side the ray should check
      */
-    private void traceRay(int x, int y, int z, int side){
+    private void traceRay(int[] coords, int side){
+        int x = coords[0];
+        int y = coords[1];
+        int z = coords[2];
+        
         boolean left = true;
         boolean right = true;
         boolean leftliquid = false;
@@ -552,14 +550,12 @@ public class Camera {
     }
     
     /**
-     * Traces the ray to this block.
-     * @param x
-     * @param y
-     * @param z
+     * Traces the ray to a specific block.
+     * @param coords
      * @param allsides True when every side should be traced?
      */
-    public void traceRayTo(int x, int y, int z, boolean allsides){
-        Block block = Controller.getMapData(x,y,z);
+    public void traceRayTo(int[] coords, boolean allsides){
+        Block block = Controller.getMapData(coords);
                     
         //Blocks with offset are not in the grid, so can not be calculated => always visible
         block.setVisible(
@@ -567,29 +563,29 @@ public class Camera {
         );
                     
        //find start position
-        while (z < Map.getBlocksZ()-1){
-            y += 2;
-            z++;
+        while (coords[2] < Map.getBlocksZ()-1){
+            coords[1] += 2;
+            coords[2]++;
         }
         
         //trace rays
         if (allsides){
-             traceRay(x,y,z, Block.LEFTSIDE);
-             traceRay(x,y,z, Block.RIGHTSIDE);
+             traceRay(coords, Block.LEFTSIDE);
+             traceRay(coords, Block.RIGHTSIDE);
         }
-        traceRay(x,y,z, Block.TOPSIDE);
+        traceRay(coords, Block.TOPSIDE);
         
         //calculate light
         //find top most block
         int topmost = Chunk.getBlocksZ()-1;
-        while (Controller.getMapData(x, y, topmost).isTransparent() == true && topmost > 0 ){
+        while (Controller.getMapData(coords[0], coords[1], topmost).isTransparent() == true && topmost > 0 ){
             topmost--;
         }
                 
         if (topmost>0) {
             //start at topmost block and go down. Every step make it a bit darker
             for (int level = topmost; level > 0; level--)
-                Controller.getMapData(x, y, level).setLightlevel(50* level / topmost);
+                Controller.getMapData(coords[0], coords[1], level).setLightlevel(50* level / topmost);
         }
     }
 }

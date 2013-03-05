@@ -54,7 +54,7 @@ public class View {
         Block.loadSheet();
         //camera.focusOnBlock(new Blockpointer(Chunk.getBlocksX()*3/2,Map.getBlocksY()/2,Chunk.getBlocksZ()/2));
         
-        if (camera.getTotalHeight() > Chunk.getBlocksY()*Block.DIM2/2) {
+        if (camera.getGameTotalHeight() > Chunk.getBlocksY()*Block.DIM2/2) {
             Gameplay.MSGSYSTEM.add("The chunks are maybe too small for this camera height/resolution to grant a stable experience", "Warning");
             Log.warn("The chunks are maybe too small for this camera height/resolution to grant a stable experience");
         }
@@ -94,7 +94,7 @@ public class View {
      * @return game coordinate
      */
     public int ScreenXtoGame(int x){
-        return (int) ((x + Gameplay.getView().getCamera().getX()) / Gameplay.getView().getCamera().getAbsZoom());
+        return (int) ((x + Gameplay.getView().getCamera().getGamePosX()) / Gameplay.getView().getCamera().getAbsZoom());
     }
     
    /**
@@ -103,11 +103,11 @@ public class View {
      * @return game coordinate
      */
     public int ScreenYtoGame(int y){
-        return (int) ((y + Gameplay.getView().getCamera().getY()) / Gameplay.getView().getCamera().getAbsZoom() * 2);
+        return (int) ((y / Gameplay.getView().getCamera().getAbsZoom() + Gameplay.getView().getCamera().getGamePosY()) * 2);
     }
     
     /**
-     * Returns the coordinates belonging to a point on the screen. ATTENTION! this is just 2d and the topmost layer is taken. no depth-check.
+     * Returns the coordinates belonging to a point on the screen.
      * @param x the x position on the screen
      * @param y the y position on the screen
      * @return map coordinates
@@ -121,7 +121,7 @@ public class View {
         x = ScreenXtoGame(x);
         
         //find out where the click went
-        coords[0] = x / Block.DIMENSION-1;
+        coords[0] = x / Block.DIMENSION -1;
         
         coords[1] = (int) (y / Block.DIMENSION)*2-1;
             

@@ -49,7 +49,7 @@ public class Player extends AbstractCharacter{
     }
     
      @Override
-     public void render(int x, int y, int z, Camera camera){
+     public void render(int[] coords, Camera camera){
         float[] dir = getDirectionVector();
         if (dir[0] < -Math.sin(Math.PI/3)){
             setValue(2);//west
@@ -83,7 +83,7 @@ public class Player extends AbstractCharacter{
                 }
             }
         }
-        super.render(x, y, z, camera);
+        super.render(coords, camera);
         //this line causes massive rendering problems
         //Gameplay.view.g.fillRect(500, 500, 900, 600);
     }

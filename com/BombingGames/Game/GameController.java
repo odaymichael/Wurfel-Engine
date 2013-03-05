@@ -136,7 +136,7 @@ public class GameController extends Controller {
             int coords[] = Gameplay.getView().ScreenToGameCoords(newx,newy);
             if (coords[2] < Map.getBlocksZ()-1) coords[2]++; 
             setMapDataSafe(coords[0], coords[1], coords[2], Block.getInstance(1));
-            Gameplay.getView().getCamera().traceRayTo(coords[0], coords[1], coords[2], true);
+            Gameplay.getView().getCamera().traceRayTo(coords, true);
         }
 
         @Override

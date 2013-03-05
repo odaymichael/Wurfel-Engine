@@ -266,7 +266,7 @@ public class Map {
             else //if an entity get it
                 renderobject = entitylist.get(entitynumber);
                             
-            renderobject.render(coords[0],coords[1],coords[2], camera);            
+            renderobject.render(coords, camera);            
         }
             
        Block.getBlocksheet().endUse(); 
@@ -320,6 +320,10 @@ public class Map {
         return data[x][y][z];    
     }
     
+    public Block getDataSafe(int[] coords) {
+        return getDataSafe(coords[0], coords[1], coords[2]);
+    }
+    
     /**
      * Returns  a Block without checking the parameters first. Good for debugging and also faster.
      * @param x position
@@ -340,7 +344,10 @@ public class Map {
      */
     public void setData(int x, int y, int z, Block block){
         data[x][y][z] = block;
-       // Gameplay.getView().traceRayTo(x, y, z, true);
+    }
+    
+    public void setData(int[] coords, Block block) {
+        data[coords[0]][coords[1]][coords[2]] = block;
     }
     
     /**
@@ -430,4 +437,6 @@ public class Map {
     public ArrayList<AbstractEntity> getEntitylist() {
         return entitylist;
     }
+
+
 }

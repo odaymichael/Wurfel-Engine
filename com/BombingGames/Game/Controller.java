@@ -4,7 +4,6 @@ import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.Player;
 import com.BombingGames.MainMenu.MainMenuState;
-import java.util.ArrayList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -54,6 +53,10 @@ public class Controller {
      */
     public static Block getMapDataSafe(int x, int y, int z){
         return map.getDataSafe(x, y, z);
+    }
+    
+    public static Block getMapDataSafe(int[] coords) {
+        return map.getDataSafe(coords);
     }
     
     /**
