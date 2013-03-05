@@ -42,11 +42,6 @@ public abstract class AbstractCharacter extends AbstractEntity{
     }  
     
    /**
-     * Lets the player walk with a second block on top.
-     * @param up 
-     * @param down
-     * @param left 
-     *  @param right 
      * Lets the player walk.
      * @param up move up?
      * @param down move down?
@@ -218,20 +213,21 @@ public abstract class AbstractCharacter extends AbstractEntity{
             
             //coord switch
             setCoordZ(getCoordZ()-1);
-
             setPos(2, getPos()[2] + Block.GAMEDIMENSION);
+            
             Controller.getMap().requestRecalc();
         } else {
             //up
-            if (getPos()[2] >= Block.GAMEDIMENSION
-                && getCoordZ() < Chunk.getBlocksZ()-2
-                && !Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()){
-                
-                //coord switch
-                setCoordZ(getCoordZ()+1);
-                
-                setPos(2, getPos()[2] - Block.GAMEDIMENSION);
-                Controller.getMap().requestRecalc();
+            if (! Controller.getMapDataSafe(getCoordX(), getCoordY(), getCoordZ()+2).isObstacle()) {
+                if (getPos()[2] >= Block.GAMEDIMENSION
+                    && getCoordZ()+1 < Chunk.getBlocksZ()
+                    ){
+                    //coord switch
+                    setCoordZ(getCoordZ()+1);
+                    setPos(2, getPos()[2] - Block.GAMEDIMENSION);
+
+                    Controller.getMap().requestRecalc();
+                }
             } else dir[2] = 0;
         }
         

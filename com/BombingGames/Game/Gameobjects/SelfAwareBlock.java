@@ -31,18 +31,19 @@ public class SelfAwareBlock extends Block{
     
    /**
       *  CoordZ is always absolute and relative at the same time because there are no chunks in z direction.
+      * Performes a safety check.
       * @param z the new value for z
       */
     public void setCoordZ(int z) {
         //if Z is too high set to highes possible position
-        if (z > Map.getBlocksZ()-2)
-            absCoords[2] = Map.getBlocksZ() -2;
+        if (z > Map.getBlocksZ()-1)
+            absCoords[2] = Map.getBlocksZ() -1;
         else absCoords[2] = z;
     }
    
     /**
-     * Set the absolute Coordinates
-     * @param coords 
+     * Set the absolute Coordinates without safety check.
+     * @param coords the new coordinates.
      */
     public final void setAbsCoords(int[] coords){
         absCoords = coords;
