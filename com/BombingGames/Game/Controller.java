@@ -10,7 +10,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
 
 /**
- *A controlelr manages the map and the game data.
+ *A controller manages the map and the game data.
  * @author Benedikt
  */
 public class Controller {

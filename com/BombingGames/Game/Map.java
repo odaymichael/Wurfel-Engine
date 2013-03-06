@@ -22,9 +22,7 @@ public class Map {
     private boolean recalcRequested;
     private static ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
-    /**
-     *The list which has all current nine chunk coordinates in it.
-     */
+    //A list which has all current nine chunk coordinates in it.
     private int[][] coordlist = new int[9][2];
     private Minimap minimap;
     
