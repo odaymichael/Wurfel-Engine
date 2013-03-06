@@ -18,7 +18,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 4;
+    public static final int MAPGENERATOR = 6;
     
     private static int blocksX = 10;
     private static int blocksY = 40;//blocksY must be even number
@@ -144,6 +144,13 @@ public class Chunk {
                 
                 break;
             } 
+            case 6: {//every block                
+                for (int x=0; x < blocksX; x++)
+                    for (int y=0; y < blocksY; y++){
+                        data[x][y][0] = Block.getInstance(y);
+                    }
+                break;
+            }     
         }
     }
     
