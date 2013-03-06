@@ -5,11 +5,10 @@ import java.util.logging.Logger;
 import org.newdawn.slick.SlickException;
 
 /**
- *An entity is a game object wich is selfAware that means it knows it's position.
+ *An entity is a game object wich is self aware that means it knows it's position.
  * @author Benedikt
  */
 public abstract class AbstractEntity extends Object implements IsSelfAware {
-   
     /**
      * Create an abstractEntity. You should use Block.getInstance(int) 
      * @param id 
@@ -21,11 +20,11 @@ public abstract class AbstractEntity extends Object implements IsSelfAware {
     }
     
     /**
-     * 
-     * @param id
-     * @param value
-     * @param coords
-     * @return
+     * Create an entity.
+     * @param id the object id of the entity.
+     * @param value The value at start.
+     * @param coords the coordiantes where the entity is.
+     * @return the entity.
      */
     public static AbstractEntity getInstance(int id, int value, int[] coords){
         AbstractEntity entity = null;

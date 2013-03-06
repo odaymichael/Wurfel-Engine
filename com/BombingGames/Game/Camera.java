@@ -2,7 +2,7 @@ package com.BombingGames.Game;
 
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.Blockpointer;
+import com.BombingGames.Game.Gameobjects.Pointer;
 import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ public class Camera {
     private float zoom = 1;
     
     private Camera.Focustype focus;
-    private Blockpointer focusblock;
+    private Pointer focusblock;
     private AbstractEntity focusentity;
     private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
     
@@ -35,7 +35,7 @@ public class Camera {
      * @param height the height of the output. it can be different than the output on the display because it gets scaled later again.
      * @param scale the zoom factor.
      */
-    public Camera(Blockpointer focusblock, int x, int y,int width, int height, float scale) {
+    public Camera(Pointer focusblock, int x, int y,int width, int height, float scale) {
         screenX = x;
         screenY = y;
         //to achieve the wanted size it must be scaled in the other direction
@@ -155,7 +155,7 @@ public class Camera {
      * Use this if you want to focus on a special block
      * @param blockpointer
      */
-    public void focusOnBlock(Blockpointer blockpointer){
+    public void focusOnBlock(Pointer blockpointer){
         focus = Camera.Focustype.BLOCK;
         focusblock = blockpointer;
     }

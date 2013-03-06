@@ -1,12 +1,12 @@
 package com.BombingGames.Game.Gameobjects;
 
 /**
- *A Block that knows his own position
+ *An object that knows his own position IsSelfAware.
  * @author Benedikt
  */
 public interface IsSelfAware{
    /**
-     * Returns the AbsCoords
+     * Return the absolute coordinates.
      * @return
      */
     public int[] getAbsCoords();
@@ -25,8 +25,8 @@ public interface IsSelfAware{
      */
     public void addToAbsCoords(int x, int y, int z);
      /**
-      * 
-      * @return
+      * Returns the relative coordinates wich can be found on the map.
+      * @return relative coordinates
       */
      public int[] getRelCoords();
 }

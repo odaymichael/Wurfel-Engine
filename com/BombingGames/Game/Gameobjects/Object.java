@@ -1,17 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Camera;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 /**
- *
+ *An object is something wich can be found in the game world.
  * @author Benedikt
  */
 public abstract class Object {
@@ -101,9 +96,9 @@ public abstract class Object {
         SPRITEPOS[5][0][2][1] = 600;
 
         NAMELIST[6] = "pavement";
-        SPRITEPOS[6][0][0][0] = 240;
+        SPRITEPOS[6][0][0][0] = 320;
         SPRITEPOS[6][0][0][1] = 600;
-        SPRITEPOS[6][0][1][0] = 320;
+        SPRITEPOS[6][0][1][0] = 400;
         SPRITEPOS[6][0][1][1] = 600;
         SPRITEPOS[6][0][2][0] = 560;
         SPRITEPOS[6][0][2][1] = 600;
@@ -117,11 +112,11 @@ public abstract class Object {
         SPRITEPOS[7][0][2][1] = 600;
         
         NAMELIST[8] = "sand";
-        SPRITEPOS[8][0][0][0] = 160;
+        SPRITEPOS[8][0][0][0] = 320;
         SPRITEPOS[8][0][0][1] = 720;
-        SPRITEPOS[8][0][1][0] = 240;
+        SPRITEPOS[8][0][1][0] = 400;
         SPRITEPOS[8][0][1][1] = 720;
-        SPRITEPOS[8][0][2][0] = 400;
+        SPRITEPOS[8][0][2][0] = 560;
         SPRITEPOS[8][0][2][1] = 720;
         
         NAMELIST[9] = "water";

@@ -142,9 +142,6 @@ public class Block extends Object {
                     block.setTransparent(true);
                     block.liquid = true;
                     break;    
-            case 20:block = new Block(20); 
-                    block.setObstacle(true);
-                    break;
             case 40://already reserverd
                     break;
             case 70:block = new Block(70); 

@@ -3,30 +3,30 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.Game.Controller;
   
 /**
- *The pointer can point to a IsSelfAware or to a fixed coordinate.
+ *The pointer can point to a self aware block or to a fixed coordinate.
  * @author Benedikt
  */
-public class Blockpointer{
+public class Pointer{
     private int[] vector;
-    private IsSelfAware block;
+    private IsSelfAware block = null;
     
     /**
      * Create a pointer to field in the coordinate system.
      * @param coords 
      */
-    public Blockpointer(int[] coords) {
+    public Pointer(int[] coords) {
         this.vector = coords;
     }
     
     /**
-     * Create a blockpointer who points at a IsSelfAware and follows him.
+     * Create a blockpointer who points at a IsSelfAware block and follows it.
      * You can add a coordinate offset.
      * @param block the block where you are pointing at.
-     * @param offsetvector  
+     * @param offsetvector  the offset added to the coordinates
      */
-    public Blockpointer(IsSelfAware block, int[] offsetvector){
+    public Pointer(IsSelfAware block, int[] offsetvector){
         this.block = block;
-        //here the coordinates have the function to add it
+        //in this case the coordinates have the function to add to the coordinates
         this.vector = offsetvector;
     }
 
@@ -39,8 +39,8 @@ public class Blockpointer{
     }
     
     /**
-     * Set a block at the reference.
-     * @param block 
+     * Set a block in the Map at the field pointing to.
+     * @param block the block you want to set.
      */
     public void setBlock(Block block) {
         Controller.getMap().setData(vector, block);
@@ -51,19 +51,23 @@ public class Blockpointer{
     * @return 
     */
     public int[] getCoords() {
-        return vector;
+        if (block != null ) return vector;
+        else {
+            int[] coords = block.getRelCoords();
+            return new int[]{coords[0]+vector[0], coords[1]+vector[1], coords[2]+vector[2]};
+        }
     }
 
     /**
-     * 
+     * Set the offset vector.
      * @param vector
      */
-    public void setVector(int[] vector) {
+    public void setOffsetVector(int[] vector) {
         this.vector = vector;
     }
     
     /**
-     * The same as setVector.
+     * The same as setOffsetVector.
      * @param coords
      * @see 
      */

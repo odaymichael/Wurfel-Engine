@@ -1,7 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
 /**
- *
+ *An object wich is animatable.
  * @author Benedikt
  */
 public interface Animatable {

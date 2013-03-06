@@ -3,7 +3,7 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.Game.Controller;
 
 /**
- *
+ *An entitiy wich is animated.
  * @author Benedikt
  */
 public class AnimatedEntity extends AbstractEntity implements Animatable{
@@ -51,17 +51,11 @@ public class AnimatedEntity extends AbstractEntity implements Animatable{
         }
     }
 
-    /**
-     * Starts the animation.
-     */
     @Override
     public void start() {
         running = true;
     }
 
-    /**
-     * Stops the animation.
-     */
     @Override
     public void stop() {
         running = false;
@@ -82,12 +76,6 @@ public class AnimatedEntity extends AbstractEntity implements Animatable{
         return Controller.getMap().absoluteToRelativeCoords(coords);
     }
 
-    /**
-     * Increases/decreases the coordinates by the parameters
-     * @param x the value added to x-coordiante
-     * @param y y-coordiante
-     * @param z z-coordiante
-     */
     @Override
     public void addToAbsCoords(int x, int y, int z) {
         setAbsCoords(new int[]{getAbsCoords()[0]+x, getAbsCoords()[1]+y, getAbsCoords()[2]+z});
