@@ -105,7 +105,7 @@ public class Block extends Object {
                     break;      
             case 9: block = new Block(9); //water
                     block.setTransparent(true);
-                   // block.setLiquid=true;
+                    block.liquid = true;
                     break;    
             case 20:block = new Block(20); 
                     block.setObstacle(true);
@@ -117,12 +117,13 @@ public class Block extends Object {
                     block.hasSides = false;
                     break;
             case 71:block = new ExplosiveBarrel(71);
-                    ((ISelfAware)block).setAbsCoords(new int[]{x,y,z});
+                    ((ExplosiveBarrel) block).setAbsCoords(new int[]{x,y,z});
                     block.setObstacle(true);
-                    block.hasSides = true;
+                    block.hasSides = false;
                     break;
             case 72:block = new AnimatedBlock(new int[]{1000,1000},true, true);//animation test
                     block.setObstacle(true);
+                    block.hasSides = true;
                     break;
             default:
                     block = new Block(0); 

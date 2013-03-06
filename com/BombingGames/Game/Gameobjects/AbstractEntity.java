@@ -23,20 +23,26 @@ public abstract class AbstractEntity extends Object implements ISelfAware {
         AbstractEntity entity = null;
         //define the default SideSprites
         switch (id){
-            case 40: 
+            case 40:
                     try {
                         entity = new Player(id);
                         entity.setAbsCoords(coords);
                         entity.setTransparent(true);
                         entity.setObstacle(true);
                         entity.setDimensionY(2);
-                        if (value == 0)
-                            entity.setHidden(true);
                     } catch (SlickException ex) {
                         Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
-           case 50:entity = new AnimatedEntity(id, new int[]{2000,200},true, false);//explosion
+           case 50: 
+                    entity = new AnimatedEntity(
+                                id,
+                                value,
+                                coords,
+                                new int[]{500,500},
+                                true,
+                                true
+                            );//explosion
                     break;
         }
         entity.setValue(value);

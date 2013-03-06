@@ -15,6 +15,7 @@ import org.newdawn.slick.util.Log;
  */
 public class Controller {
     private static Map map;
+
     private Player player;   
     
     /**
@@ -103,6 +104,10 @@ public class Controller {
      */
     public static void setMapDataSafe(int x, int y, int z, Block block){
         map.setDataSafe(x, y, z, block);
+    }
+    
+    public static void setMapDataSafe(int[] coords, Block block) {
+        map.setDataSafe(coords, block);
     }
     
     

@@ -164,6 +164,20 @@ public abstract class Object {
         SPRITEPOS[40][8][0][0] = 800;
         SPRITEPOS[40][8][0][1] = 360;
         
+        NAMELIST[50] = "smoke test";
+        SPRITEPOS[50][0][0][0] = 0;
+        SPRITEPOS[50][0][0][1] = 120;
+        SPRITEPOS[50][0][1][0] = 80;
+        SPRITEPOS[50][0][1][1] = 120;
+        SPRITEPOS[50][0][2][0] = 240;
+        SPRITEPOS[50][0][2][1] = 120;
+        SPRITEPOS[50][1][0][0] = 0;
+        SPRITEPOS[50][1][0][1] = 0;
+        SPRITEPOS[50][1][1][0] = 80;
+        SPRITEPOS[50][1][1][1] = 0;
+        SPRITEPOS[50][1][2][0] = 240;
+        SPRITEPOS[50][1][2][1] = 0;
+        
         NAMELIST[70] = "fire";
         SPRITEPOS[70][0][0][0] = 0;
         SPRITEPOS[70][0][0][1] = 720;

@@ -24,8 +24,11 @@ public class ExplosiveBarrel extends Block implements ISelfAware {
     public void explode(){
         for (int x=-RADIUS;x<RADIUS;x++)
             for (int y=-RADIUS*2;y<RADIUS*2;y++)
-                for (int z=-RADIUS;z<RADIUS;z++)
-                    Controller.setMapDataSafe(coords[0]+x, coords[1]+y, coords[2]+z, Block.getInstance());
+                for (int z=-RADIUS;z<RADIUS;z++){
+                    int[] tmp = new int[]{coords[0]+x, coords[1]+y, coords[2]+z};
+                    Controller.setMapDataSafe(tmp, Block.getInstance());
+                    Controller.getMap().getEntitylist().add(AbstractEntity.getInstance(50, 0, tmp));
+                }
          Controller.getMap().requestRecalc();
     }
 
@@ -41,7 +44,7 @@ public class ExplosiveBarrel extends Block implements ISelfAware {
 
     @Override
     public int[] getRelCoords() {
-        return Controller.getMap().AbsoluteToRelativeCoords(coords);
+        return Controller.getMap().absoluteToRelativeCoords(coords);
     }
 
     @Override

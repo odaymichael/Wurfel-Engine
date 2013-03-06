@@ -102,7 +102,7 @@ public class Player extends AbstractCharacter{
 
     @Override
     public int[] getRelCoords() {
-        return Controller.getMap().AbsoluteToRelativeCoords(coords);
+        return Controller.getMap().absoluteToRelativeCoords(coords);
     }
 
     @Override

@@ -10,7 +10,7 @@ public class AnimatedBlock extends Block implements IAnimation{
     private boolean running;
     private boolean loop;
     
-        /**
+    /**
      * Create this Block with an array wich has the time of every animation step in ms in it.
      * @param animationinformation array wich has time in ms of each value. Example: new int[]{600,200,1000}
      * @param  autostart True when it should automatically start.
@@ -28,7 +28,19 @@ public class AnimatedBlock extends Block implements IAnimation{
      */
     @Override
     public void update(int delta) {
-        if (running) counter = Animator.updateAnimation(this, animationsduration, delta, counter, loop);
+        if (running) {
+        counter += delta;
+            if (counter >= animationsduration[getValue()]){
+                setValue(getValue()+1);
+                counter=0;
+            }
+            
+            if (getValue() >= animationsduration.length) {
+                if (loop)
+                    setValue(0);
+                else running = false;
+            }
+        }
     }
 
     /**
@@ -46,5 +58,4 @@ public class AnimatedBlock extends Block implements IAnimation{
     public void stop() {
         running = false;
     }
-    
 }

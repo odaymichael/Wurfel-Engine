@@ -13,7 +13,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
    /* Always one of them must be 1 to prevent a division with 0.*/
    private float[] dir = {1,0,0};
 
-    public AbstractCharacter(int id) {
+    protected AbstractCharacter(int id) {
         super(id);
     }
    

@@ -1,10 +1,13 @@
 package com.BombingGames.Game.Gameobjects;
 
+import com.BombingGames.Game.Controller;
+
 /**
  *
  * @author Benedikt
  */
 public class AnimatedEntity extends AbstractEntity implements IAnimation{
+    private int[] coords;
     private int[] animationsduration;
     private int counter = 0;
     private boolean running;
@@ -12,12 +15,16 @@ public class AnimatedEntity extends AbstractEntity implements IAnimation{
     
    /**
      * Create this Block with an array wich has the time of every animation step in ms in it.
-     * @param animationinformation array wich has time in ms of each value. Example: new int[]{600,200,1000}
+     * @param id The id of the object
+     * @param value the starting value
      * @param  autostart True when it should automatically start.
-     * @param loop Set to true when it should loop, when false it stops after one time. 
+     * @param coords the coordinates where the animation should be
+     * @param loop Set to true when it should loop, when false it stops after one time.
+     * @param animationsinformation  
      */
-    protected AnimatedEntity(int id, int[] animationsinformation, boolean autostart, boolean loop){
+    protected AnimatedEntity(int id, int value, int[] coords, int[] animationsinformation, boolean autostart, boolean loop){
         super(id);
+        this.coords = coords;
         this.animationsduration = animationsinformation;
         this.running = autostart;
         this.loop = loop;
@@ -29,7 +36,19 @@ public class AnimatedEntity extends AbstractEntity implements IAnimation{
      */
     @Override
     public void update(int delta) {
-        if (running) counter = Animator.updateAnimation(this, animationsduration, delta, counter, loop);
+        if (running) {
+        counter += delta;
+            if (counter >= animationsduration[getValue()]){
+                setValue(getValue()+1);
+                counter=0;
+            }
+            
+            if (getValue() >= animationsduration.length) {
+                if (loop)
+                    setValue(0);
+                else running = false;
+            }
+        }
     }
 
     /**
@@ -50,22 +69,27 @@ public class AnimatedEntity extends AbstractEntity implements IAnimation{
 
     @Override
     public int[] getAbsCoords() {
-        throw new UnsupportedOperationException("Not supported yet.");
+      return coords; 
     }
 
     @Override
     public void setAbsCoords(int[] coords) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.coords = coords;
     }
 
     @Override
     public int[] getRelCoords() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Controller.getMap().absoluteToRelativeCoords(coords);
     }
 
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param z
+     */
     @Override
     public void addToAbsCoords(int x, int y, int z) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        setAbsCoords(new int[]{getAbsCoords()[0]+x, getAbsCoords()[1]+y, getAbsCoords()[2]+z});
     }
-    
 }

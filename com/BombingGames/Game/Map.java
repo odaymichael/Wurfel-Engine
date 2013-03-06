@@ -377,6 +377,10 @@ public class Map {
         data[x][y][z] = block;
     }
     
+    public void setDataSafe(int[] coords, Block block) {
+        setDataSafe(coords[0],coords[1],coords[2], block);
+    }
+    
     
     /**
      * a method who gives random blocks offset
@@ -435,13 +439,20 @@ public class Map {
         return entitylist;
     }
     
-    public int[] AbsoluteToRelativeCoords(int[] coords){
+    /**
+     * Transforms absolute coordinates into realtive coordinates.
+     * @param coords
+     * @return 
+     */
+    public int[] absoluteToRelativeCoords(int[] coords){
         return new int[]{
             coords[0] - getChunkCoords(4)[0]  * Chunk.getBlocksX(),
             coords[1] - getChunkCoords(4)[1] * Chunk.getBlocksY(),
             coords[2]
         };
     }
+
+
 
 
 }
