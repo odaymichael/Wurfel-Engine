@@ -1,6 +1,10 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Camera;
+import com.BombingGames.Game.Gameplay;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Image;
 
 /**
  * A Block is a wonderful piece of information and a geometrical object.
@@ -8,12 +12,22 @@ import com.BombingGames.Game.Camera;
  */
 public class Block extends Object {
 
+    /**
+     * The id of the left side of a block.
+     */
     public static final int LEFTSIDE=0;
+    /**
+     * The id of the top side of a block.
+     */
     public static final int TOPSIDE=1;
+    /**
+     * The id of the right side of a block.
+     */
     public static final int RIGHTSIDE=2;
     
     private boolean liquid, renderRight, renderTop, renderLeft;
     private boolean hasSides = true;
+    private static Color[][] colorlist = new Color[99][9];
    
     /**
      *Don't use this constructor to get a new block. Use the static <i>getInstance</i> methods instead.
@@ -23,15 +37,36 @@ public class Block extends Object {
         super(0);
     }
     
+    /**
+     * 
+     * @param id
+     */
     protected Block(int id){
         super(id);
     }
     
+    /**
+     * 
+     * @param id
+     * @param value
+     */
     protected Block(int id, int value){
         super(id, value);
     }
     
    
+    /**
+     * Returns a color representing the block. Picks from the sprite image.
+     * @param id id of the Block
+     * @param value the value of the block.
+     * @return a color representing the block
+     */
+    public static Color getRepresentingColor(int id, int value){
+        if (colorlist[id][value] == null){
+            colorlist[id][value] = getBlockSprite(id, value,1).getColor(DIM2, DIM4);
+            return colorlist[id][value]; 
+        } else return colorlist[id][value];
+    }
     
     /**
      * Creates an air block.
@@ -69,7 +104,7 @@ public class Block extends Object {
      * @param z the z-coordinate
      * @return the Block
      */
-    public static Block getInstance(int id, int value,int x, int y, int z){
+    public static Block getInstance(int id, int value, int x, int y, int z){
         Block block = null;
         //define the default SideSprites
         switch (id){
@@ -144,7 +179,22 @@ public class Block extends Object {
      * @return The neighbour block or itself
      */
     public static int[] posToNeighbourCoords (int[] coords, int xpos, int ypos){
-        return sideNumbToNeighbourCoords(coords, sideNumb(xpos, ypos));
+        return sideIDtoNeighbourCoords(coords, getSideID(xpos, ypos));
+    }
+    
+     /**
+     *  Returns a sprite image of a specific side of the block
+     * @param id
+     * @param side Which side? (0 - 2)
+     * @param value
+     * @return an image of the side
+     */
+    public static Image getBlockSprite(int id, int value, int side) {
+        if (side == 1) {
+            return getBlocksheet().getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIMENSION, DIM2);
+        } else {
+            return getBlocksheet().getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIM2, (int) (DIM2 * 3 / 2));
+        }
     }
 
     /**
@@ -206,5 +256,49 @@ public class Block extends Object {
                     }
                 } else super.render(coords, camera);
             }
+    }
+    
+    /**
+     * Draws a side of a block
+     * @param coords the coordinates where to render 
+     * @param camera the rendering camera
+     * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
+     */
+    protected void renderSide(int[] coords, int sidenumb, Camera camera){
+        Image image = getBlockSprite(getId(), getValue(), sidenumb);
+        
+        if (Gameplay.getView().hasGoodGraphics()){
+                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
+        
+            if (sidenumb == 0){
+                int brightness = getLightlevel() * 255 / 100;
+                new Color(brightness,brightness,brightness).bind();
+            } else {
+                Color.black.bind();
+            }
+        }
+        
+        //calc  brightness
+        float brightness = getLightlevel() / 50f;
+                
+        image.setColor(0, brightness,brightness,brightness);
+        image.setColor(1, brightness,brightness, brightness);
+
+        if (sidenumb != 1) brightness -= .3f;
+
+        image.setColor(2, brightness, brightness, brightness);
+        image.setColor(3, brightness, brightness, brightness);
+        
+        //right side is  half a block more to the right
+        int xpos = getScreenPosX(this, coords, camera) + ( sidenumb == 2 ? DIM2 : 0);
+        
+        //the top is drawn a quarter blocks higher
+        int ypos = getScreenPosY(this, coords, camera) + (sidenumb != 1 ? DIM4 : 0);
+        
+        image.drawEmbedded(xpos, ypos);
+    }
+
+    @Override
+    public void update(int delta) {
     }
 }

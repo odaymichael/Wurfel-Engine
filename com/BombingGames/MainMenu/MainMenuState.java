@@ -67,10 +67,18 @@ public class MainMenuState extends BasicGameState{
         return View;
     }
 
+    /**
+     * 
+     * @return
+     */
     public static boolean shouldLoadMap() {
         return loadMap;
     }
 
+    /**
+     * 
+     * @param loadmap
+     */
     public static void setLoadMap(boolean loadmap) {
         MainMenuState.loadMap = loadmap;
     }

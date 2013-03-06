@@ -315,6 +315,11 @@ public class Map {
         return data[x][y][z];    
     }
     
+    /**
+     * 
+     * @param coords
+     * @return
+     */
     public Block getDataSafe(int[] coords) {
         return getDataSafe(coords[0], coords[1], coords[2]);
     }
@@ -335,12 +340,17 @@ public class Map {
      * @param x position
      * @param y position
      * @param z position
-     * @param renderobject The renderobject you want to set.
+     * @param block  
      */
     public void setData(int x, int y, int z, Block block){
         data[x][y][z] = block;
     }
     
+    /**
+     * 
+     * @param coords
+     * @param block
+     */
     public void setData(int[] coords, Block block) {
         data[coords[0]][coords[1]][coords[2]] = block;
     }
@@ -350,7 +360,7 @@ public class Map {
      * @param x position
      * @param y position
      * @param z position
-     * @param renderobject The renderobject you want to set.
+     * @param block 
      * @see com.BombingGames.Game.Map#setData(int x, int y, int z, Block renderobject)
      */
     public void setDataSafe(int x, int y, int z, Block block){
@@ -375,6 +385,11 @@ public class Map {
         data[x][y][z] = block;
     }
     
+    /**
+     * 
+     * @param coords
+     * @param block
+     */
     public void setDataSafe(int[] coords, Block block) {
         setDataSafe(coords[0],coords[1],coords[2], block);
     }

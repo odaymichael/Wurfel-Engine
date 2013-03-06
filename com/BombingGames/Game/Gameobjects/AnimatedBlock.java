@@ -4,7 +4,7 @@ package com.BombingGames.Game.Gameobjects;
  *
  * @author Benedikt
  */
-public class AnimatedBlock extends Block implements IAnimation{
+public class AnimatedBlock extends Block implements Animatable{
     private int[] animationsduration;
     private int counter = 0;
     private boolean running;
@@ -12,7 +12,7 @@ public class AnimatedBlock extends Block implements IAnimation{
     
     /**
      * Create this Block with an array wich has the time of every animation step in ms in it.
-     * @param animationinformation array wich has time in ms of each value. Example: new int[]{600,200,1000}
+     * @param animationsinformation 
      * @param  autostart True when it should automatically start.
      * @param loop Set to true when it should loop, when false it stops after one time. 
      */

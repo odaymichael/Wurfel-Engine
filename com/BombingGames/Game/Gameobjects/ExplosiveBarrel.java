@@ -6,7 +6,7 @@ import com.BombingGames.Game.Controller;
  *An example for a special block: barrel block which can explode
  * @author Benedikt
  */
-public class ExplosiveBarrel extends Block implements ISelfAware {
+public class ExplosiveBarrel extends Block implements IsSelfAware {
     /**
      * Defines the radius of the explosion.
      */
@@ -14,6 +14,10 @@ public class ExplosiveBarrel extends Block implements ISelfAware {
     
     private int[] coords;
 
+    /**
+     * 
+     * @param id
+     */
     protected ExplosiveBarrel(int id) {
         super(id);
     }

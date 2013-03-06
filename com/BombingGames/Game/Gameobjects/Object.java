@@ -5,8 +5,6 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Camera;
-import com.BombingGames.Game.Gameplay;
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -46,9 +44,6 @@ public abstract class Object {
      * Containts the names of the blocks. index=id
      */
     public static final String[] NAMELIST = new String[99];   
-    
-    
-    private static Color[][] colorlist = new Color[99][9];
     
     /**
      * The sprite image which contains every block image
@@ -201,15 +196,34 @@ public abstract class Object {
         SPRITEPOS[72][1][2][1] = 0;
     }
     
+    /**
+     * 
+     * @param id
+     */
     protected Object(int id) {
         this.id = id;
     }
 
+    /**
+     * 
+     * @param id
+     * @param value
+     */
     protected Object(int id, int value) {
         this.id = id;
         this.value = value;
     }
 
+    /**
+     * 
+     * @param id
+     * @param value
+     * @param obstacle
+     * @param transparent
+     * @param visible
+     * @param hidden
+     * @param dimensionY
+     */
     protected Object(int id, int value, boolean obstacle, boolean transparent, boolean visible, boolean hidden, int dimensionY) {
         this.id = id;
         this.value = value;
@@ -221,19 +235,12 @@ public abstract class Object {
     }
     
     /**
-     *  Returns a sprite image of a specific side of the block
-     * @param id
-     * @param side Which side? (0 - 2)
-     * @param value
-     * @return an image of the side
+     * updates the logic of the object.
+     * @param delta time since last update
      */
-    public static Image getBlockSprite(int id, int value, int side) {
-        if (side == 1) {
-            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIMENSION, DIM2);
-        } else {
-            return spritesheet.getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIM2, (int) (DIM2 * 3 / 2));
-        }
-    }
+    public abstract void update(int delta);
+    
+
 
     /**
      * Returns the spritesheet used for rendering
@@ -243,25 +250,11 @@ public abstract class Object {
         return spritesheet;
     }
     
-    /**
-     * Returns a color representing the block. Picks from the sprite image.
-     * @param id id of the Block
-     * @param value the value of the block.
-     * @return a color representing the block
-     */
-    public static Color getRepresentingColor(int id, int value){
-        if (colorlist[id][value] == null){
-            colorlist[id][value] = getBlockSprite(id, value,1).getColor(DIM2, DIM4);
-            return colorlist[id][value]; 
-        } else return colorlist[id][value];
-    }
 
     /**
      * Get the screen X-position where to block is rendered. if camera = null the position of it get's not calculated
-     * @param block the block of wich you want the position
-     * @param x the blocks coord
-     * @param y the blocks coord
-     * @param z the blocks coord
+     * @param object 
+     * @param coords 
      * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen X-position in pixels
      */
@@ -276,9 +269,7 @@ public abstract class Object {
     /**
      * Get the screen Y-position where to object is rendered.  if camera = null the position of it get's not calculated
      * @param object the object of wich you want the position
-     * @param x the blocks coord
-     * @param y the blocks coord
-     * @param z the blocks coord
+     * @param coords 
      * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen Y-position in pixels
      */
@@ -320,7 +311,7 @@ public abstract class Object {
      * @return Returns the fieldnumber of the coordinates. 8 is self.
      * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int)
      */
-    public static int sideNumb(float x, float y) {
+    public static int getSideID(float x, float y) {
         int result = 8;
         if (x + y <= Block.DIM2) {
             result = 7;
@@ -357,7 +348,7 @@ public abstract class Object {
      * @param sidenumb the side number of the given coordinates
      * @return coordinates of the neighbour
      */
-    public static int[] sideNumbToNeighbourCoords(int[] coords, int sidenumb) {
+    public static int[] sideIDtoNeighbourCoords(int[] coords, int sidenumb) {
         int[] result = new int[3];
         switch (sidenumb) {
             case 0:
@@ -552,27 +543,26 @@ public abstract class Object {
         this.visible = visible;
     }
 
+    /**
+     * 
+     * @param hidden
+     */
     public void setHidden(boolean hidden){
         this.hidden = hidden;
     }
 
+    /**
+     * Set the height of the object.
+     * @param dimensionY
+     */
     public void setDimensionY(int dimensionY) {
         this.dimensionY = dimensionY;
     }
     
-    /**
-     * updates teh logic of the block.
-     * @param delta time since last update
-     */
-    public void update(int delta) {
-        //the normal (parent) block has no logic.
-    }
     
    /**
      * Draws a block
-     * @param x x-coordinate
-     * @param y y-coordinate
-     * @param z z-coordinate
+     * @param coords 
      * @param camera
      */
     public void render(int[] coords, Camera camera) {
@@ -594,48 +584,5 @@ public abstract class Object {
             int ypos = getScreenPosY(this, coords, camera) - (dimensionY - 1) * Block.DIM2;
             image.drawEmbedded(xpos, ypos);
         }
-    }
-    
-     /**
-     * Draws a side of a block
-     * @param x
-     * @param y
-     * @param z
-     * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
-     * @param renderBlock The block which gets rendered
-     */
-    protected void renderSide(int[] coords, int sidenumb, Camera camera){
-        Image image = getBlockSprite(id,value,sidenumb);
-        
-        if (Gameplay.getView().hasGoodGraphics()){
-                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
-        
-            if (sidenumb == 0){
-                int brightness = lightlevel * 255 / 100;
-                new Color(brightness,brightness,brightness).bind();
-            } else {
-                Color.black.bind();
-            }
-        }
-        
-        //calc  brightness
-        float brightness = lightlevel / 50f;
-                
-        image.setColor(0, brightness,brightness,brightness);
-        image.setColor(1, brightness,brightness, brightness);
-
-        if (sidenumb != 1) brightness -= .3f;
-
-        image.setColor(2, brightness, brightness, brightness);
-        image.setColor(3, brightness, brightness, brightness);
-        
-        //right side is  half a block more to the right
-        int xpos = getScreenPosX(this, coords, camera) + ( sidenumb == 2 ? DIM2 : 0);
-        
-        //the top is drawn a quarter blocks higher
-        int ypos = getScreenPosY(this, coords, camera) + (sidenumb != 1 ? DIM4 : 0);
-        
-        image.drawEmbedded(xpos, ypos);
-    }
-    
+    } 
 }

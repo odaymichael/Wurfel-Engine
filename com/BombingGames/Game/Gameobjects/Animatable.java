@@ -4,7 +4,7 @@ package com.BombingGames.Game.Gameobjects;
  *
  * @author Benedikt
  */
-public interface IAnimation {
+public interface Animatable {
     
     /**
      * Starts the animation.

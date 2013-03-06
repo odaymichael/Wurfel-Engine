@@ -160,6 +160,10 @@ public class View {
         return goodgraphics;
     }
 
+    /**
+     * 
+     * @return
+     */
     public static AngelCodeFont getFont() {
         return baseFont;
     }

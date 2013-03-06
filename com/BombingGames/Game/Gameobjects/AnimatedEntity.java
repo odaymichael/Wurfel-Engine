@@ -6,7 +6,7 @@ import com.BombingGames.Game.Controller;
  *
  * @author Benedikt
  */
-public class AnimatedEntity extends AbstractEntity implements IAnimation{
+public class AnimatedEntity extends AbstractEntity implements Animatable{
     private int[] coords;
     private int[] animationsduration;
     private int counter = 0;
@@ -83,10 +83,10 @@ public class AnimatedEntity extends AbstractEntity implements IAnimation{
     }
 
     /**
-     * 
-     * @param x
-     * @param y
-     * @param z
+     * Increases/decreases the coordinates by the parameters
+     * @param x the value added to x-coordiante
+     * @param y y-coordiante
+     * @param z z-coordiante
      */
     @Override
     public void addToAbsCoords(int x, int y, int z) {

@@ -56,6 +56,11 @@ public class Controller {
         return map.getDataSafe(x, y, z);
     }
     
+    /**
+     * 
+     * @param coords
+     * @return
+     */
     public static Block getMapDataSafe(int[] coords) {
         return map.getDataSafe(coords);
     }
@@ -106,6 +111,11 @@ public class Controller {
         map.setDataSafe(x, y, z, block);
     }
     
+    /**
+     * 
+     * @param coords
+     * @param block
+     */
     public static void setMapDataSafe(int[] coords, Block block) {
         map.setDataSafe(coords, block);
     }
@@ -178,10 +188,11 @@ public class Controller {
 
     /**
      * Get the neighbour block to a side
+     * @param coords 
      * @param side the id of the side
      * @return the neighbour block
      */
     public static Block getNeighbourBlock(int[] coords, int side){
-        return Controller.getMapDataSafe(Block.sideNumbToNeighbourCoords(coords, side));
+        return Controller.getMapDataSafe(Block.sideIDtoNeighbourCoords(coords, side));
     }
 }

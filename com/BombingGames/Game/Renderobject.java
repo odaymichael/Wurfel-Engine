@@ -11,9 +11,7 @@ public class Renderobject {
 
      /**
          * Create an Renderobject
-         * @param x the x-coordiante where to render
-         * @param y the y-coordiante where to render
-         * @param z the z-coordiante where to render
+         * @param coords 
          * @param depth the depth of the object
          * @param entitynumber when it is an entity put the number here. When it is not then set it to -1.
          */
@@ -23,14 +21,26 @@ public class Renderobject {
         this.entityindex = entitynumber;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getDepth() {
         return depth;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getEntityindex() {
         return entityindex;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int[] getCoords() {
         return coords;
     }

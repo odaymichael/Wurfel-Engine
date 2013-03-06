@@ -15,6 +15,7 @@ public class Player extends AbstractCharacter{
    
     /**
      * Creates a player. The parameters are for the lower half of the player. The constructor automatically creates a block on top of it.
+     * @param id 
      * @throws SlickException
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
      */

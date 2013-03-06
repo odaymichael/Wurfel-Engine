@@ -3,32 +3,28 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.Game.Controller;
   
 /**
- *The pointer can point to a ISelfAware or to a fixed coordinate.
+ *The pointer can point to a IsSelfAware or to a fixed coordinate.
  * @author Benedikt
  */
 public class Blockpointer{
     private int[] vector;
-    private ISelfAware block;
+    private IsSelfAware block;
     
     /**
      * Create a pointer to field in the coordinate system.
-     * @param x the coordinates of the block you are pointing to
-     * @param y the coordinates of the block you are pointing to
-     * @param z the coordinates of the block you are pointing to
+     * @param coords 
      */
     public Blockpointer(int[] coords) {
         this.vector = coords;
     }
     
     /**
-     * Create a blockpointer who points at a ISelfAware and follows him.
+     * Create a blockpointer who points at a IsSelfAware and follows him.
      * You can add a coordinate offset.
      * @param block the block where you are pointing at.
-     * @param x the amount of x added to the coordiantes of the block
-     * @param y the amount of x added to the coordiantes of the block
-     * @param z the amount of x added to the coordiantes of the block 
+     * @param offsetvector  
      */
-    public Blockpointer(ISelfAware block, int[] offsetvector){
+    public Blockpointer(IsSelfAware block, int[] offsetvector){
         this.block = block;
         //here the coordinates have the function to add it
         this.vector = offsetvector;
@@ -58,6 +54,10 @@ public class Blockpointer{
         return vector;
     }
 
+    /**
+     * 
+     * @param vector
+     */
     public void setVector(int[] vector) {
         this.vector = vector;
     }

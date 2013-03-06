@@ -77,10 +77,18 @@ public class MenuItem {
         this.Y = Y;
     }
 
+    /**
+     * 
+     * @return
+     */
     public static SpriteSheet getSpritesheet() {
         return spritesheet;
     }
 
+    /**
+     * 
+     * @param spritesheet
+     */
     public static void setSpritesheet(SpriteSheet spritesheet) {
         MenuItem.spritesheet = spritesheet;
     }

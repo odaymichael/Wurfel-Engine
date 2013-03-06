@@ -4,7 +4,7 @@ package com.BombingGames.Game.Gameobjects;
  *A Block that knows his own position
  * @author Benedikt
  */
-public interface ISelfAware{
+public interface IsSelfAware{
    /**
      * Returns the AbsCoords
      * @return
@@ -17,6 +17,12 @@ public interface ISelfAware{
      */
     public void setAbsCoords(int[] coords);
    
+    /**
+     * Increases/decreases the coordinates by the parameters
+     * @param x the value added to x-coordiante
+     * @param y y-coordiante
+     * @param z z-coordiante
+     */
     public void addToAbsCoords(int x, int y, int z);
      /**
       * 
