@@ -18,7 +18,9 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 6;
+    public static final int MAPGENERATOR = 3;
+    protected static final String CHUNKFILESUFFIX = "wec";
+    protected static final String METAFILESUFFIX = "wem";
     
     private static int blocksX = 10;
     private static int blocksY = 40;//blocksY must be even number
@@ -45,13 +47,14 @@ public class Chunk {
     public Chunk(int coordX, int coordY, boolean loadmap){
         this();
 
-        if (loadmap) loadChunk(coordX, coordY);
-            else fillChunk(coordX, coordY);
+        if (loadmap) load(coordX, coordY);
+            else generate(coordX, coordY);
     }
+    
     /**
      * Generates new content for a chunk.
      */  
-    private void fillChunk(int coordX, int coordY){
+    private void generate(int coordX, int coordY){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
         Log.debug("Creating new chunk: "+ coordX + ", "+ coordY);
@@ -157,11 +160,11 @@ public class Chunk {
     /**
      * loads a chunk from memory
      */
-    private void loadChunk(int coordX, int coordY){
+    private void load(int coordX, int coordY){
         //Reading map files test
         try {
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
-            File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/chunk"+coordX+","+coordY+".otmc");
+            File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/chunk"+coordX+","+coordY+"."+CHUNKFILESUFFIX);
             Log.debug("Trying to load Chunk: "+ coordX + ", "+ coordY + " from \"" + path.getAbsolutePath() + "\"");
             Gameplay.MSGSYSTEM.add("Load: "+coordX+","+coordY);
             
@@ -221,7 +224,7 @@ public class Chunk {
                 } while (lastline != null);
             } else {
                 Log.debug("...but it could not be found. Creating new.");
-                fillChunk(coordX, coordY);
+                generate(coordX, coordY);
             }
         } catch (IOException ex) {
             Log.debug("Loading of chunk "+coordX+","+coordY + "failed: "+ex);
@@ -234,7 +237,7 @@ public class Chunk {
     public static void readMapInfo(){
         BufferedReader bufRead = null;
         try {
-            File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/map.otmi");
+            File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/map."+METAFILESUFFIX);
             Log.debug("Trying to load Map Info from \"" + path.getAbsolutePath() + "\"");
             bufRead = new BufferedReader(new FileReader(path));
             String mapname = bufRead.readLine();
