@@ -192,7 +192,7 @@ public abstract class Object {
     }
     
     /**
-     * 
+     * Creates an object. Use getInterface().
      * @param id
      */
     protected Object(int id) {
@@ -200,7 +200,7 @@ public abstract class Object {
     }
 
     /**
-     * 
+     * Creates an object. Use getInterface().
      * @param id
      * @param value
      */
@@ -239,9 +239,9 @@ public abstract class Object {
 
     /**
      * Returns the spritesheet used for rendering
-     * @return the spritesheet used by the blocks
+     * @return the spritesheet used by the objects
      */
-    public static Image getBlocksheet() {
+    public static Image getSpritesheet() {
         return spritesheet;
     }
     
@@ -387,18 +387,25 @@ public abstract class Object {
     }
 
     /**
-     * Returns the depth of the block. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
+     * Returns the depth of the object. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
      * @param y the y-coordinate
      * @param z  the z-coordinate
      * @return the depth
      */
     public int getDepth(int y, int z) {
-        return (int) (Block.DIMENSION * y + (y % 2) * Block.DIM2 + Block.DIMENSION * z + pos[0] + (dimensionY - 1) * Block.DIMENSION);
+        return (int) (
+            DIMENSION * y
+            + (y % 2) * DIM2
+            + DIMENSION * z
+            + pos[1]
+            + pos[2]
+            + (dimensionY - 1) * DIMENSION
+            );
     }
 
     //getter & setter
     /**
-     * returns the id of a block
+     * returns the id of a object
      * @return getId
      */
     public int getId() {
@@ -406,7 +413,7 @@ public abstract class Object {
     }
 
     /**
-     * How bright is the block?
+     * How bright is the object?
      * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black. Default is 50.
      * @return
      */
@@ -415,15 +422,15 @@ public abstract class Object {
     }
 
     /**
-     * Returns the name of the block
-     * @return the name of the block
+     * Returns the name of the object
+     * @return the name of the object
      */
     public String getName() {
-        return Block.NAMELIST[getId()];
+        return NAMELIST[getId()];
     }
 
     /**
-     *  Gets the positon of the block inside it's coordinate field. Coordinate system starting at bottom rear.
+     *  Gets the positon of the object inside it's coordinate field. Coordinate system starting at bottom rear.
      * @return an array with three fields. [x,y,z]
      */
     public float[] getPos() {
@@ -439,7 +446,7 @@ public abstract class Object {
     }
 
     /**
-     * Has the block an offset (pos vector)?
+     * Has the object an offset (pos vector)?
      * @return when it has offset true, else false
      */
     public boolean hasOffset() {
@@ -447,7 +454,7 @@ public abstract class Object {
     }
 
     /**
-     * Returns true, when set as hidden. Hidden blocks are not rendered even when they are visible ("visible" by the meaning of the raytracing).
+     * Returns true, when set as hidden. Hidden objects are not rendered even when they are visible ("visible" by the meaning of the raytracing).
      * @return the locked visiblity
      */
     public boolean isHidden() {
@@ -455,7 +462,7 @@ public abstract class Object {
     }
 
     /**
-     * Is this Block an obstacle or can you pass through?
+     * Is this object an obstacle or can you pass through?
      * @return
      */
     public boolean isObstacle() {
@@ -463,7 +470,7 @@ public abstract class Object {
     }
 
     /**
-     * Can light travel through block?
+     * Can light travel through object?
      * @return
      */
     public boolean isTransparent() {
@@ -471,7 +478,7 @@ public abstract class Object {
     }
 
     /**
-     * Is the Block visible?
+     * Is the object visible?
      * @return true when visible
      */
     public boolean isVisible() {
@@ -481,7 +488,7 @@ public abstract class Object {
   
 
     /**
-     * Set the brightness of the Block.
+     * Set the brightness of the object.
      * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black.
      * @param lightlevel
      */
@@ -490,7 +497,7 @@ public abstract class Object {
     }
 
     /**
-     * Make the block to an obstacle or passable.
+     * Make the object to an obstacle or passable.
      * @param obstacle true when obstacle. False when passable.
      */
     public void setObstacle(boolean obstacle) {
@@ -498,7 +505,7 @@ public abstract class Object {
     }
 
     /**
-     * Set a whole new array containing the positon of the block. Coordinate system starting at bottom rear.
+     * Set a whole new array containing the positon of the object. Coordinate system starting at bottom rear.
      * @param pos the new positon array
      */
     public void setPos(float[] pos) {
@@ -506,7 +513,7 @@ public abstract class Object {
     }
 
     /**
-     * Sets the position of the block. Coordinate system starting at bottom rear.
+     * Sets the position of the object. Coordinate system starting at bottom rear.
      * @param i Select the field you want to write 0=>x, y=>1, z=>2
      * @param value the value you want to set it to.
      */
@@ -523,7 +530,7 @@ public abstract class Object {
     }
 
     /**
-     * Set the value of the block.
+     * Set the value of the object.
      * @param value
      */
     protected void setValue(int value) {
@@ -531,7 +538,7 @@ public abstract class Object {
     }
 
     /**
-     * Hide this block and prevent it from beeing rendered.
+     * Hide this object and prevent it from beeing rendered.
      * @param visible Sets the visibility. When it is false, every side will also get hidden
      */
     public void setVisible(boolean visible) {

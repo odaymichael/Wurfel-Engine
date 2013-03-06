@@ -188,9 +188,9 @@ public class Block extends Object {
      */
     public static Image getBlockSprite(int id, int value, int side) {
         if (side == 1) {
-            return getBlocksheet().getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIMENSION, DIM2);
+            return getSpritesheet().getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIMENSION, DIM2);
         } else {
-            return getBlocksheet().getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIM2, (int) (DIM2 * 3 / 2));
+            return getSpritesheet().getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIM2, (int) (DIM2 * 3 / 2));
         }
     }
 
