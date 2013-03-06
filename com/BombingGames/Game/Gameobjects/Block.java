@@ -128,7 +128,7 @@ public class Block extends Object {
             default:
                     block = new Block(0); 
                     block.setTransparent(true);
-                    block.setObstacle(true);
+                    block.setHidden(true);
                     break; 
         }
         block.setValue(value);
