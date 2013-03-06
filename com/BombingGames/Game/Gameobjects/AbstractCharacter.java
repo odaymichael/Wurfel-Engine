@@ -179,8 +179,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
         } else {
             if (getRelCoords()[1] % 2 == 0) addToAbsCoords(1, 0, 0);
         }
-        
-        Controller.getMap().requestRecalc();
     }
     
    /**
@@ -217,8 +215,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
             //coord switch
             addToAbsCoords(0, 0, -1);
             setPos(2, getPos()[2] + Block.GAMEDIMENSION);
-            
-            Controller.getMap().requestRecalc();
         } else {
             //up
             if (! Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]+2).isObstacle()) {
@@ -228,8 +224,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
                     //coord switch
                     addToAbsCoords(0, 0, 1);
                     setPos(2, getPos()[2] - Block.GAMEDIMENSION);
-
-                    Controller.getMap().requestRecalc();
                 }
             } else dir[2] = 0;
         }
