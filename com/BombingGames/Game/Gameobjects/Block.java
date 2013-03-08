@@ -10,7 +10,7 @@ import org.newdawn.slick.Image;
  * A Block is a wonderful piece of information and a geometrical object.
  * @author Benedikt
  */
-public class Block extends Object {
+public class Block extends GameObject {
 
     /**
      * The id of the left side of a block.

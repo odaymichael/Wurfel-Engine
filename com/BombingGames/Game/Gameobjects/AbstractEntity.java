@@ -8,7 +8,7 @@ import org.newdawn.slick.SlickException;
  *An entity is a game object wich is self aware that means it knows it's position.
  * @author Benedikt
  */
-public abstract class AbstractEntity extends Object implements IsSelfAware {
+public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     /**
      * Create an abstractEntity. You should use Block.getInstance(int) 
      * @param id 

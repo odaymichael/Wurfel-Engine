@@ -2,6 +2,7 @@ package com.BombingGames.Game;
 
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Gameobjects.GameObject;
 import com.BombingGames.Game.Gameobjects.Pointer;
 import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;

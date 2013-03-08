@@ -9,7 +9,11 @@ import org.newdawn.slick.SpriteSheet;
  *An object is something wich can be found in the game world.
  * @author Benedikt
  */
-public abstract class Object {
+public abstract class GameObject {
+        /**
+     * Screen DIMENSION of the Block in pixels. This is the length of the side, when you cut the block in the middle
+     */
+    public static final int DIMENSION = 160;
     /**
      * The half (2) of DIMENSION. The short form of DIMENSION/2
      */
@@ -18,10 +22,6 @@ public abstract class Object {
      * A quarter (4) of DIMENSION. The short form of DIMENSION/4
      */
     public static final int DIM4 = Block.DIMENSION / 4;
-    /**
-     * Screen DIMENSION of the Block in pixels. This is the length of the side, when you cut the block in the middle
-     */
-    public static final int DIMENSION = 160;
     /**
      * The real game world dimension in pixel. Usually DIMENSION should be enough becaue of the map format. The value is DIMENSION/sqrt(2).
      */
@@ -195,7 +195,7 @@ public abstract class Object {
      * Creates an object. Use getInterface().
      * @param id
      */
-    protected Object(int id) {
+    protected GameObject(int id) {
         this.id = id;
     }
 
@@ -204,7 +204,7 @@ public abstract class Object {
      * @param id
      * @param value
      */
-    protected Object(int id, int value) {
+    protected GameObject(int id, int value) {
         this.id = id;
         this.value = value;
     }
@@ -219,7 +219,7 @@ public abstract class Object {
      * @param hidden
      * @param dimensionY
      */
-    protected Object(int id, int value, boolean obstacle, boolean transparent, boolean visible, boolean hidden, int dimensionY) {
+    protected GameObject(int id, int value, boolean obstacle, boolean transparent, boolean visible, boolean hidden, int dimensionY) {
         this.id = id;
         this.value = value;
         this.obstacle = obstacle;
@@ -253,7 +253,7 @@ public abstract class Object {
      * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen X-position in pixels
      */
-    public static int getScreenPosX(Object object, int[] coords, Camera camera) {
+    public static int getScreenPosX(GameObject object, int[] coords, Camera camera) {
         int camerax = 0;
         if (camera != null) {
             camerax = camera.getGamePosX();
@@ -268,7 +268,7 @@ public abstract class Object {
      * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen Y-position in pixels
      */
-    public static int getScreenPosY(Object object, int[] coords, Camera camera) {
+    public static int getScreenPosY(GameObject object, int[] coords, Camera camera) {
         int cameray = 0;
         if (camera != null) {
             cameray = camera.getGamePosY();
