@@ -13,7 +13,7 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class View {
-    public static final int DEFAULTRESOLUTIONWIDTH = 1920;
+    public static final int ENGINE_RENDER_WIDTH = 1920;
 
     private static AngelCodeFont baseFont;
     private Camera camera;
@@ -37,15 +37,15 @@ public class View {
         //tTFont = new TrueTypeFont(baseFont, true);
         
         //default rendering size is FullHD
-        equalizationScale = gc.getWidth() / (float) DEFAULTRESOLUTIONWIDTH;
+        equalizationScale = gc.getWidth() / (float) ENGINE_RENDER_WIDTH;
         Log.debug("Scale is:" + Float.toString(equalizationScale));
         
         camera = new Camera(
             Gameplay.getController().getPlayer(),
             0, //top
             0, //left
-            800, //full width 
-            600//full height
+            gc.getScreenWidth(), //full width 
+            gc.getScreenHeight()//full height
         );
         
         Block.loadSheet();
@@ -63,6 +63,7 @@ public class View {
      */
     public void render(Graphics g) throws SlickException{
         camera.render();
+        
         g.scale(equalizationScale, equalizationScale);
         
         //render HUD
