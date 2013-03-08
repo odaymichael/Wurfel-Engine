@@ -99,7 +99,7 @@ public class GameController extends Controller {
             gc.getInput().consumeEvent();
             
             zoom = zoom + change/1000f;
-            Gameplay.getView().getCamera().setZoom((float) (3f*Math.sin(zoom-1.5f)+3.5f));
+            Gameplay.getView().getCamera().setZoom(zoom);
             
             Gameplay.MSGSYSTEM.add("Zoom: "+Gameplay.getView().getCamera().getZoom());   
         }
