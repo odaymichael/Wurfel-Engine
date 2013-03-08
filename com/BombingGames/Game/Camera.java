@@ -28,7 +28,9 @@ public class Camera {
         screenPosY = y;
         screenWidth = width;
         screenHeight = height;
-    };
+        
+        equalizationScale = screenWidth / (float) View.ENGINE_RENDER_WIDTH;
+    }
     
    /**
      * The camera locks to the player by default. It can be changed with <i>focusblock()</i>. Screen size does refer to the output of the camera not the real size on the display.
@@ -43,12 +45,7 @@ public class Camera {
         
         this.focusblock = focusblock;
         this.focusentity = null;         
-        
-        
-        equalizationScale = screenWidth / (float) View.DEFAULTRESOLUTIONWIDTH;
 
-        Wurfelengine.getGraphics().setWorldClip(x, y, screenWidth, screenHeight);
-        
         update();
     }
     
@@ -66,11 +63,9 @@ public class Camera {
         
         this.focusentity = focusentity;
         this.focusblock = null;
-        
-        equalizationScale = width / (float) View.DEFAULTRESOLUTIONWIDTH;
+
         update();
     }
-
   
     
     /**
@@ -78,11 +73,11 @@ public class Camera {
      */
     public final void update() {
         if (focusblock != null) {
-            gamePosX = Block.getScreenPosX(focusblock.getBlock(), focusblock.getCoords(), null) - getGameWidth() / 2;            
-            gamePosY = Block.getScreenPosY(focusblock.getBlock(), focusblock.getCoords(), null) - getGroundHeight() / 2 ;
+            gamePosX = Block.getScreenPosX(focusblock.getBlock(), focusblock.getCoords()) - getGameWidth() / 2;            
+            gamePosY = Block.getScreenPosY(focusblock.getBlock(), focusblock.getCoords()) - getGroundHeight() / 2 ;
         } else {
-            gamePosX = Block.getScreenPosX(focusentity, focusentity.getRelCoords(), null) - getGameWidth() / 2;            
-            gamePosY = Block.getScreenPosY(focusentity, focusentity.getRelCoords(), null) - getGroundHeight() / 2 ;
+            gamePosX = Block.getScreenPosX(focusentity, focusentity.getRelCoords()) - getGameWidth() / 2;            
+            gamePosY = Block.getScreenPosY(focusentity, focusentity.getRelCoords()) - getGroundHeight() / 2 ;
         }
         
         //maybe unneccessary and can be done when the getter is called.
@@ -106,13 +101,16 @@ public class Camera {
     public void render() {
         if (Controller.getMap() != null) {        
             Wurfelengine.getGraphics().scale(getTotalScale(), getTotalScale());
-            
             Wurfelengine.getGraphics().setClip(screenPosX, screenPosY, screenWidth, screenHeight);
+            
+            Wurfelengine.getGraphics().translate(-gamePosX, -gamePosY);
             //render map
             createDepthList();
             Controller.getMap().render(this);
-            Wurfelengine.getGraphics().clearClip();
+            Wurfelengine.getGraphics().translate(gamePosX, gamePosY);
             
+            //reset clipping
+            Wurfelengine.getGraphics().clearClip();            
             //reverse scale
             Wurfelengine.getGraphics().scale(1/getTotalScale(), 1/getTotalScale());
         }

@@ -239,29 +239,28 @@ public class Block extends GameObject {
     
 
     @Override
-    public void render(int[] coords, Camera camera) {
+    public void render(int[] coords) {
         if (!isHidden() && isVisible()) {
             if (hasSides) {
                     if (renderTop) {
-                        renderSide(coords, Block.TOPSIDE, camera);
+                        renderSide(coords, Block.TOPSIDE);
                     }
                     if (renderLeft) {
-                        renderSide(coords, Block.LEFTSIDE, camera);
+                        renderSide(coords, Block.LEFTSIDE);
                     }
                     if (renderRight) {
-                        renderSide(coords, Block.RIGHTSIDE, camera);
+                        renderSide(coords, Block.RIGHTSIDE);
                     }
-                } else super.render(coords, camera);
+                } else super.render(coords);
             }
     }
     
     /**
      * Draws a side of a block
      * @param coords the coordinates where to render 
-     * @param camera the rendering camera
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      */
-    protected void renderSide(int[] coords, int sidenumb, Camera camera){
+    protected void renderSide(int[] coords, int sidenumb){
         Image image = getBlockSprite(getId(), getValue(), sidenumb);
         
         if (Gameplay.getView().hasGoodGraphics()){
@@ -287,10 +286,10 @@ public class Block extends GameObject {
         image.setColor(3, brightness, brightness, brightness);
         
         //right side is  half a block more to the right
-        int xpos = getScreenPosX(this, coords, camera) + ( sidenumb == 2 ? DIM2 : 0);
+        int xpos = getScreenPosX(this, coords) + ( sidenumb == 2 ? DIM2 : 0);
         
         //the top is drawn a quarter blocks higher
-        int ypos = getScreenPosY(this, coords, camera) + (sidenumb != 1 ? DIM4 : 0);
+        int ypos = getScreenPosY(this, coords) + (sidenumb != 1 ? DIM4 : 0);
         
         image.drawEmbedded(xpos, ypos);
     }

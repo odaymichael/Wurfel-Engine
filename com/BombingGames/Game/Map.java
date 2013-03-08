@@ -258,10 +258,10 @@ public class Map {
             int[] coords = camera.getDepthsortCoord(i);//get the coords of the current renderobject
             int entitynumber = camera.getEntityIndex(i); //get the entityindex to check if it is an entity
             
-            if (entitynumber == -1) //if a block get it
-                data[coords[0]][coords[1]][coords[2]].render(coords, camera);
-            else //if an entity get it
-                entitylist.get(entitynumber).render(coords, camera);        
+            if (entitynumber == -1) //if a block then  get it and draw it
+                data[coords[0]][coords[1]][coords[2]].render(coords);
+            else //if it's an entity get it and draw it
+                entitylist.get(entitynumber).render(coords);        
         }
             
        Block.getSpritesheet().endUse(); 

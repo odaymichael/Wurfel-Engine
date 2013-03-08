@@ -54,7 +54,7 @@ public class Player extends AbstractCharacter{
     }
     
      @Override
-     public void render(int[] coords, Camera camera){
+     public void render(int[] coords){
         float[] dir = getDirectionVector();
         if (dir[0] < -Math.sin(Math.PI/3)){
             setValue(2);//west
@@ -88,7 +88,7 @@ public class Player extends AbstractCharacter{
                 }
             }
         }
-        super.render(coords, camera);
+        super.render(coords);
     }
 
     @Override

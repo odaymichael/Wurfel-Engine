@@ -253,12 +253,8 @@ public abstract class GameObject {
      * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen X-position in pixels
      */
-    public static int getScreenPosX(GameObject object, int[] coords, Camera camera) {
-        int camerax = 0;
-        if (camera != null) {
-            camerax = camera.getGamePosX();
-        }
-        return -camerax + coords[0] * DIMENSION + (coords[1] % 2) * DIM2 + (int) (object.pos[0]);
+    public static int getScreenPosX(GameObject object, int[] coords) {
+        return coords[0] * DIMENSION + (coords[1] % 2) * DIM2 + (int) (object.pos[0]);
     }
 
     /**
@@ -268,12 +264,8 @@ public abstract class GameObject {
      * @param camera the camera which renders the scene. if it is null it get's ignored
      * @return the screen Y-position in pixels
      */
-    public static int getScreenPosY(GameObject object, int[] coords, Camera camera) {
-        int cameray = 0;
-        if (camera != null) {
-            cameray = camera.getGamePosY();
-        }
-        return -cameray + coords[1] * DIM4 - coords[2] * DIM2 + (int) (object.pos[1] / 2) - (int) (object.pos[2] / Math.sqrt(2));
+    public static int getScreenPosY(GameObject object, int[] coords) {
+        return coords[1] * DIM4 - coords[2] * DIM2 + (int) (object.pos[1] / 2) - (int) (object.pos[2] / Math.sqrt(2));
     }
 
     /**
@@ -565,9 +557,8 @@ public abstract class GameObject {
    /**
      * Draws a block
      * @param coords 
-     * @param camera
      */
-    public void render(int[] coords, Camera camera) {
+    public void render(int[] coords) {
         //draw every visible block except not visible ones
         if (!hidden && visible) {
             Image image = getSprite(id, value, dimensionY);
@@ -582,8 +573,8 @@ public abstract class GameObject {
             brightness -= 0.1F;
             image.setColor(2, brightness, brightness, brightness);
             image.setColor(3, brightness, brightness, brightness);
-            int xpos = getScreenPosX(this, coords, camera);
-            int ypos = getScreenPosY(this, coords, camera) - (dimensionY - 1) * Block.DIM2;
+            int xpos = getScreenPosX(this, coords);
+            int ypos = getScreenPosY(this, coords) - (dimensionY - 1) * Block.DIM2;
             image.drawEmbedded(xpos, ypos);
         }
     } 
