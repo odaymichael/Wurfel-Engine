@@ -103,10 +103,14 @@ public class Camera {
             Wurfelengine.getGraphics().scale(getTotalScale(), getTotalScale());
             Wurfelengine.getGraphics().setClip(screenPosX, screenPosY, screenWidth, screenHeight);
             
+            //move the camera (graphic context)
             Wurfelengine.getGraphics().translate(-gamePosX, -gamePosY);
+            
             //render map
             createDepthList();
             Controller.getMap().render(this);
+            
+            //move graphic context
             Wurfelengine.getGraphics().translate(gamePosX, gamePosY);
             
             //reset clipping
