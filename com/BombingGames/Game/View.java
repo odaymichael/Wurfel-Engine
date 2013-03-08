@@ -1,6 +1,7 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Wurfelengine;
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -12,11 +13,9 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class View {
-    /**
-     * Contains a font
-     */
-    private static  AngelCodeFont baseFont;
+    public static final int DEFAULTRESOLUTIONWIDTH = 1920;
 
+    private static AngelCodeFont baseFont;
     private Camera camera;
     private float equalizationScale;    
     private boolean goodgraphics = false;
@@ -38,24 +37,21 @@ public class View {
         //tTFont = new TrueTypeFont(baseFont, true);
         
         //default rendering size is FullHD
-        equalizationScale = gc.getWidth()/1920f;
+        equalizationScale = gc.getWidth() / (float) DEFAULTRESOLUTIONWIDTH;
         Log.debug("Scale is:" + Float.toString(equalizationScale));
         
         camera = new Camera(
-            //new Blockpointer(Map.getBlocksX()/2, Map.getBlocksY()/2, 0),
             Gameplay.getController().getPlayer(),
             0, //top
             0, //left
-            gc.getWidth(), //full width
-            gc.getHeight(), //full height
-            equalizationScale
+            800, //full width 
+            600//full height
         );
         
         Block.loadSheet();
         //camera.focusOnBlock(new Blockpointer(Chunk.getBlocksX()*3/2,Map.getBlocksY()/2,Chunk.getBlocksZ()/2));
         
         if (camera.getGameTotalHeight() > Chunk.getBlocksY()*Block.DIM2/2) {
-            Gameplay.MSGSYSTEM.add("The chunks are maybe too small for this camera height/resolution to grant a stable experience", "Warning");
             Log.warn("The chunks are maybe too small for this camera height/resolution to grant a stable experience");
         }
      }
@@ -66,8 +62,16 @@ public class View {
      * @throws SlickException
      */
     public void render(Graphics g) throws SlickException{
-        g.scale(equalizationScale, equalizationScale);
         camera.render();
+        g.scale(equalizationScale, equalizationScale);
+        
+        //render HUD
+        if (Controller.getMap().getMinimap() != null)
+            Controller.getMap().getMinimap().render(
+                Wurfelengine.getGc().getScreenWidth() - 10,
+                10
+                ); 
+        
         Gameplay.MSGSYSTEM.draw(); 
     }
        
@@ -94,7 +98,7 @@ public class View {
      * @return game coordinate
      */
     public int ScreenXtoGame(int x){
-        return (int) ((x + Gameplay.getView().getCamera().getGamePosX()) / Gameplay.getView().getCamera().getAbsZoom());
+        return (int) ((x + Gameplay.getView().getCamera().getGamePosX()) / Gameplay.getView().getCamera().getTotalScale());
     }
     
    /**
@@ -103,7 +107,7 @@ public class View {
      * @return game coordinate
      */
     public int ScreenYtoGame(int y){
-        return (int) ((y / Gameplay.getView().getCamera().getAbsZoom() + Gameplay.getView().getCamera().getGamePosY()) * 2);
+        return (int) ((y / Gameplay.getView().getCamera().getTotalScale() + Gameplay.getView().getCamera().getGamePosY()) * 2);
     }
     
     /**

@@ -12,42 +12,41 @@ import java.util.ArrayList;
  * @author Benedikt
  */
 public class Camera {
-    private enum Focustype {
-        BLOCK, ENTITY
-    }
-        
-    private final int screenX, screenY, screenWidth, screenHeight;
-    private int xPos, yPos, gameWidth, gameHeight;
+    private final int screenPosX, screenPosY, screenWidth, screenHeight;
+    private int gamePosX, gamePosY;
     private int leftborder, topborder, rightborder, bottomborder;
     private float zoom = 1;
+    private float equalizationScale = 1;
     
-    private Camera.Focustype focus;
     private Pointer focusblock;
     private AbstractEntity focusentity;
     private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
     
 
-     /**
+    private Camera(int x, int y, int width, int height){
+        screenPosX = x;
+        screenPosY = y;
+        screenWidth = width;
+        screenHeight = height;
+    };
+    
+   /**
      * The camera locks to the player by default. It can be changed with <i>focusblock()</i>. Screen size does refer to the output of the camera not the real size on the display.
      * @param focusblock the block in the focus
      * @param x the position of the output
      * @param y the position of the output
      * @param width the width of the output. it can be different than the output on the display because it gets scaled later again.
      * @param height the height of the output. it can be different than the output on the display because it gets scaled later again.
-     * @param scale the zoom factor.
      */
-    public Camera(Pointer focusblock, int x, int y,int width, int height, float scale) {
-        screenX = x;
-        screenY = y;
-        //to achieve the wanted size it must be scaled in the other direction
-        screenWidth = (int) (width / scale);
-        screenHeight = (int) (height / scale);
+    public Camera(Pointer focusblock, int x, int y, int width, int height) {
+        this(x,y,width,height);   
         
-        focus = Camera.Focustype.BLOCK;
         this.focusblock = focusblock;
+        this.focusentity = null;         
         
-        gameWidth = (int) (screenWidth / zoom);
-        gameHeight = (int) (screenHeight / zoom);
+        
+        equalizationScale = screenWidth / (float) View.DEFAULTRESOLUTIONWIDTH;
+
         Wurfelengine.getGraphics().setWorldClip(x, y, screenWidth, screenHeight);
         
         update();
@@ -61,49 +60,43 @@ public class Camera {
      * @param y the position of the output
      * @param width the screen width
      * @param height the screen width
-     * @param scale the zoom factor.
      */
-    public Camera(AbstractEntity focusentity, int x, int y,int width, int height, float scale) {
-        screenX = x;
-        screenY = y;
-        //to achieve the wanted size it must be scaled in the other direction
-        screenWidth = (int) (width / scale);
-        screenHeight = (int) (height / scale);
+    public Camera(AbstractEntity focusentity, int x, int y, int width, int height) {
+        this(x,y,width,height);  
         
-        focus = Camera.Focustype.ENTITY;
         this.focusentity = focusentity;
+        this.focusblock = null;
         
-        gameWidth = (int) (screenWidth / zoom);
-        gameHeight = (int) (screenHeight / zoom);
-        Wurfelengine.getGraphics().setWorldClip(x, y, screenWidth, screenHeight);
-        
+        equalizationScale = width / (float) View.DEFAULTRESOLUTIONWIDTH;
         update();
     }
 
+  
     
     /**
-     * Updates the camera
+     * Updates the camera.
      */
     public final void update() {
-        if (focus == Camera.Focustype.BLOCK) {
-            xPos = Block.getScreenPosX(focusblock.getBlock(), focusblock.getCoords(), null) - gameWidth / 2;            
-            yPos = Block.getScreenPosY(focusblock.getBlock(), focusblock.getCoords(), null) - gameHeight / 2 ;
+        if (focusblock != null) {
+            gamePosX = Block.getScreenPosX(focusblock.getBlock(), focusblock.getCoords(), null) - getGameWidth() / 2;            
+            gamePosY = Block.getScreenPosY(focusblock.getBlock(), focusblock.getCoords(), null) - getGroundHeight() / 2 ;
         } else {
-            xPos = Block.getScreenPosX(focusentity, focusentity.getRelCoords(), null) - gameWidth / 2;            
-            yPos = Block.getScreenPosY(focusentity, focusentity.getRelCoords(), null) - gameHeight / 2 ;
+            gamePosX = Block.getScreenPosX(focusentity, focusentity.getRelCoords(), null) - getGameWidth() / 2;            
+            gamePosY = Block.getScreenPosY(focusentity, focusentity.getRelCoords(), null) - getGroundHeight() / 2 ;
         }
         
+        //maybe unneccessary and can be done when the getter is called.
         //update borders
-        leftborder = xPos / Block.DIMENSION - 1;
+        leftborder = gamePosX / GameObject.DIMENSION - 1;
         if (leftborder < 0) leftborder= 0;
         
-        rightborder = (xPos + gameWidth) / Block.DIMENSION + 2;
+        rightborder = (gamePosX + getGameWidth()) / GameObject.DIMENSION + 2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
         
-        topborder = yPos / Block.DIM4 - 3;
+        topborder = gamePosY / GameObject.DIM4 - 3;
         if (topborder < 0) topborder= 0;
         
-        bottomborder = (yPos+gameHeight) / Block.DIM4 + Map.getBlocksZ()*2;
+        bottomborder = (gamePosY+getGroundHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
     }
     
@@ -111,18 +104,19 @@ public class Camera {
      * Renders the viewport
      */
     public void render() {
-        if (Controller.getMap() != null) {
-        
-            Wurfelengine.getGraphics().scale(zoom, zoom);
+        if (Controller.getMap() != null) {        
+            Wurfelengine.getGraphics().scale(getTotalScale(), getTotalScale());
             
+            Wurfelengine.getGraphics().setClip(screenPosX, screenPosY, screenWidth, screenHeight);
+            //render map
             createDepthList();
             Controller.getMap().render(this);
-        
-            Wurfelengine.getGraphics().scale(1/zoom, 1/zoom);
+            Wurfelengine.getGraphics().clearClip();
+            
+            //reverse scale
+            Wurfelengine.getGraphics().scale(1/getTotalScale(), 1/getTotalScale());
         }
-        //GUI
-        if (Controller.getMap().getMinimap() != null)
-            Controller.getMap().getMinimap().render(); 
+
     }
     
     /**
@@ -131,8 +125,6 @@ public class Camera {
      */
     public void setZoom(float zoom) {
         this.zoom = zoom;
-        gameWidth = (int) (screenWidth / zoom);
-        gameHeight = (int) (screenHeight / zoom);
     }
     
     /**
@@ -147,8 +139,8 @@ public class Camera {
      * Returns the zoom multiplied by the EqualizationScale
      * @return 
      */
-    public float getAbsZoom() {
-        return zoom*Gameplay.getView().getEqualizationScale();
+    public float getTotalScale() {
+        return zoom*equalizationScale;
     }
 
     
@@ -157,8 +149,8 @@ public class Camera {
      * @param blockpointer
      */
     public void focusOnBlock(Pointer blockpointer){
-        focus = Camera.Focustype.BLOCK;
         focusblock = blockpointer;
+        focusentity = null;
     }
     
     
@@ -199,7 +191,7 @@ public class Camera {
      * @return 
      */
     public int getGamePosX() {
-        return xPos;
+        return gamePosX;
     }
 
     /**
@@ -207,7 +199,7 @@ public class Camera {
      * @param x 
      */
     public void setGamePosX(int x) {
-        this.xPos = x;
+        this.gamePosX = x;
     }
 
     /**
@@ -215,7 +207,7 @@ public class Camera {
      * @return in camera position game space
      */
     public int getGamePosY() {
-        return yPos;
+        return gamePosY;
     }
 
     /**
@@ -223,7 +215,7 @@ public class Camera {
      * @param y in game space
      */
     public void setGamePosY(int y) {
-        this.yPos = y;
+        this.gamePosY = y;
     }
 
    /**
@@ -231,16 +223,16 @@ public class Camera {
     * @return
     */
    public int getGroundHeight() {
-        return gameHeight;
+        return (int) (screenHeight / zoom / equalizationScale);
     }
 
     /**
-     * The amount of pixel which are visible in xPos direction (game pixels).
+     * The amount of pixel which are visible in gamePosX direction (game pixels).
      * For screen pixels use <i>ScreenWidth()</i>.
      * @return
      */
     public int getGameWidth() {
-        return gameWidth;
+        return (int) (screenWidth / zoom / equalizationScale);
     }
 
     /**
@@ -249,7 +241,7 @@ public class Camera {
      * @return
      */
     public int getGameTotalHeight() {
-        return gameHeight + Block.DIM2*Map.getBlocksZ();
+        return getGroundHeight() + Block.DIM2*Map.getBlocksZ();
     }
 
     /**
@@ -275,7 +267,7 @@ public class Camera {
      * @return
      */
     public int getScreenPosX() {
-        return screenX;
+        return screenPosX;
     }
 
     /**
@@ -283,8 +275,9 @@ public class Camera {
      * @return
      */
     public int getScreenPosY() {
-        return screenY;
+        return screenPosY;
     }
+    
     
      /**
      * Fills the map into a list and sorts it in the order of the rendering, called the depthlist.
