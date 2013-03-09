@@ -248,9 +248,8 @@ public abstract class GameObject {
 
     /**
      * Get the screen X-position where to block is rendered. if camera = null the position of it get's not calculated
-     * @param object 
-     * @param coords 
-     * @param camera the camera which renders the scene. if it is null it get's ignored
+     * @param object the object of wich you want the position
+     * @param coords  the coordinates where the object is rendered 
      * @return the screen X-position in pixels
      */
     public static int getScreenPosX(GameObject object, int[] coords) {
@@ -260,8 +259,7 @@ public abstract class GameObject {
     /**
      * Get the screen Y-position where to object is rendered.  if camera = null the position of it get's not calculated
      * @param object the object of wich you want the position
-     * @param coords 
-     * @param camera the camera which renders the scene. if it is null it get's ignored
+     * @param coords the coordinates where the object is rendered 
      * @return the screen Y-position in pixels
      */
     public static int getScreenPosY(GameObject object, int[] coords) {
