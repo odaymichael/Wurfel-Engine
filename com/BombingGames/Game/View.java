@@ -47,13 +47,13 @@ public class View {
             gc.getScreenWidth(), //full width 
             gc.getScreenHeight()//full height
         );
-        camera2 = new Camera(
-            Gameplay.getController().getPlayer(),
-            800, //left
-            0, //top
-            400, //full width 
-            400//full height
-        );
+//        camera2 = new Camera(
+//            Gameplay.getController().getPlayer(),
+//            800, //left
+//            0, //top
+//            400, //full width 
+//            400//full height
+//        );
         
         Block.loadSheet();
      }
@@ -65,7 +65,7 @@ public class View {
      */
     public void render(Graphics g) throws SlickException{
         camera.render();
-        camera2.render();
+        //camera2.render();
         
         g.scale(equalizationScale, equalizationScale);
         
