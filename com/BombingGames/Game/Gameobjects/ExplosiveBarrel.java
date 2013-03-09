@@ -27,9 +27,9 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
      * Explodes the barrel.
      */
     public void explode(){
-        for (int x=-RADIUS;x<RADIUS;x++)
-            for (int y=-RADIUS*2;y<RADIUS*2;y++)
-                for (int z=-RADIUS;z<RADIUS;z++){
+        for (int x=-RADIUS; x<RADIUS; x++)
+            for (int y=-RADIUS*2; y<RADIUS*2; y++)
+                for (int z=-RADIUS; z<RADIUS; z++){
                     int[] tmp = new int[]{coords[0]+x, coords[1]+y, coords[2]+z};
                     Controller.setMapDataSafe(tmp, Block.getInstance(0));//place air
                     Controller.getMap().getEntitylist().add(AbstractEntity.getInstance(41, 0, tmp));//spawn effect
