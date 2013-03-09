@@ -151,7 +151,7 @@ public class Block extends GameObject {
         }
         block.setValue(value);
         return block;
-    } 
+    }  
     
  
     /**
@@ -209,6 +209,9 @@ public class Block extends GameObject {
         return hasSides;
     }   
     
+    public boolean hidingPastBlock(){
+        return (hasSides && ! isTransparent());
+    }
     /**
      * Make a side (in)visible. If one side is visible, the whole block is visible.
      * @param side 0 = left, 1 = top, 2 = right

@@ -449,7 +449,7 @@ public class Camera {
                 if (side == 0){
                     //direct neighbour block on left hiding the complete left side
                     if (x > 0 && y < Map.getBlocksY()-1
-                        && ! Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z).isTransparent())
+                        && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z).hidingPastBlock())
                         break; //stop ray
                     
                     //liquid
@@ -471,17 +471,17 @@ public class Camera {
 
                     //two blocks hiding the left side
                     if (x > 0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                        && ! Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isTransparent())
+                        && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).hidingPastBlock())
                         left = false;
                     if (y < Map.getBlocksY()-2
-                        && ! Controller.getMapData(x, y+2, z).isTransparent()
+                        && Controller.getMapData(x, y+2, z).hidingPastBlock()
                         )
                         right = false;
                     
                 } else {              
                     if (side == 1) {//check top side
                         if (z < Map.getBlocksZ()-1
-                            && ! Controller.getMapData(x, y, z+1).isTransparent())
+                            && Controller.getMapData(x, y, z+1).hidingPastBlock())
                             break;
                         
                         //liquid
@@ -502,11 +502,11 @@ public class Camera {
                     
                         //two 0- and 2-sides hiding the side 1
                         if (x>0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                            && ! Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isTransparent())
+                            && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).hidingPastBlock())
                             left = false;
                         
                         if (x < Map.getBlocksX()-1  && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                            && ! Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent()
+                            && Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).hidingPastBlock()
                             )
                             right = false;
                           
@@ -514,7 +514,7 @@ public class Camera {
                         if (side==2){
                             //block on right hiding the whole right side
                             if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY()
-                                && ! Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).isTransparent()
+                                && Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).hidingPastBlock()
                                 ) break;
                             
                             //liquid
@@ -539,12 +539,12 @@ public class Camera {
                             //two blocks hiding the right side
                             if (y+2 < Map.getBlocksY()
                                 &&
-                                ! Controller.getMapData(x, y+2, z).isTransparent())
+                                Controller.getMapData(x, y+2, z).hidingPastBlock())
                                 left = false;
                             
                             if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY() && z+1 < Map.getBlocksZ()
                                 &&
-                                ! Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isTransparent())
+                                Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).hidingPastBlock())
                                 right = false;
                         }
                     }
@@ -558,7 +558,9 @@ public class Camera {
                         temp.setSideVisibility(side, true);  
                     }                                
                 }                
-            } while (y >= 2 && z >= 1  && (left || right) && (Controller.getMapData(x, y, z).isTransparent() || Controller.getMapData(x, y, z).hasOffset()));
+            } while (y >= 2 && z >= 1 //not on bottom of map
+                && (left || right) //left and right still visible
+                && (!Controller.getMapData(x, y, z).hidingPastBlock() || Controller.getMapData(x, y, z).hasOffset()));
     }
     
     /**
