@@ -253,7 +253,9 @@ public abstract class GameObject {
      * @return the screen X-position in pixels
      */
     public static int getScreenPosX(GameObject object, int[] coords) {
-        return coords[0] * DIMENSION + (coords[1] % 2) * DIM2 + (int) (object.pos[0]);
+        return coords[0] * DIMENSION
+               + (coords[1] % 2) * DIM2
+               + (int) (object.pos[0]);
     }
 
     /**
@@ -263,7 +265,10 @@ public abstract class GameObject {
      * @return the screen Y-position in pixels
      */
     public static int getScreenPosY(GameObject object, int[] coords) {
-        return coords[1] * DIM4 - coords[2] * DIM2 + (int) (object.pos[1] / 2) - (int) (object.pos[2] / Math.sqrt(2));
+        return coords[1] * DIM4
+               - coords[2] * DIM2
+               + (int) (object.pos[1] / 2)
+               - (int) (object.pos[2] / Math.sqrt(2));
     }
 
     /**
