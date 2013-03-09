@@ -54,19 +54,6 @@ public class Block extends GameObject {
         super(id, value);
     }
     
-   
-    /**
-     * Returns a color representing the block. Picks from the sprite image.
-     * @param id id of the Block
-     * @param value the value of the block.
-     * @return a color representing the block
-     */
-    public static Color getRepresentingColor(int id, int value){
-        if (colorlist[id][value] == null){
-            colorlist[id][value] = getBlockSprite(id, value,1).getColor(DIM2, DIM4);
-            return colorlist[id][value]; 
-        } else return colorlist[id][value];
-    }
     
     /**
      * Creates an air block.
@@ -192,6 +179,19 @@ public class Block extends GameObject {
         } else {
             return getSpritesheet().getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIM2, (int) (DIM2 * 3 / 2));
         }
+    }
+    
+        /**
+     * Returns a color representing the block. Picks from the sprite image.
+     * @param id id of the Block
+     * @param value the value of the block.
+     * @return a color representing the block
+     */
+    public static Color getRepresentingColor(int id, int value){
+        if (colorlist[id][value] == null){
+            colorlist[id][value] = getBlockSprite(id, value,1).getColor(DIM2, DIM4);
+            return colorlist[id][value]; 
+        } else return colorlist[id][value];
     }
 
     /**

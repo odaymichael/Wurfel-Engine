@@ -16,6 +16,7 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class GameController extends Controller {
     private GameContainer gc;
+    
     /**
      * The custom game code belongs here
      * @param gc 
