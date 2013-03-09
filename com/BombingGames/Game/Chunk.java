@@ -18,7 +18,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 3;
+    public static final int MAPGENERATOR = 1;
     protected static final String CHUNKFILESUFFIX = "wec";
     protected static final String METAFILESUFFIX = "wem";
     
@@ -75,8 +75,9 @@ public class Chunk {
             case 1: {//islands
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = Block.getInstance(9);
+                        data[x][y][0] = Block.getInstance(8);
                         data[x][y][1] = Block.getInstance(9);
+                        data[x][y][2] = Block.getInstance(9);
                     }
                 
                 int mountainx = (int) (Math.random()*blocksX-1);
