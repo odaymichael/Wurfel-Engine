@@ -306,15 +306,24 @@ public class Camera {
                 }
         
         //add entitys
-        for (int i=0; i< Controller.getMap().getEntitylist().size(); i++){
+        for (int i=0; i< Controller.getMap().getEntitylist().size(); i++) {
             AbstractEntity entity = Controller.getMap().getEntitylist().get(i);
-            depthsort.add(
-                new Renderobject(
-                    entity.getRelCoords(),
-                    entity.getDepth(entity.getRelCoords()[1], entity.getRelCoords()[2]),
-                    i
-                )
-             );
+            if (!entity.isHidden() && entity.isVisible()
+                        && 
+                            GameObject.getScreenPosY(
+                                entity,
+                                entity.getRelCoords()
+                            )
+                        <
+                            outputPosY + getOutputHeight()
+                    )
+                    depthsort.add(
+                        new Renderobject(
+                            entity.getRelCoords(),
+                            entity.getDepth(entity.getRelCoords()[1], entity.getRelCoords()[2]),
+                            i
+                        )
+                    );
         }
         //sort the list
         sortDepthList(0, depthsort.size()-1);
