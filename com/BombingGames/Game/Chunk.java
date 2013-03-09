@@ -18,7 +18,7 @@ public class Chunk {
     /**
      * The number of the mapgenerator used.
      */
-    public static final int MAPGENERATOR = 1;
+    public static final int MAPGENERATOR = 2;
     protected static final String CHUNKFILESUFFIX = "wec";
     protected static final String METAFILESUFFIX = "wem";
     
