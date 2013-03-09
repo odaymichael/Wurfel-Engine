@@ -41,14 +41,14 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
                         Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
-           case 50: 
+          case 41: 
                     entity = new AnimatedEntity(
                                 id,
                                 value,
                                 coords,
-                                new int[]{500,500},
+                                new int[]{1000,100},
                                 true,
-                                true
+                                false
                             );//explosion
                     break;
         }

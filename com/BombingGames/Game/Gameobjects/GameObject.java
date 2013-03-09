@@ -103,77 +103,69 @@ public abstract class GameObject {
         SPRITEPOS[6][0][2][1] = 600;
        
         NAMELIST[7] = "concrete";
-        SPRITEPOS[7][0][0][0] = 640;
-        SPRITEPOS[7][0][0][1] = 600;
-        SPRITEPOS[7][0][1][0] = 720;
-        SPRITEPOS[7][0][1][1] = 600;
-        SPRITEPOS[7][0][2][0] = 880;
-        SPRITEPOS[7][0][2][1] = 600;
+        SPRITEPOS[7][0][0][0] = 1920;
+        SPRITEPOS[7][0][0][1] = 240;
+        SPRITEPOS[7][0][1][0] = 0;
+        SPRITEPOS[7][0][1][1] = 480;
+        SPRITEPOS[7][0][2][0] = 160;
+        SPRITEPOS[7][0][2][1] = 480;
         
         NAMELIST[8] = "sand";
-        SPRITEPOS[8][0][0][0] = 320;
-        SPRITEPOS[8][0][0][1] = 720;
-        SPRITEPOS[8][0][1][0] = 400;
-        SPRITEPOS[8][0][1][1] = 720;
-        SPRITEPOS[8][0][2][0] = 560;
-        SPRITEPOS[8][0][2][1] = 720;
+        SPRITEPOS[8][0][0][0] = 560;
+        SPRITEPOS[8][0][0][1] = 480;
+        SPRITEPOS[8][0][1][0] = 640;
+        SPRITEPOS[8][0][1][1] = 480;
+        SPRITEPOS[8][0][2][0] = 800;
+        SPRITEPOS[8][0][2][1] = 480;
         
         NAMELIST[9] = "water";
-        SPRITEPOS[9][0][0][0] = 640;
-        SPRITEPOS[9][0][0][1] = 720;
-        SPRITEPOS[9][0][1][0] = 720;
-        SPRITEPOS[9][0][1][1] = 720;
-        SPRITEPOS[9][0][2][0] = 880;
-        SPRITEPOS[9][0][2][1] = 720;
+        SPRITEPOS[9][0][0][0] = 880;
+        SPRITEPOS[9][0][0][1] = 480;
+        SPRITEPOS[9][0][1][0] = 960;
+        SPRITEPOS[9][0][1][1] = 480;
+        SPRITEPOS[9][0][2][0] = 1120;
+        SPRITEPOS[9][0][2][1] = 480;
         
         
         NAMELIST[40] = "player";
         //sw
-        SPRITEPOS[40][1][0][0] = 640;
-        SPRITEPOS[40][1][0][1] = 120;
+        SPRITEPOS[40][1][0][0] = 1600;
+        SPRITEPOS[40][1][0][1] = 0;
         //w
-        SPRITEPOS[40][2][0][0] = 800;
-        SPRITEPOS[40][2][0][1] = 120;
+        SPRITEPOS[40][2][0][0] = 1760;
+        SPRITEPOS[40][2][0][1] = 0;
         //nw
         SPRITEPOS[40][3][0][0] = 0;
-        SPRITEPOS[40][3][0][1] = 360;
+        SPRITEPOS[40][3][0][1] = 240;
         //n
         SPRITEPOS[40][4][0][0] = 160;
-        SPRITEPOS[40][4][0][1] = 360;
+        SPRITEPOS[40][4][0][1] = 240;
         //ne
         SPRITEPOS[40][5][0][0] = 320;
-        SPRITEPOS[40][5][0][1] = 360;
+        SPRITEPOS[40][5][0][1] = 240;
         //e
         SPRITEPOS[40][6][0][0] = 480;
-        SPRITEPOS[40][6][0][1] = 360;
+        SPRITEPOS[40][6][0][1] = 240;
         //se
         SPRITEPOS[40][7][0][0] = 640;
-        SPRITEPOS[40][7][0][1] = 360;
+        SPRITEPOS[40][7][0][1] = 240;
         //s
         SPRITEPOS[40][8][0][0] = 800;
-        SPRITEPOS[40][8][0][1] = 360;
+        SPRITEPOS[40][8][0][1] = 240;
         
-        NAMELIST[50] = "smoke test";
-        SPRITEPOS[50][0][0][0] = 0;
-        SPRITEPOS[50][0][0][1] = 120;
-        SPRITEPOS[50][0][1][0] = 80;
-        SPRITEPOS[50][0][1][1] = 120;
-        SPRITEPOS[50][0][2][0] = 240;
-        SPRITEPOS[50][0][2][1] = 120;
-        SPRITEPOS[50][1][0][0] = 0;
-        SPRITEPOS[50][1][0][1] = 0;
-        SPRITEPOS[50][1][1][0] = 80;
-        SPRITEPOS[50][1][1][1] = 0;
-        SPRITEPOS[50][1][2][0] = 240;
-        SPRITEPOS[50][1][2][1] = 0;
-        
+        NAMELIST[41] = "smoke test";
+        SPRITEPOS[41][0][0][0] = 960;
+        SPRITEPOS[41][0][0][1] = 240;
+        SPRITEPOS[41][1][0][0] = 1120;
+        SPRITEPOS[41][1][0][1] = 240;
+
         NAMELIST[70] = "fire";
-        SPRITEPOS[70][0][0][0] = 0;
-        SPRITEPOS[70][0][0][1] = 720;
+        SPRITEPOS[70][0][0][0] = 240;
+        SPRITEPOS[70][0][0][1] = 480;
         
         NAMELIST[71] = "explosive barrel";
-        SPRITEPOS[71][0][0][0] = 160;
-        SPRITEPOS[71][0][0][1] = 720;
+        SPRITEPOS[71][0][0][0] = 400;
+        SPRITEPOS[71][0][0][1] = 480;
         
         NAMELIST[72] = "animation test";
         SPRITEPOS[72][0][0][0] = 0;
