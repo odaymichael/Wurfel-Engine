@@ -132,7 +132,7 @@ public class Chunk {
                         data[x][y][1] = Block.getInstance(2);
                         data[x][y][0] = Block.getInstance(2);
                     }
-                data[5][5][3] = Block.getInstance(71,0,5,5,3);
+                data[5][5][3] = Block.getInstance(71,0,new int[]{5,5,3});
                 data[5][5][2] = Block.getInstance(2);
                 
                 break;

@@ -138,10 +138,22 @@ public class CustomGameController extends Controller {
             //workaround for the bug in slick, because the event is called multiple times
             gc.getInput().consumeEvent();
             
-            int coords[] = Gameplay.getView().ScreenToGameCoords(newx,newy);
-            if (coords[2] < Map.getBlocksZ()-1) coords[2]++; 
-            setMapDataSafe(coords[0], coords[1], coords[2], Block.getInstance(1));
-            Gameplay.getView().getCamera().traceRayTo(coords, true);
+            if (Chunk.MAPGENERATOR == 4){
+                int coords[] = Gameplay.getView().ScreenToGameCoords(newx,newy);
+                if (gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
+                    if (coords[2] < Map.getBlocksZ()-1) coords[2]++; 
+                    setMapDataSafe(coords, Block.getInstance(71, 0, coords));
+                    Gameplay.getView().getCamera().traceRayTo(coords, true);
+                }else {
+                   if (getMapDataSafe(coords) instanceof ExplosiveBarrel)
+                       ((ExplosiveBarrel) getMapDataSafe(coords)).explode();
+                }
+            }else{
+                int coords[] = Gameplay.getView().ScreenToGameCoords(newx,newy);
+                if (coords[2] < Map.getBlocksZ()-1) coords[2]++; 
+                setMapDataSafe(coords, Block.getInstance(1));
+                Gameplay.getView().getCamera().traceRayTo(coords, true);
+            }
         }
 
         @Override
