@@ -60,7 +60,7 @@ public class Block extends GameObject {
      * @return a block of air.
      */
     public static Block getInstance(){
-        return getInstance(0,0,0,0,0);
+        return getInstance(0,0,null);
     }
     
     /**
@@ -69,7 +69,7 @@ public class Block extends GameObject {
      * @return the wanted block.
      */
     public static Block getInstance(int id){
-        return getInstance(id,0,0,0,0);
+        return getInstance(id,0,null);
     }
     
     /**
@@ -79,7 +79,7 @@ public class Block extends GameObject {
      * @return the wanted block.
      */
     public static Block getInstance(int id, int value){
-        return getInstance(id,value,0,0,0);
+        return getInstance(id,value,null);
     }
     
     /**
@@ -91,7 +91,7 @@ public class Block extends GameObject {
      * @param z the z-coordinate
      * @return the Block
      */
-    public static Block getInstance(int id, int value, int x, int y, int z){
+    public static Block getInstance(int id, int value, int[] coords){
         Block block = null;
         //define the default SideSprites
         switch (id){
@@ -135,8 +135,7 @@ public class Block extends GameObject {
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;
-            case 71:block = new ExplosiveBarrel(71);
-                    ((ExplosiveBarrel) block).setAbsCoords(new int[]{x,y,z});
+            case 71:block = new ExplosiveBarrel(71,coords);
                     block.setObstacle(true);
                     block.hasSides = false;
                     break;

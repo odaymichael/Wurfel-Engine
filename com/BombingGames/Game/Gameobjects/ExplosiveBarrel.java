@@ -18,8 +18,9 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
      * 
      * @param id
      */
-    protected ExplosiveBarrel(int id) {
+    protected ExplosiveBarrel(int id, int[] coords) {
         super(id);
+        this.coords = coords;
     }
     
     /**
@@ -30,8 +31,8 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
             for (int y=-RADIUS*2;y<RADIUS*2;y++)
                 for (int z=-RADIUS;z<RADIUS;z++){
                     int[] tmp = new int[]{coords[0]+x, coords[1]+y, coords[2]+z};
-                    Controller.setMapDataSafe(tmp, Block.getInstance());
-                    Controller.getMap().getEntitylist().add(AbstractEntity.getInstance(50, 0, tmp));
+                    Controller.setMapDataSafe(tmp, Block.getInstance(0));//place air
+                    Controller.getMap().getEntitylist().add(AbstractEntity.getInstance(41, 0, tmp));//spawn effect
                 }
          Controller.getMap().requestRecalc();
     }
