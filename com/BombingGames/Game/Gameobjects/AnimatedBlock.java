@@ -29,16 +29,17 @@ public class AnimatedBlock extends Block implements Animatable{
     @Override
     public void update(int delta) {
         if (running) {
-        counter += delta;
+            counter += delta;
             if (counter >= animationsduration[getValue()]){
                 setValue(getValue()+1);
                 counter=0;
-            }
-            
-            if (getValue() >= animationsduration.length) {
-                if (loop)
-                    setValue(0);
-                else running = false;
+                if (getValue() >= animationsduration.length)//if over animation array
+                    if (loop)
+                        setValue(0);
+                    else{
+                        running = false;
+                        setValue(getValue()-1);
+                    }
             }
         }
     }
