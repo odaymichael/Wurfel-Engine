@@ -46,7 +46,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
                                 id,
                                 value,
                                 coords,
-                                new int[]{1000,100},
+                                new int[]{700,2000},
                                 true,
                                 false
                             );//explosion
