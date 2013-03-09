@@ -1,5 +1,6 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.Player;
@@ -16,7 +17,7 @@ import org.newdawn.slick.util.Log;
 public class Controller {
     private static Map map;
 
-    private Player player;   
+    private AbstractCharacter player;   
     
     /**
      * Constructor is called when entering the gamemode.
@@ -173,7 +174,7 @@ public class Controller {
      * Returns the player
      * @return the player
      */
-    public Player getPlayer() {
+    public AbstractCharacter getPlayer() {
         return player;
     }
 
@@ -181,7 +182,7 @@ public class Controller {
      * Sets a player 
      * @param player 
      */
-    public void setPlayer(Player player) {
+    public void setPlayer(AbstractCharacter player) {
         this.player = player;
         map.getEntitylist().add(player);
     }

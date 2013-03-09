@@ -10,7 +10,6 @@ import org.newdawn.slick.Sound;
  * @author Benedikt
  */
 public class Player extends AbstractCharacter{
-   private String controls = "WASD";
    private int[] coords;
    
     /**
@@ -23,25 +22,6 @@ public class Player extends AbstractCharacter{
         super(id);
         setFallingSound(new Sound("com/BombingGames/Game/Sounds/wind.wav"));
         setRunningSound(new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav"));
-    }
-
-    
-  
-    /**
-     * Set the controls.
-     * @param controls either "arrows" or "WASD".
-     */
-    public void setControlls(String controls){
-        if ("arrows".equals(controls) || "WASD".equals(controls))
-            this.controls = controls;
-    }
-    
-    /**
-     * Returns the Controls
-     * @return either "arrows" or "WASD".
-     */
-    public String getControlls(){
-        return controls;
     }
         
 
