@@ -44,8 +44,8 @@ public class AnimatedEntity extends AbstractEntity implements Animatable{
                 if (getValue() >= animationsduration.length)//if over animation array
                     if (loop)
                         setValue(0);
-                    else{
-                        running = false;
+                    else{//delete
+                        setHidden(true);
                         setValue(getValue()-1);
                     }
             }
