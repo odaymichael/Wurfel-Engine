@@ -28,6 +28,7 @@ public class AnimatedEntity extends AbstractEntity implements Animatable{
         this.animationsduration = animationsinformation;
         this.running = autostart;
         this.loop = loop;
+        setLightlevel(70);
     }
     
    /**

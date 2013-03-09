@@ -179,8 +179,10 @@
             <filename>sprites/40-5.png</filename>
             <filename>sprites/40-6.png</filename>
             <filename>sprites/40-7.png</filename>
-            <filename>sprites/70-0.png</filename>
+            <filename>sprites/41-0.png</filename>
+            <filename>sprites/41-1.png</filename>
             <filename>sprites/71-0.png</filename>
+            <filename>sprites/70-0.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
