@@ -49,11 +49,6 @@ public class View {
         );
         
         Block.loadSheet();
-        //camera.focusOnBlock(new Blockpointer(Chunk.getBlocksX()*3/2,Map.getBlocksY()/2,Chunk.getBlocksZ()/2));
-        
-        if (camera.getGameTotalHeight() > Chunk.getBlocksY()*Block.DIM2/2) {
-            Log.warn("The chunks are maybe too small for this camera height/resolution to grant a stable experience");
-        }
      }
     
     /**
