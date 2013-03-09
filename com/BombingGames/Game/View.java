@@ -156,7 +156,7 @@ public class View {
      * 
      * @param goodgraphics
      */
-    protected void setGoodgraphics(boolean goodgraphics) {
+    public void setGoodgraphics(boolean goodgraphics) {
         this.goodgraphics = goodgraphics;
     }
        

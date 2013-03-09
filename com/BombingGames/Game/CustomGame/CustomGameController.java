@@ -1,9 +1,13 @@
-package com.BombingGames.Game;
+package com.BombingGames.Game.CustomGame;
 
+import com.BombingGames.Game.Chunk;
+import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.ExplosiveBarrel;
+import com.BombingGames.Game.Gameplay;
+import com.BombingGames.Game.Map;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
@@ -11,10 +15,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- *The <i>GameController</i> is for the game code. Put engine code into <i>Controller</i>.
+ *The <i>CustomGameController</i> is for the game code. Put engine code into <i>Controller</i>.
  * @author Benedikt
  */
-public class GameController extends Controller {
+public class CustomGameController extends Controller {
     private GameContainer gc;
     
     /**
@@ -23,7 +27,7 @@ public class GameController extends Controller {
      * @param game
      * @throws SlickException
      */
-    public GameController(GameContainer gc, StateBasedGame game) throws SlickException{
+    public CustomGameController(GameContainer gc, StateBasedGame game) throws SlickException{
         super(gc, game);
         this.gc = gc;
         

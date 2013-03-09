@@ -132,11 +132,11 @@ public class MsgSystem extends ArrayList<Msg> {
         }
     }
 
-    void listenForInput(boolean input) {
+    public void listenForInput(boolean input) {
         waitforinput = input;
     }
     
-    boolean isListeningForInput() {
+    public boolean isListeningForInput() {
         return waitforinput;
     }
 }

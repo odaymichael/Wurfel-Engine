@@ -1,5 +1,6 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.Game.CustomGame.CustomGameController;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -31,7 +32,7 @@ public class Gameplay extends BasicGameState {
     
     @Override 
     public void enter(GameContainer container, StateBasedGame game) throws SlickException{
-        controller = new GameController(container, game);
+        controller = new CustomGameController(container, game);
         view = new View(container);
     }    
 
