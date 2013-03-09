@@ -557,16 +557,14 @@ public abstract class GameObject {
         if (!hidden && visible) {
             Image image = getSprite(id, value, dimensionY);
             //calc  brightness
-            float brightness = lightlevel / 100.0F;
-            //System.out.println("Lightlevel " + Controller.map.data[x][y][z].lightlevel + "-> "+lightlevel);
-            //or paint whole block with :
-            //int brightness = renderBlock.lightlevel * 255 / 100;
-            //new Color(brightness,brightness,brightness).bind();
+            float brightness = lightlevel / 50.0f;
+            
             image.setColor(0, brightness, brightness, brightness);
             image.setColor(1, brightness, brightness, brightness);
-            brightness -= 0.1F;
+            brightness -= 0.1f;
             image.setColor(2, brightness, brightness, brightness);
             image.setColor(3, brightness, brightness, brightness);
+            
             int xpos = getScreenPosX(this, coords);
             int ypos = getScreenPosY(this, coords) - (dimensionY - 1) * Block.DIM2;
             image.drawEmbedded(xpos, ypos);
