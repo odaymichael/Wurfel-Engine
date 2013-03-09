@@ -44,15 +44,15 @@ public class View {
             Gameplay.getController().getPlayer(),
             0, //left
             0, //top
-            800, //full width 
-            600//full height
+            gc.getScreenWidth(), //full width 
+            gc.getScreenHeight()//full height
         );
         camera2 = new Camera(
             Gameplay.getController().getPlayer(),
             800, //left
             0, //top
-            800, //full width 
-            600//full height
+            400, //full width 
+            400//full height
         );
         
         Block.loadSheet();
@@ -102,7 +102,7 @@ public class View {
      * @return game coordinate
      */
     public int ScreenXtoGame(int x){
-        return (int) ((x + Gameplay.getView().getCamera().getScreenPosX()) / Gameplay.getView().getCamera().getTotalScale());
+        return (int) ((x + Gameplay.getView().getCamera().getOutputPosX()) / Gameplay.getView().getCamera().getTotalScale());
     }
     
    /**
@@ -111,7 +111,7 @@ public class View {
      * @return game coordinate
      */
     public int ScreenYtoGame(int y){
-        return (int) ((y / Gameplay.getView().getCamera().getTotalScale() + Gameplay.getView().getCamera().getScreenPosY()) * 2);
+        return (int) ((y / Gameplay.getView().getCamera().getTotalScale() + Gameplay.getView().getCamera().getOutputPosY()) * 2);
     }
     
     /**
