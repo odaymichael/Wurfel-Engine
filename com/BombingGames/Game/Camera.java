@@ -3,7 +3,6 @@ package com.BombingGames.Game;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
-import com.BombingGames.Game.Gameobjects.Pointer;
 import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;
 
@@ -18,7 +17,7 @@ public class Camera {
     private float zoom = 1;
     private float equalizationScale = 1;
     
-    private Pointer focusblock;
+    private int[] focusblock;
     private AbstractEntity focusentity;
     private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
     
@@ -40,10 +39,10 @@ public class Camera {
      * @param width the width of the output. it can be different than the output on the display because it gets scaled later again.
      * @param height the height of the output. it can be different than the output on the display because it gets scaled later again.
      */
-    public Camera(Pointer focusblock, int x, int y, int width, int height) {
+    public Camera(int[] focus, int x, int y, int width, int height) {
         this(x, y, width, height);   
         
-        this.focusblock = focusblock;
+        this.focusblock = focus;
         this.focusentity = null;         
 
         update();
@@ -93,11 +92,11 @@ public class Camera {
 
     
     /**
-     * Use this if you want to focus on a special block
-     * @param blockpointer
+     * Use this if you want to focus on a special block.
+     * @param coord the coordaintes of the block.
      */
-    public void focusOnBlock(Pointer blockpointer){
-        focusblock = blockpointer;
+    public void focusOnCoords(int[] coord){
+        focusblock = coord;
         focusentity = null;
     }
     
@@ -223,8 +222,8 @@ public class Camera {
      */
     public final void update() {
         if (focusblock != null) {
-            outputPosX = GameObject.getScreenPosX(focusblock.getBlock(), focusblock.getCoords()) - getOutputWidth() / 2;            
-            outputPosY = GameObject.getScreenPosY(focusblock.getBlock(), focusblock.getCoords()) - getOutputHeight() / 2 ;
+            outputPosX = GameObject.getScreenPosX(Controller.getMapData(focusblock), focusblock) - getOutputWidth() / 2;            
+            outputPosY = GameObject.getScreenPosY(Controller.getMapData(focusblock), focusblock) - getOutputHeight() / 2 ;
         } else {
             outputPosX = GameObject.getScreenPosX(focusentity, focusentity.getRelCoords()) - getOutputWidth() / 2;            
             outputPosY = GameObject.getScreenPosY(focusentity, focusentity.getRelCoords()) - getOutputHeight() / 2 ;
