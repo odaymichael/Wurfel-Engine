@@ -32,6 +32,8 @@ public class Gameplay extends BasicGameState {
     
     @Override 
     public void enter(GameContainer container, StateBasedGame game) throws SlickException{
+        container.setClearEachFrame(false);
+        
         controller = new CustomGameController(container, game);
         view = new View(container, controller);
         controller.setView(view);
