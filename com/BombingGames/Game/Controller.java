@@ -3,7 +3,6 @@ package com.BombingGames.Game;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.Player;
 import com.BombingGames.MainMenu.MainMenuState;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
