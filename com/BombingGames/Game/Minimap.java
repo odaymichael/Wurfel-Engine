@@ -13,7 +13,12 @@ public class Minimap {
     private int posX, posY;
     private final float scaleX = 12;//8
     private final float scaleY = 6;//4
+    private Controller controller;
 
+    public Minimap(Controller controller) {
+        this.controller = controller;
+    }
+    
     
     /**
      * Draws the Minimap
@@ -25,8 +30,8 @@ public class Minimap {
         this.posY = screenY;
         int z;        
         //if there is no player => ground level
-        if (Gameplay.getController().getPlayer()!=null)
-            z = Gameplay.getController().getPlayer().getRelCoords()[2]-1;
+        if (controller.getPlayer()!=null)
+            z = controller.getPlayer().getRelCoords()[2]-1;
         else z = 0;
         
         //render a chunk
@@ -47,11 +52,11 @@ public class Minimap {
             }
 
             //player
-            if (Gameplay.getController().getPlayer()!=null){
+            if (controller.getPlayer()!=null){
                 Wurfelengine.getGraphics().setColor(Color.blue);
                 Wurfelengine.getGraphics().drawRect(
-                    posX + (Gameplay.getController().getPlayer().getRelCoords()[0] + (Gameplay.getController().getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX,
-                    posY + Gameplay.getController().getPlayer().getRelCoords()[1] * scaleY,
+                    posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX,
+                    posY + controller.getPlayer().getRelCoords()[1] * scaleY,
                     scaleX,
                     scaleY
                 );
@@ -84,13 +89,13 @@ public class Minimap {
             scaleY*Gameplay.getView().getCamera().getOutputHeight() / (Block.DIM2/2)
         );
 
-        if (Gameplay.getController().getPlayer()!=null){
+        if (controller.getPlayer()!=null){
             //player level getCamera() rectangle
             Wurfelengine.getGraphics().setColor(Color.gray);
             Wurfelengine.getGraphics().drawRect(
                 posX + scaleX * Gameplay.getView().getCamera().getOutputPosX() / Block.DIMENSION,
                 posY + scaleY * Gameplay.getView().getCamera().getOutputPosY() / (Block.DIM2/2)
-                + scaleY *2*(Gameplay.getController().getPlayer().getRelCoords()[2] * (Block.DIM2/2))/ (float) (Block.DIMENSION),
+                + scaleY *2*(controller.getPlayer().getRelCoords()[2] * (Block.DIM2/2))/ (float) (Block.DIMENSION),
                 scaleX*Gameplay.getView().getCamera().getOutputWidth() / Block.DIMENSION,
                 scaleY*Gameplay.getView().getCamera().getOutputHeight() / (Block.DIM2/2)
             );
@@ -106,12 +111,12 @@ public class Minimap {
             scaleY*Gameplay.getView().getCamera().getOutputHeight() / (Block.DIM2/2)
         );
 
-        if (Gameplay.getController().getPlayer()!=null){
+        if (controller.getPlayer()!=null){
             View.getFont().drawString(
                     posX + scaleX * Gameplay.getView().getCamera().getOutputPosX() / Block.DIMENSION
                     + scaleX*Gameplay.getView().getCamera().getOutputWidth() / Block.DIMENSION,
                     posY + scaleY * Gameplay.getView().getCamera().getOutputPosY() / Block.DIM2
-                    + scaleY *2*(Gameplay.getController().getPlayer().getRelCoords()[2] * Block.DIM2)/ (float) (Block.DIMENSION)
+                    + scaleY *2*(controller.getPlayer().getRelCoords()[2] * Block.DIM2)/ (float) (Block.DIMENSION)
                     + scaleY*Gameplay.getView().getCamera().getOutputHeight() / Block.DIM2,
                     Gameplay.getView().getCamera().getRightBorder() +" | "+ Gameplay.getView().getCamera().getBottomBorder() ,
                     Color.black
@@ -120,27 +125,27 @@ public class Minimap {
             //player coord
             Wurfelengine.getGraphics().setColor(Color.blue);
             View.getFont().drawString(
-                posX + (Gameplay.getController().getPlayer().getRelCoords()[0] + (Gameplay.getController().getPlayer().getRelCoords()[1] %2==1?0.5f:0) ) * scaleX+20,
-                posY + Gameplay.getController().getPlayer().getRelCoords()[1] * scaleY - 50,
-                Gameplay.getController().getPlayer().getRelCoords()[0] +" | "+ Gameplay.getController().getPlayer().getRelCoords()[1] +" | "+ Gameplay.getController().getPlayer().getRelCoords()[2],
+                posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1] %2==1?0.5f:0) ) * scaleX+20,
+                posY + controller.getPlayer().getRelCoords()[1] * scaleY - 50,
+                controller.getPlayer().getRelCoords()[0] +" | "+ controller.getPlayer().getRelCoords()[1] +" | "+ controller.getPlayer().getRelCoords()[2],
                 Color.blue
             );
             
             //player coord
             Wurfelengine.getGraphics().setColor(Color.blue);
             View.getFont().drawString(
-                posX + (Gameplay.getController().getPlayer().getRelCoords()[0] + (Gameplay.getController().getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
-                posY + Gameplay.getController().getPlayer().getRelCoords()[1] * scaleY - 30,
-                Gameplay.getController().getPlayer().getRelCoords()[0] +" | "+ Gameplay.getController().getPlayer().getRelCoords()[1] +" | "+ Gameplay.getController().getPlayer().getRelCoords()[2],
+                posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
+                posY + controller.getPlayer().getRelCoords()[1] * scaleY - 30,
+                controller.getPlayer().getRelCoords()[0] +" | "+ controller.getPlayer().getRelCoords()[1] +" | "+ controller.getPlayer().getRelCoords()[2],
                 Color.blue
             );
 
 
             //player pos
             View.getFont().drawString(
-                posX + (Gameplay.getController().getPlayer().getRelCoords()[0] + (Gameplay.getController().getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
-                posY + Gameplay.getController().getPlayer().getRelCoords()[1] * scaleY - 10,
-                Gameplay.getController().getPlayer().getPos()[0] +" | "+ Gameplay.getController().getPlayer().getPos()[1] +" | "+ Gameplay.getController().getPlayer().getPos()[2],
+                posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
+                posY + controller.getPlayer().getRelCoords()[1] * scaleY - 10,
+                controller.getPlayer().getPos()[0] +" | "+ controller.getPlayer().getPos()[1] +" | "+ controller.getPlayer().getPos()[2],
                 Color.red
             );
         }

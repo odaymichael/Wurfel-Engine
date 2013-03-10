@@ -33,7 +33,7 @@ public class Gameplay extends BasicGameState {
     @Override 
     public void enter(GameContainer container, StateBasedGame game) throws SlickException{
         controller = new CustomGameController(container, game);
-        view = new View(container);
+        view = new View(container, controller);
     }    
 
     @Override
@@ -50,9 +50,9 @@ public class Gameplay extends BasicGameState {
      * 
      * @return
      */
-    public static Controller getController() {
-        return controller;
-    }
+//    public static Controller getController() {
+//        return controller;
+//    }
 
     /**
      * 

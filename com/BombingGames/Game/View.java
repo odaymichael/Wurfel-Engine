@@ -19,13 +19,16 @@ public class View {
     private Camera camera,camera2;
     private float equalizationScale;    
     private boolean goodgraphics = false;
+    private Controller controller;
+    private Minimap minimap;
     
     /**
      * Creates a View
      * @param gc
      * @throws SlickException
      */
-    public View(GameContainer gc) throws SlickException {
+    public View(GameContainer gc, Controller controller) throws SlickException {
+        this.controller = controller;
         // initialise the ttF font which CAUSES LONG LOADING TIME!!!
         //TrueTypeFont trueTypeFont;
 
@@ -41,7 +44,7 @@ public class View {
         Log.debug("Scale is:" + Float.toString(equalizationScale));
         
         camera = new Camera(
-            Gameplay.getController().getPlayer(),
+            controller.getPlayer(),
             0, //left
             0, //top
             gc.getScreenWidth(), //full width 
@@ -54,6 +57,7 @@ public class View {
 //            400, //full width 
 //            400//full height
 //        );
+        minimap = new Minimap(controller);
         
         Block.loadSheet();
      }
@@ -70,8 +74,8 @@ public class View {
         g.scale(equalizationScale, equalizationScale);
         
         //render HUD
-        if (Controller.getMap().getMinimap() != null)
-            Controller.getMap().getMinimap().render(
+        if (minimap != null)
+            minimap.render(
                 Wurfelengine.getGc().getScreenWidth() - 10,
                 10
                 ); 

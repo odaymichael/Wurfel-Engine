@@ -24,7 +24,6 @@ public class Map {
         
     //A list which has all current nine chunk coordinates in it.
     private int[][] coordlist = new int[9][2];
-    private Minimap minimap;
     
       
     /**
@@ -56,7 +55,6 @@ public class Map {
         
         recalcRequested = true;
        
-        minimap = new Minimap();
         Log.debug("...Finished creating the map");
     }
     
@@ -275,14 +273,6 @@ public class Map {
      */
     public int[] getChunkCoords(int pos) {
         return coordlist[pos];
-    }
-
-    /**
-     * The minimap is a 2d representation of the map.
-     * @return the minimap of this map
-     */
-    public Minimap getMinimap() {
-        return minimap;
     }
     
     /**
