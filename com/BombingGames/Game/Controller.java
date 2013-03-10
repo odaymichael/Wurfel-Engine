@@ -127,9 +127,7 @@ public class Controller {
      * @throws SlickException
      */
     public void update(int delta) throws SlickException{
-        if (delta > 200) Log.warn("delta is too high for a stable game. d: "+delta);
-         
-       //earth to right
+         //earth to right
         if (view.getCamera().getLeftBorder() <= 0)
            map.setCenter(3);
         else {       

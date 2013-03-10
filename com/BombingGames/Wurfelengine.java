@@ -41,7 +41,10 @@ public class Wurfelengine extends StateBasedGame {
         
         game = new AppGameContainer(new Wurfelengine());         
         game.setUpdateOnlyWhenVisible(true);
-         
+        //game.setIcon(VERSION);
+        
+        game.setMaximumLogicUpdateInterval(200);//delta can not be bigger than 200ms
+        
         //you can start the game with a custom resolution
         if (args.length == 0)
            game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), false);
