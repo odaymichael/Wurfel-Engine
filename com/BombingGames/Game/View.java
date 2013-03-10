@@ -13,22 +13,25 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class View {
+    /**
+     * The default render width.
+     * Wich means that every resolution smaller than this get's scaled down and every resolution bigger scaled up. 
+     */
     public static final int ENGINE_RENDER_WIDTH = 1920;
 
     private static AngelCodeFont baseFont;
     private Camera camera,camera2;
     private float equalizationScale;    
     private boolean goodgraphics = false;
-    private Controller controller;
     private Minimap minimap;
     
     /**
      * Creates a View
      * @param gc
+     * @param controller 
      * @throws SlickException
      */
     public View(GameContainer gc, Controller controller) throws SlickException {
-        this.controller = controller;
         // initialise the ttF font which CAUSES LONG LOADING TIME!!!
         //TrueTypeFont trueTypeFont;
 
@@ -47,8 +50,6 @@ public class View {
             controller.getPlayer(),
             0, //left
             0, //top
-            gc.getScreenWidth(), //full width 
-            gc.getScreenHeight()//full height
             gc.getWidth(), //full width 
             gc.getHeight()//full height
         );
@@ -73,7 +74,7 @@ public class View {
      */
     public void render(Graphics g) throws SlickException{
         camera.render();
-        camera2.render();
+        //camera2.render();
         
         g.scale(equalizationScale, equalizationScale);
         
@@ -84,7 +85,8 @@ public class View {
                 10
                 ); 
         
-        Gameplay.MSGSYSTEM.draw(); 
+        Gameplay.MSGSYSTEM.draw();
+        //g.scale(1/equalizationScale, 1/equalizationScale);
     }
        
 

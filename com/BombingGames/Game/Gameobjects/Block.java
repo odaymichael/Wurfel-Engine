@@ -83,9 +83,7 @@ public class Block extends GameObject {
      * Create a block. If the block needs to know it's position you have to use this method and give the coordinates.
      * @param id the id of the block
      * @param value the value of the block, which is like a sub-id
-     * @param x the x-coordinate
-     * @param y the y-coordinate
-     * @param z the z-coordinate
+     * @param coords the coordinates where the bloks should be created
      * @return the Block
      */
     public static Block getInstance(int id, int value, int[] coords){
@@ -206,6 +204,10 @@ public class Block extends GameObject {
         return hasSides;
     }   
     
+    /**
+     * The block hides the pst block when it has sides and is not transparent (like normal block)
+     * @return true when hiding the past Block
+     */
     public boolean hidingPastBlock(){
         return (hasSides && ! isTransparent());
     }

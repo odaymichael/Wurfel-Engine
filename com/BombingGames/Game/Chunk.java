@@ -19,7 +19,13 @@ public class Chunk {
      * The number of the mapgenerator used.
      */
     public static final int MAPGENERATOR = 4;
+    /**
+     * The suffix of a chunk file.
+     */
     protected static final String CHUNKFILESUFFIX = "wec";
+    /**
+     * The suffix of the metafile
+     */
     protected static final String METAFILESUFFIX = "wem";
     
     private static int blocksX = 10;

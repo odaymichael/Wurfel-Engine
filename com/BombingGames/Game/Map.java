@@ -4,7 +4,6 @@ import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.MainMenu.MainMenuState;
 import java.util.ArrayList;
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -233,6 +232,7 @@ public class Map {
     /**
      * When the recalc was requested it calls raytracing and light recalculing. This method should be called every update.
      * Request a recalc with <i>reuqestRecalc()</i>. 
+     * @param camera 
      */
     public void recalcIfRequested(Camera camera){
         if (recalcRequested) {

@@ -6,7 +6,7 @@ import com.BombingGames.Wurfelengine;
 import org.newdawn.slick.Color;
 
 /**
- *
+ *A minimap is a view that draws the map from top in a small window.
  * @author Benedikt
  */
 public class Minimap {
@@ -16,6 +16,11 @@ public class Minimap {
     private Controller controller;
     private Camera camera;
 
+    /**
+     * Create a camera
+     * @param controller
+     * @param camera the camera wich should be represented on the minimap
+     */
     public Minimap(Controller controller, Camera camera) {
         this.controller = controller;
         this.camera = camera;

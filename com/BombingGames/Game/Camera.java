@@ -33,7 +33,7 @@ public class Camera {
     
    /**
      * The camera locks to the player by default. It can be changed with <i>focusblock()</i>. Screen size does refer to the output of the camera not the real size on the display.
-     * @param focusblock the block in the focus
+     * @param focus 
      * @param x the position of the output
      * @param y the position of the output
      * @param width the width of the output. it can be different than the output on the display because it gets scaled later again.

@@ -15,8 +15,9 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
     private int[] coords;
 
     /**
-     * 
+     * Create a explosive barreld
      * @param id
+     * @param coords  
      */
     protected ExplosiveBarrel(int id, int[] coords) {
         super(id);

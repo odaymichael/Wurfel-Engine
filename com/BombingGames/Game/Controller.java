@@ -186,10 +186,18 @@ public class Controller {
         map.getEntitylist().add(player);
     }
 
+    /**
+     * Returns the view.
+     * @return
+     */
     public View getView() {
         return view;
     }
 
+    /**
+     * Set the view.
+     * @param view
+     */
     public void setView(View view) {
         this.view = view;
     }
