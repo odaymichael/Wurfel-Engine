@@ -40,16 +40,7 @@ public class Block extends GameObject {
      */
     protected Block(int id){
         super(id);
-    }
-    
-    /**
-     * 
-     * @param id
-     * @param value
-     */
-    protected Block(int id, int value){
-        super(id, value);
-    }
+    } 
     
     
     /**

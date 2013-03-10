@@ -191,16 +191,6 @@ public abstract class GameObject {
     }
 
     /**
-     * Creates an object. Use getInterface().
-     * @param id
-     * @param value
-     */
-    protected GameObject(int id, int value) {
-        this.id = id;
-        this.value = value;
-    }
-
-    /**
      * 
      * @param id
      * @param value

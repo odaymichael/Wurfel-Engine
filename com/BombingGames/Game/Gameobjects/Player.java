@@ -1,6 +1,5 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Camera;
 import com.BombingGames.Game.Controller;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
@@ -50,7 +49,7 @@ public class Player extends AbstractCharacter{
                 if (dir[0] <  0.5){
                     //y
                     if (dir[1]<0){
-                            setValue(4);//north
+                        setValue(4);//north
                     }else{
                         setValue(8);//south
                          }

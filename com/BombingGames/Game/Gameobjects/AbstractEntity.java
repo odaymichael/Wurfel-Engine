@@ -16,7 +16,6 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      */
     protected AbstractEntity(int id){
         super(id);
-        setVisible(true);
     }
     
     /**
@@ -53,6 +52,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
                     break;
         }
         entity.setValue(value);
+        entity.setVisible(true);
         return entity;
     }
 }
