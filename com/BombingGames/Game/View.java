@@ -49,6 +49,8 @@ public class View {
             0, //top
             gc.getScreenWidth(), //full width 
             gc.getScreenHeight()//full height
+            gc.getWidth(), //full width 
+            gc.getHeight()//full height
         );
         
         camera2 = new Camera(
