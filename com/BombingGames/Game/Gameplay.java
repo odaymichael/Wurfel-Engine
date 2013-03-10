@@ -17,8 +17,8 @@ public class Gameplay extends BasicGameState {
      */
     public static final MsgSystem MSGSYSTEM = new MsgSystem();    
     
-    private static View view = null;
-    private static Controller controller = null;
+    private View view = null;
+    private Controller controller = null;
      
     
     @Override
@@ -34,6 +34,7 @@ public class Gameplay extends BasicGameState {
     public void enter(GameContainer container, StateBasedGame game) throws SlickException{
         controller = new CustomGameController(container, game);
         view = new View(container, controller);
+        controller.setView(view);
     }    
 
     @Override
@@ -45,22 +46,4 @@ public class Gameplay extends BasicGameState {
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         view.render(g);
     }
-
-    /**
-     * 
-     * @return
-     */
-//    public static Controller getController() {
-//        return controller;
-//    }
-
-    /**
-     * 
-     * @return
-     */
-    public static View getView() {
-        return view;
-    }
-    
-    
 }

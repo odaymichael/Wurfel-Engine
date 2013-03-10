@@ -56,8 +56,8 @@ public class CustomGameController extends Controller {
 
             //good graphics
             if (input.isKeyPressed(Input.KEY_G)) {
-                Gameplay.getView().setGoodgraphics(!Gameplay.getView().hasGoodGraphics());
-                Gameplay.MSGSYSTEM.add("Good Graphics is now "+Gameplay.getView().hasGoodGraphics());
+                getView().setGoodgraphics(!getView().hasGoodGraphics());
+                Gameplay.MSGSYSTEM.add("Good Graphics is now "+getView().hasGoodGraphics());
             }
 
             //toggle getCamera()
@@ -68,7 +68,7 @@ public class CustomGameController extends Controller {
 
             //reset zoom
             if (input.isKeyPressed(Input.KEY_Z)) {
-                Gameplay.getView().getCamera().setZoom(1);
+                getView().getCamera().setZoom(1);
                 Gameplay.MSGSYSTEM.add("Zoom reset");
             }        
 
@@ -104,9 +104,9 @@ public class CustomGameController extends Controller {
             gc.getInput().consumeEvent();
             
             zoom = zoom + change/1000f;
-            Gameplay.getView().getCamera().setZoom(zoom);
+            getView().getCamera().setZoom(zoom);
             
-            Gameplay.MSGSYSTEM.add("Zoom: "+Gameplay.getView().getCamera().getZoom());   
+            Gameplay.MSGSYSTEM.add("Zoom: "+getView().getCamera().getZoom());   
         }
 
         @Override
@@ -127,8 +127,8 @@ public class CustomGameController extends Controller {
         public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 //            Log.info(
 //                    Double.toString(Math.atan(
-//                        Math.abs(Gameplay.getView().getCamera().getCenterofBlock(getPlayer().getCoordX(), getPlayer().getCoordY(), getPlayer().getCoordZ())[1 ]- newy * Gameplay.getView().getEqualizationScale()) /
-//                        (float) Math.abs(Gameplay.getView().getCamera().getCenterofBlock(getPlayer().getCoordX(), getPlayer().getCoordY(), getPlayer().getCoordZ())[0] - newx * Gameplay.getView().getEqualizationScale())
+//                        Math.abs(getView().getCamera().getCenterofBlock(getPlayer().getCoordX(), getPlayer().getCoordY(), getPlayer().getCoordZ())[1 ]- newy * getView().getEqualizationScale()) /
+//                        (float) Math.abs(getView().getCamera().getCenterofBlock(getPlayer().getCoordX(), getPlayer().getCoordY(), getPlayer().getCoordZ())[0] - newx * getView().getEqualizationScale())
 //                    )*180/Math.PI)+"°"
 //                );
         }
@@ -139,20 +139,20 @@ public class CustomGameController extends Controller {
             gc.getInput().consumeEvent();
             
             if (Chunk.MAPGENERATOR == 4){
-                int coords[] = Gameplay.getView().ScreenToGameCoords(newx,newy);
+                int coords[] = getView().ScreenToGameCoords(newx,newy);
                 if (gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
                     if (coords[2] < Map.getBlocksZ()-1) coords[2]++; 
                     setMapDataSafe(coords, Block.getInstance(71, 0, coords));
-                    Gameplay.getView().getCamera().traceRayTo(coords, true);
+                    getView().getCamera().traceRayTo(coords, true);
                 }else {
                    if (getMapDataSafe(coords) instanceof ExplosiveBarrel)
                        ((ExplosiveBarrel) getMapDataSafe(coords)).explode();
                 }
             }else{
-                int coords[] = Gameplay.getView().ScreenToGameCoords(newx,newy);
+                int coords[] = getView().ScreenToGameCoords(newx,newy);
                 if (coords[2] < Map.getBlocksZ()-1) coords[2]++; 
                 setMapDataSafe(coords, Block.getInstance(1));
-                Gameplay.getView().getCamera().traceRayTo(coords, true);
+                getView().getCamera().traceRayTo(coords, true);
             }
         }
 

@@ -15,8 +15,8 @@ import org.newdawn.slick.util.Log;
  */
 public class Controller {
     private static Map map;
-
-    private AbstractCharacter player;   
+    private AbstractCharacter player;
+    private View view;
     
     /**
      * Constructor is called when entering the gamemode.
@@ -130,25 +130,25 @@ public class Controller {
         if (delta > 200) Log.warn("delta is too high for a stable game. d: "+delta);
          
        //earth to right
-        if (Gameplay.getView().getCamera().getLeftBorder() <= 0)
+        if (view.getCamera().getLeftBorder() <= 0)
            map.setCenter(3);
         else {       
             //earth to the left
-            if (Gameplay.getView().getCamera().getRightBorder() >= Map.getBlocksX()-1) 
+            if (view.getCamera().getRightBorder() >= Map.getBlocksX()-1) 
                 map.setCenter(5); 
         }
         
        //scroll up, earth down            
-        if (Gameplay.getView().getCamera().getTopBorder()  <= 0) {
+        if (view.getCamera().getTopBorder()  <= 0) {
             map.setCenter(1);
         } else {
             //scroll down, earth up
-            if (Gameplay.getView().getCamera().getBottomBorder() >= Map.getBlocksY()-1)
+            if (view.getCamera().getBottomBorder() >= Map.getBlocksY()-1)
                 map.setCenter(7);
         }
         
         
-        Gameplay.getView().getCamera().update();
+        view.getCamera().update();
 
         
         //update every block on the map
@@ -163,7 +163,7 @@ public class Controller {
             entity.update(delta);
         
         //recalculates the light if requested
-        map.recalcIfRequested();      
+        map.recalcIfRequested(view.getCamera());      
        
         //update the log
         Gameplay.MSGSYSTEM.update(delta);
@@ -185,6 +185,15 @@ public class Controller {
         this.player = player;
         map.getEntitylist().add(player);
     }
+
+    public View getView() {
+        return view;
+    }
+
+    public void setView(View view) {
+        this.view = view;
+    }
+    
 
     /**
      * Get the neighbour block to a side

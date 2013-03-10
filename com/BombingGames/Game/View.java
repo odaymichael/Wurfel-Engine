@@ -50,14 +50,16 @@ public class View {
             gc.getScreenWidth(), //full width 
             gc.getScreenHeight()//full height
         );
-//        camera2 = new Camera(
-//            Gameplay.getController().getPlayer(),
-//            800, //left
-//            0, //top
-//            400, //full width 
-//            400//full height
-//        );
-        minimap = new Minimap(controller);
+        
+        camera2 = new Camera(
+            new int[]{0,0,0},
+            800, //left
+            0, //top
+            400, //full width 
+            400//full height
+        );
+        
+        minimap = new Minimap(controller, camera);
         
         Block.loadSheet();
      }
@@ -69,7 +71,7 @@ public class View {
      */
     public void render(Graphics g) throws SlickException{
         camera.render();
-        //camera2.render();
+        camera2.render();
         
         g.scale(equalizationScale, equalizationScale);
         
@@ -106,7 +108,7 @@ public class View {
      * @return game coordinate
      */
     public int ScreenXtoGame(int x){
-        return (int) ((x + Gameplay.getView().getCamera().getOutputPosX()) / Gameplay.getView().getCamera().getTotalScale());
+        return (int) ((x + getCamera().getOutputPosX()) / getCamera().getTotalScale());
     }
     
    /**
@@ -115,7 +117,7 @@ public class View {
      * @return game coordinate
      */
     public int ScreenYtoGame(int y){
-        return (int) ((y / Gameplay.getView().getCamera().getTotalScale() + Gameplay.getView().getCamera().getOutputPosY()) * 2);
+        return (int) ((y / getCamera().getTotalScale() + getCamera().getOutputPosY()) * 2);
     }
     
     /**

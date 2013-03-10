@@ -1,8 +1,5 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Camera;
-import com.BombingGames.Game.Gameplay;
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 
@@ -265,16 +262,16 @@ public class Block extends GameObject {
     protected void renderSide(int[] coords, int sidenumb){
         Image image = getBlockSprite(getId(), getValue(), sidenumb);
         
-        if (Gameplay.getView().hasGoodGraphics()){
-                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
-        
-            if (sidenumb == 0){
-                int brightness = getLightlevel() * 255 / 100;
-                new Color(brightness,brightness,brightness).bind();
-            } else {
-                Color.black.bind();
-            }
-        }
+//        if (Gameplay.getView().hasGoodGraphics()){
+//                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
+//        
+//            if (sidenumb == 0){
+//                int brightness = getLightlevel() * 255 / 100;
+//                new Color(brightness,brightness,brightness).bind();
+//            } else {
+//                Color.black.bind();
+//            }
+        //}
         
         //calc  brightness
         float brightness = getLightlevel() / 50f;

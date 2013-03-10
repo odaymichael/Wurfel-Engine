@@ -234,9 +234,9 @@ public class Map {
      * When the recalc was requested it calls raytracing and light recalculing. This method should be called every update.
      * Request a recalc with <i>reuqestRecalc()</i>. 
      */
-    public void recalcIfRequested(){
+    public void recalcIfRequested(Camera camera){
         if (recalcRequested) {
-            Gameplay.getView().getCamera().raytracing();
+            camera.raytracing();
             calc_light();
             recalcRequested = false;
         }
@@ -248,7 +248,7 @@ public class Map {
      */
     public void render(Camera camera) {
         //if (Gameplay.getController().hasGoodGraphics()) Block.getSpritesheet().bind();
-        if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
+        //if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
         Block.getSpritesheet().startUse();
         //render vom bottom to top
@@ -263,7 +263,7 @@ public class Map {
         }
             
        Block.getSpritesheet().endUse(); 
-       if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
+      // if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
     }
 
    /**
