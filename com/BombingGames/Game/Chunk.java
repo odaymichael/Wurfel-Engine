@@ -41,7 +41,7 @@ public class Chunk {
         for (int x=0; x < blocksX; x++)
             for (int y=0; y < blocksY; y++)
                 for (int z=0; z < blocksZ; z++)
-                    data[x][y][z] = Block.getInstance();
+                    data[x][y][z] = Block.getInstance(0);
     }
     
     /**

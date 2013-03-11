@@ -42,15 +42,6 @@ public class Block extends GameObject {
         super(id);
     } 
     
-    
-    /**
-     * Creates an air block.
-     * @return a block of air.
-     */
-    public static Block getInstance(){
-        return getInstance(0,0,null);
-    }
-    
     /**
      *  Create a block. If the block needs to know it's position you have to use <i>getInstance(int id, int value,int x, int y, int z)</i>
      * @param id the block's id

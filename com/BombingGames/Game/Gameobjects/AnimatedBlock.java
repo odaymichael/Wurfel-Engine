@@ -1,7 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
 /**
- *A block who has an animation
+ *A block who has an animation.
  * @author Benedikt
  */
 public class AnimatedBlock extends Block implements Animatable{
