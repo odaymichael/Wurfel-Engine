@@ -253,7 +253,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
 
     /**
      * Jump with a specific speed
-     * @param velo 
+     * @param velo the velocity in m/s
      */
     public void jump(float velo) {
         if (isStanding()) dir[2] = velo;
