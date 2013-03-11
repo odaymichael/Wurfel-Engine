@@ -3,7 +3,7 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.Game.Controller;
 
 /**
- *An entitiy wich is animated.
+ *An entity wich is animated.
  * @author Benedikt
  */
 public class AnimatedEntity extends AbstractEntity implements Animatable{
