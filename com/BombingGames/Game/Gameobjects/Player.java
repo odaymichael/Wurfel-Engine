@@ -29,7 +29,7 @@ public class Player extends AbstractCharacter{
      */
     @Override
     public void jump() {
-        super.jump(8);
+        super.jump(5);
     }
     
      @Override
