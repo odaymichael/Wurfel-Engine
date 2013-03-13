@@ -7,7 +7,6 @@ import com.BombingGames.MainMenu.MainMenuState;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.Log;
 
 /**
  *A controller manages the map and the game data.
@@ -127,24 +126,19 @@ public class Controller {
      * @throws SlickException
      */
     public void update(int delta) throws SlickException{
-         //earth to right
+        //earth to right
         if (view.getCamera().getLeftBorder() <= 0)
            map.setCenter(3);
-        else {       
-            //earth to the left
+        else //earth to the left
             if (view.getCamera().getRightBorder() >= Map.getBlocksX()-1) 
-                map.setCenter(5); 
-        }
+                map.setCenter(5);
         
        //scroll up, earth down            
-        if (view.getCamera().getTopBorder()  <= 0) {
+        if (view.getCamera().getTopBorder() <= 0)
             map.setCenter(1);
-        } else {
-            //scroll down, earth up
+        else //scroll down, earth up
             if (view.getCamera().getBottomBorder() >= Map.getBlocksY()-1)
                 map.setCenter(7);
-        }
-        
         
         view.getCamera().update();
 
