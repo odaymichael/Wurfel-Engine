@@ -15,7 +15,7 @@ import org.newdawn.slick.util.Log;
 public class View {
     /**
      * The default render width.
-     * Wich means that every resolution smaller than this get's scaled down and every resolution bigger scaled up. 
+     * Every resolution smaller than this get's scaled down and every resolution bigger scaled up. 
      */
     public static final int ENGINE_RENDER_WIDTH = 1920;
 
