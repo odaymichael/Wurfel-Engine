@@ -447,12 +447,10 @@ public class Map {
      * @param coords
      * @return 
      */
-    public int[] absoluteToRelativeCoords(int[] coords){
-        return new int[]{
-            coords[0] - getChunkCoords(4)[0]  * Chunk.getBlocksX(),
-            coords[1] - getChunkCoords(4)[1] * Chunk.getBlocksY(),
-            coords[2]
-        };
+    public int[] absToRelCoords(int[] coords){
+        coords[0] -= getChunkCoords(4)[0] * Chunk.getBlocksX();
+        coords[1] -= getChunkCoords(4)[1] * Chunk.getBlocksY();        
+        return coords;
     }
 
 
