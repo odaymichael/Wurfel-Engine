@@ -62,24 +62,4 @@ public class AnimatedEntity extends AbstractEntity implements Animatable{
     public void stop() {
         running = false;
     }
-
-    @Override
-    public int[] getAbsCoords() {
-      return coords; 
-    }
-
-    @Override
-    public void setAbsCoords(int[] coords) {
-        this.coords = coords;
-    }
-
-    @Override
-    public int[] getRelCoords() {
-        return Controller.getMap().absoluteToRelativeCoords(coords);
-    }
-
-    @Override
-    public void addToAbsCoords(int x, int y, int z) {
-        setAbsCoords(new int[]{getAbsCoords()[0]+x, getAbsCoords()[1]+y, getAbsCoords()[2]+z});
-    }
 }

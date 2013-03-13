@@ -1,6 +1,5 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
@@ -8,9 +7,7 @@ import org.newdawn.slick.Sound;
  *The Player is a character who can walk.
  * @author Benedikt
  */
-public class Player extends AbstractCharacter{
-   private int[] coords;
-   
+public class Player extends AbstractCharacter{   
     /**
      * Creates a player. The parameters are for the lower half of the player. The constructor automatically creates a block on top of it.
      * @param id 
@@ -68,25 +65,5 @@ public class Player extends AbstractCharacter{
             }
         }
         super.render(coords);
-    }
-
-    @Override
-    public int[] getAbsCoords() {
-      return coords; 
-    }
-
-    @Override
-    public void setAbsCoords(int[] coords) {
-        this.coords = coords;
-    }
-
-    @Override
-    public int[] getRelCoords() {
-        return Controller.getMap().absoluteToRelativeCoords(coords);
-    }
-
-    @Override
-    public void addToAbsCoords(int x, int y, int z) {
-        setAbsCoords(new int[]{getAbsCoords()[0]+x, getAbsCoords()[1]+y, getAbsCoords()[2]+z});
     }
 }

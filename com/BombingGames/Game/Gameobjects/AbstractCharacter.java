@@ -4,6 +4,7 @@ import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Map;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.util.Log;
 
 /**
  *A character is an entity wich can walk around.
@@ -51,7 +52,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
      * @param down move down?
      * @param left move left?
      *  @param right move right?
-     * @param walkingspeed the higher the speed the bigger the steps
+     * @param walkingspeed the higher the speed the bigger the steps. Should be in m/s.
      *  @param delta time which has passed since last call
      * @throws SlickException
      */
@@ -70,7 +71,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
             if (right) dir[0] = 1;
         
             //scale that the velocity vector is always an unit vector (only x and y)
-            double vectorLenght = Math.sqrt(dir[0]*dir[0]+dir[1]*dir[1]);
+            double vectorLenght = Math.sqrt(dir[0]*dir[0] + dir[1]*dir[1]);
             dir[0] /= vectorLenght;
             dir[1] /= vectorLenght;
             //veloZ /= vectorLenght;
@@ -136,26 +137,24 @@ public abstract class AbstractCharacter extends AbstractEntity {
                 setPos(1, newy);
                 
                 //track the coordiante change, if there is one
-                int sidennumb = getSideNumb();
-                if (sidennumb != 8){                
-                    switch(sidennumb) {
-                        case 0:
-                        case 1:
-                                makeCoordinateStep(1, -1);
-                                break;
-                        case 2:    
-                        case 3:
-                                makeCoordinateStep(1, 1);
-                                break;
-                        case 4:
-                        case 5:
-                                makeCoordinateStep(-1, 1);
-                                break;
-                        case 6:
-                        case 7:
-                                makeCoordinateStep(-1, -1);
-                                break;    
-                    }
+                int sidennumb = getSideNumb();              
+                switch(sidennumb) {
+                    case 0:
+                    case 1:
+                            makeCoordinateStep(1, -1);
+                            break;
+                    case 2:    
+                    case 3:
+                            makeCoordinateStep(1, 1);
+                            break;
+                    case 4:
+                    case 5:
+                            makeCoordinateStep(-1, 1);
+                            break;
+                    case 6:
+                    case 7:
+                            makeCoordinateStep(-1, -1);
+                            break;    
                 }
             }
         }
@@ -170,12 +169,16 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     private void makeCoordinateStep(int x, int y){
         //mirror the position around the center
-        setPos(1, getPos()[1] -1*y*Block.DIM2);
-        setPos(0, getPos()[0] -1*x*Block.DIM2);
+        setPos(
+            new float[]{
+                getPos()[0] -x*Block.DIM2,
+                getPos()[1] -y*Block.DIM2
+            }
+        );
         
         
         addToAbsCoords(0, y, 0);
-        if (x<0){
+        if (x < 0){
             if (getRelCoords()[1] % 2 == 1) addToAbsCoords(-1, 0, 0);
         } else {
             if (getRelCoords()[1] % 2 == 0) addToAbsCoords(1, 0, 0);
@@ -188,45 +191,24 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     @Override
     public void update(int delta) { 
-        //calculate movement
+        float oldHeight = getHeight();
+        
+        //calculate new height
         float t = delta/1000f; //t = time in s
         dir[2] += -Map.GRAVITY*t; //in m/s
-        float newPosZ = getPos()[2] + dir[2] * Block.GAMEDIMENSION * t; //in m
-
+        setHeight(getHeight() + dir[2] * GAMEDIMENSION * t); //in m
+        
+        //vertical colission
         //land if standing in or under 0-level or there is an obstacle
         if (dir[2] <= 0
-            && newPosZ <= 0
-            && (getRelCoords()[2] == 0 || Controller.getMapData(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).isObstacle())
+            && (getHeight() <= 0 || onGround())
         ) {
             //stop sound
             if (fallingSound != null) fallingSound.stop();
             dir[2] = 0;
-            newPosZ = 0;
-        }
-        
-        //set position to calculated new position
-        setPos(2, newPosZ);
-        
-        //coordinate switch
-        //down
-        if (getPos()[2] < 0
-            && getRelCoords()[2] > 0
-            && ! Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).isObstacle()){
-            
-            //coord switch
-            addToAbsCoords(0, 0, -1);
-            setPos(2, getPos()[2] + Block.GAMEDIMENSION);
-        } else {
-            //up
-            if (! Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]+2).isObstacle()) {
-                if (getPos()[2] >= Block.GAMEDIMENSION
-                    && getRelCoords()[2]+1 < Map.getBlocksZ()
-                    ){
-                    //coord switch
-                    addToAbsCoords(0, 0, 1);
-                    setPos(2, getPos()[2] - Block.GAMEDIMENSION);
-                }
-            } else dir[2] = 0;
+            //newPosZ = 0;
+            //set coord
+            setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION);
         }
         
         //should the runningsound be played?
@@ -238,25 +220,18 @@ public abstract class AbstractCharacter extends AbstractEntity {
         //should the fallingsound be played?
         if (fallingSound != null
             && dir[2] < -1
-            &&! fallingSound.playing()
+            && ! fallingSound.playing()
            )
             fallingSound.play();
     }
    
-    /**
-     * Returns true if the player is standing on ground.
-     * @return
-     */
-    public boolean isStanding(){
-       return (dir[2] == 0 && getPos()[2] == 0);
-    }
 
     /**
      * Jump with a specific speed
      * @param velo the velocity in m/s
      */
     public void jump(float velo) {
-        if (isStanding()) dir[2] = velo;
+        if (onGround()) dir[2] = velo;
     }
     
     /**
@@ -292,7 +267,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
             this.controls = controls;
     }
     
-    /**
+   /**
      * Returns the Controls
      * @return either "arrows" or "WASD".
      */

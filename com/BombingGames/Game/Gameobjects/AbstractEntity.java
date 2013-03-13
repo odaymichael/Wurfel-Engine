@@ -1,5 +1,6 @@
 package com.BombingGames.Game.Gameobjects;
 
+import com.BombingGames.Game.Controller;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.SlickException;
@@ -9,6 +10,9 @@ import org.newdawn.slick.SlickException;
  * @author Benedikt
  */
 public abstract class AbstractEntity extends GameObject implements IsSelfAware {
+   private int[] coords;//the z-field is used as height in px not in coordinates. setting and getting the coordaintes should convert it.
+    private float height;
+   
     /**
      * Create an abstractEntity. You should use Block.getInstance(int) 
      * @param id 
@@ -54,5 +58,65 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         entity.setValue(value);
         entity.setVisible(true);
         return entity;
+    }
+    
+    //IsSelfAware implementation
+    @Override
+    public int[] getAbsCoords() {
+      return new int[]{coords[0],coords[1],(int) (height/GAMEDIMENSION)};
+    }
+
+    @Override
+    public void setAbsCoords(int[] coords) {
+        this.coords = new int[]{coords[0], coords[1]};
+        if (coords.length >= 3) this.height = coords[2]*GAMEDIMENSION;
+    }
+
+    @Override
+    public int[] getRelCoords() {
+        return Controller.getMap().absToRelCoords(getAbsCoords());
+    }
+
+    @Override
+    public void addToAbsCoords(int x, int y, int z) {
+        height += z;
+        setAbsCoords(new int[]{getAbsCoords()[0]+x, getAbsCoords()[1]+y});
+    }
+
+    //overrides
+    @Override
+    public void setPos(int i, float value) {
+        if (i==2) value = height % GAMEDIMENSION;
+        super.setPos(i, value);
+    }
+
+    /**
+     * if you want to set the height (z-axis) use setHeight.
+     * @param pos 
+     */
+    @Override
+    public void setPos(float[] pos) {
+        super.setPos(new float[]{pos[0], pos[1], height % GAMEDIMENSION});
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+        super.setPos(2, height % GAMEDIMENSION);
+    }
+    
+    /**
+     * Is the entity laying/standing on the ground?
+     * @return true when on the ground
+     */
+    public boolean onGround(){
+        return Controller.getMapData(
+                    Controller.getMap().absToRelCoords(
+                        new int[]{coords[0],coords[1],(int) ((height-1)/GAMEDIMENSION)}
+                    )
+                ).isObstacle();
     }
 }
