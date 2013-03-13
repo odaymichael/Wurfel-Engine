@@ -41,6 +41,8 @@ public class Minimap {
             z = controller.getPlayer().getRelCoords()[2]-1;
         else z = 0;
         
+        Wurfelengine.getGraphics().setAntiAlias(false);
+        
         //render a chunk
         for (int pos=0; pos < 9; pos++){  
             for (int x = Chunk.getBlocksX()*(pos%3); x < Chunk.getBlocksX() * (pos%3+1); x++){
@@ -128,15 +130,6 @@ public class Minimap {
                     camera.getRightBorder() +" | "+ camera.getBottomBorder() ,
                     Color.black
                 );
-
-            //player coord
-            Wurfelengine.getGraphics().setColor(Color.blue);
-            View.getFont().drawString(
-                posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1] %2==1?0.5f:0) ) * scaleX+20,
-                posY + controller.getPlayer().getRelCoords()[1] * scaleY - 50,
-                controller.getPlayer().getRelCoords()[0] +" | "+ controller.getPlayer().getRelCoords()[1] +" | "+ controller.getPlayer().getRelCoords()[2],
-                Color.blue
-            );
             
             //player coord
             Wurfelengine.getGraphics().setColor(Color.blue);
@@ -152,7 +145,7 @@ public class Minimap {
             View.getFont().drawString(
                 posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
                 posY + controller.getPlayer().getRelCoords()[1] * scaleY - 10,
-                controller.getPlayer().getPos()[0] +" | "+ controller.getPlayer().getPos()[1] +" | "+ controller.getPlayer().getPos()[2],
+                (int) controller.getPlayer().getPos()[0] +" | "+ (int) controller.getPlayer().getPos()[1] +" | "+ (int) controller.getPlayer().getPos()[2],
                 Color.red
             );
         }
