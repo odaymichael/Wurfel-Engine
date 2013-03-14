@@ -1,13 +1,10 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
-
 /**
  *An entity wich is animated.
  * @author Benedikt
  */
 public class AnimatedEntity extends AbstractEntity implements Animatable{
-    private int[] coords;
     private int[] animationsduration;
     private int counter = 0;
     private boolean running;
@@ -22,9 +19,8 @@ public class AnimatedEntity extends AbstractEntity implements Animatable{
      * @param loop Set to true when it should loop, when false it stops after one time.
      * @param animationsinformation  
      */
-    protected AnimatedEntity(int id, int value, int[] coords, int[] animationsinformation, boolean autostart, boolean loop){
+    protected AnimatedEntity(int id, int value, int[] animationsinformation, boolean autostart, boolean loop){
         super(id);
-        this.coords = coords;
         this.animationsduration = animationsinformation;
         this.running = autostart;
         this.loop = loop;

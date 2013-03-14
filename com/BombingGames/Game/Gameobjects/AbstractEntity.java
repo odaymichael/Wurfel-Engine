@@ -12,7 +12,7 @@ import org.newdawn.slick.SlickException;
  */
 public abstract class AbstractEntity extends GameObject implements IsSelfAware {
    private int[] coords;//the z-field is used as height in px not in coordinates. setting and getting the coordaintes should convert it.
-    private float height;
+   private float height;
    
     /**
      * Create an abstractEntity. You should use Block.getInstance(int) 
@@ -27,7 +27,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * Create an entity.
      * @param id the object id of the entity.
      * @param value The value at start.
-     * @param coords the coordiantes where the entity is.
+     * @param coords the relative coordiantes where the entity is.
      * @return the entity.
      */
     public static AbstractEntity getInstance(int id, int value, int[] coords){
@@ -49,13 +49,15 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
                     entity = new AnimatedEntity(
                                 id,
                                 value,
-                                coords,
                                 new int[]{700,2000},
                                 true,
                                 false
                             );//explosion
                     break;
         }
+        
+        entity.coords = coords;
+        entity.setHeight(coords[2]*GAMEDIMENSION);
         entity.setValue(value);
         entity.setVisible(true);
         return entity;
@@ -64,7 +66,9 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     //IsSelfAware implementation
     @Override
     public int[] getAbsCoords() {
-      return new int[]{coords[0],coords[1],(int) (height/GAMEDIMENSION)};
+        int z = (int) (height/GAMEDIMENSION);
+        if (z >= Map.getBlocksZ()) z = Map.getBlocksZ()-1;
+        return new int[]{coords[0], coords[1], z};
     }
 
     @Override
