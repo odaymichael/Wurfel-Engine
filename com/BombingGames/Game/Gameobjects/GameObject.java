@@ -271,7 +271,7 @@ public abstract class GameObject {
     }
 
     /**
-     * Returns the field-number where the coordiantes are in in relation to the current Block. Counts clockwise startin with the top 0.
+     * Returns the field-number where the coordiantes are inside in relation to the current Block. Counts clockwise startin with the top 0.
      * If you want to get the neighbour you have to use a SelfAwareBlock and the method getNeighbourBlock
      * 701
      * 682
