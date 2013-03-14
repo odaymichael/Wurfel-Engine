@@ -217,7 +217,6 @@ public abstract class GameObject {
     public abstract void update(int delta);
     
 
-
     /**
      * Returns the spritesheet used for rendering
      * @return the spritesheet used by the objects

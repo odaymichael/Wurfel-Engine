@@ -1,6 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.SlickException;
@@ -113,9 +114,11 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * @return true when on the ground
      */
     public boolean onGround(){
+        int z = (int) ((height-1)/GAMEDIMENSION);
+        if (z > Map.getBlocksZ()-1) z = Map.getBlocksZ()-1;
         return Controller.getMapData(
                     Controller.getMap().absToRelCoords(
-                        new int[]{coords[0],coords[1],(int) ((height-1)/GAMEDIMENSION)}
+                        new int[]{coords[0],coords[1],z}
                     )
                 ).isObstacle();
     }

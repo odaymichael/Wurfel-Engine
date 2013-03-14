@@ -4,7 +4,6 @@ import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Map;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
-import org.newdawn.slick.util.Log;
 
 /**
  *A character is an entity wich can walk around.
@@ -56,9 +55,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
      *  @param delta time which has passed since last call
      * @throws SlickException
      */
-    public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed, int delta) throws SlickException {
-        //if the player is walking then move him
-        if (up || down || left || right) {
+    public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed) throws SlickException {
             speed = walkingspeed;
             
             //update the movement vector
@@ -69,97 +66,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
             if (down)  dir[1] = 1;
             if (left)  dir[0] = -1;
             if (right) dir[0] = 1;
-        
-            //scale that the velocity vector is always an unit vector (only x and y)
-            double vectorLenght = Math.sqrt(dir[0]*dir[0] + dir[1]*dir[1]);
-            dir[0] /= vectorLenght;
-            dir[1] /= vectorLenght;
-            //veloZ /= vectorLenght;
-            
-            //colision check
-            float[] oldpos = getPos();
-            //calculate new position
-            float newx = getPos()[0] + delta * speed * dir[0];
-            float newy = getPos()[1] + delta * speed * dir[1];
-            
-            //check if position is okay
-            boolean validmovement = true;
-            
-            //check for movement in x
-            //top corner
-            int neighbourNumber = Block.getSideID(newx, newy - Block.DIM2); 
-            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
-                validmovement = false;
-            //bottom corner
-            neighbourNumber = Block.getSideID(newx, newy + Block.DIM2); 
-            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
-                validmovement = false;
-            
-            //find out the direction of the movement
-            if (oldpos[0] - newx > 0) {
-                //check left corner
-                neighbourNumber = Block.getSideID(newx - Block.DIM2, newy);
-                if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
-                    validmovement = false;
-            } else {
-                //check right corner
-                neighbourNumber = Block.getSideID(newx + Block.DIM2, newy);
-                if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
-                    validmovement = false;
-            }
-            
-            //check for movement in y
-            //left corner
-            neighbourNumber = Block.getSideID(newx - Block.DIM2, newy); 
-            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
-                validmovement = false;
-
-            //right corner
-            neighbourNumber = Block.getSideID(newx + Block.DIM2, newy); 
-            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
-                validmovement = false; 
-            
-            if (oldpos[1] - newy > 0) {
-                //check top corner
-                neighbourNumber = Block.getSideID(newx, newy - Block.DIM2);
-                if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
-                    validmovement = false;
-            } else {
-                //check bottom corner
-                neighbourNumber = Block.getSideID(newx, newy + Block.GAMEDIMENSION/2);
-                if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
-                    validmovement = false;
-            }
-            
-            //if movement allowed => move player   
-            if (validmovement) {                
-                setPos(0, newx);
-                setPos(1, newy);
-                
-                //track the coordiante change, if there is one
-                int sidennumb = getSideNumb();              
-                switch(sidennumb) {
-                    case 0:
-                    case 1:
-                            makeCoordinateStep(1, -1);
-                            break;
-                    case 2:    
-                    case 3:
-                            makeCoordinateStep(1, 1);
-                            break;
-                    case 4:
-                    case 5:
-                            makeCoordinateStep(-1, 1);
-                            break;
-                    case 6:
-                    case 7:
-                            makeCoordinateStep(-1, -1);
-                            break;    
-                }
-            }
-        }
-        //enable this line to see where to player stands:
-        Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
    }
     
    /**
@@ -176,7 +82,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
             }
         );
         
-        
         addToAbsCoords(0, y, 0);
         if (x < 0){
             if (getRelCoords()[1] % 2 == 1) addToAbsCoords(-1, 0, 0);
@@ -190,7 +95,15 @@ public abstract class AbstractCharacter extends AbstractEntity {
      * @param delta time since last update
      */
     @Override
-    public void update(int delta) { 
+    public void update(int delta) {
+        //scale that the velocity vector is always an unit vector (only x and y)
+        double vectorLenght = Math.sqrt(dir[0]*dir[0] + dir[1]*dir[1]);
+        if (vectorLenght > 0){
+            dir[0] /= vectorLenght;
+            dir[1] /= vectorLenght;
+        }
+            
+        /*VERTICAL MOVEMENT*/
         float oldHeight = getHeight();
         
         //calculate new height
@@ -211,6 +124,93 @@ public abstract class AbstractCharacter extends AbstractEntity {
             setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION);
         }
         
+         /*HORIZONTAL MOVEMENT*/
+        float[] oldpos = getPos();
+        
+        //calculate new position
+        float newx = getPos()[0] + delta * speed * dir[0];
+        float newy = getPos()[1] + delta * speed * dir[1];
+
+        //horizontal colision check
+        boolean validmovement = true;
+
+        //check for movement in x
+        //top corner
+        int neighbourNumber = Block.getSideID(newx, newy - Block.DIM2); 
+        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+            validmovement = false;
+        //bottom corner
+        neighbourNumber = Block.getSideID(newx, newy + Block.DIM2); 
+        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+            validmovement = false;
+
+        //find out the direction of the movement
+        if (oldpos[0] - newx > 0) {
+            //check left corner
+            neighbourNumber = Block.getSideID(newx - Block.DIM2, newy);
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+                validmovement = false;
+        } else {
+            //check right corner
+            neighbourNumber = Block.getSideID(newx + Block.DIM2, newy);
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+                validmovement = false;
+        }
+
+        //check for movement in y
+        //left corner
+        neighbourNumber = Block.getSideID(newx - Block.DIM2, newy); 
+        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+            validmovement = false;
+
+        //right corner
+        neighbourNumber = Block.getSideID(newx + Block.DIM2, newy); 
+        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+            validmovement = false; 
+
+        if (oldpos[1] - newy > 0) {
+            //check top corner
+            neighbourNumber = Block.getSideID(newx, newy - Block.DIM2);
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+                validmovement = false;
+        } else {
+            //check bottom corner
+            neighbourNumber = Block.getSideID(newx, newy + Block.GAMEDIMENSION/2);
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+                validmovement = false;
+        }
+
+        //if movement allowed => move player   
+        if (validmovement) {                
+            setPos(0, newx);
+            setPos(1, newy);
+
+            //track the coordiante change, if there is one
+            int sidennumb = getSideNumb();              
+            switch(sidennumb) {
+                case 0:
+                case 1:
+                        makeCoordinateStep(1, -1);
+                        break;
+                case 2:    
+                case 3:
+                        makeCoordinateStep(1, 1);
+                        break;
+                case 4:
+                case 5:
+                        makeCoordinateStep(-1, 1);
+                        break;
+                case 6:
+                case 7:
+                        makeCoordinateStep(-1, -1);
+                        break;    
+            }
+        }
+        
+        //uncomment this line to see where to player stands:
+        Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
+        
+        /* SOUNDS */
         //should the runningsound be played?
         if (runningSound != null)
             if (speed > 0.5f){

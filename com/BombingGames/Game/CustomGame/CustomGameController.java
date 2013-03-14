@@ -80,8 +80,7 @@ public class CustomGameController extends Controller {
                         input.isKeyDown(Input.KEY_S),
                         input.isKeyDown(Input.KEY_A),
                         input.isKeyDown(Input.KEY_D),
-                        .25f+(input.isKeyDown(Input.KEY_LSHIFT)? 0.75f: 0),
-                        delta
+                        .25f+(input.isKeyDown(Input.KEY_LSHIFT)? 0.75f: 0)
                     );
                 if (input.isKeyPressed(Input.KEY_SPACE)) getPlayer().jump();
             
