@@ -81,7 +81,7 @@ public class View {
         //render HUD
         if (minimap != null)
             minimap.render(
-                Wurfelengine.getGc().getScreenWidth() - 10,
+                Wurfelengine.getGameContainer().getScreenWidth() - 10,
                 10
                 ); 
         

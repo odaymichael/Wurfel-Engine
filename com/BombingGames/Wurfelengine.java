@@ -86,7 +86,7 @@ public class Wurfelengine extends StateBasedGame {
      * Returns the game container
      * @return 
      */
-    public static GameContainer getGc() {
+    public static GameContainer getGameContainer() {
         return gc;
     }
 }
