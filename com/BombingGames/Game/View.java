@@ -55,7 +55,7 @@ public class View {
         );
         
         camera2 = new Camera(
-            new int[]{0,0,0},
+            new int[]{Map.getBlocksX()/2,Map.getBlocksY()/2,Map.getBlocksZ()/2},
             800, //left
             0, //top
             400, //full width 
@@ -85,8 +85,7 @@ public class View {
                 10
                 ); 
         
-        Gameplay.MSGSYSTEM.draw();
-        //g.scale(1/equalizationScale, 1/equalizationScale);
+        Gameplay.MSGSYSTEM.render();
     }
        
 

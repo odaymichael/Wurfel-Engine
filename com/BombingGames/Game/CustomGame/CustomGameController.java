@@ -31,7 +31,7 @@ public class CustomGameController extends Controller {
         super(gc, game);
         this.gc = gc;
         
-        setPlayer((AbstractCharacter) AbstractEntity.getInstance(40, 0, new int[]{(int) (Chunk.getBlocksX()*1.5), (int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-2}));
+        setPlayer((AbstractCharacter) AbstractEntity.getInstance(40, 0, new int[]{(int) (Chunk.getBlocksX()*1.5), (int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-1}));
         
         gc.getInput().addMouseListener(new MouseDraggedListener());
     }

@@ -14,7 +14,7 @@ class Msg {
     private int importance = 1;
     
     
-    Msg(String pmessage, String psender, int imp) {
+    protected Msg(String pmessage, String psender, int imp) {
         fmessage = pmessage;
         sender = psender;
         importance = imp;
@@ -113,7 +113,7 @@ public class MsgSystem extends ArrayList<Msg> {
     /**
      * Draws the Messages
      */
-    public void draw(){
+    public void render(){
         if (waitforinput) Wurfelengine.getGraphics().drawString("MSG:", Wurfelengine.getGc().getWidth()/2, 3*Wurfelengine.getGc().getHeight()/4);
         
         for (int i=0; i < size(); i++){
