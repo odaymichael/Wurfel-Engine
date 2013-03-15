@@ -34,7 +34,7 @@ public class Gameplay extends BasicGameState {
     @Override 
     public void enter(GameContainer container, StateBasedGame game) throws SlickException{
         container.setClearEachFrame(false);
-        Wurfelengine.getGameContainer().setSmoothDeltas(true);
+        //Wurfelengine.getGameContainer().setSmoothDeltas(true);
         
         controller = new CustomGameController(container, game);
         view = new View(container, controller);
