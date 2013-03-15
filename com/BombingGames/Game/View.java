@@ -111,7 +111,7 @@ public class View {
      * @return game coordinate
      */
     public int ScreenXtoGame(int x){
-        return (int) ((x + getCamera().getOutputPosX()) / getCamera().getTotalScale());
+        return (int) ((x - getCamera().getScreenPosX()) / getCamera().getTotalScale() + getCamera().getOutputPosX());
     }
     
    /**
@@ -120,7 +120,7 @@ public class View {
      * @return game coordinate
      */
     public int ScreenYtoGame(int y){
-        return (int) ((y / getCamera().getTotalScale() + getCamera().getOutputPosY()) * 2);
+        return (int) ((y - getCamera().getScreenPosY()) / getCamera().getTotalScale() + getCamera().getOutputPosY()) * 2;
     }
     
     /**
@@ -133,9 +133,8 @@ public class View {
         int[] coords = new int[3];  
         
         //reverse y to game niveau, first the zoom:
-        Log.debug("ScreenToGameCoords("+x+","+y+")");
-        y = ScreenYtoGame(y);
         x = ScreenXtoGame(x);
+        y = ScreenYtoGame(y);
         
         //find out where the click went
         coords[0] = x / Block.DIMENSION -1;
