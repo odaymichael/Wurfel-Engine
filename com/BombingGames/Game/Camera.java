@@ -134,7 +134,7 @@ public class Camera {
     }
     
   /**
-     * The Camera left Position in the game world.
+     * The Camera Position from in the game world.
      * @return in pixels
      */
     public int getOutputPosX() {
