@@ -154,7 +154,7 @@ public class View {
             do {
                 coords[1] = coords[1]-2;
                 coords[2] = coords[2]-1;
-            } while (Controller.getMapData(coords).isHidden());
+            } while (Controller.getMapData(coords).isHidden() && coords[2]>0);
         }
         
         return coords;
