@@ -79,6 +79,7 @@ public class Chunk {
             }
                 
             case 1: {//islands
+                //water
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         data[x][y][0] = Block.getInstance(8);
@@ -86,17 +87,28 @@ public class Chunk {
                         data[x][y][2] = Block.getInstance(9);
                     }
                 
+                //mountain
                 int mountainx = (int) (Math.random()*blocksX-1);
                 int mountainy = (int) (Math.random()*blocksY-1);
                 
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         int height = blocksZ-1- Math.abs(mountainy-y)- Math.abs(mountainx-x);
-                        if (height>1){
+                        if (height>0){
                             for (int z=0; z < height; z++) {
-                                data[x][y][z] = Block.getInstance(2);
+                                if (height > 2)
+                                    data[x][y][z] = Block.getInstance(2);
+                                else
+                                    data[x][y][z] = Block.getInstance(8);
+                                    
                             }
-                            data[x][y][height] = Block.getInstance(1);
+                            if (height > 2)
+                                    data[x][y][height] = Block.getInstance(1);
+                                else
+                                    data[x][y][height] = Block.getInstance(8);
+                            
+                            if (Math.random() < 0.15f && height < getBlocksZ()-1 && height > 2) data[x][y][height+1] = Block.getInstance(34);
+                            if (Math.random() < 0.15f && height < getBlocksZ()-1 && height > 2) data[x][y][height+1] = Block.getInstance(35);
                         }
                     }
                 break;
