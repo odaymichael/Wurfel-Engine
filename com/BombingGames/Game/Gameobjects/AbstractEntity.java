@@ -27,17 +27,16 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * Create an entity.
      * @param id the object id of the entity.
      * @param value The value at start.
-     * @param coords the relative coordiantes where the entity is.
+     * @param absCoords the absolute coordiantes where the entity is.
      * @return the entity.
      */
-    public static AbstractEntity getInstance(int id, int value, int[] coords){
+    public static AbstractEntity getInstance(int id, int value, int[] absCoords){
         AbstractEntity entity = null;
         //define the default SideSprites
         switch (id){
             case 40:
                     try {
                         entity = new Player(id);
-                        entity.setAbsCoords(coords);
                         entity.setTransparent(true);
                         entity.setObstacle(true);
                         entity.setDimensionY(2);
@@ -56,8 +55,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
                     break;
         }
         
-        entity.coords = coords;
-        entity.setHeight(coords[2]*GAMEDIMENSION);
+        entity.setAbsCoords(absCoords);
         entity.setValue(value);
         entity.setVisible(true);
         return entity;

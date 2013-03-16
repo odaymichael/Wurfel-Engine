@@ -113,6 +113,7 @@ public class Block extends GameObject {
                     block.hasSides = false;
                     break;
             case 71:block = new ExplosiveBarrel(71,coords);
+            case 71:block = new ExplosiveBarrel(71,absCoords);
                     block.setObstacle(true);
                     block.hasSides = false;
                     break;

@@ -31,7 +31,9 @@ public class CustomGameController extends Controller {
         super(gc, game);
         this.gc = gc;
         
-        setPlayer((AbstractCharacter) AbstractEntity.getInstance(40, 0, new int[]{(int) (Chunk.getBlocksX()*1.5), (int) (Chunk.getBlocksY()*1.5), Chunk.getBlocksZ()-1}));
+        setPlayer(
+            (AbstractCharacter) AbstractEntity.getInstance(40, 0, new int[]{0,0, Map.getBlocksZ()-1})
+        );
         
         gc.getInput().addMouseListener(new MouseDraggedListener());
     }
@@ -139,11 +141,13 @@ public class CustomGameController extends Controller {
             
             if (Chunk.MAPGENERATOR == 4){
                 int coords[] = getView().ScreenToGameCoords(newx,newy);
-                if (gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
-                    if (coords[2] < Map.getBlocksZ()-1) coords[2]++; 
-                    setMapDataSafe(coords, Block.getInstance(71, 0, coords));
+                
+                if (gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){ //left click
+                    if (coords[2] < Map.getBlocksZ()-1) coords[2]++;
+                    
+                    setMapData(coords, Block.getInstance(71, 0, Controller.getMap().relToAbsCoords(coords)));
                     getView().getCamera().traceRayTo(coords, true);
-                }else {
+                } else {//right click
                    if (getMapDataSafe(coords) instanceof ExplosiveBarrel)
                        ((ExplosiveBarrel) getMapDataSafe(coords)).explode();
                 }

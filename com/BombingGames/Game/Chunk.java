@@ -15,17 +15,11 @@ import org.newdawn.slick.util.Log;
  * @author Benedikt
  */
 public class Chunk {
-    /**
-     * The number of the mapgenerator used.
-     */
+    /**The number of the mapgenerator used.*/
     public static final int MAPGENERATOR = 4;
-    /**
-     * The suffix of a chunk file.
-     */
+    /**The suffix of a chunk file.*/
     protected static final String CHUNKFILESUFFIX = "wec";
-    /**
-     * The suffix of the metafile
-     */
+    /**The suffix of the metafile */
     protected static final String METAFILESUFFIX = "wem";
     
     private static int blocksX = 10;
@@ -150,7 +144,7 @@ public class Chunk {
                         data[x][y][1] = Block.getInstance(2);
                         data[x][y][0] = Block.getInstance(2);
                     }
-                data[5][5][3] = Block.getInstance(71,0,new int[]{5,5,3});
+                data[5][10][3] = Block.getInstance(71, 0, new int[]{5 + coordX* blocksX, 10 + coordY * blocksY, 3});
                 data[5][5][2] = Block.getInstance(2);
                 
                 break;
