@@ -52,22 +52,33 @@ public abstract class GameObject {
     private int dimensionY = 1;    
     
     static {
+        for (int[][][] id : SPRITEPOS) {
+            for (int[][] value : id) {
+                  value[0][0]=0;
+                  value[0][1]=0;
+                  value[1][0]=80;
+                  value[1][1]=0;
+                  value[2][0]=240;
+                  value[2][1]=0;
+            }
+        }
+        
         NAMELIST[0] = "air";
         
         NAMELIST[1] = "grass";
-        SPRITEPOS[1][0][0][0] = 0;
+        SPRITEPOS[1][0][0][0] = 320;
         SPRITEPOS[1][0][0][1] = 0;
-        SPRITEPOS[1][0][1][0] = 80;
+        SPRITEPOS[1][0][1][0] = 400;
         SPRITEPOS[1][0][1][1] = 0;
-        SPRITEPOS[1][0][2][0] = 240;
+        SPRITEPOS[1][0][2][0] = 560;
         SPRITEPOS[1][0][2][1] = 0;
         
         NAMELIST[2] = "dirt";
-        SPRITEPOS[2][0][0][0] = 0;
+        SPRITEPOS[2][0][0][0] = 640;
         SPRITEPOS[2][0][0][1] = 0;
-        SPRITEPOS[2][0][1][0] = 400;
+        SPRITEPOS[2][0][1][0] = 720;
         SPRITEPOS[2][0][1][1] = 0;
-        SPRITEPOS[2][0][2][0] = 560;
+        SPRITEPOS[2][0][2][0] = 880;
         SPRITEPOS[2][0][2][1] = 0;
         
         NAMELIST[3] = "stone";
@@ -87,85 +98,108 @@ public abstract class GameObject {
         SPRITEPOS[4][0][2][1] = 120;
        
         NAMELIST[5] = "cobblestone";
-        SPRITEPOS[5][0][0][0] = 0;
-        SPRITEPOS[5][0][0][1] = 600;
-        SPRITEPOS[5][0][1][0] = 80;
-        SPRITEPOS[5][0][1][1] = 600;
-        SPRITEPOS[5][0][2][0] = 240;
-        SPRITEPOS[5][0][2][1] = 600;
+        SPRITEPOS[5][0][0][0] = 640;
+        SPRITEPOS[5][0][0][1] = 120;
+        SPRITEPOS[5][0][1][0] = 720;
+        SPRITEPOS[5][0][1][1] = 120;
+        SPRITEPOS[5][0][2][0] = 880;
+        SPRITEPOS[5][0][2][1] = 120;
 
         NAMELIST[6] = "pavement";
-        SPRITEPOS[6][0][0][0] = 320;
-        SPRITEPOS[6][0][0][1] = 600;
-        SPRITEPOS[6][0][1][0] = 400;
-        SPRITEPOS[6][0][1][1] = 600;
-        SPRITEPOS[6][0][2][0] = 560;
-        SPRITEPOS[6][0][2][1] = 600;
+        SPRITEPOS[6][0][0][0] = 0;
+        SPRITEPOS[6][0][0][1] = 240;
+        SPRITEPOS[6][0][1][0] = 80;
+        SPRITEPOS[6][0][1][1] = 240;
+        SPRITEPOS[6][0][2][0] = 240;
+        SPRITEPOS[6][0][2][1] = 240;
        
         NAMELIST[7] = "concrete";
-        SPRITEPOS[7][0][0][0] = 1920;
+        SPRITEPOS[7][0][0][0] = 320;
         SPRITEPOS[7][0][0][1] = 240;
-        SPRITEPOS[7][0][1][0] = 0;
-        SPRITEPOS[7][0][1][1] = 480;
-        SPRITEPOS[7][0][2][0] = 160;
-        SPRITEPOS[7][0][2][1] = 480;
+        SPRITEPOS[7][0][1][0] = 400;
+        SPRITEPOS[7][0][1][1] = 240;
+        SPRITEPOS[7][0][2][0] = 560;
+        SPRITEPOS[7][0][2][1] = 240;
         
         NAMELIST[8] = "sand";
-        SPRITEPOS[8][0][0][0] = 560;
-        SPRITEPOS[8][0][0][1] = 480;
-        SPRITEPOS[8][0][1][0] = 640;
-        SPRITEPOS[8][0][1][1] = 480;
-        SPRITEPOS[8][0][2][0] = 800;
-        SPRITEPOS[8][0][2][1] = 480;
+        SPRITEPOS[8][0][0][0] = 640;
+        SPRITEPOS[8][0][0][1] = 240;
+        SPRITEPOS[8][0][1][0] = 720;
+        SPRITEPOS[8][0][1][1] = 240;
+        SPRITEPOS[8][0][2][0] = 880;
+        SPRITEPOS[8][0][2][1] = 240;
         
         NAMELIST[9] = "water";
-        SPRITEPOS[9][0][0][0] = 880;
-        SPRITEPOS[9][0][0][1] = 480;
-        SPRITEPOS[9][0][1][0] = 960;
-        SPRITEPOS[9][0][1][1] = 480;
-        SPRITEPOS[9][0][2][0] = 1120;
-        SPRITEPOS[9][0][2][1] = 480;
+        SPRITEPOS[9][0][0][0] = 0;
+        SPRITEPOS[9][0][0][1] = 360;
+        SPRITEPOS[9][0][1][0] = 80;
+        SPRITEPOS[9][0][1][1] = 360;
+        SPRITEPOS[9][0][2][0] = 240;
+        SPRITEPOS[9][0][2][1] = 360;
         
+        NAMELIST[20] = "red brick wall";
+        SPRITEPOS[20][0][0][0] = 320;
+        SPRITEPOS[20][0][0][1] = 360;
+        SPRITEPOS[20][0][1][0] = 400;
+        SPRITEPOS[20][0][1][1] = 360;
+        SPRITEPOS[20][0][2][0] = 560;
+        SPRITEPOS[20][0][2][1] = 360;
+        
+        NAMELIST[30] = "fence";
+        
+        NAMELIST[32] = "sandbags";
+        
+        NAMELIST[33] = "crate";
+        
+        NAMELIST[34] = "flower";
+        SPRITEPOS[34][0][0][0] = 640;
+        SPRITEPOS[34][0][0][1] = 360;
+        
+        NAMELIST[35] = "round bush";
+        SPRITEPOS[34][0][0][0] = 800;
+        SPRITEPOS[34][0][0][1] = 360;
         
         NAMELIST[40] = "player";
         //sw
-        SPRITEPOS[40][1][0][0] = 1600;
-        SPRITEPOS[40][1][0][1] = 0;
+        SPRITEPOS[40][1][0][0] = 0;
+        SPRITEPOS[40][1][0][1] = 520;
         //w
-        SPRITEPOS[40][2][0][0] = 1760;
-        SPRITEPOS[40][2][0][1] = 0;
+        SPRITEPOS[40][2][0][0] = 160;
+        SPRITEPOS[40][2][0][1] = 520;
         //nw
-        SPRITEPOS[40][3][0][0] = 0;
-        SPRITEPOS[40][3][0][1] = 240;
+        SPRITEPOS[40][3][0][0] = 320;
+        SPRITEPOS[40][3][0][1] = 520;
         //n
-        SPRITEPOS[40][4][0][0] = 160;
-        SPRITEPOS[40][4][0][1] = 240;
+        SPRITEPOS[40][4][0][0] = 480;
+        SPRITEPOS[40][4][0][1] = 520;
         //ne
-        SPRITEPOS[40][5][0][0] = 320;
-        SPRITEPOS[40][5][0][1] = 240;
+        SPRITEPOS[40][5][0][0] = 640;
+        SPRITEPOS[40][5][0][1] = 520;
         //e
-        SPRITEPOS[40][6][0][0] = 480;
-        SPRITEPOS[40][6][0][1] = 240;
+        SPRITEPOS[40][6][0][0] = 800;
+        SPRITEPOS[40][6][0][1] = 520;
         //se
-        SPRITEPOS[40][7][0][0] = 640;
-        SPRITEPOS[40][7][0][1] = 240;
+        SPRITEPOS[40][7][0][0] = 0;
+        SPRITEPOS[40][7][0][1] = 760;
         //s
-        SPRITEPOS[40][8][0][0] = 800;
-        SPRITEPOS[40][8][0][1] = 240;
+        SPRITEPOS[40][8][0][0] = 160;
+        SPRITEPOS[40][8][0][1] = 760;
         
         NAMELIST[41] = "smoke test";
-        SPRITEPOS[41][0][0][0] = 960;
-        SPRITEPOS[41][0][0][1] = 240;
-        SPRITEPOS[41][1][0][0] = 1120;
-        SPRITEPOS[41][1][0][1] = 240;
+        SPRITEPOS[41][0][0][0] = 320;
+        SPRITEPOS[41][0][0][1] = 760;
+        SPRITEPOS[41][1][0][0] = 480;
+        SPRITEPOS[41][1][0][1] = 760;
+        
+        NAMELIST[50] = "strewbed";
 
-        NAMELIST[70] = "fire";
-        SPRITEPOS[70][0][0][0] = 240;
-        SPRITEPOS[70][0][0][1] = 480;
+        NAMELIST[70] = "campfire";
+        SPRITEPOS[70][0][0][0] = 640;
+        SPRITEPOS[70][0][0][1] = 760;
         
         NAMELIST[71] = "explosive barrel";
-        SPRITEPOS[71][0][0][0] = 400;
-        SPRITEPOS[71][0][0][1] = 480;
+        SPRITEPOS[71][0][0][0] = 800;
+        SPRITEPOS[71][0][0][1] = 760;
         
         NAMELIST[72] = "animation test";
         SPRITEPOS[72][0][0][0] = 0;
