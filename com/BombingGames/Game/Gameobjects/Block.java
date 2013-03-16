@@ -65,54 +65,61 @@ public class Block extends GameObject {
      * Create a block. If the block needs to know it's position you have to use this method and give the coordinates.
      * @param id the id of the block
      * @param value the value of the block, which is like a sub-id
-     * @param coords the coordinates where the bloks should be created
+     * @param absCoords the absolute coordinates where the bloks should be created. Only SelfAware Blocks should use this.
      * @return the Block
      */
-    public static Block getInstance(int id, int value, int[] coords){
+    public static Block getInstance(int id, int value, int[] absCoords){
         Block block = null;
         //define the default SideSprites
         switch (id){
             case 0: 
-                    block = new Block(0);//air
+                    block = new Block(id);//air
                     block.setTransparent(true);
                     block.setHidden(true);
                     break;
-            case 1: block = new Block(1); //grass
+            case 1: block = new Block(id); //grass
                     block.setObstacle(true);
                     break;
-            case 2: block = new Block(2); //dirt
+            case 2: block = new Block(id); //dirt
                     block.setObstacle(true);
                     break;
-            case 3: block = new Block(3); 
+            case 3: block = new Block(id); 
                     block.setTransparent(false);
                     block.setObstacle(true);
                     break;
-            case 4: block = new Block(4); 
+            case 4: block = new Block(id); 
                     block.setObstacle(true);
                     break;
-            case 5: block = new Block(5); 
+            case 5: block = new Block(id); 
                     block.setObstacle(true);
                     break;
-            case 6: block = new Block(6); 
+            case 6: block = new Block(id); 
                     block.setObstacle(true);
                     break;
-            case 7: block = new Block(7); 
+            case 7: block = new Block(id); 
                     block.setObstacle(true);
                     break;
-            case 8: block = new Block(8); //sand
+            case 8: block = new Block(id); //sand
                     block.setObstacle(true);
                     break;      
-            case 9: block = new Block(9); //water
+            case 9: block = new Block(id); //water
                     block.setTransparent(true);
                     block.liquid = true;
-                    break;    
+                    break;
+            case 34: block = new Block(id); //water
+                    block.setTransparent(true);
+                    block.hasSides = false;
+                    break;
+            case 35: block = new Block(id); //water
+                    block.setTransparent(true);
+                    block.hasSides = false;
+                    break;       
             case 40://already reserverd
                     break;
             case 70:block = new Block(70); 
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;
-            case 71:block = new ExplosiveBarrel(71,coords);
             case 71:block = new ExplosiveBarrel(71,absCoords);
                     block.setObstacle(true);
                     block.hasSides = false;
@@ -122,9 +129,9 @@ public class Block extends GameObject {
                     block.hasSides = true;
                     break;
             default:
-                    block = new Block(0); 
+                    block = new Block(id); 
                     block.setTransparent(true);
-                    block.setHidden(true);
+                    block.setHidden(false);
                     break; 
         }
         block.setValue(value);
