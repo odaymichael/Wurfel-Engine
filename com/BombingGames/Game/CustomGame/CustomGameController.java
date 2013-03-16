@@ -48,8 +48,8 @@ public class CustomGameController extends Controller {
             if (input.isKeyPressed(Input.KEY_F)) gc.setFullscreen(!gc.isFullscreen()); 
 
             //toggle fullscreen
-            if (input.isKeyPressed(Input.KEY_E)) ((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
-            //getMap().earthquake(); 
+            if (input.isKeyPressed(Input.KEY_E)) //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
+                getMap().earthquake(5000); 
             
             //pause
             if (input.isKeyDown(Input.KEY_P)) gc.setPaused(true);
