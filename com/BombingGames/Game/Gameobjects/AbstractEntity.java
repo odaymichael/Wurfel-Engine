@@ -102,10 +102,18 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         super.setPos(new float[]{pos[0], pos[1], height % GAMEDIMENSION});
     }
 
+    /**
+     * 
+     * @return
+     */
     public float getHeight() {
         return height;
     }
 
+    /**
+     * 
+     * @param height
+     */
     public void setHeight(float height) {
         this.height = height;
         super.setPos(2, height % GAMEDIMENSION);

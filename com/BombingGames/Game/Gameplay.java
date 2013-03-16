@@ -22,15 +22,31 @@ public class Gameplay extends BasicGameState {
     private Controller controller = null;
      
     
+    /**
+     * 
+     * @return
+     */
     @Override
     public int getID() {
         return 2;
     }
      
+    /**
+     * 
+     * @param gc
+     * @param sbg
+     * @throws SlickException
+     */
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
     }
     
+    /**
+     * 
+     * @param container
+     * @param game
+     * @throws SlickException
+     */
     @Override 
     public void enter(GameContainer container, StateBasedGame game) throws SlickException{
         container.setClearEachFrame(false);
@@ -41,11 +57,25 @@ public class Gameplay extends BasicGameState {
         controller.setView(view);
     }    
 
+    /**
+     * 
+     * @param gc
+     * @param sbg
+     * @param delta
+     * @throws SlickException
+     */
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         controller.update(delta);
     }
 
+    /**
+     * 
+     * @param container
+     * @param game
+     * @param g
+     * @throws SlickException
+     */
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         view.render(g);
