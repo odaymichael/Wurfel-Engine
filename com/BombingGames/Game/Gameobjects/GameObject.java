@@ -156,8 +156,8 @@ public abstract class GameObject {
         SPRITEPOS[34][0][0][1] = 360;
         
         NAMELIST[35] = "round bush";
-        SPRITEPOS[34][0][0][0] = 800;
-        SPRITEPOS[34][0][0][1] = 360;
+        SPRITEPOS[35][0][0][0] = 800;
+        SPRITEPOS[35][0][0][1] = 360;
         
         NAMELIST[40] = "player";
         //sw
