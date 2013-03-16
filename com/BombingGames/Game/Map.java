@@ -351,6 +351,7 @@ public class Map {
      * @param y position
      * @param z position
      * @param block 
+     * @deprecated 
      * @see com.BombingGames.Game.Map#setData(int x, int y, int z, Block renderobject)
      */
     public void setDataSafe(int x, int y, int z, Block block){
@@ -381,7 +382,25 @@ public class Map {
      * @param block
      */
     public void setDataSafe(int[] coords, Block block) {
-        setDataSafe(coords[0],coords[1],coords[2], block);
+        if (coords[0] >= blocksX){
+            coords[0] = blocksX-1;
+        } else if( coords[0]<0 ){
+            coords[0] = 0;
+        }
+        
+        if (coords[1] >= blocksY){
+            coords[1] = blocksY-1;
+        } else if( coords[1] < 0 ){
+            coords[1] = 0;
+        }
+        
+        if (coords[2] >= blocksZ){
+            coords[2] = blocksZ-1;
+        } else if( coords[2] < 0 ){
+            coords[2] = 0;
+        }
+        
+        data[coords[0]][coords[1]][coords[2]] = block;
     }
     
     
@@ -444,16 +463,26 @@ public class Map {
     
     /**
      * Transforms absolute coordinates into realtive coordinates.
-     * @param coords
-     * @return 
+     * @param absCoords the absolute absCoords
+     * @return  the relative absCoords
      */
-    public int[] absToRelCoords(int[] coords){
-        coords[0] -= getChunkCoords(4)[0] * Chunk.getBlocksX();
-        coords[1] -= getChunkCoords(4)[1] * Chunk.getBlocksY();        
-        return coords;
+    public int[] absToRelCoords(int[] absCoords){
+        int[] tmp = absCoords.clone();
+        tmp[0] -= getChunkCoords(0)[0] * Chunk.getBlocksX();
+        tmp[1] -= getChunkCoords(0)[1] * Chunk.getBlocksY();        
+        return tmp;
     }
+    
+     /**
+     * Transforms absolute coordinates into realtive coordinates.
+     * @param relCoords the relative relCoords
+     * @return the absolute relCoords
+     */
+    public int[] relToAbsCoords(int[] relCoords){
+        int[] tmp = relCoords.clone();
+        tmp[0] += getChunkCoords(0)[0] * Chunk.getBlocksX();
+        tmp[1] += getChunkCoords(0)[1] * Chunk.getBlocksY();
+        return tmp;
 
-
-
-
+    }
 }

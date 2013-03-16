@@ -103,11 +103,21 @@ public class Controller {
      * @param x
      * @param y
      * @param z
-     * @param block 
+     * @param block
+     * @deprecated 
      * @see com.BombingGames.Game.Map#getData(int, int, int) 
      */
     public static void setMapDataSafe(int x, int y, int z, Block block){
         map.setDataSafe(x, y, z, block);
+    }
+    
+     /**
+     * 
+     * @param coords
+     * @param block
+     */
+    public static void setMapData(int[] coords, Block block) {
+        map.setData(coords, block);
     }
     
     /**
