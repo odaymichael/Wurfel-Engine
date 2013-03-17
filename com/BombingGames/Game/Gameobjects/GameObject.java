@@ -34,9 +34,7 @@ public abstract class GameObject {
      /**Containts the names of the blocks. index=id*/
     public static final String[] NAMELIST = new String[OBJECTTYPECOUNT];   
     
-    /**
-     * The sprite image which contains every block image
-     */
+    /**The sprite image which contains every block image*/
     private static Image spritesheet;
     
     private final int id; 
@@ -226,6 +224,28 @@ public abstract class GameObject {
      */
     public abstract void update(int delta);
     
+     /**
+     * Draws a block
+     * @param coords 
+     */
+    public void render(int[] coords) {
+        //draw every visible block except not visible ones
+        if (!hidden && visible) {
+            Image image = getSprite(id, value, dimensionY);
+            //calc  brightness
+            float brightness = lightlevel / 50.0f;
+            
+            image.setColor(0, brightness, brightness, brightness);
+            image.setColor(1, brightness, brightness, brightness);
+            brightness -= 0.1f;
+            image.setColor(2, brightness, brightness, brightness);
+            image.setColor(3, brightness, brightness, brightness);
+            
+            int xpos = getScreenPosX(this, coords);
+            int ypos = getScreenPosY(this, coords) - (dimensionY - 1) * Block.DIM2;
+            image.drawEmbedded(xpos, ypos);
+        }
+    } 
 
     /**
      * Returns the spritesheet used for rendering.
@@ -326,12 +346,12 @@ public abstract class GameObject {
     /**
      * Get the neighbour coordinates of the neighbour of the coords you give
      * @param coords
-     * @param sidenumb the side number of the given coordinates
+     * @param sideID the side number of the given coordinates
      * @return coordinates of the neighbour
      */
-    public static int[] sideIDtoNeighbourCoords(int[] coords, int sidenumb) {
+    public static int[] sideIDtoNeighbourCoords(int[] coords, int sideID) {
         int[] result = new int[3];
-        switch (sidenumb) {
+        switch (sideID) {
             case 0:
                 result[0] = coords[0];
                 result[1] = coords[1] - 2;
@@ -371,7 +391,7 @@ public abstract class GameObject {
         result[2] = coords[2];
         return result;
     }
-
+    
     /**
      * Returns the depth of the object. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
      * @param y the y-coordinate
@@ -546,28 +566,4 @@ public abstract class GameObject {
     public void setDimensionY(int dimensionY) {
         this.dimensionY = dimensionY;
     }
-    
-    
-   /**
-     * Draws a block
-     * @param coords 
-     */
-    public void render(int[] coords) {
-        //draw every visible block except not visible ones
-        if (!hidden && visible) {
-            Image image = getSprite(id, value, dimensionY);
-            //calc  brightness
-            float brightness = lightlevel / 50.0f;
-            
-            image.setColor(0, brightness, brightness, brightness);
-            image.setColor(1, brightness, brightness, brightness);
-            brightness -= 0.1f;
-            image.setColor(2, brightness, brightness, brightness);
-            image.setColor(3, brightness, brightness, brightness);
-            
-            int xpos = getScreenPosX(this, coords);
-            int ypos = getScreenPosY(this, coords) - (dimensionY - 1) * Block.DIM2;
-            image.drawEmbedded(xpos, ypos);
-        }
-    } 
 }

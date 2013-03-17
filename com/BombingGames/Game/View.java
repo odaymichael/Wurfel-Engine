@@ -1,6 +1,7 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Gameobjects.GameObject;
 import com.BombingGames.Wurfelengine;
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.GameContainer;
@@ -144,7 +145,7 @@ public class View {
         coords[2] = Map.getBlocksZ()-1;
         
         //find the block
-        int[] tmpcoords = Block.posToNeighbourCoords(coords, x % Block.DIMENSION, y % Block.DIMENSION);
+        int[] tmpcoords = GameObject.sideIDtoNeighbourCoords(coords, GameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION));
         coords[0] = tmpcoords[0];
         coords[1] = tmpcoords[1] + coords[2]*2;
         

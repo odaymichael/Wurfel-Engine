@@ -124,17 +124,6 @@ public class Block extends GameObject {
         return block;
     }  
     
- 
-    /**
-     * Get the coordinates correct coordiantes when you have coordiantes and a position laying outside this field.
-     * @param coords 
-     *  @param xpos The x-position inside/outside this field
-     * @param ypos The y-position inside/outside this field 
-     * @return The neighbour block or itself
-     */
-    public static int[] posToNeighbourCoords (int[] coords, int xpos, int ypos){
-        return sideIDtoNeighbourCoords(coords, getSideID(xpos, ypos));
-    }
     
      /**
      *  Returns a sprite image of a specific side of the block
