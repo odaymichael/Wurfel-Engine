@@ -16,6 +16,8 @@ public abstract class GameObject {
     public static final int DIM2 = Block.DIMENSION / 2;
     /**A quarter (4) of DIMENSION. The short form of: DIMENSION/4*/
     public static final int DIM4 = Block.DIMENSION / 4;
+    /**the max. amount of different object types*/
+    public static final int OBJECTTYPECOUNT = 99;
     /**The real game world dimension in pixel. Usually the use of DIMENSION is fine because of the map format every coordinate center is straight.
         * The value is DIMENSION/sqrt(2).
         */
@@ -27,12 +29,10 @@ public abstract class GameObject {
      * 3. Dimension: Side
      * 4. Dimension: X- or Y-coordinate
      */
-    public static final int[][][][] SPRITEPOS = new int[99][9][3][2];
+    public static final int[][][][] SPRITEPOS = new int[OBJECTTYPECOUNT][9][3][2];
 
-     /**
-     * Containts the names of the blocks. index=id
-     */
-    public static final String[] NAMELIST = new String[99];   
+     /**Containts the names of the blocks. index=id*/
+    public static final String[] NAMELIST = new String[OBJECTTYPECOUNT];   
     
     /**
      * The sprite image which contains every block image
@@ -213,41 +213,22 @@ public abstract class GameObject {
     
     /**
      * Creates an object. Use getInterface().
-     * @param id
+     * @param id the id of the object
+     * @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
     protected GameObject(int id) {
         this.id = id;
     }
-
-    /**
-     * 
-     * @param id
-     * @param value
-     * @param obstacle
-     * @param transparent
-     * @param visible
-     * @param hidden
-     * @param dimensionY
-     */
-    protected GameObject(int id, int value, boolean obstacle, boolean transparent, boolean visible, boolean hidden, int dimensionY) {
-        this.id = id;
-        this.value = value;
-        this.obstacle = obstacle;
-        this.transparent = transparent;
-        this.visible = visible;
-        this.hidden = hidden;
-        this.dimensionY = dimensionY;
-    }
     
     /**
-     * updates the logic of the object.
+     * Updates the logic of the object.
      * @param delta time since last update
      */
     public abstract void update(int delta);
     
 
     /**
-     * Returns the spritesheet used for rendering
+     * Returns the spritesheet used for rendering.
      * @return the spritesheet used by the objects
      */
     public static Image getSpritesheet() {
@@ -301,13 +282,14 @@ public abstract class GameObject {
 
     /**
      * Returns the field-number where the coordiantes are inside in relation to the current Block. Counts clockwise startin with the top 0.
-     * If you want to get the neighbour you have to use a SelfAwareBlock and the method getNeighbourBlock
-     * 701
-     * 682
-     * 543
+     * If you want to get the neighbour you have to use a SelfAwareBlock and the method getNeighbourBlock.
+     * The counting:<br>
+     * 701<br>
+     * 682<br>
+     * 543<br>
      * @param x value in pixels
      * @param y value in pixels
-     * @return Returns the fieldnumber of the coordinates. 8 is self.
+     * @return Returns the fieldnumber of the coordinates. 8 is itself.
      * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int)
      */
     public static int getSideID(float x, float y) {

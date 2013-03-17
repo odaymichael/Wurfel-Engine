@@ -8,35 +8,21 @@ import org.newdawn.slick.Image;
  * @author Benedikt
  */
 public class Block extends GameObject {
-
-    /**
-     * The id of the left side of a block.
-     */
+    private static Color[][] colorlist = new Color[99][9];
+    /**The id of the left side of a block.*/
     public static final int LEFTSIDE=0;
-    /**
-     * The id of the top side of a block.
-     */
+    /**The id of the top side of a block.*/
     public static final int TOPSIDE=1;
-    /**
-     * The id of the right side of a block.
-     */
+    /**The id of the right side of a block.*/
     public static final int RIGHTSIDE=2;
     
     private boolean liquid, renderRight, renderTop, renderLeft;
     private boolean hasSides = true;
-    private static Color[][] colorlist = new Color[99][9];
-   
-    /**
-     *Don't use this constructor to get a new block. Use the static <i>getInstance</i> methods instead.
-     * @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
-     */
-    protected Block(){
-        super(0);
-    }
     
     /**
-     * 
+     * Don't use this constructor to get a new block. Use the static <i>getInstance</i> methods instead.
      * @param id
+     *  @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
     protected Block(int id){
         super(id);
@@ -116,15 +102,15 @@ public class Block extends GameObject {
                     break;       
             case 40://already reserverd
                     break;
-            case 70:block = new Block(70); 
+            case 70:block = new Block(id); 
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;
-            case 71:block = new ExplosiveBarrel(71,absCoords);
+            case 71:block = new ExplosiveBarrel(id,absCoords);
                     block.setObstacle(true);
                     block.hasSides = false;
                     break;
-            case 72:block = new AnimatedBlock(new int[]{1000,1000},true, true);//animation test
+            case 72:block = new AnimatedBlock(id, new int[]{1000,1000},true, true);//animation test
                     block.setObstacle(true);
                     block.hasSides = true;
                     break;
