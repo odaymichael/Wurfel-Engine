@@ -5,3 +5,6 @@ http://www.freesound.org/people/victorcenusa/sounds/22862/
 
 "wind.wav" and edited file "wind-loud.wav"
 http://soundbible.com/1810-Wind.html
+
+"explosion2.wav" by steveygos93
+http://freesound.org/people/steveygos93/sounds/80401/
