@@ -91,11 +91,11 @@ public abstract class AbstractCharacter extends AbstractEntity {
             }
         );
         
-        addToAbsCoords(0, y, 0);
+        addVector(new int[]{0, y, 0});
         if (x < 0){
-            if (getRelCoords()[1] % 2 == 1) addToAbsCoords(-1, 0, 0);
+            if (getRelCoords()[1] % 2 == 1) addVector(new int[]{-1, 0, 0});
         } else {
-            if (getRelCoords()[1] % 2 == 0) addToAbsCoords(1, 0, 0);
+            if (getRelCoords()[1] % 2 == 0) addVector(new int[]{1, 0, 0});
         }
     }
     

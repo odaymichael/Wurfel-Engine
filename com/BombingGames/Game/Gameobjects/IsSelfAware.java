@@ -18,12 +18,10 @@ public interface IsSelfAware{
     public void setAbsCoords(int[] coords);
    
     /**
-     * Increases/decreases the coordinates by the parameters
-     * @param x the value added to x-coordiante
-     * @param y y-coordiante
-     * @param z z-coordiante
+     * Does a vector addition to the coordinates.
+     * @param coords the vector which is added to teh coords
      */
-    public void addToAbsCoords(int x, int y, int z);
+    public void addVector(int[] coords);
      /**
       * Returns the relative coordinates wich can be found on the map.
       * @return relative coordinates

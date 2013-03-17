@@ -77,7 +77,7 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
     }
 
     @Override
-    public void addToAbsCoords(int x, int y, int z) {
-        setAbsCoords(new int[]{getAbsCoords()[0]+x, getAbsCoords()[1]+y, getAbsCoords()[2]+z});
+    public void addVector(int[] coords) {
+        setAbsCoords(new int[]{getAbsCoords()[0]+coords[0], getAbsCoords()[1]+coords[1], getAbsCoords()[2]+coords[2]});
     }
 }
