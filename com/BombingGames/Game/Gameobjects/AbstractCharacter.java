@@ -16,7 +16,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private final int COLISSIONRADIUS = GameObject.DIM4;
 
    /**
-    * 
+    * Constructor of AbstractCharacter.
     * @param id
     */
    protected AbstractCharacter(int id) {
@@ -32,10 +32,18 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private Sound runningSound;
    
    /**
-     * These method should define what happens when the object  jumps. It should call super.jump(int velo)
+     * This method should define what happens when the object  jumps. It should call super.jump(int velo)
      * @see com.BombingGames.Game.Gameobjects.AbstractCharacter#jump(float)
      */
     public abstract void jump();
+    
+   /**
+     * Jump with a specific speed
+     * @param velo the velocity in m/s
+     */
+    public void jump(float velo) {
+        if (onGround()) dir[2] = velo;
+    }
     
     /**
      * Returns the side of the current position.
@@ -92,7 +100,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
     }
     
    /**
-     * Updates the block.
+     * Updates the charackter.
      * @param delta time since last update
      */
     @Override
@@ -105,7 +113,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         }
             
         float oldHeight = getHeight();
-        float[] oldpos = getPos();
+        float[] oldPos = getPos();
  
         
         /*VERTICAL MOVEMENT*/
@@ -114,21 +122,14 @@ public abstract class AbstractCharacter extends AbstractEntity {
         dir[2] += -Map.GRAVITY*t; //in m/s
         setHeight(getHeight() + dir[2] * GAMEDIMENSION * t); //in m
         
-        //vertical colission
+        //check new neight for colission
         //land if standing in or under 0-level or there is an obstacle
-        if ((
-                dir[2] <= 0
-                &&
-                (getHeight() <= 0 || onGround())
-            )
-            ||
-            horizontalColission(getPos()[0], getPos()[1], oldpos)
+        if ((dir[2] <= 0 && onGround()) //land when moving down and standing on ground
         ) {
             //stop sound
             if (fallingSound != null) fallingSound.stop();
-            
             dir[2] = 0;
-            //set coord
+            //set on top of block
             setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION);
         }
         
@@ -139,7 +140,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         float newy = getPos()[1] + delta * speed * dir[1];
 
         //if movement allowed => move player   
-        if (! horizontalColission(newx, newy, oldpos)) {                
+        if (! horizontalColission(newx, newy, oldPos[0], oldPos[1])) {                
             setPos(0, newx);
             setPos(1, newy);
 
@@ -183,7 +184,13 @@ public abstract class AbstractCharacter extends AbstractEntity {
             fallingSound.play();
     }
     
-    private boolean horizontalColission(float newx, float newy, float[] oldpos){
+    /**
+     * check for horizontal colission
+     * @param newx the new x position
+     * @param newy the new y position
+     * @return 
+     */
+    private boolean horizontalColission(float newx, float newy, float oldx, float oldy){
         boolean validmovement = false;
         
         //check for movement in x
@@ -197,7 +204,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
             validmovement = true;
 
         //find out the direction of the movement
-        if (oldpos[0] - newx > 0) {
+        if (oldx - newx > 0) {
             //check left corner
             neighbourNumber = Block.getSideID(newx - COLISSIONRADIUS, newy);
             if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
@@ -220,7 +227,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
             validmovement = true; 
 
-        if (oldpos[1] - newy > 0) {
+        if (oldy - newy > 0) {
             //check top corner
             neighbourNumber = Block.getSideID(newx, newy - COLISSIONRADIUS);
             if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
@@ -233,15 +240,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
         }
         return validmovement;
     }
-   
-
-    /**
-     * Jump with a specific speed
-     * @param velo the velocity in m/s
-     */
-    public void jump(float velo) {
-        if (onGround()) dir[2] = velo;
-    }
     
     /**
      * Returns a normalized vector wich contains the direction of the block.
@@ -252,7 +250,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
     }
 
     /**
-     * Sets the sound to be played when falling
+     * Sets the sound to be played when falling.
      * @param fallingSound
      */
     public void setFallingSound(Sound fallingSound) {
@@ -282,5 +280,14 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     public String getControlls(){
         return controls;
+    }
+
+    @Override
+    public boolean onGround() {
+        setHeight(getHeight()-1);
+        boolean colission = horizontalColission(getPos()[0], getPos()[1], getPos()[0], getPos()[1]);
+        setHeight(getHeight()+1);
+        
+        return (super.onGround() || colission);
     }
 }

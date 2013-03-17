@@ -103,7 +103,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     }
 
     /**
-     * 
+     * Returns the height of the character.
      * @return
      */
     public float getHeight() {
@@ -124,8 +124,11 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * @return true when on the ground
      */
     public boolean onGround(){
+        if (height <= 0) return true;
+            
         int z = (int) ((height-1)/GAMEDIMENSION);
         if (z > Map.getBlocksZ()-1) z = Map.getBlocksZ()-1;
+        
         return Controller.getMapData(
                     Controller.getMap().absToRelCoords(
                         new int[]{coords[0],coords[1],z}
