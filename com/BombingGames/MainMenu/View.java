@@ -12,7 +12,8 @@ import org.newdawn.slick.SpriteSheet;
 public class View {
     //private float startGameScale = 1;
     //private float exitScale = 1;
-    private final Image background;
+    private final Image lettering;
+    private GameContainer gc;
     
     
     /**
@@ -21,7 +22,8 @@ public class View {
      * @throws SlickException
      */
     public View(GameContainer gc) throws SlickException{
-        background = new Image("com/BombingGames/MainMenu/Images/Lettering.png"); 
+        lettering = new Image("com/BombingGames/MainMenu/Images/Lettering.png");
+        this.gc = gc;
         MenuItem.setSpritesheet(new SpriteSheet("com/BombingGames/MainMenu/Images/MainMenu.png",400,50));
         
         MenuItem startgame = MainMenuState.getController().getStartGameOption();
@@ -43,8 +45,8 @@ public class View {
      * @param pController
      */
     public void render(Controller pController){
-        // render the background
-        background.draw(0,0);
+        // render the lettering
+        lettering.draw((gc.getWidth() - lettering.getWidth())/2,0);
         
         // Draw menu
         MenuItem.getSpritesheet().startUse();
