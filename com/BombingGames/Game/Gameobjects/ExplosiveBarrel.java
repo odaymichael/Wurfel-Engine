@@ -39,14 +39,23 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
         for (int x=-RADIUS; x<RADIUS; x++)
             for (int y=-RADIUS*2; y<RADIUS*2; y++)
                 for (int z=-RADIUS; z<RADIUS; z++){
-                    Controller.setMapDataSafe(new int[]{relcoords[0]+x, relcoords[1]+y, relcoords[2]+z}, Block.getInstance(0));//place air
-                    Controller.getMap().getEntitylist().add(AbstractEntity.getInstance(41, 0,
-                        new int[]{
-                                getAbsCoords()[0]+x,
-                                getAbsCoords()[1]+y,
-                                getAbsCoords()[2]+z
-                            })
-                   );//spawn effect
+                    //place air
+                    Controller.setMapDataSafe(
+                        new int[]{relcoords[0]+x, relcoords[1]+y, relcoords[2]+z}, Block.getInstance(0)
+                    );
+                    
+                    //spawn effect
+                    if (x*x + y*y >= RADIUS*RADIUS){
+                        Controller.getMap().getEntitylist().add(
+                            AbstractEntity.getInstance(41, 0,
+                                new int[]{
+                                    getAbsCoords()[0]+x,
+                                    getAbsCoords()[1]+y,
+                                    getAbsCoords()[2]+z
+                                }
+                            )
+                        );
+                    }
                 }
          explosionsound.play();
          Controller.getMap().requestRecalc();
