@@ -9,21 +9,16 @@ import org.newdawn.slick.SpriteSheet;
  * @author Benedikt
  */
 public abstract class GameObject {
-        /**
-     * Screen DIMENSION of the Block in pixels. This is the length of the side, when you cut the block in the middle
-     */
+    /**Screen DIMENSION of the Block in pixels. This is the length from the left to the right border of the block.
+     * In game coordinates this is also the dimension from top to bottom.*/
     public static final int DIMENSION = 160;
-    /**
-     * The half (2) of DIMENSION. The short form of DIMENSION/2
-     */
+    /**The half (2) of DIMENSION. The short form of: DIMENSION/2*/
     public static final int DIM2 = Block.DIMENSION / 2;
-    /**
-     * A quarter (4) of DIMENSION. The short form of DIMENSION/4
-     */
+    /**A quarter (4) of DIMENSION. The short form of: DIMENSION/4*/
     public static final int DIM4 = Block.DIMENSION / 4;
-    /**
-     * The real game world dimension in pixel. Usually DIMENSION should be enough becaue of the map format. The value is DIMENSION/sqrt(2).
-     */
+    /**The real game world dimension in pixel. Usually the use of DIMENSION is fine because of the map format every coordinate center is straight.
+        * The value is DIMENSION/sqrt(2).
+        */
     public static int GAMEDIMENSION = (int) (Block.DIMENSION / Math.sqrt(2));
     /**
      * Has the positions of the sprites for rendering with sides
