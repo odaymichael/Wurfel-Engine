@@ -50,8 +50,10 @@ public class CustomGameController extends Controller {
             if (input.isKeyPressed(Input.KEY_F)) gc.setFullscreen(!gc.isFullscreen()); 
 
             //toggle fullscreen
-            if (input.isKeyPressed(Input.KEY_E)) //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
-                getMap().earthquake(5000); 
+            if (input.isKeyPressed(Input.KEY_E)){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
+                getMap().earthquake(5000);
+                getMap().requestRecalc();
+            }
             
             //pause
             if (input.isKeyDown(Input.KEY_P)) gc.setPaused(true);
@@ -59,7 +61,7 @@ public class CustomGameController extends Controller {
             //good graphics
             if (input.isKeyPressed(Input.KEY_G)) {
                 getView().setGoodgraphics(!getView().hasGoodGraphics());
-                Gameplay.MSGSYSTEM.add("Good Graphics is now "+getView().hasGoodGraphics());
+                Gameplay.MSGSYSTEM.add("Good Graphics is now " + getView().hasGoodGraphics());
             }
 
             //toggle getCamera()
@@ -107,7 +109,7 @@ public class CustomGameController extends Controller {
             zoom = zoom + change/1000f;
             getView().getCamera().setZoom(zoom);
             
-            Gameplay.MSGSYSTEM.add("Zoom: "+getView().getCamera().getZoom());   
+            Gameplay.MSGSYSTEM.add("Zoom: " + getView().getCamera().getZoom());   
         }
 
         @Override
@@ -139,23 +141,16 @@ public class CustomGameController extends Controller {
             //workaround for the bug in slick, because the event is called multiple times
             gc.getInput().consumeEvent();
             
-            if (Chunk.MAPGENERATOR == 4){
-                int coords[] = getView().ScreenToGameCoords(newx,newy);
-                
-                if (gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){ //left click
-                    if (coords[2] < Map.getBlocksZ()-1) coords[2]++;
-                    
-                    setMapData(coords, Block.getInstance(71, 0, Controller.getMap().relToAbsCoords(coords)));
-                    getView().getCamera().traceRayTo(coords, true);
-                } else {//right click
-                   if (getMapDataSafe(coords) instanceof ExplosiveBarrel)
-                       ((ExplosiveBarrel) getMapDataSafe(coords)).explode();
-                }
-            }else{
-                int coords[] = getView().ScreenToGameCoords(newx,newy);
-                if (coords[2] < Map.getBlocksZ()-1) coords[2]++; 
-                setMapDataSafe(coords, Block.getInstance(1));
+            int coords[] = getView().ScreenToGameCoords(newx,newy);
+
+            if (gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){ //left click
+                if (coords[2] < Map.getBlocksZ()-1) coords[2]++;
+
+                setMapData(coords, Block.getInstance(71, 0, Controller.getMap().relToAbsCoords(coords)));
                 getView().getCamera().traceRayTo(coords, true);
+            } else {//right click
+                if (getMapDataSafe(coords) instanceof ExplosiveBarrel)
+                    ((ExplosiveBarrel) getMapDataSafe(coords)).explode();
             }
         }
 
