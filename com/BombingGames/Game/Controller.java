@@ -150,9 +150,6 @@ public class Controller {
             if (view.getCamera().getBottomBorder() >= Map.getBlocksY()-1)
                 map.setCenter(7);
         
-        view.getCamera().update();
-
-        
         //update every block on the map
         Block[][][] mapdata = map.getData();
         for (int x=0; x < Map.getBlocksX(); x++)
@@ -167,6 +164,8 @@ public class Controller {
         //recalculates the light if requested
         map.recalcIfRequested(view.getCamera());      
        
+        view.getCamera().update();
+                
         //update the log
         Gameplay.MSGSYSTEM.update(delta);
     }

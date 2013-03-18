@@ -402,7 +402,7 @@ public abstract class GameObject {
         return (int) (
             DIMENSION * y
             + (y % 2) * DIM2
-            + DIMENSION * z
+            + GAMEDIMENSION * z
             + pos[1]
             + pos[2]
             + (dimensionY - 1) * DIMENSION
