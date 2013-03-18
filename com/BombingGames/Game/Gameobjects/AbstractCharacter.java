@@ -11,7 +11,7 @@ import org.newdawn.slick.Sound;
  */
 public abstract class AbstractCharacter extends AbstractEntity {
    /* Always one of them must be 1 to prevent a division with 0.*/
-   private float[] dir = {1,0,0};
+   private float[] dir = {1, 0, 0};
    private String controls = "WASD";
    private final int COLISSIONRADIUS = GameObject.DIM4;
 
