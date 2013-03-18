@@ -131,7 +131,7 @@ public class Controller {
     
     
     /**
-     * Main method which is called every refresh
+     * Main method which is called every refresh.
      * @param delta
      * @throws SlickException
      */

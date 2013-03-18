@@ -285,7 +285,7 @@ public abstract class GameObject {
      * Returns a sprite image of non-block image
      * @param id
      * @param value
-     * @param dimY
+     * @param dimY the height of the object
      * @return
      */
     public static Image getSprite(int id, int value, int dimY) {
@@ -301,14 +301,14 @@ public abstract class GameObject {
     }
 
     /**
-     * Returns the field-number where the coordiantes are inside in relation to the current Block. Counts clockwise startin with the top 0.
+     * Returns the field-number where the coordiantes are inside in relation to the current field. Field id count clockwise, starting with the top with 0.
      * If you want to get the neighbour you have to use a SelfAwareBlock and the method getNeighbourBlock.
      * The counting:<br>
      * 701<br>
      * 682<br>
      * 543<br>
-     * @param x value in pixels
-     * @param y value in pixels
+     * @param x game-space, value in pixels
+     * @param y game-space, value in pixels
      * @return Returns the fieldnumber of the coordinates. 8 is itself.
      * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int)
      */
@@ -344,8 +344,8 @@ public abstract class GameObject {
     }
 
     /**
-     * Get the neighbour coordinates of the neighbour of the coords you give
-     * @param coords
+     * Get the neighbour coordinates of the neighbour of the coords you give.
+     * @param coords the coordinates of the field
      * @param sideID the side number of the given coordinates
      * @return coordinates of the neighbour
      */
