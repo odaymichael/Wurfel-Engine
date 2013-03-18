@@ -222,8 +222,13 @@ public class Camera {
      */
     public final void update() {
         if (focusblock != null) {
-            outputPosX = GameObject.getScreenPosX(Controller.getMapData(focusblock), focusblock) - getOutputWidth() / 2;            
-            outputPosY = GameObject.getScreenPosY(Controller.getMapData(focusblock), focusblock) - getOutputHeight() / 2 ;
+            outputPosX = GameObject.getScreenPosX(
+                Controller.getMapData(focusblock), focusblock
+            ) - getOutputWidth() / 2 - GameObject.DIM2;
+            
+            outputPosY = GameObject.getScreenPosY(
+                Controller.getMapData(focusblock), focusblock
+            ) - getOutputHeight() / 2;
         } else {
             outputPosX = GameObject.getScreenPosX(focusentity, focusentity.getRelCoords()) - getOutputWidth() / 2;            
             outputPosY = GameObject.getScreenPosY(focusentity, focusentity.getRelCoords()) - getOutputHeight() / 2 ;
