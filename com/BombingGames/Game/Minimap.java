@@ -50,123 +50,125 @@ public class Minimap {
      * @param screenY Distance from top.
      */
     public void render(int screenX, int screenY) {
-        this.posX = screenX - (int) (Map.getBlocksX()*scaleX);
-        this.posY = screenY;
-        
-        //maybe this speeds up rendering the minimap
-        Wurfelengine.getGraphics().setAntiAlias(false);
-        
-        //render the map
-        for (int x = 0; x < Map.getBlocksX(); x++) {
-            for (int y = 0; y < Map.getBlocksY(); y++) {
-                Wurfelengine.getGraphics().setColor(mapdata[x][y]);
-                Wurfelengine.getGraphics().fillRect(
-                    this.posX + (x + (y%2 == 1 ? 0.5f : 0) ) * scaleX,
-                    this.posY + y*scaleY,
-                    scaleX,
-                    scaleY
-                );   
+        if (visible) {
+            this.posX = screenX - (int) (Map.getBlocksX()*scaleX);
+            this.posY = screenY;
+
+            //maybe this speeds up rendering the minimap
+            Wurfelengine.getGraphics().setAntiAlias(false);
+
+            //render the map
+            for (int x = 0; x < Map.getBlocksX(); x++) {
+                for (int y = 0; y < Map.getBlocksY(); y++) {
+                    Wurfelengine.getGraphics().setColor(mapdata[x][y]);
+                    Wurfelengine.getGraphics().fillRect(
+                        this.posX + (x + (y%2 == 1 ? 0.5f : 0) ) * scaleX,
+                        this.posY + y*scaleY,
+                        scaleX,
+                        scaleY
+                    );   
+                }
             }
-        }
-                
-        for (int pos = 0; pos < 9; pos++) {
-            //player
-            if (controller.getPlayer()!=null){
-                Wurfelengine.getGraphics().setColor(Color.blue);
+
+            for (int pos = 0; pos < 9; pos++) {
+                //player
+                if (controller.getPlayer()!=null){
+                    Wurfelengine.getGraphics().setColor(Color.blue);
+                    Wurfelengine.getGraphics().drawRect(
+                        posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX,
+                        posY + controller.getPlayer().getRelCoords()[1] * scaleY,
+                        scaleX,
+                        scaleY
+                    );
+                }
+
+
+                //Chunk outline
+                Wurfelengine.getGraphics().setColor(Color.black);
                 Wurfelengine.getGraphics().drawRect(
-                    posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX,
-                    posY + controller.getPlayer().getRelCoords()[1] * scaleY,
-                    scaleX,
-                    scaleY
+                    posX + pos%3 *(Chunk.getBlocksX()*scaleX),
+                    posY + pos/3*(Chunk.getBlocksY()*scaleY),
+                    Chunk.getBlocksX()*scaleX,
+                    Chunk.getBlocksY()*scaleY
+                );
+
+                View.getFont().drawString(
+                    posX + 10 + pos%3 *Chunk.getBlocksX()*scaleX,
+                    posY + 10 + pos/3 *(Chunk.getBlocksY()*scaleY),
+                    Controller.getMap().getChunkCoords(pos)[0] +" | "+ Controller.getMap().getChunkCoords(pos)[1] ,
+                    Color.black
                 );
             }
 
-
-            //Chunk outline
-            Wurfelengine.getGraphics().setColor(Color.black);
-            Wurfelengine.getGraphics().drawRect(
-                posX + pos%3 *(Chunk.getBlocksX()*scaleX),
-                posY + pos/3*(Chunk.getBlocksY()*scaleY),
-                Chunk.getBlocksX()*scaleX,
-                Chunk.getBlocksY()*scaleY
-            );
-
-            View.getFont().drawString(
-                posX + 10 + pos%3 *Chunk.getBlocksX()*scaleX,
-                posY + 10 + pos/3 *(Chunk.getBlocksY()*scaleY),
-                Controller.getMap().getChunkCoords(pos)[0] +" | "+ Controller.getMap().getChunkCoords(pos)[1] ,
-                Color.black
-            );
-        }
-
-        //bottom getCamera() rectangle
-        Wurfelengine.getGraphics().setColor(Color.green);
-        Wurfelengine.getGraphics().drawRect(
-            posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
-            posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2),
-            scaleX*camera.getOutputWidth() / Block.DIMENSION,
-            scaleY*camera.getOutputHeight() / (Block.DIM2/2)
-        );
-
-        if (controller.getPlayer()!=null){
-            //player level getCamera() rectangle
-            Wurfelengine.getGraphics().setColor(Color.gray);
+            //bottom getCamera() rectangle
+            Wurfelengine.getGraphics().setColor(Color.green);
             Wurfelengine.getGraphics().drawRect(
                 posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
-                posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
-                + scaleY *2*(controller.getPlayer().getRelCoords()[2] * (Block.DIM2/2))/ (float) (Block.DIMENSION),
+                posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2),
                 scaleX*camera.getOutputWidth() / Block.DIMENSION,
                 scaleY*camera.getOutputHeight() / (Block.DIM2/2)
             );
-        }
 
-        //top level getCamera() rectangle
-        Wurfelengine.getGraphics().setColor(Color.white);
-        Wurfelengine.getGraphics().drawRect(
-            posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
-            posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
-            + scaleY *2*(Chunk.getBlocksZ() * Block.DIM2)/ (float) (Block.DIMENSION),
-            scaleX*camera.getOutputWidth() / Block.DIMENSION,
-            scaleY*camera.getOutputHeight() / (Block.DIM2/2)
-        );
-
-        if (controller.getPlayer()!=null){
-            View.getFont().drawString(
-                    posX + scaleX * camera.getOutputPosX() / Block.DIMENSION
-                    + scaleX*camera.getOutputWidth() / Block.DIMENSION,
-                    posY + scaleY * camera.getOutputPosY() / Block.DIM2
-                    + scaleY *2*(controller.getPlayer().getRelCoords()[2] * Block.DIM2)/ (float) (Block.DIMENSION)
-                    + scaleY*camera.getOutputHeight() / Block.DIM2,
-                    camera.getRightBorder() +" | "+ camera.getBottomBorder() ,
-                    Color.black
+            if (controller.getPlayer()!=null){
+                //player level getCamera() rectangle
+                Wurfelengine.getGraphics().setColor(Color.gray);
+                Wurfelengine.getGraphics().drawRect(
+                    posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
+                    posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
+                    + scaleY *2*(controller.getPlayer().getRelCoords()[2] * (Block.DIM2/2))/ (float) (Block.DIMENSION),
+                    scaleX*camera.getOutputWidth() / Block.DIMENSION,
+                    scaleY*camera.getOutputHeight() / (Block.DIM2/2)
                 );
-            
-            //player coord
-            Wurfelengine.getGraphics().setColor(Color.blue);
-            View.getFont().drawString(
-                posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
-                posY + controller.getPlayer().getRelCoords()[1] * scaleY - 30,
-                controller.getPlayer().getRelCoords()[0] +" | "+ controller.getPlayer().getRelCoords()[1] +" | "+ controller.getPlayer().getRelCoords()[2],
-                Color.blue
+            }
+
+            //top level getCamera() rectangle
+            Wurfelengine.getGraphics().setColor(Color.white);
+            Wurfelengine.getGraphics().drawRect(
+                posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
+                posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
+                + scaleY *2*(Chunk.getBlocksZ() * Block.DIM2)/ (float) (Block.DIMENSION),
+                scaleX*camera.getOutputWidth() / Block.DIMENSION,
+                scaleY*camera.getOutputHeight() / (Block.DIM2/2)
             );
 
+            if (controller.getPlayer()!=null){
+                View.getFont().drawString(
+                        posX + scaleX * camera.getOutputPosX() / Block.DIMENSION
+                        + scaleX*camera.getOutputWidth() / Block.DIMENSION,
+                        posY + scaleY * camera.getOutputPosY() / Block.DIM2
+                        + scaleY *2*(controller.getPlayer().getRelCoords()[2] * Block.DIM2)/ (float) (Block.DIMENSION)
+                        + scaleY*camera.getOutputHeight() / Block.DIM2,
+                        camera.getRightBorder() +" | "+ camera.getBottomBorder() ,
+                        Color.black
+                    );
 
-            //player pos
+                //player coord
+                Wurfelengine.getGraphics().setColor(Color.blue);
+                View.getFont().drawString(
+                    posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
+                    posY + controller.getPlayer().getRelCoords()[1] * scaleY - 30,
+                    controller.getPlayer().getRelCoords()[0] +" | "+ controller.getPlayer().getRelCoords()[1] +" | "+ controller.getPlayer().getRelCoords()[2],
+                    Color.blue
+                );
+
+
+                //player pos
+                View.getFont().drawString(
+                    posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
+                    posY + controller.getPlayer().getRelCoords()[1] * scaleY - 10,
+                    (int) controller.getPlayer().getPos()[0] +" | "+ (int) controller.getPlayer().getPos()[1] +" | "+ (int) controller.getPlayer().getPos()[2],
+                    Color.red
+                );
+            }
+
+            //getCamera() pos
             View.getFont().drawString(
-                posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
-                posY + controller.getPlayer().getRelCoords()[1] * scaleY - 10,
-                (int) controller.getPlayer().getPos()[0] +" | "+ (int) controller.getPlayer().getPos()[1] +" | "+ (int) controller.getPlayer().getPos()[2],
-                Color.red
+                    posX ,
+                    posY + 3*Chunk.getBlocksY()*scaleY + 15,
+                    camera.getOutputPosX() +" | "+ camera.getOutputPosY(),
+                    Color.white
             );
         }
-
-        //getCamera() pos
-        View.getFont().drawString(
-                posX ,
-                posY + 3*Chunk.getBlocksY()*scaleY + 15,
-                camera.getOutputPosX() +" | "+ camera.getOutputPosY(),
-                Color.white
-            );
     }
     
      public boolean toggleVisibility(){
