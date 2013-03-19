@@ -16,6 +16,7 @@ public class Minimap {
     private Controller controller;
     private Camera camera;
     private Color[][] mapdata = new Color[Map.getBlocksX()][Map.getBlocksY()];
+    private boolean visible;
 
     /**
      * Create a camera
@@ -23,6 +24,7 @@ public class Minimap {
      * @param camera the camera wich should be represented on the minimap
      */
     public Minimap(Controller controller, Camera camera) {
+        //if (controller == null || camera == null) throw new NullPointerException("Parameter controller or camera is null");
         this.controller = controller;
         this.camera = camera;
     }
@@ -49,11 +51,6 @@ public class Minimap {
     public void render(int screenX, int screenY) {
         this.posX = screenX - (int) (Map.getBlocksX()*scaleX);
         this.posY = screenY;
-        int z;        
-        //if there is no player => ground level
-        if (controller.getPlayer()!=null)
-            z = controller.getPlayer().getRelCoords()[2]-1;
-        else z = 0;
         
         Wurfelengine.getGraphics().setAntiAlias(false);
         
@@ -168,5 +165,10 @@ public class Minimap {
                 camera.getOutputPosX() +" | "+ camera.getOutputPosY(),
                 Color.white
             );
-        }
+    }
+    
+     public boolean toggleVisibility(){
+        visible = !visible;
+        return visible;
+    }
 }

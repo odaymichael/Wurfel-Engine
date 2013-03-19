@@ -1,13 +1,10 @@
 package com.BombingGames.Game.CustomGame;
 
-import com.BombingGames.Game.Camera;
-import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.*;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.ExplosiveBarrel;
-import com.BombingGames.Game.Gameplay;
-import com.BombingGames.Game.Map;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
@@ -45,6 +42,7 @@ public class CustomGameController extends Controller {
             )
         );
         
+        setMinimap(new Minimap(this, getCamera()));
         gc.getInput().addMouseListener(new MouseDraggedListener());
     }
     

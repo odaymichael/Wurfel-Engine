@@ -37,7 +37,6 @@ public class Controller {
             400//full height
         );
         
-        minimap = new Minimap(this, camera);
         recalcRequested = true;
     }
 
@@ -257,13 +256,15 @@ public class Controller {
      * Returns the camera
      * @return
      */
-    public Camera getCamera() {
+    protected Camera getCamera() {
         return camera;
     }
 
-    public void setCamera(Camera camera) {
+    protected void setCamera(Camera camera) {
         this.camera = camera;
     }
-    
-    
+
+    protected void setMinimap(Minimap minimap) {
+        this.minimap = minimap;
+    }
 }
