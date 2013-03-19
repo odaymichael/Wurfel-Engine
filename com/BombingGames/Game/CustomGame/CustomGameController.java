@@ -52,7 +52,7 @@ public class CustomGameController extends Controller {
             //toggle fullscreen
             if (input.isKeyPressed(Input.KEY_E)){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
                 getMap().earthquake(5000);
-                getMap().requestRecalc();
+                Controller.requestRecalc();
             }
             
             //pause

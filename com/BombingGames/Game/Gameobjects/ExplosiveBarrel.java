@@ -58,7 +58,7 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
                     }
                 }
          explosionsound.play();
-         Controller.getMap().requestRecalc();
+         Controller.requestRecalc();
     }
 
     @Override

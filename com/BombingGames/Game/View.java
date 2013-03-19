@@ -184,5 +184,9 @@ public class View {
     public static AngelCodeFont getFont() {
         return baseFont;
     }
+
+    public Minimap getMinimap() {
+        return minimap;
+    }    
     
 }

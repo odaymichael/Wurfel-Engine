@@ -15,6 +15,7 @@ public class Minimap {
     private final float scaleY = 6;//4
     private Controller controller;
     private Camera camera;
+    private Color[][] mapdata = new Color[Map.getBlocksX()][Map.getBlocksY()];
 
     /**
      * Create a camera
@@ -24,6 +25,19 @@ public class Minimap {
     public Minimap(Controller controller, Camera camera) {
         this.controller = controller;
         this.camera = camera;
+    }
+    
+    public void update(){
+        for (int x = 0; x < Map.getBlocksX(); x++) {
+            for (int y = 0; y < Map.getBlocksY(); y++) {
+                int z = Map.getBlocksZ() -1;
+                Block block = Controller.getMapData(new int[]{x,y,z});
+                while ( z>0 && (block = Controller.getMapData(new int[]{x,y,z})).isHidden() ) {
+                    z--;
+                }
+                mapdata[x][y] = Block.getRepresentingColor(block.getId(), block.getValue());
+            }
+        }
     }
     
     
@@ -43,23 +57,20 @@ public class Minimap {
         
         Wurfelengine.getGraphics().setAntiAlias(false);
         
-        //render a chunk
-        for (int pos=0; pos < 9; pos++){  
-            for (int x = Chunk.getBlocksX()*(pos%3); x < Chunk.getBlocksX() * (pos%3+1); x++){
-                for (int y = Chunk.getBlocksY()*(pos/3); y < Chunk.getBlocksY() * (pos/3+1); y++){
-                    Block block = Controller.getMapDataSafe(x, y, z);               
-                    if (!block.isHidden()){
-                        Wurfelengine.getGraphics().setColor(Block.getRepresentingColor(block.getId(), block.getValue()));
-                        Wurfelengine.getGraphics().fillRect(
-                            this.posX + (x + (y%2==1 ? 0.5f : 0) ) * scaleX,
-                            this.posY + y*scaleY,
-                            scaleX,
-                            scaleY
-                        );
-                    }
-                }
+        //render the map
+        for (int x = 0; x < Map.getBlocksX(); x++) {
+            for (int y = 0; y < Map.getBlocksY(); y++) {
+                Wurfelengine.getGraphics().setColor(mapdata[x][y]);
+                Wurfelengine.getGraphics().fillRect(
+                    this.posX + (x + (y%2 == 1 ? 0.5f : 0) ) * scaleX,
+                    this.posY + y*scaleY,
+                    scaleX,
+                    scaleY
+                );   
             }
-
+        }
+                
+        for (int pos = 0; pos < 9; pos++) {
             //player
             if (controller.getPlayer()!=null){
                 Wurfelengine.getGraphics().setColor(Color.blue);

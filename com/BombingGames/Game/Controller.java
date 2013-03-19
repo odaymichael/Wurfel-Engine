@@ -14,6 +14,7 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class Controller {
     private static Map map;
+    private static boolean recalcRequested;
     private AbstractCharacter player;
     private View view;
     
@@ -25,6 +26,7 @@ public class Controller {
      */
     public Controller(GameContainer container, StateBasedGame game) throws SlickException{        
         map = new Map(MainMenuState.shouldLoadMap());
+        recalcRequested = true;
     }
 
     /**
@@ -162,7 +164,7 @@ public class Controller {
             entity.update(delta);
         
         //recalculates the light if requested
-        map.recalcIfRequested(view.getCamera());      
+        recalcIfRequested(view.getCamera());      
        
         view.getCamera().update();
                 
@@ -212,5 +214,26 @@ public class Controller {
      */
     public static Block getNeighbourBlock(int[] coords, int side){
         return Controller.getMapDataSafe(Block.sideIDtoNeighbourCoords(coords, side));
+    }
+    
+   /**
+     * Informs the map that a recalc is requested. It will do it in the next update. This method exist to minimize update calls.
+     */
+    public static void requestRecalc(){
+        recalcRequested = true;
+    }
+    
+    /**
+     * When the recalc was requested it calls raytracing and light recalculing. This method should be called every update.
+     * Request a recalc with <i>reuqestRecalc()</i>. 
+     * @param camera 
+     */
+    public void recalcIfRequested(Camera camera){
+        if (recalcRequested) {
+            camera.raytracing();
+            map.calc_light();
+            view.getMinimap().update();
+            recalcRequested = false;
+        }
     }
 }

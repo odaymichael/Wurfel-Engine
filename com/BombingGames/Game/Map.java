@@ -18,7 +18,6 @@ public class Map {
     
     private static int blocksX, blocksY, blocksZ;    
     private Block data[][][];
-    private boolean recalcRequested;
     private static ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
     //A list which has all current nine chunk coordinates in it.
@@ -52,7 +51,7 @@ public class Map {
                 pos++;               
             }
         
-        recalcRequested = true;
+
        
         Log.debug("...Finished creating the map");
     }
@@ -147,7 +146,7 @@ public class Map {
             }
         }
         
-        requestRecalc();
+        Controller.requestRecalc();
         } else {
             Log.error("setCenter was called with center:"+newmiddle);
         }
@@ -222,25 +221,6 @@ public class Map {
             }
     }
     
-    /**
-     * Informs the map that a recalc is requested. It will do it in the next update. This method exist to minimize updates.
-     */
-    public void requestRecalc(){
-        recalcRequested = true;
-    }
-    
-    /**
-     * When the recalc was requested it calls raytracing and light recalculing. This method should be called every update.
-     * Request a recalc with <i>reuqestRecalc()</i>. 
-     * @param camera 
-     */
-    public void recalcIfRequested(Camera camera){
-        if (recalcRequested) {
-            camera.raytracing();
-            calc_light();
-            recalcRequested = false;
-        }
-    }
     
     /**
      * Draws the map
@@ -428,7 +408,7 @@ public class Map {
             };
             data[x[i]][y[i]][z[i]].setPos(pos);
         }
-        requestRecalc();
+        Controller.requestRecalc();
     }
     
     /**
