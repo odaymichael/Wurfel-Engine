@@ -258,21 +258,21 @@ public abstract class GameObject {
 
     /**
      * Get the screen x-position where the object is rendered without regarding the camera.
-     * @param object the object of wich you want the position
-     * @param coords  the coordinates where the object is rendered 
-     * @return the screen X-position in pixels
+     * @param object The object of wich you want the position
+     * @param coords  The coordinates where the object is rendered 
+     * @return The screen X-position in pixels.
      */
     public static int getScreenPosX(GameObject object, int[] coords) {
-        return coords[0] * DIMENSION
-               + (coords[1] % 2) * DIM2
-               + (int) (object.pos[0]);
+        return coords[0] * DIMENSION //x-coordinate multiplied by it's dimension in this direction
+               + (coords[1] % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
+               + (int) (object.pos[0]); //add the objects position inside this coordinate
     }
 
     /**
      * Get the screen y-position where the object is rendered without regarding the camera.
-     * @param object the object of wich you want the position
-     * @param coords the coordinates where the object is rendered 
-     * @return the screen Y-position in pixels
+     * @param object The object of wich you want the position
+     * @param coords The coordinates where the object is rendered 
+     * @return The screen Y-position in pixels.
      */
     public static int getScreenPosY(GameObject object, int[] coords) {
         return coords[1] * DIM4
@@ -301,14 +301,16 @@ public abstract class GameObject {
     }
 
     /**
-     * Returns the field-number where the coordiantes are inside in relation to the current field. Field id count clockwise, starting with the top with 0.
-     * If you want to get the neighbour you can use sideIDtoNeighbourCoords(int[], int)
+     * Returns the field-id where the coordiantes are inside in relation to the current field. Field id count clockwise, starting with the top with 0.
+     * If you want to get the neighbour you can use sideIDtoNeighbourCoords(int[], int) with the second parameter foudn by this function.
      * The counting:<br>
-     * 701<br>
-     * 682<br>
-     * 543<br>
-     * @param x game-space, value in pixels
-     * @param y game-space, value in pixels
+     * 7 \ 0 / 1<br>
+     * -------<br>
+     * 6 | 8 | 2<br>
+     * -------<br>
+     * 5 / 4 \ 3<br>
+     * @param x game-space-coordinates, value in pixels
+     * @param y game-space-coordinates, value in pixels
      * @return Returns the fieldnumber of the coordinates. 8 is the field itself.
      * @see com.BombingGames.Game.Gameobjects.GameObject#sideIDtoNeighbourCoords(int[], int)
      */
