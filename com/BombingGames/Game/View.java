@@ -21,50 +21,23 @@ public class View {
     public static final int ENGINE_RENDER_WIDTH = 1920;
 
     private static AngelCodeFont baseFont;
-    private Camera camera,camera2;
-    private float equalizationScale;    
-    private boolean goodgraphics = false;
-    private Minimap minimap;
+    private float equalizationScale;
+    private Controller controller;
     
     /**
-     * Creates a View
+     * Creates a View.
      * @param gc
      * @param controller 
      * @throws SlickException
      */
     public View(GameContainer gc, Controller controller) throws SlickException {
-        // initialise the ttF font which CAUSES LONG LOADING TIME!!!
-        //TrueTypeFont trueTypeFont;
-
-        //startFont = Font.createFont(Font.TRUETYPE_FONT,new BufferedInputStream(this.getClass().getResourceAsStream("Blox2.ttf")));
-        //UnicodeFont startFont = new UnicodeFont("com/BombingGames/Game/Blox2.ttf", 20, false, false);
+        this.controller = controller;
         baseFont = new AngelCodeFont("com/BombingGames/Game/arial.fnt","com/BombingGames/Game/arial.png");
-        //baseFont = startFont.deriveFont(Font.PLAIN, 12);
-        //baseFont = startFont.getFont().deriveFont(Font.PLAIN, 18);
-        //tTFont = new TrueTypeFont(baseFont, true);
         
         //default rendering size is FullHD
         equalizationScale = gc.getWidth() / (float) ENGINE_RENDER_WIDTH;
         Log.debug("Scale is:" + Float.toString(equalizationScale));
-        
-        camera = new Camera(
-            controller.getPlayer(),
-            0, //left
-            0, //top
-            gc.getWidth(), //full width 
-            gc.getHeight()//full height
-        );
-        
-        camera2 = new Camera(
-            new int[]{Map.getBlocksX()/2,Map.getBlocksY()/2,Map.getBlocksZ()/2},
-            800, //left
-            0, //top
-            400, //full width 
-            400//full height
-        );
-        
-        minimap = new Minimap(controller, camera);
-        
+ 
         Block.loadSheet();
      }
     
@@ -74,14 +47,15 @@ public class View {
      * @throws SlickException
      */
     public void render(Graphics g) throws SlickException{
-        camera.render();
+        if (controller.getCamera() != null) 
+            controller.getCamera().render();
         //camera2.render();
         
         g.scale(equalizationScale, equalizationScale);
         
         //render HUD
-        if (minimap != null)
-            minimap.render(
+        if (controller.getMinimap() != null)
+            controller.getMinimap().render(
                 Wurfelengine.getGameContainer().getScreenWidth() - 10,
                 10
                 ); 
@@ -98,13 +72,6 @@ public class View {
         return equalizationScale;
     }
 
-    /**
-     * Returns the camera
-     * @return
-     */
-    public Camera getCamera() {
-        return camera;
-    }
     
    /**
      * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
@@ -112,7 +79,8 @@ public class View {
      * @return game coordinate
      */
     public int ScreenXtoGame(int x){
-        return (int) ((x - getCamera().getScreenPosX()) / getCamera().getTotalScale() + getCamera().getOutputPosX());
+        return (int) ((x - controller.getCamera().getScreenPosX()) / controller.getCamera().getTotalScale()
+            + controller.getCamera().getOutputPosX());
     }
     
    /**
@@ -121,7 +89,8 @@ public class View {
      * @return game coordinate
      */
     public int ScreenYtoGame(int y){
-        return (int) ((y - getCamera().getScreenPosY()) / getCamera().getTotalScale() + getCamera().getOutputPosY()) * 2;
+        return (int) ((y - controller.getCamera().getScreenPosY()) / controller.getCamera().getTotalScale()
+            + controller.getCamera().getOutputPosY()) * 2;
     }
     
     /**
@@ -160,22 +129,6 @@ public class View {
         
         return coords;
     }
-    
-   /**
-     * 
-     * @param goodgraphics
-     */
-    public void setGoodgraphics(boolean goodgraphics) {
-        this.goodgraphics = goodgraphics;
-    }
-       
-   /**
-     * Should the graphic be a bit slower but better? Must be in Controller because is needed for e.g. the Block and there used as data
-     * @return 
-     */
-    public boolean hasGoodGraphics() {
-        return goodgraphics;
-    }
 
     /**
      * 
@@ -184,9 +137,4 @@ public class View {
     public static AngelCodeFont getFont() {
         return baseFont;
     }
-
-    public Minimap getMinimap() {
-        return minimap;
-    }    
-    
 }

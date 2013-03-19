@@ -1,6 +1,6 @@
 package com.BombingGames.Game.CustomGame;
 
-import com.BombingGames.Game.Chunk;
+import com.BombingGames.Game.Camera;
 import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
@@ -22,7 +22,7 @@ public class CustomGameController extends Controller {
     private GameContainer gc;
     
     /**
-     * The custom game code belongs here
+     * The custom game code belongs here.
      * @param gc 
      * @param game
      * @throws SlickException
@@ -33,6 +33,16 @@ public class CustomGameController extends Controller {
         
         setPlayer(
             (AbstractCharacter) AbstractEntity.getInstance(40, 0, new int[]{0,0, Map.getBlocksZ()-1})
+        );
+        
+        setCamera(
+            new Camera(
+                getPlayer(),
+                0, //left
+                0, //top
+                gc.getWidth(), //full width 
+                gc.getHeight()//full height
+            )
         );
         
         gc.getInput().addMouseListener(new MouseDraggedListener());
@@ -55,14 +65,13 @@ public class CustomGameController extends Controller {
                 Controller.requestRecalc();
             }
             
+            //toggle minimap
+            if (input.isKeyPressed(Input.KEY_M)){
+                Gameplay.MSGSYSTEM.add("Minimap toggled to: "+ getMinimap().toggleVisibility());
+            }
+            
             //pause
             if (input.isKeyDown(Input.KEY_P)) gc.setPaused(true);
-
-            //good graphics
-            if (input.isKeyPressed(Input.KEY_G)) {
-                getView().setGoodgraphics(!getView().hasGoodGraphics());
-                Gameplay.MSGSYSTEM.add("Good Graphics is now " + getView().hasGoodGraphics());
-            }
 
             //toggle getCamera()
             //if (input.isKeyPressed(Input.KEY_C)) 
@@ -72,7 +81,7 @@ public class CustomGameController extends Controller {
 
             //reset zoom
             if (input.isKeyPressed(Input.KEY_Z)) {
-                getView().getCamera().setZoom(1);
+                getCamera().setZoom(1);
                 Gameplay.MSGSYSTEM.add("Zoom reset");
             }        
 
@@ -107,9 +116,9 @@ public class CustomGameController extends Controller {
             gc.getInput().consumeEvent();
             
             zoom = zoom + change/1000f;
-            getView().getCamera().setZoom(zoom);
+            getCamera().setZoom(zoom);
             
-            Gameplay.MSGSYSTEM.add("Zoom: " + getView().getCamera().getZoom());   
+            Gameplay.MSGSYSTEM.add("Zoom: " + getCamera().getZoom());   
         }
 
         @Override
@@ -147,7 +156,7 @@ public class CustomGameController extends Controller {
                 if (coords[2] < Map.getBlocksZ()-1) coords[2]++;
 
                 setMapData(coords, Block.getInstance(71, 0, Controller.getMap().relToAbsCoords(coords)));
-                getView().getCamera().traceRayTo(coords, true);
+                getCamera().traceRayTo(coords, true);
             } else {//right click
                 if (getMapDataSafe(coords) instanceof ExplosiveBarrel)
                     ((ExplosiveBarrel) getMapDataSafe(coords)).explode();

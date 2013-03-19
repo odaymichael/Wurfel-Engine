@@ -17,15 +17,27 @@ public class Controller {
     private static boolean recalcRequested;
     private AbstractCharacter player;
     private View view;
+    private Camera camera,camera2;
+    private Minimap minimap;
     
     /**
      * Constructor is called when entering the gamemode.
-     * @param container
+     * @param gc
      * @param game
      * @throws SlickException
      */
-    public Controller(GameContainer container, StateBasedGame game) throws SlickException{        
+    public Controller(GameContainer gc, StateBasedGame game) throws SlickException{        
         map = new Map(MainMenuState.shouldLoadMap());
+        
+        camera2 = new Camera(
+            new int[]{Map.getBlocksX()/2,Map.getBlocksY()/2,Map.getBlocksZ()/2},
+            800, //left
+            0, //top
+            400, //full width 
+            400//full height
+        );
+        
+        minimap = new Minimap(this, camera);
         recalcRequested = true;
     }
 
@@ -139,17 +151,17 @@ public class Controller {
      */
     public void update(int delta) throws SlickException{
         //earth to right
-        if (view.getCamera().getLeftBorder() <= 0)
+        if (camera.getLeftBorder() <= 0)
            map.setCenter(3);
         else //earth to the left
-            if (view.getCamera().getRightBorder() >= Map.getBlocksX()-1) 
+            if (camera.getRightBorder() >= Map.getBlocksX()-1) 
                 map.setCenter(5);
         
        //scroll up, earth down            
-        if (view.getCamera().getTopBorder() <= 0)
+        if (camera.getTopBorder() <= 0)
             map.setCenter(1);
         else //scroll down, earth up
-            if (view.getCamera().getBottomBorder() >= Map.getBlocksY()-1)
+            if (camera.getBottomBorder() >= Map.getBlocksY()-1)
                 map.setCenter(7);
         
         //update every block on the map
@@ -164,9 +176,9 @@ public class Controller {
             entity.update(delta);
         
         //recalculates the light if requested
-        recalcIfRequested(view.getCamera());      
+        recalcIfRequested(camera);      
        
-        view.getCamera().update();
+        camera.update();
                 
         //update the log
         Gameplay.MSGSYSTEM.update(delta);
@@ -232,8 +244,26 @@ public class Controller {
         if (recalcRequested) {
             camera.raytracing();
             map.calc_light();
-            view.getMinimap().update();
+            if (minimap != null) minimap.update();
             recalcRequested = false;
         }
     }
+    
+    public Minimap getMinimap() {
+        return minimap;
+    }
+    
+    /**
+     * Returns the camera
+     * @return
+     */
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
+    }
+    
+    
 }

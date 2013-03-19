@@ -41,11 +41,9 @@ public class Camera {
      */
     public Camera(int[] focus, int x, int y, int width, int height) {
         this(x, y, width, height);   
-        
+        Gameplay.MSGSYSTEM.add("Camera is focusing a coordinate");
         this.focusblock = focus;
         this.focusentity = null;         
-
-        update();
     }
     
    /**
@@ -58,12 +56,12 @@ public class Camera {
      * @param height the screen width
      */
     public Camera(AbstractEntity focusentity, int x, int y, int width, int height) {
-        this(x,y,width,height);  
-        
+        this(x,y,width,height);
+        if (focusentity == null)
+            throw new NullPointerException("Parameter 'focusentity' is null");
+        Gameplay.MSGSYSTEM.add("Camera is focusing an entity");
         this.focusentity = focusentity;
         this.focusblock = null;
-
-        update();
     }
   
     /**
@@ -220,7 +218,7 @@ public class Camera {
     /**
      * Updates the camera.
      */
-    public final void update() {
+    public void update() {
         if (focusblock != null) {
             outputPosX = GameObject.getScreenPosX(
                 Controller.getMapData(focusblock), focusblock
