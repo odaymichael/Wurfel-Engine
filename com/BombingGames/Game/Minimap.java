@@ -38,6 +38,7 @@ public class Minimap {
                     z--;
                 }
                 mapdata[x][y] = Block.getRepresentingColor(block.getId(), block.getValue());
+                mapdata[x][y] = mapdata[x][y].darker(1f-z/(float)Map.getBlocksZ());
             }
         }
     }
@@ -52,6 +53,7 @@ public class Minimap {
         this.posX = screenX - (int) (Map.getBlocksX()*scaleX);
         this.posY = screenY;
         
+        //maybe this speeds up rendering the minimap
         Wurfelengine.getGraphics().setAntiAlias(false);
         
         //render the map
