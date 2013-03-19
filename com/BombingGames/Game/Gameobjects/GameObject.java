@@ -9,19 +9,19 @@ import org.newdawn.slick.SpriteSheet;
  * @author Benedikt
  */
 public abstract class GameObject {
-    /**Screen DIMENSION of the Block in pixels. This is the length from the left to the right border of the block.
+    /**Screen DIMENSION of a block/object in pixels. This is the length from the left to the right border of the block.
      * In game coordinates this is also the dimension from top to bottom.*/
     public static final int DIMENSION = 160;
     /**The half (2) of DIMENSION. The short form of: DIMENSION/2*/
-    public static final int DIM2 = Block.DIMENSION / 2;
+    public static final int DIM2 = DIMENSION / 2;
     /**A quarter (4) of DIMENSION. The short form of: DIMENSION/4*/
-    public static final int DIM4 = Block.DIMENSION / 4;
+    public static final int DIM4 = DIMENSION / 4;
     /**the max. amount of different object types*/
-    public static final int OBJECTTYPECOUNT = 99;
+    public static final int OBJECTTYPESCOUNT = 99;
     /**The real game world dimension in pixel. Usually the use of DIMENSION is fine because of the map format every coordinate center is straight.
         * The value is DIMENSION/sqrt(2).
         */
-    public static int GAMEDIMENSION = (int) (Block.DIMENSION / Math.sqrt(2));
+    public static int GAMEDIMENSION = (int) (DIMENSION / Math.sqrt(2));
     /**
      * Has the positions of the sprites for rendering with sides
      * 1. Dimension id
@@ -29,17 +29,17 @@ public abstract class GameObject {
      * 3. Dimension: Side
      * 4. Dimension: X- or Y-coordinate
      */
-    public static final int[][][][] SPRITEPOS = new int[OBJECTTYPECOUNT][9][3][2];
+    public static final int[][][][] SPRITEPOS = new int[OBJECTTYPESCOUNT][9][3][2];
 
-     /**Containts the names of the blocks. index=id*/
-    public static final String[] NAMELIST = new String[OBJECTTYPECOUNT];   
+     /**Containts the names of the objects. index=id*/
+    public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT];   
     
-    /**The sprite image which contains every block image*/
+    /**The sprite image which contains every object image*/
     private static Image spritesheet;
     
     private final int id; 
     private int value;
-    private float[] pos = {Block.DIM2, Block.DIM2, 0};
+    private float[] pos = {DIM2, DIM2, 0};
     private boolean obstacle, transparent, visible, hidden; 
     private int lightlevel = 50;
     private int dimensionY = 1;    
@@ -210,7 +210,7 @@ public abstract class GameObject {
     }
     
     /**
-     * Creates an object. Use getInterface().
+     * Creates an object. Use getInterface() to create blocks or entitys.
      * @param id the id of the object
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
@@ -225,11 +225,11 @@ public abstract class GameObject {
     public abstract void update(int delta);
     
      /**
-     * Draws a block
+     * Draws an object.
      * @param coords 
      */
     public void render(int[] coords) {
-        //draw every visible block except not visible ones
+        //draw the object except not visible ones
         if (!hidden && visible) {
             Image image = getSprite(id, value, dimensionY);
             //calc  brightness
@@ -242,7 +242,7 @@ public abstract class GameObject {
             image.setColor(3, brightness, brightness, brightness);
             
             int xpos = getScreenPosX(this, coords);
-            int ypos = getScreenPosY(this, coords) - (dimensionY - 1) * Block.DIM2;
+            int ypos = getScreenPosY(this, coords) - (dimensionY - 1) * DIM2;
             image.drawEmbedded(xpos, ypos);
         }
     } 
@@ -257,7 +257,7 @@ public abstract class GameObject {
     
 
     /**
-     * Get the screen x-position where the block is rendered without regarding the camera.
+     * Get the screen x-position where the object is rendered without regarding the camera.
      * @param object the object of wich you want the position
      * @param coords  the coordinates where the object is rendered 
      * @return the screen X-position in pixels
@@ -302,15 +302,15 @@ public abstract class GameObject {
 
     /**
      * Returns the field-number where the coordiantes are inside in relation to the current field. Field id count clockwise, starting with the top with 0.
-     * If you want to get the neighbour you have to use a SelfAwareBlock and the method getNeighbourBlock.
+     * If you want to get the neighbour you can use sideIDtoNeighbourCoords(int[], int)
      * The counting:<br>
      * 701<br>
      * 682<br>
      * 543<br>
      * @param x game-space, value in pixels
      * @param y game-space, value in pixels
-     * @return Returns the fieldnumber of the coordinates. 8 is itself.
-     * @see com.BombingGames.Game.Blocks.SelfAwareBlock#getNeighbourBlock(int, int)
+     * @return Returns the fieldnumber of the coordinates. 8 is the field itself.
+     * @see com.BombingGames.Game.Gameobjects.GameObject#sideIDtoNeighbourCoords(int[], int)
      */
     public static int getSideID(float x, float y) {
         int result = 8;
@@ -347,7 +347,7 @@ public abstract class GameObject {
      * Get the neighbour coordinates of the neighbour of the coords you give.
      * @param coords the coordinates of the field
      * @param sideID the side number of the given coordinates
-     * @return coordinates of the neighbour
+     * @return The coordinates of the neighbour.
      */
     public static int[] sideIDtoNeighbourCoords(int[] coords, int sideID) {
         int[] result = new int[3];
@@ -528,7 +528,7 @@ public abstract class GameObject {
     }
 
     /**
-     * Make the Block transparent
+     * Make the Object transparent
      * @param transparent
      */
     public void setTransparent(boolean transparent) {

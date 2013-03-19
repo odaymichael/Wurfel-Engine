@@ -24,11 +24,14 @@ public class Minimap {
      * @param camera the camera wich should be represented on the minimap
      */
     public Minimap(Controller controller, Camera camera) {
-        //if (controller == null || camera == null) throw new NullPointerException("Parameter controller or camera is null");
+        if (controller == null || camera == null) throw new NullPointerException("Parameter controller or camera is null");
         this.controller = controller;
         this.camera = camera;
     }
     
+    /**
+     * Updates the minimap- Should only be done after changing the map.
+     */
     public void update(){
         for (int x = 0; x < Map.getBlocksX(); x++) {
             for (int y = 0; y < Map.getBlocksY(); y++) {
@@ -45,9 +48,9 @@ public class Minimap {
     
     
     /**
-     * Draws the Minimap
-     * @param screenX The distance of the right side.
-     * @param screenY Distance from top.
+     * Renders the Minimap
+     * @param screenX The distance of the right border.
+     * @param screenY The distance from top.
      */
     public void render(int screenX, int screenY) {
         if (visible) {
@@ -171,7 +174,11 @@ public class Minimap {
         }
     }
     
-     public boolean toggleVisibility(){
+    /**
+     * Toggle between visible and invisible.
+     * @return The new visibility of the minimap. True= visible.
+     */
+    public boolean toggleVisibility(){
         visible = !visible;
         return visible;
     }
