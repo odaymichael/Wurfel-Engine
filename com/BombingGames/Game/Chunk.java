@@ -221,7 +221,8 @@ public class Chunk {
 
                             data[x][y][z] = Block.getInstance(
                                         Integer.parseInt(line.substring(0,posdots)),
-                                        Integer.parseInt(line.substring(posdots+1, posend))
+                                        Integer.parseInt(line.substring(posdots+1, posend)),
+                                        new int[]{x + coordX* blocksX, y + coordY * blocksY, z} 
                                         );
                             x++;
                             line.delete(0,posend+1);

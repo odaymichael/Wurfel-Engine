@@ -15,10 +15,8 @@ public class Launcher extends StateBasedGame {
     /**
      * The Version of the Engine
      */
-    public static final String VERSION = "0.7";
-    
+    public static final String VERSION = "0.7";    
     private static AppGameContainer game;    
-    private static GameContainer gc;
         
     /**
      * Creates a new Launcher
@@ -47,7 +45,5 @@ public class Launcher extends StateBasedGame {
     public void initStatesList(GameContainer container) throws SlickException {
         addState(new MainMenuState(1));
         addState(new Gameplay());
-        
-        gc = container;
     }
 }
