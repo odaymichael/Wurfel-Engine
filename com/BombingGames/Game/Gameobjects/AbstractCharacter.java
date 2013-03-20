@@ -10,10 +10,14 @@ import org.newdawn.slick.Sound;
  * @author Benedikt
  */
 public abstract class AbstractCharacter extends AbstractEntity {
-   /* Always one of them must be 1 to prevent a division with 0.*/
+   private final int COLISSIONRADIUS = GameObject.DIM4;
    private float[] dir = {1, 0, 0};
    private String controls = "WASD";
-   private final int COLISSIONRADIUS = GameObject.DIM4;
+      
+   /**provides a factor for the vector*/
+   private float speed;
+   private Sound fallingSound;
+   private Sound runningSound;
 
    /**
     * Constructor of AbstractCharacter.
@@ -22,14 +26,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
    protected AbstractCharacter(int id) {
         super(id);
     }
-   
-   /**
-    * provides a factor for the vector
-    */
-   private float speed;
-   
-   private Sound fallingSound;
-   private Sound runningSound;
    
    /**
      * This method should define what happens when the object  jumps. It should call super.jump(int velo)
@@ -65,16 +61,18 @@ public abstract class AbstractCharacter extends AbstractEntity {
      * @throws SlickException
      */
     public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed) throws SlickException {
-            speed = walkingspeed;
-            
-            //update the movement vector
-            dir[0] = 0;
-            dir[1] = 0;
-               
-            if (up)    dir[1] = -1;
-            if (down)  dir[1] = 1;
-            if (left)  dir[0] = -1;
-            if (right) dir[0] = 1;
+        if (up || down || left || right){
+        speed = walkingspeed;
+
+        //update the movement vector
+        dir[0] = 0;
+        dir[1] = 0;
+
+        if (up)    dir[1] = -1;
+        if (down)  dir[1] = 1;
+        if (left)  dir[0] = -1;
+        if (right) dir[0] = 1;
+        } else speed=0;
    }
     
    /**
