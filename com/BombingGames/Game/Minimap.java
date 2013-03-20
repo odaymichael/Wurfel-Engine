@@ -41,6 +41,8 @@ public class Minimap {
                     z--;
                 }
                 mapdata[x][y] = Block.getRepresentingColor(block.getId(), block.getValue());
+                mapdata[x][y].a = 1;
+                mapdata[x][y] = mapdata[x][y].brighter(0.1f);
                 mapdata[x][y] = mapdata[x][y].darker(1f-z/(float)Map.getBlocksZ());
             }
         }
