@@ -248,6 +248,10 @@ public class Controller {
         }
     }
     
+    /**
+     * Returns the minimap.
+     * @return 
+     */
     public Minimap getMinimap() {
         return minimap;
     }
