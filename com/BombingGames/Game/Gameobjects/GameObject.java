@@ -248,51 +248,6 @@ public abstract class GameObject {
     } 
 
     /**
-     * Returns the spritesheet used for rendering.
-     * @return the spritesheet used by the objects
-     */
-    public static Image getSpritesheet() {
-        return spritesheet;
-    }
-    
-
-    /**
-     * Get the screen x-position where the object is rendered without regarding the camera.
-     * @param object The object of wich you want the position
-     * @param coords  The coordinates where the object is rendered 
-     * @return The screen X-position in pixels.
-     */
-    public static int getScreenPosX(GameObject object, int[] coords) {
-        return coords[0] * DIMENSION //x-coordinate multiplied by it's dimension in this direction
-               + (coords[1] % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
-               + (int) (object.pos[0]); //add the objects position inside this coordinate
-    }
-
-    /**
-     * Get the screen y-position where the object is rendered without regarding the camera.
-     * @param object The object of wich you want the position
-     * @param coords The coordinates where the object is rendered 
-     * @return The screen Y-position in pixels.
-     */
-    public static int getScreenPosY(GameObject object, int[] coords) {
-        return coords[1] * DIM4
-               - coords[2] * DIM2
-               + (int) (object.pos[1] / 2)
-               - (int) (object.pos[2] / Math.sqrt(2));
-    }
-
-    /**
-     * Returns a sprite image of non-block image
-     * @param id
-     * @param value
-     * @param dimY the height of the object
-     * @return
-     */
-    public static Image getSprite(int id, int value, int dimY) {
-        return spritesheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], DIMENSION, dimY * DIM2 + DIM2);
-    }
-
-    /**
      * Load the spritesheet from memory.
      * @throws SlickException
      */
@@ -410,8 +365,57 @@ public abstract class GameObject {
             + (dimensionY - 1) * DIMENSION
             );
     }
+    
+  
+
+    /**
+     * Get the screen x-position where the object is rendered without regarding the camera.
+     * @param object The object of wich you want the position
+     * @param coords  The coordinates where the object is rendered 
+     * @return The screen X-position in pixels.
+     */
+    public static int getScreenPosX(GameObject object, int[] coords) {
+        return coords[0] * DIMENSION //x-coordinate multiplied by it's dimension in this direction
+               + (coords[1] % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
+               + (int) (object.pos[0]); //add the objects position inside this coordinate
+    }
+
+    /**
+     * Get the screen y-position where the object is rendered without regarding the camera.
+     * @param object The object of wich you want the position
+     * @param coords The coordinates where the object is rendered 
+     * @return The screen Y-position in pixels.
+     */
+    public static int getScreenPosY(GameObject object, int[] coords) {
+        return coords[1] * DIM4
+               - coords[2] * DIM2
+               + (int) (object.pos[1] / 2)
+               - (int) (object.pos[2] / Math.sqrt(2));
+    }
+
+    /**
+     * Returns a sprite image of non-block image
+     * @param id
+     * @param value
+     * @param dimY the height of the object
+     * @return
+     */
+    public static Image getSprite(int id, int value, int dimY) {
+        return spritesheet.getSubImage(SPRITEPOS[id][value][0][0], SPRITEPOS[id][value][0][1], DIMENSION, dimY * DIM2 + DIM2);
+    }
+
+    
 
     //getter & setter
+    
+     /**
+     * Returns the spritesheet used for rendering.
+     * @return the spritesheet used by the objects
+     */
+    public static Image getSpritesheet() {
+        return spritesheet;
+    }
+    
     /**
      * returns the id of a object
      * @return getId

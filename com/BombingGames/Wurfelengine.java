@@ -39,12 +39,12 @@ public class Wurfelengine extends AppGameContainer {
                 fullscreen = ("true".equals(args[2]));
             setDisplayMode(Integer.parseInt(args[0]), Integer.parseInt(args[1]), fullscreen);
         }
-        //System.out.println(game.isVSyncRequested());
+        
         start();
     }
     
    /**
-     * returns the save file folder, different on every OS
+     * Returns the save file folder, wich is different on every OS.
      * @return a folder
      */
     public static File getWorkingDirectory() {
