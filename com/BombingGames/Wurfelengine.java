@@ -1,97 +1,42 @@
 package com.BombingGames;
 
-
-import com.BombingGames.Game.Gameplay;
-import com.BombingGames.MainMenu.MainMenuState;
 import java.io.File;
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
 
 /**
- * The main class of the Wurfelengine.
+ *
  * @author Benedikt
  */
-public class Wurfelengine extends StateBasedGame {
-    /**
-     * The Version of the Engine
-     */
-    public static final String VERSION = "0.6";
-    
-    private static AppGameContainer game;    
+public class Wurfelengine extends AppGameContainer{
     private static File workingDirectory;
-    private static GameContainer gc;
-        
-    /**
-     * Creates a new Wurfelengine
-     */
-    public Wurfelengine(){
-        super("Wurfelengine V" + VERSION);
-    }
 
-    /**
-     * main method wich starts the game
-     * @param args custom display resolution [0] width, [1] height
-     * @throws SlickException
-     */
-    public static void main(String[] args) throws SlickException {
+    public Wurfelengine(Launcher core, String[] args) throws SlickException {
+        super(core);
         workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
         
-        game = new AppGameContainer(new Wurfelengine());         
-        game.setUpdateOnlyWhenVisible(true);
-        //game.setIcon(VERSION);
+        setUpdateOnlyWhenVisible(true);
         
-        game.setMaximumLogicUpdateInterval(200);//delta can not be bigger than 200ms
+        setMaximumLogicUpdateInterval(200);//delta can not be bigger than 200ms
         
         //you can start the game with a custom resolution
         if (args.length == 0)
-           game.setDisplayMode(game.getScreenWidth(), game.getScreenHeight(), false);
+           setDisplayMode(getScreenWidth(), getScreenHeight(), false);
         else{
             boolean fullscreen = true;
             if (args.length >= 3)
                 fullscreen = ("true".equals(args[2]));
-            game.setDisplayMode(Integer.parseInt(args[0]), Integer.parseInt(args[1]), fullscreen);
+            setDisplayMode(Integer.parseInt(args[0]), Integer.parseInt(args[1]), fullscreen);
         }
         //System.out.println(game.isVSyncRequested());
-        game.start();
+        start();
     }
-
-    /**
-     * 
-     * @param container
-     * @throws SlickException
-     */
-    @Override
-    public void initStatesList(GameContainer container) throws SlickException {
-        addState(new MainMenuState(1));
-        addState(new Gameplay());
-        
-        gc = container;
-    }
-
-    /**
+    
+   /**
      * returns the save file folder, different on every OS
      * @return a folder
      */
     public static File getWorkingDirectory() {
         return workingDirectory;
-    }
-    
-    /**
-     * Returns the graphic context
-     * @return 
-     */
-    public static Graphics getGraphics(){
-        return game.getGraphics();
-    }
-
-    /**
-     * Returns the game container
-     * @return 
-     */
-    public static GameContainer getGameContainer() {
-        return gc;
     }
 }

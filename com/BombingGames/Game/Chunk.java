@@ -58,7 +58,7 @@ public class Chunk {
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
         Log.debug("Creating new chunk: "+ coordX + ", "+ coordY);
-        Gameplay.MSGSYSTEM.add("Creating new chunk: "+coordX+", "+ coordY);
+        Gameplay.msgSystem().add("Creating new chunk: "+coordX+", "+ coordY);
         switch (GENERATOR){
             case 0:{//random pillars
                 for (int x=0; x < blocksX; x++)
@@ -179,7 +179,7 @@ public class Chunk {
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
             File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/chunk"+coordX+","+coordY+"."+CHUNKFILESUFFIX);
             Log.debug("Trying to load Chunk: "+ coordX + ", "+ coordY + " from \"" + path.getAbsolutePath() + "\"");
-            Gameplay.MSGSYSTEM.add("Load: "+coordX+","+coordY);
+            Gameplay.msgSystem().add("Load: "+coordX+","+coordY);
             
             if (path.isFile()) {
                 //FileReader input = new FileReader("map/chunk"+coordX+","+coordY+".otmc");
@@ -256,7 +256,7 @@ public class Chunk {
             String mapname = bufRead.readLine();
             mapname = mapname.substring(2, mapname.length());
             Log.info("Loading map: "+mapname);
-            Gameplay.MSGSYSTEM.add("Loading map: "+mapname);   
+            Gameplay.msgSystem().add("Loading map: "+mapname);   
             
             String mapversion = bufRead.readLine(); 
             mapversion = mapversion.substring(2, mapversion.length());

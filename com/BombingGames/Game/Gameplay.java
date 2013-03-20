@@ -15,14 +15,14 @@ public class Gameplay extends BasicGameState {
   /**
      * Contains the Message System
      */
-    public static final MsgSystem MSGSYSTEM = new MsgSystem();    
+    private static MsgSystem msgSystem;    
     
     private View view = null;
     private Controller controller = null;
      
     
     /**
-     * 
+     * Returns the state Id of this gameState.
      * @return
      */
     @Override
@@ -31,7 +31,7 @@ public class Gameplay extends BasicGameState {
     }
      
     /**
-     * 
+     * Initailize the gameplay.
      * @param gc
      * @param sbg
      * @throws SlickException
@@ -48,6 +48,7 @@ public class Gameplay extends BasicGameState {
      */
     @Override 
     public void enter(GameContainer container, StateBasedGame game) throws SlickException{
+        msgSystem = new MsgSystem(container.getWidth()/2, 3*container.getHeight()/4);
         container.setClearEachFrame(false);
         //Wurfelengine.getGameContainer().setSmoothDeltas(true);
         
@@ -79,4 +80,9 @@ public class Gameplay extends BasicGameState {
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         view.render(g);
     }
+
+    public static MsgSystem msgSystem() {
+        return msgSystem;
+    }
+    
 }

@@ -180,7 +180,7 @@ public class Controller {
         camera.update();
                 
         //update the log
-        Gameplay.MSGSYSTEM.update(delta);
+        Gameplay.msgSystem().update(delta);
     }
     
     /**

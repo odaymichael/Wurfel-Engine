@@ -2,7 +2,6 @@ package com.BombingGames.Game;
 
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
-import com.BombingGames.Wurfelengine;
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -48,19 +47,16 @@ public class View {
      */
     public void render(Graphics g) throws SlickException{
         if (controller.getCamera() != null) 
-            controller.getCamera().render();
+            controller.getCamera().render(g);
         //camera2.render();
         
         g.scale(equalizationScale, equalizationScale);
         
         //render HUD
         if (controller.getMinimap() != null)
-            controller.getMinimap().render(
-                Wurfelengine.getGameContainer().getScreenWidth() - 10,
-                10
-                ); 
+            controller.getMinimap().render(g); 
         
-        Gameplay.MSGSYSTEM.render();
+        Gameplay.msgSystem().render(g);
     }
        
 

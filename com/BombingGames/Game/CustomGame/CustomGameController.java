@@ -42,7 +42,9 @@ public class CustomGameController extends Controller {
             )
         );
         
-        setMinimap(new Minimap(this, getCamera()));
+        setMinimap(
+            new Minimap(this, getCamera(), gc.getScreenWidth() - 10,10)
+        );
         gc.getInput().addMouseListener(new MouseDraggedListener());
     }
     
@@ -51,7 +53,7 @@ public class CustomGameController extends Controller {
         //get input and do actions
         Input input = gc.getInput();
         
-        if (!Gameplay.MSGSYSTEM.isListeningForInput()) {
+        if (!Gameplay.msgSystem().isListeningForInput()) {
             if (input.isKeyDown(Input.KEY_Q)) gc.exit();
 
             //toggle fullscreen
@@ -65,7 +67,7 @@ public class CustomGameController extends Controller {
             
             //toggle minimap
             if (input.isKeyPressed(Input.KEY_M)){
-                Gameplay.MSGSYSTEM.add("Minimap toggled to: "+ getMinimap().toggleVisibility());
+                Gameplay.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
             }
             
             //pause
@@ -80,7 +82,7 @@ public class CustomGameController extends Controller {
             //reset zoom
             if (input.isKeyPressed(Input.KEY_Z)) {
                 getCamera().setZoom(1);
-                Gameplay.MSGSYSTEM.add("Zoom reset");
+                Gameplay.msgSystem().add("Zoom reset");
             }        
 
             //walk
@@ -101,7 +103,7 @@ public class CustomGameController extends Controller {
         }
         
         //toggle input for msgSystem
-        if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.MSGSYSTEM.listenForInput(!Gameplay.MSGSYSTEM.isListeningForInput());
+        if (input.isKeyPressed(Input.KEY_ENTER)) Gameplay.msgSystem().listenForInput(!Gameplay.msgSystem().isListeningForInput());
         
         super.update(delta);
     }
@@ -116,7 +118,7 @@ public class CustomGameController extends Controller {
             zoom = zoom + change/1000f;
             getCamera().setZoom(zoom);
             
-            Gameplay.MSGSYSTEM.add("Zoom: " + getCamera().getZoom());   
+            Gameplay.msgSystem().add("Zoom: " + getCamera().getZoom());   
         }
 
         @Override

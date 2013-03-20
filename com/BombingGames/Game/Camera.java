@@ -3,8 +3,8 @@ package com.BombingGames.Game;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
-import com.BombingGames.Wurfelengine;
 import java.util.ArrayList;
+import org.newdawn.slick.Graphics;
 
 /**
  *Creates a virtual camera wich displays the game world.  
@@ -41,7 +41,7 @@ public class Camera {
      */
     public Camera(int[] focus, int x, int y, int width, int height) {
         this(x, y, width, height);   
-        Gameplay.MSGSYSTEM.add("Camera is focusing a coordinate");
+        Gameplay.msgSystem().add("Camera is focusing a coordinate");
         this.focusblock = focus;
         this.focusentity = null;         
     }
@@ -59,7 +59,7 @@ public class Camera {
         this(x,y,width,height);
         if (focusentity == null)
             throw new NullPointerException("Parameter 'focusentity' is null");
-        Gameplay.MSGSYSTEM.add("Camera is focusing an entity");
+        Gameplay.msgSystem().add("Camera is focusing an entity");
         this.focusentity = focusentity;
         this.focusblock = null;
     }
@@ -250,17 +250,17 @@ public class Camera {
     /**
      * Renders the viewport
      */
-    public void render() {
+    public void render(Graphics g) {
         if (Controller.getMap() != null) {     
             //move the camera (graphic context)
            
-            Wurfelengine.getGraphics().translate(screenPosX, screenPosY);
+            g.translate(screenPosX, screenPosY);
             
-            Wurfelengine.getGraphics().scale(getTotalScale(), getTotalScale());
+            g.scale(getTotalScale(), getTotalScale());
             
-            Wurfelengine.getGraphics().translate(-outputPosX, -outputPosY);
+            g.translate(-outputPosX, -outputPosY);
             
-            Wurfelengine.getGraphics().setClip(screenPosX, screenPosY, screenWidth, screenHeight);
+            g.setClip(screenPosX, screenPosY, screenWidth, screenHeight);
 
             
             //render map
@@ -268,12 +268,12 @@ public class Camera {
             Controller.getMap().render(this);
 
             //reset clipping
-            Wurfelengine.getGraphics().clearClip();            
+            g.clearClip();            
             //reverse scale
-            Wurfelengine.getGraphics().scale(1/getTotalScale(), 1/getTotalScale());
+            g.scale(1/getTotalScale(), 1/getTotalScale());
                         
             //reverse translate
-            Wurfelengine.getGraphics().translate(outputPosX*getTotalScale() - screenPosX, outputPosY*getTotalScale() - screenPosY);
+            g.translate(outputPosX*getTotalScale() - screenPosX, outputPosY*getTotalScale() - screenPosY);
             
         }
     }

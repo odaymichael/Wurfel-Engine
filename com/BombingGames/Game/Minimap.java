@@ -2,8 +2,9 @@ package com.BombingGames.Game;
    
 
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Wurfelengine;
+import com.BombingGames.Launcher;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 /**
  *A minimap is a view that draws the map from top in a small window.
@@ -23,8 +24,10 @@ public class Minimap {
      * @param controller
      * @param camera the camera wich should be represented on the minimap
      */
-    public Minimap(Controller controller, Camera camera) {
+    public Minimap(Controller controller, Camera camera, int screenX, int screenY) {
         if (controller == null || camera == null) throw new NullPointerException("Parameter controller or camera is null");
+        this.posX = screenX - (int) (Map.getBlocksX()*scaleX);
+        this.posY = screenY;
         this.controller = controller;
         this.camera = camera;
     }
@@ -54,19 +57,17 @@ public class Minimap {
      * @param screenX The distance of the right border.
      * @param screenY The distance from top.
      */
-    public void render(int screenX, int screenY) {
+    public void render(Graphics g) {
         if (visible) {
-            this.posX = screenX - (int) (Map.getBlocksX()*scaleX);
-            this.posY = screenY;
 
             //maybe this speeds up rendering the minimap
-            Wurfelengine.getGraphics().setAntiAlias(false);
+            g.setAntiAlias(false);
 
             //render the map
             for (int x = 0; x < Map.getBlocksX(); x++) {
                 for (int y = 0; y < Map.getBlocksY(); y++) {
-                    Wurfelengine.getGraphics().setColor(mapdata[x][y]);
-                    Wurfelengine.getGraphics().fillRect(
+                    g.setColor(mapdata[x][y]);
+                    g.fillRect(
                         this.posX + (x + (y%2 == 1 ? 0.5f : 0) ) * scaleX,
                         this.posY + y*scaleY,
                         scaleX,
@@ -78,8 +79,8 @@ public class Minimap {
             for (int pos = 0; pos < 9; pos++) {
                 //player
                 if (controller.getPlayer()!=null){
-                    Wurfelengine.getGraphics().setColor(Color.blue);
-                    Wurfelengine.getGraphics().drawRect(
+                    g.setColor(Color.blue);
+                    g.drawRect(
                         posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX,
                         posY + controller.getPlayer().getRelCoords()[1] * scaleY,
                         scaleX,
@@ -89,8 +90,8 @@ public class Minimap {
 
 
                 //Chunk outline
-                Wurfelengine.getGraphics().setColor(Color.black);
-                Wurfelengine.getGraphics().drawRect(
+                g.setColor(Color.black);
+                g.drawRect(
                     posX + pos%3 *(Chunk.getBlocksX()*scaleX),
                     posY + pos/3*(Chunk.getBlocksY()*scaleY),
                     Chunk.getBlocksX()*scaleX,
@@ -106,8 +107,8 @@ public class Minimap {
             }
 
             //bottom getCamera() rectangle
-            Wurfelengine.getGraphics().setColor(Color.green);
-            Wurfelengine.getGraphics().drawRect(
+            g.setColor(Color.green);
+            g.drawRect(
                 posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
                 posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2),
                 scaleX*camera.getOutputWidth() / Block.DIMENSION,
@@ -116,8 +117,8 @@ public class Minimap {
 
             if (controller.getPlayer()!=null){
                 //player level getCamera() rectangle
-                Wurfelengine.getGraphics().setColor(Color.gray);
-                Wurfelengine.getGraphics().drawRect(
+                g.setColor(Color.gray);
+                g.drawRect(
                     posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
                     posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
                     + scaleY *2*(controller.getPlayer().getRelCoords()[2] * (Block.DIM2/2))/ (float) (Block.DIMENSION),
@@ -127,8 +128,8 @@ public class Minimap {
             }
 
             //top level getCamera() rectangle
-            Wurfelengine.getGraphics().setColor(Color.white);
-            Wurfelengine.getGraphics().drawRect(
+            g.setColor(Color.white);
+            g.drawRect(
                 posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
                 posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
                 + scaleY *2*(Chunk.getBlocksZ() * Block.DIM2)/ (float) (Block.DIMENSION),
@@ -148,7 +149,7 @@ public class Minimap {
                     );
 
                 //player coord
-                Wurfelengine.getGraphics().setColor(Color.blue);
+                g.setColor(Color.blue);
                 View.getFont().drawString(
                     posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
                     posY + controller.getPlayer().getRelCoords()[1] * scaleY - 30,

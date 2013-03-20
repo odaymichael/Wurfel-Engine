@@ -1,8 +1,9 @@
 package com.BombingGames.Game;
 
-import com.BombingGames.Wurfelengine;
+import com.BombingGames.Launcher;
 import java.util.ArrayList;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 /**
  * A message is put into the MsgSystem. It contains the message, the sender and the importance.
@@ -61,6 +62,12 @@ class Msg {
 public class MsgSystem extends ArrayList<Msg> {
     private int timelastupdate = 0;
     private boolean waitforinput = false;
+    private int xPos, yPos;    
+
+    public MsgSystem(int xPos, int yPos) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+    }
         
 
         
@@ -113,8 +120,8 @@ public class MsgSystem extends ArrayList<Msg> {
     /**
      * Draws the Messages
      */
-    public void render(){
-        if (waitforinput) Wurfelengine.getGraphics().drawString("MSG:", Wurfelengine.getGameContainer().getWidth()/2, 3*Wurfelengine.getGameContainer().getHeight()/4);
+    public void render(Graphics g){
+        if (waitforinput) g.drawString("MSG:", xPos, yPos);
         
         for (int i=0; i < size(); i++){
             Msg msg = get(i);
