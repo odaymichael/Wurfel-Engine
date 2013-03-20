@@ -450,7 +450,8 @@ public class Camera {
 
                 if (side == 0){
                     //direct neighbour block on left hiding the complete left side
-                    if (x > 0 && y < Map.getBlocksY()-1
+                    if (Controller.getMapData(x, y, z).hasSides()//block on top
+                        && x > 0 && y < Map.getBlocksY()-1
                         && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z).hidingPastBlock())
                         break; //stop ray
                     
@@ -482,7 +483,8 @@ public class Camera {
                     
                 } else {              
                     if (side == 1) {//check top side
-                        if (z < Map.getBlocksZ()-1
+                        if (Controller.getMapData(x, y, z).hasSides()//block on top
+                            && z+1 < Map.getBlocksZ()
                             && Controller.getMapData(x, y, z+1).hidingPastBlock())
                             break;
                         
@@ -515,7 +517,8 @@ public class Camera {
                     } else {
                         if (side==2){
                             //block on right hiding the whole right side
-                            if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY()
+                            if (Controller.getMapData(x, y, z).hasSides()//block on top
+                                && x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY()
                                 && Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).hidingPastBlock()
                                 ) break;
                             
@@ -548,6 +551,13 @@ public class Camera {
                                 &&
                                 Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).hidingPastBlock())
                                 right = false;
+                        } else {
+//                            if (side == 4) {//check top side
+//                                if (Controller.getMapData(x, y, z).hasSides()//block on top
+//                                    && z+1 < Map.getBlocksZ()
+//                                    && Controller.getMapData(x, y, z+1).hidingPastBlock())
+//                                    break;
+//                                }
                         }
                     }
                 }
@@ -568,9 +578,9 @@ public class Camera {
     /**
      * Traces the ray to a specific block.
      * @param coords
-     * @param allsides True when every side should be traced?
+     * @param neighbours True when neighbours block also should be scanned
      */
-    public void traceRayTo(int[] coords, boolean allsides){
+    public void traceRayTo(int[] coords, boolean neighbours){
         Block block = Controller.getMapData(coords);
                     
         //Blocks with offset are not in the grid, so can not be calculated => always visible
@@ -585,23 +595,28 @@ public class Camera {
         }
         
         //trace rays
-        if (allsides){
-             traceRay(coords, Block.LEFTSIDE);
-             traceRay(coords, Block.RIGHTSIDE);
+        if (neighbours){
+            traceRay(new int[]{coords[0] - (coords[1]%2 == 0 ? 1:0), coords[1]-1, coords[2]}, Block.RIGHTSIDE);
+            traceRay(new int[]{coords[0] + (coords[1]%2 == 0 ? 0:1), coords[1]-1, coords[2]}, Block.LEFTSIDE);
+            traceRay(new int[]{coords[0], coords[1], coords[2]-1}, Block.TOPSIDE);
         }
-        traceRay(coords, Block.TOPSIDE);
+        traceRay(coords, Block.LEFTSIDE);
+        traceRay(coords, Block.TOPSIDE);             
+        traceRay(coords, Block.RIGHTSIDE);
+
         
         //calculate light
-        //find top most block
+        //find top most renderobject
         int topmost = Chunk.getBlocksZ()-1;
         while (Controller.getMapData(coords[0], coords[1], topmost).isTransparent() == true && topmost > 0 ){
             topmost--;
         }
-                
-        if (topmost > 0) {
-            //start at topmost block and go down. Every step make it a bit darker
-            for (int level = topmost; level > 0; level--)
-                Controller.getMapData(coords[0], coords[1], level).setLightlevel(50* level / topmost);
+        
+        if (topmost>0) {
+            //start at topmost renderobject and go down. Every step make it a bit darker
+            for (int level = topmost; level > -1; level--){
+                Controller.getMapData(coords[0], coords[1], level).setLightlevel((50 * level) / topmost);
+            }
         }
     }
 }
