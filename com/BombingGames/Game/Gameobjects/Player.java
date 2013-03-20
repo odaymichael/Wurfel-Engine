@@ -18,8 +18,7 @@ public class Player extends AbstractCharacter{
         super(id);
         setFallingSound(new Sound("com/BombingGames/Game/Sounds/wind.wav"));
         setRunningSound(new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav"));
-    }
-        
+    }   
 
     /**
      * Jumps the player

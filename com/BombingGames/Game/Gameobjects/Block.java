@@ -127,9 +127,9 @@ public class Block extends GameObject {
     
      /**
      *  Returns a sprite image of a specific side of the block
-     * @param id
+     * @param id the id of the block
+     * @param value the value of teh block
      * @param side Which side? (0 - 2)
-     * @param value
      * @return an image of the side
      */
     public static Image getBlockSprite(int id, int value, int side) {
@@ -147,10 +147,13 @@ public class Block extends GameObject {
      * @return a color representing the block
      */
     public static Color getRepresentingColor(int id, int value){
-        if (colorlist[id][value] == null){
-            colorlist[id][value] = getBlockSprite(id, value,1).getColor(DIM2, DIM4);
+        if (colorlist[id][value] == null){ //if not in list, add it to the list
+            if (Block.getInstance(id,0,new int[]{0,0,0}).hasSides)
+                colorlist[id][value] = getBlockSprite(id, value, 1).getColor(DIM2, DIM4);
+            else
+                colorlist[id][value] = getSprite(id, value, 1).getColor(DIM2, DIM2);
             return colorlist[id][value]; 
-        } else return colorlist[id][value];
+        } else return colorlist[id][value]; //return value when in list
     }
 
     /**

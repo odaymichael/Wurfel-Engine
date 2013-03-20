@@ -175,7 +175,7 @@
             <filename>sprites/20-1.png</filename>
             <filename>sprites/20-2.png</filename>
             <filename>sprites/34.png</filename>
-            <filename>sprites/35 - bush.png</filename>
+            <filename>sprites/35 - 0.png</filename>
             <filename>sprites/40-0.png</filename>
             <filename>sprites/40-1.png</filename>
             <filename>sprites/40-2.png</filename>

@@ -23,6 +23,7 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
      */
     protected ExplosiveBarrel(int id, int[] absCoords){
         super(id);
+        if (absCoords == null) throw new NullPointerException("No coordinates given to explosive Barrel during creation."); 
         this.coords = absCoords;
         try {
             explosionsound = new Sound("com/BombingGames/Game/Sounds/explosion2.wav");
