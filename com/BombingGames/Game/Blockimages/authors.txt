@@ -1,0 +1,3 @@
+Author of sprites, if not differently noted, by Benedikt Vogler.
+
+The 3D-player-model used for the player sprites is by Pia Lenßen.
