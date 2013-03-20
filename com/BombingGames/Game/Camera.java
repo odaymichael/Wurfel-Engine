@@ -249,6 +249,7 @@ public class Camera {
     
     /**
      * Renders the viewport
+     * @param g 
      */
     public void render(Graphics g) {
         if (Controller.getMap() != null) {     

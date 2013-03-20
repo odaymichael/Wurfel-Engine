@@ -264,10 +264,18 @@ public class Controller {
         return camera;
     }
 
+    /**
+     * Set the camera.
+     * @param camera
+     */
     protected void setCamera(Camera camera) {
         this.camera = camera;
     }
 
+    /**
+     * Set the minimap-
+     * @param minimap
+     */
     protected void setMinimap(Minimap minimap) {
         this.minimap = minimap;
     }

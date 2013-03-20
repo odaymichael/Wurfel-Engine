@@ -13,31 +13,23 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class Launcher extends StateBasedGame {
     /**
-     * The Version of the Engine
-     */
-    public static final String VERSION = "0.7";    
-    private static AppGameContainer game;    
-        
-    /**
-     * Creates a new Launcher
+     * Creates a new Launcher.
      */
     public Launcher(){
-        super("Wurfelengine V" + VERSION);
+        super("Wurfelengine V" + Wurfelengine.VERSION);
     }
 
     /**
-     * main method wich starts the game
-     * @param args custom display resolution [0] width, [1] height
+     * Main method wich starts the game
+     * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
      * @throws SlickException
      */
     public static void main(String[] args) throws SlickException {
-        
-        game = new Wurfelengine(new Launcher(),args);         
-        //game.setIcon(VERSION); 
+        AppGameContainer game = new Wurfelengine(new Launcher(), args);         
     }
 
     /**
-     * 
+     * Initialize the statesList
      * @param container
      * @throws SlickException
      */

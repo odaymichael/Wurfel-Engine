@@ -70,7 +70,7 @@ public class Gameplay extends BasicGameState {
     }
 
     /**
-     * 
+     * Part of the game loop. Cals view.render(g);
      * @param container
      * @param game
      * @param g
@@ -81,6 +81,10 @@ public class Gameplay extends BasicGameState {
         view.render(g);
     }
 
+    /**
+     * Returns the Message System. Use .add() to add messages to the msgSystem.
+     * @return The msgSystem.
+     */
     public static MsgSystem msgSystem() {
         return msgSystem;
     }

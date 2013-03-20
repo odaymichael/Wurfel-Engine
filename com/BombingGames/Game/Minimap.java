@@ -2,7 +2,6 @@ package com.BombingGames.Game;
    
 
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Launcher;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -20,9 +19,11 @@ public class Minimap {
     private boolean visible;
 
     /**
-     * Create a camera
-     * @param controller
+     * Create a minimap.
+     * @param controller the controller wich should be represented
      * @param camera the camera wich should be represented on the minimap
+     * @param screenX the screen-position of the minimap
+     * @param screenY  the screen-position of the minimap
      */
     public Minimap(Controller controller, Camera camera, int screenX, int screenY) {
         if (controller == null || camera == null) throw new NullPointerException("Parameter controller or camera is null");
@@ -53,9 +54,8 @@ public class Minimap {
     
     
     /**
-     * Renders the Minimap
-     * @param screenX The distance of the right border.
-     * @param screenY The distance from top.
+     * Renders the Minimap.
+     * @param g The graphics context.
      */
     public void render(Graphics g) {
         if (visible) {

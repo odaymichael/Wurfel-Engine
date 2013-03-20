@@ -64,6 +64,11 @@ public class MsgSystem extends ArrayList<Msg> {
     private boolean waitforinput = false;
     private int xPos, yPos;    
 
+    /**
+     * 
+     * @param xPos
+     * @param yPos
+     */
     public MsgSystem(int xPos, int yPos) {
         this.xPos = xPos;
         this.yPos = yPos;
@@ -119,6 +124,7 @@ public class MsgSystem extends ArrayList<Msg> {
     
     /**
      * Draws the Messages
+     * @param g The graphics context.
      */
     public void render(Graphics g){
         if (waitforinput) g.drawString("MSG:", xPos, yPos);

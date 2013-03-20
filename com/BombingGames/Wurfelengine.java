@@ -3,16 +3,27 @@ package com.BombingGames;
 import java.io.File;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
 /**
- *
+ *The Main Class of the engine.
  * @author Benedikt
  */
-public class Wurfelengine extends AppGameContainer{
+public class Wurfelengine extends AppGameContainer {
+    /**
+     * The Version of the Engine
+     */
+    public static final String VERSION = "0.7";    
     private static File workingDirectory;
 
-    public Wurfelengine(Launcher core, String[] args) throws SlickException {
-        super(core);
+    /**
+     * Create the Engine.
+     * @param sbGame The surrounding StatebasedGame
+     * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
+     * @throws SlickException
+     */
+    public Wurfelengine(StateBasedGame sbGame, String[] args) throws SlickException {
+        super(sbGame);
         workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
         
         setUpdateOnlyWhenVisible(true);

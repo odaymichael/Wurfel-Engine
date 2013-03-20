@@ -15,7 +15,6 @@ public class AnimatedEntity extends AbstractEntity implements Animatable{
      * @param id The id of the object
      * @param value the starting value
      * @param  autostart True when it should automatically start.
-     * @param coords the coordinates where the animation should be
      * @param loop Set to true when it should loop, when false it stops after one time.
      * @param animationsinformation  
      */
