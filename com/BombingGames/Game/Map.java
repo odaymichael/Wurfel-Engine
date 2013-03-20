@@ -18,7 +18,7 @@ public class Map {
     
     private static int blocksX, blocksY, blocksZ;    
     private Block data[][][];
-    private static ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
+    private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
     //A list which has all current nine chunk coordinates in it.
     private int[][] coordlist = new int[9][2];

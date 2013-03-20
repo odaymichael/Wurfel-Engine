@@ -22,8 +22,8 @@ public class Controller {
     
     /**
      * Constructor is called when entering the gamemode.
-     * @param gc
-     * @param game
+     * @param gc The gameContainer containing this class.
+     * @param game The StateBasedGame containing this class.
      * @throws SlickException
      */
     public Controller(GameContainer gc, StateBasedGame game) throws SlickException{        
@@ -38,6 +38,46 @@ public class Controller {
         );
         
         recalcRequested = true;
+    }
+    
+     /**
+     * Main method which is called every refresh.
+     * @param delta time since last call
+     * @throws SlickException
+     */
+    public void update(int delta) throws SlickException{
+        //earth to right
+        if (camera.getLeftBorder() <= 0)
+           map.setCenter(3);
+        else //earth to the left
+            if (camera.getRightBorder() >= Map.getBlocksX()-1) 
+                map.setCenter(5);
+        
+       //scroll up, earth down            
+        if (camera.getTopBorder() <= 0)
+            map.setCenter(1);
+        else //scroll down, earth up
+            if (camera.getBottomBorder() >= Map.getBlocksY()-1)
+                map.setCenter(7);
+        
+        //update every block on the map
+        Block[][][] mapdata = map.getData();
+        for (int x=0; x < Map.getBlocksX(); x++)
+            for (int y=0; y < Map.getBlocksY(); y++)
+                for (int z=0; z < Map.getBlocksZ(); z++)
+                    mapdata[x][y][z].update(delta);
+        
+        //update every entity
+        for (AbstractEntity entity : map.getEntitylist())
+            entity.update(delta);
+        
+        //recalculates the light if requested
+        recalcIfRequested(camera);      
+       
+        camera.update();
+                
+        //update the log
+        Gameplay.msgSystem().update(delta);
     }
 
     /**
@@ -141,47 +181,7 @@ public class Controller {
     public static void setMapDataSafe(int[] coords, Block block) {
         map.setDataSafe(coords, block);
     }
-    
-    
-    /**
-     * Main method which is called every refresh.
-     * @param delta
-     * @throws SlickException
-     */
-    public void update(int delta) throws SlickException{
-        //earth to right
-        if (camera.getLeftBorder() <= 0)
-           map.setCenter(3);
-        else //earth to the left
-            if (camera.getRightBorder() >= Map.getBlocksX()-1) 
-                map.setCenter(5);
-        
-       //scroll up, earth down            
-        if (camera.getTopBorder() <= 0)
-            map.setCenter(1);
-        else //scroll down, earth up
-            if (camera.getBottomBorder() >= Map.getBlocksY()-1)
-                map.setCenter(7);
-        
-        //update every block on the map
-        Block[][][] mapdata = map.getData();
-        for (int x=0; x < Map.getBlocksX(); x++)
-            for (int y=0; y < Map.getBlocksY(); y++)
-                for (int z=0; z < Map.getBlocksZ(); z++)
-                    mapdata[x][y][z].update(delta);
-        
-        //update every entity
-        for (AbstractEntity entity : map.getEntitylist())
-            entity.update(delta);
-        
-        //recalculates the light if requested
-        recalcIfRequested(camera);      
-       
-        camera.update();
-                
-        //update the log
-        Gameplay.msgSystem().update(delta);
-    }
+
     
     /**
      * Returns the player
