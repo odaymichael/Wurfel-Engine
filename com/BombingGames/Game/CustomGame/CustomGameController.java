@@ -1,10 +1,10 @@
 package com.BombingGames.Game.CustomGame;
 
-import com.BombingGames.Game.*;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.ExplosiveBarrel;
+import com.BombingGames.Game.*;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;

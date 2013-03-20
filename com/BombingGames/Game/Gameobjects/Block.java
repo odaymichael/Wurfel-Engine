@@ -173,7 +173,7 @@ public class Block extends GameObject {
     }   
     
     /**
-     * The block hides the pst block when it has sides and is not transparent (like normal block)
+     * The block hides the past block when it has sides and is not transparent (like normal block)
      * @return true when hiding the past Block
      */
     public boolean hidingPastBlock(){
