@@ -359,11 +359,11 @@ public abstract class GameObject {
         return (int) (
             DIMENSION * y
             + (y % 2) * DIM2
-            + GAMEDIMENSION * z
+            + (DIM2-1) * z
             + pos[1]
             + pos[2]
-            + (dimensionY - 1) * DIMENSION
-            );
+            + (dimensionY - 1) * DIM4
+        );
     }
     
   
@@ -387,10 +387,10 @@ public abstract class GameObject {
      * @return The screen Y-position in pixels.
      */
     public static int getScreenPosY(GameObject object, int[] coords) {
-        return coords[1] * DIM4
-               - coords[2] * DIM2
-               + (int) (object.pos[1] / 2)
-               - (int) (object.pos[2] / Math.sqrt(2));
+        return coords[1] * DIM4 //x-coordinate * the tile's size
+               - coords[2] * DIM2 //put higher blocks higher
+               + (int) (object.pos[1] / 2) //add the objects position inside this coordinate
+               - (int) (object.pos[2] / Math.sqrt(2)); //take axis shortening into account
     }
 
     /**
