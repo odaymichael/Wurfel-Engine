@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -294,6 +295,10 @@ public class Chunk {
         } finally {
             try {
                 bufRead.close();
+                JOptionPane.showMessageDialog(null,
+                 "The meta file could not be read. It must be named 'map."+ Chunk.METAFILESUFFIX + "' and must be at the maps directory."
+                 + "", "Loading error",
+                 JOptionPane.ERROR_MESSAGE);
             } catch (IOException ex) {
                 Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
             }
