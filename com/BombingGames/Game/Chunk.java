@@ -138,16 +138,29 @@ public class Chunk {
                 break;
             }
                 
-            case 4: {//explosive barrel test                
+            case 4: {//explosive barrel test
+                for (int x=0; x < blocksX; x++)
+                    for (int y=0; y < blocksY; y++)
+                        for (int z=0; z < blocksZ-1; z++){
+                            if (z!=blocksZ-2)
+                                 data[x][y][z] = Block.getInstance(2);
+                            else data[x][y][z] = Block.getInstance(1);
+                    }
+                
+                //mountain
+                int mountainx = (int) (Math.random()*blocksX-1);
+                int mountainy = (int) (Math.random()*blocksY-1);
+                
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][2] = Block.getInstance(1);
-                        data[x][y][1] = Block.getInstance(2);
-                        data[x][y][0] = Block.getInstance(2);
-                    }
-                data[5][10][3] = Block.getInstance(71, 0, new int[]{5 + coordX* blocksX, 10 + coordY * blocksY, 3});
-                data[5][5][2] = Block.getInstance(2);
-                
+                        int height = blocksZ-1- Math.abs(mountainy-y)- Math.abs(mountainx-x);
+                        if (height>0){
+                            for (int z=0; z < height; z++) {
+                                    data[x][y][z] = Block.getInstance(2);
+                                    
+                            }
+                        }
+                    }                
                 break;
             }
                 
