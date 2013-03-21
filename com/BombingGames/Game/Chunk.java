@@ -146,22 +146,6 @@ public class Chunk {
                                  data[x][y][z] = Block.getInstance(2);
                             else data[x][y][z] = Block.getInstance(1);
                     }
-                
-                //mountain
-                int mountainx = (int) (Math.random()*blocksX-1);
-                int mountainy = (int) (Math.random()*blocksY-1);
-                
-                for (int x=0; x < blocksX; x++)
-                    for (int y=0; y < blocksY; y++){
-                        int height = blocksZ-1- Math.abs(mountainy-y)- Math.abs(mountainx-x);
-                        if (height>0){
-                            for (int z=0; z < height; z++) {
-                                    data[x][y][z] = Block.getInstance(2);
-                                    
-                            }
-                        }
-                    }                
-                break;
             }
                 
             case 5: {//animation test                
