@@ -1,10 +1,8 @@
 package com.BombingGames.Game.CustomGame;
 
-import com.BombingGames.Game.*;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
-import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.ExplosiveBarrel;
+import com.BombingGames.Game.*;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
@@ -111,6 +109,7 @@ public class CustomGameController extends Controller {
             gc.getInput().consumeEvent();
             
             zoom = zoom + change/1000f;
+            if (zoom < 1) zoom = 1;
             getCamera().setZoom(zoom);
             
             Gameplay.msgSystem().add("Zoom: " + getCamera().getZoom());   
@@ -118,12 +117,10 @@ public class CustomGameController extends Controller {
 
         @Override
         public void mouseClicked(int button, int x, int y, int clickCount) {
-
         }
 
         @Override
         public void mousePressed(int button, int x, int y) {
-            
         }
 
         @Override
@@ -136,20 +133,6 @@ public class CustomGameController extends Controller {
 
         @Override
         public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-            //workaround for the bug in slick, because the event is called multiple times
-            gc.getInput().consumeEvent();
-            
-            int coords[] = getView().ScreenToGameCoords(newx,newy);
-
-            if (gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){ //left click
-                if (coords[2] < Map.getBlocksZ()-1) coords[2]++;
-
-                setMapData(coords, Block.getInstance(71, 0, Controller.getMap().relToAbsCoords(coords)));
-                getCamera().traceRayTo(coords, true);
-            } else {//right click
-                if (getMapDataSafe(coords) instanceof ExplosiveBarrel)
-                    ((ExplosiveBarrel) getMapDataSafe(coords)).explode();
-            }
         }
 
         @Override
