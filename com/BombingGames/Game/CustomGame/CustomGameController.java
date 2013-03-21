@@ -73,9 +73,6 @@ public class CustomGameController extends Controller {
             //pause
             if (input.isKeyDown(Input.KEY_P)) gc.setPaused(true);
 
-            //toggle getCamera()
-            //if (input.isKeyPressed(Input.KEY_C)) 
-
             //restart
             if (input.isKeyPressed(Input.KEY_N)) newMap();
 
