@@ -164,7 +164,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         }
         
         //uncomment this line to see where to player stands:
-        Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
+        //Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
         
         /* SOUNDS */
         //should the runningsound be played?
