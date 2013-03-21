@@ -19,6 +19,11 @@ public class Gameplay extends BasicGameState {
     
     private View view = null;
     private Controller controller = null;
+    private int stateId;
+
+    public Gameplay(int id) {
+        this.stateId = id;
+    }
      
     
     /**
@@ -27,7 +32,7 @@ public class Gameplay extends BasicGameState {
      */
     @Override
     public int getID() {
-        return 2;
+        return stateId;
     }
      
     /**

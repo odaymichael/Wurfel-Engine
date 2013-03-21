@@ -26,21 +26,20 @@ public class Wurfelengine extends AppGameContainer {
         super(sbGame);
         workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
         
-        setUpdateOnlyWhenVisible(true);
-        
+        setUpdateOnlyWhenVisible(true);        
         setMaximumLogicUpdateInterval(200);//delta can not be bigger than 200ms
         
         //you can start the game with a custom resolution
-        if (args.length == 0)
+        if (args.length == 0){
            setDisplayMode(getScreenWidth(), getScreenHeight(), false);
-        else{
+        } else {
             boolean fullscreen = true;
             if (args.length >= 3)
                 fullscreen = ("true".equals(args[2]));
             setDisplayMode(Integer.parseInt(args[0]), Integer.parseInt(args[1]), fullscreen);
         }
         
-        start();
+        start();        
     }
     
    /**
