@@ -29,13 +29,13 @@ public class Controller {
     public Controller(GameContainer gc, StateBasedGame game) throws SlickException{        
         map = new Map(MainMenuState.shouldLoadMap());
         
-        camera2 = new Camera(
-            new int[]{Map.getBlocksX()/2,Map.getBlocksY()/2,Map.getBlocksZ()/2},
-            800, //left
-            0, //top
-            400, //full width 
-            400//full height
-        );
+//        camera2 = new Camera(
+//            new int[]{Map.getBlocksX()/2,Map.getBlocksY()/2,Map.getBlocksZ()/2},
+//            800, //left
+//            0, //top
+//            400, //full width 
+//            400//full height
+//        );
         
         recalcRequested = true;
     }
