@@ -1,10 +1,13 @@
 package com.BombingGames.Game.CustomGame;
 
+import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.ExplosiveBarrel;
-import com.BombingGames.Game.*;
+import com.BombingGames.Game.Gameplay;
+import com.BombingGames.Game.Map;
+import com.BombingGames.Game.Minimap;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
@@ -32,15 +35,15 @@ public class CustomGameController extends Controller {
             (AbstractCharacter) AbstractEntity.getInstance(40, 0, new int[]{0,0, Map.getBlocksZ()-1})
         );
         
-        setCamera(
-            new Camera(
-                getPlayer(),
-                0, //left
-                0, //top
-                gc.getWidth(), //full width 
-                gc.getHeight()//full height
-            )
-        );
+//        setCamera(
+//            new Camera(
+//                getPlayer(),
+//                0, //left
+//                0, //top
+//                gc.getWidth(), //full width 
+//                gc.getHeight()//full height
+//            )
+//        );
         
         setMinimap(
             new Minimap(this, getCamera(), gc.getScreenWidth() - 10,10)
