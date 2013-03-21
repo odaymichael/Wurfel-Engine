@@ -137,12 +137,6 @@ public class CustomGameController extends Controller {
 
         @Override
         public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-//            Log.info(
-//                    Double.toString(Math.atan(
-//                        Math.abs(getView().getCamera().getCenterofBlock(getPlayer().getCoordX(), getPlayer().getCoordY(), getPlayer().getCoordZ())[1 ]- newy * getView().getEqualizationScale()) /
-//                        (float) Math.abs(getView().getCamera().getCenterofBlock(getPlayer().getCoordX(), getPlayer().getCoordY(), getPlayer().getCoordZ())[0] - newx * getView().getEqualizationScale())
-//                    )*180/Math.PI)+"°"
-//                );
         }
 
         @Override
