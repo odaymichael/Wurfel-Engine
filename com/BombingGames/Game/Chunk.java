@@ -16,7 +16,7 @@ import org.newdawn.slick.util.Log;
  */
 public class Chunk {
     /**The number of the mapgenerator used.*/
-    public static final int GENERATOR = 1;
+    public static final int GENERATOR = 7;
     /**The suffix of a chunk file.*/
     protected static final String CHUNKFILESUFFIX = "wec";
     /**The suffix of the metafile */
@@ -108,7 +108,7 @@ public class Chunk {
                 break;
             }
                 
-            case 2: {//flat gras
+            case 2: {//flat block
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         if (blocksZ>1){
@@ -166,7 +166,19 @@ public class Chunk {
                         data[x][y][0] = Block.getInstance(y);
                     }
                 break;
-            }     
+            }
+             case 7: {//flat grass
+                for (int x=0; x < blocksX; x++)
+                    for (int y=0; y < blocksY; y++){
+                        if (blocksZ>1){
+                            int z;
+                            for (z=0; z < blocksZ/2; z++){
+                                data[x][y][z] = Block.getInstance(9);
+                            }
+                        }else data[x][y][0] = Block.getInstance(9);
+                    }
+                break;
+            }    
         }
     }
     
