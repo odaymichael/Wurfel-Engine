@@ -73,8 +73,6 @@ public class CustomGameController extends Controller {
             //pause
             if (input.isKeyDown(Input.KEY_P)) gc.setPaused(true);
 
-            //restart
-            if (input.isKeyPressed(Input.KEY_N)) newMap();
 
             //reset zoom
             if (input.isKeyPressed(Input.KEY_Z)) {
