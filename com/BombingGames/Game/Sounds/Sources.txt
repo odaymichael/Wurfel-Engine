@@ -3,7 +3,7 @@ Sources of the sounds:
 "victorcenusa_running.wav"
 http://www.freesound.org/people/victorcenusa/sounds/22862/
 
-"wind.wav" and edited file "wind-loud.wav"
+edited file "wind-loud.wav"
 http://soundbible.com/1810-Wind.html
 
 "explosion2.wav" by steveygos93
