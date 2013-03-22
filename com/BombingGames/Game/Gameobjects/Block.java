@@ -92,6 +92,8 @@ public class Block extends GameObject {
                     block.setTransparent(true);
                     block.liquid = true;
                     break;
+            case 20: block = new Block(id);
+                    block.setObstacle(true);
             case 34: block = new Block(id); //water
                     block.setTransparent(true);
                     block.hasSides = false;
@@ -102,6 +104,8 @@ public class Block extends GameObject {
                     break;       
             case 40://already reserverd
                     break;
+            case 41://already reserverd
+                    break;    
             case 70:block = new Block(id); 
                     block.setTransparent(true);
                     block.hasSides = false;
