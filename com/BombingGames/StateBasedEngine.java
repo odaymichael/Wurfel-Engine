@@ -13,6 +13,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class StateBasedEngine extends StateBasedGame {
    /**
      * Creates a new Launcher.
+     * @param title The title of the game.
      */
     public StateBasedEngine(String title){
         super(title);

@@ -21,6 +21,10 @@ public class Gameplay extends BasicGameState {
     private Controller controller = null;
     private int stateId;
 
+    /**
+     * Create the gameplay state.
+     * @param id the id used by this state.
+     */
     public Gameplay(int id) {
         this.stateId = id;
     }
