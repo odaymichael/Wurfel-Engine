@@ -52,7 +52,7 @@ public class CustomGameController extends Controller {
         Input input = gc.getInput();
         
         if (!Gameplay.msgSystem().isListeningForInput()) {
-            if (input.isKeyDown(Input.KEY_Q)) gc.exit();
+            if (input.isKeyDown(Input.KEY_ESCAPE)) gc.exit();
 
             //toggle fullscreen
             if (input.isKeyPressed(Input.KEY_F)) gc.setFullscreen(!gc.isFullscreen()); 
