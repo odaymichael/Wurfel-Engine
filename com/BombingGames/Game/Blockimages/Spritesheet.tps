@@ -135,7 +135,7 @@
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">None</enum>
+            <enum type="SpriteSettings::TrimMode">CropKeepPos</enum>
             <key>heuristicMask</key>
             <false/>
         </struct>
@@ -144,38 +144,38 @@
             <filename>sprites/0-0.png</filename>
             <filename>sprites/0-1.png</filename>
             <filename>sprites/0-2.png</filename>
-            <filename>sprites/01-0.png</filename>
-            <filename>sprites/01-1.png</filename>
-            <filename>sprites/01-2.png</filename>
-            <filename>sprites/02-0.png</filename>
-            <filename>sprites/02-1.png</filename>
-            <filename>sprites/02-2.png</filename>
-            <filename>sprites/03-0.png</filename>
-            <filename>sprites/03-1.png</filename>
-            <filename>sprites/03-2.png</filename>
-            <filename>sprites/04-0.png</filename>
-            <filename>sprites/04-1.png</filename>
-            <filename>sprites/04-2.png</filename>
-            <filename>sprites/05-0.png</filename>
-            <filename>sprites/05-1.png</filename>
-            <filename>sprites/05-2.png</filename>
-            <filename>sprites/06-0.png</filename>
-            <filename>sprites/06-1.png</filename>
-            <filename>sprites/06-2.png</filename>
-            <filename>sprites/07-0.png</filename>
-            <filename>sprites/07-1.png</filename>
-            <filename>sprites/07-2.png</filename>
-            <filename>sprites/08-0.png</filename>
-            <filename>sprites/08-1.png</filename>
-            <filename>sprites/08-2.png</filename>
-            <filename>sprites/09-0.png</filename>
-            <filename>sprites/09-1.png</filename>
-            <filename>sprites/09-2.png</filename>
-            <filename>sprites/20-0.png</filename>
-            <filename>sprites/20-1.png</filename>
-            <filename>sprites/20-2.png</filename>
-            <filename>sprites/34.png</filename>
-            <filename>sprites/35 - 0.png</filename>
+            <filename>sprites/1-0-0.png</filename>
+            <filename>sprites/1-0-1.png</filename>
+            <filename>sprites/1-0-2.png</filename>
+            <filename>sprites/2-0-0.png</filename>
+            <filename>sprites/2-0-1.png</filename>
+            <filename>sprites/2-0-2.png</filename>
+            <filename>sprites/3-0-0.png</filename>
+            <filename>sprites/3-0-1.png</filename>
+            <filename>sprites/3-0-2.png</filename>
+            <filename>sprites/4-0-0.png</filename>
+            <filename>sprites/4-0-1.png</filename>
+            <filename>sprites/4-0-2.png</filename>
+            <filename>sprites/5-0-0.png</filename>
+            <filename>sprites/5-0-1.png</filename>
+            <filename>sprites/5-0-2.png</filename>
+            <filename>sprites/6-0-0.png</filename>
+            <filename>sprites/6-0-1.png</filename>
+            <filename>sprites/6-0-2.png</filename>
+            <filename>sprites/7-0-0.png</filename>
+            <filename>sprites/7-0-1.png</filename>
+            <filename>sprites/7-0-2.png</filename>
+            <filename>sprites/8-0-0.png</filename>
+            <filename>sprites/8-0-1.png</filename>
+            <filename>sprites/8-0-2.png</filename>
+            <filename>sprites/9-0-0.png</filename>
+            <filename>sprites/9-0-1.png</filename>
+            <filename>sprites/9-0-2.png</filename>
+            <filename>sprites/20-0-0.png</filename>
+            <filename>sprites/20-0-1.png</filename>
+            <filename>sprites/20-0-2.png</filename>
+            <filename>sprites/34-0.png</filename>
+            <filename>sprites/35-0.png</filename>
             <filename>sprites/40-0.png</filename>
             <filename>sprites/40-1.png</filename>
             <filename>sprites/40-2.png</filename>
