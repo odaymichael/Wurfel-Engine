@@ -23,6 +23,9 @@ public abstract class GameObject {
         */
     public static int GAMEDIMENSION = (int) (DIMENSION / Math.sqrt(2));
 
+    /** A list containing the offset of the objects. */
+    public static final int[][][] OFFSETLIST = new int[OBJECTTYPESCOUNT][10][2];
+    
      /**Containts the names of the objects. index=id*/
     public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT];   
     
@@ -53,8 +56,28 @@ public abstract class GameObject {
         NAMELIST[32] = "sandbags";
         NAMELIST[33] = "crate";
         NAMELIST[34] = "flower";
+        OFFSETLIST[34][0][0] = 71;
+        OFFSETLIST[34][0][1] = 78;
         NAMELIST[35] = "round bush";
+        OFFSETLIST[35][0][0] = 22;
+        OFFSETLIST[35][0][1] = 2;
         NAMELIST[40] = "player";
+        OFFSETLIST[40][0][0] = 54;
+        OFFSETLIST[40][0][1] = 37;
+        OFFSETLIST[40][1][0] = 55;
+        OFFSETLIST[40][1][1] = 38;
+        OFFSETLIST[40][2][0] = 53;
+        OFFSETLIST[40][2][1] = 35;
+        OFFSETLIST[40][3][0] = 46;
+        OFFSETLIST[40][3][1] = 33;
+        OFFSETLIST[40][4][0] = 53;
+        OFFSETLIST[40][4][1] = 35;
+        OFFSETLIST[40][5][0] = 64;
+        OFFSETLIST[40][5][1] = 33;
+        OFFSETLIST[40][6][0] = 53;
+        OFFSETLIST[40][6][1] = 33;
+        OFFSETLIST[40][7][0] = 46;
+        OFFSETLIST[40][7][1] = 33;
         NAMELIST[41] = "smoke test";
         NAMELIST[50] = "strewbed";
         NAMELIST[70] = "campfire";
@@ -94,8 +117,8 @@ public abstract class GameObject {
             image.setColor(2, brightness, brightness, brightness);
             image.setColor(3, brightness, brightness, brightness);
             
-            int xpos = getScreenPosX(this, coords);
-            int ypos = getScreenPosY(this, coords) - (dimensionY - 1) * DIM2;
+            int xpos = getScreenPosX(this, coords) + OFFSETLIST[id][value][0];
+            int ypos = getScreenPosY(this, coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
             image.drawEmbedded(xpos, ypos);
         }
     } 
