@@ -254,7 +254,7 @@ public abstract class GameObject {
      * @return
      */
     public static Image getSprite(int id, int value) {
-        return spritesheet.getSprite(id+"-"+value+".png");
+        return spritesheet.getSprite(id+"-"+value);
     }
 
     

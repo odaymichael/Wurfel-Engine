@@ -138,7 +138,7 @@ public class Block extends GameObject {
      * @return an image of the side
      */
     public static Image getBlockSprite(int id, int value, int side) {
-        return getSpritesheet().getSprite(id+"-"+value+"-"+side+".png");
+        return getSpritesheet().getSprite(id+"-"+value+"-"+side);
     }
     
         /**
