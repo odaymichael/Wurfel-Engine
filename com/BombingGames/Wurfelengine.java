@@ -13,7 +13,7 @@ public class Wurfelengine extends AppGameContainer {
     /**
      * The Version of the Engine
      */
-    public static final String VERSION = "1.0";    
+    public static final String VERSION = "1.0.1";    
     private static File workingDirectory;
 
     /**
