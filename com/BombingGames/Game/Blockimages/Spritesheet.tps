@@ -121,7 +121,7 @@
         <key>autoAliasEnabled</key>
         <false/>
         <key>trimSpriteNames</key>
-        <false/>
+        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -187,7 +187,9 @@
             <filename>sprites/41-0.png</filename>
             <filename>sprites/41-1.png</filename>
             <filename>sprites/70-0.png</filename>
-            <filename>sprites/71-0.png</filename>
+            <filename>sprites/71-0-0.png</filename>
+            <filename>sprites/71-0-1.png</filename>
+            <filename>sprites/71-0-2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
