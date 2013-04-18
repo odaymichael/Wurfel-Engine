@@ -230,7 +230,7 @@ public class Map {
         //if (Gameplay.getController().hasGoodGraphics()) Block.getSpritesheet().bind();
         //if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
-        Block.getSpritesheet().startUse();
+        Block.getSpritesheet().getFullImage().startUse();
         //render vom bottom to top
         for (int i=0; i < camera.depthsortlistSize() ;i++) {
             int[] coords = camera.getDepthsortCoord(i);//get the coords of the current renderobject
@@ -242,7 +242,7 @@ public class Map {
                 entitylist.get(entitynumber).render(coords);        
         }
             
-       Block.getSpritesheet().endUse(); 
+       Block.getSpritesheet().getFullImage().endUse(); 
       // if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
     }
 

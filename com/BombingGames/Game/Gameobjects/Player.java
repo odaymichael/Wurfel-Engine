@@ -32,33 +32,33 @@ public class Player extends AbstractCharacter{
      public void render(int[] coords){
         float[] dir = getDirectionVector();
         if (dir[0] < -Math.sin(Math.PI/3)){
-            setValue(2);//west
+            setValue(1);//west
         } else {
             if (dir[0] < - 0.5){
                 //y
                 if (dir[1]<0){
-                    setValue(3);//north-west
+                    setValue(2);//north-west
                 } else {
-                    setValue(1);//south-east
+                    setValue(0);//south-east
                 }
             } else {
                 if (dir[0] <  0.5){
                     //y
                     if (dir[1]<0){
-                        setValue(4);//north
+                        setValue(3);//north
                     }else{
-                        setValue(8);//south
+                        setValue(7);//south
                          }
                 }else {
                     if (dir[0] < Math.sin(Math.PI/3)) {
                         //y
                         if (dir[1] < 0){
-                            setValue(5);//north-east
+                            setValue(4);//north-east
                         } else{
-                            setValue(7);//sout-east
+                            setValue(6);//sout-east
                         }
                     } else{
-                        setValue(6);//east
+                        setValue(5);//east
                     }
                 }
             }

@@ -138,11 +138,7 @@ public class Block extends GameObject {
      * @return an image of the side
      */
     public static Image getBlockSprite(int id, int value, int side) {
-        if (side == 1) {
-            return getSpritesheet().getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIMENSION, DIM2);
-        } else {
-            return getSpritesheet().getSubImage(SPRITEPOS[id][value][side][0], SPRITEPOS[id][value][side][1], DIM2, (int) (DIM2 * 3 / 2));
-        }
+        return getSpritesheet().getSprite(id+"-"+value+"-"+side);
     }
     
         /**
@@ -156,7 +152,7 @@ public class Block extends GameObject {
             if (Block.getInstance(id,0,new int[]{0,0,0}).hasSides)
                 colorlist[id][value] = getBlockSprite(id, value, 1).getColor(DIM2, DIM4);
             else
-                colorlist[id][value] = getSprite(id, value, 1).getColor(DIM2, DIM2);
+                colorlist[id][value] = getSprite(id, value).getColor(DIM2, DIM2);
             return colorlist[id][value]; 
         } else return colorlist[id][value]; //return value when in list
     }
