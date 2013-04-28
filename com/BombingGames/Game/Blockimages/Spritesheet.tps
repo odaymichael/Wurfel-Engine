@@ -118,6 +118,11 @@
         <false/>
         <key>outputFormat</key>
         <enum type="SettingsBase::OutputFormat">RGBA8888</enum>
+        <key>contentProtection</key>
+        <struct type="ContentProtection">
+            <key>key</key>
+            <string></string>
+        </struct>
         <key>autoAliasEnabled</key>
         <false/>
         <key>trimSpriteNames</key>
@@ -171,6 +176,12 @@
             <filename>sprites/9-0-0.png</filename>
             <filename>sprites/9-0-1.png</filename>
             <filename>sprites/9-0-2.png</filename>
+            <filename>sprites/17-0-0.png</filename>
+            <filename>sprites/17-0-1.png</filename>
+            <filename>sprites/17-0-2.png</filename>
+            <filename>sprites/18-0-0.png</filename>
+            <filename>sprites/18-0-1.png</filename>
+            <filename>sprites/18-0-2.png</filename>
             <filename>sprites/20-0-0.png</filename>
             <filename>sprites/20-0-1.png</filename>
             <filename>sprites/20-0-2.png</filename>
@@ -194,6 +205,8 @@
         <key>ignoreFileList</key>
         <array/>
         <key>replaceList</key>
+        <array/>
+        <key>ignoredWarnings</key>
         <array/>
         <key>commonDivisorX</key>
         <uint>1</uint>

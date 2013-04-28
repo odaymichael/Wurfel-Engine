@@ -1,9 +1,6 @@
 package com.BombingGames.MainMenu;
 
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.*;
 
 /**
  * The View manages ouput
@@ -13,6 +10,7 @@ public class View {
     //private float startGameScale = 1;
     //private float exitScale = 1;
     private final Image lettering;
+    private final Image background;
     private GameContainer gc;
     
     
@@ -23,8 +21,9 @@ public class View {
      */
     public View(GameContainer gc) throws SlickException{
         lettering = new Image("com/BombingGames/MainMenu/Images/Lettering.png");
+        background = new Image("com/BombingGames/MainMenu/Images/background.png");
         this.gc = gc;
-        MenuItem.setSpritesheet(new SpriteSheet("com/BombingGames/MainMenu/Images/MainMenu.png",400,50));
+        MenuItem.setSpritesheet(new SpriteSheet("com/BombingGames/MainMenu/Images/MainMenu.png",800,80));
         
         MenuItem startgame = MainMenuState.getController().getStartGameOption();
         startgame.setX((gc.getWidth() - MenuItem.getSpritesheet().getWidth())/2);
@@ -42,18 +41,24 @@ public class View {
 
     /**
      * renders the scene
-     * @param pController
+     * @param controller
+     * @param g
      */
-    public void render(Controller pController){
+    void render(Controller Controller, Graphics g) {
+                //Background        
+        for (int x = 0; x-1 < gc.getWidth()/background.getWidth(); x++) {
+            for (int y = 0; y-1 < gc.getHeight()/background.getHeight(); y++) {
+                background.draw(x*background.getWidth(), y*background.getHeight());
+            }
+        }
+        
         // render the lettering
-        lettering.draw((gc.getWidth() - lettering.getWidth())/2,0);
+        lettering.draw((gc.getWidth() - lettering.getWidth())/2,80);
         
         // Draw menu
-        MenuItem.getSpritesheet().startUse();
-        MainMenuState.getController().getStartGameOption().draw();
-        MainMenuState.getController().getLoadGameOption().draw();
-        MainMenuState.getController().getExitOption().draw();
-        MenuItem.getSpritesheet().endUse();
+        MainMenuState.getController().getStartGameOption().draw(g);
+        MainMenuState.getController().getLoadGameOption().draw(g);
+        MainMenuState.getController().getExitOption().draw(g);
     }
 }
 

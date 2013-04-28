@@ -1,5 +1,6 @@
 package com.BombingGames.MainMenu;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
@@ -8,25 +9,27 @@ import org.newdawn.slick.SpriteSheet;
  * @author Benedikt
  */
 public class MenuItem {
-
     private static SpriteSheet spritesheet;
     private final int index;
-    private int X = 0;
-    private int Y = 0;
+    private final String label;
+    private int X;
+    private int Y;
 
     /**
      * 
      * @param index
      */
-    public MenuItem(int index) {
+    public MenuItem(int index, String label) {
         this.index = index;
+        this.label = label;
     }
     
     /**
      * 
      */
-    public void draw(){
-        spritesheet.renderInUse(X, Y, 0, index);
+    public void draw(Graphics g){
+        spritesheet.getSubImage(0, 1).draw(X, Y);
+        g.drawString(label, X+300, Y+40-g.getFont().getLineHeight()/2);
     }
 
     /**

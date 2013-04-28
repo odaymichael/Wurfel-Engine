@@ -13,9 +13,9 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Controller {
     private Sound fx;
     
-    private final MenuItem startGameOption = new MenuItem(0);
-    private final MenuItem loadGameOption = new MenuItem(1);
-    private final MenuItem exitOption = new MenuItem(2);
+    private final MenuItem startGameOption = new MenuItem(0, "Generate Map");
+    private final MenuItem loadGameOption = new MenuItem(1, "Load Map");
+    private final MenuItem exitOption = new MenuItem(2, "Exit");
     
     /**
      * Creates a new Controller
