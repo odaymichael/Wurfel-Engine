@@ -17,7 +17,7 @@ import org.newdawn.slick.util.Log;
  */
 public class Chunk {
     /**The number of the mapgenerator used.*/
-    public static final int GENERATOR = 1;
+    public static final int GENERATOR = 8;
     /**The suffix of a chunk file.*/
     protected static final String CHUNKFILESUFFIX = "wec";
     /**The suffix of the metafile */
@@ -109,7 +109,7 @@ public class Chunk {
                 break;
             }
                 
-            case 2: {//flat block
+            case 2: {//flat grass
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         if (blocksZ>1){
@@ -165,17 +165,36 @@ public class Chunk {
                     }
                 break;
             }
-             case 7: {//flat grass
+             case 7: {//water
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         if (blocksZ>1){
-                            int z;
-                            for (z=0; z < blocksZ/2; z++){
+                            for (int z=0; z < blocksZ/2; z++){
                                 data[x][y][z] = Block.getInstance(9);
                             }
                         }else data[x][y][0] = Block.getInstance(9);
                     }
                 break;
+            }    
+             case 8: {//Minecraft
+                for (int x=0; x < blocksX; x++)
+                    for (int y=0; y < blocksY; y++)
+                        for (int z=0; z < blocksZ/2; z++)
+                            data[x][y][z] = Block.getInstance(1);
+                //place trees
+                 for (int i = 0; i < 3; i++) {
+                    int treeX = (int) (Math.random()*blocksX-1);
+                    int treeY = (int) (Math.random()*blocksY-1);
+                    for (int leavesY = treeY-2; leavesY <= treeY+2; leavesY++)
+                        for (int leavesX = treeX-2+Math.abs(leavesY-treeY); leavesX <= treeX+1-Math.abs(leavesY-treeY); leavesX++)
+                            for (int leavesZ = blocksZ/2+2; leavesZ <= blocksZ/2+4; leavesZ++)
+                                if (leavesX < blocksX && leavesX>=0 && leavesY < blocksY && leavesY >= 0)        
+                                    data[leavesX][leavesY][leavesZ] = Block.getInstance(18);
+                    //trunk 
+                    data[treeX][treeY][blocksZ/2] = Block.getInstance(17);
+                    data[treeX][treeY][blocksZ/2+1] = Block.getInstance(17);
+                    data[treeX][treeY][blocksZ/2+2] = Block.getInstance(17);
+                 }
             }    
         }
     }
