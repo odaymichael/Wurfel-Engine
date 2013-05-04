@@ -92,14 +92,21 @@ public class Block extends GameObject {
                     block.setTransparent(true);
                     block.liquid = true;
                     break;
-            case 20: block = new Block(id);
+            case 17:block = new Block(id); //trunk
                     block.setObstacle(true);
                     break;
-            case 34: block = new Block(id); //water
+            case 18:block = new Block(id); //leaves
+                    block.setObstacle(true);
+                    block.setTransparent(true);
+                    break;    
+            case 20:block = new Block(id);
+                    block.setObstacle(true);
+                    break;
+            case 34:block = new Block(id); //water
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;
-            case 35: block = new Block(id); //water
+            case 35:block = new Block(id); //water
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;       

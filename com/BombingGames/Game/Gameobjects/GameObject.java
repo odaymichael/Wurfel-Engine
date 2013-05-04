@@ -51,6 +51,8 @@ public abstract class GameObject {
         NAMELIST[7] = "concrete";
         NAMELIST[8] = "sand";
         NAMELIST[9] = "water";
+        NAMELIST[17] = "tree trunk";
+        NAMELIST[18] = "leaves";
         NAMELIST[20] = "red brick wall";
         NAMELIST[30] = "fence";
         NAMELIST[32] = "sandbags";
