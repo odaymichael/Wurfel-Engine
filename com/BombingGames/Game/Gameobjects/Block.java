@@ -8,7 +8,7 @@ import org.newdawn.slick.Image;
  * @author Benedikt
  */
 public class Block extends GameObject {
-    private static Color[][] colorlist = new Color[OBJECTTYPESCOUNT][9];
+    private static Color[][] colorlist = new Color[OBJECTTYPESCOUNT][24];
     /**The id of the left side of a block.*/
     public static final int LEFTSIDE=0;
     /**The id of the top side of a block.*/

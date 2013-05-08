@@ -24,7 +24,7 @@ public abstract class GameObject {
     public static int GAMEDIMENSION = (int) (DIMENSION / Math.sqrt(2));
 
     /** A list containing the offset of the objects. */
-    public static final int[][][] OFFSETLIST = new int[OBJECTTYPESCOUNT][10][2];
+    public static final int[][][] OFFSETLIST = new int[OBJECTTYPESCOUNT][24][2];
     
      /**Containts the names of the objects. index=id*/
     public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT];   
@@ -80,6 +80,38 @@ public abstract class GameObject {
         OFFSETLIST[40][6][1] = 30;
         OFFSETLIST[40][7][0] = 20;
         OFFSETLIST[40][7][1] = 34;
+        OFFSETLIST[40][8][0] = 24;
+        OFFSETLIST[40][8][1] = 30;
+        OFFSETLIST[40][9][0] = 39;
+        OFFSETLIST[40][9][1] = 34;
+        OFFSETLIST[40][10][0] = 24;
+        OFFSETLIST[40][10][1] = 30;
+        OFFSETLIST[40][11][0] = 20;
+        OFFSETLIST[40][11][1] = 34;
+        OFFSETLIST[40][12][0] = 24;
+        OFFSETLIST[40][12][1] = 30;
+        OFFSETLIST[40][13][0] = 40;
+        OFFSETLIST[40][13][1] = 34;
+        OFFSETLIST[40][14][0] = 24;
+        OFFSETLIST[40][14][1] = 30;
+        OFFSETLIST[40][15][0] = 20;
+        OFFSETLIST[40][15][1] = 34;
+        OFFSETLIST[40][16][0] = 24;
+        OFFSETLIST[40][16][1] = 30;
+        OFFSETLIST[40][17][0] = 39;
+        OFFSETLIST[40][17][1] = 34;
+        OFFSETLIST[40][18][0] = 24;
+        OFFSETLIST[40][18][1] = 30;
+        OFFSETLIST[40][19][0] = 20;
+        OFFSETLIST[40][19][1] = 34;
+        OFFSETLIST[40][20][0] = 24;
+        OFFSETLIST[40][20][1] = 30;
+        OFFSETLIST[40][21][0] = 40;
+        OFFSETLIST[40][21][1] = 34;
+        OFFSETLIST[40][22][0] = 24;
+        OFFSETLIST[40][22][1] = 30;
+        OFFSETLIST[40][23][0] = 20;
+        OFFSETLIST[40][23][1] = 34;
         NAMELIST[41] = "smoke test";
         NAMELIST[50] = "strewbed";
         NAMELIST[70] = "campfire";

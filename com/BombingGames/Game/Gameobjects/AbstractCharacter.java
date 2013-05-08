@@ -13,9 +13,11 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private final int COLISSIONRADIUS = GameObject.DIM4;
    private float[] dir = {1, 0, 0};
    private String controls = "WASD";
-      
+   private int walkinganimation = 0;
+   
    /**provides a factor for the vector*/
    private float speed;
+   
    private Sound fallingSound;
    private Sound runningSound;
 
@@ -162,6 +164,48 @@ public abstract class AbstractCharacter extends AbstractEntity {
                         break;    
             }
         }
+        
+        //animation
+        walkinganimation += delta*speed*5;
+        if (walkinganimation > 1000) walkinganimation=0;
+        
+        if (dir[0] < -Math.sin(Math.PI/3)){
+            setValue(1);//west
+        } else {
+            if (dir[0] < - 0.5){
+                //y
+                if (dir[1]<0){
+                    setValue(2);//north-west
+                } else {
+                    setValue(0);//south-east
+                }
+            } else {
+                if (dir[0] <  0.5){
+                    //y
+                    if (dir[1]<0){
+                        setValue(3);//north
+                    }else{
+                        setValue(7);//south
+                    }
+                }else {
+                    if (dir[0] < Math.sin(Math.PI/3)) {
+                        //y
+                        if (dir[1] < 0){
+                            setValue(4);//north-east
+                        } else{
+                            setValue(6);//sout-east
+                        }
+                    } else{
+                        setValue(5);//east
+                    }
+                }
+            }
+        }
+        
+        if (walkinganimation >750) setValue(getValue()+16);
+        else if (walkinganimation >250 && walkinganimation <500) setValue(getValue()+8);
+
+        
         
         //uncomment this line to see where to player stands:
         //Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
