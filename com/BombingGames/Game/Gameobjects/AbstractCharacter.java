@@ -14,6 +14,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private float[] dir = {1, 0, 0};
    private String controls = "WASD";
    private int walkinganimation = 0;
+   private int spritesPerDirection = 3; 
    
    /**provides a factor for the vector*/
    private float speed;
@@ -166,7 +167,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         }
         
         //animation
-        walkinganimation += delta*speed*5;
+        walkinganimation += delta*speed*4;
         if (walkinganimation > 1000) walkinganimation=0;
         
         if (dir[0] < -Math.sin(Math.PI/3)){
