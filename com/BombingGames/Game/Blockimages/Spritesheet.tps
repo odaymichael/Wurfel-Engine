@@ -201,6 +201,22 @@
             <filename>sprites/71-0-0.png</filename>
             <filename>sprites/71-0-1.png</filename>
             <filename>sprites/71-0-2.png</filename>
+            <filename>sprites/40-8.png</filename>
+            <filename>sprites/40-9.png</filename>
+            <filename>sprites/40-10.png</filename>
+            <filename>sprites/40-11.png</filename>
+            <filename>sprites/40-12.png</filename>
+            <filename>sprites/40-13.png</filename>
+            <filename>sprites/40-14.png</filename>
+            <filename>sprites/40-15.png</filename>
+            <filename>sprites/40-16.png</filename>
+            <filename>sprites/40-17.png</filename>
+            <filename>sprites/40-18.png</filename>
+            <filename>sprites/40-19.png</filename>
+            <filename>sprites/40-20.png</filename>
+            <filename>sprites/40-21.png</filename>
+            <filename>sprites/40-22.png</filename>
+            <filename>sprites/40-23.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
