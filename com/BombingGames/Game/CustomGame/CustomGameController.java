@@ -3,6 +3,7 @@ package com.BombingGames.Game.CustomGame;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.*;
+import com.BombingGames.Game.Gameobjects.Block;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
@@ -121,6 +122,21 @@ public class CustomGameController extends Controller {
 
         @Override
         public void mousePressed(int button, int x, int y) {
+             //workaround for the bug in slick, because the event is called multiple times
+            //gc.getInput().consumeEvent();
+            
+            int coords[] = getView().ScreenToGameCoords(x,y);
+            if (coords[2] < Map.getBlocksZ()-1) coords[2]++;
+            
+            if (button == 0){ //left click
+                setMapData(coords, Block.getInstance(0));
+                getCamera().traceRayTo(coords, true);
+            } else {//right click
+                if (getMapData(coords).getId() == 0){
+                    setMapData(coords, Block.getInstance(2));
+                    getCamera().traceRayTo(coords, true);
+                }
+            }    
         }
 
         @Override
