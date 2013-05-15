@@ -15,7 +15,7 @@ public class Player extends AbstractCharacter{
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
      */
     public Player(int id) throws SlickException {
-        super(id);
+        super(id, 3);
         setFallingSound(new Sound("com/BombingGames/Game/Sounds/wind.wav"));
         setRunningSound(new Sound("com/BombingGames/Game/Sounds/victorcenusa_running.wav"));
     }   
