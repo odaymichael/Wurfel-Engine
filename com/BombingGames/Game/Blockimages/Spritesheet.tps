@@ -217,6 +217,7 @@
             <filename>sprites/40-21.png</filename>
             <filename>sprites/40-22.png</filename>
             <filename>sprites/40-23.png</filename>
+            <filename>sprites/13-0.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
