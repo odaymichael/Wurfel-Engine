@@ -47,15 +47,13 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
                     
                     //spawn effect
                     if (x*x + y*y >= RADIUS*RADIUS){
-                        Controller.getMap().getEntitylist().add(
-                            AbstractEntity.getInstance(41, 0,
+                        AbstractEntity.getInstance(41, 0,
                                 new int[]{
                                     getAbsCoords()[0]+x,
                                     getAbsCoords()[1]+y,
                                     getAbsCoords()[2]+z
                                 }
-                            )
-                        );
+                            ).exist();
                     }
                 }
          explosionsound.play();

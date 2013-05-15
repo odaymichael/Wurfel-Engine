@@ -151,4 +151,11 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     public void render(){
         this.render(getRelCoords());
     }
+    
+    /**
+     * add this entity to the map-> let it exist
+     */
+    public void exist(){
+        Controller.getMap().getEntitylist().add(this);
+    }
 }

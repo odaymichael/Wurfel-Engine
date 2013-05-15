@@ -464,6 +464,5 @@ public class Map {
         tmp[0] += getChunkCoords(0)[0] * Chunk.getBlocksX();
         tmp[1] += getChunkCoords(0)[1] * Chunk.getBlocksY();
         return tmp;
-
     }
 }
