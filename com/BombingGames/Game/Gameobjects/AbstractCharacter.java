@@ -18,13 +18,17 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private float speed;
    private Sound fallingSound;
    private Sound runningSound;
+   
+   private int walkingAnimationCounter;
+   private final int SPRITESPERDIR;
 
    /**
     * Constructor of AbstractCharacter.
     * @param id
     */
-   protected AbstractCharacter(int id) {
+   protected AbstractCharacter(int id, int spritesPerDir) {
         super(id);
+        SPRITESPERDIR = spritesPerDir;
     }
    
    /**
@@ -163,6 +167,47 @@ public abstract class AbstractCharacter extends AbstractEntity {
             }
         }
         
+        if (dir[0] < -Math.sin(Math.PI/3)){
+            setValue(1);//west
+        } else {
+            if (dir[0] < - 0.5){
+                //y
+                if (dir[1]<0){
+                    setValue(2);//north-west
+                } else {
+                    setValue(0);//south-east
+                }
+            } else {
+                if (dir[0] <  0.5){
+                    //y
+                    if (dir[1]<0){
+                        setValue(3);//north
+                    }else{
+                        setValue(7);//south
+                    }
+                }else {
+                    if (dir[0] < Math.sin(Math.PI/3)) {
+                        //y
+                        if (dir[1] < 0){
+                            setValue(4);//north-east
+                        } else{
+                            setValue(6);//sout-east
+                        }
+                    } else{
+                        setValue(5);//east
+                    }
+                }
+            }
+        }
+        if (SPRITESPERDIR==3){
+            //animation
+            walkingAnimationCounter += delta*speed*4;
+            if (walkingAnimationCounter > 1000) walkingAnimationCounter=0;    
+
+            if (walkingAnimationCounter >750) setValue(getValue()+16);
+            else if (walkingAnimationCounter >250 && walkingAnimationCounter <500) setValue(getValue()+8);
+        }
+
         //uncomment this line to see where to player stands:
         //Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
         
@@ -286,5 +331,43 @@ public abstract class AbstractCharacter extends AbstractEntity {
         setHeight(getHeight()+1);
         
         return (super.onGround() || colission);
+    }
+    
+    @Override
+    public void render(){
+    float[] direction = getDirectionVector();
+        if (direction[0] < -Math.sin(Math.PI/3)){
+            setValue(1);//west
+        } else {
+            if (direction[0] < - 0.5){
+                //y
+                if (direction[1]<0){
+                    setValue(2);//north-west
+                } else {
+                    setValue(0);//south-east
+                }
+            } else {
+                if (direction[0] <  0.5){
+                    //y
+                    if (direction[1]<0){
+                        setValue(3);//north
+                    }else{
+                        setValue(7);//south
+                         }
+                }else {
+                    if (direction[0] < Math.sin(Math.PI/3)) {
+                        //y
+                        if (direction[1] < 0){
+                            setValue(4);//north-east
+                        } else{
+                            setValue(6);//sout-east
+                        }
+                    } else{
+                        setValue(5);//east
+                    }
+                }
+            }
+        }
+        super.render();
     }
 }
