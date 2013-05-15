@@ -11,7 +11,7 @@ import org.newdawn.slick.SlickException;
  * @author Benedikt
  */
 public abstract class AbstractEntity extends GameObject implements IsSelfAware {
-   private int[] coords;//the z-field is used as height in px not in coordinates. setting and getting the coordaintes should convert it.
+   private int[] coords;//the z-field is used as [height in px] not in [coordinates]. setting and getting the coordaintes should convert it.
    private float height;
    
     /**
@@ -44,7 +44,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
                         Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
-          case 41: 
+            case 41: 
                     entity = new AnimatedEntity(
                                 id,
                                 value,
@@ -53,6 +53,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
                                 false
                             );//explosion
                     break;
+            default: entity = new SimpleEntity(id);
         }
         
         entity.setAbsCoords(absCoords);
@@ -103,7 +104,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     }
 
     /**
-     * Returns the height of the character.
+     * Returns the height of the character in px.
      * @return
      */
     public float getHeight() {
@@ -111,7 +112,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     }
 
     /**
-     * 
+     * Set the height in px
      * @param height
      */
     public void setHeight(float height) {
@@ -134,5 +135,12 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
                         new int[]{coords[0],coords[1],z}
                     )
                 ).isObstacle();
+    }
+    
+    /**
+     * Renders the entity
+     **/
+    public void render(){
+        this.render(getRelCoords());
     }
 }

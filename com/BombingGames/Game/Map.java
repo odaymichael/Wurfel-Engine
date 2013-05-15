@@ -239,7 +239,7 @@ public class Map {
             if (entitynumber == -1) //if a block then  get it and draw it
                 data[coords[0]][coords[1]][coords[2]].render(coords);
             else //if it's an entity get it and draw it
-                entitylist.get(entitynumber).render(coords);        
+                entitylist.get(entitynumber).render();        
         }
             
        Block.getSpritesheet().getFullImage().endUse(); 

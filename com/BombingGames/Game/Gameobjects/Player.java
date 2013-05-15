@@ -29,7 +29,7 @@ public class Player extends AbstractCharacter{
     }
     
      @Override
-     public void render(int[] coords){
+     public void render(){
         float[] dir = getDirectionVector();
         if (dir[0] < -Math.sin(Math.PI/3)){
             setValue(1);//west
@@ -63,6 +63,6 @@ public class Player extends AbstractCharacter{
                 }
             }
         }
-        super.render(coords);
+        super.render();
     }
 }
