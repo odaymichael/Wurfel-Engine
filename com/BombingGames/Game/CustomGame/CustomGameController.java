@@ -2,8 +2,8 @@ package com.BombingGames.Game.CustomGame;
 
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
-import com.BombingGames.Game.*;
 import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.*;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
@@ -16,6 +16,7 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class CustomGameController extends Controller {
     private GameContainer gc;
+    private AbstractEntity focusentity;
     
     /**
      * The custom game code belongs here.
@@ -45,6 +46,8 @@ public class CustomGameController extends Controller {
             new Minimap(this, getCamera(), gc.getScreenWidth() - 10,10)
         );
         gc.getInput().addMouseListener(new MouseDraggedListener());
+        
+        focusentity = AbstractEntity.getInstance(13, 0, new int[]{0,0, Map.getBlocksZ()-1});
     }
     
     @Override
@@ -101,7 +104,11 @@ public class CustomGameController extends Controller {
         
         super.update(delta);
     }
-    
+
+    public AbstractEntity getFocusentity() {
+        return focusentity;
+    }
+      
     class MouseDraggedListener implements MouseListener{
         private float zoom = 1;
         
@@ -145,6 +152,8 @@ public class CustomGameController extends Controller {
 
         @Override
         public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+            focusentity.setAbsCoords(getView().ScreenToGameCoords(newx,newy));
+            //if (coords[2] < Map.getBlocksZ()-1) coords[2]++;
         }
 
         @Override
