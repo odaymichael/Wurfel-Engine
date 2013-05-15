@@ -1,6 +1,7 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.Game.CustomGame.CustomGameController;
+import com.BombingGames.Game.CustomGame.CustomGameView;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -62,7 +63,7 @@ public class Gameplay extends BasicGameState {
         //Wurfelengine.getGameContainer().setSmoothDeltas(true);
         
         controller = new CustomGameController(container, game);
-        view = new View(container, controller);
+        view = new CustomGameView(container, controller);
         controller.setView(view);
     }    
 

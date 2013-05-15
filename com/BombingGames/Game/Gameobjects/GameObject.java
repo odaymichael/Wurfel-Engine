@@ -136,7 +136,7 @@ public abstract class GameObject {
     
      /**
      * Draws an object.
-     * @param coords 
+     * @param coords the relative coordinates
      */
     public void render(int[] coords) {
         //draw the object except not visible ones
@@ -281,7 +281,7 @@ public abstract class GameObject {
     /**
      * Get the screen x-position where the object is rendered without regarding the camera.
      * @param object The object of wich you want the position
-     * @param coords  The coordinates where the object is rendered 
+     * @param coords  The relative coordinates where the object is rendered 
      * @return The screen X-position in pixels.
      */
     public static int getScreenPosX(GameObject object, int[] coords) {
