@@ -21,6 +21,5 @@ public class CustomGameView extends View{
      @Override
      public void render(Graphics g) throws SlickException {
          super.render(g);
-         controller.getFocusentity().render();
      } 
  }
