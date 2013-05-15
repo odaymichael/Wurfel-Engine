@@ -332,42 +332,4 @@ public abstract class AbstractCharacter extends AbstractEntity {
         
         return (super.onGround() || colission);
     }
-    
-    @Override
-    public void render(){
-    float[] direction = getDirectionVector();
-        if (direction[0] < -Math.sin(Math.PI/3)){
-            setValue(1);//west
-        } else {
-            if (direction[0] < - 0.5){
-                //y
-                if (direction[1]<0){
-                    setValue(2);//north-west
-                } else {
-                    setValue(0);//south-east
-                }
-            } else {
-                if (direction[0] <  0.5){
-                    //y
-                    if (direction[1]<0){
-                        setValue(3);//north
-                    }else{
-                        setValue(7);//south
-                         }
-                }else {
-                    if (direction[0] < Math.sin(Math.PI/3)) {
-                        //y
-                        if (direction[1] < 0){
-                            setValue(4);//north-east
-                        } else{
-                            setValue(6);//sout-east
-                        }
-                    } else{
-                        setValue(5);//east
-                    }
-                }
-            }
-        }
-        super.render();
-    }
 }
