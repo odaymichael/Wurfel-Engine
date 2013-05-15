@@ -62,7 +62,7 @@ public class View {
 
     /**
      * The equalizationScale is a factor which the image is scaled by to have the same size on different resolutions.
-     * @return
+     * @return the scale factor
      */
     public float getEqualizationScale() {
         return equalizationScale;
@@ -72,7 +72,7 @@ public class View {
    /**
      * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
      * @param x the x position on the screen
-     * @return game coordinate
+     * @return the relative game coordinate
      */
     public int ScreenXtoGame(int x){
         return (int) ((x - controller.getCamera().getScreenPosX()) / controller.getCamera().getTotalScale()
@@ -82,7 +82,7 @@ public class View {
    /**
      * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
      * @param y the y position on the screen
-     * @return game coordinate
+     * @return the relative game coordinate
      */
     public int ScreenYtoGame(int y){
         return (int) ((y - controller.getCamera().getScreenPosY()) / controller.getCamera().getTotalScale()
@@ -93,7 +93,7 @@ public class View {
      * Returns the coordinates belonging to a point on the screen.
      * @param x the x position on the screen
      * @param y the y position on the screen
-     * @return map coordinates
+     * @return the relative map coordinates
      */
     public int[] ScreenToGameCoords(int x, int y){
         int[] coords = new int[3];  
