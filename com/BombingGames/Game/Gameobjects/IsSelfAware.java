@@ -13,18 +13,25 @@ public interface IsSelfAware{
     
     /**
      * Set the absolute Coordinates without safety check.
-     * @param coords the new coordinates.
+     * @param absCoords the new coordinates.
      */
-    public void setAbsCoords(int[] coords);
+    public void setAbsCoords(int[] absCoords);
    
     /**
      * Does a vector addition to the coordinates.
      * @param coords the vector which is added to teh coords
      */
     public void addVector(int[] coords);
+    
      /**
       * Returns the relative coordinates wich can be found on the map.
       * @return relative coordinates
       */
      public int[] getRelCoords();
+     
+       /**
+      * Set the relative coordiantes which are saved as absolute coordinates.
+      * @param coords the new coordinates.
+      */
+     public void setRelCoords(int[] relCoords);
 }

@@ -80,12 +80,20 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     public int[] getRelCoords() {
         return Controller.getMap().absToRelCoords(getAbsCoords());
     }
+    
+    @Override
+    public void setRelCoords(int[] relCoords) {
+        this.coords = Controller.getMap().relToAbsCoords(relCoords);
+        if (coords.length >= 3) this.height = coords[2]*GAMEDIMENSION;
+    }
 
     @Override
     public void addVector(int[] coords) {
         height += coords[2];
         setAbsCoords(new int[]{getAbsCoords()[0]+coords[0], getAbsCoords()[1]+coords[1]});
     }
+    
+    
 
     /*overrides of super class*/
     @Override

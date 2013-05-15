@@ -455,9 +455,9 @@ public class Map {
     }
     
      /**
-     * Transforms absolute coordinates into realtive coordinates.
-     * @param relCoords the relative relCoords
-     * @return the absolute relCoords
+     * Transforms absolute coordinates into relative coordinates. This only affects index 0 and 1.
+     * @param relCoords the relative coords
+     * @return the absolute coords
      */
     public int[] relToAbsCoords(int[] relCoords){
         int[] tmp = relCoords.clone();

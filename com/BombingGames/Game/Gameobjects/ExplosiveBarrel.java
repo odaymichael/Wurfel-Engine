@@ -76,6 +76,11 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
     public int[] getRelCoords() {
         return Controller.getMap().absToRelCoords(coords);
     }
+    
+    @Override
+    public void setRelCoords(int[] relCoords) {
+        this.coords = Controller.getMap().relToAbsCoords(relCoords);
+    }
 
     @Override
     public void addVector(int[] coords) {
