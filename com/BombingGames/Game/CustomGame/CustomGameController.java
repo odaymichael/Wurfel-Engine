@@ -32,7 +32,7 @@ public class CustomGameController extends Controller {
             (AbstractCharacter) AbstractEntity.getInstance(40, 0, new int[]{0,0, Map.getBlocksZ()-1})
         );
         
-        setCamera(
+        addCamera(
             new Camera(
                 getPlayer(),
                 0, //left
@@ -42,8 +42,18 @@ public class CustomGameController extends Controller {
             )
         );
         
+        addCamera(
+            new Camera(
+                new int[]{Map.getBlocksX()/2, Map.getBlocksY()/2, Map.getBlocksZ()/2},
+                800, //left
+                0, //top
+                400, //full width 
+                400//full height
+            )
+        );
+        
         setMinimap(
-            new Minimap(this, getCamera(), gc.getScreenWidth() - 10,10)
+            new Minimap(this, getCameras().get(0), gc.getScreenWidth() - 10,10)
         );
         gc.getInput().addMouseListener(new MouseDraggedListener());
         
@@ -78,7 +88,7 @@ public class CustomGameController extends Controller {
 
             //reset zoom
             if (input.isKeyPressed(Input.KEY_Z)) {
-                getCamera().setZoom(1);
+                getCameras().get(0).setZoom(1);
                 Gameplay.msgSystem().add("Zoom reset");
             }        
 
@@ -118,9 +128,9 @@ public class CustomGameController extends Controller {
             
             zoom = zoom + change/1000f;
             if (zoom < 1) zoom = 1;
-            getCamera().setZoom(zoom);
+            getCameras().get(0).setZoom(zoom);
             
-            Gameplay.msgSystem().add("Zoom: " + getCamera().getZoom());   
+            Gameplay.msgSystem().add("Zoom: " + getCameras().get(0).getZoom());   
         }
 
         @Override

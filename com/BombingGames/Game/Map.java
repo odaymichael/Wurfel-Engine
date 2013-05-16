@@ -22,6 +22,8 @@ public class Map {
         
     //A list which has all current nine chunk coordinates in it.
     private int[][] coordlist = new int[9][2];
+    private boolean ENABLECHUNKSWITCH = true;
+   
     
       
     /**
@@ -119,36 +121,38 @@ public class Map {
      * @param newmiddle newmiddle is 1, 3, 5 or 7
      */
     public void setCenter(int newmiddle){
-        Log.debug("ChunkSwitch:"+newmiddle);
-        if (newmiddle==1 || newmiddle==3 || newmiddle==5 || newmiddle==7) {
-        
-        //make a copy of the data
-        Block data_copy[][][] = copyOf3Dim(data);
-        
-        for (int pos=0; pos<9; pos++){
-            //refresh coordinates
-            coordlist[pos][0] += (newmiddle == 3 ? -1 : (newmiddle == 5 ? 1 : 0));
-            coordlist[pos][1] += (newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0));
-            
-            if (isMovingChunkPossible(pos, newmiddle)){
-                setChunk(pos, getChunk(data_copy, pos - 4 + newmiddle));
-            } else {
-                
-                setChunk(
-                        pos,
-                        new Chunk(
-                            coordlist[pos][0],
-                            coordlist[pos][1],
-                            MainMenuState.shouldLoadMap()
-                        )
-                );
-                
+        if (ENABLECHUNKSWITCH){
+            Log.debug("ChunkSwitch:"+newmiddle);
+            if (newmiddle==1 || newmiddle==3 || newmiddle==5 || newmiddle==7) {
+
+            //make a copy of the data
+            Block data_copy[][][] = copyOf3Dim(data);
+
+            for (int pos=0; pos<9; pos++){
+                //refresh coordinates
+                coordlist[pos][0] += (newmiddle == 3 ? -1 : (newmiddle == 5 ? 1 : 0));
+                coordlist[pos][1] += (newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0));
+
+                if (isMovingChunkPossible(pos, newmiddle)){
+                    setChunk(pos, getChunk(data_copy, pos - 4 + newmiddle));
+                } else {
+
+                    setChunk(
+                            pos,
+                            new Chunk(
+                                coordlist[pos][0],
+                                coordlist[pos][1],
+                                MainMenuState.shouldLoadMap()
+                            )
+                    );
+
+                }
             }
-        }
-        
-        Controller.requestRecalc();
-        } else {
-            Log.error("setCenter was called with center:"+newmiddle);
+
+            Controller.requestRecalc();
+            } else {
+                Log.error("setCenter was called with center:"+newmiddle);
+            }
         }
     }
     
@@ -464,5 +468,6 @@ public class Map {
         tmp[0] += getChunkCoords(0)[0] * Chunk.getBlocksX();
         tmp[1] += getChunkCoords(0)[1] * Chunk.getBlocksY();
         return tmp;
+
     }
 }
