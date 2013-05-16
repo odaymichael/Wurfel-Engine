@@ -4,10 +4,10 @@ import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.*;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.MouseListener;
-import org.newdawn.slick.SlickException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
@@ -17,6 +17,8 @@ import org.newdawn.slick.state.StateBasedGame;
 public class CustomGameController extends Controller {
     private GameContainer gc;
     private AbstractEntity focusentity;
+    private Sound gras1;
+    private Sound gras2;
     
     /**
      * The custom game code belongs here.
@@ -24,10 +26,16 @@ public class CustomGameController extends Controller {
      * @param game
      * @throws SlickException
      */
-    public CustomGameController(GameContainer gc, StateBasedGame game) throws SlickException{
+    public CustomGameController(GameContainer gc, StateBasedGame game) throws SlickException, FileNotFoundException, IOException{
         super(gc, game);
         this.gc = gc;
         
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL file  = classLoader.getResource("com/BombingGames/Game/Sounds/grass1.ogg");
+        URL file2 = classLoader.getResource("com/BombingGames/Game/Sounds/grass2.ogg");
+        
+        gras1 = new Sound(file);
+        gras2 = new Sound(file2);        
         setPlayer(
             (AbstractCharacter) AbstractEntity.getInstance(40, 0, new int[]{0,0, Map.getBlocksZ()-1})
         );
@@ -140,10 +148,12 @@ public class CustomGameController extends Controller {
             if (button == 0){ //left click
                 setMapData(coords, Block.getInstance(0));
                 getCameras().get(0).traceRayTo(coords, true);
+                gras1.play();
             } else {//right click
                 if (getMapData(coords).getId() == 0){
                     setMapData(coords, Block.getInstance(2));
                     getCameras().get(0).traceRayTo(coords, true);
+                    gras2.play();
                 }
             }    
         }

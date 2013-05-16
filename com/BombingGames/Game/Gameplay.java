@@ -2,6 +2,10 @@ package com.BombingGames.Game;
 
 import com.BombingGames.Game.CustomGame.CustomGameController;
 import com.BombingGames.Game.CustomGame.CustomGameView;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -61,8 +65,13 @@ public class Gameplay extends BasicGameState {
         msgSystem = new MsgSystem(container.getWidth()/2, 3*container.getHeight()/4);
         container.setClearEachFrame(false);
         //Wurfelengine.getGameContainer().setSmoothDeltas(true);
-        
-        controller = new CustomGameController(container, game);
+        try {
+            controller = new CustomGameController(container, game);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Gameplay.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Gameplay.class.getName()).log(Level.SEVERE, null, ex);
+        }
         view = new CustomGameView(container, controller);
         controller.setView(view);
     }    
