@@ -42,22 +42,15 @@ public class CustomGameController extends Controller {
             )
         );
         
-        addCamera(
-            new Camera(
-                new int[]{Map.getBlocksX()/2, Map.getBlocksY()/2, Map.getBlocksZ()/2},
-                800, //left
-                0, //top
-                400, //full width 
-                400//full height
-            )
-        );
-        
         setMinimap(
             new Minimap(this, getCameras().get(0), gc.getScreenWidth() - 10,10)
         );
-        gc.getInput().addMouseListener(new MouseDraggedListener());
         
         focusentity = AbstractEntity.getInstance(13, 0, new int[]{0,0, Map.getBlocksZ()-1});
+        focusentity.exist();
+        
+        gc.getInput().addMouseListener(new MouseDraggedListener());
+        
     }
     
     @Override
@@ -127,7 +120,6 @@ public class CustomGameController extends Controller {
             gc.getInput().consumeEvent();
             
             zoom = zoom + change/1000f;
-            if (zoom < 1) zoom = 1;
             getCameras().get(0).setZoom(zoom);
             
             Gameplay.msgSystem().add("Zoom: " + getCameras().get(0).getZoom());   
@@ -147,11 +139,11 @@ public class CustomGameController extends Controller {
             
             if (button == 0){ //left click
                 setMapData(coords, Block.getInstance(0));
-                getCamera().traceRayTo(coords, true);
+                getCameras().get(0).traceRayTo(coords, true);
             } else {//right click
                 if (getMapData(coords).getId() == 0){
                     setMapData(coords, Block.getInstance(2));
-                    getCamera().traceRayTo(coords, true);
+                    getCameras().get(0).traceRayTo(coords, true);
                 }
             }    
         }
@@ -162,8 +154,9 @@ public class CustomGameController extends Controller {
 
         @Override
         public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-            focusentity.setAbsCoords(getView().ScreenToGameCoords(newx,newy));
-            //if (coords[2] < Map.getBlocksZ()-1) coords[2]++;
+            int[] tmpcoords = getView().ScreenToGameCoords(newx,newy);
+            tmpcoords[2]++;
+            focusentity.setRelCoords(tmpcoords);
         }
 
         @Override
