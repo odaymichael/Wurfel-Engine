@@ -4,6 +4,7 @@ import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.MainMenu.MainMenuState;
+import java.util.ArrayList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -17,8 +18,9 @@ public class Controller {
     private static boolean recalcRequested;
     private AbstractCharacter player;
     private View view;
-    private Camera camera,camera2;
+    private ArrayList<Camera> cameras = new ArrayList();
     private Minimap minimap;
+    private final boolean ENABLECHUNKSWITCH = true;
     
     /**
      * Constructor is called when entering the gamemode.
@@ -27,16 +29,7 @@ public class Controller {
      * @throws SlickException
      */
     public Controller(GameContainer gc, StateBasedGame game) throws SlickException{        
-        map = new Map(MainMenuState.shouldLoadMap());
-        
-//        camera2 = new Camera(
-//            new int[]{Map.getBlocksX()/2,Map.getBlocksY()/2,Map.getBlocksZ()/2},
-//            800, //left
-//            0, //top
-//            400, //full width 
-//            400//full height
-//        );
-        
+        map = new Map(MainMenuState.shouldLoadMap());        
         recalcRequested = true;
     }
     
@@ -46,20 +39,21 @@ public class Controller {
      * @throws SlickException
      */
     public void update(int delta) throws SlickException{
-        //earth to right
-        if (camera.getLeftBorder() <= 0)
-           map.setCenter(3);
-        else //earth to the left
-            if (camera.getRightBorder() >= Map.getBlocksX()-1) 
-                map.setCenter(5);
-        
-       //scroll up, earth down            
-        if (camera.getTopBorder() <= 0)
-            map.setCenter(1);
-        else //scroll down, earth up
-            if (camera.getBottomBorder() >= Map.getBlocksY()-1)
+        if (ENABLECHUNKSWITCH){
+            //earth to right
+            if (cameras.get(0).getLeftBorder() <= 0)
+            map.setCenter(3);
+            else //earth to the left
+                if (cameras.get(0).getRightBorder() >= Map.getBlocksX()-1) 
+                    map.setCenter(5);
+
+        //scroll up, earth down            
+            if (cameras.get(0).getTopBorder() <= 0)
+                map.setCenter(1);
+            else //scroll down, earth up
+                if (cameras.get(0).getBottomBorder() >= Map.getBlocksY()-1)
                 map.setCenter(7);
-        
+        }
         //update every block on the map
         Block[][][] mapdata = map.getData();
         for (int x=0; x < Map.getBlocksX(); x++)
@@ -72,9 +66,11 @@ public class Controller {
             entity.update(delta);
         
         //recalculates the light if requested
-        recalcIfRequested(camera);      
+        recalcIfRequested(cameras.get(0));      
        
-        camera.update();
+        for (int i = 0; i < cameras.size(); i++) {
+            cameras.get(i).update();
+        }
                 
         //update the log
         Gameplay.msgSystem().update(delta);
@@ -257,19 +253,19 @@ public class Controller {
     }
     
     /**
-     * Returns the camera
-     * @return
+     * Returns a camera.
+     * @return The virtual cameras rendering the scene
      */
-    protected Camera getCamera() {
-        return camera;
+    protected ArrayList<Camera> getCameras() {
+        return cameras;
     }
 
     /**
-     * Set the camera.
+     * Add a camera.
      * @param camera
      */
-    protected void setCamera(Camera camera) {
-        this.camera = camera;
+    protected void addCamera(Camera camera) {
+        this.cameras.add(camera);
     }
 
     /**

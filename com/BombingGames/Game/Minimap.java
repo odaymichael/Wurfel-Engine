@@ -106,7 +106,7 @@ public class Minimap {
                 );
             }
 
-            //bottom getCamera() rectangle
+            //bottom getCameras() rectangle
             g.setColor(Color.green);
             g.drawRect(
                 posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
@@ -116,7 +116,7 @@ public class Minimap {
             );
 
             if (controller.getPlayer()!=null){
-                //player level getCamera() rectangle
+                //player level getCameras() rectangle
                 g.setColor(Color.gray);
                 g.drawRect(
                     posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
@@ -127,7 +127,7 @@ public class Minimap {
                 );
             }
 
-            //top level getCamera() rectangle
+            //top level getCameras() rectangle
             g.setColor(Color.white);
             g.drawRect(
                 posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,

@@ -46,9 +46,10 @@ public class View {
      * @throws SlickException
      */
     public void render(Graphics g) throws SlickException{
-        if (controller.getCamera() != null) 
-            controller.getCamera().render(g);
-        //camera2.render();
+        for (int i = 0; i < controller.getCameras().size(); i++) {
+            controller.getCameras().get(i).render(g);
+            
+        }
         
         g.scale(equalizationScale, equalizationScale);
         
@@ -75,8 +76,8 @@ public class View {
      * @return the relative game coordinate
      */
     public int ScreenXtoGame(int x){
-        return (int) ((x - controller.getCamera().getScreenPosX()) / controller.getCamera().getTotalScale()
-            + controller.getCamera().getOutputPosX());
+        return (int) ((x - controller.getCameras().get(0).getScreenPosX()) / controller.getCameras().get(0).getTotalScale()
+            + controller.getCameras().get(0).getOutputPosX());
     }
     
    /**
@@ -85,8 +86,8 @@ public class View {
      * @return the relative game coordinate
      */
     public int ScreenYtoGame(int y){
-        return (int) ((y - controller.getCamera().getScreenPosY()) / controller.getCamera().getTotalScale()
-            + controller.getCamera().getOutputPosY()) * 2;
+        return (int) ((y - controller.getCameras().get(0).getScreenPosY()) / controller.getCameras().get(0).getTotalScale()
+            + controller.getCameras().get(0).getOutputPosY()) * 2;
     }
     
     /**
