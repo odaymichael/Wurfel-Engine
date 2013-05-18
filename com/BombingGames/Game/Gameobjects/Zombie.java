@@ -1,6 +1,5 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
@@ -9,15 +8,15 @@ import org.newdawn.slick.Image;
  * @author Benedikt
  */
 public class Zombie extends AbstractCharacter{
-
-    public Zombie(int id) {
+    private AbstractCharacter target;
+    
+    protected Zombie(int id) {
         super(id, 3);
         setTransparent(true);
         setObstacle(true);
         setDimensionY(2);
     }
 
-    
     @Override
     public void jump() {
         super.jump(5);
@@ -37,13 +36,21 @@ public class Zombie extends AbstractCharacter{
     }
 
     @Override
-    public void update(Controller controller, int delta) {
+    public void update(int delta) {
         walk(
-            controller.getPlayer().getRelCoords()[1]<getRelCoords()[1]?true:false,
-            controller.getPlayer().getRelCoords()[1]>getRelCoords()[1]?true:false,
-            controller.getPlayer().getRelCoords()[0]<getRelCoords()[0]?true:false,
-            controller.getPlayer().getRelCoords()[0]>getRelCoords()[0]?true:false,
+            target.getRelCoords()[1]<getRelCoords()[1]?true:false,
+            target.getRelCoords()[1]>getRelCoords()[1]?true:false,
+            target.getRelCoords()[0]<getRelCoords()[0]?true:false,
+            target.getRelCoords()[0]>getRelCoords()[0]?true:false,
             0.35f);
-        super.update(controller, delta);
+        super.update(delta);
+    }
+
+    public AbstractCharacter getTarget() {
+        return target;
+    }
+
+    public void setTarget(AbstractCharacter target) {
+        this.target = target;
     }
 }

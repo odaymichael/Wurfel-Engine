@@ -3,6 +3,7 @@ package com.BombingGames.Game.CustomGame;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.Player;
+import com.BombingGames.Game.Gameobjects.Zombie;
 import com.BombingGames.Game.*;
 import java.net.URL;
 import org.newdawn.slick.*;
@@ -95,7 +96,9 @@ public class CustomGameController extends Controller {
             } 
             
             if (input.isKeyPressed(Input.KEY_K)) {
-                AbstractEntity zombie = AbstractEntity.getInstance(42, 0,
+                Zombie zombie = (Zombie) AbstractEntity.getInstance(
+                    42,
+                    0,
                     Controller.getMap().relToAbsCoords(
                         new int[]{
                             (int) (Math.random()*(Map.getBlocksX()-1)),
@@ -103,6 +106,7 @@ public class CustomGameController extends Controller {
                             Map.getBlocksZ()-1}
                     )
                 );
+                zombie.setTarget(getPlayer());
                 zombie.exist();   
              }
 
