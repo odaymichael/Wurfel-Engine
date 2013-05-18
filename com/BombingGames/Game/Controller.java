@@ -162,20 +162,20 @@ public class Controller {
     
      /**
      * 
-     * @param coords
+     * @param relCoords
      * @param block
      */
-    public static void setMapData(int[] coords, Block block) {
-        map.setData(coords, block);
+    public static void setMapData(int[] relCoords, Block block) {
+        map.setData(relCoords, block);
     }
     
     /**
-     * 
-     * @param coords
-     * @param block
+     * Shortcut to "map.setDataSafe". Set a block with safety checks.
+     * @param relCoords
+     * @param block the block you want to set
      */
-    public static void setMapDataSafe(int[] coords, Block block) {
-        map.setDataSafe(coords, block);
+    public static void setMapDataSafe(int[] relCoords, Block block) {
+        map.setDataSafe(relCoords, block);
     }
 
     
@@ -193,7 +193,7 @@ public class Controller {
      */
     public void setPlayer(AbstractCharacter player) {
         this.player = player;
-        map.getEntitylist().add(player);
+        player.exist();
     }
 
     /**
