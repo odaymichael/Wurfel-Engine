@@ -1,5 +1,6 @@
 package com.BombingGames.Game.Gameobjects;
 
+import com.BombingGames.Game.Controller;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -266,6 +267,6 @@ public class Block extends GameObject {
     }
 
     @Override
-    public void update(int delta) {
+    public void update(Controller controller, int delta) {
     }
 }
