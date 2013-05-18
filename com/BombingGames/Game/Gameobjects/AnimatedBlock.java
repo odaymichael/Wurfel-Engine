@@ -1,7 +1,5 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
-
 /**
  *A block who has an animation.
  * @author Benedikt
@@ -31,7 +29,7 @@ public class AnimatedBlock extends Block implements Animatable{
      * @param delta the time wich has passed since last update
      */
     @Override
-    public void update(Controller controller, int delta) {
+    public void update(int delta) {
         if (running) {
             counter += delta;
             if (counter >= animationsduration[getValue()]){

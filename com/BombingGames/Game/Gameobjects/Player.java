@@ -1,6 +1,5 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 

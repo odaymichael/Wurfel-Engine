@@ -1,6 +1,5 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.PackedSpriteSheet;
@@ -134,7 +133,7 @@ public abstract class GameObject {
      * Updates the logic of the object.
      * @param delta time since last update
      */
-    public abstract void update(Controller controller, int delta);
+    public abstract void update(int delta);
     
      /**
      * Draws an object.

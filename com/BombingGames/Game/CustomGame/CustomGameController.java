@@ -1,8 +1,8 @@
 package com.BombingGames.Game.CustomGame;
 
-import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Gameobjects.Player;
 import com.BombingGames.Game.*;
 import java.net.URL;
 import org.newdawn.slick.*;
@@ -34,9 +34,11 @@ public class CustomGameController extends Controller {
         
         gras1 = new Sound(file);
         gras2 = new Sound(file2);        
-        setPlayer(
-            (AbstractCharacter) AbstractEntity.getInstance(40, 0, new int[]{Chunk.getBlocksX()/2,Chunk.getBlocksY()/2, Map.getBlocksZ()-1})
-        );
+
+        Player player = (Player) AbstractEntity.getInstance(40, 0,
+            new int[]{Chunk.getBlocksX()/2,Chunk.getBlocksY()/2, Map.getBlocksZ()-1});
+        player.setControls("WASD");
+        setPlayer(player);
         
         addCamera(
             new Camera(
@@ -106,7 +108,7 @@ public class CustomGameController extends Controller {
 
             //walk
             if (getPlayer() != null)
-                if ("WASD".equals(getPlayer().getControlls()))
+                if ("WASD".equals(getPlayer().getControls()))
                     getPlayer().walk(
                         input.isKeyDown(Input.KEY_W),
                         input.isKeyDown(Input.KEY_S),
