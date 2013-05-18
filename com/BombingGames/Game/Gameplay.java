@@ -65,13 +65,8 @@ public class Gameplay extends BasicGameState {
         msgSystem = new MsgSystem(container.getWidth()/2, 3*container.getHeight()/4);
         container.setClearEachFrame(false);
         //Wurfelengine.getGameContainer().setSmoothDeltas(true);
-        try {
-            controller = new CustomGameController(container, game);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Gameplay.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Gameplay.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        controller = new CustomGameController(container, game);
+
         view = new CustomGameView(container, controller);
         controller.setView(view);
     }    

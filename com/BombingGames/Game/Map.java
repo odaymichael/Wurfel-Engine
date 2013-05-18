@@ -4,11 +4,12 @@ import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.MainMenu.MainMenuState;
 import java.util.ArrayList;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.util.Log;
 
 /**
  *A map stores nine chunks as part of a bigger map.
- * @author Benedikt
+ * @author Benedikt Vogler
  */
 public class Map {
     /**
@@ -230,7 +231,7 @@ public class Map {
      * Draws the map
      * @param camera 
      */
-    public void render(Camera camera) {
+    public void render(Graphics g, Camera camera) {
         //if (Gameplay.getController().hasGoodGraphics()) Block.getSpritesheet().bind();
         //if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
@@ -241,9 +242,9 @@ public class Map {
             int entitynumber = camera.getEntityIndex(i); //get the entityindex to check if it is an entity
             
             if (entitynumber == -1) //if a block then  get it and draw it
-                data[coords[0]][coords[1]][coords[2]].render(coords);
+                data[coords[0]][coords[1]][coords[2]].render(g, coords);
             else //if it's an entity get it and draw it
-                entitylist.get(entitynumber).render();        
+                entitylist.get(entitynumber).render(g);        
         }
             
        Block.getSpritesheet().getFullImage().endUse(); 

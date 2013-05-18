@@ -8,7 +8,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *A class wich holds the game states.
- * @author Benedikt
+ * @author Benedikt Vogler
  */
 public class StateBasedEngine extends StateBasedGame {
    /**

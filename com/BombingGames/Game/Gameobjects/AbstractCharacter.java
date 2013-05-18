@@ -64,7 +64,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
      * @param walkingspeed the higher the speed the bigger the steps. Should be in m/s.
      * @throws SlickException
      */
-    public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed) throws SlickException {
+    public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed){
         if (up || down || left || right){
         speed = walkingspeed;
 

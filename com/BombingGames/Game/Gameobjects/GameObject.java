@@ -1,5 +1,6 @@
 package com.BombingGames.Game.Gameobjects;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.PackedSpriteSheet;
 import org.newdawn.slick.SlickException;
@@ -138,7 +139,7 @@ public abstract class GameObject {
      * Draws an object.
      * @param coords the relative coordinates
      */
-    public void render(int[] coords) {
+    public void render(Graphics g, int[] coords) {
         //draw the object except not visible ones
         if (!hidden && visible) {
             Image image = getSprite(id, value);
@@ -481,5 +482,9 @@ public abstract class GameObject {
      */
     public void setDimensionY(int dimensionY) {
         this.dimensionY = dimensionY;
+    }
+
+    public int getDimensionY() {
+        return dimensionY;
     }
 }

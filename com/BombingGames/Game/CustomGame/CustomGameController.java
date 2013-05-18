@@ -4,8 +4,6 @@ import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.*;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
@@ -26,7 +24,7 @@ public class CustomGameController extends Controller {
      * @param game
      * @throws SlickException
      */
-    public CustomGameController(GameContainer gc, StateBasedGame game) throws SlickException, FileNotFoundException, IOException{
+    public CustomGameController(GameContainer gc, StateBasedGame game) throws SlickException{
         super(gc, game);
         this.gc = gc;
         

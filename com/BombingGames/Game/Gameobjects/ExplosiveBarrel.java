@@ -35,7 +35,7 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
     /**
      * Explodes the barrel.
      */
-    public void explode(){
+    public void explode() throws SlickException{
         int[] relcoords = getRelCoords();
         for (int x=-RADIUS; x<RADIUS; x++)
             for (int y=-RADIUS*2; y<RADIUS*2; y++)
