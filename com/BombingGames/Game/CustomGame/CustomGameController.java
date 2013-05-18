@@ -11,7 +11,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *The <i>CustomGameController</i> is for the game code. Put engine code into <i>Controller</i>.
- * @author Benedikt
+ * @author Benedikt Vogler
  */
 public class CustomGameController extends Controller {
     private GameContainer gc;

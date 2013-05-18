@@ -4,12 +4,16 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 /**
- *A zombie which follows the player
- * @author Benedikt
+ *A zombie which can follow a character
+ * @author Benedikt Vogler
  */
 public class Zombie extends AbstractCharacter{
     private AbstractCharacter target;
     
+    /**
+     * Zombie constructor. Use AbstractEntitiy.getInstance to create an zombie.
+     * @param id
+     */
     protected Zombie(int id) {
         super(id, 3);
         setTransparent(true);
@@ -26,7 +30,9 @@ public class Zombie extends AbstractCharacter{
     public void render(Graphics g) {
         //draw the object except not visible ones
         if (!isHidden() && isVisible()) {
+            //get the player sprite
             Image image = getSprite(40, getValue());
+            //color it green
             image.setImageColor(0, 0.5f, 0);
             
             int xpos = getScreenPosX(this, getRelCoords()) + OFFSETLIST[40][getValue()][0];
@@ -37,19 +43,21 @@ public class Zombie extends AbstractCharacter{
 
     @Override
     public void update(int delta) {
+        //follow the target
         walk(
             target.getRelCoords()[1]<getRelCoords()[1]?true:false,
             target.getRelCoords()[1]>getRelCoords()[1]?true:false,
             target.getRelCoords()[0]<getRelCoords()[0]?true:false,
             target.getRelCoords()[0]>getRelCoords()[0]?true:false,
             0.35f);
+        //update as usual
         super.update(delta);
     }
 
-    public AbstractCharacter getTarget() {
-        return target;
-    }
-
+    /**
+     * Set the target which the zombie follows.
+     * @param target an character
+     */
     public void setTarget(AbstractCharacter target) {
         this.target = target;
     }
