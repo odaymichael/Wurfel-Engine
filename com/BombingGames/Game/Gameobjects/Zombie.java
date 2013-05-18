@@ -1,14 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.BombingGames.Game.Gameobjects;
 
+import com.BombingGames.Game.Controller;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 /**
- *
+ *A zombie which follows the player
  * @author Benedikt
  */
 public class Zombie extends AbstractCharacter{
@@ -32,15 +29,6 @@ public class Zombie extends AbstractCharacter{
         if (!isHidden() && isVisible()) {
             Image image = getSprite(40, getValue());
             image.setImageColor(0, 0.5f, 0);
-
-            //calc  brightness
-//            float brightness = getLightlevel() / 50.0f;
-//            
-//            image.setColor(0, brightness, brightness, brightness);
-//            image.setColor(1, brightness, brightness, brightness);
-//            brightness -= 0.1f;
-//            image.setColor(2, brightness, brightness, brightness);
-//            image.setColor(3, brightness, brightness, brightness);
             
             int xpos = getScreenPosX(this, getRelCoords()) + OFFSETLIST[40][getValue()][0];
             int ypos = getScreenPosY(this, getRelCoords()) - (getDimensionY() - 1) * DIM2 + OFFSETLIST[40][getValue()][1];
@@ -49,11 +37,13 @@ public class Zombie extends AbstractCharacter{
     }
 
     @Override
-    public void update(int delta) {
-        walk(true, false, true, false, 0.25f);
-        super.update(delta);
+    public void update(Controller controller, int delta) {
+        walk(
+            controller.getPlayer().getRelCoords()[1]<getRelCoords()[1]?true:false,
+            controller.getPlayer().getRelCoords()[1]>getRelCoords()[1]?true:false,
+            controller.getPlayer().getRelCoords()[0]<getRelCoords()[0]?true:false,
+            controller.getPlayer().getRelCoords()[0]>getRelCoords()[0]?true:false,
+            0.35f);
+        super.update(controller, delta);
     }
-    
-    
-    
 }
