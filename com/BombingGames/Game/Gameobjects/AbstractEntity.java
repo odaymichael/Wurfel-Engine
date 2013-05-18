@@ -36,17 +36,17 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
             case 40:
                     entity = new Player(id);
                     break;
-            case 41: 
+            case 41: //explosion
                     entity = new AnimatedEntity(
                                 id,
                                 value,
                                 new int[]{700,2000},
                                 true,
                                 false
-                            );//explosion
+                            );
                     break;
             case 42: 
-                    entity = new Zombie(id);//zombie
+                    entity = new Zombie(id);
                     break;
             default: entity = new SimpleEntity(id);
         }
