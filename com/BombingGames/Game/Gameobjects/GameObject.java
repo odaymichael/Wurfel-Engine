@@ -449,4 +449,8 @@ public abstract class GameObject {
     public void setDimensionY(int dimensionY) {
         this.dimensionY = dimensionY;
     }
+
+    public int getDimensionY() {
+        return dimensionY;
+    }
 }
