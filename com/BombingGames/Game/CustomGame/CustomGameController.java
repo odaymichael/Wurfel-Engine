@@ -51,8 +51,7 @@ public class CustomGameController extends Controller {
         setMinimap(
             new Minimap(this, getCameras().get(0), gc.getScreenWidth() - 10,10)
         );
-        AbstractEntity zombie = AbstractEntity.getInstance(42, 0, new int[]{Chunk.getBlocksX()/2,Chunk.getBlocksY()/2, Map.getBlocksZ()-1});
-        zombie.exist();    
+
         
         focusentity = AbstractEntity.getInstance(13, 0, new int[]{0,0, Map.getBlocksZ()-1});
         focusentity.exist();
@@ -91,7 +90,19 @@ public class CustomGameController extends Controller {
             if (input.isKeyPressed(Input.KEY_Z)) {
                 getCameras().get(0).setZoom(1);
                 Gameplay.msgSystem().add("Zoom reset");
-            }        
+            } 
+            
+            if (input.isKeyPressed(Input.KEY_K)) {
+                AbstractEntity zombie = AbstractEntity.getInstance(42, 0,
+                    Controller.getMap().relToAbsCoords(
+                        new int[]{
+                            (int) (Math.random()*(Map.getBlocksX()-1)),
+                            (int) (Math.random()*(Map.getBlocksY()-1)),
+                            Map.getBlocksZ()-1}
+                    )
+                );
+                zombie.exist();   
+             }
 
             //walk
             if (getPlayer() != null)
