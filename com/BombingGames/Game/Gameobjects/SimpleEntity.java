@@ -1,7 +1,5 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
-
 /**
  *A simple basic entity. You can use it for simple images like an effect.
  * @author  Benedikt Vogler
@@ -12,6 +10,6 @@ class SimpleEntity extends AbstractEntity {
     }
 
     @Override
-    public void update(Controller controller, int delta) {
+    public void update(int delta) {
     }
 }

@@ -12,7 +12,7 @@ import org.newdawn.slick.Sound;
 public abstract class AbstractCharacter extends AbstractEntity {
    private final int COLISSIONRADIUS = GameObject.DIM4;
    private float[] dir = {1, 0, 0};
-   private String controls = "WASD";
+   private String controls = "NPC";
       
    /**provides a factor for the vector*/
    private float speed;
@@ -105,7 +105,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
      * @param delta time since last update
      */
     @Override
-    public void update(Controller controller, int delta) {
+    public void update(int delta) {
         //scale that the velocity vector is always an unit vector (only x and y)
         double vectorLenght = Math.sqrt(dir[0]*dir[0] + dir[1]*dir[1]);
         if (vectorLenght > 0){
@@ -309,16 +309,16 @@ public abstract class AbstractCharacter extends AbstractEntity {
     
    /**
      * Set the controls.
-     * @param controls either "arrows" or "WASD".
+     * @param controls either "arrows", "WASD" or "NPC"
      */
     public void setControlls(String controls){
-        if ("arrows".equals(controls) || "WASD".equals(controls))
+        if ("arrows".equals(controls) || "WASD".equals(controls) || "NPC".equals(controls))
             this.controls = controls;
     }
     
    /**
      * Returns the Controls
-     * @return either "arrows" or "WASD".
+     * @return either "arrows", "WASD" or "NPC"
      */
     public String getControlls(){
         return controls;
