@@ -15,6 +15,9 @@ public class Zombie extends AbstractCharacter{
 
     public Zombie(int id) {
         super(id, 3);
+        setTransparent(true);
+        setObstacle(true);
+        setDimensionY(2);
     }
 
     
@@ -28,24 +31,20 @@ public class Zombie extends AbstractCharacter{
         //draw the object except not visible ones
         if (!isHidden() && isVisible()) {
             Image image = getSprite(40, getValue());
-            //GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
-           // Color.green.bind();
-            image.setImageColor(0, 0, 1);
-            //image.set
-            //g.;
+            image.setImageColor(0, 0.5f, 0);
+
             //calc  brightness
-            float brightness = getLightlevel() / 50.0f;
-            
-            image.setColor(0, brightness, brightness, brightness);
-            image.setColor(1, brightness, brightness, brightness);
-            brightness -= 0.1f;
-            image.setColor(2, brightness, brightness, brightness);
-            image.setColor(3, brightness, brightness, brightness);
+//            float brightness = getLightlevel() / 50.0f;
+//            
+//            image.setColor(0, brightness, brightness, brightness);
+//            image.setColor(1, brightness, brightness, brightness);
+//            brightness -= 0.1f;
+//            image.setColor(2, brightness, brightness, brightness);
+//            image.setColor(3, brightness, brightness, brightness);
             
             int xpos = getScreenPosX(this, getRelCoords()) + OFFSETLIST[40][getValue()][0];
             int ypos = getScreenPosY(this, getRelCoords()) - (getDimensionY() - 1) * DIM2 + OFFSETLIST[40][getValue()][1];
             image.drawEmbedded(xpos, ypos);
-            //GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
         }
     }
 

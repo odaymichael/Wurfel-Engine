@@ -51,7 +51,7 @@ public class CustomGameController extends Controller {
         setMinimap(
             new Minimap(this, getCameras().get(0), gc.getScreenWidth() - 10,10)
         );
-        AbstractEntity zombie = AbstractEntity.getInstance(42, 0, new int[]{0,0, Map.getBlocksZ()-1});
+        AbstractEntity zombie = AbstractEntity.getInstance(42, 0, new int[]{Chunk.getBlocksX()/2,Chunk.getBlocksY()/2, Map.getBlocksZ()-1});
         zombie.exist();    
         
         focusentity = AbstractEntity.getInstance(13, 0, new int[]{0,0, Map.getBlocksZ()-1});

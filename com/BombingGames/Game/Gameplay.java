@@ -2,10 +2,6 @@ package com.BombingGames.Game;
 
 import com.BombingGames.Game.CustomGame.CustomGameController;
 import com.BombingGames.Game.CustomGame.CustomGameView;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
