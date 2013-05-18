@@ -11,7 +11,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *A controller manages the map and the game data.
- * @author Benedikt
+ * @author Benedikt Vogler
  */
 public class Controller {
     private static Map map;
