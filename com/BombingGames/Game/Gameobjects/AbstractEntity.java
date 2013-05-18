@@ -38,9 +38,6 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
             case 40:
                     try {
                         entity = new Player(id);
-                        entity.setTransparent(true);
-                        entity.setObstacle(true);
-                        entity.setDimensionY(2);
                     } catch (SlickException ex) {
                         Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
                     }
