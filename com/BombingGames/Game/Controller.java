@@ -59,11 +59,11 @@ public class Controller {
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY(); y++)
                 for (int z=0; z < Map.getBlocksZ(); z++)
-                    mapdata[x][y][z].update(delta);
+                    mapdata[x][y][z].update(this, delta);
         
         //update every entity
         for (AbstractEntity entity : map.getEntitylist())
-            entity.update(delta);
+            entity.update(this, delta);
         
         //recalculates the light if requested
         recalcIfRequested(cameras.get(0));      
