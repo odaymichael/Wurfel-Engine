@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 /**
- *A character is an entity wich can walk around.
+ *A character is an entity wich can walk around. To control the character you have to set the controls with "setControls(String controls)".
  * @author Benedikt
  */
 public abstract class AbstractCharacter extends AbstractEntity {
@@ -311,7 +311,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
      * Set the controls.
      * @param controls either "arrows", "WASD" or "NPC"
      */
-    public void setControlls(String controls){
+    public void setControls(String controls){
         if ("arrows".equals(controls) || "WASD".equals(controls) || "NPC".equals(controls))
             this.controls = controls;
     }
@@ -320,7 +320,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
      * Returns the Controls
      * @return either "arrows", "WASD" or "NPC"
      */
-    public String getControlls(){
+    public String getControls(){
         return controls;
     }
 

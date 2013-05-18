@@ -1,7 +1,5 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
-
 /**
  *A block who has an animation.
  * @author Benedikt

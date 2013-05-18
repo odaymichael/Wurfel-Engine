@@ -3,6 +3,7 @@ package com.BombingGames.Game.CustomGame;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.*;
+import com.BombingGames.Game.Gameobjects.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
@@ -26,9 +27,9 @@ public class CustomGameController extends Controller {
         super(gc, game);
         this.gc = gc;
         
-        setPlayer(
-            (AbstractCharacter) AbstractEntity.getInstance(40, 0, new int[]{0,0, Map.getBlocksZ()-1})
-        );
+        Player player = (Player) AbstractEntity.getInstance(40, 0, new int[]{0,0, Map.getBlocksZ()-1});
+        player.setControls("WASD");
+        setPlayer(player);
         
         addCamera(
             new Camera(
@@ -90,7 +91,7 @@ public class CustomGameController extends Controller {
 
             //walk
             if (getPlayer() != null)
-                if ("WASD".equals(getPlayer().getControlls()))
+                if ("WASD".equals(getPlayer().getControls()))
                     getPlayer().walk(
                         input.isKeyDown(Input.KEY_W),
                         input.isKeyDown(Input.KEY_S),
