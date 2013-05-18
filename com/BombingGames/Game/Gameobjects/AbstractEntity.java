@@ -2,8 +2,7 @@ package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 /**
@@ -30,19 +29,12 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * @param absCoords the absolute coordiantes where the entity is.
      * @return the entity.
      */
-    public static AbstractEntity getInstance(int id, int value, int[] absCoords){
-        AbstractEntity entity = null;
+    public static AbstractEntity getInstance(int id, int value, int[] absCoords) throws SlickException{
+        AbstractEntity entity;
         //define the default SideSprites
         switch (id){
             case 40:
-                    try {
-                        entity = new Player(id);
-                        entity.setTransparent(true);
-                        entity.setObstacle(true);
-                        entity.setDimensionY(2);
-                    } catch (SlickException ex) {
-                        Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    entity = new Player(id);
                     break;
             case 41: 
                     entity = new AnimatedEntity(
@@ -52,6 +44,9 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
                                 true,
                                 false
                             );//explosion
+                    break;
+            case 42: 
+                    entity = new Zombie(id);//zombie
                     break;
             default: entity = new SimpleEntity(id);
         }
@@ -148,8 +143,8 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     /**
      * Renders the entity
      **/
-    public void render(){
-        this.render(getRelCoords());
+    public void render(Graphics g){
+        this.render(g, getRelCoords());
     }
     
     /**
