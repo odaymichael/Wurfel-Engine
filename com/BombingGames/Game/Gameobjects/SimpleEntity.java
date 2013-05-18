@@ -5,11 +5,10 @@
 package com.BombingGames.Game.Gameobjects;
 
 /**
- *
- * @author Benedikt
+ *A simple basic entity. You can use it for simple images like an effect.
+ * @author  Benedikt Vogler
  */
 class SimpleEntity extends AbstractEntity {
-
     public SimpleEntity(int id) {
         super(id);
     }
@@ -17,5 +16,4 @@ class SimpleEntity extends AbstractEntity {
     @Override
     public void update(int delta) {
     }
-    
 }

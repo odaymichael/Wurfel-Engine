@@ -1,11 +1,12 @@
 package com.BombingGames.Game.Gameobjects;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 /**
  * A Block is a wonderful piece of information and a geometrical object.
- * @author Benedikt
+ * @author Benedikt Vogler
  */
 public class Block extends GameObject {
     private static Color[][] colorlist = new Color[OBJECTTYPESCOUNT][9];
@@ -209,7 +210,7 @@ public class Block extends GameObject {
     
 
     @Override
-    public void render(int[] coords) {
+    public void render(Graphics g, int[] coords) {
         if (!isHidden() && isVisible()) {
             if (hasSides) {
                     if (renderTop) {
@@ -221,7 +222,7 @@ public class Block extends GameObject {
                     if (renderRight) {
                         renderSide(coords, Block.RIGHTSIDE);
                     }
-                } else super.render(coords);
+                } else super.render(g, coords);
             }
     }
     

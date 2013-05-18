@@ -8,7 +8,7 @@ import org.newdawn.slick.Graphics;
 
 /**
  *Creates a virtual camera wich displays the game world.  
- * @author Benedikt
+ * @author Benedikt Vogler
  */
 public class Camera {
     private final int screenPosX, screenPosY, screenWidth, screenHeight;
@@ -266,7 +266,7 @@ public class Camera {
             
             //render map
             createDepthList();
-            Controller.getMap().render(this);
+            Controller.getMap().render(g, this);
 
             //reset clipping
             g.clearClip();            

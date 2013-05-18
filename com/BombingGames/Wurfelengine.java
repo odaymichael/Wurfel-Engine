@@ -7,7 +7,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *The Main Class of the engine.
- * @author Benedikt
+ * @author Benedikt Vogler
  */
 public class Wurfelengine extends AppGameContainer {
     /**

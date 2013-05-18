@@ -5,7 +5,7 @@ import org.newdawn.slick.SlickException;
 
 /**
  * The main class of the Launcher.
- * @author Benedikt
+ * @author  Benedikt Vogler
  */
 public class Launcher{
     /**

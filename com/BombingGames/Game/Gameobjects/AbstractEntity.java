@@ -4,6 +4,7 @@ import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 /**
@@ -148,8 +149,8 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     /**
      * Renders the entity
      **/
-    public void render(){
-        this.render(getRelCoords());
+    public void render(Graphics g){
+        this.render(g, getRelCoords());
     }
     
     /**

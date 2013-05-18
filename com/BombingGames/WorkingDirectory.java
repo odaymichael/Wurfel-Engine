@@ -1,4 +1,3 @@
-//class by Martin Brunokowsky
 package com.BombingGames;
 
 import java.io.File;
