@@ -14,7 +14,6 @@ public class Launcher{
      * @throws SlickException
      */
     public static void main(String[] args) throws SlickException {
-        AppGameContainer game = new Wurfelengine(
-            new StateBasedEngine("Wurfelengine V" + Wurfelengine.VERSION), args);    
+        AppGameContainer game = new Wurfelengine("Wurfelengine V" + Wurfelengine.VERSION, args);    
     }
 }
