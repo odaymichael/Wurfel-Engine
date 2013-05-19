@@ -274,17 +274,17 @@ public class Chunk {
             Log.info("Map Version:"+mapversion);
             
             String blocksXString = bufRead.readLine();
-            Log.info("sizex:"+blocksXString);
+            Log.debug("sizeX:"+blocksXString);
             blocksXString = blocksXString.substring(2, blocksXString.length());
             blocksX = Integer.parseInt(blocksXString);
             
             String blocksYString = bufRead.readLine();
-            Log.info("sizey:"+blocksYString);
+            Log.debug("sizeY:"+blocksYString);
             blocksYString = blocksYString.substring(2, blocksYString.length());
             blocksY = Integer.parseInt(blocksYString);
             
             String blocksZString = bufRead.readLine();
-            Log.info("sizez:"+blocksZString);
+            Log.debug("sizeZ:"+blocksZString);
             blocksZString = blocksZString.substring(2, blocksZString.length());
             blocksZ = Integer.parseInt(blocksZString);
         } catch (IOException ex) {
