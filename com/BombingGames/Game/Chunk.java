@@ -293,28 +293,29 @@ public class Chunk {
             Log.info("Map Version:"+mapversion);
             
             String blocksXString = bufRead.readLine();
-            Log.info("sizex:"+blocksXString);
+            Log.debug("sizeX:"+blocksXString);
             blocksXString = blocksXString.substring(2, blocksXString.length());
             blocksX = Integer.parseInt(blocksXString);
             
             String blocksYString = bufRead.readLine();
-            Log.info("sizey:"+blocksYString);
+            Log.debug("sizeY:"+blocksYString);
             blocksYString = blocksYString.substring(2, blocksYString.length());
             blocksY = Integer.parseInt(blocksYString);
             
             String blocksZString = bufRead.readLine();
-            Log.info("sizez:"+blocksZString);
+            Log.debug("sizeZ:"+blocksZString);
             blocksZString = blocksZString.substring(2, blocksZString.length());
             blocksZ = Integer.parseInt(blocksZString);
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                null,
+                "The meta file could not be read. It must be named 'map."+ Chunk.METAFILESUFFIX + "' and must be at the maps directory:"+ Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/",
+                "Loading error",
+                 JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 bufRead.close();
-                JOptionPane.showMessageDialog(null,
-                 "The meta file could not be read. It must be named 'map."+ Chunk.METAFILESUFFIX + "' and must be at the maps directory."
-                 + "", "Loading error",
-                 JOptionPane.ERROR_MESSAGE);
             } catch (IOException ex) {
                 Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
             }
