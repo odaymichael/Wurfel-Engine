@@ -57,6 +57,7 @@ public class CustomGameController extends Controller {
 
         
         focusentity = AbstractEntity.getInstance(13, 0, new int[]{0,0, Map.getBlocksZ()-1});
+        focusentity.setPos(1, Block.DIM2+1f);
         focusentity.exist();
         
         gc.getInput().addMouseListener(new MouseDraggedListener());
