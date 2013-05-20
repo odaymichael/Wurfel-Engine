@@ -29,7 +29,7 @@ public class Controller {
      * @throws SlickException
      */
     public Controller(GameContainer gc, StateBasedGame game) throws SlickException{        
-        map = new Map(MainMenuState.shouldLoadMap());        
+        newMap();        
         recalcRequested = true;
     }
     
