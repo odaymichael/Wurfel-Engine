@@ -26,7 +26,9 @@ public class CustomGameController extends Controller {
         super(gc, game);
         this.gc = gc;
         
-        Player player = (Player) AbstractEntity.getInstance(40, 0, new int[]{0,0, Map.getBlocksZ()-1});
+        
+        Player player = (Player) AbstractEntity.getInstance(40, 0,
+            new int[]{Chunk.getBlocksX()/2,Chunk.getBlocksY()/2, Map.getBlocksZ()-1});
         player.setControls("WASD");
         setPlayer(player);
         
@@ -40,15 +42,15 @@ public class CustomGameController extends Controller {
             )
         );
         
-        addCamera(
-            new Camera(
-                new int[]{Map.getBlocksX()/2, Map.getBlocksY()/2, Map.getBlocksZ()/2},
-                800, //left
-                0, //top
-                400, //full width 
-                400//full height
-            )
-        );
+//        addCamera(
+//            new Camera(
+//                new int[]{Map.getBlocksX()/2, Map.getBlocksY()/2, Map.getBlocksZ()/2},
+//                800, //left
+//                0, //top
+//                400, //full width 
+//                400//full height
+//            )
+//        );
         
         setMinimap(
             new Minimap(this, getCameras().get(0), gc.getScreenWidth() - 10,10)
