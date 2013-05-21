@@ -113,6 +113,16 @@ public class CustomGameController extends Controller {
                 zombie.exist();   
              }
 
+            if (input.isKeyPressed(Input.KEY_1)) blockToolbar.setSelection(0);
+            if (input.isKeyPressed(Input.KEY_2)) blockToolbar.setSelection(1);
+            if (input.isKeyPressed(Input.KEY_3)) blockToolbar.setSelection(2);
+            if (input.isKeyPressed(Input.KEY_4)) blockToolbar.setSelection(3);
+            if (input.isKeyPressed(Input.KEY_5)) blockToolbar.setSelection(4);
+            if (input.isKeyPressed(Input.KEY_6)) blockToolbar.setSelection(5);
+            if (input.isKeyPressed(Input.KEY_7)) blockToolbar.setSelection(6);
+            if (input.isKeyPressed(Input.KEY_8)) blockToolbar.setSelection(7);
+            if (input.isKeyPressed(Input.KEY_9)) blockToolbar.setSelection(8);
+            
             //walk
             if (getPlayer() != null)
                 if ("WASD".equals(getPlayer().getControls()))
@@ -176,7 +186,7 @@ public class CustomGameController extends Controller {
                 gras1.play();
             } else {//right click
                 if (getMapData(coords).getId() == 0){
-                    setMapData(coords, Block.getInstance(2));
+                    setMapData(coords, Block.getInstance(blockToolbar.getSelectionID()));
                     getCameras().get(0).traceRayTo(coords, true);
                     gras2.play();
                 }

@@ -18,8 +18,8 @@ public class CustomGameView extends View{
          super(gc, controller);
          this.controller = (CustomGameController) controller;
          this.controller.getBlockToolbar().setPos(
-             (gc.getScreenWidth() - Block.getSpritesheet().getSprite("gui").getWidth()) /2,
-             gc.getScreenHeight() - Block.getSpritesheet().getSprite("gui").getHeight()
+             (gc.getScreenWidth() - Block.getSpritesheet().getSprite("toolbar").getWidth()) /2,
+             gc.getScreenHeight() - Block.getSpritesheet().getSprite("toolbar").getHeight()
          );
      }
  

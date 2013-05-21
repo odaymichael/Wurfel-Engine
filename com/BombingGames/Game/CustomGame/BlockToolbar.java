@@ -1,6 +1,7 @@
 package com.BombingGames.Game.CustomGame;
 
 import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Gameobjects.GameObject;
 import org.newdawn.slick.Graphics;
 
 /**
@@ -11,6 +12,7 @@ public class BlockToolbar {
     private int posX;
     private int posY;
     private int[] slot = new int[9];
+    private int selection = 0;
 
     public BlockToolbar() {
         slot[0] = 1;
@@ -24,7 +26,6 @@ public class BlockToolbar {
         slot[8] = 9;
     }
 
-    
     public void setSlot(int slot, int id) {
         this.slot[slot] = id;
     } 
@@ -34,9 +35,19 @@ public class BlockToolbar {
         this.posX = posX;
         this.posY = posY;
     }
+
+    public void setSelection(int selection) {
+        this.selection = selection;
+    }
+    
+    public int getSelectionID(){
+        return slot[selection];
+    }
     
     public void render(Graphics g){
-        Block.getSpritesheet().getSprite("gui").draw(posX, posY); 
+        GameObject.getSpritesheet().getSprite("toolbar").draw(posX, posY);
+        GameObject.getSpritesheet().getSprite("selection").draw(posX+80*selection, posY-5);
+        
         for (int i = 0; i < 9; i++) {
             if (slot[i]!=0){
                 Block.getBlockSprite(slot[i], 0,1).draw(posX+i*80+17, posY+15, 0.35f);
@@ -44,7 +55,5 @@ public class BlockToolbar {
                 Block.getBlockSprite(slot[i], 0,2).draw(posX+i*80+17+28, posY+15+14, 0.35f);
             }
         }
-
     }
-
 }

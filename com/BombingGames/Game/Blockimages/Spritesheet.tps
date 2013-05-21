@@ -70,13 +70,13 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
             <enum type="AlgorithmSettings::SizeConstraints">AnySize</enum>
             <key>forceSquared</key>
-            <true/>
+            <false/>
             <key>forceWordAligned</key>
             <false/>
             <key>maxRects</key>
@@ -140,7 +140,7 @@
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">CropKeepPos</enum>
+            <enum type="SpriteSettings::TrimMode">Crop</enum>
             <key>heuristicMask</key>
             <false/>
         </struct>
@@ -218,7 +218,8 @@
             <filename>sprites/40-22.png</filename>
             <filename>sprites/40-23.png</filename>
             <filename>sprites/13-0.png</filename>
-            <filename>sprites/gui.png</filename>
+            <filename>sprites/selection.png</filename>
+            <filename>sprites/toolbar.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
