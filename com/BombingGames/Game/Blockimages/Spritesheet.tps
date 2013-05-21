@@ -74,7 +74,7 @@
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
-            <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
+            <enum type="AlgorithmSettings::SizeConstraints">AnySize</enum>
             <key>forceSquared</key>
             <true/>
             <key>forceWordAligned</key>
@@ -218,6 +218,7 @@
             <filename>sprites/40-22.png</filename>
             <filename>sprites/40-23.png</filename>
             <filename>sprites/13-0.png</filename>
+            <filename>sprites/gui.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
