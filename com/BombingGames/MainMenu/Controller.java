@@ -72,6 +72,4 @@ public class Controller {
     public MenuItem getStartGameOption() {
         return startGameOption;
     }
- 
-   
 }

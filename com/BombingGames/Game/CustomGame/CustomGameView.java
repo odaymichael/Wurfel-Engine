@@ -1,6 +1,7 @@
 package com.BombingGames.Game.CustomGame;
 
 import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.View;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -16,10 +17,15 @@ public class CustomGameView extends View{
      public CustomGameView(GameContainer gc, Controller controller) throws SlickException {
          super(gc, controller);
          this.controller = (CustomGameController) controller;
+         this.controller.getBlockToolbar().setPos(
+             (gc.getScreenWidth() - Block.getSpritesheet().getSprite("gui").getWidth()) /2,
+             gc.getScreenHeight() - Block.getSpritesheet().getSprite("gui").getHeight()
+         );
      }
  
      @Override
      public void render(Graphics g) throws SlickException {
          super.render(g);
+         controller.getBlockToolbar().render(g);
      } 
  }

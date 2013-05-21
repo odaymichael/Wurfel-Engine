@@ -18,6 +18,7 @@ public class CustomGameController extends Controller {
     private AbstractEntity focusentity;
     private Sound gras1;
     private Sound gras2;
+    private final BlockToolbar blockToolbar;
     
     /**
      * The custom game code belongs here.
@@ -55,6 +56,7 @@ public class CustomGameController extends Controller {
             new Minimap(this, getCameras().get(0), gc.getScreenWidth() - 10,10)
         );
 
+        blockToolbar = new BlockToolbar();
         
         focusentity = AbstractEntity.getInstance(13, 0, new int[]{0,0, Map.getBlocksZ()-1});
         focusentity.setPos(1, Block.DIM2+1f);
@@ -137,6 +139,11 @@ public class CustomGameController extends Controller {
     public AbstractEntity getFocusentity() {
         return focusentity;
     }
+
+    public BlockToolbar getBlockToolbar() {
+        return blockToolbar;
+    }
+    
       
     class MouseDraggedListener implements MouseListener{
         private float zoom = 1;

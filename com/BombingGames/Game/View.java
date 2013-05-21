@@ -36,21 +36,21 @@ public class View {
         //default rendering size is FullHD
         equalizationScale = gc.getWidth() / (float) ENGINE_RENDER_WIDTH;
         Log.debug("Scale is:" + Float.toString(equalizationScale));
- 
         Block.loadSheet();
      }
     
     /**
-     * Main method which is called every time
-     * @param g 
+     * Main method which is called every time and renders everything.
+     * @param g the graphics context
      * @throws SlickException
      */
     public void render(Graphics g) throws SlickException{
-        for (int i = 0; i < controller.getCameras().size(); i++) {
-            controller.getCameras().get(i).render(g);
-            
+        //render every camera
+        for (Camera camera : controller.getCameras()) {
+            camera.render(g);
         }
         
+        //scale to fit
         g.scale(equalizationScale, equalizationScale);
         
         //render HUD

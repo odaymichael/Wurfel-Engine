@@ -106,7 +106,4 @@ public class MainMenuState extends BasicGameState{
     public static void setLoadMap(boolean loadmap) {
         MainMenuState.loadMap = loadmap;
     }
-    
-    
-
 }
