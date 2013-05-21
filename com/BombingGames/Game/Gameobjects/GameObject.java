@@ -63,7 +63,7 @@ public abstract class GameObject {
         OFFSETLIST[34][0][1] = 78;
         NAMELIST[35] = "round bush";
         OFFSETLIST[35][0][0] = 22;
-        OFFSETLIST[35][0][1] = 2;
+        OFFSETLIST[35][0][1] = 40;
         NAMELIST[40] = "player";
         OFFSETLIST[40][0][0] = 24+21;
         OFFSETLIST[40][0][1] = 30+20;
