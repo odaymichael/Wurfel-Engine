@@ -102,12 +102,7 @@ public class CustomGameController extends Controller {
                 Zombie zombie = (Zombie) AbstractEntity.getInstance(
                     42,
                     0,
-                    Controller.getMap().relToAbsCoords(
-                        new int[]{
-                            (int) (Math.random()*(Map.getBlocksX()-1)),
-                            (int) (Math.random()*(Map.getBlocksY()-1)),
-                            Map.getBlocksZ()-1}
-                    )
+                    focusentity.getAbsCoords()
                 );
                 zombie.setTarget(getPlayer());
                 zombie.exist();   
