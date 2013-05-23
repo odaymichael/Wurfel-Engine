@@ -1,5 +1,6 @@
 package com.BombingGames.Game.Gameobjects;
 
+import java.util.Arrays;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
@@ -9,6 +10,9 @@ import org.newdawn.slick.Image;
  */
 public class Zombie extends AbstractCharacter{
     private AbstractCharacter target;
+    private int runningagainstwallCounter = 0;
+    private float[] lastPos;
+    private int[] lastCoord;
     
     /**
      * Zombie constructor. Use AbstractEntitiy.getInstance to create an zombie.
@@ -50,8 +54,24 @@ public class Zombie extends AbstractCharacter{
             target.getRelCoords()[0]<getRelCoords()[0]?true:false,
             target.getRelCoords()[0]>getRelCoords()[0]?true:false,
             0.35f);
+        
         //update as usual
         super.update(delta);
+        
+        //if standing on same position as in last update
+        if (Arrays.equals(getPos(), lastPos) && Arrays.equals(getAbsCoords(), lastCoord))
+            runningagainstwallCounter += delta;
+        else {
+            runningagainstwallCounter=0;
+            lastPos = getPos().clone();
+            lastCoord = getAbsCoords().clone();
+        }
+        
+        //jump after one second
+        if (runningagainstwallCounter > 50) {
+            jump();
+            runningagainstwallCounter=0;
+        }
     }
 
     /**
