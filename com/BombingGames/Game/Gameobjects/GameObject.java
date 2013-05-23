@@ -4,6 +4,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.PackedSpriteSheet;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.util.Log;
 
 /**
  *An object is something wich can be found in the game world.
@@ -164,6 +165,7 @@ public abstract class GameObject {
      */
     public static void loadSheet() throws SlickException {
         spritesheet = new PackedSpriteSheet("com/BombingGames/Game/Blockimages/Spritesheet.def");
+        Log.debug("Spritesheet loaded");
     }
 
     /**
