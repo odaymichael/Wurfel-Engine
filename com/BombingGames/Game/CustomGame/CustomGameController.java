@@ -177,12 +177,13 @@ public class CustomGameController extends Controller {
             
             if (button == 0){ //left click
                 setMapData(coords, Block.getInstance(0));
-                getCameras().get(0).traceRayTo(coords, true);
+                requestRecalc();
+                //getCameras().get(0).traceRayTo(coords, true);
                 gras1.play();
             } else {//right click
                 if (getMapData(coords).getId() == 0){
                     setMapData(coords, Block.getInstance(blockToolbar.getSelectionID()));
-                    getCameras().get(0).traceRayTo(coords, true);
+                    requestRecalc();
                     gras2.play();
                 }
             }    
