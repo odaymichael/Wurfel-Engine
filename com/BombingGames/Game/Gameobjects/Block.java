@@ -89,7 +89,7 @@ public class Block extends GameObject {
             case 8: block = new Block(id); //sand
                     block.setObstacle(true);
                     break;      
-            case 9: block = new Block(id); //water
+            case 9: block = new AnimatedBlock(id, new int[]{500,500,500},true, true); //water
                     block.setTransparent(true);
                     block.liquid = true;
                     break;

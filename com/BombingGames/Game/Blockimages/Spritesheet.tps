@@ -220,6 +220,12 @@
             <filename>sprites/13-0.png</filename>
             <filename>sprites/selection.png</filename>
             <filename>sprites/toolbar.png</filename>
+            <filename>sprites/9-1-0.png</filename>
+            <filename>sprites/9-1-1.png</filename>
+            <filename>sprites/9-1-2.png</filename>
+            <filename>sprites/9-2-0.png</filename>
+            <filename>sprites/9-2-1.png</filename>
+            <filename>sprites/9-2-2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
