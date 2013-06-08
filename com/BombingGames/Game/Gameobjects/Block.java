@@ -113,7 +113,6 @@ public class Block extends GameObject {
                     block.hasSides = false;
                     break;
             case 71:block = new ExplosiveBarrel(id,absCoords);
-                    block.setObstacle(true);
                     block.hasSides = false;
                     break;
             case 72:block = new AnimatedBlock(id, new int[]{1000,1000},true, true);//animation test
