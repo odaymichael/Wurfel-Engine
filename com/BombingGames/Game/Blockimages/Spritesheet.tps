@@ -176,6 +176,13 @@
             <filename>sprites/9-0-0.png</filename>
             <filename>sprites/9-0-1.png</filename>
             <filename>sprites/9-0-2.png</filename>
+            <filename>sprites/9-1-0.png</filename>
+            <filename>sprites/9-1-1.png</filename>
+            <filename>sprites/9-1-2.png</filename>
+            <filename>sprites/9-2-0.png</filename>
+            <filename>sprites/9-2-1.png</filename>
+            <filename>sprites/9-2-2.png</filename>
+            <filename>sprites/13-0.png</filename>
             <filename>sprites/17-0-0.png</filename>
             <filename>sprites/17-0-1.png</filename>
             <filename>sprites/17-0-2.png</filename>
@@ -185,6 +192,9 @@
             <filename>sprites/20-0-0.png</filename>
             <filename>sprites/20-0-1.png</filename>
             <filename>sprites/20-0-2.png</filename>
+            <filename>sprites/21-0-0.png</filename>
+            <filename>sprites/21-0-1.png</filename>
+            <filename>sprites/21-0-2.png</filename>
             <filename>sprites/34-0.png</filename>
             <filename>sprites/35-0.png</filename>
             <filename>sprites/40-0.png</filename>
@@ -195,12 +205,6 @@
             <filename>sprites/40-5.png</filename>
             <filename>sprites/40-6.png</filename>
             <filename>sprites/40-7.png</filename>
-            <filename>sprites/41-0.png</filename>
-            <filename>sprites/41-1.png</filename>
-            <filename>sprites/70-0.png</filename>
-            <filename>sprites/71-0-0.png</filename>
-            <filename>sprites/71-0-1.png</filename>
-            <filename>sprites/71-0-2.png</filename>
             <filename>sprites/40-8.png</filename>
             <filename>sprites/40-9.png</filename>
             <filename>sprites/40-10.png</filename>
@@ -217,15 +221,14 @@
             <filename>sprites/40-21.png</filename>
             <filename>sprites/40-22.png</filename>
             <filename>sprites/40-23.png</filename>
-            <filename>sprites/13-0.png</filename>
+            <filename>sprites/41-0.png</filename>
+            <filename>sprites/41-1.png</filename>
+            <filename>sprites/70-0.png</filename>
+            <filename>sprites/71-0-0.png</filename>
+            <filename>sprites/71-0-1.png</filename>
+            <filename>sprites/71-0-2.png</filename>
             <filename>sprites/selection.png</filename>
             <filename>sprites/toolbar.png</filename>
-            <filename>sprites/9-1-0.png</filename>
-            <filename>sprites/9-1-1.png</filename>
-            <filename>sprites/9-1-2.png</filename>
-            <filename>sprites/9-2-0.png</filename>
-            <filename>sprites/9-2-1.png</filename>
-            <filename>sprites/9-2-2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

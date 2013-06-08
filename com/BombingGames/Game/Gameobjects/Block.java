@@ -103,7 +103,7 @@ public class Block extends GameObject {
             case 20:block = new Block(id);
                     block.setObstacle(true);
                     break;
-            case 21:block = new ConveyorBelt(id, absCoords);
+            case 21:block = new AirLift(id, absCoords);
                     block.hasSides = true;
                     break;
             case 34:block = new Block(id); //

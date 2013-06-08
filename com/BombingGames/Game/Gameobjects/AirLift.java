@@ -6,10 +6,10 @@ import com.BombingGames.Game.Controller;
  *
  * @author Benedikt Vogler
  */
-public class ConveyorBelt extends Block implements IsSelfAware{
+public class AirLift extends Block implements IsSelfAware{
     int[] coords;
     
-    protected ConveyorBelt(int id, int[] absCoords){
+    protected AirLift(int id, int[] absCoords){
         super(id);
         this.coords = absCoords;
         setObstacle(true);
@@ -21,7 +21,6 @@ public class ConveyorBelt extends Block implements IsSelfAware{
         Block topblock = Controller.getMapData(relCoords[0], relCoords[1], relCoords[2]+1);
         if (topblock.getId() != 0){
             topblock.setPos(2, topblock.getPos()[2]+delta/8f);
-            //Controller.requestRecalc();
         }
     }
     
@@ -50,5 +49,4 @@ public class ConveyorBelt extends Block implements IsSelfAware{
     public void addVector(int[] coords) {
         setAbsCoords(new int[]{getAbsCoords()[0]+coords[0], getAbsCoords()[1]+coords[1], getAbsCoords()[2]+coords[2]});
     }
-    
 }
