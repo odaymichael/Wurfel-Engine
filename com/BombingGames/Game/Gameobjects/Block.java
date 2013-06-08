@@ -179,7 +179,7 @@ public class Block extends GameObject {
      * @return true when hiding the past Block
      */
     public boolean hidingPastBlock(){
-        return (hasSides && ! isTransparent());
+        return (hasSides && ! isTransparent() && ! hasOffset());
     }
     /**
      * Make a side (in)visible. If one side is visible, the whole block is visible.
