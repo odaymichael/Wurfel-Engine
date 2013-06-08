@@ -288,7 +288,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
     }
     
     /**
-     * Returns a normalized vector wich contains the direction of the block.
+     * Returns a normalized vector wich contains the direction of the entitiy.
      * @return 
      */
     public float[] getDirectionVector(){
