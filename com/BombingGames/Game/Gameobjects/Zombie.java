@@ -5,7 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 /**
- *A zombie which can follow a character
+ *A zombie which can follow a character.
  * @author Benedikt Vogler
  */
 public class Zombie extends AbstractCharacter{
