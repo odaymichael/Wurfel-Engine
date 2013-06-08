@@ -400,9 +400,13 @@ public class Camera {
                     Block block = mapdata[x][y][z];
                     
                     //Blocks with offset are not in the grid, so can not be calculated => always visible
-                    block.setVisible(
-                       !block.hasSides() || block.hasOffset()
-                       );
+                    boolean notCalculatable = !block.hasSides() || block.hasOffset();
+                    block.setVisible(notCalculatable);
+                    if (notCalculatable) {
+                        block.setSideVisibility(0, true);
+                        block.setSideVisibility(1, true);
+                        block.setSideVisibility(2, true);
+                    }
                 }
                 
         //send the rays through top of the map

@@ -123,8 +123,7 @@ public class Block extends GameObject {
                     block.hasSides = false;
                     break;
             case 71:block = new ExplosiveBarrel(id,absCoords);
-                    block.setObstacle(true);
-                    block.hasSides = true;
+                    block.hasSides = false;
                     break;
             case 72:block = new AnimatedBlock(id, new int[]{1000,1000},true, true);//animation test
                     block.setObstacle(true);
@@ -189,7 +188,7 @@ public class Block extends GameObject {
      * @return true when hiding the past Block
      */
     public boolean hidingPastBlock(){
-        return (hasSides && ! isTransparent());
+        return (hasSides && ! isTransparent() && ! hasOffset());
     }
     /**
      * Make a side (in)visible. If one side is visible, the whole block is visible.
