@@ -182,7 +182,7 @@ public class CustomGameController extends Controller {
                 gras1.play();
             } else {//right click
                 if (getMapData(coords).getId() == 0){
-                    setMapData(coords, Block.getInstance(blockToolbar.getSelectionID()));
+                    setMapData(coords, Block.getInstance(blockToolbar.getSelectionID(),0,Controller.getMap().relToAbsCoords(coords)));
                     requestRecalc();
                     gras2.play();
                 }

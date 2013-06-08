@@ -23,7 +23,7 @@ public class BlockToolbar {
         slot[5] = 6;
         slot[6] = 7;
         slot[7] = 8;
-        slot[8] = 9;
+        slot[8] = 21;
     }
 
     public void setSlot(int slot, int id) {
