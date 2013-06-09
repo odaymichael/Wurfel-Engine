@@ -106,6 +106,9 @@ public class Block extends GameObject {
             case 21:block = new AirLift(id, absCoords);
                     block.hasSides = true;
                     break;
+            case 22:block = new AirLift2(id,absCoords);
+                    block.hasSides = true;
+                    break;
             case 34:block = new Block(id); //
                     block.setTransparent(true);
                     block.hasSides = false;
@@ -123,7 +126,7 @@ public class Block extends GameObject {
                     block.hasSides = false;
                     break;
             case 71:block = new ExplosiveBarrel(id,absCoords);
-                    block.hasSides = false;
+                    block.hasSides = true;
                     break;
             case 72:block = new AnimatedBlock(id, new int[]{1000,1000},true, true);//animation test
                     block.setObstacle(true);
