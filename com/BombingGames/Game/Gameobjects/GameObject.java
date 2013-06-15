@@ -155,7 +155,7 @@ public abstract class GameObject {
             
             int xpos = getScreenPosX(this, coords) + OFFSETLIST[id][value][0];
             int ypos = getScreenPosY(this, coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
-            image.drawEmbedded(xpos, ypos);
+            image.drawEmbedded(xpos, ypos,image.getWidth(),image.getHeight());
         }
     } 
 

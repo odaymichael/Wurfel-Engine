@@ -41,7 +41,7 @@ public class Zombie extends AbstractCharacter{
             
             int xpos = getScreenPosX(this, getRelCoords()) + OFFSETLIST[40][getValue()][0];
             int ypos = getScreenPosY(this, getRelCoords()) - (getDimensionY() - 1) * DIM2 + OFFSETLIST[40][getValue()][1];
-            image.drawEmbedded(xpos, ypos);
+            image.drawEmbedded(xpos, ypos,image.getWidth(),image.getHeight());
         }
     }
 

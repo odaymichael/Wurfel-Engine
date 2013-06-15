@@ -274,7 +274,7 @@ public class Block extends GameObject {
         //the top is drawn a quarter blocks higher
         int ypos = getScreenPosY(this, coords) + (sidenumb != 1 ? DIM4 : 0);
         
-        image.drawEmbedded(xpos, ypos);
+        image.drawEmbedded(xpos, ypos,image.getWidth(),image.getHeight());
     }
 
     @Override
