@@ -1,5 +1,9 @@
 package com.BombingGames.Game.Gameobjects;
 
+import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Lighting.LightEngine;
+import com.BombingGames.Game.Lighting.Sun;
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -115,7 +119,7 @@ public class Block extends GameObject {
             case 71:block = new ExplosiveBarrel(id,absCoords);
                     block.hasSides = false;
                     break;
-            case 72:block = new AnimatedBlock(id, new int[]{1000,1000},true, true);//animation test
+            case 72:block = new AnimatedBlock(id, new int[]{1000,1000},true, true);//animation lighting
                     block.setObstacle(true);
                     block.hasSides = true;
                     break;
@@ -212,17 +216,27 @@ public class Block extends GameObject {
     public void render(Graphics g, int[] coords) {
         if (!isHidden() && isVisible()) {
             if (hasSides) {
-                    if (renderTop) {
-                        renderSide(coords, Block.TOPSIDE);
-                    }
-                    if (renderLeft) {
-                        renderSide(coords, Block.LEFTSIDE);
-                    }
-                    if (renderRight) {
-                        renderSide(coords, Block.RIGHTSIDE);
-                    }
-                } else super.render(g, coords);
+                if (renderTop)
+                    renderSide(coords, Block.TOPSIDE);
+                if (renderLeft)
+                    renderSide(coords, Block.LEFTSIDE);
+                if (renderRight)
+                    renderSide(coords, Block.RIGHTSIDE);
+            } else super.render(g, coords);
+        }
+    }
+    
+    private Color lighting(int brightness){
+        if (Controller.lightengine != null){
+            if (brightness < 128){
+                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+                return new Color(brightness/128f,brightness/128f,brightness/128f).multiply(Sun.getColor());
+            } else {
+                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
+                //GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+                return new Color((brightness-128)/128f,(brightness-128)/128f,(brightness-128)/128f).multiply(Sun.getColor());
             }
+        }return Color.white;
     }
     
     /**
@@ -232,6 +246,8 @@ public class Block extends GameObject {
      */
     protected void renderSide(int[] coords, int sidenumb){
         Image image = getBlockSprite(getId(), getValue(), sidenumb);
+        Color filter = lighting(LightEngine.getBrightness(sidenumb));
+        if (LightEngine.getBrightness(sidenumb)>128)GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
 //        if (Gameplay.getView().hasGoodGraphics()){
 //                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
@@ -244,24 +260,28 @@ public class Block extends GameObject {
 //            }
         //}
         
-        //calc  brightness
-        float brightness = getLightlevel() / 50f;
-                
-        image.setColor(0, brightness,brightness,brightness);
-        image.setColor(1, brightness,brightness, brightness);
-
-        if (sidenumb != 1) brightness -= .3f;
-
-        image.setColor(2, brightness, brightness, brightness);
-        image.setColor(3, brightness, brightness, brightness);
+        
+        
+//        //calc  brightness
+//        float brightness = getLightlevel() / 50f;
+//                
+//        image.setColor(0, brightness,brightness,brightness);
+//        image.setColor(1, brightness,brightness, brightness);
+//
+//        if (sidenumb != 1) brightness -= .3f;
+//
+//        image.setColor(2, brightness, brightness, brightness);
+//        image.setColor(3, brightness, brightness, brightness);
         
         //right side is  half a block more to the right
         int xpos = getScreenPosX(this, coords) + ( sidenumb == 2 ? DIM2 : 0);
         
         //the top is drawn a quarter blocks higher
         int ypos = getScreenPosY(this, coords) + (sidenumb != 1 ? DIM4 : 0);
-        
-        image.drawEmbedded(xpos, ypos);
+        //image.drawEmbedded(xpos, ypos, image.getWidth(), image.getHeight());
+        image.drawEmbedded(xpos, ypos, xpos+image.getWidth(), ypos+image.getHeight(), 0, 0, image.getWidth(), image.getHeight(), filter);
+        image.drawEmbedded(xpos, ypos, xpos, ypos, ypos, ypos, DIM2, DIM2, filter);
+        //image.draw(xpos, ypos, filter);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.BombingGames.Game;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.MainMenu.MainMenuState;
 import java.util.ArrayList;
 import org.newdawn.slick.GameContainer;
@@ -14,6 +15,7 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Benedikt Vogler
  */
 public class Controller {
+    public static final LightEngine lightengine = new LightEngine();
     private static Map map;
     private static boolean recalcRequested;
     private AbstractCharacter player;
@@ -22,13 +24,14 @@ public class Controller {
     private Minimap minimap;
     private final boolean ENABLECHUNKSWITCH = true;
     
+    
     /**
      * Constructor is called when entering the gamemode.
      * @param gc The gameContainer containing this class.
      * @param game The StateBasedGame containing this class.
      * @throws SlickException
      */
-    public Controller(GameContainer gc, StateBasedGame game) throws SlickException{        
+    public Controller(GameContainer gc, StateBasedGame game) throws SlickException{  
         newMap();        
         recalcRequested = true;
     }
@@ -39,6 +42,7 @@ public class Controller {
      * @throws SlickException
      */
     public void update(int delta) throws SlickException{
+        if (lightengine != null) lightengine.update(delta);
         if (ENABLECHUNKSWITCH){
             //earth to right
             if (cameras.get(0).getLeftBorder() <= 0)
@@ -275,4 +279,9 @@ public class Controller {
     protected void setMinimap(Minimap minimap) {
         this.minimap = minimap;
     }
+
+    public LightEngine getLightengine() {
+        return lightengine;
+    }
+    
 }

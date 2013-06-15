@@ -17,6 +17,15 @@ public class Map {
      */
     public static final float GRAVITY = 9.81f;
     
+    
+    /**in which direction is the world spinning? This is needed for the light engine.
+     * WEST->SOUTH->EAST = 0
+      * SOUTH->WEST->NORTH = -90
+      * EAST->NORTH->WEST = -180
+       *NORTH->EAST->SOUT = -270
+       **/
+    private final int worldSpinDirection = -40;
+    
     private static int blocksX, blocksY, blocksZ;    
     private Block data[][][];
     private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
@@ -24,7 +33,6 @@ public class Map {
     //A list which has all current nine chunk coordinates in it.
     private int[][] coordlist = new int[9][2];
     private boolean ENABLECHUNKSWITCH = true;
-   
     
       
     /**
@@ -470,5 +478,9 @@ public class Map {
         tmp[1] += getChunkCoords(0)[1] * Chunk.getBlocksY();
         return tmp;
 
+    }
+
+    public int getWorldSpinDirection() {
+        return worldSpinDirection;
     }
 }
