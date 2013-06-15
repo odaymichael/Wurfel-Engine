@@ -45,20 +45,24 @@ public class View {
      * @param g the graphics context
      * @throws SlickException
      */
-    public void render(Graphics g) throws SlickException { 
+    public void render(Graphics g) throws SlickException {
         //render every camera
         for (Camera camera : controller.getCameras()) {
             camera.render(g);
         }
         
+        //render HUD
+        
         //scale to fit
         g.scale(equalizationScale, equalizationScale);
         
-        //render HUD
         if (controller.getMinimap() != null)
             controller.getMinimap().render(g); 
         
         Gameplay.msgSystem().render(g);
+        
+        //reverse scale
+        g.scale(1/equalizationScale, 1/equalizationScale);
     }
        
 
