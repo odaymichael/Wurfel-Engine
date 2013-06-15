@@ -57,7 +57,7 @@ public class View {
         g.scale(equalizationScale, equalizationScale);
         
         if (controller.getMinimap() != null)
-            controller.getMinimap().render(g); 
+            controller.getMinimap().render(g, this); 
         
         Gameplay.msgSystem().render(g);
         
