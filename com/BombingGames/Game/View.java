@@ -45,7 +45,7 @@ public class View {
      * @param g the graphics context
      * @throws SlickException
      */
-    public void render(Graphics g) throws SlickException{
+    public void render(Graphics g) throws SlickException { 
         //render every camera
         for (Camera camera : controller.getCameras()) {
             camera.render(g);
