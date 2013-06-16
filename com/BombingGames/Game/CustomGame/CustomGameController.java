@@ -53,7 +53,7 @@ public class CustomGameController extends Controller {
         );
         
         setMinimap(
-            new Minimap(this, getCameras().get(0), gc.getScreenWidth() - 10,10)
+            new Minimap(this, getCameras().get(0), gc.getWidth() - 10,10)
         );
 
         blockToolbar = new BlockToolbar();

@@ -16,16 +16,25 @@ public class CustomGameView extends View{
  
      public CustomGameView(GameContainer gc, Controller controller) throws SlickException {
          super(gc, controller);
+         
          this.controller = (CustomGameController) controller;
+         
          this.controller.getBlockToolbar().setPos(
-             (gc.getWidth() - Block.getSpritesheet().getSprite("toolbar").getWidth()) /2,
-             gc.getHeight() - Block.getSpritesheet().getSprite("toolbar").getHeight()
+             (int) (
+                (gc.getWidth()/2 / getEqualizationScale())
+                - Block.getSpritesheet().getSprite("toolbar").getWidth()/2
+             ),
+             (int) (
+                (gc.getHeight()/getEqualizationScale())
+                - Block.getSpritesheet().getSprite("toolbar").getHeight()
+             )
          );
      }
  
      @Override
      public void render(Graphics g) throws SlickException {
          super.render(g);
+         g.scale(getEqualizationScale(), getEqualizationScale());
          controller.getBlockToolbar().render(g);
      } 
  }

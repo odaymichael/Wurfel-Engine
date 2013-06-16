@@ -50,14 +50,18 @@ public class View {
             camera.render(g);
         }
         
+        //render HUD
+        
         //scale to fit
         g.scale(equalizationScale, equalizationScale);
         
-        //render HUD
         if (controller.getMinimap() != null)
-            controller.getMinimap().render(g); 
+            controller.getMinimap().render(g, this); 
         
         Gameplay.msgSystem().render(g);
+        
+        //reverse scale
+        g.scale(1/equalizationScale, 1/equalizationScale);
     }
        
 

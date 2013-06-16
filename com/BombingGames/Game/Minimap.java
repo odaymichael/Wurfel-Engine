@@ -27,7 +27,7 @@ public class Minimap {
      */
     public Minimap(Controller controller, Camera camera, int screenX, int screenY) {
         if (controller == null || camera == null) throw new NullPointerException("Parameter controller or camera is null");
-        this.posX = screenX - (int) (Map.getBlocksX()*scaleX);
+        this.posX = screenX;
         this.posY = screenY;
         this.controller = controller;
         this.camera = camera;
@@ -57,9 +57,11 @@ public class Minimap {
      * Renders the Minimap.
      * @param g The graphics context.
      */
-    public void render(Graphics g) {
+    public void render(Graphics g, View view) {
         if (visible) {
-
+            int renderPosX = (int) (posX/view.getEqualizationScale() - (int) (Map.getBlocksX()*scaleX));
+            int renderPosY = (int) (posY/view.getEqualizationScale());
+            
             //maybe this speeds up rendering the minimap
             g.setAntiAlias(false);
 
@@ -68,8 +70,8 @@ public class Minimap {
                 for (int y = 0; y < Map.getBlocksY(); y++) {
                     g.setColor(mapdata[x][y]);
                     g.fillRect(
-                        this.posX + (x + (y%2 == 1 ? 0.5f : 0) ) * scaleX,
-                        this.posY + y*scaleY,
+                        renderPosX + (x + (y%2 == 1 ? 0.5f : 0) ) * scaleX,
+                        renderPosY + y*scaleY,
                         scaleX,
                         scaleY
                     );   
@@ -81,8 +83,8 @@ public class Minimap {
                 if (controller.getPlayer()!=null){
                     g.setColor(Color.blue);
                     g.drawRect(
-                        posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX,
-                        posY + controller.getPlayer().getRelCoords()[1] * scaleY,
+                        renderPosX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX,
+                        renderPosY + controller.getPlayer().getRelCoords()[1] * scaleY,
                         scaleX,
                         scaleY
                     );
@@ -92,14 +94,14 @@ public class Minimap {
                 //Chunk outline
                 g.setColor(Color.black);
                 g.drawRect(
-                    posX + pos%3 *(Chunk.getBlocksX()*scaleX),
-                    posY + pos/3*(Chunk.getBlocksY()*scaleY),
+                    renderPosX + pos%3 *(Chunk.getBlocksX()*scaleX),
+                    renderPosY + pos/3*(Chunk.getBlocksY()*scaleY),
                     Chunk.getBlocksX()*scaleX,
                     Chunk.getBlocksY()*scaleY
                 );
 
                 View.getFont().drawString(
-                    posX + 10 + pos%3 *Chunk.getBlocksX()*scaleX,
+                    renderPosX + 10 + pos%3 *Chunk.getBlocksX()*scaleX,
                     posY + 10 + pos/3 *(Chunk.getBlocksY()*scaleY),
                     Controller.getMap().getChunkCoords(pos)[0] +" | "+ Controller.getMap().getChunkCoords(pos)[1] ,
                     Color.black
@@ -109,8 +111,8 @@ public class Minimap {
             //bottom getCameras() rectangle
             g.setColor(Color.green);
             g.drawRect(
-                posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
-                posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2),
+                renderPosX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
+                renderPosY + scaleY * camera.getOutputPosY() / (Block.DIM2/2),
                 scaleX*camera.getOutputWidth() / Block.DIMENSION,
                 scaleY*camera.getOutputHeight() / (Block.DIM2/2)
             );
@@ -119,8 +121,8 @@ public class Minimap {
                 //player level getCameras() rectangle
                 g.setColor(Color.gray);
                 g.drawRect(
-                    posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
-                    posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
+                    renderPosX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
+                    renderPosY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
                     + scaleY *2*(controller.getPlayer().getRelCoords()[2] * (Block.DIM2/2))/ (float) (Block.DIMENSION),
                     scaleX*camera.getOutputWidth() / Block.DIMENSION,
                     scaleY*camera.getOutputHeight() / (Block.DIM2/2)
@@ -130,8 +132,8 @@ public class Minimap {
             //top level getCameras() rectangle
             g.setColor(Color.white);
             g.drawRect(
-                posX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
-                posY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
+                renderPosX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
+                renderPosY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
                 + scaleY *2*(Chunk.getBlocksZ() * Block.DIM2)/ (float) (Block.DIMENSION),
                 scaleX*camera.getOutputWidth() / Block.DIMENSION,
                 scaleY*camera.getOutputHeight() / (Block.DIM2/2)
@@ -139,9 +141,9 @@ public class Minimap {
 
             if (controller.getPlayer()!=null){
                 View.getFont().drawString(
-                        posX + scaleX * camera.getOutputPosX() / Block.DIMENSION
+                        renderPosX + scaleX * camera.getOutputPosX() / Block.DIMENSION
                         + scaleX*camera.getOutputWidth() / Block.DIMENSION,
-                        posY + scaleY * camera.getOutputPosY() / Block.DIM2
+                        renderPosY + scaleY * camera.getOutputPosY() / Block.DIM2
                         + scaleY *2*(controller.getPlayer().getRelCoords()[2] * Block.DIM2)/ (float) (Block.DIMENSION)
                         + scaleY*camera.getOutputHeight() / Block.DIM2,
                         camera.getRightBorder() +" | "+ camera.getBottomBorder() ,
@@ -151,8 +153,8 @@ public class Minimap {
                 //player coord
                 g.setColor(Color.blue);
                 View.getFont().drawString(
-                    posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
-                    posY + controller.getPlayer().getRelCoords()[1] * scaleY - 30,
+                    renderPosX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
+                    renderPosY + controller.getPlayer().getRelCoords()[1] * scaleY - 30,
                     controller.getPlayer().getRelCoords()[0] +" | "+ controller.getPlayer().getRelCoords()[1] +" | "+ controller.getPlayer().getRelCoords()[2],
                     Color.blue
                 );
@@ -160,8 +162,8 @@ public class Minimap {
 
                 //player pos
                 View.getFont().drawString(
-                    posX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
-                    posY + controller.getPlayer().getRelCoords()[1] * scaleY - 10,
+                    renderPosX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
+                    renderPosY + controller.getPlayer().getRelCoords()[1] * scaleY - 10,
                     (int) controller.getPlayer().getPos()[0] +" | "+ (int) controller.getPlayer().getPos()[1] +" | "+ (int) controller.getPlayer().getPos()[2],
                     Color.red
                 );
@@ -169,8 +171,8 @@ public class Minimap {
 
             //getCamera() pos
             View.getFont().drawString(
-                    posX ,
-                    posY + 3*Chunk.getBlocksY()*scaleY + 15,
+                    renderPosX ,
+                    renderPosY + 3*Chunk.getBlocksY()*scaleY + 15,
                     camera.getOutputPosX() +" | "+ camera.getOutputPosY(),
                     Color.white
             );
