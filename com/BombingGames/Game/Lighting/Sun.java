@@ -16,7 +16,7 @@ public class Sun {
     private final float longSpeed = 1/32f;
     private float latPos;
     private float longPos = 45;//starting position
-    private static Color color = new Color(255,255,255); //the color of the light
+    private Color color = new Color(255,255,255); //the color of the light
     private float brightness;//should raise at morning and fall at night but stay over teh day
     
     public void update(int delta){
@@ -34,14 +34,14 @@ public class Sun {
         if (brightness < 0)brightness=0;
                
          //if (longPos>180+IGLPrototype.TWISTDIRECTION)
-        //color = new Color(127+(int) (brightness*128), 255, 255);
+        color = new Color(127+(int) (brightness*128), 255, 255);
         //else color = new Color(1f,1f,1f); 
         
         //I_a = (int) ((90-latPos)*0.1f);
         
     }
 
-    public static Color getColor() {
+    public Color getColor() {
         return color;
     }
 

@@ -2,6 +2,7 @@ package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Map;
+import com.BombingGames.Game.View;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.Graphics;
@@ -146,8 +147,8 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     /**
      * Renders the entity
      **/
-    public void render(Graphics g){
-        this.render(g, getRelCoords());
+    public void render(Graphics g, View view){
+        this.render(g, view, getRelCoords());
     }
     
     /**

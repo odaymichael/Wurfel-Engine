@@ -2,6 +2,7 @@ package com.BombingGames.Game;
 
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -22,6 +23,8 @@ public class View {
     private static AngelCodeFont baseFont;
     private float equalizationScale;
     private Controller controller;
+    
+    private int drawmode;
     
     /**
      * Creates a View.
@@ -48,7 +51,7 @@ public class View {
     public void render(Graphics g) throws SlickException {
         //render every camera
         for (Camera camera : controller.getCameras()) {
-            camera.render(g);
+            camera.render(g, this);
         }
         
         //render HUD
@@ -139,4 +142,19 @@ public class View {
     public static AngelCodeFont getFont() {
         return baseFont;
     }
+
+    public int getDrawmode() {
+        return drawmode;
+    }
+
+    public void setDrawmode(int drawmode) {
+        if (drawmode != this.drawmode){
+            this.drawmode = drawmode;
+            GameObject.getSpritesheet().getFullImage().endUse();
+            GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, drawmode);
+            GameObject.getSpritesheet().getFullImage().startUse();
+        }
+    }
+    
+    
 }

@@ -251,7 +251,7 @@ public class Camera {
      * Renders the viewport
      * @param g 
      */
-    public void render(Graphics g) {
+    public void render(Graphics g, View view) {
         if (Controller.getMap() != null) {     
             //move the camera (graphic context)
            
@@ -266,7 +266,7 @@ public class Camera {
             
             //render map
             createDepthList();
-            Controller.getMap().render(g, this);
+            Controller.getMap().render(g, view, this);
 
             //reset clipping
             g.clearClip();            

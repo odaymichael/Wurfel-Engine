@@ -239,7 +239,7 @@ public class Map {
      * Draws the map
      * @param camera 
      */
-    public void render(Graphics g, Camera camera) {
+    public void render(Graphics g, View view, Camera camera) {
         //if (Gameplay.getController().hasGoodGraphics()) Block.getSpritesheet().bind();
         //if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
@@ -250,9 +250,9 @@ public class Map {
             int entitynumber = camera.getEntityIndex(i); //get the entityindex to check if it is an entity
             
             if (entitynumber == -1) //if a block then  get it and draw it
-                data[coords[0]][coords[1]][coords[2]].render(g, coords);
+                data[coords[0]][coords[1]][coords[2]].render(g,view, coords);
             else //if it's an entity get it and draw it
-                entitylist.get(entitynumber).render(g);        
+                entitylist.get(entitynumber).render(g, view);        
         }
             
        Block.getSpritesheet().getFullImage().endUse(); 

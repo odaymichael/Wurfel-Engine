@@ -2,7 +2,7 @@ package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Lighting.LightEngine;
-import com.BombingGames.Game.Lighting.Sun;
+import com.BombingGames.Game.View;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -213,30 +213,17 @@ public class Block extends GameObject {
     
 
     @Override
-    public void render(Graphics g, int[] coords) {
+    public void render(Graphics g, View view, int[] coords) {
         if (!isHidden() && isVisible()) {
             if (hasSides) {
                 if (renderTop)
-                    renderSide(coords, Block.TOPSIDE);
+                    renderSide(g, view, coords, Block.TOPSIDE, LightEngine.getBrightness(Block.TOPSIDE));
                 if (renderLeft)
-                    renderSide(coords, Block.LEFTSIDE);
+                    renderSide(g, view, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE));
                 if (renderRight)
-                    renderSide(coords, Block.RIGHTSIDE);
-            } else super.render(g, coords);
+                    renderSide(g, view, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE));
+            } else super.render(g, view, coords);
         }
-    }
-    
-    private Color lighting(int brightness){
-        if (Controller.lightengine != null){
-            if (brightness < 128){
-                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
-                return new Color(brightness/128f,brightness/128f,brightness/128f).multiply(Sun.getColor());
-            } else {
-                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
-                //GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
-                return new Color((brightness-128)/128f,(brightness-128)/128f,(brightness-128)/128f).multiply(Sun.getColor());
-            }
-        }return Color.white;
     }
     
     /**
@@ -244,44 +231,41 @@ public class Block extends GameObject {
      * @param coords the coordinates where to render 
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      */
-    protected void renderSide(int[] coords, int sidenumb){
+    protected void renderSide(Graphics g, View view, int[] coords, int sidenumb, int brightness){
         Image image = getBlockSprite(getId(), getValue(), sidenumb);
-        Color filter = lighting(LightEngine.getBrightness(sidenumb));
-        if (LightEngine.getBrightness(sidenumb)>128)GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
-        
-//        if (Gameplay.getView().hasGoodGraphics()){
-//                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
-//        
-//            if (sidenumb == 0){
-//                int brightness = getLightlevel() * 255 / 100;
-//                new Color(brightness,brightness,brightness).bind();
-//            } else {
-//                Color.black.bind();
-//            }
-        //}
-        
-        
-        
-//        //calc  brightness
-//        float brightness = getLightlevel() / 50f;
-//                
-//        image.setColor(0, brightness,brightness,brightness);
-//        image.setColor(1, brightness,brightness, brightness);
-//
-//        if (sidenumb != 1) brightness -= .3f;
-//
-//        image.setColor(2, brightness, brightness, brightness);
-//        image.setColor(3, brightness, brightness, brightness);
+        Color filter;
         
         //right side is  half a block more to the right
         int xpos = getScreenPosX(this, coords) + ( sidenumb == 2 ? DIM2 : 0);
         
         //the top is drawn a quarter blocks higher
         int ypos = getScreenPosY(this, coords) + (sidenumb != 1 ? DIM4 : 0);
-        //image.drawEmbedded(xpos, ypos, image.getWidth(), image.getHeight());
-        image.drawEmbedded(xpos, ypos, xpos+image.getWidth(), ypos+image.getHeight(), 0, 0, image.getWidth(), image.getHeight(), filter);
-        image.drawEmbedded(xpos, ypos, xpos, ypos, ypos, ypos, DIM2, DIM2, filter);
-        //image.draw(xpos, ypos, filter);
+        
+        if (Controller.lightengine != null){
+            if (brightness < 128){
+                view.setDrawmode(GL11.GL_MODULATE);
+                filter = new Color(brightness/128f,brightness/128f,brightness/128f);
+            } else {
+                view.setDrawmode(GL11.GL_ADD);
+                filter =  new Color((brightness-128)/128f,(brightness-128)/128f,(brightness-128)/128f);
+            }
+            filter = filter.multiply(Controller.lightengine.getLightColor());
+            image.drawEmbedded(xpos, ypos, xpos+image.getWidth(), ypos+image.getHeight(), 0, 0, image.getWidth(), image.getHeight(), filter);
+        } else {
+            //calc  verticalGradient
+            float verticalGradient = getLightlevel() / 50f;
+
+            image.setColor(0, verticalGradient,verticalGradient,verticalGradient);
+            image.setColor(1, verticalGradient,verticalGradient, verticalGradient);
+
+            if (sidenumb != 1) verticalGradient -= .3f;
+
+            image.setColor(2, verticalGradient, verticalGradient, verticalGradient);
+            image.setColor(3, verticalGradient, verticalGradient, verticalGradient);
+
+            //image.drawEmbedded(xpos, ypos, image.getWidth(), image.getHeight());
+            image.drawEmbedded(xpos, ypos, image.getWidth(), image.getHeight());
+        }
     }
 
     @Override

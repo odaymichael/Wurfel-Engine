@@ -1,10 +1,14 @@
 package com.BombingGames.Game.Lighting;
 
+import org.newdawn.slick.Color;
+
 /**
  *
  * @author Benedikt Vogler
  */
 public class LightEngine {
+    public static final String Version = "0.1.1";
+    
     //ambient light
     private final int ambientBaseLevel = 40;//value 0-255
     private float k_ambient = 0.32f;//material constant, value 0-1
@@ -122,5 +126,9 @@ public class LightEngine {
         if (side==0) return I_0;
             else if (side==1) return I_1;
                 else return I_2;
+    }
+    
+    public Color getLightColor(){
+        return sun.getColor();
     }
 }
