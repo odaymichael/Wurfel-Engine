@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Controller;
@@ -6,25 +10,26 @@ import com.BombingGames.Game.Controller;
  *
  * @author Benedikt Vogler
  */
-public class AirLift extends Block implements IsSelfAware{
+public class AirLift extends Block implements IsSelfAware {
     int[] coords;
-    
-    protected AirLift(int id, int[] absCoords){
+
+    public AirLift(int[] coords, int id) {
         super(id);
-        this.coords = absCoords;
+        this.coords = coords;
         setObstacle(true);
     }
 
     @Override
     public void update(int delta) {
-        int[] relCoords= Controller.getMap().absToRelCoords(coords);
-        Block topblock = Controller.getMapData(relCoords[0], relCoords[1], relCoords[2]+1);
-        if (topblock.getId() != 0){
+        int[] relcoords = Controller.getMap().absToRelCoords(coords);
+        Block topblock = Controller.getMapData(relcoords[0], relcoords[1], relcoords[2]+1);
+        if (topblock.getId() != 0)
             topblock.setPos(2, topblock.getPos()[2]+delta/8f);
-        }
     }
     
     
+    
+
     @Override
     public int[] getAbsCoords() {
       return coords; 
