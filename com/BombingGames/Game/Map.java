@@ -440,7 +440,7 @@ public class Map {
                 if (topmost>0) {
                     //start at topmost renderobject and go down. Every step make it a bit darker
                     for (int level = topmost; level > -1; level--){
-                        data[x][y][level].setLightlevel((127 * level) / topmost);
+                        data[x][y][level].setLightlevel(63 + 64 * level / topmost);
                     }
                 }
             }

@@ -252,6 +252,8 @@ public class Block extends GameObject {
         //the top is drawn a quarter blocks higher
         int yPos = getScreenPosY(this, coords) + (sidenumb != 1 ? DIM4 : 0);
         
+        brightness -= 127-getLightlevel();
+            
         Color filter;
         if (brightness <= 127){
             view.setDrawmode(GL11.GL_MODULATE);
@@ -265,7 +267,7 @@ public class Block extends GameObject {
             filter = filter.multiply(Controller.LIGHTENGINE.getLightColor());
         } else {
             //calc  verticalGradient
-            float verticalGradient = getLightlevel() / 127f;
+            float verticalGradient = getLightlevel();
 
             image.setColor(0, verticalGradient,verticalGradient,verticalGradient);
             image.setColor(1, verticalGradient,verticalGradient, verticalGradient);
