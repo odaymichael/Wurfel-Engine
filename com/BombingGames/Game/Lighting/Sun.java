@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.BombingGames.Game.Lighting;
 
 import com.BombingGames.Game.Controller;
 import org.newdawn.slick.Color;
 
 /**
- *
+ * The sun circles the world. The sun is only virtual. You can never see it inisometric perspective.
  * @author Benedikt Vogler
  */
 public class Sun {

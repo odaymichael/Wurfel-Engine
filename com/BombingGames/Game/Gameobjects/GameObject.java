@@ -1,10 +1,9 @@
 package com.BombingGames.Game.Gameobjects;
 
+import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.View;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.PackedSpriteSheet;
-import org.newdawn.slick.SlickException;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.*;
 import org.newdawn.slick.util.Log;
 
 /**
@@ -39,11 +38,10 @@ public abstract class GameObject {
     private int value;
     private float[] pos = {DIM2, DIM2, 0};
     private boolean obstacle, transparent, visible, hidden; 
-    private int lightlevel = 50;
+    private int lightlevel = 127;
     private int dimensionY = 1;    
     
     static {
-        
         NAMELIST[0] = "air";
         NAMELIST[1] = "grass";
         NAMELIST[2] = "dirt";
@@ -103,26 +101,42 @@ public abstract class GameObject {
      */
     public abstract void update(int delta);
     
-     /**
+    /**
      * Draws an object.
+     * @param g 
      * @param coords the relative coordinates
+     * @param view  
      */
     public void render(Graphics g,View view, int[] coords) {
+        render(g, view, coords, 128);
+    }
+    
+     /**
+     * Draws an object.
+     * @param g 
+     * @param coords the relative coordinates
+     * @param view 
+     * @param brightness  
+     */
+    public void render(Graphics g, View view, int[] coords, int brightness) {
         //draw the object except not visible ones
         if (!hidden && visible) {
             Image image = getSprite(id, value);
-            //calc  brightness
-            float brightness = lightlevel / 50.0f;
+             
+            int xPos = getScreenPosX(this, coords) + OFFSETLIST[id][value][0];
+            int yPos = getScreenPosY(this, coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
             
-            image.setColor(0, brightness, brightness, brightness);
-            image.setColor(1, brightness, brightness, brightness);
-            brightness -= 0.1f;
-            image.setColor(2, brightness, brightness, brightness);
-            image.setColor(3, brightness, brightness, brightness);
-            
-            int xpos = getScreenPosX(this, coords) + OFFSETLIST[id][value][0];
-            int ypos = getScreenPosY(this, coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
-            image.drawEmbedded(xpos, ypos, image.getWidth(), image.getHeight());
+            Color filter;
+            if (brightness <= 127){
+                view.setDrawmode(GL11.GL_MODULATE);
+                filter = new Color(brightness/127f, brightness/127f, brightness/127f);
+            } else {
+                view.setDrawmode(GL11.GL_ADD);
+                filter = new Color((brightness-127)/127f, (brightness-127)/127f, (brightness-127)/127f);
+            }
+
+            if (Controller.LIGHTENGINE != null) filter = filter.multiply(Controller.LIGHTENGINE.getLightColor());
+            image.drawEmbedded(xPos, yPos, xPos+image.getWidth(), yPos+image.getHeight(), 0, 0, image.getWidth(), image.getHeight(), filter);
         }
     } 
 
@@ -277,7 +291,6 @@ public abstract class GameObject {
      * Returns a sprite image of non-block image
      * @param id
      * @param value
-     * @param dimY the height of the object
      * @return
      */
     public static Image getSprite(int id, int value) {
@@ -306,7 +319,7 @@ public abstract class GameObject {
 
     /**
      * How bright is the object?
-     * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black. Default is 50.
+     * The lightlevel is a number between 0 and 255. 100 is full bright. 0 is black. Default is 50.
      * @return
      */
     public int getLightlevel() {
@@ -381,7 +394,7 @@ public abstract class GameObject {
 
     /**
      * Set the brightness of the object.
-     * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black.
+     * The lightlevel is a number between 0 and 255. 255 is full bright. 0 is black.
      * @param lightlevel
      */
     public void setLightlevel(int lightlevel) {
@@ -453,6 +466,10 @@ public abstract class GameObject {
         this.dimensionY = dimensionY;
     }
 
+    /**
+     * 
+     * @return
+     */
     public int getDimensionY() {
         return dimensionY;
     }

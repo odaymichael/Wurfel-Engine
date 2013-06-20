@@ -620,7 +620,7 @@ public class Camera {
         if (topmost>0) {
             //start at topmost renderobject and go down. Every step make it a bit darker
             for (int level = topmost; level > -1; level--){
-                Controller.getMapData(coords[0], coords[1], level).setLightlevel((50 * level) / topmost);
+                Controller.getMapData(coords[0], coords[1], level).setLightlevel((255 * level) / topmost);
             }
         }
     }

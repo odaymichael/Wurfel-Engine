@@ -3,11 +3,14 @@ package com.BombingGames.Game.Lighting;
 import org.newdawn.slick.Color;
 
 /**
- *
+ *This Light engine calculates phong shading for three normals over the day.
  * @author Benedikt Vogler
  */
 public class LightEngine {
-    public static final String Version = "0.1.1";
+    /**
+     * The Version of the light engine.
+     */
+    public static final String Version = "0.1.2";
     
     //ambient light
     private final int ambientBaseLevel = 40;//value 0-255
@@ -34,6 +37,9 @@ public class LightEngine {
     private Sun sun;
     private Moon moon; 
 
+    /**
+     * 
+     */
     public LightEngine() {
         sun = new Sun();
         moon = new Moon();
@@ -41,6 +47,10 @@ public class LightEngine {
     
     
     
+    /**
+     * 
+     * @param delta
+     */
     public void update(int delta) {
         sun.update(delta);
         moon.update(delta);
@@ -122,12 +132,29 @@ public class LightEngine {
         I_2 = (int) (I_ambient + I_diff2 + I_spec2);
     }
     
+    /**
+     * 
+     * @return
+     */
+    public static int getBrightness() {
+        return (I_0+I_1+I_2)/3;
+    }
+        
+    /**
+     * 
+     * @param side
+     * @return
+     */
     public static int getBrightness(int side){
         if (side==0) return I_0;
             else if (side==1) return I_1;
                 else return I_2;
     }
     
+    /**
+     * Returns the global lightcolor.
+     * @return
+     */
     public Color getLightColor(){
         return sun.getColor();
     }

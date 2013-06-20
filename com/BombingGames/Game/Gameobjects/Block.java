@@ -104,7 +104,7 @@ public class Block extends GameObject {
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;
-            case 35: block = new Block(id); //water
+            case 35: block = new Block(id); //bush
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;       
@@ -211,20 +211,32 @@ public class Block extends GameObject {
     }
     
     
-
     @Override
     public void render(Graphics g, View view, int[] coords) {
         if (!isHidden() && isVisible()) {
-            if (hasSides) {
-                if (renderTop)
-                    renderSide(g, view, coords, Block.TOPSIDE, LightEngine.getBrightness(Block.TOPSIDE));
-                if (renderLeft)
-                    renderSide(g, view, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE));
-                if (renderRight)
-                    renderSide(g, view, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE));
-            } else super.render(g, view, coords);
+            
+            if (Controller.LIGHTENGINE != null){
+                if (hasSides) {
+                    if (renderTop)
+                        renderSide(g, view, coords, Block.TOPSIDE, LightEngine.getBrightness(Block.TOPSIDE));
+                    if (renderLeft)
+                        renderSide(g, view, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE));
+                    if (renderRight)
+                        renderSide(g, view, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE));
+                } else super.render(g, view, coords, LightEngine.getBrightness());
+            } else 
+                if (hasSides){
+                    if (renderTop)
+                        renderSide(g, view, coords, Block.TOPSIDE, getLightlevel());
+                    if (renderLeft)
+                        renderSide(g, view, coords, Block.LEFTSIDE, getLightlevel());
+                    if (renderRight)
+                        renderSide(g, view, coords, Block.RIGHTSIDE, getLightlevel());
+                } else super.render(g, view, coords, getLightlevel());
         }
     }
+
+
     
     /**
      * Draws a side of a block
@@ -233,27 +245,27 @@ public class Block extends GameObject {
      */
     protected void renderSide(Graphics g, View view, int[] coords, int sidenumb, int brightness){
         Image image = getBlockSprite(getId(), getValue(), sidenumb);
-        Color filter;
         
         //right side is  half a block more to the right
-        int xpos = getScreenPosX(this, coords) + ( sidenumb == 2 ? DIM2 : 0);
+        int xPos = getScreenPosX(this, coords) + ( sidenumb == 2 ? DIM2 : 0);
         
         //the top is drawn a quarter blocks higher
-        int ypos = getScreenPosY(this, coords) + (sidenumb != 1 ? DIM4 : 0);
+        int yPos = getScreenPosY(this, coords) + (sidenumb != 1 ? DIM4 : 0);
         
-        if (Controller.lightengine != null){
-            if (brightness < 128){
-                view.setDrawmode(GL11.GL_MODULATE);
-                filter = new Color(brightness/128f,brightness/128f,brightness/128f);
-            } else {
-                view.setDrawmode(GL11.GL_ADD);
-                filter =  new Color((brightness-128)/128f,(brightness-128)/128f,(brightness-128)/128f);
-            }
-            filter = filter.multiply(Controller.lightengine.getLightColor());
-            image.drawEmbedded(xpos, ypos, xpos+image.getWidth(), ypos+image.getHeight(), 0, 0, image.getWidth(), image.getHeight(), filter);
+        Color filter;
+        if (brightness <= 127){
+            view.setDrawmode(GL11.GL_MODULATE);
+            filter = new Color(brightness/127f, brightness/127f, brightness/127f);
+        } else {
+            view.setDrawmode(GL11.GL_ADD);
+            filter = new Color((brightness-127)/127f, (brightness-127)/127f, (brightness-127)/127f);
+        }
+            
+        if (Controller.LIGHTENGINE != null){
+            filter = filter.multiply(Controller.LIGHTENGINE.getLightColor());
         } else {
             //calc  verticalGradient
-            float verticalGradient = getLightlevel() / 50f;
+            float verticalGradient = getLightlevel() / 127f;
 
             image.setColor(0, verticalGradient,verticalGradient,verticalGradient);
             image.setColor(1, verticalGradient,verticalGradient, verticalGradient);
@@ -262,10 +274,9 @@ public class Block extends GameObject {
 
             image.setColor(2, verticalGradient, verticalGradient, verticalGradient);
             image.setColor(3, verticalGradient, verticalGradient, verticalGradient);
-
-            //image.drawEmbedded(xpos, ypos, image.getWidth(), image.getHeight());
-            image.drawEmbedded(xpos, ypos, image.getWidth(), image.getHeight());
         }
+        
+        image.drawEmbedded(xPos, yPos, xPos+image.getWidth(), yPos+image.getHeight(), 0, 0, image.getWidth(), image.getHeight(), filter);
     }
 
     @Override
