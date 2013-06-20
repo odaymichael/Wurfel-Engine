@@ -108,7 +108,7 @@ public abstract class GameObject {
      * @param view  
      */
     public void render(Graphics g,View view, int[] coords) {
-        render(g, view, coords, 128);
+        render(g, view, coords, lightlevel);
     }
     
      /**
