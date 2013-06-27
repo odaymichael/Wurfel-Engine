@@ -5,7 +5,7 @@ package com.BombingGames.Game;
  * @author Benedikt
  */
 public class Renderobject {
-    private final int[] coords;
+    private final Coordinate coords;
     private final int depth;
     private final int entityindex;
 
@@ -15,7 +15,7 @@ public class Renderobject {
          * @param depth the depth of the object
          * @param entitynumber when it is an entity put the number here. When it is not then set it to -1.
          */
-    protected Renderobject(int[] coords, int depth, int entitynumber) {
+    protected Renderobject(Coordinate coords, int depth, int entitynumber) {
         this.coords = coords;
         this.depth = depth;
         this.entityindex = entitynumber;
@@ -41,7 +41,7 @@ public class Renderobject {
      * 
      * @return
      */
-    public int[] getCoords() {
+    public Coordinate getCoords() {
         return coords;
     }
 

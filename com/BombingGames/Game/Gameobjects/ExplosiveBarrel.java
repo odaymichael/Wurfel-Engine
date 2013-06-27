@@ -1,6 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Coordinate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.SlickException;
@@ -13,7 +14,7 @@ import org.newdawn.slick.Sound;
 public class ExplosiveBarrel extends Block implements IsSelfAware {
     /**Defines the radius of the explosion.*/
     public static int RADIUS = 2;
-    private int[] coords;
+    private Coordinate coords;
     private Sound explosionsound;
 
     /**
@@ -21,10 +22,10 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
      * @param id the id
      * @param absCoords the absolute coordinates
      */
-    protected ExplosiveBarrel(int id, int[] absCoords){
+    protected ExplosiveBarrel(int id, Coordinate coords){
         super(id);
-        if (absCoords == null) throw new NullPointerException("No coordinates given to ExplosiveBarrel during creation."); 
-        this.coords = absCoords;
+        if (coords == null) throw new NullPointerException("No coordinates given to ExplosiveBarrel during creation."); 
+        this.coords = coords;
         setObstacle(true);
         try {
             explosionsound = new Sound("com/BombingGames/Game/Sounds/explosion2.wav");
@@ -37,7 +38,7 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
      * Explodes the barrel.
      */
     public void explode(){
-        int[] relcoords = getRelCoords();
+        int[] relcoords = coords.getRel();
         for (int x=-RADIUS; x<RADIUS; x++)
             for (int y=-RADIUS*2; y<RADIUS*2; y++)
                 for (int z=-RADIUS; z<RADIUS; z++){
@@ -49,11 +50,7 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
                     //spawn effect
                     if (x*x + y*y >= RADIUS*RADIUS){
                         AbstractEntity.getInstance(41, 0,
-                                new int[]{
-                                    getAbsCoords()[0]+x,
-                                    getAbsCoords()[1]+y,
-                                    getAbsCoords()[2]+z
-                                }
+                                coords.addVector(new int[]{x,y,z}) 
                             ).exist();
                     }
                 }
@@ -62,27 +59,14 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
     }
 
     @Override
-    public int[] getAbsCoords() {
-      return coords; 
+    public Coordinate getCoords() {
+        return coords;
     }
 
     @Override
-    public void setAbsCoords(int[] coords) {
+    public void setCoords(Coordinate coords) {
         this.coords = coords;
     }
 
-    @Override
-    public int[] getRelCoords() {
-        return Controller.getMap().absToRelCoords(coords);
-    }
-    
-    @Override
-    public void setRelCoords(int[] relCoords) {
-        this.coords = Controller.getMap().relToAbsCoords(relCoords);
-    }
 
-    @Override
-    public void addVector(int[] coords) {
-        setAbsCoords(new int[]{getAbsCoords()[0]+coords[0], getAbsCoords()[1]+coords[1], getAbsCoords()[2]+coords[2]});
-    }
 }

@@ -22,7 +22,7 @@ public class Controller {
     private View view;
     private ArrayList<Camera> cameras = new ArrayList();
     private Minimap minimap;
-    private final boolean ENABLECHUNKSWITCH = true;
+    private final boolean ENABLECHUNKSWITCH = false;
     
     
     /**
@@ -113,7 +113,7 @@ public class Controller {
      * @param coords
      * @return
      */
-    public static Block getMapDataSafe(int[] coords) {
+    public static Block getMapDataSafe(Coordinate coords) {
         return map.getDataSafe(coords);
     }
     
@@ -135,8 +135,8 @@ public class Controller {
      * @return the wanted block
      * @see com.BombingGames.Game.Map#getData(int, int, int) 
      */
-    public static Block getMapData(int[] coords){
-        return map.getData(coords[0], coords[1], coords[2]);
+    public static Block getMapData(Coordinate coords){
+        return map.getData(coords);
     }
     
     /**
@@ -223,7 +223,7 @@ public class Controller {
      * @param side the id of the side
      * @return the neighbour block
      */
-    public static Block getNeighbourBlock(int[] coords, int side){
+    public static Block getNeighbourBlock(Coordinate coords, int side){
         return Controller.getMapDataSafe(Block.sideIDtoNeighbourCoords(coords, side));
     }
     

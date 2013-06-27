@@ -45,17 +45,17 @@ public class Chunk {
     * @param coordY 
     * @param loadmap load from HD(true) or generate new (false)?
     */
-    public Chunk(int coordX, int coordY, boolean loadmap){
+    public Chunk(int pos, int coordX, int coordY, boolean loadmap){
         this();
 
-        if (loadmap) load(coordX, coordY);
-            else generate(coordX, coordY);
+        if (loadmap) load(pos, coordX, coordY);
+            else generate(pos, coordX, coordY);
     }
     
     /**
      * Generates new content for a chunk.
      */  
-    private void generate(int coordX, int coordY){
+    private void generate(int pos, int coordX, int coordY){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
         Log.debug("Creating new chunk: "+ coordX + ", "+ coordY);
@@ -183,7 +183,7 @@ public class Chunk {
     /**
      * loads a chunk from memory
      */
-    private void load(int coordX, int coordY){
+    private void load(int pos, int coordX, int coordY){
         //Reading map files test
         try {
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
@@ -232,7 +232,7 @@ public class Chunk {
                             data[x][y][z] = Block.getInstance(
                                         Integer.parseInt(line.substring(0,posdots)),
                                         Integer.parseInt(line.substring(posdots+1, posend)),
-                                        new int[]{x + coordX* blocksX, y + coordY * blocksY, z} 
+                                        new Coordinate(x + coordX* blocksX, y + coordY * blocksY, z, coordX - pos / 3, coordY- pos % 3)
                                         );
                             x++;
                             line.delete(0,posend+1);
@@ -248,7 +248,7 @@ public class Chunk {
                 } while (lastline != null);
             } else {
                 Log.debug("...but it could not be found. Creating new.");
-                generate(coordX, coordY);
+                generate(pos, coordX, coordY);
             }
         } catch (IOException ex) {
             Log.debug("Loading of chunk "+coordX+","+coordY + "failed: "+ex);

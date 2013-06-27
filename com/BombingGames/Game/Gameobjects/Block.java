@@ -1,6 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Coordinate;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.Game.View;
 import org.lwjgl.opengl.GL11;
@@ -59,7 +60,7 @@ public class Block extends GameObject {
      * @param absCoords the absolute coordinates where the bloks should be created. Only SelfAware Blocks should use this.
      * @return the Block
      */
-    public static Block getInstance(int id, int value, int[] absCoords){
+    public static Block getInstance(int id, int value, Coordinate coord){
         Block block = null;
         //define the default SideSprites
         switch (id){
@@ -116,7 +117,7 @@ public class Block extends GameObject {
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;
-            case 71:block = new ExplosiveBarrel(id,absCoords);
+            case 71:block = new ExplosiveBarrel(id, coord);
                     block.hasSides = false;
                     break;
             case 72:block = new AnimatedBlock(id, new int[]{1000,1000},true, true);//animation lighting
@@ -153,7 +154,7 @@ public class Block extends GameObject {
      */
     public static Color getRepresentingColor(int id, int value){
         if (colorlist[id][value] == null){ //if not in list, add it to the list
-            if (Block.getInstance(id,0,new int[]{0,0,0}).hasSides)
+            if (Block.getInstance(id,0,new Coordinate(0,0,0,false)).hasSides)
                 colorlist[id][value] = getBlockSprite(id, value, 1).getColor(DIM2, DIM4);
             else
                 colorlist[id][value] = getSprite(id, value).getColor(DIM2, DIM2);
@@ -177,13 +178,6 @@ public class Block extends GameObject {
         return hasSides;
     }   
     
-    /**
-     * The block hides the past block when it has sides and is not transparent (like normal block)
-     * @return true when hiding the past Block
-     */
-    public boolean hidingPastBlock(){
-        return (hasSides && ! isTransparent() && ! hasOffset());
-    }
     /**
      * Make a side (in)visible. If one side is visible, the whole block is visible.
      * @param side 0 = left, 1 = top, 2 = right
@@ -212,7 +206,7 @@ public class Block extends GameObject {
     
     
     @Override
-    public void render(Graphics g, View view, int[] coords) {
+    public void render(Graphics g, View view, Coordinate coords) {
         if (!isHidden() && isVisible()) {
             
             if (Controller.LIGHTENGINE != null){
@@ -243,7 +237,7 @@ public class Block extends GameObject {
      * @param coords the coordinates where to render 
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      */
-    protected void renderSide(Graphics g, View view, int[] coords, int sidenumb, int brightness){
+    protected void renderSide(Graphics g, View view, Coordinate coords, int sidenumb, int brightness){
         Image image = getBlockSprite(getId(), getValue(), sidenumb);
         
         //right side is  half a block more to the right

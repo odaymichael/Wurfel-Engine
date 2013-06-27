@@ -40,8 +40,8 @@ public class Minimap {
         for (int x = 0; x < Map.getBlocksX(); x++) {
             for (int y = 0; y < Map.getBlocksY(); y++) {
                 int z = Map.getBlocksZ() -1;
-                Block block = Controller.getMapData(new int[]{x,y,z});
-                while ( z>0 && (block = Controller.getMapData(new int[]{x,y,z})).isHidden() ) {
+                Block block = new Coordinate(x, y, z, true).getBlock();
+                while ( z>0 && (block = new Coordinate(x, y, z, true).getBlock()).isHidden() ) {
                     z--;
                 }
                 mapdata[x][y] = Block.getRepresentingColor(block.getId(), block.getValue());
@@ -83,8 +83,8 @@ public class Minimap {
                 if (controller.getPlayer()!=null){
                     g.setColor(Color.blue);
                     g.drawRect(
-                        renderPosX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX,
-                        renderPosY + controller.getPlayer().getRelCoords()[1] * scaleY,
+                        renderPosX + (controller.getPlayer().getCoords().getRelX() + (controller.getPlayer().getCoords().getRelY()%2==1?0.5f:0) ) * scaleX,
+                        renderPosY + controller.getPlayer().getCoords().getRelY() * scaleY,
                         scaleX,
                         scaleY
                     );
@@ -123,7 +123,7 @@ public class Minimap {
                 g.drawRect(
                     renderPosX + scaleX * camera.getOutputPosX() / Block.DIMENSION,
                     renderPosY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
-                    + scaleY *2*(controller.getPlayer().getRelCoords()[2] * (Block.DIM2/2))/ (float) (Block.DIMENSION),
+                    + scaleY *2*(controller.getPlayer().getCoords().getZ() * (Block.DIM2/2))/ (float) (Block.DIMENSION),
                     scaleX*camera.getOutputWidth() / Block.DIMENSION,
                     scaleY*camera.getOutputHeight() / (Block.DIM2/2)
                 );
@@ -144,7 +144,7 @@ public class Minimap {
                         renderPosX + scaleX * camera.getOutputPosX() / Block.DIMENSION
                         + scaleX*camera.getOutputWidth() / Block.DIMENSION,
                         renderPosY + scaleY * camera.getOutputPosY() / Block.DIM2
-                        + scaleY *2*(controller.getPlayer().getRelCoords()[2] * Block.DIM2)/ (float) (Block.DIMENSION)
+                        + scaleY *2*(controller.getPlayer().getCoords().getZ() * Block.DIM2)/ (float) (Block.DIMENSION)
                         + scaleY*camera.getOutputHeight() / Block.DIM2,
                         camera.getRightBorder() +" | "+ camera.getBottomBorder() ,
                         Color.black
@@ -153,17 +153,17 @@ public class Minimap {
                 //player coord
                 g.setColor(Color.blue);
                 View.getFont().drawString(
-                    renderPosX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
-                    renderPosY + controller.getPlayer().getRelCoords()[1] * scaleY - 30,
-                    controller.getPlayer().getRelCoords()[0] +" | "+ controller.getPlayer().getRelCoords()[1] +" | "+ controller.getPlayer().getRelCoords()[2],
+                    renderPosX + (controller.getPlayer().getCoords().getRelX() + (controller.getPlayer().getCoords().getRelY()%2==1?0.5f:0) ) * scaleX+20,
+                    renderPosY + controller.getPlayer().getCoords().getRelY() * scaleY - 30,
+                    controller.getPlayer().getCoords().getRelX() +" | "+ controller.getPlayer().getCoords().getRelY() +" | "+ controller.getPlayer().getCoords().getZ(),
                     Color.blue
                 );
 
 
                 //player pos
                 View.getFont().drawString(
-                    renderPosX + (controller.getPlayer().getRelCoords()[0] + (controller.getPlayer().getRelCoords()[1]%2==1?0.5f:0) ) * scaleX+20,
-                    renderPosY + controller.getPlayer().getRelCoords()[1] * scaleY - 10,
+                    renderPosX + (controller.getPlayer().getCoords().getRelX() + (controller.getPlayer().getCoords().getRelY()%2==1?0.5f:0) ) * scaleX+20,
+                    renderPosY + controller.getPlayer().getCoords().getRelY() * scaleY - 10,
                     (int) controller.getPlayer().getPos()[0] +" | "+ (int) controller.getPlayer().getPos()[1] +" | "+ (int) controller.getPlayer().getPos()[2],
                     Color.red
                 );

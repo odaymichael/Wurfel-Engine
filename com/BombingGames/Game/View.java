@@ -119,17 +119,18 @@ public class View {
         coords[2] = Map.getBlocksZ()-1;
         
         //find the block
-        int[] tmpcoords = GameObject.sideIDtoNeighbourCoords(coords, GameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION));
-        coords[0] = tmpcoords[0];
-        coords[1] = tmpcoords[1] + coords[2]*2;
+        Coordinate tmpcoords = GameObject.sideIDtoNeighbourCoords(new Coordinate(x, y, y, true),
+                                GameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION));
+        coords[0] = tmpcoords.getRelX();
+        coords[1] = tmpcoords.getRelY() + coords[2]*2;
         
         //if selection is not found by that specify it
-        if (Controller.getMapData(coords).isHidden()){
+        if (new Coordinate(coords[0], coords[1], coords[2], true).getBlock().isHidden()){
             //trace ray down to bottom
             do {
                 coords[1] = coords[1]-2;
                 coords[2] = coords[2]-1;
-            } while (Controller.getMapData(coords).isHidden() && coords[2]>0);
+            } while (new Coordinate(coords[0], coords[1], coords[2], true).getBlock().isHidden() && coords[2]>0);
         }
         
         return coords;

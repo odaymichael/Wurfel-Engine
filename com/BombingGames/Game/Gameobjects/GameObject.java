@@ -1,6 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Coordinate;
 import com.BombingGames.Game.View;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.*;
@@ -36,7 +37,6 @@ public abstract class GameObject {
     
     private final int id; 
     private int value;
-    private float[] pos = {DIM2, DIM2, 0};
     private boolean obstacle, transparent, visible, hidden; 
     private int lightlevel = 127;
     private int dimensionY = 1;    
@@ -107,7 +107,7 @@ public abstract class GameObject {
      * @param coords the relative coordinates
      * @param view  
      */
-    public void render(Graphics g,View view, int[] coords) {
+    public void render(Graphics g,View view, Coordinate coords) {
         render(g, view, coords, lightlevel);
     }
     
@@ -118,7 +118,7 @@ public abstract class GameObject {
      * @param view 
      * @param brightness  
      */
-    public void render(Graphics g, View view, int[] coords, int brightness) {
+    public void render(Graphics g, View view, Coordinate coords, int brightness) {
         //draw the object except not visible ones
         if (!hidden && visible) {
             Image image = getSprite(id, value);
@@ -200,47 +200,47 @@ public abstract class GameObject {
      * @param sideID the side number of the given coordinates
      * @return The coordinates of the neighbour.
      */
-    public static int[] sideIDtoNeighbourCoords(int[] coords, int sideID) {
+    public static Coordinate sideIDtoNeighbourCoords(Coordinate coords, int sideID) {
         int[] result = new int[3];
         switch (sideID) {
             case 0:
-                result[0] = coords[0];
-                result[1] = coords[1] - 2;
+                result[0] = coords.getRelX();
+                result[1] = coords.getRelY() - 2;
                 break;
             case 1:
-                result[0] = coords[0] + (coords[1] % 2 == 1 ? 1 : 0);
-                result[1] = coords[1] - 1;
+                result[0] = coords.getRelX() + (coords.getRelY() % 2 == 1 ? 1 : 0);
+                result[1] = coords.getRelY() - 1;
                 break;
             case 2:
-                result[0] = coords[0] + 1;
-                result[1] = coords[1];
+                result[0] = coords.getRelX() + 1;
+                result[1] = coords.getRelY();
                 break;
             case 3:
-                result[0] = coords[0] + (coords[1] % 2 == 1 ? 1 : 0);
-                result[1] = coords[1] + 1;
+                result[0] = coords.getRelX() + (coords.getRelY() % 2 == 1 ? 1 : 0);
+                result[1] = coords.getRelY() + 1;
                 break;
             case 4:
-                result[0] = coords[0];
-                result[1] = coords[1] + 2;
+                result[0] = coords.getRelX();
+                result[1] = coords.getRelY() + 2;
                 break;
             case 5:
-                result[0] = coords[0] - (coords[1] % 2 == 0 ? 1 : 0);
-                result[1] = coords[1] + 1;
+                result[0] = coords.getRelX() - (coords.getRelY() % 2 == 0 ? 1 : 0);
+                result[1] = coords.getRelY() + 1;
                 break;
             case 6:
-                result[0] = coords[0] - 1;
-                result[1] = coords[1];
+                result[0] = coords.getRelX() - 1;
+                result[1] = coords.getRelY();
                 break;
             case 7:
-                result[0] = coords[0] - (coords[1] % 2 == 0 ? 1 : 0);
-                result[1] = coords[1] - 1;
+                result[0] = coords.getRelX() - (coords.getRelY() % 2 == 0 ? 1 : 0);
+                result[1] = coords.getRelY() - 1;
                 break;
             default:
-                result[0] = coords[0];
-                result[1] = coords[1];
+                result[0] = coords.getRelX();
+                result[1] = coords.getRelY();
         }
-        result[2] = coords[2];
-        return result;
+        result[2] = coords.getZ();
+        return new Coordinate(result[0], result[1], result[2], true);
     }
     
     /**
@@ -249,13 +249,13 @@ public abstract class GameObject {
      * @param z  the z-coordinate
      * @return the depth
      */
-    public int getDepth(int y, int z) {
+    public int getDepth(Coordinate coords) {
         return (int) (
-            DIMENSION * y
-            + (y % 2) * DIM2
-            + (DIM2-1) * z
-            + pos[1]
-            + pos[2]
+            DIMENSION * coords.getRelY()
+            + (coords.getRelY() % 2) * DIM2
+            + (DIM2-1) * coords.getZ()
+            + coords.getCellPos()[1]
+            + coords.getCellPos()[2]
             + (dimensionY - 1) * DIM4
         );
     }
@@ -268,10 +268,10 @@ public abstract class GameObject {
      * @param coords  The relative coordinates where the object is rendered 
      * @return The screen X-position in pixels.
      */
-    public static int getScreenPosX(GameObject object, int[] coords) {
-        return coords[0] * DIMENSION //x-coordinate multiplied by it's dimension in this direction
-               + (coords[1] % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
-               + (int) (object.pos[0]); //add the objects position inside this coordinate
+    public static int getScreenPosX(GameObject object, Coordinate coords) {
+        return coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
+               + (coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
+               + (int) (coords.getCellPos()[0]); //add the objects position inside this coordinate
     }
 
     /**
@@ -280,11 +280,11 @@ public abstract class GameObject {
      * @param coords The coordinates where the object is rendered 
      * @return The screen Y-position in pixels.
      */
-    public static int getScreenPosY(GameObject object, int[] coords) {
-        return coords[1] * DIM4 //x-coordinate * the tile's size
-               - coords[2] * DIM2 //put higher blocks higher
-               + (int) (object.pos[1] / 2) //add the objects position inside this coordinate
-               - (int) (object.pos[2] / Math.sqrt(2)); //take axis shortening into account
+    public static int getScreenPosY(GameObject object, Coordinate coords) {
+        return coords.getRelY() * DIM4 //x-coordinate * the tile's size
+               + (int) (coords.getCellPos()[1] / 2) //add the objects position inside this coordinate
+               - (int) (coords.getCellPos()[2] / Math.sqrt(2)) //add the objects position inside this coordinate
+               - (int) (coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
     }
 
     /**
@@ -335,27 +335,11 @@ public abstract class GameObject {
     }
 
     /**
-     *  Gets the positon of the object inside it's coordinate field. Coordinate system starting at bottom rear.
-     * @return an array with three fields. [x,y,z]
-     */
-    public float[] getPos() {
-        return pos;
-    }
-
-    /**
      * Get the value. It is like a sub-id and can identify the status.
      * @return
      */
     public int getValue() {
         return value;
-    }
-
-    /**
-     * Has the object an offset (pos vector)?
-     * @return when it has offset true, else false
-     */
-    public boolean hasOffset() {
-        return pos[0] != DIM2 || pos[1] != DIM2 || pos[2] != 0;
     }
 
     /**
@@ -407,23 +391,6 @@ public abstract class GameObject {
      */
     public void setObstacle(boolean obstacle) {
         this.obstacle = obstacle;
-    }
-
-    /**
-     * Set a whole new array containing the positon of the object. Coordinate system starting at bottom rear.
-     * @param pos the new positon array
-     */
-    public void setPos(float[] pos) {
-        this.pos = pos;
-    }
-
-    /**
-     * Sets the position of the object. Coordinate system starting at bottom rear.
-     * @param i Select the field you want to write 0=>x, y=>1, z=>2
-     * @param value the value you want to set it to.
-     */
-    public void setPos(int i, float value) {
-        pos[i] = value;
     }
 
     /**

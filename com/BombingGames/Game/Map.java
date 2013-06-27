@@ -27,7 +27,9 @@ public class Map {
     private final int worldSpinDirection = -40;
     
     private static int blocksX, blocksY, blocksZ;    
-    private Block data[][][];
+    private Block[][][] data;
+    private float[][][][] cellPos;
+    
     private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
     //A list which has all current nine chunk coordinates in it.
@@ -39,6 +41,7 @@ public class Map {
      * Creates a map.
      * @param load Should the map be generated or loaded from disk?
      */
+    @SuppressWarnings("empty-statement")
     public Map(boolean load) {
         Log.debug("Creating the map...");
         Log.debug("Should the Engine load a map: "+load);
@@ -49,20 +52,27 @@ public class Map {
         blocksZ = Chunk.getBlocksZ();
         data = new Block[blocksX][blocksY][blocksZ];
         
+        cellPos = new float[blocksX][blocksY][blocksZ][3];
+        for (int x = 0; x < cellPos.length; x++) {
+            for (int y = 0; y < cellPos[x].length; y++) {
+                for (int z = 0; z < cellPos[x][y].length; z++) {
+                    cellPos[x][y][z] = new float[]{Block.DIM2, Block.DIM2,0};
+                }
+            }   
+        }
+        
         //Fill the nine chunks
         Chunk tempchunk;
-        int pos = 0;
+        int chunkpos = 0;
         
         for (int y=-1; y < 2; y++)
             for (int x=-1; x < 2; x++){
-                coordlist[pos][0] = x;
-                coordlist[pos][1] = y;
-                tempchunk = new Chunk(x, y, load);
-                setChunk(pos, tempchunk);
-                pos++;               
-            }
-        
-
+                coordlist[chunkpos][0] = x;
+                coordlist[chunkpos][1] = y;  
+                tempchunk = new Chunk(chunkpos, x, y, load);
+                setChunk(chunkpos, tempchunk);
+                chunkpos++;
+        }
        
         Log.debug("...Finished creating the map");
     }
@@ -148,7 +158,7 @@ public class Map {
 
                     setChunk(
                             pos,
-                            new Chunk(
+                            new Chunk(pos,
                                 coordlist[pos][0],
                                 coordlist[pos][1],
                                 MainMenuState.shouldLoadMap()
@@ -167,7 +177,7 @@ public class Map {
     
     /**
      * checks if the number can be reached by moving the net in a newmiddle
-     * @param pos the position you want to check
+     * @param cellPos the position you want to check
      * @param newmiddle the newmiddle the chunkswitch is made to
      * @return 
      */
@@ -192,7 +202,7 @@ public class Map {
     /**
      * Get a chunk out of a map (should be a copy of Map.data)
      * @param src The map
-     * @param pos The chunk number
+     * @param cellPos The chunk number
      */ 
     private Chunk getChunk(Block[][][] src, int pos) {
         Chunk tmpChunk = new Chunk();
@@ -218,7 +228,7 @@ public class Map {
 
     /**
      * Inserts a chunk in the map.
-     * @param pos The position in the grid
+     * @param cellPos The position in the grid
      * @param newchunk The chunk you want to insert
      */
     private void setChunk(int pos, Chunk newchunk) {
@@ -246,11 +256,11 @@ public class Map {
         Block.getSpritesheet().getFullImage().startUse();
         //render vom bottom to top
         for (int i=0; i < camera.depthsortlistSize() ;i++) {
-            int[] coords = camera.getDepthsortCoord(i);//get the coords of the current renderobject
+            Coordinate coords = camera.getDepthsortCoord(i);//get the coords of the current renderobject
             int entitynumber = camera.getEntityIndex(i); //get the entityindex to check if it is an entity
             
             if (entitynumber == -1) //if a block then  get it and draw it
-                data[coords[0]][coords[1]][coords[2]].render(g,view, coords);
+                getData(coords).render(g,view, coords);
             else //if it's an entity get it and draw it
                 entitylist.get(entitynumber).render(g, view);        
         }
@@ -261,7 +271,7 @@ public class Map {
 
    /**
      *Get the coordinates of a chunk. 
-     * @param pos the position of the chunk
+     * @param cellPos the position of the chunk
      * @return the coordinates of the chunk
      */
     public int[] getChunkCoords(int pos) {
@@ -273,26 +283,32 @@ public class Map {
      * @param x If too high or too low, it takes the highest/deepest value possible
      * @param y If too high or too low, it takes the highest/deepest value possible
      * @param z If too high or too low, it takes the highest/deepest value possible
-     * @return A single renderobject at the wanted coordinates.
+     * @return A single Block at the wanted coordinates.
      * @see com.BombingGames.Game.Map#getData(int, int, int) 
      */
     public Block getDataSafe(int x, int y, int z){
         if (x >= blocksX){
             x = blocksX-1;
+            Log.debug("X:"+x);
         } else if( x<0 ){
             x = 0;
+            Log.debug("X:"+x);
         }
         
         if (y >= blocksY){
             y = blocksY-1;
+            Log.debug("Y:"+y);
         } else if( y < 0 ){
             y = 0;
+            Log.debug("Y:"+y);
         }
         
         if (z >= blocksZ){
             z = blocksZ-1;
+            Log.debug("Z:"+z);
         } else if( z < 0 ){
             z = 0;
+            Log.debug("Z:"+z);
         }
         
         return data[x][y][z];    
@@ -303,8 +319,8 @@ public class Map {
      * @param coords
      * @return
      */
-    public Block getDataSafe(int[] coords) {
-        return getDataSafe(coords[0], coords[1], coords[2]);
+    public Block getDataSafe(Coordinate coords) {
+        return getDataSafe(coords.getRelX(), coords.getRelY(), coords.getZ());
     }
     
     /**
@@ -316,6 +332,10 @@ public class Map {
      */
     public Block getData(int x, int y, int z){
         return data[x][y][z];  
+    }
+    
+    public Block getData(Coordinate coord){
+        return data[coord.getRelX()][coord.getRelY()][coord.getZ()];  
     }
     
     /**
@@ -414,12 +434,10 @@ public class Map {
         }
         
         for (int i=0;i < numberofblocks; i++){
-            float[] pos = {
-                (float) (Math.random()*Block.DIM2),
-                (float) (Math.random()*Block.DIM2),
-                (float) (Math.random()*Block.GAMEDIMENSION)
-            };
-            data[x[i]][y[i]][z[i]].setPos(pos);
+                //cellPos[x[i]][y[i]][z[i]][0] = (float) (Math.random()*Block.DIM2);
+                //cellPos[x[i]][y[i]][z[i]][1] = (float) (Math.random()*Block.DIM2);
+                cellPos[x[i]][y[i]][z[i]][2] = (float) (Math.random()*Block.GAMEDIMENSION);
+            
         }
         Controller.requestRecalc();
     }
@@ -482,5 +500,13 @@ public class Map {
 
     public int getWorldSpinDirection() {
         return worldSpinDirection;
+    }
+
+    public float[][][][] getCellPos() {
+        return cellPos;
+    }
+    
+    public float[] getCellPos(Coordinate coord) {
+        return cellPos[coord.getRelX()][coord.getRelY()][coord.getZ()];
     }
 }

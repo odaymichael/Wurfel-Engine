@@ -1,5 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
+import com.BombingGames.Game.Coordinate;
+
 /**
  *An entity wich is animated.
  * @author Benedikt
@@ -57,4 +59,5 @@ public class AnimatedEntity extends AbstractEntity implements Animatable{
     public void stop() {
         running = false;
     }
+
 }

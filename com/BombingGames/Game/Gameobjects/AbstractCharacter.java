@@ -45,14 +45,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         if (onGround()) dir[2] = velo;
     }
     
-    /**
-     * Returns the side of the current position.
-     * @return
-     * @see com.BombingGames.Game.Blocks.Block#getSideNumb(int, int) 
-     */
-    protected int getSideNumb() {
-        return Block.getSideID(getPos()[0], getPos()[1]);
-    }  
+
     
    /**
      * Lets the player walk.
@@ -85,18 +78,15 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     private void makeCoordinateStep(int x, int y){
         //mirror the position around the center
-        setPos(
-            new float[]{
-                getPos()[0] -x*Block.DIM2,
-                getPos()[1] -y*Block.DIM2
-            }
-        );
+        setPos(0, getPos()[0] -x*Block.DIM2);
+        setPos(1, getPos()[1] -y*Block.DIM2);
+
         
-        addVector(new int[]{0, y, 0});
+        setCoords(getCoords().addVector(new int[]{0, y, 0}));
         if (x < 0){
-            if (getRelCoords()[1] % 2 == 1) addVector(new int[]{-1, 0, 0});
+            if (getCoords().getRelY() % 2 == 1) setCoords(getCoords().addVector(new int[]{-1, 0, 0}));
         } else {
-            if (getRelCoords()[1] % 2 == 0) addVector(new int[]{1, 0, 0});
+            if (getCoords().getRelY() % 2 == 0) setCoords(getCoords().addVector(new int[]{1, 0, 0}));
         }
     }
     
@@ -113,7 +103,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
             dir[1] /= vectorLenght;
         }
             
-        float oldHeight = getHeight();
+        float oldHeight = getCoords().getHeight();
         float[] oldPos = getPos();
  
         
@@ -121,7 +111,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         //calculate new height
         float t = delta/1000f; //t = time in s
         dir[2] += -Map.GRAVITY*t; //in m/s
-        setHeight(getHeight() + dir[2] * GAMEDIMENSION * t); //in m
+        getCoords().setHeight(getCoords().getHeight() + dir[2] * GAMEDIMENSION * t); //in m
         
         //check new neight for colission
         //land if standing in or under 0-level or there is an obstacle
@@ -131,7 +121,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
             if (fallingSound != null) fallingSound.stop();
             dir[2] = 0;
             //set on top of block
-            setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION);
+            getCoords().setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION);
         }
         
         
@@ -238,46 +228,46 @@ public abstract class AbstractCharacter extends AbstractEntity {
         //check for movement in x
         //top corner
         int neighbourNumber = Block.getSideID(newx, newy - COLISSIONRADIUS); 
-        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
             validmovement = true;
         //bottom corner
         neighbourNumber = Block.getSideID(newx, newy + COLISSIONRADIUS); 
-        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
             validmovement = true;
 
         //find out the direction of the movement
         if (oldx - newx > 0) {
             //check left corner
             neighbourNumber = Block.getSideID(newx - COLISSIONRADIUS, newy);
-            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
                 validmovement = true;
         } else {
             //check right corner
             neighbourNumber = Block.getSideID(newx + COLISSIONRADIUS, newy);
-            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
                 validmovement = true;
         }
 
         //check for movement in y
         //left corner
         neighbourNumber = Block.getSideID(newx - COLISSIONRADIUS, newy); 
-        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
             validmovement = true;
 
         //right corner
         neighbourNumber = Block.getSideID(newx + COLISSIONRADIUS, newy); 
-        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+        if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
             validmovement = true; 
 
         if (oldy - newy > 0) {
             //check top corner
             neighbourNumber = Block.getSideID(newx, newy - COLISSIONRADIUS);
-            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
                 validmovement = true;
         } else {
             //check bottom corner
             neighbourNumber = Block.getSideID(newx, newy + COLISSIONRADIUS);
-            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getRelCoords(), neighbourNumber).isObstacle())
+            if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
                 validmovement = true;
         }
         return validmovement;
@@ -323,12 +313,16 @@ public abstract class AbstractCharacter extends AbstractEntity {
     public String getControls(){
         return controls;
     }
-
+    
+    /**
+     * Adds horizontal colission check to onGround().
+     * @return 
+     */
     @Override
     public boolean onGround() {
-        setHeight(getHeight()-1);
-        boolean colission = horizontalColission(getPos()[0], getPos()[1], getPos()[0], getPos()[1]);
-        setHeight(getHeight()+1);
+        getCoords().setHeight(getCoords().getHeight()-1);
+        boolean colission = horizontalColission(getPos(0), getPos(1), getPos(0), getPos(1));
+        getCoords().setHeight(getCoords().getHeight()+1);
         
         return (super.onGround() || colission);
     }

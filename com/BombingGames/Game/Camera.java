@@ -17,7 +17,7 @@ public class Camera {
     private float zoom = 1;
     private float equalizationScale = 1;
     
-    private int[] focusblock;
+    private Coordinate focusblock;
     private AbstractEntity focusentity;
     private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
     
@@ -33,17 +33,17 @@ public class Camera {
     
    /**
      * The camera locks to the player by default. It can be changed with <i>focusblock()</i>. Screen size does refer to the output of the camera not the real size on the display.
-     * @param focus 
+     * @param focus the coordiante where teh camera focuses
      * @param x the position of the output
      * @param y the position of the output
      * @param width the width of the output. it can be different than the output on the display because it gets scaled later again.
      * @param height the height of the output. it can be different than the output on the display because it gets scaled later again.
      */
-    public Camera(int[] focus, int x, int y, int width, int height) {
+    public Camera(Coordinate focus, int x, int y, int width, int height) {
         this(x, y, width, height);   
         Gameplay.msgSystem().add("Camera is focusing a coordinate");
         this.focusblock = focus;
-        this.focusentity = null;         
+        this.focusentity = null;
     }
     
    /**
@@ -93,7 +93,7 @@ public class Camera {
      * Use this if you want to focus on a special block.
      * @param coord the coordaintes of the block.
      */
-    public void focusOnCoords(int[] coord){
+    public void focusOnCoords(Coordinate coord){
         focusblock = coord;
         focusentity = null;
     }
@@ -104,6 +104,9 @@ public class Camera {
      * @return 
      */
     public int getLeftBorder(){
+        leftborder = outputPosX / GameObject.DIMENSION - 1;
+        if (leftborder < 0) leftborder= 0;
+        
         return leftborder;
     }
     
@@ -112,6 +115,9 @@ public class Camera {
      * @return
      */
     public int getRightBorder(){
+        rightborder = (outputPosX + getOutputWidth()) / GameObject.DIMENSION + 2;
+        if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
+
         return rightborder;
     }
     
@@ -119,7 +125,10 @@ public class Camera {
      * Returns the top seight border of the deepest block
      * @return measured in blocks
      */
-    public int getTopBorder(){
+    public int getTopBorder(){    
+        topborder = outputPosY / GameObject.DIM4 - 3;
+        if (topborder < 0) topborder= 0;
+        
         return topborder;
     }
     
@@ -128,6 +137,8 @@ public class Camera {
      * @return measured in blocks
      */
     public int getBottomBorder(){
+        bottomborder = (outputPosY+getOutputHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
+        if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
         return bottomborder;
     }
     
@@ -221,15 +232,15 @@ public class Camera {
     public void update() {
         if (focusblock != null) {
             outputPosX = GameObject.getScreenPosX(
-                Controller.getMapData(focusblock), focusblock
+                focusblock.getBlock(), focusblock
             ) - getOutputWidth() / 2 - GameObject.DIM2;
             
             outputPosY = GameObject.getScreenPosY(
-                Controller.getMapData(focusblock), focusblock
+                focusblock.getBlock(), focusblock
             ) - getOutputHeight() / 2;
         } else {
-            outputPosX = GameObject.getScreenPosX(focusentity, focusentity.getRelCoords()) - getOutputWidth() / 2;            
-            outputPosY = GameObject.getScreenPosY(focusentity, focusentity.getRelCoords()) - getOutputHeight() / 2 ;
+            outputPosX = GameObject.getScreenPosX(focusentity, focusentity.getCoords()) - getOutputWidth() / 2;            
+            outputPosY = GameObject.getScreenPosY(focusentity, focusentity.getCoords()) - getOutputHeight() / 2 ;
         }
         
         //maybe unneccessary and can be done when the getter is called.
@@ -293,15 +304,15 @@ public class Camera {
                         && 
                             GameObject.getScreenPosY(
                                 block,
-                                new int[]{x, y, z}
+                                new Coordinate(x, y, z, true)
                             )
                         <
                             outputPosY + getOutputHeight()
                     ) {
                         depthsort.add(
                             new Renderobject(
-                                new int[]{x, y, z},
-                                block.getDepth(y,z),
+                                new Coordinate(x, y, z, true),
+                                block.getDepth(new Coordinate(x, y, z, true)),
                                 -1
                             )
                         );
@@ -315,15 +326,15 @@ public class Camera {
                         && 
                             GameObject.getScreenPosY(
                                 entity,
-                                entity.getRelCoords()
+                                entity.getCoords()
                             )
                         <
                             outputPosY + getOutputHeight()
                     )
                     depthsort.add(
                         new Renderobject(
-                            entity.getRelCoords(),
-                            entity.getDepth(entity.getRelCoords()[1], entity.getRelCoords()[2]),
+                            entity.getCoords(),
+                            entity.getDepth(entity.getCoords()),
                             i
                         )
                     );
@@ -364,11 +375,11 @@ public class Camera {
         * @param index the index
         * @return the coordinate triple with x,y,z
         */
-        protected int[] getDepthsortCoord(int index) {
-            Renderobject item = depthsort.get(index);
-            int[] triple = item.getCoords();
-            return triple;
-        }
+    protected Coordinate getDepthsortCoord(int index) {
+        Renderobject item = depthsort.get(index);
+        Coordinate triple = item.getCoords();
+        return triple;
+    }
 
         /**
         * Returns the entityindex of a element i in the depthsort list.
@@ -400,7 +411,7 @@ public class Camera {
                     Block block = mapdata[x][y][z];
                     
                     //Blocks with offset are not in the grid, so can not be calculated => always visible
-                    boolean notCalculatable = !block.hasSides() || block.hasOffset();
+                    boolean notCalculatable = !block.hasSides() || new Coordinate(x,y,z, true).hasOffset();
                     block.setVisible(notCalculatable);
                     if (notCalculatable) {
                         block.setSideVisibility(0, true);
@@ -457,7 +468,7 @@ public class Camera {
                     //direct neighbour block on left hiding the complete left side
                     if (Controller.getMapData(x, y, z).hasSides()//block on top
                         && x > 0 && y < Map.getBlocksY()-1
-                        && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z).hidingPastBlock())
+                        && new Coordinate(x - (y%2 == 0 ? 1:0), y+1, z, true).hidingPastBlock())
                         break; //stop ray
                     
                     //liquid
@@ -479,10 +490,10 @@ public class Camera {
 
                     //two blocks hiding the left side
                     if (x > 0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                        && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).hidingPastBlock())
+                        && new Coordinate(x - (y%2 == 0 ? 1:0), y+1, z+1, true).hidingPastBlock())
                         left = false;
                     if (y < Map.getBlocksY()-2
-                        && Controller.getMapData(x, y+2, z).hidingPastBlock()
+                        && new Coordinate(x, y+2, z, true).hidingPastBlock()
                         )
                         right = false;
                     
@@ -490,7 +501,7 @@ public class Camera {
                     if (side == 1) {//check top side
                         if (Controller.getMapData(x, y, z).hasSides()//block on top
                             && z+1 < Map.getBlocksZ()
-                            && Controller.getMapData(x, y, z+1).hidingPastBlock())
+                            && new Coordinate(x, y, z+1, true).hidingPastBlock())
                             break;
                         
                         //liquid
@@ -511,11 +522,11 @@ public class Camera {
                     
                         //two 0- and 2-sides hiding the side 1
                         if (x>0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                            && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).hidingPastBlock())
+                            && new Coordinate(x - (y%2 == 0 ? 1:0), y+1, z+1, true).hidingPastBlock())
                             left = false;
                         
                         if (x < Map.getBlocksX()-1  && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                            && Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).hidingPastBlock()
+                            && new Coordinate(x + (y%2 == 0 ? 0:1), y+1, z+1, true).hidingPastBlock()
                             )
                             right = false;
                           
@@ -524,7 +535,7 @@ public class Camera {
                             //block on right hiding the whole right side
                             if (Controller.getMapData(x, y, z).hasSides()//block on top
                                 && x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY()
-                                && Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).hidingPastBlock()
+                                && new Coordinate(x + (y%2 == 0 ? 0:1), y+1, z, true).hidingPastBlock()
                                 ) break;
                             
                             //liquid
@@ -549,12 +560,12 @@ public class Camera {
                             //two blocks hiding the right side
                             if (y+2 < Map.getBlocksY()
                                 &&
-                                Controller.getMapData(x, y+2, z).hidingPastBlock())
+                                new Coordinate(x, y+2, z, true).hidingPastBlock())
                                 left = false;
                             
                             if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY() && z+1 < Map.getBlocksZ()
                                 &&
-                                Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).hidingPastBlock())
+                                new Coordinate(x + (y%2 == 0 ? 0:1), y+1, z+1, true).hidingPastBlock())
                                 right = false;
                         } else {
 //                            if (side == 4) {//check top side
@@ -577,7 +588,7 @@ public class Camera {
                 }                
             } while (y >= 2 && z >= 1 //not on bottom of map
                 && (left || right) //left and right still visible
-                && (!Controller.getMapData(x, y, z).hidingPastBlock() || Controller.getMapData(x, y, z).hasOffset()));
+                && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset()));
     }
     
     /**
@@ -585,12 +596,13 @@ public class Camera {
      * @param coords
      * @param neighbours True when neighbours block also should be scanned
      */
-    public void traceRayTo(int[] coords, boolean neighbours){
-        Block block = Controller.getMapData(coords);
+    public void traceRayTo(Coordinate coord, boolean neighbours){
+        Block block = coord.getBlock();
+        int[] coords = coord.getRel();
                     
         //Blocks with offset are not in the grid, so can not be calculated => always visible
         block.setVisible(
-            !block.hasSides() || block.hasOffset()
+            !block.hasSides() || coord.hasOffset()
         );
                     
        //find start position

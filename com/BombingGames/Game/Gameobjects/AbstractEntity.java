@@ -1,6 +1,9 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Coordinate;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
+import static com.BombingGames.Game.Gameobjects.GameObject.GAMEDIMENSION;
 import com.BombingGames.Game.Map;
 import com.BombingGames.Game.View;
 import java.util.logging.Level;
@@ -13,8 +16,8 @@ import org.newdawn.slick.SlickException;
  * @author Benedikt
  */
 public abstract class AbstractEntity extends GameObject implements IsSelfAware {
-   private int[] coords;//the z-field is used as [height in px] not in [coordinates]. setting and getting the coordaintes should convert it.
-   private float height;
+   private Coordinate coords;
+   private float[] pos = {DIM2, DIM2};
    
     /**
      * Create an abstractEntity. You should use Block.getInstance(int) 
@@ -29,10 +32,10 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * Create an entity.
      * @param id the object id of the entity.
      * @param value The value at start.
-     * @param absCoords the absolute coordiantes where the entity is.
+     * @param absCoords the coordiantes where the entity is.
      * @return the entity.
      */
-    public static AbstractEntity getInstance(int id, int value, int[] absCoords){
+    public static AbstractEntity getInstance(int id, int value, Coordinate coords){
         AbstractEntity entity = null;
         //define the default SideSprites
         switch (id){
@@ -55,7 +58,8 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
             default: entity = new SimpleEntity(id);
         }
         
-        entity.setAbsCoords(absCoords);
+        entity.setCoords(coords);
+
         entity.setValue(value);
         entity.setVisible(true);
         return entity;
@@ -63,92 +67,65 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     
     //IsSelfAware implementation
     @Override
-    public int[] getAbsCoords() {
-        int z = (int) (height/GAMEDIMENSION);
-        if (z >= Map.getBlocksZ()) z = Map.getBlocksZ()-1;
-        return new int[]{coords[0], coords[1], z};
+    public Coordinate getCoords() {
+        return this.coords;
     }
 
     @Override
-    public void setAbsCoords(int[] coords) {
-        this.coords = new int[]{coords[0], coords[1]};
-        if (coords.length >= 3) this.height = coords[2]*GAMEDIMENSION;
-    }
-
-    @Override
-    public int[] getRelCoords() {
-        return Controller.getMap().absToRelCoords(getAbsCoords());
-    }
-    
-    @Override
-    public void setRelCoords(int[] relCoords) {
-        this.coords = Controller.getMap().relToAbsCoords(relCoords);
-        if (coords.length >= 3) this.height = coords[2]*GAMEDIMENSION;
-    }
-
-    @Override
-    public void addVector(int[] coords) {
-        height += coords[2];
-        setAbsCoords(new int[]{getAbsCoords()[0]+coords[0], getAbsCoords()[1]+coords[1]});
+    public void setCoords(Coordinate coords) {
+        this.coords = coords;
     }
     
     
-
-    /*overrides of super class*/
-    @Override
-    public void setPos(int i, float value) {
-        if (i==2) value = height % GAMEDIMENSION;
-        super.setPos(i, value);
-    }
-
-    /**
-     * if you want to set the height (z-axis) use setHeight.
-     * @param pos 
-     */
-    @Override
-    public void setPos(float[] pos) {
-        super.setPos(new float[]{pos[0], pos[1], height % GAMEDIMENSION});
-    }
-
-    /**
-     * Returns the height of the character in px.
-     * @return
-     */
-    public float getHeight() {
-        return height;
-    }
-
-    /**
-     * Set the height in px
-     * @param height
-     */
-    public void setHeight(float height) {
-        this.height = height;
-        super.setPos(2, height % GAMEDIMENSION);
-    }
     
+//    public int[] getAbsCoords() {
+//        int z = (int) (height/GAMEDIMENSION);
+//        if (z >= Map.getBlocksZ()) z = Map.getBlocksZ()-1;
+//        return new int[]{coords[0], coords[1], z};
+//    }
+
+//    @Override
+//    public void setAbsCoords(int[] coords) {
+//        this.coords = new int[]{coords[0], coords[1]};
+//        if (coords.length >= 3) this.height = coords[2]*GAMEDIMENSION;
+//    }
+//
+//    @Override
+//    public int[] getRelCoords() {
+//        return Controller.getMap().absToRelCoords(getAbsCoords());
+//    }
+//    
+//    @Override
+//    public void setRelCoords(int[] relCoords) {
+//        this.coords = Controller.getMap().relToAbsCoords(relCoords);
+//        if (coords.length >= 3) this.height = coords[2]*GAMEDIMENSION;
+//    }
+//
+//    @Override
+//    public void addVector(int[] coords) {
+//        height += coords[2];
+//        setAbsCoords(new int[]{getAbsCoords()[0]+coords[0], getAbsCoords()[1]+coords[1]});
+//    }
+    
+        
     /**
      * Is the entity laying/standing on the ground?
      * @return true when on the ground
      */
     public boolean onGround(){
-        if (height <= 0) return true;
-            
-        int z = (int) ((height-1)/GAMEDIMENSION);
+        if (getCoords().getHeight() <= 0) return true;
+                   
+        int z = (int) ((getCoords().getHeight()-1)/GAMEDIMENSION);
         if (z > Map.getBlocksZ()-1) z = Map.getBlocksZ()-1;
         
-        return Controller.getMapData(
-                    Controller.getMap().absToRelCoords(
-                        new int[]{coords[0],coords[1],z}
-                    )
-                ).isObstacle();
+        return new Coordinate(coords.getRelX(), coords.getRelY(), z, true).getBlock().isObstacle();
     }
     
     /**
      * Renders the entity
      **/
     public void render(Graphics g, View view){
-        this.render(g, view, getRelCoords());
+        this.render(g, view, getCoords());
     }
     
     /**
@@ -156,5 +133,30 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      */
     public void exist(){
         Controller.getMap().getEntitylist().add(this);
+    }
+    
+        /**
+     * Returns the side of the current position.
+     * @return
+     * @see com.BombingGames.Game.Blocks.Block#getSideNumb(int, int) 
+     */
+    protected int getSideNumb() {
+        return Block.getSideID(pos[0], pos[1]);
+    }  
+
+    public float[] getPos() {
+        return pos;
+    }
+    
+    public float getPos(int i) {
+        return pos[i];
+    }
+
+    public void setPos(float[] pos) {
+        this.pos = pos;
+    }
+    
+    public void setPos(int i, float pos) {
+        this.pos[i] = pos;
     }
 }

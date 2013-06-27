@@ -3,6 +3,7 @@ package com.BombingGames.Game.CustomGame;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Player;
 import com.BombingGames.Game.*;
+import com.BombingGames.Game.Gameobjects.Block;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
@@ -27,8 +28,11 @@ public class CustomGameController extends Controller {
         this.gc = gc;
         
         
-        Player player = (Player) AbstractEntity.getInstance(40, 0,
-            new int[]{Chunk.getBlocksX()/2,Chunk.getBlocksY()/2, Map.getBlocksZ()-1});
+        Player player = (Player) AbstractEntity.getInstance(
+                40,
+                0,
+                Coordinate.getMapCenter(Map.getBlocksZ()*Block.GAMEDIMENSION)
+            );
         player.setControls("WASD");
         setPlayer(player);
         
@@ -44,7 +48,7 @@ public class CustomGameController extends Controller {
         
 //        addCamera(
 //            new Camera(
-//                new int[]{Map.getBlocksX()/2, Map.getBlocksY()/2, Map.getBlocksZ()/2},
+//                Coordinate.getMapCenter(),
 //                800, //left
 //                0, //top
 //                400, //full width 
@@ -72,7 +76,6 @@ public class CustomGameController extends Controller {
             //toggle fullscreen
             if (input.isKeyPressed(Input.KEY_E)){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
                 getMap().earthquake(5000);
-                Controller.requestRecalc();
             }
             
             //toggle minimap
