@@ -17,7 +17,7 @@ public class Camera {
     private float zoom = 1;
     private float equalizationScale = 1;
     
-    private Coordinate focusblock;
+    private Coordinate focusCoordinates;
     private AbstractEntity focusentity;
     private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
     
@@ -32,7 +32,7 @@ public class Camera {
     }
     
    /**
-     * The camera locks to the player by default. It can be changed with <i>focusblock()</i>. Screen size does refer to the output of the camera not the real size on the display.
+     * The camera locks to the player by default. It can be changed with <i>focusCoordinates()</i>. Screen size does refer to the output of the camera not the real size on the display.
      * @param focus the coordiante where teh camera focuses
      * @param x the position of the output
      * @param y the position of the output
@@ -42,7 +42,7 @@ public class Camera {
     public Camera(Coordinate focus, int x, int y, int width, int height) {
         this(x, y, width, height);   
         Gameplay.msgSystem().add("Camera is focusing a coordinate");
-        this.focusblock = focus;
+        this.focusCoordinates = focus;
         this.focusentity = null;
     }
     
@@ -61,7 +61,7 @@ public class Camera {
             throw new NullPointerException("Parameter 'focusentity' is null");
         Gameplay.msgSystem().add("Camera is focusing an entity");
         this.focusentity = focusentity;
-        this.focusblock = null;
+        this.focusCoordinates = null;
     }
   
     /**
@@ -94,7 +94,7 @@ public class Camera {
      * @param coord the coordaintes of the block.
      */
     public void focusOnCoords(Coordinate coord){
-        focusblock = coord;
+        focusCoordinates = coord;
         focusentity = null;
     }
     
@@ -230,17 +230,17 @@ public class Camera {
      * Updates the camera.
      */
     public void update() {
-        if (focusblock != null) {
-            outputPosX = GameObject.getScreenPosX(
-                focusblock.getBlock(), focusblock
+        if (focusCoordinates != null) {
+            outputPosX = focusCoordinates.getBlock().getScreenPosX(
+                focusCoordinates
             ) - getOutputWidth() / 2 - GameObject.DIM2;
             
-            outputPosY = GameObject.getScreenPosY(
-                focusblock.getBlock(), focusblock
+            outputPosY = focusCoordinates.getBlock().getScreenPosY(
+                focusCoordinates
             ) - getOutputHeight() / 2;
         } else {
-            outputPosX = GameObject.getScreenPosX(focusentity, focusentity.getCoords()) - getOutputWidth() / 2;            
-            outputPosY = GameObject.getScreenPosY(focusentity, focusentity.getCoords()) - getOutputHeight() / 2 ;
+            outputPosX = focusentity.getScreenPosX(focusentity.getCoords()) - getOutputWidth() / 2;            
+            outputPosY = focusentity.getScreenPosY(focusentity.getCoords()) - getOutputHeight() / 2 ;
         }
         
         //maybe unneccessary and can be done when the getter is called.
@@ -302,9 +302,8 @@ public class Camera {
                     Block block = Controller.getMapData(x, y, z); 
                     if (!block.isHidden() && block.isVisible()
                         && 
-                            GameObject.getScreenPosY(
-                                block,
-                                new Coordinate(x, y, z, true)
+                            block.getScreenPosY(
+                               new Coordinate(x, y, z, true)
                             )
                         <
                             outputPosY + getOutputHeight()
@@ -324,8 +323,7 @@ public class Camera {
             AbstractEntity entity = Controller.getMap().getEntitylist().get(i);
             if (!entity.isHidden() && entity.isVisible()
                         && 
-                            GameObject.getScreenPosY(
-                                entity,
+                            entity.getScreenPosY(
                                 entity.getCoords()
                             )
                         <

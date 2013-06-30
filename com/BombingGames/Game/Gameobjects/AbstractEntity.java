@@ -3,6 +3,8 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Coordinate;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
 import static com.BombingGames.Game.Gameobjects.GameObject.GAMEDIMENSION;
 import com.BombingGames.Game.Map;
 import com.BombingGames.Game.View;
@@ -16,8 +18,8 @@ import org.newdawn.slick.SlickException;
  * @author Benedikt
  */
 public abstract class AbstractEntity extends GameObject implements IsSelfAware {
-   private Coordinate coords;
-   private float[] pos = {DIM2, DIM2};
+   private Coordinate coords;//the position in the map-grid
+   private float[] offset = {DIM2, DIM2}; //the horizontal offset
    
     /**
      * Create an abstractEntity. You should use Block.getInstance(int) 
@@ -121,6 +123,36 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         return new Coordinate(coords.getRelX(), coords.getRelY(), z, true).getBlock().isObstacle();
     }
     
+    @Override
+    public void update(int delta) {
+    }
+        
+     /**
+     * Get the screen x-position where the object is rendered without regarding the camera.
+     * @param object The object of wich you want the position
+     * @param coords  The relative coordinates where the object is rendered 
+     * @return The screen X-position in pixels.
+     */
+   @Override
+    public int getScreenPosX(Coordinate coords) {
+        return coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
+               + (coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
+               + (int) (offset[0]); //add the objects position inside this coordinate
+    }
+
+    /**
+     * Get the screen y-position where the object is rendered without regarding the camera.
+     * @param object The object of wich you want the position
+     * @param coords The coordinates where the object is rendered 
+     * @return The screen Y-position in pixels.
+     */
+   @Override
+    public int getScreenPosY(Coordinate coords) {
+        return coords.getRelY() * DIM4 //x-coordinate * the tile's size
+               + (int) (offset[1] / 2) //add the objects position inside this coordinate
+               - (int) (coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
+    }
+    
     /**
      * Renders the entity
      **/
@@ -141,22 +173,22 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * @see com.BombingGames.Game.Blocks.Block#getSideNumb(int, int) 
      */
     protected int getSideNumb() {
-        return Block.getSideID(pos[0], pos[1]);
+        return Block.getSideID(offset[0], offset[1]);
     }  
 
     public float[] getPos() {
-        return pos;
+        return offset;
     }
     
     public float getPos(int i) {
-        return pos[i];
+        return offset[i];
     }
 
     public void setPos(float[] pos) {
-        this.pos = pos;
+        this.offset = pos;
     }
     
     public void setPos(int i, float pos) {
-        this.pos[i] = pos;
+        this.offset[i] = pos;
     }
 }

@@ -101,6 +101,10 @@ public abstract class GameObject {
      */
     public abstract void update(int delta);
     
+    public abstract int getScreenPosX(Coordinate coords);
+    
+    public abstract int getScreenPosY(Coordinate coords);
+    
     /**
      * Draws an object.
      * @param g 
@@ -123,8 +127,8 @@ public abstract class GameObject {
         if (!hidden && visible) {
             Image image = getSprite(id, value);
              
-            int xPos = getScreenPosX(this, coords) + OFFSETLIST[id][value][0];
-            int yPos = getScreenPosY(this, coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
+            int xPos = getScreenPosX(coords) + OFFSETLIST[id][value][0];
+            int yPos = getScreenPosY(coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
             
             Color filter;
             if (brightness <= 127){
@@ -254,38 +258,12 @@ public abstract class GameObject {
             DIMENSION * coords.getRelY()
             + (coords.getRelY() % 2) * DIM2
             + (DIM2-1) * coords.getZ()
-            + coords.getCellPos()[1]
-            + coords.getCellPos()[2]
+            + coords.getCellOffset()[1]
+            + coords.getCellOffset()[2]
             + (dimensionY - 1) * DIM4
         );
     }
     
-  
-
-    /**
-     * Get the screen x-position where the object is rendered without regarding the camera.
-     * @param object The object of wich you want the position
-     * @param coords  The relative coordinates where the object is rendered 
-     * @return The screen X-position in pixels.
-     */
-    public static int getScreenPosX(GameObject object, Coordinate coords) {
-        return coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
-               + (coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
-               + (int) (coords.getCellPos()[0]); //add the objects position inside this coordinate
-    }
-
-    /**
-     * Get the screen y-position where the object is rendered without regarding the camera.
-     * @param object The object of wich you want the position
-     * @param coords The coordinates where the object is rendered 
-     * @return The screen Y-position in pixels.
-     */
-    public static int getScreenPosY(GameObject object, Coordinate coords) {
-        return coords.getRelY() * DIM4 //x-coordinate * the tile's size
-               + (int) (coords.getCellPos()[1] / 2) //add the objects position inside this coordinate
-               - (int) (coords.getCellPos()[2] / Math.sqrt(2)) //add the objects position inside this coordinate
-               - (int) (coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
-    }
 
     /**
      * Returns a sprite image of non-block image
@@ -297,7 +275,6 @@ public abstract class GameObject {
         return spritesheet.getSprite(id+"-"+value);
     }
 
-    
 
     //getter & setter
     
@@ -374,7 +351,6 @@ public abstract class GameObject {
         return visible;
     }
 
-  
 
     /**
      * Set the brightness of the object.

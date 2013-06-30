@@ -2,6 +2,9 @@ package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Coordinate;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.Game.View;
 import org.lwjgl.opengl.GL11;
@@ -146,7 +149,7 @@ public class Block extends GameObject {
         return getSpritesheet().getSprite(id+"-"+value+"-"+side);
     }
     
-        /**
+   /**
      * Returns a color representing the block. Picks from the sprite image.
      * @param id id of the Block
      * @param value the value of the block.
@@ -192,6 +195,33 @@ public class Block extends GameObject {
             renderTop = visible;
                 else if (side==2)
                     renderRight = visible;
+    }
+    
+       /**
+     * Get the screen x-position where the object is rendered without regarding the camera.
+     * @param object The object of wich you want the position
+     * @param coords  The relative coordinates where the object is rendered 
+     * @return The screen X-position in pixels.
+     */
+   @Override
+    public int getScreenPosX(Coordinate coords) {
+        return coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
+               + (coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
+               + (int) (coords.getCellOffset()[0]); //add the objects position inside this coordinate
+    }
+
+    /**
+     * Get the screen y-position where the object is rendered without regarding the camera.
+     * @param object The object of wich you want the position
+     * @param coords The coordinates where the object is rendered 
+     * @return The screen Y-position in pixels.
+     */
+   @Override
+    public int getScreenPosY(Coordinate coords) {
+        return coords.getRelY() * DIM4 //x-coordinate * the tile's size
+               + (int) (coords.getCellOffset()[1] / 2) //add the objects position inside this coordinate
+               - (int) (coords.getCellOffset()[2] / Math.sqrt(2)) //add the objects position inside this coordinate
+               - (int) (coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
     }
 
     @Override
@@ -241,10 +271,10 @@ public class Block extends GameObject {
         Image image = getBlockSprite(getId(), getValue(), sidenumb);
         
         //right side is  half a block more to the right
-        int xPos = getScreenPosX(this, coords) + ( sidenumb == 2 ? DIM2 : 0);
+        int xPos = getScreenPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);
         
         //the top is drawn a quarter blocks higher
-        int yPos = getScreenPosY(this, coords) + (sidenumb != 1 ? DIM4 : 0);
+        int yPos = getScreenPosY(coords) + (sidenumb != 1 ? DIM4 : 0);
         
         brightness -= 127-getLightlevel();
             

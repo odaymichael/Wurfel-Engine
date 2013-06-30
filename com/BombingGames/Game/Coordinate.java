@@ -142,8 +142,8 @@ public class Coordinate {
         return Controller.getMapData(this);
     }
     
-    public float[] getCellPos(){
-        return Controller.getMap().getCellPos(this);
+    public float[] getCellOffset(){
+        return Controller.getMap().getCellOffset(this);
     }
     
     public Block getBlockSafe(){
@@ -157,7 +157,7 @@ public class Coordinate {
      * @return when it has offset true, else false
      */
     public boolean hasOffset() {
-        return getCellPos()[0] != DIM2 || getCellPos()[1] != DIM2 || getCellPos()[2] != 0;
+        return getCellOffset()[0] != DIM2 || getCellOffset()[1] != DIM2 || getCellOffset()[2] != 0;
     }
     
    /**

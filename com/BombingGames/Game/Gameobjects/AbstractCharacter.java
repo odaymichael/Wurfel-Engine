@@ -11,8 +11,11 @@ import org.newdawn.slick.Sound;
  */
 public abstract class AbstractCharacter extends AbstractEntity {
    private final int COLISSIONRADIUS = GameObject.DIM4;
+   private final int SPRITESPERDIR;
+      
    private float[] dir = {1, 0, 0};
    private String controls = "NPC";
+   private final boolean smoothwalking = true;
       
    /**provides a factor for the vector*/
    private float speed;
@@ -20,7 +23,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private Sound runningSound;
    
    private int walkingAnimationCounter;
-   private final int SPRITESPERDIR;
 
    /**
     * Constructor of AbstractCharacter.
@@ -157,6 +159,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
             }
         }
         
+        //graphic
         if (dir[0] < -Math.sin(Math.PI/3)){
             setValue(1);//west
         } else {

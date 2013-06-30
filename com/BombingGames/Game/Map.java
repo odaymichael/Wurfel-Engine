@@ -28,7 +28,7 @@ public class Map {
     
     private static int blocksX, blocksY, blocksZ;    
     private Block[][][] data;
-    private float[][][][] cellPos;
+    private float[][][][] cellOffset;
     
     private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
@@ -58,11 +58,11 @@ public class Map {
         blocksZ = Chunk.getBlocksZ();
         data = new Block[blocksX][blocksY][blocksZ];
         
-        cellPos = new float[blocksX][blocksY][blocksZ][3];
-        for (int x = 0; x < cellPos.length; x++) {
-            for (int y = 0; y < cellPos[x].length; y++) {
-                for (int z = 0; z < cellPos[x][y].length; z++) {
-                    cellPos[x][y][z] = new float[]{Block.DIM2, Block.DIM2,0};
+        cellOffset = new float[blocksX][blocksY][blocksZ][3];
+        for (int x = 0; x < cellOffset.length; x++) {
+            for (int y = 0; y < cellOffset[x].length; y++) {
+                for (int z = 0; z < cellOffset[x][y].length; z++) {
+                    cellOffset[x][y][z] = new float[]{Block.DIM2, Block.DIM2,0};
                 }
             }   
         }
@@ -183,7 +183,7 @@ public class Map {
     
     /**
      * checks if the number can be reached by moving the net in a newmiddle
-     * @param cellPos the position you want to check
+     * @param cellOffset the position you want to check
      * @param newmiddle the newmiddle the chunkswitch is made to
      * @return 
      */
@@ -208,7 +208,7 @@ public class Map {
     /**
      * Get a chunk out of a map (should be a copy of Map.data)
      * @param src The map
-     * @param cellPos The chunk number
+     * @param cellOffset The chunk number
      */ 
     private Chunk getChunk(Block[][][] src, int pos) {
         Chunk tmpChunk = new Chunk();
@@ -234,7 +234,7 @@ public class Map {
 
     /**
      * Inserts a chunk in the map.
-     * @param cellPos The position in the grid
+     * @param cellOffset The position in the grid
      * @param newchunk The chunk you want to insert
      */
     private void setChunk(int pos, Chunk newchunk) {
@@ -277,7 +277,7 @@ public class Map {
 
    /**
      *Get the coordinates of a chunk. 
-     * @param cellPos the position of the chunk
+     * @param cellOffset the position of the chunk
      * @return the coordinates of the chunk
      */
     public int[] getChunkCoords(int pos) {
@@ -442,7 +442,7 @@ public class Map {
         for (int i=0;i < numberofblocks; i++){
                 //cellPos[x[i]][y[i]][z[i]][0] = (float) (Math.random()*Block.DIM2);
                 //cellPos[x[i]][y[i]][z[i]][1] = (float) (Math.random()*Block.DIM2);
-                cellPos[x[i]][y[i]][z[i]][2] = (float) (Math.random()*Block.GAMEDIMENSION);
+                cellOffset[x[i]][y[i]][z[i]][2] = (float) (Math.random()*Block.GAMEDIMENSION);
             
         }
         Controller.requestRecalc();
@@ -508,11 +508,11 @@ public class Map {
         return worldSpinDirection;
     }
     
-    public float[][][][] getCellPos() {
-        return cellPos;
+    public float[][][][] getCellOffset() {
+        return cellOffset;
     }
     
-    public float[] getCellPos(Coordinate coord) {
-        return cellPos[coord.getRelX()][coord.getRelY()][coord.getZ()];
+    public float[] getCellOffset(Coordinate coord) {
+        return cellOffset[coord.getRelX()][coord.getRelY()][coord.getZ()];
     }
 }
