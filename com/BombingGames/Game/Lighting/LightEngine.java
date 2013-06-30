@@ -10,7 +10,7 @@ public class LightEngine {
     /**
      * The Version of the light engine.
      */
-    public static final String Version = "0.1.2";
+    public static final String Version = "0.1.3";
     
     //ambient light
     private final int ambientBaseLevel = 40;//value 0-255
@@ -24,7 +24,7 @@ public class LightEngine {
     private int I_diff2;
     
     //specular light
-    private int n_spec = 8; // ... konstanter Faktor zur Beschreibung der Oberflächenbeschaffenheit (rau kleiner 32, glatt größer 32,  wäre ein perfekter Spiegel)
+    private int n_spec = 10; // ... konstanter Faktor zur Beschreibung der Oberflächenbeschaffenheit (rau kleiner 32, glatt größer 32,  wäre ein perfekter Spiegel)
     private int k_specular = 25; //empirisch bestimmter Reflexionsfaktor für spiegelnde Komponente der Reflexion
     private int I_spec0;
     private int I_spec1;

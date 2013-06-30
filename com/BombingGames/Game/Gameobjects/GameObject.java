@@ -135,7 +135,7 @@ public abstract class GameObject {
                 filter = new Color((brightness-127)/127f, (brightness-127)/127f, (brightness-127)/127f);
             }
 
-            if (Controller.LIGHTENGINE != null) filter = filter.multiply(Controller.LIGHTENGINE.getLightColor());
+            if (Controller.lightEngine != null) filter = filter.multiply(Controller.lightEngine.getLightColor());
             image.drawEmbedded(xPos, yPos, xPos+image.getWidth(), yPos+image.getHeight(), 0, 0, image.getWidth(), image.getHeight(), filter);
         }
     } 

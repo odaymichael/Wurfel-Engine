@@ -9,11 +9,16 @@ import org.newdawn.slick.Color;
  */
 public class Sun {
     private final int maxAngle = 70;//the max possible angle (from horizon) the sun can has
-    private final float LONGSPEED = 1/32f;
+    private final float LONGSPEED = 1/64f;
     private float latPos;
-    private float longPos = 45;//starting position
+    private float longPos = 0;//longitudinal starting position
     private Color color = new Color(255,255,255); //the color of the light
     private float brightness;//should raise at morning and fall at night but stay over teh day
+
+    public Sun() {
+        longPos = -Controller.getMap().getWorldSpinDirection();
+    }
+    
     
     public void update(int delta){
         longPos += LONGSPEED*delta;

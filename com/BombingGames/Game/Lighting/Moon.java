@@ -13,11 +13,17 @@ import org.newdawn.slick.Color;
  */
 public class Moon {
     private final int maxAngle = 70;//the max possible angle (from horizon) the sun can has
-    private final float LONGSPEED = 1/32f;
+    private final float LONGSPEED = 1/64f;
     private float latPos;
-    private float longPos = 225;//starting position
+    private float longPos = 0;//longitudinal starting position
     private Color color = new Color(0.8f,0.8f,1f); //the color of the light
     private float brightness = 1;//should raise at morning and fall at night but stay over teh day
+
+    public Moon() {
+        longPos = 180-Controller.getMap().getWorldSpinDirection();
+    }
+    
+    
     
     public void update(int delta){
         longPos += LONGSPEED*delta;
@@ -29,9 +35,9 @@ public class Moon {
         //sunLat = container.getInput().getMouseY()*360/container.getHeight();
         //sunLong = container.getInput().getMouseX()*360/container.getWidth();
         brightness = (-latPos+110)/((maxAngle+20)/2);
-        if (brightness > 1)brightness=1;
-        if (brightness < 0)brightness=0;
-        brightness *=0.3f;
+        if (brightness > 1) brightness=1;
+        if (brightness < 0) brightness=0;
+        brightness *=0.6f;
                 
         //I_a = (int) ((90-latPos)*0.1f);
         

@@ -15,7 +15,7 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Benedikt Vogler
  */
 public class Controller {
-    public static final LightEngine LIGHTENGINE = new LightEngine();
+    public static LightEngine lightEngine;
     private static Map map;
     private static boolean recalcRequested;
     private AbstractCharacter player;
@@ -32,7 +32,9 @@ public class Controller {
      * @throws SlickException
      */
     public Controller(GameContainer gc, StateBasedGame game) throws SlickException{  
-        newMap();        
+        newMap();
+        lightEngine = new LightEngine();
+        
         recalcRequested = true;
     }
     
@@ -42,7 +44,7 @@ public class Controller {
      * @throws SlickException
      */
     public void update(int delta) throws SlickException{
-        if (LIGHTENGINE != null) LIGHTENGINE.update(delta);
+        if (lightEngine != null) lightEngine.update(delta);
         if (ENABLECHUNKSWITCH){
             //earth to right
             if (cameras.get(0).getLeftBorder() <= 0)
@@ -281,7 +283,7 @@ public class Controller {
     }
 
     public LightEngine getLightengine() {
-        return LIGHTENGINE;
+        return lightEngine;
     }
     
 }
