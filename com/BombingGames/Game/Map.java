@@ -24,7 +24,7 @@ public class Map {
       * EAST->NORTH->WEST = -180
        *NORTH->EAST->SOUT = -270
        **/
-    private final int worldSpinDirection = -10;
+    private final int worldSpinDirection;
     
     private static int blocksX, blocksY, blocksZ;    
     private Block[][][] data;
@@ -36,14 +36,21 @@ public class Map {
     private int[][] coordlist = new int[9][2];
     private boolean ENABLECHUNKSWITCH = true;
     
-      
+    public Map(boolean load){
+        this(load,0);
+    }  
+    
     /**
      * Creates a map.
      * @param load Should the map be generated or loaded from disk?
+     * @param worldSpinDirection the angle of the "morning" (0° is left).
      */
-    public Map(boolean load) {
+    public Map(boolean load, int worldSpinDirection) {
         Log.debug("Creating the map...");
         Log.debug("Should the Engine load a map: "+load);
+        
+        this.worldSpinDirection = worldSpinDirection;
+        
         if (load) Chunk.readMapInfo();
         //save chunk size, which are now loaded
         blocksX = Chunk.getBlocksX()*3;
@@ -500,7 +507,7 @@ public class Map {
     public int getWorldSpinDirection() {
         return worldSpinDirection;
     }
-
+    
     public float[][][][] getCellPos() {
         return cellPos;
     }
