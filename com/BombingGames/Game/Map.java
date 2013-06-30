@@ -24,7 +24,7 @@ public class Map {
       * EAST->NORTH->WEST = -180
        *NORTH->EAST->SOUT = -270
        **/
-    private final int worldSpinDirection = -40;
+    private final int worldSpinDirection = -10;
     
     private static int blocksX, blocksY, blocksZ;    
     private Block[][][] data;
