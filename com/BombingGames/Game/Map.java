@@ -41,7 +41,6 @@ public class Map {
      * Creates a map.
      * @param load Should the map be generated or loaded from disk?
      */
-    @SuppressWarnings("empty-statement")
     public Map(boolean load) {
         Log.debug("Creating the map...");
         Log.debug("Should the Engine load a map: "+load);
