@@ -15,7 +15,9 @@ public abstract class AbstractCharacter extends AbstractEntity {
       
    private float[] dir = {1, 0, 0};
    private String controls = "NPC";
-   private final boolean smoothwalking = true;
+
+   /** Set value how fast the character brakes or slides. 1 is "immediately". The hgiher the value, teh more "slide". Value >1**/
+   private final int smoothBreaks = 80;
       
    /**provides a factor for the vector*/
    private float speed;
@@ -70,7 +72,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         if (down)  dir[1] = 1;
         if (left)  dir[0] = -1;
         if (right) dir[0] = 1;
-        } else speed=0;
+        }
    }
     
    /**
@@ -104,6 +106,10 @@ public abstract class AbstractCharacter extends AbstractEntity {
             dir[0] /= vectorLenght;
             dir[1] /= vectorLenght;
         }
+        
+        //slow walking down
+        if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
+        if (speed < 0) speed = 0;
             
         float oldHeight = getCoords().getHeight();
         float[] oldPos = getPos();
