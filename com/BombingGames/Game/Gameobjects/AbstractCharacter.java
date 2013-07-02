@@ -82,8 +82,8 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     private void makeCoordinateStep(int x, int y){
         //mirror the position around the center
-        setPos(0, getPos()[0] -x*Block.DIM2);
-        setPos(1, getPos()[1] -y*Block.DIM2);
+        setOffsetX(getOffsetX() -x*Block.DIM2);
+        setOffsetY(getOffsetY() -y*Block.DIM2);
 
         
         setCoords(getCoords().addVector(0, y, 0));
@@ -110,8 +110,8 @@ public abstract class AbstractCharacter extends AbstractEntity {
         if (speed < 0) speed = 0;
             
         float oldHeight = getCoords().getHeight();
-        float[] oldPos = getPos();
- 
+        float oldOffsetX = getOffsetX();
+        float oldOffsetY = getOffsetY();
         
         /*VERTICAL MOVEMENT*/
         //calculate new height
@@ -133,13 +133,13 @@ public abstract class AbstractCharacter extends AbstractEntity {
         
         /*HORIZONTAL MOVEMENT*/
         //calculate new position
-        float newx = getPos()[0] + delta * speed * dir[0];
-        float newy = getPos()[1] + delta * speed * dir[1];
+        float newx = getOffsetX() + delta * speed * dir[0];
+        float newy = getOffsetY() + delta * speed * dir[1];
 
         //if movement allowed => move player   
-        if (! horizontalColission(newx, newy, oldPos[0], oldPos[1])) {                
-            setPos(0, newx);
-            setPos(1, newy);
+        if (! horizontalColission(newx, newy, oldOffsetX, oldOffsetY)) {                
+            setOffsetX(newx);
+            setOffsetY(newy);
 
             //track the coordiante change, if there is one
             int sidennumb = getSideNumb();              
@@ -328,7 +328,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
     @Override
     public boolean onGround() {
         getCoords().setHeight(getCoords().getHeight()-1);
-        boolean colission = horizontalColission(getPos(0), getPos(1), getPos(0), getPos(1));
+        boolean colission = horizontalColission(getOffsetX(), getOffsetY(), getOffsetX(), getOffsetY());
         getCoords().setHeight(getCoords().getHeight()+1);
         
         return (super.onGround() || colission);

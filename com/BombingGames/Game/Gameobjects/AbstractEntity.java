@@ -19,7 +19,9 @@ import org.newdawn.slick.SlickException;
  */
 public abstract class AbstractEntity extends GameObject implements IsSelfAware {
    private Coordinate coords;//the position in the map-grid
-   private float[] offset = {DIM2, DIM2}; //the horizontal offset
+   private float offsetX = DIM2; //the horizontal offset
+   private float offsetY = DIM2;
+
    
     /**
      * Create an abstractEntity. You should use Block.getInstance(int) 
@@ -137,7 +139,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     public int getScreenPosX(Coordinate coords) {
         return coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
                + (coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
-               + (int) (offset[0]); //add the objects position inside this coordinate
+               + (int) (offsetX); //add the objects position inside this coordinate
     }
 
     /**
@@ -149,7 +151,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
    @Override
     public int getScreenPosY(Coordinate coords) {
         return coords.getRelY() * DIM4 //x-coordinate * the tile's size
-               + (int) (offset[1] / 2) //add the objects position inside this coordinate
+               + (int) (offsetY / 2) //add the objects position inside this coordinate
                - (int) (coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
     }
     
@@ -167,28 +169,30 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         Controller.getMap().getEntitylist().add(this);
     }
     
-        /**
-     * Returns the side of the current position.
+    /**
+     * Returns the side with the current offset.
      * @return
      * @see com.BombingGames.Game.Blocks.Block#getSideNumb(int, int) 
      */
     protected int getSideNumb() {
-        return Block.getSideID(offset[0], offset[1]);
+        return Block.getSideID(offsetX, offsetY);
     }  
 
-    public float[] getPos() {
-        return offset;
-    }
-    
-    public float getPos(int i) {
-        return offset[i];
+    public float getOffsetX() {
+        return offsetX;
     }
 
-    public void setPos(float[] pos) {
-        this.offset = pos;
+    public void setOffsetX(float offsetX) {
+        this.offsetX = offsetX;
+    }
+
+    public float getOffsetY() {
+        return offsetY;
+    }
+
+    public void setOffsetY(float offsetY) {
+        this.offsetY = offsetY;
     }
     
-    public void setPos(int i, float pos) {
-        this.offset[i] = pos;
-    }
+    
 }

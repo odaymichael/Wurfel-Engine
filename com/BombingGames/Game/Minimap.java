@@ -164,7 +164,7 @@ public class Minimap {
                 View.getFont().drawString(
                     renderPosX + (controller.getPlayer().getCoords().getRelX() + (controller.getPlayer().getCoords().getRelY()%2==1?0.5f:0) ) * scaleX+20,
                     renderPosY + controller.getPlayer().getCoords().getRelY() * scaleY - 10,
-                    (int) controller.getPlayer().getPos()[0] +" | "+ (int) controller.getPlayer().getPos()[1] +" | "+ (int) controller.getPlayer().getPos()[2],
+                    (int) controller.getPlayer().getOffsetX() +" | "+ (int) controller.getPlayer().getOffsetY() +" | "+ (int) controller.getPlayer().getCoords().getHeight(),
                     Color.red
                 );
             }
