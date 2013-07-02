@@ -126,14 +126,12 @@ public class Coordinate {
     public int[] getAbs(){
         return new int[]{getAbsX(), getAbsY(), getZ()};
     }
-    public Coordinate addVector(int[] vector){
-        return new Coordinate(
-            x+vector[0],
-            y+vector[1],
-            getZ() + vector[2],
-            this.topleftX,
-            this.topleftY
-            );
+    public Coordinate addVector(int[] vector) {
+            Coordinate newvec = this;
+            newvec.x += vector[0];
+            newvec.y += vector[1];
+            newvec.height += vector[2]*Block.GAMEDIMENSION;
+            return newvec;
     }
 
     public Coordinate addVector(int x, int y, int z) {

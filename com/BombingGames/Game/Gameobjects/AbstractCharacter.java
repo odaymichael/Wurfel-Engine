@@ -86,12 +86,10 @@ public abstract class AbstractCharacter extends AbstractEntity {
         setPos(1, getPos()[1] -y*Block.DIM2);
 
         
-        setCoords(getCoords().addVector(new int[]{0, y, 0}));
-        if (x < 0){
-            if (getCoords().getRelY() % 2 == 1) setCoords(getCoords().addVector(new int[]{-1, 0, 0}));
-        } else {
-            if (getCoords().getRelY() % 2 == 0) setCoords(getCoords().addVector(new int[]{1, 0, 0}));
-        }
+        setCoords(getCoords().addVector(0, y, 0));
+        if (x < 0 && getCoords().getRelY() % 2 == 1) setCoords(getCoords().addVector(-1, 0, 0));
+        if (x > 0 && getCoords().getRelY() % 2 == 0) setCoords(getCoords().addVector(1, 0, 0));
+
     }
     
    /**
