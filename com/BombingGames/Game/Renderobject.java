@@ -1,5 +1,8 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.Game.Gameobjects.AbstractEntity;
+import com.BombingGames.Game.Gameobjects.Block;
+
 /**
  *Saves the information for the rendering.
  * @author Benedikt
@@ -10,14 +13,27 @@ public class Renderobject {
     private final int entityindex;
 
      /**
-         * Create an Renderobject
+         * Create an Renderobject with a Block
          * @param coords 
          * @param depth the depth of the object
          * @param entitynumber when it is an entity put the number here. When it is not then set it to -1.
          */
-    protected Renderobject(Coordinate coords, int depth, int entitynumber) {
+    protected Renderobject(Coordinate coords, int entitynumber) {
         this.coords = coords;
-        this.depth = depth;
+        Block block = Controller.getMapData(coords); 
+        this.depth = block.getDepth(coords);
+        this.entityindex = entitynumber;
+    }
+    
+    /**
+         * Create an Renderobject with an entity
+         * @param coords 
+         * @param depth the depth of the object
+         * @param entitynumber when it is an entity put the number here. When it is not then set it to -1.
+         */
+    protected Renderobject(AbstractEntity entity, int entitynumber) {
+        this.coords = entity.getCoords();
+        this.depth = entity.getDepth(coords);
         this.entityindex = entitynumber;
     }
 

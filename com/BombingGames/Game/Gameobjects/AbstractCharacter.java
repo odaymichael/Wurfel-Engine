@@ -109,9 +109,9 @@ public abstract class AbstractCharacter extends AbstractEntity {
         if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
         if (speed < 0) speed = 0;
             
-        float oldHeight = getCoords().getHeight();
         float oldOffsetX = getOffsetX();
         float oldOffsetY = getOffsetY();
+        float oldHeight = getCoords().getHeight();
         
         /*VERTICAL MOVEMENT*/
         //calculate new height

@@ -253,16 +253,7 @@ public abstract class GameObject {
      * @param z  the z-coordinate
      * @return the depth
      */
-    public int getDepth(Coordinate coords) {
-        return (int) (
-            DIMENSION * coords.getRelY()
-            + (coords.getRelY() % 2) * DIM2
-            + (DIM2-1) * coords.getZ()
-            + coords.getCellOffset()[1]
-            + coords.getCellOffset()[2]
-            + (dimensionY - 1) * DIM4
-        );
-    }
+    public abstract int getDepth(Coordinate coords);
     
 
     /**

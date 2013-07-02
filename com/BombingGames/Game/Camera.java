@@ -299,22 +299,15 @@ public class Camera {
             for (int y = topborder; y < bottomborder;y++)
                 for (int z=0; z < Map.getBlocksZ(); z++){
                     
-                    Block block = Controller.getMapData(x, y, z); 
-                    if (!block.isHidden() && block.isVisible()
+                    Coordinate coord = new Coordinate(x, y, z, true); 
+                    if (! coord.getBlock().isHidden()
+                        && coord.getBlock().isVisible()
                         && 
-                            block.getScreenPosY(
-                               new Coordinate(x, y, z, true)
-                            )
+                            coord.getBlock().getScreenPosY(coord)
                         <
                             outputPosY + getOutputHeight()
                     ) {
-                        depthsort.add(
-                            new Renderobject(
-                                new Coordinate(x, y, z, true),
-                                block.getDepth(new Coordinate(x, y, z, true)),
-                                -1
-                            )
-                        );
+                        depthsort.add(new Renderobject(coord, -1));
                     }
                 }
         
@@ -330,11 +323,7 @@ public class Camera {
                             outputPosY + getOutputHeight()
                     )
                     depthsort.add(
-                        new Renderobject(
-                            entity.getCoords(),
-                            entity.getDepth(entity.getCoords()),
-                            i
-                        )
+                        new Renderobject(entity, i)
                     );
         }
         //sort the list

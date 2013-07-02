@@ -1,6 +1,9 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Coordinate;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
 
 /**
  *An entity wich is animated.
@@ -59,5 +62,4 @@ public class AnimatedEntity extends AbstractEntity implements Animatable{
     public void stop() {
         running = false;
     }
-
 }

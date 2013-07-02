@@ -69,6 +69,17 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         return entity;
     }
     
+    @Override
+    public int getDepth(Coordinate coords){
+        return (int) (
+            DIMENSION * coords.getRelY()
+            + (coords.getRelY() % 2) * DIM2
+            + getOffsetY()
+            + coords.getHeight()
+            + (getDimensionY() - 1) * DIM4
+        );
+    }
+    
     //IsSelfAware implementation
     @Override
     public Coordinate getCoords() {
@@ -193,6 +204,4 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     public void setOffsetY(float offsetY) {
         this.offsetY = offsetY;
     }
-    
-    
 }
