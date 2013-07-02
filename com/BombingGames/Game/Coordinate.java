@@ -93,7 +93,9 @@ public class Coordinate {
     }
     
     public int getZ(){
-        return (int) (height/Block.GAMEDIMENSION);
+        if (height/Block.GAMEDIMENSION < Map.getBlocksZ())
+            return (int) (height/Block.GAMEDIMENSION);
+        else return Map.getBlocksZ()-1;
     }
     
     public float getHeight(){
