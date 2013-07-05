@@ -28,33 +28,32 @@ public class CustomGameController extends Controller {
         this.gc = gc;
         
         
-        Player player = (Player) AbstractEntity.getInstance(
-                40,
-                0,
-                Coordinate.getMapCenter(Map.getBlocksZ()*Block.GAMEDIMENSION)
-            );
-        player.setControls("WASD");
-        setPlayer(player);
+//        Player player = (Player) AbstractEntity.getInstance(
+//                40,
+//                0,
+//                Coordinate.getMapCenter(Map.getBlocksZ()*Block.GAMEDIMENSION)
+//            );
+//        player.setControls("WASD");
+//        setPlayer(player);
+        
+//        addCamera(
+//            new Camera(
+//                getPlayer(),
+//                0, //left
+//                0, //top
+//                gc.getWidth(), //full width 
+//                gc.getHeight()//full height
+//            )
+//        );
         
         addCamera(
             new Camera(
-                getPlayer(),
                 0, //left
                 0, //top
                 gc.getWidth(), //full width 
                 gc.getHeight()//full height
             )
         );
-        
-//        addCamera(
-//            new Camera(
-//                Coordinate.getMapCenter(),
-//                800, //left
-//                0, //top
-//                400, //full width 
-//                400//full height
-//            )
-//        );
         
         setMinimap(
             new Minimap(this, getCameras().get(0), gc.getScreenWidth() - 10,10)
@@ -93,8 +92,14 @@ public class CustomGameController extends Controller {
                 Gameplay.msgSystem().add("Zoom reset");
             }        
 
+            Camera camera = getCameras().get(0);
+            camera.setOutputPosY(camera.getOutputPosY()- (input.isKeyDown(Input.KEY_W)? 3: 0));
+            camera.setOutputPosY(camera.getOutputPosY()+ (input.isKeyDown(Input.KEY_S)? 3: 0));
+            camera.setOutputPosX(camera.getOutputPosX()+ (input.isKeyDown(Input.KEY_D)? 3: 0));
+            camera.setOutputPosX(camera.getOutputPosX()- (input.isKeyDown(Input.KEY_A)? 1: 0));
+            
             //walk
-            if (getPlayer() != null)
+            if (getPlayer() != null){
                 if ("WASD".equals(getPlayer().getControls()))
                     getPlayer().walk(
                         input.isKeyDown(Input.KEY_W),
@@ -104,6 +109,7 @@ public class CustomGameController extends Controller {
                         .25f+(input.isKeyDown(Input.KEY_LSHIFT)? 0.75f: 0)
                     );
                 if (input.isKeyPressed(Input.KEY_SPACE)) getPlayer().jump();
+            }
             
         } else {
             //fetch input and write it down

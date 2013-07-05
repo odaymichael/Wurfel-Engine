@@ -205,9 +205,7 @@ public class Block extends GameObject {
      */
    @Override
     public int getScreenPosX(Coordinate coords) {
-        return coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
-               + (coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
-               + (int) (coords.getCellOffset()[0]); //add the objects position inside this coordinate
+        return coords.getScreenPosX() + (int) (coords.getCellOffset()[0]); //add the objects position inside this coordinate
     }
 
     /**
@@ -218,10 +216,9 @@ public class Block extends GameObject {
      */
    @Override
     public int getScreenPosY(Coordinate coords) {
-        return coords.getRelY() * DIM4 //x-coordinate * the tile's size
+        return coords.getScreenPosY()
                + (int) (coords.getCellOffset()[1] / 2) //add the objects position inside this coordinate
-               - (int) (coords.getCellOffset()[2] / Math.sqrt(2)) //add the objects position inside this coordinate
-               - (int) (coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
+               - (int) (coords.getCellOffset()[2] / Math.sqrt(2)); //add the objects position inside this coordinate
     }
 
     @Override

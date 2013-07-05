@@ -2,6 +2,8 @@ package com.BombingGames.Game;
 
 import com.BombingGames.Game.Gameobjects.Block;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
 
 /**
  *
@@ -66,6 +68,10 @@ public class Coordinate {
         this.height = z*Block.GAMEDIMENSION;
         topleftX = chunkX;
         topleftY = chunkY;
+    }
+    
+    public static Coordinate getMapCenter(){
+        return getMapCenter(Map.getBlocksZ()*Block.GAMEDIMENSION/2);
     }
     
    public static Coordinate getMapCenter(float height){
@@ -164,5 +170,15 @@ public class Coordinate {
      */
     public boolean hidingPastBlock(){
         return (getBlock().hasSides() && ! getBlock().isTransparent() && ! hasOffset());
+    }
+    
+    public int getScreenPosX() {
+        return getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
+               + (getRelY() % 2) * DIM2; //y-coordinate multiplied by it's dimension in this direction
+    }
+    
+    public int getScreenPosY() {
+        return getRelY() * DIM4 //x-coordinate * the tile's size
+               - (int) (getHeight() / Math.sqrt(2)); //take axis shortening into account
     }
 }
