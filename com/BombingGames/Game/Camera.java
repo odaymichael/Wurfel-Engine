@@ -37,8 +37,8 @@ public class Camera {
         
         equalizationScale = screenWidth / (float) View.ENGINE_RENDER_WIDTH;
         
-        outputPosX = Coordinate.getMapCenter().getScreenPosX();
-        outputPosY = Coordinate.getMapCenter().getScreenPosY();
+        outputPosX = Coordinate.getMapCenter().getScreenPosX() - getOutputWidth() / 2;
+        outputPosY = Coordinate.getMapCenter().getScreenPosY() - getOutputHeight() / 2;
     }
     
    /**
@@ -72,6 +72,70 @@ public class Camera {
         Gameplay.msgSystem().add("Camera is focusing an entity");
         this.focusentity = focusentity;
         this.focusCoordinates = null;
+    }
+    
+     /**
+     * Updates the camera.
+     */
+    public void update() {
+        if (focusCoordinates != null) {
+            outputPosX = focusCoordinates.getBlock().getScreenPosX(
+                focusCoordinates
+            ) - getOutputWidth() / 2 - GameObject.DIM2;
+            
+            outputPosY = focusCoordinates.getBlock().getScreenPosY(
+                focusCoordinates
+            ) - getOutputHeight() / 2;
+        } else if (focusentity != null ){
+            outputPosX = focusentity.getScreenPosX(focusentity.getCoords()) - getOutputWidth() / 2;            
+            outputPosY = focusentity.getScreenPosY(focusentity.getCoords()) - getOutputHeight() / 2 ;
+        }
+        
+        //maybe unneccessary and can be done when the getter is called.
+        //update borders once every update
+        leftborder = outputPosX / GameObject.DIMENSION - 1;
+        if (leftborder < 0) leftborder= 0;
+        
+        rightborder = (outputPosX + getOutputWidth()) / GameObject.DIMENSION + 2;
+        if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
+        
+        topborder = outputPosY / GameObject.DIM4 - 3;
+        if (topborder < 0) topborder= 0;
+        
+        bottomborder = (outputPosY+getOutputHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
+        if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
+    }
+    
+    /**
+     * Renders the viewport
+     * @param g 
+     */
+    public void render(Graphics g, View view) {
+        if (Controller.getMap() != null) {     
+            //move the camera (graphic context)
+           
+            g.translate(screenPosX, screenPosY);
+            
+            g.scale(getTotalScale(), getTotalScale());
+            
+            g.translate(-outputPosX, -outputPosY);
+            
+            g.setClip(screenPosX, screenPosY, screenWidth, screenHeight);
+
+            
+            //render map
+            createDepthList();
+            Controller.getMap().render(g, view, this);
+
+            //reset clipping
+            g.clearClip();            
+            //reverse scale
+            g.scale(1/getTotalScale(), 1/getTotalScale());
+                        
+            //reverse translate
+            g.translate(outputPosX*getTotalScale() - screenPosX, outputPosY*getTotalScale() - screenPosY);
+            
+        }
     }
   
     /**
@@ -189,7 +253,7 @@ public class Camera {
      * For screen pixels use <i>ScreenWidth()</i>.
      * @return in pixels
      */
-    public int getOutputWidth() {
+    public final int getOutputWidth() {
         return (int) (screenWidth / getTotalScale());
     }
     
@@ -197,7 +261,7 @@ public class Camera {
     * The amount of pixel which are visible in Y direction (game pixels). For screen pixels use <i>ScreenHeight()</i>.
     * @return  in pixels
     */
-   public int getOutputHeight() {
+   public final int getOutputHeight() {
         return (int) (screenHeight / getTotalScale());
     }
 
@@ -236,69 +300,7 @@ public class Camera {
     }
 
 
-    /**
-     * Updates the camera.
-     */
-    public void update() {
-        if (focusCoordinates != null) {
-            outputPosX = focusCoordinates.getBlock().getScreenPosX(
-                focusCoordinates
-            ) - getOutputWidth() / 2 - GameObject.DIM2;
-            
-            outputPosY = focusCoordinates.getBlock().getScreenPosY(
-                focusCoordinates
-            ) - getOutputHeight() / 2;
-        } else if (focusentity != null ){
-            outputPosX = focusentity.getScreenPosX(focusentity.getCoords()) - getOutputWidth() / 2;            
-            outputPosY = focusentity.getScreenPosY(focusentity.getCoords()) - getOutputHeight() / 2 ;
-        }
-        
-        //maybe unneccessary and can be done when the getter is called.
-        //update borders once every update
-        leftborder = outputPosX / GameObject.DIMENSION - 1;
-        if (leftborder < 0) leftborder= 0;
-        
-        rightborder = (outputPosX + getOutputWidth()) / GameObject.DIMENSION + 2;
-        if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
-        
-        topborder = outputPosY / GameObject.DIM4 - 3;
-        if (topborder < 0) topborder= 0;
-        
-        bottomborder = (outputPosY+getOutputHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
-        if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
-    }
-    
-    /**
-     * Renders the viewport
-     * @param g 
-     */
-    public void render(Graphics g, View view) {
-        if (Controller.getMap() != null) {     
-            //move the camera (graphic context)
-           
-            g.translate(screenPosX, screenPosY);
-            
-            g.scale(getTotalScale(), getTotalScale());
-            
-            g.translate(-outputPosX, -outputPosY);
-            
-            g.setClip(screenPosX, screenPosY, screenWidth, screenHeight);
-
-            
-            //render map
-            createDepthList();
-            Controller.getMap().render(g, view, this);
-
-            //reset clipping
-            g.clearClip();            
-            //reverse scale
-            g.scale(1/getTotalScale(), 1/getTotalScale());
-                        
-            //reverse translate
-            g.translate(outputPosX*getTotalScale() - screenPosX, outputPosY*getTotalScale() - screenPosY);
-            
-        }
-    }
+   
     
      /**
      * Fills the map into a list and sorts it in the order of the rendering, called the depthlist.

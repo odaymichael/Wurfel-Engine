@@ -90,13 +90,13 @@ public class CustomGameController extends Controller {
             if (input.isKeyPressed(Input.KEY_Z)) {
                 getCameras().get(0).setZoom(1);
                 Gameplay.msgSystem().add("Zoom reset");
-            }        
+             }        
 
             Camera camera = getCameras().get(0);
             camera.setOutputPosY(camera.getOutputPosY()- (input.isKeyDown(Input.KEY_W)? 3: 0));
             camera.setOutputPosY(camera.getOutputPosY()+ (input.isKeyDown(Input.KEY_S)? 3: 0));
             camera.setOutputPosX(camera.getOutputPosX()+ (input.isKeyDown(Input.KEY_D)? 3: 0));
-            camera.setOutputPosX(camera.getOutputPosX()- (input.isKeyDown(Input.KEY_A)? 1: 0));
+            camera.setOutputPosX(camera.getOutputPosX()- (input.isKeyDown(Input.KEY_A)? 3: 0));
             
             //walk
             if (getPlayer() != null){

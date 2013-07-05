@@ -15,6 +15,7 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Benedikt Vogler
  */
 public class Controller {
+    private final boolean ENABLECHUNKSWITCH = true;
     public static LightEngine lightEngine;
     private static Map map;
     private static boolean recalcRequested;
@@ -22,7 +23,7 @@ public class Controller {
     private View view;
     private ArrayList<Camera> cameras = new ArrayList();
     private Minimap minimap;
-    private final boolean ENABLECHUNKSWITCH = false;
+
     
     
     /**
