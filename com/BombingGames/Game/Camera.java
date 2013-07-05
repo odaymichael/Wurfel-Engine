@@ -22,13 +22,23 @@ public class Camera {
     private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
     
 
-    private Camera(int x, int y, int width, int height){
+    /**
+     * Creates a camera pointing at the middle of the map.
+     * @param x
+     * @param y
+     * @param width
+     * @param height 
+     */
+    public Camera(int x, int y, int width, int height){
         screenPosX = x;
         screenPosY = y;
         screenWidth = width;
         screenHeight = height;
         
         equalizationScale = screenWidth / (float) View.ENGINE_RENDER_WIDTH;
+        
+        outputPosX = Coordinate.getMapCenter().getScreenPosX();
+        outputPosY = Coordinate.getMapCenter().getScreenPosY();
     }
     
    /**
@@ -238,7 +248,7 @@ public class Camera {
             outputPosY = focusCoordinates.getBlock().getScreenPosY(
                 focusCoordinates
             ) - getOutputHeight() / 2;
-        } else {
+        } else if (focusentity != null ){
             outputPosX = focusentity.getScreenPosX(focusentity.getCoords()) - getOutputWidth() / 2;            
             outputPosY = focusentity.getScreenPosY(focusentity.getCoords()) - getOutputHeight() / 2 ;
         }
