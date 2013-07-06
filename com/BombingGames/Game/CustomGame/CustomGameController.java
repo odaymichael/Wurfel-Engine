@@ -28,32 +28,32 @@ public class CustomGameController extends Controller {
         this.gc = gc;
         
         
-//        Player player = (Player) AbstractEntity.getInstance(
-//                40,
-//                0,
-//                Coordinate.getMapCenter(Map.getBlocksZ()*Block.GAMEDIMENSION)
-//            );
-//        player.setControls("WASD");
-//        setPlayer(player);
-        
-//        addCamera(
-//            new Camera(
-//                getPlayer(),
-//                0, //left
-//                0, //top
-//                gc.getWidth(), //full width 
-//                gc.getHeight()//full height
-//            )
-//        );
+        Player player = (Player) AbstractEntity.getInstance(
+                40,
+                0,
+                Coordinate.getMapCenter(Map.getBlocksZ()*Block.GAMEDIMENSION)
+            );
+        player.setControls("WASD");
+        setPlayer(player);
         
         addCamera(
             new Camera(
+                getPlayer(),
                 0, //left
                 0, //top
                 gc.getWidth(), //full width 
                 gc.getHeight()//full height
             )
         );
+        
+//        addCamera(
+//            new Camera(
+//                0, //left
+//                0, //top
+//                gc.getWidth(), //full width 
+//                gc.getHeight()//full height
+//            )
+//        );
         
         setMinimap(
             new Minimap(this, getCameras().get(0), gc.getScreenWidth() - 10,10)
