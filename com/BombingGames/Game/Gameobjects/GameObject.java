@@ -101,8 +101,18 @@ public abstract class GameObject {
      */
     public abstract void update(int delta);
     
+    /**
+     *
+     * @param coords
+     * @return
+     */
     public abstract int getScreenPosX(Coordinate coords);
     
+    /**
+     *
+     * @param coords
+     * @return
+     */
     public abstract int getScreenPosY(Coordinate coords);
     
     /**
@@ -249,8 +259,7 @@ public abstract class GameObject {
     
     /**
      * Returns the depth of the object. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
-     * @param y the y-coordinate
-     * @param z  the z-coordinate
+     * @param coords 
      * @return the depth
      */
     public abstract int getDepth(Coordinate coords);

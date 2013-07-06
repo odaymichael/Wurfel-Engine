@@ -60,7 +60,7 @@ public class Block extends GameObject {
      * Create a block. If the block needs to know it's position you have to use this method and give the coordinates.
      * @param id the id of the block
      * @param value the value of the block, which is like a sub-id
-     * @param absCoords the absolute coordinates where the bloks should be created. Only SelfAware Blocks should use this.
+     * @param coord 
      * @return the Block
      */
     public static Block getInstance(int id, int value, Coordinate coord){
@@ -199,7 +199,6 @@ public class Block extends GameObject {
     
        /**
      * Get the screen x-position where the object is rendered without regarding the camera.
-     * @param object The object of wich you want the position
      * @param coords  The relative coordinates where the object is rendered 
      * @return The screen X-position in pixels.
      */
@@ -210,7 +209,6 @@ public class Block extends GameObject {
 
     /**
      * Get the screen y-position where the object is rendered without regarding the camera.
-     * @param object The object of wich you want the position
      * @param coords The coordinates where the object is rendered 
      * @return The screen Y-position in pixels.
      */
@@ -261,10 +259,13 @@ public class Block extends GameObject {
     
     /**
      * Draws a side of a block
+     * @param g The graphics context where the side is rendered at.
+     * @param view the view using this render method
      * @param coords the coordinates where to render 
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
+     * @param brightness  The brightness of the side. Value between 0  and 255.
      */
-    protected void renderSide(Graphics g, View view, Coordinate coords, int sidenumb, int brightness){
+    protected void renderSide(final Graphics g, final View view, Coordinate coords, final int sidenumb, int brightness){
         Image image = getBlockSprite(getId(), getValue(), sidenumb);
         
         //right side is  half a block more to the right

@@ -15,7 +15,6 @@ public class Renderobject {
      /**
          * Create an Renderobject with a Block
          * @param coords 
-         * @param depth the depth of the object
          * @param entitynumber when it is an entity put the number here. When it is not then set it to -1.
          */
     protected Renderobject(Coordinate coords, int entitynumber) {
@@ -27,8 +26,7 @@ public class Renderobject {
     
     /**
          * Create an Renderobject with an entity
-         * @param coords 
-         * @param depth the depth of the object
+         * @param entity The entity which should be contained by the renderobject.
          * @param entitynumber when it is an entity put the number here. When it is not then set it to -1.
          */
     protected Renderobject(AbstractEntity entity, int entitynumber) {

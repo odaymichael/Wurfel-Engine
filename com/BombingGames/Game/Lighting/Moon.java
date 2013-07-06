@@ -8,7 +8,7 @@ import com.BombingGames.Game.Controller;
 import org.newdawn.slick.Color;
 
 /**
- *
+ *The moon is a moving object, like the sun but it should rise at night.
  * @author Benedikt Vogler
  */
 public class Moon {
@@ -19,12 +19,19 @@ public class Moon {
     private Color color = new Color(0.8f,0.8f,1f); //the color of the light
     private float brightness = 1;//should raise at morning and fall at night but stay over teh day
 
+    /**
+     *Create a moon.
+     */
     public Moon() {
         longPos = 180-Controller.getMap().getWorldSpinDirection();
     }
     
     
     
+    /**
+     *
+     * @param delta
+     */
     public void update(int delta){
         longPos += LONGSPEED*delta;
         latPos = (float) (90 - maxAngle*Math.sin((longPos+Controller.getMap().getWorldSpinDirection())*Math.PI/180));
@@ -43,26 +50,50 @@ public class Moon {
         
     }
 
+    /**
+     *The  color of the moon's light.
+     * @return
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     *The latitudinal position is a degree in the latitudinal direction where the moon is located. Value 0-360.
+     * @return
+     */
     public float getLatPos() {
         return latPos;
     }
 
+    /**
+     *The longitudinal position is a degree in the longitudinal direction where the moon is located. Value 0-360.
+     * @return
+     */
     public float getLongPos() {
         return longPos;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getLongSpeed() {
         return LONGSPEED;
     }
 
+    /**
+     *The highest possible angle the moon can rise.
+     * @return
+     */
     public int getMaxAngle() {
         return maxAngle;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getBrightness() {
         return brightness;
     }

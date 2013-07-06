@@ -41,6 +41,7 @@ public class Chunk {
     
     /**
     *Creates a chunk.
+    * @param pos the position of the chunk. Value between 0-8
     * @param coordX 
     * @param coordY 
     * @param loadmap load from HD(true) or generate new (false)?

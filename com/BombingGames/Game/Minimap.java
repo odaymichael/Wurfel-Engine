@@ -56,6 +56,7 @@ public class Minimap {
     /**
      * Renders the Minimap.
      * @param g The graphics context.
+     * @param view the view using this render method 
      */
     public void render(Graphics g, View view) {
         if (visible) {

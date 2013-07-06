@@ -36,7 +36,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * Create an entity.
      * @param id the object id of the entity.
      * @param value The value at start.
-     * @param absCoords the coordiantes where the entity is.
+     * @param coords The coordiantes where you place it.
      * @return the entity.
      */
     public static AbstractEntity getInstance(int id, int value, Coordinate coords){
@@ -143,7 +143,6 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         
      /**
      * Get the screen x-position where the object is rendered without regarding the camera.
-     * @param object The object of wich you want the position
      * @param coords  The relative coordinates where the object is rendered 
      * @return The screen X-position in pixels.
      */
@@ -156,7 +155,6 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
 
     /**
      * Get the screen y-position where the object is rendered without regarding the camera.
-     * @param object The object of wich you want the position
      * @param coords The coordinates where the object is rendered 
      * @return The screen Y-position in pixels.
      */
@@ -169,7 +167,10 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     
     /**
      * Renders the entity
-     **/
+     *
+     * @param g 
+     * @param view 
+     */
     public void render(Graphics g, View view){
         this.render(g, view, getCoords());
     }
@@ -190,18 +191,34 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         return Block.getSideID(offsetX, offsetY);
     }  
 
+    /**
+     *
+     * @return
+     */
     public float getOffsetX() {
         return offsetX;
     }
 
+    /**
+     *
+     * @param offsetX
+     */
     public void setOffsetX(float offsetX) {
         this.offsetX = offsetX;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getOffsetY() {
         return offsetY;
     }
 
+    /**
+     *
+     * @param offsetY
+     */
     public void setOffsetY(float offsetY) {
         this.offsetY = offsetY;
     }

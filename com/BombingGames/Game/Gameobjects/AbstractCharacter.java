@@ -30,8 +30,9 @@ public abstract class AbstractCharacter extends AbstractEntity {
    /**
     * Constructor of AbstractCharacter.
     * @param id
+    * @param spritesPerDir The number of animation sprites per walking direction
     */
-   protected AbstractCharacter(int id, int spritesPerDir) {
+   protected AbstractCharacter(final int id, final int spritesPerDir) {
         super(id);
         SPRITESPERDIR = spritesPerDir;
     }

@@ -36,6 +36,10 @@ public class Map {
     private int[][] coordlist = new int[9][2];
     private boolean ENABLECHUNKSWITCH = true;
     
+    /**
+     *
+     * @param load
+     */
     public Map(boolean load){
         this(load,0);
     }  
@@ -253,6 +257,8 @@ public class Map {
     
     /**
      * Draws the map
+     * @param g 
+     * @param view 
      * @param camera 
      */
     public void render(Graphics g, View view, Camera camera) {
@@ -277,7 +283,7 @@ public class Map {
 
    /**
      *Get the coordinates of a chunk. 
-     * @param cellOffset the position of the chunk
+     * @param pos 
      * @return the coordinates of the chunk
      */
     public int[] getChunkCoords(int pos) {
@@ -340,6 +346,11 @@ public class Map {
         return data[x][y][z];  
     }
     
+    /**
+     *
+     * @param coord
+     * @return
+     */
     public Block getData(Coordinate coord){
         return data[coord.getRelX()][coord.getRelY()][coord.getZ()];  
     }
@@ -504,14 +515,27 @@ public class Map {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public int getWorldSpinDirection() {
         return worldSpinDirection;
     }
     
+    /**
+     *
+     * @return
+     */
     public float[][][][] getCellOffset() {
         return cellOffset;
     }
     
+    /**
+     *
+     * @param coord
+     * @return
+     */
     public float[] getCellOffset(Coordinate coord) {
         return cellOffset[coord.getRelX()][coord.getRelY()][coord.getZ()];
     }

@@ -108,7 +108,8 @@ public class Camera {
     
     /**
      * Renders the viewport
-     * @param g 
+     * @param g
+     * @param view  
      */
     public void render(Graphics g, View view) {
         if (Controller.getMap() != null) {     
@@ -592,7 +593,7 @@ public class Camera {
     
     /**
      * Traces the ray to a specific block.
-     * @param coords
+     * @param coord The coordinate where the ray should point to.
      * @param neighbours True when neighbours block also should be scanned
      */
     public void traceRayTo(Coordinate coord, boolean neighbours){

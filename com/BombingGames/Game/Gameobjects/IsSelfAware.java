@@ -8,14 +8,14 @@ import com.BombingGames.Game.Coordinate;
  */
 public interface IsSelfAware{
    /**
-     * Return the absolute coordinates.
+     * Return the coordinates.
      * @return
      */
     public Coordinate getCoords();
     
     /**
-     * Set the absolute Coordinates without safety check.
-     * @param absCoords the new coordinates.
+     * Set the coordinates without safety check.
+     * @param coords 
      */
     public void setCoords(Coordinate coords);
     
