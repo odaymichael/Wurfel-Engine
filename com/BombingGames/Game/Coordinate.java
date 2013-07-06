@@ -85,10 +85,10 @@ public class Coordinate {
         
     
     public int getRelX(){
-        return x + (Controller.getMap().getChunkCoords(0)[0]-topleftX) * Chunk.getBlocksX();
+        return x + (topleftX-Controller.getMap().getChunkCoords(0)[0]) * Chunk.getBlocksX();
     }
     public int getRelY(){
-        return y + (Controller.getMap().getChunkCoords(0)[1]-topleftY) * Chunk.getBlocksY();
+        return y + (topleftY-Controller.getMap().getChunkCoords(0)[1]) * Chunk.getBlocksY();
     }
     
     public int getAbsX(){
