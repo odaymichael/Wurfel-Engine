@@ -128,8 +128,9 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * @return true when on the ground
      */
     public boolean onGround(){
-        if (getCoords().getHeight() <= 0) return true;
-                   
+        if (getCoords().getHeight() <= 0) return true; //if entity is under the map
+        
+        //check if one pixel deeper is on ground.
         int z = (int) ((getCoords().getHeight()-1)/GAMEDIMENSION);
         if (z > Map.getBlocksZ()-1) z = Map.getBlocksZ()-1;
         
