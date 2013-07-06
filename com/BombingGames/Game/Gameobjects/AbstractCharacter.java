@@ -1,6 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Coordinate;
 import com.BombingGames.Game.Map;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
@@ -327,9 +328,13 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     @Override
     public boolean onGround() {
-        getCoords().setHeight(getCoords().getHeight()-1);
+        Coordinate tempcoords = getCoords();
+        tempcoords.setHeight(getCoords().getHeight()-1);
+        setCoords(tempcoords);
+        
         boolean colission = horizontalColission(getOffsetX(), getOffsetY(), getOffsetX(), getOffsetY());
-        getCoords().setHeight(getCoords().getHeight()+1);
+        tempcoords.setHeight(getCoords().getHeight()+1);
+        setCoords(tempcoords);
         
         return (super.onGround() || colission);
     }
