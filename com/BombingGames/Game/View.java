@@ -144,10 +144,18 @@ public class View {
         return baseFont;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDrawmode() {
         return drawmode;
     }
 
+    /**
+     *
+     * @param drawmode
+     */
     public void setDrawmode(int drawmode) {
         if (drawmode != this.drawmode){
             this.drawmode = drawmode;

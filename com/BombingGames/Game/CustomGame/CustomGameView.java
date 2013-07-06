@@ -13,7 +13,13 @@ import org.newdawn.slick.SlickException;
 public class CustomGameView extends View{
      private CustomGameController controller;
  
-     public CustomGameView(GameContainer gc, Controller controller) throws SlickException {
+     /**
+     *
+     * @param gc
+     * @param controller
+     * @throws SlickException
+     */
+    public CustomGameView(GameContainer gc, Controller controller) throws SlickException {
          super(gc, controller);
          this.controller = (CustomGameController) controller;
      }

@@ -15,11 +15,18 @@ public class Sun {
     private Color color = new Color(255,255,255); //the color of the light
     private float brightness;//should raise at morning and fall at night but stay over teh day
 
+    /**
+     *
+     */
     public Sun() {
         longPos = -Controller.getMap().getWorldSpinDirection();
     }
     
     
+    /**
+     *
+     * @param delta
+     */
     public void update(int delta){
         longPos += LONGSPEED*delta;
         latPos = (float) (90 - maxAngle*Math.sin((longPos+Controller.getMap().getWorldSpinDirection())*Math.PI/180));
@@ -42,26 +49,50 @@ public class Sun {
         
     }
 
+    /**
+     *
+     * @return
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getLatPos() {
         return latPos;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getLongPos() {
         return longPos;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getLongSpeed() {
         return LONGSPEED;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMaxAngle() {
         return maxAngle;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getBrightness() {
         return brightness;
     }

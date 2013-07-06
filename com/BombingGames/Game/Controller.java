@@ -16,6 +16,9 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class Controller {
     private final boolean ENABLECHUNKSWITCH = true;
+    /**
+     *
+     */
     public static LightEngine lightEngine;
     private static Map map;
     private static boolean recalcRequested;
@@ -283,6 +286,10 @@ public class Controller {
         this.minimap = minimap;
     }
 
+    /**
+     *
+     * @return
+     */
     public LightEngine getLightengine() {
         return lightEngine;
     }
