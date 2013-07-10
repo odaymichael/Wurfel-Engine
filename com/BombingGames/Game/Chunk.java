@@ -49,8 +49,9 @@ public class Chunk {
     public Chunk(int pos, int coordX, int coordY, boolean newMap){
         this();
 
-        if (!newMap) load(pos, coordX, coordY);
-            else generate(pos, coordX, coordY);
+        if (newMap)
+            generate(pos, coordX, coordY);
+            else load(pos, coordX, coordY);
     }
     
     /**

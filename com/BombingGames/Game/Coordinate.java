@@ -180,7 +180,7 @@ public class Coordinate {
      */
     public void setHeight(float height, boolean copyToMap){
         this.height = height;
-        if (copyToMap) Controller.getMap().setCelloffset(this, Block.DIM2+20, Block.DIM2);
+        if (copyToMap) Controller.getMap().setCelloffset(this, Block.DIM2, Block.DIM2);
     }
     
     /**

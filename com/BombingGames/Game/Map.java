@@ -55,7 +55,10 @@ public class Map {
      */
     public Map(boolean newMap, int worldSpinDirection) {
         Log.debug("Should the Engine generate a new map: "+newMap);
+        this.newMap = newMap;
         this.worldSpinDirection = worldSpinDirection;
+        
+        
         if (!newMap) Chunk.readMapInfo();
         
         //save chunk size, which are now loaded
