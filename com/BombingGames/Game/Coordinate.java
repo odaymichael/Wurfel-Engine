@@ -24,7 +24,6 @@ public class Coordinate {
      * @param z The z value.
      * @param relative   True when the coordiantes are relative to the currently loaded map. False when they are absolute.
      */
-    public Coordinate(int x, int y, int z,final boolean relative) {
     public Coordinate(int x, int y, int z, final boolean relative) {
         topleftX = Controller.getMap().getChunkCoords(0)[0];
         topleftY = Controller.getMap().getChunkCoords(0)[1];
@@ -126,10 +125,29 @@ public class Coordinate {
      *
      * @return
      */
+    public int getZSafe(){
+        int tmpZ =  (int) (height/Block.GAMEDIMENSION);
+        if (tmpZ >= Map.getBlocksZ())
+            return Map.getBlocksZ() -1;
+        else if (tmpZ < 0) return 0;
+            else return tmpZ;
+    }
+    
+    /**
+     *
+     * @return
+     */
     public float getHeight(){
         return height;
     }
 
+     /**
+     *Calculates the offset in vertical direction in this cell.
+     * @return
+     */
+    public float getCellOffsetZ(){
+        return height - (int) (height/Block.GAMEDIMENSION)*Block.GAMEDIMENSION;
+    }
     
     /**
      *
@@ -158,9 +176,11 @@ public class Coordinate {
     /**
      *
      * @param height
+     * @param copyToMap Set true when the height change should also effect the map where the coordiante is pointing at.
      */
-    public void setHeight(float height){
+    public void setHeight(float height, boolean copyToMap){
         this.height = height;
+        if (copyToMap) Controller.getMap().setCelloffset(this, Block.DIM2+20, Block.DIM2);
     }
     
     /**
