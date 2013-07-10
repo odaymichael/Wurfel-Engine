@@ -90,7 +90,7 @@ public class Controller {
      * Creates a new Map.
      */
     public static void newMap(){
-        map = new Map(MainMenuState.shouldLoadMap());
+        map = new Map(!MainMenuState.shouldLoadMap());
     }
     
     /**

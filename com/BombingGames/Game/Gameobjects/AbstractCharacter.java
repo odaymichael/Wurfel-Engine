@@ -119,7 +119,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         //calculate new height
         float t = delta/1000f; //t = time in s
         dir[2] += -Map.GRAVITY*t; //in m/s
-        getCoords().setHeight(getCoords().getHeight() + dir[2] * GAMEDIMENSION * t); //in m
+        getCoords().setHeight(getCoords().getHeight() + dir[2] * GAMEDIMENSION * t, false); //in m
         
         //check new neight for colission
         //land if standing in or under 0-level or there is an obstacle
@@ -129,7 +129,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
             if (fallingSound != null) fallingSound.stop();
             dir[2] = 0;
             //set on top of block
-            getCoords().setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION);
+            getCoords().setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION, false);
         }
         
         
@@ -330,11 +330,11 @@ public abstract class AbstractCharacter extends AbstractEntity {
     @Override
     public boolean onGround() {
         Coordinate tempcoords = getCoords();
-        tempcoords.setHeight(getCoords().getHeight()-1);
+        tempcoords.setHeight(getCoords().getHeight()-1, false);
         setCoords(tempcoords);
         
         boolean colission = horizontalColission(getOffsetX(), getOffsetY(), getOffsetX(), getOffsetY());
-        tempcoords.setHeight(getCoords().getHeight()+1);
+        tempcoords.setHeight(getCoords().getHeight()+1, false);
         setCoords(tempcoords);
         
         return (super.onGround() || colission);
