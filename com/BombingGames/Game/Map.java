@@ -16,7 +16,10 @@ public class Map {
      * The gravity constant in m/s^2
      */
     public static final float GRAVITY = 9.81f;
+    public final static boolean ENABLECHUNKSWITCH = true;
     
+    
+    private boolean newMap;
     
     /**in which direction is the world spinning? This is needed for the light engine.
      * WEST->SOUTH->EAST = 0
@@ -26,43 +29,43 @@ public class Map {
        **/
     private final int worldSpinDirection;
     
+    
+    //A list which has all current nine chunk coordinates in it.
+    private int[][] coordlist = new int[9][2];
+    
     private static int blocksX, blocksY, blocksZ;    
     private Block[][][] data;
     private float[][][][] cellOffset;
     
     private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
-    //A list which has all current nine chunk coordinates in it.
-    private int[][] coordlist = new int[9][2];
-    private boolean ENABLECHUNKSWITCH = true;
     
+  
     /**
      *
-     * @param load
      */
-    public Map(boolean load){
-        this(load,0);
+    public Map(boolean newMap){
+        this(newMap,0);
     }  
     
     /**
-     * Creates a map.
-     * @param load Should the map be generated or loaded from disk?
+     * Creates a map. Fill the map with fillMapWithBlocks(boolean load);
      * @param worldSpinDirection the angle of the "morning" (0° is left).
+     * @see fillMapWithBlocks(boolean load)
      */
-    public Map(boolean load, int worldSpinDirection) {
-        Log.debug("Creating the map...");
-        Log.debug("Should the Engine load a map: "+load);
-        
+    public Map(boolean newMap, int worldSpinDirection) {
+        Log.debug("Should the Engine generate a new map: "+newMap);
         this.worldSpinDirection = worldSpinDirection;
+        if (!newMap) Chunk.readMapInfo();
         
-        if (load) Chunk.readMapInfo();
         //save chunk size, which are now loaded
         blocksX = Chunk.getBlocksX()*3;
         blocksY = Chunk.getBlocksY()*3;
         blocksZ = Chunk.getBlocksZ();
-        data = new Block[blocksX][blocksY][blocksZ];
+        data = new Block[blocksX][blocksY][blocksZ];//create Array where teh data is stored
         
-        cellOffset = new float[blocksX][blocksY][blocksZ][3];
+        //set the offset for every cell
+        cellOffset = new float[blocksX][blocksY][blocksZ][];
         for (int x = 0; x < cellOffset.length; x++) {
             for (int y = 0; y < cellOffset[x].length; y++) {
                 for (int z = 0; z < cellOffset[x][y].length; z++) {
@@ -70,7 +73,15 @@ public class Map {
                 }
             }   
         }
-        
+    }
+    
+    /**
+     * Fill the data array of the map with blocks.
+     * @param load Should the map be generated or loaded from disk?
+     */
+    public void fillMapWithBlocks(){
+        Log.debug("Filling the map with blocks...");
+
         //Fill the nine chunks
         Chunk tempchunk;
         int chunkpos = 0;
@@ -79,12 +90,12 @@ public class Map {
             for (int x=-1; x < 2; x++){
                 coordlist[chunkpos][0] = x;
                 coordlist[chunkpos][1] = y;  
-                tempchunk = new Chunk(chunkpos, x, y, load);
+                tempchunk = new Chunk(chunkpos, x, y, newMap);
                 setChunk(chunkpos, tempchunk);
                 chunkpos++;
         }
        
-        Log.debug("...Finished creating the map");
+        Log.debug("...Finished filling the map");
     }
     
      /**
@@ -489,31 +500,6 @@ public class Map {
     public ArrayList<AbstractEntity> getEntitylist() {
         return entitylist;
     }
-    
-    /**
-     * Transforms absolute coordinates into realtive coordinates.
-     * @param absCoords the absolute absCoords
-     * @return  the relative absCoords
-     */
-    public int[] absToRelCoords(int[] absCoords){
-        int[] tmp = absCoords.clone();
-        tmp[0] -= getChunkCoords(0)[0] * Chunk.getBlocksX();
-        tmp[1] -= getChunkCoords(0)[1] * Chunk.getBlocksY();        
-        return tmp;
-    }
-    
-     /**
-     * Transforms absolute coordinates into relative coordinates. This only affects index 0 and 1.
-     * @param relCoords the relative coords
-     * @return the absolute coords
-     */
-    public int[] relToAbsCoords(int[] relCoords){
-        int[] tmp = relCoords.clone();
-        tmp[0] += getChunkCoords(0)[0] * Chunk.getBlocksX();
-        tmp[1] += getChunkCoords(0)[1] * Chunk.getBlocksY();
-        return tmp;
-
-    }
 
     /**
      *
@@ -538,5 +524,15 @@ public class Map {
      */
     public float[] getCellOffset(Coordinate coord) {
         return cellOffset[coord.getRelX()][coord.getRelY()][coord.getZ()];
+    }
+    
+    /**
+     * Set the offset in one cell. The z-offset is copied out of the coordinate.
+     * @param coordinate Pass the height with this object
+     * @param xOffset
+     * @param yOffset 
+     */
+    public void setCelloffset(Coordinate coord, float xOffset, float yOffset){
+        cellOffset[coord.getRelX()][coord.getRelY()][coord.getZSafe()] = new float[]{ xOffset, yOffset, coord.getCellOffsetZ() };
     }
 }

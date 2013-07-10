@@ -25,8 +25,10 @@ public class Coordinate {
      * @param relative   True when the coordiantes are relative to the currently loaded map. False when they are absolute.
      */
     public Coordinate(int x, int y, int z,final boolean relative) {
+    public Coordinate(int x, int y, int z, final boolean relative) {
         topleftX = Controller.getMap().getChunkCoords(0)[0];
         topleftY = Controller.getMap().getChunkCoords(0)[1];
+        
         if (relative){
             this.x = x;
             this.y = y;
@@ -47,6 +49,7 @@ public class Coordinate {
     public Coordinate(int x, int y, float height, final boolean relative) {
         topleftX = Controller.getMap().getChunkCoords(0)[0];
         topleftY = Controller.getMap().getChunkCoords(0)[1];
+        
         if (relative){
             this.x = x;
             this.y = y;
@@ -65,7 +68,7 @@ public class Coordinate {
      * @param chunkX The topleft chunk's x-coordinate
      * @param chunkY The topleft chunk's y-coordinate
      */
-    public Coordinate(int x, int y, int z, int chunkX,  int chunkY) {
+    protected Coordinate(int x, int y, int z, int chunkX,  int chunkY) {
         this.x = x;
         this.y = y;
         this.height = z*Block.GAMEDIMENSION;
