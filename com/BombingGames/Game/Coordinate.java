@@ -18,7 +18,7 @@ public class Coordinate {
     int topleftY;//topl left chunk Y coordinate
     
     /**
-     * Creates a coordiante at the current relative postion.
+     * Creates a coordiante. You can specify wether the given values are absolute or relative to the map.
      * @param x The x value.
      * @param y The y value.
      * @param z The z value.
@@ -38,9 +38,9 @@ public class Coordinate {
     }
     
      /**
-     * Creates a coordiante at the current relative postion.
-     * @param x
-     * @param y
+     * Creates a coordiante. You can specify wether the given values are absolute or relative to the map.
+     * @param x The x value.
+     * @param y The y value.
      * @param height The height of the Coordiante.
      * @param relative  True when the coordiantes are relative to the currently loaded map. False when they are absolute.
      */
@@ -57,8 +57,8 @@ public class Coordinate {
         this.height = height;
     }
     
-    /**
-     * Creates a coordiante with a specific top-left chunk. You should use the other constructors.
+   /**
+     * Creates a coordiante with a specific top-left chunk. You should use the other constructors. it should be easier than using this
      * @param x The x value.
      * @param y The y value.
      * @param z The z value.
