@@ -91,6 +91,7 @@ public class Controller {
      */
     public static void newMap(){
         map = new Map(!MainMenuState.shouldLoadMap());
+        map.fillMapWithBlocks();
     }
     
     /**

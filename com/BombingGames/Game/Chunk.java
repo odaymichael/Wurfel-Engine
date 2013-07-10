@@ -46,10 +46,10 @@ public class Chunk {
     * @param coordY 
     * @param loadmap load from HD(true) or generate new (false)?
     */
-    public Chunk(int pos, int coordX, int coordY, boolean loadmap){
+    public Chunk(int pos, int coordX, int coordY, boolean newMap){
         this();
 
-        if (loadmap) load(pos, coordX, coordY);
+        if (!newMap) load(pos, coordX, coordY);
             else generate(pos, coordX, coordY);
     }
     
@@ -79,8 +79,8 @@ public class Chunk {
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         data[x][y][0] = Block.getInstance(8);
-                        data[x][y][1] = Block.getInstance(9);
-                        data[x][y][2] = Block.getInstance(9);
+                        data[x][y][1] = Block.getInstance(9,0, new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, 1, true));
+                        data[x][y][2] = Block.getInstance(9,0, new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, 2, true));
                     }
                 
                 //mountain
@@ -233,7 +233,7 @@ public class Chunk {
                             data[x][y][z] = Block.getInstance(
                                         Integer.parseInt(line.substring(0,posdots)),
                                         Integer.parseInt(line.substring(posdots+1, posend)),
-                                        new Coordinate(x + coordX* blocksX, y + coordY * blocksY, z, coordX - pos / 3, coordY- pos % 3)
+                                        new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, z, true)
                                         );
                             x++;
                             line.delete(0,posend+1);

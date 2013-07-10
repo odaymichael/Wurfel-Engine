@@ -60,21 +60,6 @@ public class Coordinate {
         this.height = height;
     }
     
-   /**
-     * Creates a coordiante with a specific top-left chunk. You should use the other constructors. it should be easier than using this
-     * @param x The x value.
-     * @param y The y value.
-     * @param z The z value.
-     * @param chunkX The topleft chunk's x-coordinate
-     * @param chunkY The topleft chunk's y-coordinate
-     */
-    protected Coordinate(int x, int y, int z, int chunkX,  int chunkY) {
-        this.x = x;
-        this.y = y;
-        this.height = z*Block.GAMEDIMENSION;
-        topleftX = chunkX;
-        topleftY = chunkY;
-    }
     
     /**
      *Returns a coordinate pointing to the absolute(?) center of the map. Height is half the map's height.
