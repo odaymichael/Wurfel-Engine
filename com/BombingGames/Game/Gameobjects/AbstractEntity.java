@@ -72,11 +72,10 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     @Override
     public int getDepth(Coordinate coords){
         return (int) (
-            DIMENSION * coords.getRelY()
-            + (coords.getRelY() % 2) * DIM2
+            coords.getRelY() * (DIM4+1)//Y
             + getOffsetY()
-            + coords.getHeight()
-            + (getDimensionY() - 1) * DIM4
+            + coords.getHeight() / Math.sqrt(2) /2//Z
+            + (getDimensionY() - 1) * DIM4 / Math.sqrt(2) /2
         );
     }
     
@@ -137,7 +136,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      */
    @Override
     public int getScreenPosY(Coordinate coords) {
-        return coords.getRelY() * DIM4 //x-coordinate * the tile's size
+        return coords.getRelY() * DIM4 //y-coordinate * the tile's size
                + (int) (offsetY / 2) //add the objects position inside this coordinate
                - (int) (coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
     }

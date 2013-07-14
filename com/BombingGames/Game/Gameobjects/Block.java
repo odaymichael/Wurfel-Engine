@@ -310,10 +310,10 @@ public class Block extends GameObject {
     @Override
     public int getDepth(Coordinate coords){
         return (int) (
-            DIMENSION * coords.getRelY()
-            + (coords.getRelY() % 2) * DIM2
+            coords.getRelY() *(Block.DIM4+1)//Y
             + coords.getCellOffset()[1]
-            + coords.getHeight()
+            + coords.getZ()*Block.DIM4//Z
+            + coords.getCellOffset()[2] / Math.sqrt(2) /2
             + (getDimensionY() - 1) * DIM4
         );
     }
