@@ -16,6 +16,9 @@ public class Map {
      * The gravity constant in m/s^2
      */
     public static final float GRAVITY = 9.81f;
+    /**
+     *
+     */
     public final static boolean ENABLECHUNKSWITCH = true;
     
     
@@ -43,6 +46,7 @@ public class Map {
   
     /**
      *
+     * @param newMap 
      */
     public Map(boolean newMap){
         this(newMap,0);
@@ -50,6 +54,7 @@ public class Map {
     
     /**
      * Creates a map. Fill the map with fillMapWithBlocks(boolean load);
+     * @param newMap 
      * @param worldSpinDirection the angle of the "morning" (0° is left).
      * @see fillMapWithBlocks(boolean load)
      */
@@ -80,7 +85,6 @@ public class Map {
     
     /**
      * Fill the data array of the map with blocks.
-     * @param load Should the map be generated or loaded from disk?
      */
     public void fillMapWithBlocks(){
         Log.debug("Filling the map with blocks...");
@@ -527,15 +531,15 @@ public class Map {
      */
     public float[] getCellOffset(Coordinate coord) {
         return cellOffset[coord.getRelX()][coord.getRelY()][coord.getZ()];
-    }
+    }   
     
     /**
-     * Set the offset in one cell. The z-offset is copied out of the coordinate.
-     * @param coordinate Pass the height with this object
-     * @param xOffset
-     * @param yOffset 
+     *Set the offset in one cell. 
+     * @param coord the cell
+     * @param field 0 = X, 1 = y, 2 = z
+     * @param value the value you want to set the field
      */
-    public void setCelloffset(Coordinate coord, float xOffset, float yOffset){
-        cellOffset[coord.getRelX()][coord.getRelY()][coord.getZSafe()] = new float[]{ xOffset, yOffset, coord.getCellOffsetZ() };
+    public void setCelloffset(Coordinate coord, int field, float value){
+        cellOffset[coord.getRelX()][coord.getRelY()][coord.getZSafe()][field] = value;
     }
 }

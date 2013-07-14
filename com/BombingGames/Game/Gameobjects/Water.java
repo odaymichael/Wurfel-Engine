@@ -12,6 +12,11 @@ import com.BombingGames.Game.Coordinate;
  */
 public class Water extends Block implements IsSelfAware{
     public final int waveAmplitude = 40;
+    private static float currentwave;
+    private static float wavespeed = 1/1000f;
+    
+    private float startvalue;
+    
     Coordinate coords;
         
     public Water(int id, Coordinate coords) {
@@ -20,8 +25,8 @@ public class Water extends Block implements IsSelfAware{
         
         if (coords == null) throw new NullPointerException("No coordinates given to ExplosiveBarrel during creation."); 
         
-        coords.setHeight((float) (coords.getHeight() + Math.random()*waveAmplitude - waveAmplitude), true);
         this.coords = coords;
+        startvalue = (float) (coords.getCellOffset()[2] + Math.random()*waveAmplitude - waveAmplitude);
        
     }
 
@@ -33,6 +38,16 @@ public class Water extends Block implements IsSelfAware{
     @Override
     public void setCoords(Coordinate coords) {
         this.coords = coords;
+    }
+
+    @Override
+    public void update(int delta) {
+        currentwave += delta*wavespeed;
+        coords.setCellOffsetZ(startvalue + (float) (Math.sin(currentwave)*waveAmplitude));
+    }
+    
+    public static void staticUpdate(int delta){
+    
     }
     
     

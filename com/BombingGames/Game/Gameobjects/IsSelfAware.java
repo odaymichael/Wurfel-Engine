@@ -18,5 +18,4 @@ public interface IsSelfAware{
      * @param coords 
      */
     public void setCoords(Coordinate coords);
-    
 }

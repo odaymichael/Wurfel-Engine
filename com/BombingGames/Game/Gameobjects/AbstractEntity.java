@@ -93,36 +93,13 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     
     
     
-//    public int[] getAbsCoords() {
-//        int z = (int) (height/GAMEDIMENSION);
-//        if (z >= Map.getBlocksZ()) z = Map.getBlocksZ()-1;
-//        return new int[]{coords[0], coords[1], z};
-//    }
-
-//    @Override
-//    public void setAbsCoords(int[] coords) {
-//        this.coords = new int[]{coords[0], coords[1]};
-//        if (coords.length >= 3) this.height = coords[2]*GAMEDIMENSION;
-//    }
-//
-//    @Override
-//    public int[] getRelCoords() {
-//        return Controller.getMap().absToRelCoords(getAbsCoords());
-//    }
-//    
-//    @Override
-//    public void setRelCoords(int[] relCoords) {
-//        this.coords = Controller.getMap().relToAbsCoords(relCoords);
-//        if (coords.length >= 3) this.height = coords[2]*GAMEDIMENSION;
-//    }
-//
-//    @Override
-//    public void addVector(int[] coords) {
-//        height += coords[2];
-//        setAbsCoords(new int[]{getAbsCoords()[0]+coords[0], getAbsCoords()[1]+coords[1]});
-//    }
+    public void setHeight(float height) {
+        coords.setHeight(height);
+    }
     
-        
+    
+    
+  
     /**
      * Is the entity laying/standing on the ground?
      * @return true when on the ground

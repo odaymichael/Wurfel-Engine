@@ -21,17 +21,21 @@ public abstract class GameObject {
     public static final int DIM4 = DIMENSION / 4;
     /**the max. amount of different object types*/
     public static final int OBJECTTYPESCOUNT = 99;
+    
+   /** A list containing the offset of the objects. */
+    public static final int[][][] OFFSETLIST = new int[OBJECTTYPESCOUNT][10][2];
+    
     /**The real game world dimension in pixel. Usually the use of DIMENSION is fine because of the map format every coordinate center is straight.
         * The value is DIMENSION/sqrt(2).
         */
-    public static int GAMEDIMENSION = (int) (DIMENSION / Math.sqrt(2));
+    public static final int GAMEDIMENSION = (int) (DIMENSION / Math.sqrt(2));
 
-    /** A list containing the offset of the objects. */
-    public static final int[][][] OFFSETLIST = new int[OBJECTTYPESCOUNT][10][2];
     
      /**Containts the names of the objects. index=id*/
     public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT];   
     
+
+            
     /**The sprite image which contains every object image*/
     private static PackedSpriteSheet spritesheet;
     
@@ -100,6 +104,7 @@ public abstract class GameObject {
      * @param delta time since last update
      */
     public abstract void update(int delta);
+    
     
     /**
      *

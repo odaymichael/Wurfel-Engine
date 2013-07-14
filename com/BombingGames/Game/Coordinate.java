@@ -134,23 +134,25 @@ public class Coordinate {
     }
     
     /**
-     *
+     * Geht the height (z-value) of the coordinate.
      * @return
      */
     public float getHeight(){
         return height;
     }
 
-     /**
-     *Calculates the offset in vertical direction in this cell.
-     * @return
+    
+   /**
+     *
+     * @return an array with the offset of the cell
      */
-    public float getCellOffsetZ(){
-        return height - (int) (height/Block.GAMEDIMENSION)*Block.GAMEDIMENSION;
+    public float[] getCellOffset(){
+        return Controller.getMap().getCellOffset(this);
     }
+ 
     
     /**
-     *
+     *Set the coordiantes X component.
      * @param x
      */
     public void setRelX(int x){
@@ -158,7 +160,7 @@ public class Coordinate {
     }
     
     /**
-     *
+     *Set the coordiantes Y component.
      * @param y
      */
     public void setRelY(int y){
@@ -166,7 +168,7 @@ public class Coordinate {
     }
     
     /**
-     *
+     *Set the coordiantes Z component. It will be transversed into a float value (height).
      * @param z
      */
     public void setZ(int z){
@@ -174,13 +176,20 @@ public class Coordinate {
     }
     
     /**
-     *
+     * 
      * @param height
-     * @param copyToMap Set true when the height change should also effect the map where the coordiante is pointing at.
      */
-    public void setHeight(float height, boolean copyToMap){
+    public void setHeight(float height){
         this.height = height;
-        if (copyToMap) Controller.getMap().setCelloffset(this, Block.DIM2, Block.DIM2);
+        
+    }
+    
+    /**
+     *Set the vertical offset in the cell, where the coordiante is pointing at.
+     * @param height
+     */
+    public void setCellOffsetZ(float height){
+        Controller.getMap().setCelloffset(this, 2, height);
     }
     
     /**
@@ -230,13 +239,7 @@ public class Coordinate {
         return Controller.getMapData(this);
     }
     
-    /**
-     *
-     * @return
-     */
-    public float[] getCellOffset(){
-        return Controller.getMap().getCellOffset(this);
-    }
+
     
     /**
      *
