@@ -3,6 +3,7 @@ package com.BombingGames.Game;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Gameobjects.GameObject;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.MainMenu.MainMenuState;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class Controller {
     public static LightEngine lightEngine;
     private static Map map;
     private static boolean recalcRequested;
+        
     private AbstractCharacter player;
     private View view;
     private ArrayList<Camera> cameras = new ArrayList();
@@ -64,6 +66,10 @@ public class Controller {
                 if (cameras.get(0).getBottomBorder() >= Map.getBlocksY()-1)
                 map.setCenter(7);
         }
+        
+        //update every static update method
+        GameObject.updateStaticUpdates(delta);
+        
         //update every block on the map
         Block[][][] mapdata = map.getData();
         for (int x=0; x < Map.getBlocksX(); x++)

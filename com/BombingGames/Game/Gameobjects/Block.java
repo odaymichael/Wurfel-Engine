@@ -305,6 +305,7 @@ public class Block extends GameObject {
     @Override
     public void update(int delta) {
     }
+    
 
     @Override
     public int getDepth(Coordinate coords){

@@ -11,9 +11,9 @@ import com.BombingGames.Game.Coordinate;
  * @author Benedikt Vogler
  */
 public class Water extends Block implements IsSelfAware{
-    public final int waveAmplitude = 40;
+    public static int waveAmplitude = 30;
     private static float currentwave;
-    private static float wavespeed = 1/1000f;
+    private static float wavespeed = 1/500f;
     
     private float startvalue;
     
@@ -42,12 +42,11 @@ public class Water extends Block implements IsSelfAware{
 
     @Override
     public void update(int delta) {
-        currentwave += delta*wavespeed;
         coords.setCellOffsetZ(startvalue + (float) (Math.sin(currentwave)*waveAmplitude));
     }
     
     public static void staticUpdate(int delta){
-    
+        currentwave += delta*wavespeed;
     }
     
     

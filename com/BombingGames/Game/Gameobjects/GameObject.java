@@ -105,6 +105,14 @@ public abstract class GameObject {
      */
     public abstract void update(int delta);
     
+    /**
+     * Place you static update Methods here.
+     * @param delta 
+     */
+    public static void updateStaticUpdates(int delta){
+        Water.staticUpdate(delta);
+    }
+        
     
     /**
      *
@@ -323,6 +331,14 @@ public abstract class GameObject {
     public int getValue() {
         return value;
     }
+    
+        /**
+     * 
+     * @return
+     */
+    public int getDimensionY() {
+        return dimensionY;
+    }
 
     /**
      * Returns true, when set as hidden. Hidden objects are not rendered even when they are visible ("visible" by the meaning of the raytracing).
@@ -414,11 +430,5 @@ public abstract class GameObject {
         this.dimensionY = dimensionY;
     }
 
-    /**
-     * 
-     * @return
-     */
-    public int getDimensionY() {
-        return dimensionY;
-    }
+
 }
