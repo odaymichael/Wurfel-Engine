@@ -110,7 +110,7 @@ public abstract class GameObject {
      * @param delta 
      */
     public static void updateStaticUpdates(int delta){
-        Water.staticUpdate(delta);
+        Sea.staticUpdate(delta);
     }
         
     
