@@ -30,17 +30,17 @@ public class Map {
       * EAST->NORTH->WEST = -180
        *NORTH->EAST->SOUT = -270
        **/
-    private final int worldSpinDirection;
+    private static int worldSpinDirection;
     
     
     //A list which has all current nine chunk coordinates in it.
-    private int[][] coordlist = new int[9][2];
+    private static int[][] coordlist = new int[9][2];
     
     private static int blocksX, blocksY, blocksZ;    
-    private Block[][][] data;
-    private float[][][][] cellOffset;
+    private static Block[][][] data;
+    private static float[][][][] cellOffset;
     
-    private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
+    private static ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
     
   
@@ -61,7 +61,7 @@ public class Map {
     public Map(boolean newMap, int worldSpinDirection) {
         Log.debug("Should the Engine generate a new map: "+newMap);
         this.newMap = newMap;
-        this.worldSpinDirection = worldSpinDirection;
+        Map.worldSpinDirection = worldSpinDirection;
         
         
         if (!newMap) Chunk.readMapInfo();
@@ -360,7 +360,7 @@ public class Map {
      * @param z position
      * @return the single renderobject you wanted
      */
-    public Block getData(int x, int y, int z){
+    public static Block getData(int x, int y, int z){
         return data[x][y][z];  
     }
     
@@ -374,7 +374,7 @@ public class Map {
     }
     
     /**
-     * Set a renderobject at a specific coordinate
+     * Set a block at a specific coordinate.
      * @param x position
      * @param y position
      * @param z position
@@ -385,7 +385,7 @@ public class Map {
     }
     
     /**
-     * 
+     * Set a block at a specific coordinate.
      * @param coords
      * @param block
      */
@@ -477,28 +477,7 @@ public class Map {
         Controller.requestRecalc();
     }
     
-    /**
-     * Calculates the light level based on the sun shining straight from the top
-     */
-    public void calc_light(){
-        for (int x=0; x < blocksX; x++){
-            for (int y=0; y < blocksY; y++) {
-                
-                //find top most renderobject
-                int topmost = Chunk.getBlocksZ()-1;
-                while (data[x][y][topmost].isTransparent() == true && topmost > 0 ){
-                    topmost--;
-                }
-                
-                if (topmost>0) {
-                    //start at topmost renderobject and go down. Every step make it a bit darker
-                    for (int level = topmost; level > -1; level--){
-                        data[x][y][level].setLightlevel(63 + 64 * level / topmost);
-                    }
-                }
-            }
-        }         
-    }
+   
     
     /**
      * Returns the entitylist
@@ -512,7 +491,7 @@ public class Map {
      *
      * @return
      */
-    public int getWorldSpinDirection() {
+    public static int getWorldSpinDirection() {
         return worldSpinDirection;
     }
     
@@ -520,7 +499,7 @@ public class Map {
      *
      * @return
      */
-    public float[][][][] getCellOffset() {
+    public static float[][][][] getCellOffset() {
         return cellOffset;
     }
     
@@ -529,7 +508,7 @@ public class Map {
      * @param coord
      * @return
      */
-    public float[] getCellOffset(Coordinate coord) {
+    public static float[] getCellOffset(Coordinate coord) {
         return cellOffset[coord.getRelX()][coord.getRelY()][coord.getZ()];
     }   
     
@@ -539,7 +518,7 @@ public class Map {
      * @param field 0 = X, 1 = y, 2 = z
      * @param value the value you want to set the field
      */
-    public void setCelloffset(Coordinate coord, int field, float value){
+    public static void setCelloffset(Coordinate coord, int field, float value){
         cellOffset[coord.getRelX()][coord.getRelY()][coord.getZSafe()][field] = value;
     }
 }

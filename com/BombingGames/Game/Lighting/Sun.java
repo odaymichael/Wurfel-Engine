@@ -1,6 +1,6 @@
 package com.BombingGames.Game.Lighting;
 
-import com.BombingGames.Game.Controller;
+import com.BombingGames.Game.Map;
 import org.newdawn.slick.Color;
 
 /**
@@ -19,7 +19,7 @@ public class Sun {
      *
      */
     public Sun() {
-        longPos = -Controller.getMap().getWorldSpinDirection();
+        longPos = -Map.getWorldSpinDirection();
     }
     
     
@@ -29,7 +29,7 @@ public class Sun {
      */
     public void update(int delta){
         longPos += LONGSPEED*delta;
-        latPos = (float) (90 - maxAngle*Math.sin((longPos+Controller.getMap().getWorldSpinDirection())*Math.PI/180));
+        latPos = (float) (90 - maxAngle*Math.sin((longPos+ Map.getWorldSpinDirection())*Math.PI/180));
         
         if (latPos >= 360) latPos=0;
         if (longPos >= 360) longPos=0;

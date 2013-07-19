@@ -255,7 +255,7 @@ public class Controller {
     public void recalcIfRequested(Camera camera){
         if (recalcRequested) {
             camera.raytracing();
-            map.calc_light();
+            LightEngine.calcSimpleLight();
             if (minimap != null) minimap.update();
             recalcRequested = false;
         }

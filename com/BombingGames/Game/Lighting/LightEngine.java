@@ -1,5 +1,7 @@
 package com.BombingGames.Game.Lighting;
 
+import com.BombingGames.Game.Chunk;
+import com.BombingGames.Game.Map;
 import org.newdawn.slick.Color;
 
 /**
@@ -157,5 +159,28 @@ public class LightEngine {
      */
     public Color getLightColor(){
         return sun.getColor();
+    }
+    
+     /**
+     * Calculates the light level based on the sun shining straight from the top
+     */
+    public static void calcSimpleLight(){
+        for (int x=0; x < Map.getBlocksX(); x++){
+            for (int y=0; y < Map.getBlocksY(); y++) {
+                
+                //find top most renderobject
+                int topmost = Chunk.getBlocksZ()-1;
+                while (Map.getData(x,y,topmost).isTransparent() == true && topmost > 0 ){
+                    topmost--;
+                }
+                
+                if (topmost>0) {
+                    //start at topmost renderobject and go down. Every step make it a bit darker
+                    for (int level = topmost; level > -1; level--){
+                        Map.getData(x,y,level).setLightlevel(63 + 64 * level / topmost);
+                    }
+                }
+            }
+        }         
     }
 }
