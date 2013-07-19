@@ -98,7 +98,7 @@ public class Map {
                 coordlist[chunkpos][0] = x;
                 coordlist[chunkpos][1] = y;  
                 tempchunk = new Chunk(chunkpos, x, y, newMap);
-                setChunk(chunkpos, tempchunk);
+                insertChunk(chunkpos, tempchunk);
                 chunkpos++;
         }
        
@@ -181,10 +181,10 @@ public class Map {
                 coordlist[pos][1] += (newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0));
 
                 if (isMovingChunkPossible(pos, newmiddle)){
-                    setChunk(pos, getChunk(data_copy, pos - 4 + newmiddle));
+                    insertChunk(pos, getChunk(data_copy, pos - 4 + newmiddle));
                 } else {
 
-                    setChunk(
+                    insertChunk(
                             pos,
                             new Chunk(pos,
                                 coordlist[pos][0],
@@ -257,13 +257,13 @@ public class Map {
     /**
      * Inserts a chunk in the map.
      * @param cellOffset The position in the grid
-     * @param newchunk The chunk you want to insert
+     * @param newChunk The chunk you want to insert
      */
-    private void setChunk(int pos, Chunk newchunk) {
+    private void insertChunk(int pos, Chunk newChunk) {
         for (int x=0;x < Chunk.getBlocksX(); x++)
             for (int y=0;y < Chunk.getBlocksY();y++) {
                 System.arraycopy(
-                    newchunk.getData()[x][y],
+                    newChunk.getData()[x][y],
                     0,
                     data[x+ Chunk.getBlocksX()*(pos%3)][y+ Chunk.getBlocksY()*Math.abs(pos/3)],
                     0,
