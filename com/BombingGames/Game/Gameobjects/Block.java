@@ -4,7 +4,6 @@ import com.BombingGames.Game.Controller;
 import com.BombingGames.Game.Coordinate;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.Game.View;
 import org.lwjgl.opengl.GL11;

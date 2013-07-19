@@ -170,7 +170,7 @@ public class LightEngine {
                 
                 //find top most renderobject
                 int topmost = Chunk.getBlocksZ()-1;
-                while (Map.getData(x,y,topmost).isTransparent() == true && topmost > 0 ){
+                while (Map.getData(x,y,topmost).isTransparent() && topmost > 0 ){
                     topmost--;
                 }
                 
