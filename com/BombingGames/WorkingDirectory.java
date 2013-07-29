@@ -18,7 +18,7 @@ class WorkingDirectory {
         case windows:
                 String applicationData = System.getenv("APPDATA");
                 if (applicationData != null)
-                        workingDirectory = new File(applicationData, "." + applicationName + '/');
+                        workingDirectory = new File(applicationData, applicationName + '/');
                 else
                         workingDirectory = new File(userHome, '.' + applicationName + '/');
                 break;
