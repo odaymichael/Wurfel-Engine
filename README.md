@@ -7,16 +7,13 @@ The name comes from the german word for cube (Würfel).
 ![Wurfelengine logo](https://f.cloud.github.com/assets/1787847/870933/750c2e70-f83a-11e2-8de3-4c19958e1801.png)
 
 
-The Goal
---------
+### The Goal
 
 1. Provide a normal open source game engine because open source games are always geek games (often in ASCII)
 2. An easy engine for strategy or adventure games
 3. Minecraft is hip, so are blocks.
 
-Features
---------
-
+### Features
 
     Open Source:
         Well commented
