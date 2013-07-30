@@ -12,19 +12,6 @@ public class Moon extends GlobalLightSource{
      *Create a moon.
      */
     public Moon() {
-        super(-Map.getWorldSpinDirection(), 180, new Color(0.8f,0.8f,1f), 90);
-    }
-    
-    
-    
-    /**
-     *
-     * @param delta
-     */
-    @Override
-    public void update(int delta){
-        super.update(delta);
-        //setColor(new Color(127 + (int) (getBrightness() * 128), 255, 255));
-        
+        super(180-Map.getWorldSpinDirection(), 0, new Color(0.4f,0.6f,1f), 60);
     }
 }

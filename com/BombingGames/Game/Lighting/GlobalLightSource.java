@@ -9,9 +9,9 @@ import org.newdawn.slick.Color;
  */
 public class GlobalLightSource {
     /**
-     *
+     *The higher the value the faster/shorter is the day.
      */
-    protected final float LONGSPEED = 0;
+    protected final float LONGSPEED = 1/128f;
     private float brightness; //should raise at morning and fall at night but stay over teh day
     private Color color; //the color of the light
     private float latPos;
@@ -117,32 +117,19 @@ public class GlobalLightSource {
      * @param delta
      */
     public void update(int delta) {
+        //automove
         if (LONGSPEED != 0) {
             longPos += LONGSPEED * delta;
-            latPos = (float) (90 - amplitude * Math.sin((longPos + Map.getWorldSpinDirection()) * Math.PI / 180));
+            latPos = (float) (amplitude * Math.sin((longPos + Map.getWorldSpinDirection()) * Math.PI / 180));
         }
-                
-        if (longPos >= 360) {
-            longPos -= 360;
-        }else if (longPos < 0) longPos += 360;
-        
-        if (latPos >= 360) {
-            latPos -= 360;
-        } else if (latPos < 0) latPos += 360; 
-        
-        //sunLat = container.getInput().getMouseY()*360/container.getHeight();
-        //sunLong = container.getInput().getMouseX()*360/container.getWidth();
-        
-        //morning or evening
-        if ((latPos < (amplitude/ 2) || latPos > 360-(amplitude/ 2)) || (latPos > 180-(amplitude/ 2) &&  latPos < 180+(amplitude/ 2)))
-            brightness = (float) (0.5f + 0.5f*Math.sin(latPos * Math.PI/(amplitude*2)));
-        else //day
-            if (latPos > (amplitude/ 2) &&  latPos < 180-(amplitude/ 2))
-                brightness = 1;
-            else
-                brightness = 0;//night
-        
-        
+            
+        //brightness calculation
+        if (latPos > amplitude/2 && latPos < 180)
+                brightness = 1;//day
+        else if (latPos < -amplitude/2)
+                 brightness = 0;//night
+            else if (latPos < amplitude/2) 
+                    brightness = (float) (0.5f + 0.5f*Math.sin(latPos * Math.PI/amplitude)); //morning   & evening
         
 
         if (brightness > 1) brightness=1;
@@ -154,11 +141,12 @@ public class GlobalLightSource {
         //I_a = (int) ((90-latPos)*0.1f);
     }
 
+
+    /**
+     * The light color has an intensity which can be get by this function. It adds every component and then divides by three.
+     * @return 
+     */
     public float getPower() {
         return (color.r + color.g +color.b)/3;
-    }
-    
-    
- 
-    
+    }  
 }

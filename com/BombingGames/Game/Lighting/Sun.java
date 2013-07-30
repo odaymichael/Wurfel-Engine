@@ -13,6 +13,6 @@ public class Sun extends GlobalLightSource {
      *
      */
     public Sun() {
-        super(-Map.getWorldSpinDirection(), 0, new Color(255, 255, 255), 90);
+        super(-Map.getWorldSpinDirection(), 0, new Color(255, 255, 255), 60);
     }
 }

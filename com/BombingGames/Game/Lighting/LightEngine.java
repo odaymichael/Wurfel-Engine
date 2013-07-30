@@ -13,7 +13,7 @@ public class LightEngine {
     /**
      * The Version of the light engine.
      */
-    public static final String Version = "1.0";
+    public static final String Version = "1.0.1";
     
    private boolean renderPosition = false;
     private final int posX = 250;
@@ -64,7 +64,7 @@ public class LightEngine {
         
         
         //light intensitiy of enviroment. the normal level. value between 0 and 255
-        int I_a = (int) (ambientBaseLevel + sun.getBrightness()*255 + sun.getPower()*moon.getBrightness()*255);
+        int I_a = (int) (ambientBaseLevel + sun.getBrightness()*255 + moon.getBrightness()*255);
         I_ambient = (int) (I_a * k_ambient);
                 
         //diffusion
@@ -149,7 +149,10 @@ public class LightEngine {
      * @return
      */
     public Color getLightColor(){
-        return sun.getColor().multiply(moon.getColor());
+        Color tmp = sun.getColor().scaleCopy(sun.getBrightness());
+        tmp = tmp.addToCopy(moon.getColor().scaleCopy(moon.getBrightness()));
+        tmp.a = 1;
+        return tmp;
     }
     
      /**
@@ -203,7 +206,7 @@ public class LightEngine {
      *
      * @param renderPosition
      */
-    public void setRenderPosition(boolean renderPosition) {
+    public void RenderData(boolean renderPosition) {
         this.renderPosition = renderPosition;
     }
     
@@ -254,9 +257,11 @@ public class LightEngine {
              );
 
             g.setColor(Color.white);
-            g.drawString("Lat: "+sun.getLatPos()+" Long: "+sun.getLongPos(), 400, 100);
-            g.drawString("BrightnessSun: "+sun.getBrightness(), 400, 110);
-            g.drawString("BrightnessMoon: "+moon.getBrightness(), 400, 120);
+            g.drawString("Lat: "+sun.getLatPos(), 400, 110);
+            g.drawString("Long: "+sun.getLongPos(), 400, 100);
+            g.drawString("BrightnessSun: "+sun.getBrightness(), 400, 120);
+            g.drawString("BrightnessMoon: "+moon.getBrightness(), 400, 130);
+            g.drawString("Long: "+getLightColor().toString(), 400, 140);
         }
         
         //info bars
