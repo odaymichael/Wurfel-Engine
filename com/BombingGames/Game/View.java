@@ -59,6 +59,9 @@ public class View {
         //scale to fit
         g.scale(equalizationScale, equalizationScale);
         
+        
+        Controller.getLightengine().render(g);
+        
         if (controller.getMinimap() != null)
             controller.getMinimap().render(g, this); 
         
