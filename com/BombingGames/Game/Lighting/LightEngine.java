@@ -262,38 +262,38 @@ public class LightEngine {
             g.drawString("BrightnessSun: "+sun.getBrightness(), 400, 120);
             g.drawString("BrightnessMoon: "+moon.getBrightness(), 400, 130);
             g.drawString("Long: "+getLightColor().toString(), 400, 140);
-        }
+            
+             //info bars
         
-        //info bars
-        
-        //left side
-        g.setColor(Color.white);
-        g.drawString("Left:"+I_ambient+"+"+I_diff0+"+"+ I_spec0+"="+I_0, I_0, 100);
-        g.setColor(Color.green);
-        g.fillRect(0, 100, I_ambient, 10);
-        g.setColor(Color.red);
-        g.fillRect(I_ambient, 100, I_diff0, 8);
-        g.setColor(Color.blue);
-        g.fillRect(I_ambient+I_diff0, 100, I_spec0, 6);
+            //left side
+            g.setColor(Color.white);
+            g.drawString("Left:"+I_ambient+"+"+I_diff0+"+"+ I_spec0+"="+I_0, I_0, 100);
+            g.setColor(Color.green);
+            g.fillRect(0, 100, I_ambient, 10);
+            g.setColor(Color.red);
+            g.fillRect(I_ambient, 100, I_diff0, 8);
+            g.setColor(Color.blue);
+            g.fillRect(I_ambient+I_diff0, 100, I_spec0, 6);
 
-        //top side
-        g.setColor(Color.white);
-        g.drawString("Top:"+I_ambient+"+"+I_diff1+"+"+ I_spec1+"="+I_1, I_1, 120);
-        g.setColor(Color.green);
-        g.fillRect(0, 120, I_ambient, 10);
-        g.setColor(Color.red);
-        g.fillRect(I_ambient, 120, I_diff1, 8);
-        g.setColor(Color.blue);
-        g.fillRect(I_ambient+I_diff1, 120, I_spec1, 6);
-        
-        //right side
-        g.setColor(Color.white);
-        g.drawString("Right:"+I_ambient+"+"+I_diff2+"+"+ I_spec2+"="+I_2, I_2, 140);
-        g.setColor(Color.green);
-        g.fillRect(0, 140, I_ambient, 10);
-        g.setColor(Color.red);
-        g.fillRect(I_ambient, 140, I_diff2, 8);
-        g.setColor(Color.blue);
-        g.fillRect(I_ambient+I_diff2, 140, I_spec2, 6);
+            //top side
+            g.setColor(Color.white);
+            g.drawString("Top:"+I_ambient+"+"+I_diff1+"+"+ I_spec1+"="+I_1, I_1, 120);
+            g.setColor(Color.green);
+            g.fillRect(0, 120, I_ambient, 10);
+            g.setColor(Color.red);
+            g.fillRect(I_ambient, 120, I_diff1, 8);
+            g.setColor(Color.blue);
+            g.fillRect(I_ambient+I_diff1, 120, I_spec1, 6);
+
+            //right side
+            g.setColor(Color.white);
+            g.drawString("Right:"+I_ambient+"+"+I_diff2+"+"+ I_spec2+"="+I_2, I_2, 140);
+            g.setColor(Color.green);
+            g.fillRect(0, 140, I_ambient, 10);
+            g.setColor(Color.red);
+            g.fillRect(I_ambient, 140, I_diff2, 8);
+            g.setColor(Color.blue);
+            g.fillRect(I_ambient+I_diff2, 140, I_spec2, 6);
+        }
     }
 }
