@@ -3,6 +3,7 @@ package com.BombingGames.Game.Lighting;
 import com.BombingGames.Game.Chunk;
 import com.BombingGames.Game.Map;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 /**
  *This Light engine calculates phong shading for three normals over the day.
@@ -12,7 +13,11 @@ public class LightEngine {
     /**
      * The Version of the light engine.
      */
-    public static final String Version = "0.1.3";
+    public static final String Version = "1.0";
+    
+   private boolean renderPosition = false;
+    private final int posX = 250;
+    private final int posY = 250;
     
     //ambient light
     private final int ambientBaseLevel = 40;//value 0-255
@@ -26,8 +31,8 @@ public class LightEngine {
     private int I_diff2;
     
     //specular light
-    private int n_spec = 10; // ... konstanter Faktor zur Beschreibung der Oberflächenbeschaffenheit (rau kleiner 32, glatt größer 32,  wäre ein perfekter Spiegel)
-    private int k_specular = 25; //empirisch bestimmter Reflexionsfaktor für spiegelnde Komponente der Reflexion
+    private int n_spec = 8; // ... konstanter Faktor zur Beschreibung der Oberflächenbeschaffenheit (rau kleiner 32, glatt größer 32,  wäre ein perfekter Spiegel)
+    private int k_specular = 8; //empirisch bestimmter Reflexionsfaktor für spiegelnde Komponente der Reflexion
     private int I_spec0;
     private int I_spec1;
     private int I_spec2;
@@ -58,76 +63,62 @@ public class LightEngine {
         moon.update(delta);
         
         
-        int I_a; //light intensitiy of enviroment. the normal level. value between 0 and 255
-        I_a = (int) (ambientBaseLevel + sun.getBrightness()*255 + moon.getBrightness()*255);
+        //light intensitiy of enviroment. the normal level. value between 0 and 255
+        int I_a = (int) (ambientBaseLevel + sun.getBrightness()*255 + sun.getPower()*moon.getBrightness()*255);
         I_ambient = (int) (I_a * k_ambient);
                 
         //diffusion
-        I_diff0 = (int) (sun.getBrightness() * k_diff * Math.cos(((sun.getLatPos()-90)*Math.PI)/180) * Math.cos(((sun.getLongPos()-45)*Math.PI)/180));  
-        I_diff0 +=(int) (moon.getBrightness() * k_diff * Math.cos(((moon.getLatPos()-90)*Math.PI)/180) * Math.cos(((moon.getLongPos()-45)*Math.PI)/180));
+        I_diff0 = (int) (sun.getBrightness() *  k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180) * Math.cos(((sun.getLongPos()-45)*Math.PI)/180));  
+        I_diff0 +=(int) (moon.getBrightness() * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180) * Math.cos(((moon.getLongPos()-45)*Math.PI)/180));
         
-        I_diff1 = (int) (sun.getBrightness() * k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180));     
-        I_diff1 += (int) (moon.getBrightness() * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180));   
+        I_diff1 = (int) (sun.getBrightness() * k_diff * Math.cos(((sun.getLatPos()-90)*Math.PI)/180));     
+        I_diff1 += (int) (moon.getBrightness() * k_diff * Math.cos(((moon.getLatPos()-90)*Math.PI)/180));   
         
-        I_diff2 = (int) (sun.getBrightness() * k_diff * Math.cos(((sun.getLatPos()-90)*Math.PI)/180)*Math.cos(((sun.getLongPos()-135)*Math.PI)/180));
-        I_diff2 += (int) (moon.getBrightness() * k_diff * Math.cos(((moon.getLatPos()-90)*Math.PI)/180)*Math.cos(((moon.getLongPos()-135)*Math.PI)/180));
+        I_diff2 = (int) (sun.getBrightness() * k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180)*Math.cos(((sun.getLongPos()-135)*Math.PI)/180));
+        I_diff2 += (int) (moon.getBrightness()  * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180)*Math.cos(((moon.getLongPos()-135)*Math.PI)/180));
         
         //specular
-        I_spec0 =(int) (
-                        sun.getBrightness()
-                        * k_specular
-                        * Math.pow(
-                            Math.cos((sun.getLatPos() - 125.26) * Math.PI/360)
-                           *Math.cos((sun.getLongPos()) * Math.PI/360)
-                        ,n_spec)
-                        *(n_spec+2)/(2*Math.PI)
-                        );
-        I_spec0 +=(int) (
-                        moon.getBrightness()
-                        * k_specular
-                        * Math.pow(
-                            Math.cos((moon.getLatPos() - 125.26) * Math.PI/360)
-                           *Math.cos((moon.getLongPos()) * Math.PI/360)
-                        ,n_spec)
-                        *(n_spec+2)/(2*Math.PI)
-                        );
+        
+        //it is impossible to get specular with a GLS over the horizon on side 0 and 2. Just left here if it someday helps.
+//        I_spec0 =(int) (
+//                        sun.getBrightness()
+//                        * k_specular
+//                        * Math.pow(
+//                            Math.sin((sun.getLatPos())*Math.PI/180)*Math.sin((sun.getLongPos())*Math.PI/180)* Math.sqrt(2)/Math.sqrt(3)//y
+//                          + Math.sin((sun.getLatPos()-75)*Math.PI/180)/Math.sqrt(3)//z
+//                        ,n_spec)
+//                        *(n_spec+2)/(2*Math.PI)
+//                        );
+
         
         I_spec1 =(int) (
                         sun.getBrightness()
                         * k_specular
                         * Math.pow(
-                            Math.cos((sun.getLatPos() + 45) * Math.PI/360)
-                           *Math.cos((sun.getLongPos() + 90) * Math.PI/360)
+                            Math.sin(sun.getLatPos()*Math.PI/180)*Math.sin(sun.getLongPos()*Math.PI/180)/ Math.sqrt(2)//y
+                          + Math.sin((sun.getLatPos()-90)*Math.PI/180)/ Math.sqrt(2)//z
                         ,n_spec)
                         *(n_spec+2)/(2*Math.PI)
                         );
-        I_spec1 +=(int) (
+         I_spec1 +=(int) (
                         moon.getBrightness()
                         * k_specular
                         * Math.pow(
-                            Math.cos((moon.getLatPos() + 45) * Math.PI/360)
-                           *Math.cos((moon.getLongPos() + 90) * Math.PI/360)
+                            Math.sin((moon.getLatPos())*Math.PI/180)*Math.sin((moon.getLongPos())*Math.PI/180)/Math.sqrt(2)//y
+                          + Math.sin((moon.getLatPos()-90)*Math.PI/180)/Math.sqrt(2)//z
                         ,n_spec)
                         *(n_spec+2)/(2*Math.PI)
                         );
-        I_spec2 =(int) (
-                        sun.getBrightness()
-                        * k_specular
-                        * Math.pow(
-                            Math.cos((sun.getLatPos() - 125.26) * Math.PI/360)
-                           *Math.cos((sun.getLongPos() + 180) * Math.PI/360)
-                        ,n_spec)
-                        *(n_spec+2)/(2*Math.PI)
-                        );  
-         I_spec2 +=(int) (
-                        moon.getBrightness()
-                        * k_specular
-                        * Math.pow(
-                            Math.cos((moon.getLatPos() - 125.26) * Math.PI/360)
-                           *Math.cos((moon.getLongPos() + 180) * Math.PI/360)
-                        ,n_spec)
-                        *(n_spec+2)/(2*Math.PI)
-                        );  
+      //it is impossible to get specular with a GLS over the horizon on side 0 and 2. Just left here if it someday helps.
+        //        I_spec2 =(int) (
+        //                        sun.getBrightness()
+        //                        * k_specular
+        //                        * Math.pow(
+        //                            Math.cos((sun.getLatPos() - 35.26) * Math.PI/360)
+        //                           *Math.cos((sun.getLongPos() + 180) * Math.PI/360)
+        //                        ,n_spec)
+        //                        *(n_spec+2)/(2*Math.PI)
+        //                        );   
         
         I_0 = (int) (I_ambient + I_diff0 + I_spec0);
         I_1 = (int) (I_ambient + I_diff1 + I_spec1);
@@ -135,7 +126,7 @@ public class LightEngine {
     }
     
     /**
-     * 
+     * Returns the average brightness.
      * @return
      */
     public static int getBrightness() {
@@ -158,7 +149,7 @@ public class LightEngine {
      * @return
      */
     public Color getLightColor(){
-        return sun.getColor();
+        return sun.getColor().multiply(moon.getColor());
     }
     
      /**
@@ -182,5 +173,122 @@ public class LightEngine {
                 }
             }
         }         
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Sun getSun() {
+        return sun;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Moon getMoon() {
+        return moon;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean getRenderPosition() {
+        return renderPosition;
+    }
+
+    /**
+     *
+     * @param renderPosition
+     */
+    public void setRenderPosition(boolean renderPosition) {
+        this.renderPosition = renderPosition;
+    }
+    
+    
+    
+    /**
+     *
+     * @param g
+     */
+    public void render(Graphics g){
+        if (renderPosition) {
+            //sun position
+            g.setLineWidth(2);
+
+            //longitude
+            g.setColor(Color.red);
+            g.drawLine(
+                posX +(int) (80* Math.sin((sun.getLongPos()-90)*Math.PI/180)),
+                posY +(int) (40*Math.cos((sun.getLongPos()-90)*Math.PI/180)),
+                posX,
+                posY
+            );
+
+            //latitude
+            g.setColor(Color.magenta);
+            g.drawLine(
+                posX +(int) (80 * Math.sin((sun.getLatPos()-90)*Math.PI/180)),
+                posY -(int) (40*Math.sin((sun.getLatPos())*Math.PI/180)),
+                posX,
+                posY
+            );
+
+            //long+lat of sun position
+            g.setColor(Color.yellow);
+            g.drawLine(
+                posX +(int) ( 80*Math.sin((sun.getLongPos()+90)*Math.PI/180) * Math.sin((sun.getLatPos()-90)*Math.PI/180) ),
+                posY -(int) ( 40*Math.sin((sun.getLongPos())*Math.PI/180) * Math.sin((sun.getLatPos()-90)*Math.PI/180)) -(int) (40*Math.sin((sun.getLatPos())*Math.PI/180)),
+                posX,
+                posY
+             );
+            
+            g.setColor(Color.blue);
+            g.drawLine(
+                posX +(int) ( 80*Math.sin((moon.getLongPos()+90)*Math.PI/180) * Math.sin((moon.getLatPos()-90)*Math.PI/180) ),
+                posY -(int) ( 40*Math.sin((moon.getLongPos())*Math.PI/180) * Math.sin((moon.getLatPos()-90)*Math.PI/180)) -(int) (40*Math.sin((moon.getLatPos())*Math.PI/180)),
+                posX,
+                posY
+             );
+
+            g.setColor(Color.white);
+            g.drawString("Lat: "+sun.getLatPos()+" Long: "+sun.getLongPos(), 400, 100);
+            g.drawString("BrightnessSun: "+sun.getBrightness(), 400, 110);
+            g.drawString("BrightnessMoon: "+moon.getBrightness(), 400, 120);
+        }
+        
+        //info bars
+        
+        //left side
+        g.setColor(Color.white);
+        g.drawString("Left:"+I_ambient+"+"+I_diff0+"+"+ I_spec0+"="+I_0, I_0, 100);
+        g.setColor(Color.green);
+        g.fillRect(0, 100, I_ambient, 10);
+        g.setColor(Color.red);
+        g.fillRect(I_ambient, 100, I_diff0, 8);
+        g.setColor(Color.blue);
+        g.fillRect(I_ambient+I_diff0, 100, I_spec0, 6);
+
+        //top side
+        g.setColor(Color.white);
+        g.drawString("Top:"+I_ambient+"+"+I_diff1+"+"+ I_spec1+"="+I_1, I_1, 120);
+        g.setColor(Color.green);
+        g.fillRect(0, 120, I_ambient, 10);
+        g.setColor(Color.red);
+        g.fillRect(I_ambient, 120, I_diff1, 8);
+        g.setColor(Color.blue);
+        g.fillRect(I_ambient+I_diff1, 120, I_spec1, 6);
+        
+        //right side
+        g.setColor(Color.white);
+        g.drawString("Right:"+I_ambient+"+"+I_diff2+"+"+ I_spec2+"="+I_2, I_2, 140);
+        g.setColor(Color.green);
+        g.fillRect(0, 140, I_ambient, 10);
+        g.setColor(Color.red);
+        g.fillRect(I_ambient, 140, I_diff2, 8);
+        g.setColor(Color.blue);
+        g.fillRect(I_ambient+I_diff2, 140, I_spec2, 6);
     }
 }

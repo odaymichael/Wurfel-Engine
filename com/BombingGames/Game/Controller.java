@@ -20,7 +20,7 @@ public class Controller {
     /**
      *
      */
-    public static LightEngine lightEngine;
+    private static LightEngine lightEngine;
     private static Map map;
     private static boolean recalcRequested;
         
@@ -139,7 +139,7 @@ public class Controller {
      * @see com.BombingGames.Game.Map#getData(int, int, int) 
      */
     public static Block getMapData(int x, int y, int z){
-        return map.getData(x, y, z);
+        return Map.getData(x, y, z);
     }
     
     /**
@@ -297,7 +297,7 @@ public class Controller {
      *
      * @return
      */
-    public LightEngine getLightengine() {
+    public static LightEngine getLightengine() {
         return lightEngine;
     }
     

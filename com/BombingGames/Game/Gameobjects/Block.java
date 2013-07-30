@@ -232,7 +232,7 @@ public class Block extends GameObject {
     public void render(Graphics g, View view, Coordinate coords) {
         if (!isHidden() && isVisible()) {
             
-            if (Controller.lightEngine != null){
+            if (Controller.getLightengine() != null){
                 if (hasSides) {
                     if (renderTop)
                         renderSide(g, view, coords, Block.TOPSIDE, LightEngine.getBrightness(Block.TOPSIDE));
@@ -283,8 +283,8 @@ public class Block extends GameObject {
             filter = new Color((brightness-127)/127f, (brightness-127)/127f, (brightness-127)/127f);
         }
             
-        if (Controller.lightEngine != null){
-            filter = filter.multiply(Controller.lightEngine.getLightColor());
+        if (Controller.getLightengine() != null){
+            filter = filter.multiply(Controller.getLightengine().getLightColor());
         } else {
             //calc  verticalGradient
             float verticalGradient = getLightlevel();
