@@ -90,7 +90,12 @@ public class CustomGameController extends Controller {
             if (input.isKeyPressed(Input.KEY_Z)) {
                 getCameras().get(0).setZoom(1);
                 Gameplay.msgSystem().add("Zoom reset");
-             }        
+             }  
+            
+            //show/hide light engine
+            if (input.isKeyPressed(Input.KEY_L)) {
+                getLightengine().RenderData(!getLightengine().getRenderPosition());
+             } 
 
             Camera camera = getCameras().get(0);
             camera.setOutputPosY(camera.getOutputPosY()- (input.isKeyDown(Input.KEY_W)? 3: 0));
