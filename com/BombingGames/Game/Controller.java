@@ -39,7 +39,7 @@ public class Controller {
      */
     public Controller(GameContainer gc, StateBasedGame game) throws SlickException{  
         newMap();
-        lightEngine = new LightEngine();
+        lightEngine = new LightEngine(gc.getWidth()/2, gc.getHeight()/2);
         
         recalcRequested = true;
     }
