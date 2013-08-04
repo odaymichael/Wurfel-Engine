@@ -112,6 +112,8 @@
         </struct>
         <key>dataFileName</key>
         <filename>Spritesheet.def</filename>
+        <key>multiPack</key>
+        <false/>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
