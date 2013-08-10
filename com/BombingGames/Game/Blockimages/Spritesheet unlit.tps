@@ -195,6 +195,7 @@
             <filename>sprites unlit/41-1.png</filename>
             <filename>sprites unlit/70-0.png</filename>
             <filename>sprites unlit/71-0.png</filename>
+            <filename>sprites unlit/71-1.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
