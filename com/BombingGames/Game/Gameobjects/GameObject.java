@@ -1,8 +1,8 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
-import com.BombingGames.Game.Coordinate;
-import com.BombingGames.Game.View;
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.Coordinate;
+import com.BombingGames.EngineCore.View;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.*;
 import org.newdawn.slick.util.Log;

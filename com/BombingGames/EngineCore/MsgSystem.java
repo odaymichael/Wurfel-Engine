@@ -1,4 +1,4 @@
-package com.BombingGames.Game;
+package com.BombingGames.EngineCore;
 
 import java.util.ArrayList;
 import org.newdawn.slick.Color;

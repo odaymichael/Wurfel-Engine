@@ -1,7 +1,7 @@
 package com.BombingGames.Game.Lighting;
 
-import com.BombingGames.Game.Chunk;
-import com.BombingGames.Game.Map;
+import com.BombingGames.EngineCore.Chunk;
+import com.BombingGames.EngineCore.Map;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 

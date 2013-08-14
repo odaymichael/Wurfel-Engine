@@ -1,4 +1,4 @@
-package com.BombingGames.Game;
+package com.BombingGames.EngineCore;
 
 import com.BombingGames.Game.CustomGame.CustomGameController;
 import com.BombingGames.Game.CustomGame.CustomGameView;

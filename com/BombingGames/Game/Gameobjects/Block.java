@@ -1,11 +1,11 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
-import com.BombingGames.Game.Coordinate;
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.Coordinate;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import com.BombingGames.Game.Lighting.LightEngine;
-import com.BombingGames.Game.View;
+import com.BombingGames.EngineCore.View;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;

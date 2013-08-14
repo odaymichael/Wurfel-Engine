@@ -1,13 +1,13 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
-import com.BombingGames.Game.Coordinate;
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.Coordinate;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
 import static com.BombingGames.Game.Gameobjects.GameObject.GAMEDIMENSION;
-import com.BombingGames.Game.Map;
-import com.BombingGames.Game.View;
+import com.BombingGames.EngineCore.Map;
+import com.BombingGames.EngineCore.View;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.Graphics;

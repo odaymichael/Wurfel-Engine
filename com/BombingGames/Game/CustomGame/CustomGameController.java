@@ -1,8 +1,13 @@
 package com.BombingGames.Game.CustomGame;
 
+import com.BombingGames.EngineCore.Map;
+import com.BombingGames.EngineCore.Minimap;
+import com.BombingGames.EngineCore.Camera;
+import com.BombingGames.EngineCore.Coordinate;
+import com.BombingGames.EngineCore.Gameplay;
+import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Player;
-import com.BombingGames.Game.*;
 import com.BombingGames.Game.Gameobjects.Block;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;

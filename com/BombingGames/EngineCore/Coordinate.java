@@ -1,4 +1,4 @@
-package com.BombingGames.Game;
+package com.BombingGames.EngineCore;
 
 import com.BombingGames.Game.Gameobjects.Block;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;

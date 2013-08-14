@@ -1,6 +1,6 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Coordinate;
+import com.BombingGames.EngineCore.Coordinate;
 
 /**
  *A simple basic entity. You can use it for simple images like an effect.

@@ -1,4 +1,4 @@
-package com.BombingGames.Game;
+package com.BombingGames.EngineCore;
 
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
