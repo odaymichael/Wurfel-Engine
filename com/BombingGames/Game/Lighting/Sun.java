@@ -1,6 +1,6 @@
 package com.BombingGames.Game.Lighting;
 
-import com.BombingGames.Game.Map;
+import com.BombingGames.EngineCore.Map;
 import org.newdawn.slick.Color;
 
 /**
@@ -13,6 +13,6 @@ public class Sun extends GlobalLightSource {
      *
      */
     public Sun() {
-        super(-Map.getWorldSpinDirection(), 0, new Color(255, 255, 255), 60);
+        super(-Map.getWorldSpinDirection(), 0, new Color(255, 255, 255), 70);
     }
 }

@@ -12,7 +12,7 @@ public class Wurfelengine extends AppGameContainer {
     /**
      * The Version of the Engine
      */
-    public static final String VERSION = "1.0.3";    
+    public static final String VERSION = "1.0.4";    
     private static File workingDirectory;
 
     /**
@@ -43,6 +43,23 @@ public class Wurfelengine extends AppGameContainer {
         
         //launch!
         start();        
+    }
+    
+    /**
+     * Gives the credits of the engine.
+     * @return a long string with breaks
+     */
+    public static String getCredits(){
+        String newline = System.getProperty("line.separator");
+        return "Idea:"+newline
+            + " Benedikt Vogler"+newline+newline
+            + "Programming:"+newline
+            + "Benedikt Vogler"+newline+newline
+            + "Art:"+newline
+            + "Benedikt Vogler"+newline
+            + "Pia Lenßen"+newline+newline
+            + "Quality Assurance"+newline
+            + "Thomas Vogt";
     }
     
    /**

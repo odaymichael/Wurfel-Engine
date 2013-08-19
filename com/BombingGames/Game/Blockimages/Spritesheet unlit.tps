@@ -112,6 +112,8 @@
         </struct>
         <key>dataFileName</key>
         <filename>Spritesheet.def</filename>
+        <key>multiPack</key>
+        <false/>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
@@ -193,6 +195,7 @@
             <filename>sprites unlit/41-1.png</filename>
             <filename>sprites unlit/70-0.png</filename>
             <filename>sprites unlit/71-0.png</filename>
+            <filename>sprites unlit/71-1.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

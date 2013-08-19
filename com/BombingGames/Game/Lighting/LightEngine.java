@@ -1,7 +1,7 @@
 package com.BombingGames.Game.Lighting;
 
-import com.BombingGames.Game.Chunk;
-import com.BombingGames.Game.Map;
+import com.BombingGames.EngineCore.Chunk;
+import com.BombingGames.EngineCore.Map;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -13,11 +13,12 @@ public class LightEngine {
     /**
      * The Version of the light engine.
      */
-    public static final String Version = "1.0.1";
+    public static final String Version = "1.0.2";
     
-   private boolean renderPosition = false;
-    private final int posX = 250;
-    private final int posY = 250;
+    private boolean renderData = false;
+    private int posX = 250;
+    private int posY = 250;
+    private final int size = 500;
     
     //ambient light
     private final int ambientBaseLevel = 40;//value 0-255
@@ -25,7 +26,7 @@ public class LightEngine {
     private int I_ambient;//ambient light
     
     //diffuse light
-    private final int k_diff = 48; //the min and max span. value between 0 and 255 empirisch bestimmter Reflexionsfaktor für diffuse Komponente der Reflexion
+    private final int k_diff = 60; //the min and max span. value between 0 and 255 empirisch bestimmter Reflexionsfaktor für diffuse Komponente der Reflexion
     private int I_diff0;
     private int I_diff1;
     private int I_diff2;
@@ -50,6 +51,13 @@ public class LightEngine {
     public LightEngine() {
         sun = new Sun();
         moon = new Moon();
+    }
+
+    public LightEngine(int xPos, int yPos) {
+        sun = new Sun();
+        moon = new Moon();
+        this.posX = xPos;
+        this.posY = yPos;
     }
     
     
@@ -199,15 +207,15 @@ public class LightEngine {
      * @return
      */
     public boolean getRenderPosition() {
-        return renderPosition;
+        return renderData;
     }
 
     /**
      *
-     * @param renderPosition
+     * @param renderData
      */
     public void RenderData(boolean renderPosition) {
-        this.renderPosition = renderPosition;
+        this.renderData = renderPosition;
     }
     
     
@@ -217,15 +225,15 @@ public class LightEngine {
      * @param g
      */
     public void render(Graphics g){
-        if (renderPosition) {
+        if (renderData) {
             //sun position
             g.setLineWidth(2);
 
             //longitude
             g.setColor(Color.red);
             g.drawLine(
-                posX +(int) (80* Math.sin((sun.getLongPos()-90)*Math.PI/180)),
-                posY +(int) (40*Math.cos((sun.getLongPos()-90)*Math.PI/180)),
+                posX +(int) (size* Math.sin((sun.getLongPos()-90)*Math.PI/180)),
+                posY +(int) (size/2*Math.cos((sun.getLongPos()-90)*Math.PI/180)),
                 posX,
                 posY
             );
@@ -233,8 +241,8 @@ public class LightEngine {
             //latitude
             g.setColor(Color.magenta);
             g.drawLine(
-                posX +(int) (80 * Math.sin((sun.getLatPos()-90)*Math.PI/180)),
-                posY -(int) (40*Math.sin((sun.getLatPos())*Math.PI/180)),
+                posX +(int) (size * Math.sin((sun.getLatPos()-90)*Math.PI/180)),
+                posY -(int) (size/2*Math.sin((sun.getLatPos())*Math.PI/180)),
                 posX,
                 posY
             );
@@ -242,16 +250,16 @@ public class LightEngine {
             //long+lat of sun position
             g.setColor(Color.yellow);
             g.drawLine(
-                posX +(int) ( 80*Math.sin((sun.getLongPos()+90)*Math.PI/180) * Math.sin((sun.getLatPos()-90)*Math.PI/180) ),
-                posY -(int) ( 40*Math.sin((sun.getLongPos())*Math.PI/180) * Math.sin((sun.getLatPos()-90)*Math.PI/180)) -(int) (40*Math.sin((sun.getLatPos())*Math.PI/180)),
+                posX +(int) ( size*Math.sin((sun.getLongPos()+90)*Math.PI/180) * Math.sin((sun.getLatPos()-90)*Math.PI/180) ),
+                posY -(int) ( size/2*Math.sin((sun.getLongPos())*Math.PI/180) * Math.sin((sun.getLatPos()-90)*Math.PI/180)) -(int) (size/2*Math.sin((sun.getLatPos())*Math.PI/180)),
                 posX,
                 posY
              );
             
             g.setColor(Color.blue);
             g.drawLine(
-                posX +(int) ( 80*Math.sin((moon.getLongPos()+90)*Math.PI/180) * Math.sin((moon.getLatPos()-90)*Math.PI/180) ),
-                posY -(int) ( 40*Math.sin((moon.getLongPos())*Math.PI/180) * Math.sin((moon.getLatPos()-90)*Math.PI/180)) -(int) (40*Math.sin((moon.getLatPos())*Math.PI/180)),
+                posX +(int) ( size*Math.sin((moon.getLongPos()+90)*Math.PI/180) * Math.sin((moon.getLatPos()-90)*Math.PI/180) ),
+                posY -(int) ( size/2*Math.sin((moon.getLongPos())*Math.PI/180) * Math.sin((moon.getLatPos()-90)*Math.PI/180)) -(int) (size/2*Math.sin((moon.getLatPos())*Math.PI/180)),
                 posX,
                 posY
              );

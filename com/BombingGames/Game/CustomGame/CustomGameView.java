@@ -1,7 +1,7 @@
 package com.BombingGames.Game.CustomGame;
 
-import com.BombingGames.Game.Controller;
-import com.BombingGames.Game.View;
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.View;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;

@@ -1,8 +1,8 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
-import com.BombingGames.Game.Coordinate;
-import com.BombingGames.Game.View;
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.Coordinate;
+import com.BombingGames.EngineCore.View;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.*;
 import org.newdawn.slick.util.Log;
@@ -87,6 +87,10 @@ public abstract class GameObject {
         NAMELIST[50] = "strewbed";
         NAMELIST[70] = "campfire";
         NAMELIST[71] = "explosive barrel";
+        OFFSETLIST[71][0][0] = 39;
+        OFFSETLIST[71][0][1] = 19;
+        OFFSETLIST[71][1][0] = 35;
+        OFFSETLIST[71][1][1] = 16;
         NAMELIST[72] = "animation test";
     }
     

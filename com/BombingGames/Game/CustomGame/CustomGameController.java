@@ -1,8 +1,13 @@
 package com.BombingGames.Game.CustomGame;
 
+import com.BombingGames.EngineCore.Map;
+import com.BombingGames.EngineCore.Minimap;
+import com.BombingGames.EngineCore.Camera;
+import com.BombingGames.EngineCore.Coordinate;
+import com.BombingGames.EngineCore.Gameplay;
+import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Player;
-import com.BombingGames.Game.*;
 import com.BombingGames.Game.Gameobjects.Block;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
@@ -90,7 +95,12 @@ public class CustomGameController extends Controller {
             if (input.isKeyPressed(Input.KEY_Z)) {
                 getCameras().get(0).setZoom(1);
                 Gameplay.msgSystem().add("Zoom reset");
-             }        
+             }  
+            
+            //show/hide light engine
+            if (input.isKeyPressed(Input.KEY_L)) {
+                getLightengine().RenderData(!getLightengine().getRenderPosition());
+             } 
 
             Camera camera = getCameras().get(0);
             camera.setOutputPosY(camera.getOutputPosY()- (input.isKeyDown(Input.KEY_W)? 3: 0));

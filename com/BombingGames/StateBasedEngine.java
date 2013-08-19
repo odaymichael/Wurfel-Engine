@@ -1,6 +1,6 @@
 package com.BombingGames;
 
-import com.BombingGames.Game.Gameplay;
+import com.BombingGames.EngineCore.Gameplay;
 import com.BombingGames.MainMenu.MainMenuState;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;

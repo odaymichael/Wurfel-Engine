@@ -1,7 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Coordinate;
-import com.BombingGames.Game.Map;
+import com.BombingGames.EngineCore.Coordinate;
+import com.BombingGames.EngineCore.Map;
 
 /**
  *A Sea Block which has a "waves" effect.

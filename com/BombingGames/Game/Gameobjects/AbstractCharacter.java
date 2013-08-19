@@ -1,8 +1,8 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.Game.Controller;
-import com.BombingGames.Game.Coordinate;
-import com.BombingGames.Game.Map;
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.Coordinate;
+import com.BombingGames.EngineCore.Map;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
