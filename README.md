@@ -15,16 +15,16 @@ The name comes from the german word for cube (Würfel).
 
 ### Features
 
-Open Source:
-	Well commented
-	Clean code: no geeky code with strange indent and names
-	No licensing costs
-Cross-platform (Windows, Mac, Linux)
-Map Streaming: make maps as big as you want like in Minecraft
-Three Dimensions: make maps with high buildings or deep dungeons
-Map editor: free & included
-Fast: Wurfelengine renders only what is visible 
-Easy: look at our examples (soon) how easy it is to build a small game
+* Open Source:
+	* Well commented
+	* Clean code: no geeky code with strange indent and names
+	* No licensing costs
+* Cross-platform (Windows, Mac, Linux)
+* Map Streaming: make maps as big as you want like in Minecraft
+* Three Dimensions: make maps with high buildings or deep dungeons
+* Map editor: free & included
+* Fast: Wurfelengine renders only what is visible 
+* Easy: look at our examples (soon) how easy it is to build a small game
 
 
 Visit the official website:
