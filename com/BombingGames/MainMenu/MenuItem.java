@@ -1,47 +1,53 @@
 package com.BombingGames.MainMenu;
 
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SpriteSheet;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
 
 /**
  *A menu item is an object wich can be placed on a menu.
  * @author Benedikt
  */
-public class MenuItem {
-
-    private static SpriteSheet spritesheet;
+public class MenuItem extends Sprite {
+    private static TextureAtlas spritesheet;
     private final int index;
-    private int X = 0;
-    private int Y = 0;
 
     /**
      * 
      * @param index
      */
-    public MenuItem(int index) {
+    public MenuItem(int index, Texture texture) {
+        super(texture);
         this.index = index;
+        this.setX(500);
+        this.setY(index*200);
+    }
+
+
+
+    @Override
+    public void draw(SpriteBatch spriteBatch) {
+        super.draw(spriteBatch);
     }
     
-    /**
-     * 
-     */
-    public void draw(){
-        spritesheet.renderInUse(X, Y, 0, index);
-    }
 
     /**
      * 
      * @param input
      * @return
      */
-    public boolean isClicked(Input input) {
-        int mouseX = input.getMouseX();
-        int mouseY = input.getMouseY();
+    public boolean isClicked() {
+        int mouseX = Gdx.input.getX();
+        int mouseY = Gdx.input.getY();
         
         return (
-            input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) &&
-            (mouseX >= X && mouseX <= X + spritesheet.getSprite(0, 0).getWidth()) &&
-            (mouseY >= Y && mouseY <= Y + spritesheet.getSprite(0, 0).getHeight())
+            Gdx.input.isButtonPressed(Buttons.LEFT) &&
+            (mouseX >= getX() && mouseX <= getX() + getWidth()) &&
+            (mouseY >= getX() && mouseY <= getY() + getHeight())
         );
     }
 
@@ -49,39 +55,7 @@ public class MenuItem {
      * 
      * @return
      */
-    public int getX() {
-        return X;
-    }
-
-    /**
-     * 
-     * @param X
-     */
-    public void setX(int X) {
-        this.X = X;
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public int getY() {
-        return Y;
-    }
-
-    /**
-     * 
-     * @param Y
-     */
-    public void setY(int Y) {
-        this.Y = Y;
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public static SpriteSheet getSpritesheet() {
+    public static TextureAtlas getSpritesheet() {
         return spritesheet;
     }
 
@@ -89,7 +63,7 @@ public class MenuItem {
      * 
      * @param spritesheet
      */
-    public static void setSpritesheet(SpriteSheet spritesheet) {
+    public static void setSpritesheet(TextureAtlas spritesheet) {
         MenuItem.spritesheet = spritesheet;
     }
 }

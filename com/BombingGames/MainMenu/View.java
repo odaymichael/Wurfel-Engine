@@ -1,43 +1,29 @@
 package com.BombingGames.MainMenu;
 
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import org.lwjgl.opengl.GL11;
+
 
 /**
  * The View manages ouput
  * @author Benedikt
  */
 public class View {
-    //private float startGameScale = 1;
-    //private float exitScale = 1;
-    private final Image lettering;
-    private GameContainer gc;
-    
+    private final Texture lettering;    
+    private SpriteBatch batch;
     
     /**
      * Creates a View.
      * @param gc
      * @throws SlickException
      */
-    public View(GameContainer gc) throws SlickException{
-        lettering = new Image("com/BombingGames/MainMenu/Images/Lettering.png");
-        this.gc = gc;
-        MenuItem.setSpritesheet(new SpriteSheet("com/BombingGames/MainMenu/Images/MainMenu.png",400,50));
-        
-        MenuItem startgame = MainMenuState.getController().getStartGameOption();
-        startgame.setX((gc.getWidth() - MenuItem.getSpritesheet().getWidth())/2);
-        startgame.setY(gc.getHeight()/2 - 100);
-        
-        MenuItem loadgame = MainMenuState.getController().getLoadGameOption();
-        loadgame.setX((gc.getWidth()- MenuItem.getSpritesheet().getWidth())/2);
-        loadgame.setY(gc.getHeight()/2);
-        
-        MenuItem exit = MainMenuState.getController().getExitOption();
-        exit.setX((gc.getWidth()- MenuItem.getSpritesheet().getWidth())/2);
-        exit.setY(gc.getHeight()/2 + 100);
-        
+    public View(){
+        lettering = new Texture(Gdx.files.internal("com/BombingGames/MainMenu/Images/Lettering.png"));
+        TextureAtlas texture = new TextureAtlas(Gdx.files.internal("com/BombingGames/MainMenu/Images/MainMenu.txt"));
+        batch = new SpriteBatch();
     }
 
     /**
@@ -45,15 +31,20 @@ public class View {
      * @param pController
      */
     public void render(Controller pController){
+        GL11.glClearColor( 0f, 1f, 0f, 1f );
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+        
         // render the lettering
-        lettering.draw((gc.getWidth() - lettering.getWidth())/2,0);
+//        batch.begin();
+//        batch.draw(lettering, (Gdx.graphics.getWidth() - lettering.getWidth())/2,0);
+//        batch.end();
         
         // Draw menu
-        MenuItem.getSpritesheet().startUse();
-        MainMenuState.getController().getStartGameOption().draw();
-        MainMenuState.getController().getLoadGameOption().draw();
-        MainMenuState.getController().getExitOption().draw();
-        MenuItem.getSpritesheet().endUse();
+        batch.begin();
+        MainMenuScreen.getController().getMenuItems()[0].draw(batch);
+        MainMenuScreen.getController().getMenuItems()[1].draw(batch);
+        MainMenuScreen.getController().getMenuItems()[2].draw(batch);
+        batch.end();
     }
 }
 
