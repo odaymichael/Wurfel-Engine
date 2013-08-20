@@ -2,10 +2,10 @@ package com.BombingGames.MainMenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
 /**
@@ -20,13 +20,12 @@ public class MenuItem extends Sprite {
      * 
      * @param index
      */
-    public MenuItem(int index, Texture texture) {
+    public MenuItem(int index, TextureRegion texture) {
         super(texture);
         this.index = index;
-        this.setX(500);
-        this.setY(index*200);
+        this.setX((Gdx.graphics.getWidth()-getWidth())/2);
+        this.setY(index*80);
     }
-
 
 
     @Override

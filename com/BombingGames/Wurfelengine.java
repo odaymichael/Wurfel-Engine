@@ -89,5 +89,4 @@ public class Wurfelengine {
     public static File getWorkingDirectory() {
         return workingDirectory;
     }
-
 }

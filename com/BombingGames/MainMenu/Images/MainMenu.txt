@@ -2,10 +2,24 @@ MainMenu.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-MainMenu
+generate
   rotate: false
-  xy: 0, 0
-  size: 512, 256
-  orig: 512, 256
+  xy: 144, 2
+  size: 314, 42
+  orig: 314, 42
+  offset: 0, 0
+  index: -1
+Exit
+  rotate: false
+  xy: 2, 2
+  size: 140, 42
+  orig: 140, 42
+  offset: 0, 0
+  index: -1
+load
+  rotate: false
+  xy: 2, 46
+  size: 158, 42
+  orig: 158, 42
   offset: 0, 0
   index: -1

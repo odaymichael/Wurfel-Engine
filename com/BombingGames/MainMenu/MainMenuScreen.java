@@ -8,8 +8,6 @@ import com.badlogic.gdx.Screen;
  */
 public class MainMenuScreen implements Screen{
     private static boolean loadMap = false;
-    //private GameContainer gc;
-    //private StateBasedGame sbg;
  
     private static View View;
     private static Controller Controller;
@@ -84,6 +82,4 @@ public class MainMenuScreen implements Screen{
     public static void setLoadMap(boolean loadmap) {
         MainMenuScreen.loadMap = loadmap;
     }
-
-   
 }
