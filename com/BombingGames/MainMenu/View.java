@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import org.lwjgl.opengl.GL11;
@@ -16,7 +17,7 @@ import org.lwjgl.opengl.GL11;
  * @author Benedikt
  */
 public class View {
-    private final Texture lettering;    
+    private final Sprite lettering;    
     private final SpriteBatch batch;
     private final OrthographicCamera camera;
     private final BitmapFont font;
@@ -28,7 +29,11 @@ public class View {
      */
     public View(){
         //load textures
-        lettering = new Texture(Gdx.files.internal("com/BombingGames/MainMenu/Images/Lettering.png"));
+        Texture.setEnforcePotImages(false);
+        lettering = new Sprite(new Texture(Gdx.files.internal("com/BombingGames/MainMenu/Images/Lettering.png")));
+        lettering.setX((Gdx.graphics.getWidth() - lettering.getWidth())/2);
+        lettering.setY(50);
+        lettering.flip(false, true);
         
         batch = new SpriteBatch();
         
@@ -54,7 +59,7 @@ public class View {
         
         // render the lettering
         batch.begin();
-        batch.draw(lettering, (Gdx.graphics.getWidth() - lettering.getWidth())/2,0);
+        lettering.draw(batch);
         batch.end();
         
         // Draw the menu items
@@ -68,17 +73,6 @@ public class View {
         font.draw(batch, "FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
         font.draw(batch, Gdx.input.getX()+ ","+Gdx.input.getY(), Gdx.input.getX(), Gdx.input.getY());
         batch.end();
-        
-        
-        
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(camera.combined);
-      
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.line(Gdx.input.getX(), Gdx.input.getY(), 100, 100);
-        shapeRenderer.end();
-        }
     }
 }
 

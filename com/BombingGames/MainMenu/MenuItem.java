@@ -24,19 +24,12 @@ public class MenuItem extends Sprite {
         super(texture);
         this.index = index;
         this.setX((Gdx.graphics.getWidth()-getWidth())/2);
-        this.setY(index*80);
+        this.setY(200+index*80);
     }
 
 
     public void draw(SpriteBatch spriteBatch, Camera camera) {
-        super.draw(spriteBatch);
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(camera.combined);
-      
-        shapeRenderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
-        shapeRenderer.filledRect(getX(), getY(), getWidth(), getHeight());
-        shapeRenderer.end();
-        
+        super.draw(spriteBatch);        
     }
     
 
