@@ -1,10 +1,13 @@
 package com.BombingGames.MainMenu;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import org.lwjgl.opengl.GL11;
 
 
@@ -16,6 +19,7 @@ public class View {
     private final Texture lettering;    
     private final SpriteBatch batch;
     private final OrthographicCamera camera;
+    private final BitmapFont font;
     
     /**
      * Creates a View.
@@ -25,12 +29,14 @@ public class View {
     public View(){
         //load textures
         lettering = new Texture(Gdx.files.internal("com/BombingGames/MainMenu/Images/Lettering.png"));
-        TextureAtlas texture = new TextureAtlas(Gdx.files.internal("com/BombingGames/MainMenu/Images/MainMenu.txt"));
         
         batch = new SpriteBatch();
         
+        //set the center to the top left
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        
+        font = new BitmapFont(Gdx.files.internal("com/BombingGames/EngineCore/arial.fnt"), true);
     }
 
     /**
@@ -42,6 +48,10 @@ public class View {
         GL11.glClearColor( 0f, 0f, 0f, 1f );
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         
+        //update camera and set the projection matrix
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+        
         // render the lettering
         batch.begin();
         batch.draw(lettering, (Gdx.graphics.getWidth() - lettering.getWidth())/2,0);
@@ -50,9 +60,25 @@ public class View {
         // Draw the menu items
         batch.begin();
         for (MenuItem mI : MainMenuScreen.getController().getMenuItems()) {
-            mI.draw(batch);
+            mI.draw(batch, camera);
         }
         batch.end();
+        
+        batch.begin();
+        font.draw(batch, "FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
+        font.draw(batch, Gdx.input.getX()+ ","+Gdx.input.getY(), Gdx.input.getX(), Gdx.input.getY());
+        batch.end();
+        
+        
+        
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(camera.combined);
+      
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.line(Gdx.input.getX(), Gdx.input.getY(), 100, 100);
+        shapeRenderer.end();
+        }
     }
 }
 

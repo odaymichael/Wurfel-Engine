@@ -2,10 +2,11 @@ package com.BombingGames.MainMenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
 /**
@@ -13,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * @author Benedikt
  */
 public class MenuItem extends Sprite {
-    private static TextureAtlas spritesheet;
     private final int index;
 
     /**
@@ -28,9 +28,15 @@ public class MenuItem extends Sprite {
     }
 
 
-    @Override
-    public void draw(SpriteBatch spriteBatch) {
+    public void draw(SpriteBatch spriteBatch, Camera camera) {
         super.draw(spriteBatch);
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(camera.combined);
+      
+        shapeRenderer.begin(ShapeRenderer.ShapeType.FilledRectangle);
+        shapeRenderer.filledRect(getX(), getY(), getWidth(), getHeight());
+        shapeRenderer.end();
+        
     }
     
 
@@ -46,23 +52,7 @@ public class MenuItem extends Sprite {
         return (
             Gdx.input.isButtonPressed(Buttons.LEFT) &&
             (mouseX >= getX() && mouseX <= getX() + getWidth()) &&
-            (mouseY >= getX() && mouseY <= getY() + getHeight())
+            (mouseY >= getY() && mouseY <= getY() + getHeight())
         );
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public static TextureAtlas getSpritesheet() {
-        return spritesheet;
-    }
-
-    /**
-     * 
-     * @param spritesheet
-     */
-    public static void setSpritesheet(TextureAtlas spritesheet) {
-        MenuItem.spritesheet = spritesheet;
     }
 }
