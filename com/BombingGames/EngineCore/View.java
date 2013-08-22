@@ -4,6 +4,7 @@ import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.lwjgl.opengl.GL11;
@@ -27,6 +28,8 @@ public class View {
     
     private SpriteBatch batch;
     
+    private OrthographicCamera hudCamera;
+    
     /**
      * Creates a View.
      * @param gc
@@ -36,11 +39,15 @@ public class View {
     public View(Controller controller){
         this.controller = controller;
         font = new BitmapFont(Gdx.files.internal("com/BombingGames/EngineCore/arial.fnt"), true);
+        font.setColor(Color.GREEN);
         
         //default rendering size is FullHD
         equalizationScale = Gdx.graphics.getWidth() / (float) ENGINE_RENDER_WIDTH;
         Gdx.app.log("DEBUG","Scale is:" + Float.toString(equalizationScale));
  
+        hudCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        hudCamera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        
         batch = new SpriteBatch();
         Block.loadSheet();
      }
@@ -51,12 +58,18 @@ public class View {
      * @throws SlickException
      */
     public void render(){
+        //clear & set background to black
+        GL11.glClearColor( 0f, 0f, 0f, 1f );
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+        
         //render every camera
-        for (VirtualCamera camera : controller.getCameras()) {
+        for (Camera camera : controller.getCameras()) {
             camera.render(this);
         }
         
         //render HUD
+        hudCamera.update();
+        batch.setProjectionMatrix(hudCamera.combined);
         
         //scale to fit
         //g.scale(equalizationScale, equalizationScale);
@@ -90,7 +103,7 @@ public class View {
      */
     public int ScreenXtoGame(int x){
         return (int) ((x - controller.getCameras().get(0).getScreenPosX()) / controller.getCameras().get(0).getTotalScale()
-            + controller.getCameras().get(0).getOutputPosX());
+            + controller.getCameras().get(0).getGamePosX());
     }
     
    /**
@@ -100,7 +113,7 @@ public class View {
      */
     public int ScreenYtoGame(int y){
         return (int) ((y - controller.getCameras().get(0).getScreenPosY()) / controller.getCameras().get(0).getTotalScale()
-            + controller.getCameras().get(0).getOutputPosY()) * 2;
+            + controller.getCameras().get(0).getGamePosY()) * 2;
     }
     
     /**
@@ -172,13 +185,13 @@ public class View {
         }
     }
 
-    void drawString(String msg, int xPos, int yPos) {
+    public void drawString(String msg, int xPos, int yPos) {
         batch.begin();
         font.draw(batch, msg, xPos, yPos);
         batch.end();
     }
     
-    void drawString(String msg, int xPos, int yPos, Color color) {
+    public void drawString(String msg, int xPos, int yPos, Color color) {
         batch.begin();
         font.draw(batch, msg, xPos, yPos);
         batch.end();

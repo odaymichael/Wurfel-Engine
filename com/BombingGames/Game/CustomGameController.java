@@ -2,7 +2,7 @@ package com.BombingGames.Game;
 
 import com.BombingGames.EngineCore.Map;
 import com.BombingGames.EngineCore.Minimap;
-import com.BombingGames.EngineCore.VirtualCamera;
+import com.BombingGames.EngineCore.Camera;
 import com.BombingGames.EngineCore.Coordinate;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.GameplayScreen;
@@ -37,7 +37,7 @@ public class CustomGameController extends Controller {
         setPlayer(player);
         
         addCamera(
-            new VirtualCamera(
+            new Camera(
                 getPlayer(),
                 0, //left
                 0, //top
@@ -47,7 +47,7 @@ public class CustomGameController extends Controller {
         );
         
 //        addCamera(
-//            new VirtualCamera(
+//            new Camera(
 //                0, //left
 //                0, //top
 //                gc.getWidth(), //full width 
@@ -100,11 +100,11 @@ public class CustomGameController extends Controller {
              } 
             
 
-            VirtualCamera camera = getCameras().get(0);
-            camera.setOutputPosY(camera.getOutputPosY()- (input.isKeyPressed(Input.Keys.W)? 3: 0));
-            camera.setOutputPosY(camera.getOutputPosY()+ (input.isKeyPressed(Input.Keys.S)? 3: 0));
-            camera.setOutputPosX(camera.getOutputPosX()+ (input.isKeyPressed(Input.Keys.D)? 3: 0));
-            camera.setOutputPosX(camera.getOutputPosX()- (input.isKeyPressed(Input.Keys.A)? 3: 0));
+            Camera camera = getCameras().get(0);
+            camera.setGamePosY(camera.getGamePosY()- (input.isKeyPressed(Input.Keys.W)? 3: 0));
+            camera.setGamePosY(camera.getGamePosY()+ (input.isKeyPressed(Input.Keys.S)? 3: 0));
+            camera.setGamePosX(camera.getGamePosX()+ (input.isKeyPressed(Input.Keys.D)? 3: 0));
+            camera.setGamePosX(camera.getGamePosX()- (input.isKeyPressed(Input.Keys.A)? 3: 0));
             
             //walk
             if (getPlayer() != null){

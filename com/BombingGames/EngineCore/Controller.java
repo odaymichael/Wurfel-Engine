@@ -24,7 +24,7 @@ public class Controller {
         
     private AbstractCharacter player;
     private View view;
-    private ArrayList<VirtualCamera> cameras = new ArrayList();
+    private ArrayList<Camera> cameras = new ArrayList();
     private Minimap minimap;
 
     
@@ -250,7 +250,7 @@ public class Controller {
      * Request a recalc with <i>reuqestRecalc()</i>. 
      * @param camera 
      */
-    public void recalcIfRequested(VirtualCamera camera){
+    public void recalcIfRequested(Camera camera){
         if (recalcRequested) {
             camera.raytracing();
             LightEngine.calcSimpleLight();
@@ -271,7 +271,7 @@ public class Controller {
      * Returns a camera.
      * @return The virtual cameras rendering the scene
      */
-    protected ArrayList<VirtualCamera> getCameras() {
+    protected ArrayList<Camera> getCameras() {
         return cameras;
     }
 
@@ -279,7 +279,7 @@ public class Controller {
      * Add a camera.
      * @param camera
      */
-    protected void addCamera(VirtualCamera camera) {
+    protected void addCamera(Camera camera) {
         this.cameras.add(camera);
     }
 

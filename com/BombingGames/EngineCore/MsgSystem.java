@@ -1,5 +1,6 @@
 package com.BombingGames.EngineCore;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import java.util.ArrayList;
 
@@ -80,6 +81,7 @@ public class MsgSystem extends ArrayList<Msg> {
      */
     public void add(String message) {
         add(new Msg(message, "System", 100));
+        Gdx.app.log("DEBUG",message);
     }
     
     /**
@@ -89,6 +91,7 @@ public class MsgSystem extends ArrayList<Msg> {
      */
     public void add(String message, String sender){
         add(new Msg(message, sender, 100));
+        Gdx.app.log("DEBUG",message);
     }
     
     /**
@@ -99,6 +102,7 @@ public class MsgSystem extends ArrayList<Msg> {
      */
     public void add(String message, String sender, int importance){
         add(new Msg(message, sender, importance));
+        Gdx.app.log("DEBUG",message);
     }
     
     /**

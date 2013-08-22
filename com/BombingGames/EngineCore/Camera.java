@@ -3,19 +3,18 @@ package com.BombingGames.EngineCore;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import java.util.ArrayList;
 
 /**
  *Creates a virtual camera wich displays the game world.  
  * @author Benedikt Vogler
  */
-public class VirtualCamera extends Camera{
+public class Camera extends OrthographicCamera{
     private final int screenPosX, screenPosY, screenWidth, screenHeight;
-    private int outputPosX, outputPosY;
+    private int gamePosX, gamePosY;
     private int leftborder, topborder, rightborder, bottomborder;
     private float zoom = 1;
     private float equalizationScale = 1;
@@ -29,10 +28,13 @@ public class VirtualCamera extends Camera{
      * Creates a camera pointing at the middle of the map.
      * @param x
      * @param y
-     * @param width
-     * @param height 
+     * @param width The width of  image the camer creates
+     * @param height The height of  image the camer creates 
      */
-    public VirtualCamera(int x, int y, int width, int height){
+    public Camera(int x, int y, int width, int height){
+        super(width, height);
+        setToOrtho(true, width, height);
+        
         screenPosX = x;
         screenPosY = y;
         screenWidth = width;
@@ -40,8 +42,9 @@ public class VirtualCamera extends Camera{
         
         equalizationScale = screenWidth / (float) View.ENGINE_RENDER_WIDTH;
         
-        outputPosX = Coordinate.getMapCenter().getScreenPosX() - getOutputWidth() / 2;
-        outputPosY = Coordinate.getMapCenter().getScreenPosY() - getOutputHeight() / 2;
+        //set the camera's focus to the center of the map
+        gamePosX = Coordinate.getMapCenter().getScreenPosX() - getOutputWidth() / 2;
+        gamePosY = Coordinate.getMapCenter().getScreenPosY() - getOutputHeight() / 2;
     }
     
    /**
@@ -52,7 +55,7 @@ public class VirtualCamera extends Camera{
      * @param width the width of the output. it can be different than the output on the display because it gets scaled later again.
      * @param height the height of the output. it can be different than the output on the display because it gets scaled later again.
      */
-    public VirtualCamera(Coordinate focus, int x, int y, int width, int height) {
+    public Camera(Coordinate focus, int x, int y, int width, int height) {
         this(x, y, width, height);   
         GameplayScreen.msgSystem().add("Camera is focusing a coordinate");
         this.focusCoordinates = focus;
@@ -68,7 +71,7 @@ public class VirtualCamera extends Camera{
      * @param width the screen width
      * @param height the screen width
      */
-    public VirtualCamera(AbstractEntity focusentity, int x, int y, int width, int height) {
+    public Camera(AbstractEntity focusentity, int x, int y, int width, int height) {
         this(x,y,width,height);
         if (focusentity == null)
             throw new NullPointerException("Parameter 'focusentity' is null");
@@ -82,31 +85,28 @@ public class VirtualCamera extends Camera{
      */
     @Override
     public void update() {
+        super.update();
+        //refrehs the camera's position in the game world
         if (focusCoordinates != null) {
-            outputPosX = focusCoordinates.getBlock().getScreenPosX(
-                focusCoordinates
-            ) - getOutputWidth() / 2 - GameObject.DIM2;
-            
-            outputPosY = focusCoordinates.getBlock().getScreenPosY(
-                focusCoordinates
-            ) - getOutputHeight() / 2;
+            gamePosX = focusCoordinates.getBlock().getScreenPosX(focusCoordinates) - getOutputWidth() / 2 - GameObject.DIM2;
+            gamePosY = focusCoordinates.getBlock().getScreenPosY(focusCoordinates) - getOutputHeight() / 2;
         } else if (focusentity != null ){
-            outputPosX = focusentity.getScreenPosX(focusentity.getCoords()) - getOutputWidth() / 2;            
-            outputPosY = focusentity.getScreenPosY(focusentity.getCoords()) - getOutputHeight() / 2 ;
+            gamePosX = focusentity.getScreenPosX(focusentity.getCoords()) - getOutputWidth() / 2;            
+            gamePosY = focusentity.getScreenPosY(focusentity.getCoords()) - getOutputHeight() / 2 ;
         }
         
         //maybe unneccessary and can be done when the getter is called.
         //update borders once every update
-        leftborder = outputPosX / GameObject.DIMENSION - 1;
+        leftborder = gamePosX / GameObject.DIMENSION - 1;
         if (leftborder < 0) leftborder= 0;
         
-        rightborder = (outputPosX + getOutputWidth()) / GameObject.DIMENSION + 2;
+        rightborder = (gamePosX + getOutputWidth()) / GameObject.DIMENSION + 2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
         
-        topborder = outputPosY / GameObject.DIM4 - 3;
+        topborder = gamePosY / GameObject.DIM4 - 3;
         if (topborder < 0) topborder= 0;
         
-        bottomborder = (outputPosY+getOutputHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
+        bottomborder = (gamePosY+getOutputHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
     }
     
@@ -116,37 +116,39 @@ public class VirtualCamera extends Camera{
      * @param view  
      */
     public void render(View view) {
-        if (Controller.getMap() != null) {     
+        if (Controller.getMap() != null) {  
+            view.getBatch().setProjectionMatrix(combined);
+                        
             //move the camera (graphic context)
            
-            this.translate(new Vector3(screenPosX, screenPosY,0));
+            translate(new Vector3(screenPosX, screenPosY,0));
             
+            // Gdx.gl.glViewport(gamePosX, gamePosX, screenWidth, screenHeight);
             //scale(getTotalScale(), getTotalScale());
             
-            //g.translate(-outputPosX, -outputPosY);
+            translate(new Vector3(-gamePosX, -gamePosY,0));
             
-            Rectangle scissors = new Rectangle();
-            Rectangle clipBounds = new Rectangle(screenPosX,screenPosY,screenWidth,screenHeight);
-            ScissorStack.calculateScissors(this, combined, clipBounds, scissors);
-            ScissorStack.pushScissors(scissors);
+            //Rectangle scissors = new Rectangle();
+            //Rectangle clipBounds = new Rectangle(screenPosX,screenPosY,screenWidth,screenHeight);
+            //ScissorStack.calculateScissors(this, combined, clipBounds, scissors);
+            //ScissorStack.pushScissors(scissors);
 
 
             
             //g.setClip(screenPosX, screenPosY, screenWidth, screenHeight);
 
-            
             //render map
             createDepthList();
             Controller.getMap().render(view, this);
 
             //reset clipping
-            ScissorStack.popScissors();
+            //ScissorStack.popScissors();
             
             //reverse scale
             //g.scale(1/getTotalScale(), 1/getTotalScale());
                         
-            //reverse translate
-            this.translate(new Vector3(outputPosX*getTotalScale() - screenPosX, outputPosY*getTotalScale() - screenPosY, 0));
+            //reverse both translations
+            translate(new Vector3(gamePosX*getTotalScale() - screenPosX, gamePosY*getTotalScale() - screenPosY, 0));
             
         }
     }
@@ -191,7 +193,7 @@ public class VirtualCamera extends Camera{
      * @return 
      */
     public int getLeftBorder(){
-        leftborder = outputPosX / GameObject.DIMENSION - 1;
+        leftborder = gamePosX / GameObject.DIMENSION - 1;
         if (leftborder < 0) leftborder= 0;
         
         return leftborder;
@@ -202,7 +204,7 @@ public class VirtualCamera extends Camera{
      * @return
      */
     public int getRightBorder(){
-        rightborder = (outputPosX + getOutputWidth()) / GameObject.DIMENSION + 2;
+        rightborder = (gamePosX + getOutputWidth()) / GameObject.DIMENSION + 2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
 
         return rightborder;
@@ -213,7 +215,7 @@ public class VirtualCamera extends Camera{
      * @return measured in blocks
      */
     public int getTopBorder(){    
-        topborder = outputPosY / GameObject.DIM4 - 3;
+        topborder = gamePosY / GameObject.DIM4 - 3;
         if (topborder < 0) topborder= 0;
         
         return topborder;
@@ -224,41 +226,41 @@ public class VirtualCamera extends Camera{
      * @return measured in blocks
      */
     public int getBottomBorder(){
-        bottomborder = (outputPosY+getOutputHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
+        bottomborder = (gamePosY+getOutputHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
         return bottomborder;
     }
     
   /**
-     * The VirtualCamera Position from in the game world.
+     * The Camera Position in the game world.
      * @return in pixels
      */
-    public int getOutputPosX() {
-        return outputPosX;
+    public int getGamePosX() {
+        return gamePosX;
     }
 
     /**
-     * The VirtualCamera left Position in the game world.
+     * The Camera left Position in the game world.
      * @param x in pixels
      */
-    public void setOutputPosX(int x) {
-        this.outputPosX = x;
+    public void setGamePosX(int x) {
+        this.gamePosX = x;
     }
 
     /**
-     * The VirtualCamera top-position in the game world.
+     * The Camera top-position in the game world.
      * @return in camera position game space
      */
-    public int getOutputPosY() {
-        return outputPosY;
+    public int getGamePosY() {
+        return gamePosY;
     }
 
     /**
-     * The VirtualCamera top-position in the game world.
+     * The Camera top-position in the game world.
      * @param y in game space
      */
-    public void setOutputPosY(int y) {
-        this.outputPosY = y;
+    public void setGamePosY(int y) {
+        this.gamePosY = y;
     }
 
     /**
@@ -279,7 +281,7 @@ public class VirtualCamera extends Camera{
     }
 
     /**
-     * Returns the position of the cameras output.
+     * Returns the position of the cameras output (on the screen)
      * @return  in pixels
      */
     public int getScreenPosX() {
@@ -287,7 +289,7 @@ public class VirtualCamera extends Camera{
     }
 
     /**
-     * Returns the position of the camera
+     * Returns the position of the camera (on the screen)
      * @return
      */
     public int getScreenPosY() {
@@ -305,7 +307,7 @@ public class VirtualCamera extends Camera{
 
     /**
      * Returns the width of the camera output before scale.
-     * To get the real value multiply it with scale value.
+     * To get the real display size multiply it with scale value.
      * @return the value before scaling
      */
     public int getScreenWidth() {
@@ -316,7 +318,7 @@ public class VirtualCamera extends Camera{
    
     
      /**
-     * Fills the map into a list and sorts it in the order of the rendering, called the depthlist.
+     * Fills the map into a list and sorts it in the order of the rendering, called the "depthlist".
      */
     private void createDepthList() {
         depthsort.clear();
@@ -330,7 +332,7 @@ public class VirtualCamera extends Camera{
                         && 
                             coord.getBlock().getScreenPosY(coord)
                         <
-                            outputPosY + getOutputHeight()
+                            gamePosY + getOutputHeight()
                     ) {
                         depthsort.add(new Renderobject(coord, -1));
                     }
@@ -345,7 +347,7 @@ public class VirtualCamera extends Camera{
                                 entity.getCoords()
                             )
                         <
-                            outputPosY + getOutputHeight()
+                            gamePosY + getOutputHeight()
                     )
                     depthsort.add(
                         new Renderobject(entity, i)
@@ -647,10 +649,5 @@ public class VirtualCamera extends Camera{
                 Controller.getMapData(coords[0], coords[1], level).setLightlevel((255 * level) / topmost);
             }
         }
-    }
-
-    @Override
-    public void update(boolean updateFrustum) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

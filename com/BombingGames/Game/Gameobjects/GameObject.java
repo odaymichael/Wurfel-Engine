@@ -180,7 +180,7 @@ public abstract class GameObject {
      * @throws SlickException
      */
     public static void loadSheet()  {
-        spritesheet = new TextureAtlas(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.txt"));
+        spritesheet = new TextureAtlas(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.txt"), true);
         Gdx.app.debug("DEBUG","Spritesheet loaded");
     }
 

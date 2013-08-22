@@ -1,14 +1,12 @@
 package com.BombingGames.MainMenu;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import org.lwjgl.opengl.GL11;
 
 
@@ -29,7 +27,6 @@ public class View {
      */
     public View(){
         //load textures
-        Texture.setEnforcePotImages(false);
         lettering = new Sprite(new Texture(Gdx.files.internal("com/BombingGames/MainMenu/Images/Lettering.png")));
         lettering.setX((Gdx.graphics.getWidth() - lettering.getWidth())/2);
         lettering.setY(50);
@@ -42,6 +39,7 @@ public class View {
         camera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
         font = new BitmapFont(Gdx.files.internal("com/BombingGames/EngineCore/arial.fnt"), true);
+        font.setColor(Color.GREEN);
     }
 
     /**
@@ -56,6 +54,12 @@ public class View {
         //update camera and set the projection matrix
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        
+        batch.begin();
+        font.draw(batch, "FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
+        font.draw(batch, Gdx.input.getX()+ ","+Gdx.input.getY(), Gdx.input.getX(), Gdx.input.getY());
+        batch.end();
+        
         
         // render the lettering
         batch.begin();

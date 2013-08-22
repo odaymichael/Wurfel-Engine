@@ -5,6 +5,7 @@ import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.Texture;
 import java.io.File;
 
 /**
@@ -57,6 +58,7 @@ public class Wurfelengine {
 
         workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
         
+        Texture.setEnforcePotImages(false);
         LwjglApplication application = new LwjglApplication(CORE, config);
         
         //basic engine setting
