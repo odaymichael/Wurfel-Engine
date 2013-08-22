@@ -5,6 +5,8 @@ import com.BombingGames.EngineCore.Minimap;
 import com.BombingGames.EngineCore.Camera;
 import com.BombingGames.EngineCore.Coordinate;
 import com.BombingGames.EngineCore.Controller;
+import static com.BombingGames.EngineCore.Controller.getLightengine;
+import static com.BombingGames.EngineCore.Controller.getMap;
 import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Player;
@@ -28,32 +30,32 @@ public class CustomGameController extends Controller {
     public CustomGameController() {
         super();
 
-        Player player = (Player) AbstractEntity.getInstance(
-                40,
-                0,
-                Coordinate.getMapCenter(Map.getBlocksZ()*Block.GAMEDIMENSION)
-            );
-        player.setControls("WASD");
-        setPlayer(player);
-        
-        addCamera(
-            new Camera(
-                getPlayer(),
-                0, //left
-                0, //top
-                Gdx.graphics.getWidth(), //full width 
-                Gdx.graphics.getHeight()//full height
-            )
-        );
+//        Player player = (Player) AbstractEntity.getInstance(
+//                40,
+//                0,
+//                Coordinate.getMapCenter(Map.getBlocksZ()*Block.GAMEDIMENSION)
+//            );
+//        player.setControls("WASD");
+//        setPlayer(player);
         
 //        addCamera(
 //            new Camera(
+//                getPlayer(),
 //                0, //left
 //                0, //top
-//                gc.getWidth(), //full width 
-//                gc.getHeight()//full height
+//                Gdx.graphics.getWidth(), //full width 
+//                Gdx.graphics.getHeight()/2//full height
 //            )
 //        );
+        
+        addCamera(
+            new Camera(
+                0, //left
+                Gdx.graphics.getHeight()/2, //top
+                Gdx.graphics.getWidth(), //full width 
+                Gdx.graphics.getHeight()/2//full height
+            )
+        );
         
         setMinimap(
             new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 10,10)
@@ -71,34 +73,6 @@ public class CustomGameController extends Controller {
         if (!GameplayScreen.msgSystem().isListeningForInput()) {
             if (input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
 
-            //toggle fullscreen
-            //if (input.isKeyPressed(Input.Keys.F)) Gdx.graphics.setDisplayMode(new DisplayMode());.setFullscreen(!gc.isFullscreen()); 
-
-            //toggle fullscreen
-            if (input.isKeyPressed(Input.Keys.E)){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
-                getMap().earthquake(5000);
-            }
-            
-            //toggle minimap
-            if (input.isKeyPressed(Input.Keys.M)){
-                GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
-            }
-            
-            //pause
-            //if (input.isKeyDown(Input.Keys.P)) Gdx.app.setPaused(true);
-
-
-            //reset zoom
-            if (input.isKeyPressed(Input.Keys.Z)) {
-                getCameras().get(0).setZoom(1);
-                GameplayScreen.msgSystem().add("Zoom reset");
-             }  
-            
-            //show/hide light engine
-            if (input.isKeyPressed(Input.Keys.L)) {
-                getLightengine().RenderData(!getLightengine().getRenderPosition());
-             } 
-            
 
             Camera camera = getCameras().get(0);
             camera.setGamePosY(camera.getGamePosY()- (input.isKeyPressed(Input.Keys.W)? 3: 0));
@@ -135,7 +109,35 @@ public class CustomGameController extends Controller {
 
         @Override
         public boolean keyDown(int keycode) {
-            return false;
+           //toggle minimap
+            if (keycode ==Input.Keys.M){
+                GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
+            }
+            
+                        //toggle fullscreen
+            //if (input.isKeyPressed(Input.Keys.F)) Gdx.graphics.setDisplayMode(new DisplayMode());.setFullscreen(!gc.isFullscreen()); 
+
+            //toggle eathquake
+            if (keycode == Input.Keys.E){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
+                getMap().earthquake(5000);
+            }
+            
+            //pause
+            //if (input.isKeyDown(Input.Keys.P)) Gdx.app.setPaused(true);
+
+
+            //reset zoom
+            if (keycode == Input.Keys.Z) {
+                getCameras().get(0).setZoom(1);
+                GameplayScreen.msgSystem().add("Zoom reset");
+             }  
+            
+            //show/hide light engine
+            if (keycode == Input.Keys.L) {
+                getLightengine().RenderData(!getLightengine().getRenderPosition());
+             } 
+            
+            return true;
             
         }
 

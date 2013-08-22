@@ -5,7 +5,9 @@ import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import java.util.ArrayList;
 
 /**
@@ -33,7 +35,7 @@ public class Camera extends OrthographicCamera{
      */
     public Camera(int x, int y, int width, int height){
         super(width, height);
-        setToOrtho(true, width, height);
+        setToOrtho(true, width,  height);
         
         screenPosX = x;
         screenPosY = y;
@@ -85,6 +87,7 @@ public class Camera extends OrthographicCamera{
      */
     @Override
     public void update() {
+        apply(Gdx.gl10);
         super.update();
         //refrehs the camera's position in the game world
         if (focusCoordinates != null) {
@@ -119,30 +122,25 @@ public class Camera extends OrthographicCamera{
         if (Controller.getMap() != null) {  
             view.getBatch().setProjectionMatrix(combined);
                         
-            //move the camera (graphic context)
-           
-            translate(new Vector3(screenPosX, screenPosY,0));
+            //move the camera (graphic context)           
+            translate(new Vector3(screenPosX, screenPosY, 0));
             
             // Gdx.gl.glViewport(gamePosX, gamePosX, screenWidth, screenHeight);
             //scale(getTotalScale(), getTotalScale());
             
-            translate(new Vector3(-gamePosX, -gamePosY,0));
+            translate(new Vector3(-gamePosX, -gamePosY, 0));
             
-            //Rectangle scissors = new Rectangle();
-            //Rectangle clipBounds = new Rectangle(screenPosX,screenPosY,screenWidth,screenHeight);
-            //ScissorStack.calculateScissors(this, combined, clipBounds, scissors);
-            //ScissorStack.pushScissors(scissors);
-
-
-            
-            //g.setClip(screenPosX, screenPosY, screenWidth, screenHeight);
+            Rectangle scissors = new Rectangle();
+            Rectangle clipBounds = new Rectangle(screenPosX,screenPosY,screenWidth,screenHeight);
+            ScissorStack.calculateScissors(view.getHudCamera(), view.getBatch().getTransformMatrix(), clipBounds, scissors);
+            ScissorStack.pushScissors(scissors);
 
             //render map
             createDepthList();
             Controller.getMap().render(view, this);
 
             //reset clipping
-            //ScissorStack.popScissors();
+            ScissorStack.popScissors();
             
             //reverse scale
             //g.scale(1/getTotalScale(), 1/getTotalScale());

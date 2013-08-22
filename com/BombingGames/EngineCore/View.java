@@ -4,6 +4,7 @@ import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -59,17 +60,21 @@ public class View {
      */
     public void render(){
         //clear & set background to black
-        GL11.glClearColor( 0f, 0f, 0f, 1f );
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);        
         
         //render every camera
         for (Camera camera : controller.getCameras()) {
             camera.render(this);
         }
         
+        
         //render HUD
         hudCamera.update();
         batch.setProjectionMatrix(hudCamera.combined);
+        
+        batch.begin();
+        font.draw(batch, "FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
+        batch.end();
         
         //scale to fit
         //g.scale(equalizationScale, equalizationScale);
@@ -200,4 +205,10 @@ public class View {
     public SpriteBatch getBatch() {
         return batch;
     }
+
+    public OrthographicCamera getHudCamera() {
+        return hudCamera;
+    }
+    
+    
 }

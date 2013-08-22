@@ -29,7 +29,6 @@ public class GameplayScreen implements Screen{
         controller = new CustomGameController();
         view = new CustomGameView(controller);
         controller.setView(view);
-
     }
              
 
