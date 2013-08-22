@@ -20,7 +20,7 @@
         <key>dpi</key>
         <uint>72</uint>
         <key>dataFormat</key>
-        <string>slick2d</string>
+        <string>libgdx</string>
         <key>textureFileName</key>
         <filename>Spritesheet.png</filename>
         <key>flipPVR</key>
@@ -111,7 +111,7 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>Spritesheet.def</filename>
+        <filename>Spritesheet.txt</filename>
         <key>multiPack</key>
         <false/>
         <key>mainExtension</key>

@@ -1,5 +1,7 @@
 package com.BombingGames.MainMenu;
 
+import com.BombingGames.EngineCore.GameplayScreen;
+import com.BombingGames.Wurfelengine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -38,11 +40,11 @@ public class Controller {
         if (menuItems[0].isClicked()){
             MainMenuScreen.setLoadMap(false);
             fx.play();
-            //sbg.enterState(2);            
+            Wurfelengine.CORE.setScreen(new GameplayScreen());
         } else if (menuItems[1].isClicked()) { 
                 MainMenuScreen.setLoadMap(true);
                 fx.play();
-                //sbg.enterState(2); 
+                Wurfelengine.CORE.setScreen(new GameplayScreen());
             } else if (menuItems[2].isClicked()){
                 fx.play();
                 Gdx.app.exit();

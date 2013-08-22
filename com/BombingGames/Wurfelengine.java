@@ -17,8 +17,9 @@ public class Wurfelengine {
      */
     public static final String VERSION = "1.0.4";    
     private static File workingDirectory;
+    public static final Core CORE = new Core();
 
-    private static class Core extends Game {
+    public static class Core extends Game {
         
         @Override
         public void create() {
@@ -56,8 +57,8 @@ public class Wurfelengine {
 
         workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
         
-        LwjglApplication game = new LwjglApplication(new Core(), config);
-                
+        LwjglApplication application = new LwjglApplication(CORE, config);
+        
         //basic engine setting
         
         //LIBGDX: no equivalent found in libGDX yet
