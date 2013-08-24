@@ -33,7 +33,7 @@ public class Controller {
      */
     public Controller(){  
         newMap();
-        //lightEngine = new LightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        lightEngine = new LightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         
         recalcRequested = true;
     }
