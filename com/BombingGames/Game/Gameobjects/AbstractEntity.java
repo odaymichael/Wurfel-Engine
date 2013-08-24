@@ -106,31 +106,30 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         return new Coordinate(coords.getRelX(), coords.getRelY(), z, true).getBlock().isObstacle();
     }
     
-    public void update(int delta) {
-    }
+
         
      /**
      * Get the screen x-position where the object is rendered without regarding the camera.
-     * @param coords  The relative coordinates where the object is rendered 
+     * @param coords  this parameter get's ignored because entitys know their own coordinates. You can pass <i>null</i> here.
      * @return The screen X-position in pixels.
      */
    @Override
     public int getScreenPosX(Coordinate coords) {
-        return coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
-               + (coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
+        return this.coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
+               + (this.coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
                + (int) (offsetX); //add the objects position inside this coordinate
     }
 
     /**
      * Get the screen y-position where the object is rendered without regarding the camera.
-     * @param coords The coordinates where the object is rendered 
+     * @param coords  this parameter get's ignored because entitys know their own coordinates. You can pass <i>null</i> here.
      * @return The screen Y-position in pixels.
      */
    @Override
     public int getScreenPosY(Coordinate coords) {
-        return coords.getRelY() * DIM4 //y-coordinate * the tile's size
+        return this.coords.getRelY() * DIM4 //y-coordinate * the tile's size
                + (int) (offsetY / 2) //add the objects position inside this coordinate
-               - (int) (coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
+               - (int) (this.coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
     }
     
     /**

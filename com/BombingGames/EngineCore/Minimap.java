@@ -15,7 +15,7 @@ public class Minimap {
     private final float scaleX = 12;//8
     private final float scaleY = 6;//4
     private Controller controller;
-    private Camera camera;
+    private WECamera camera;
     private Color[][] mapdata = new Color[Map.getBlocksX()][Map.getBlocksY()];
     private boolean visible;
 
@@ -26,7 +26,7 @@ public class Minimap {
      * @param screenX the screen-position of the minimap
      * @param screenY  the screen-position of the minimap
      */
-    public Minimap(Controller controller, Camera camera, int screenX, int screenY) {
+    public Minimap(Controller controller, WECamera camera, int screenX, int screenY) {
         if (controller == null || camera == null) throw new NullPointerException("Parameter controller or camera is null");
         this.posX = screenX;
         this.posY = screenY;

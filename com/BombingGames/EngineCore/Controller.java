@@ -21,7 +21,7 @@ public class Controller {
         
     private AbstractCharacter player;
     private View view;
-    private ArrayList<Camera> cameras = new ArrayList();
+    private ArrayList<WECamera> cameras = new ArrayList();
     private Minimap minimap;
 
     
@@ -33,7 +33,7 @@ public class Controller {
      */
     public Controller(){  
         newMap();
-        lightEngine = new LightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        //lightEngine = new LightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         
         recalcRequested = true;
     }
@@ -243,7 +243,7 @@ public class Controller {
      * Request a recalc with <i>reuqestRecalc()</i>. 
      * @param camera 
      */
-    public void recalcIfRequested(Camera camera){
+    public void recalcIfRequested(WECamera camera){
         if (recalcRequested) {
             camera.raytracing();
             LightEngine.calcSimpleLight();
@@ -264,7 +264,7 @@ public class Controller {
      * Returns a camera.
      * @return The virtual cameras rendering the scene
      */
-    protected ArrayList<Camera> getCameras() {
+    protected ArrayList<WECamera> getCameras() {
         return cameras;
     }
 
@@ -272,7 +272,7 @@ public class Controller {
      * Add a camera.
      * @param camera
      */
-    protected void addCamera(Camera camera) {
+    protected void addCamera(WECamera camera) {
         this.cameras.add(camera);
     }
 

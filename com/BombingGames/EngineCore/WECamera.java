@@ -4,18 +4,20 @@ import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import java.util.ArrayList;
+import org.lwjgl.opengl.GL11;
 
 /**
- *Creates a virtual camera wich displays the game world.  
+ *Creates a virtual camera wich displays the game world on the viewport.  
  * @author Benedikt Vogler
  */
-public class Camera extends OrthographicCamera{
-    private final int screenPosX, screenPosY, screenWidth, screenHeight;
+public class WECamera extends Camera {
+    private final int viewportPosX, viewportPosY;
     private int gamePosX, gamePosY;
     private int leftborder, topborder, rightborder, bottomborder;
     private float zoom = 1;
@@ -28,21 +30,23 @@ public class Camera extends OrthographicCamera{
 
     /**
      * Creates a camera pointing at the middle of the map.
-     * @param x
-     * @param y
-     * @param width The width of  image the camer creates
-     * @param height The height of  image the camer creates 
+     * @param x the position in the application window
+     * @param y the position in the application window
+     * @param width The width of the image the camera creates on the application window (viewport)
+     * @param height The height of the image the camera creates on the application window (viewport)
      */
-    public Camera(int x, int y, int width, int height){
-        super(width, height);
-        setToOrtho(true, width,  height);
+    public WECamera(int x, int y, int width, int height){
+        viewportWidth = width;
+	viewportHeight = height;
+        viewportPosX = x;
+        viewportPosY = y;
         
-        screenPosX = x;
-        screenPosY = y;
-        screenWidth = width;
-        screenHeight = height;
+	near = 0;
+	up.set(0, -1, 0);
+	direction.set(0, 0, 1);
+	position.set(zoom * viewportWidth / 2.0f, zoom * viewportHeight / 2.0f, 0);        
         
-        equalizationScale = screenWidth / (float) View.ENGINE_RENDER_WIDTH;
+        equalizationScale = viewportWidth / (float) View.RENDER_RESOLUTION_WIDTH;
         
         //set the camera's focus to the center of the map
         gamePosX = Coordinate.getMapCenter().getScreenPosX() - getOutputWidth() / 2;
@@ -57,7 +61,7 @@ public class Camera extends OrthographicCamera{
      * @param width the width of the output. it can be different than the output on the display because it gets scaled later again.
      * @param height the height of the output. it can be different than the output on the display because it gets scaled later again.
      */
-    public Camera(Coordinate focus, int x, int y, int width, int height) {
+    public WECamera(Coordinate focus, int x, int y, int width, int height) {
         this(x, y, width, height);   
         GameplayScreen.msgSystem().add("Camera is focusing a coordinate");
         this.focusCoordinates = focus;
@@ -73,7 +77,7 @@ public class Camera extends OrthographicCamera{
      * @param width the screen width
      * @param height the screen width
      */
-    public Camera(AbstractEntity focusentity, int x, int y, int width, int height) {
+    public WECamera(AbstractEntity focusentity, int x, int y, int width, int height) {
         this(x,y,width,height);
         if (focusentity == null)
             throw new NullPointerException("Parameter 'focusentity' is null");
@@ -87,16 +91,33 @@ public class Camera extends OrthographicCamera{
      */
     @Override
     public void update() {
-        super.update();
         apply(Gdx.gl10);//don't know what this does
-                
+       
+        //orthographic camera, libgdx stuff
+        projection.setToOrtho(
+            zoom * -viewportWidth / 2,
+            zoom * viewportWidth / 2,
+            zoom * -viewportHeight / 2,
+            zoom * viewportHeight / 2,
+            0,
+            Math.abs(far)
+        );
+        Vector3 tmp = new Vector3();
+        view.setToLookAt(position, tmp.set(position).add(direction), up);
+        combined.set(projection);
+        Matrix4.mul(combined.val, view.val);
+
+        invProjectionView.set(combined);
+        Matrix4.inv(invProjectionView.val);
+        frustum.update(invProjectionView);
+        
         //refrehs the camera's position in the game world
         if (focusCoordinates != null) {
             gamePosX = focusCoordinates.getBlock().getScreenPosX(focusCoordinates) - getOutputWidth() / 2 - GameObject.DIM2;
             gamePosY = focusCoordinates.getBlock().getScreenPosY(focusCoordinates) - getOutputHeight() / 2;
         } else if (focusentity != null ){
-            gamePosX = focusentity.getScreenPosX(focusentity.getCoords()) - getOutputWidth() / 2;            
-            gamePosY = focusentity.getScreenPosY(focusentity.getCoords()) - getOutputHeight() / 2 ;
+            gamePosX = focusentity.getScreenPosX(null) - getOutputWidth() / 2;            
+            gamePosY = focusentity.getScreenPosY(null) - getOutputHeight() / 2 ;
         }
         
         //maybe unneccessary and can be done when the getter is called.
@@ -121,18 +142,19 @@ public class Camera extends OrthographicCamera{
      */
     public void render(View view) {
         if (Controller.getMap() != null) {  
+            //Gdx.gl10.glViewport(viewportPosX, viewportPosY+(int) viewportHeight, (int) viewportWidth, (int) viewportHeight);
+            
             view.getBatch().setProjectionMatrix(combined);
                         
-            //move the camera (graphic context)           
-            translate(new Vector3(screenPosX, screenPosY, 0));
+            //move the viewport           
+            translate(new Vector3(viewportPosX, viewportPosY, 0));
             
-            // Gdx.gl.glViewport(gamePosX, gamePosX, screenWidth, screenHeight);
             //scale(getTotalScale(), getTotalScale());
             
             translate(new Vector3(-gamePosX, -gamePosY, 0));
             
             Rectangle scissors = new Rectangle();
-            Rectangle clipBounds = new Rectangle(screenPosX,screenPosY,screenWidth,screenHeight);
+            Rectangle clipBounds = new Rectangle(viewportPosX, viewportPosY, viewportWidth, viewportHeight);
             ScissorStack.calculateScissors(view.getHudCamera(), view.getBatch().getTransformMatrix(), clipBounds, scissors);
             ScissorStack.pushScissors(scissors);
 
@@ -147,7 +169,7 @@ public class Camera extends OrthographicCamera{
             //g.scale(1/getTotalScale(), 1/getTotalScale());
                         
             //reverse both translations
-            translate(new Vector3(gamePosX*getTotalScale() - screenPosX, gamePosY*getTotalScale() - screenPosY, 0));
+            translate(new Vector3(gamePosX*getTotalScale() - viewportPosX, gamePosY*getTotalScale() - viewportPosY, 0));
             
         }
     }
@@ -268,7 +290,7 @@ public class Camera extends OrthographicCamera{
      * @return in pixels
      */
     public final int getOutputWidth() {
-        return (int) (screenWidth / getTotalScale());
+        return (int) (viewportWidth / getTotalScale());
     }
     
   /**
@@ -276,7 +298,7 @@ public class Camera extends OrthographicCamera{
     * @return  in pixels
     */
    public final int getOutputHeight() {
-        return (int) (screenHeight / getTotalScale());
+        return (int) (viewportHeight / getTotalScale());
     }
 
     /**
@@ -284,7 +306,7 @@ public class Camera extends OrthographicCamera{
      * @return  in pixels
      */
     public int getScreenPosX() {
-        return screenPosX;
+        return viewportPosX;
     }
 
     /**
@@ -292,7 +314,7 @@ public class Camera extends OrthographicCamera{
      * @return
      */
     public int getScreenPosY() {
-        return screenPosY;
+        return viewportPosY;
     }
     
     /**
@@ -300,8 +322,8 @@ public class Camera extends OrthographicCamera{
      * To get the real display size multiply it with scale values.
      * @return the value before scaling
      */
-    public int getScreenHeight() {
-        return screenHeight;
+    public float getScreenHeight() {
+        return viewportHeight;
     }
 
     /**
@@ -309,8 +331,8 @@ public class Camera extends OrthographicCamera{
      * To get the real display size multiply it with scale value.
      * @return the value before scaling
      */
-    public int getScreenWidth() {
-        return screenWidth;
+    public float getScreenWidth() {
+        return viewportWidth;
     }
 
 
@@ -648,5 +670,10 @@ public class Camera extends OrthographicCamera{
                 Controller.getMapData(coords[0], coords[1], level).setLightlevel((255 * level) / topmost);
             }
         }
+    }
+
+    @Override
+    public void update(boolean updateFrustum) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

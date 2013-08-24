@@ -2,7 +2,7 @@ package com.BombingGames.Game;
 
 import com.BombingGames.EngineCore.Map;
 import com.BombingGames.EngineCore.Minimap;
-import com.BombingGames.EngineCore.Camera;
+import com.BombingGames.EngineCore.WECamera;
 import com.BombingGames.EngineCore.Coordinate;
 import com.BombingGames.EngineCore.Controller;
 import static com.BombingGames.EngineCore.Controller.getLightengine;
@@ -30,32 +30,32 @@ public class CustomGameController extends Controller {
     public CustomGameController() {
         super();
 
-//        Player player = (Player) AbstractEntity.getInstance(
-//                40,
-//                0,
-//                Coordinate.getMapCenter(Map.getBlocksZ()*Block.GAMEDIMENSION)
-//            );
-//        player.setControls("WASD");
-//        setPlayer(player);
-        
-//        addCamera(
-//            new Camera(
-//                getPlayer(),
-//                0, //left
-//                0, //top
-//                Gdx.graphics.getWidth(), //full width 
-//                Gdx.graphics.getHeight()/2//full height
-//            )
-//        );
+        Player player = (Player) AbstractEntity.getInstance(
+                40,
+                0,
+                Coordinate.getMapCenter(Map.getBlocksZ()*Block.GAMEDIMENSION)
+        );
+        player.setControls("WASD");
+        setPlayer(player);
         
         addCamera(
-            new Camera(
+            new WECamera(
+                getPlayer(),
                 0, //left
-                Gdx.graphics.getHeight()/2, //top
+                0, //top
                 Gdx.graphics.getWidth(), //full width 
                 Gdx.graphics.getHeight()/2//full height
             )
         );
+        
+//        addCamera(
+//            new Camera(
+//                0, //left
+//                Gdx.graphics.getHeight()/2, //top
+//                Gdx.graphics.getWidth(), //full width 
+//                Gdx.graphics.getHeight()/2//full height
+//            )
+//        );
         
         setMinimap(
             new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 10,10)
@@ -66,7 +66,7 @@ public class CustomGameController extends Controller {
 
     
     @Override
-    public void update(float delta){
+    public void update(int delta){
         //get input and do actions
         Input input = Gdx.input;
         
@@ -74,11 +74,6 @@ public class CustomGameController extends Controller {
             if (input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
 
 
-            Camera camera = getCameras().get(0);
-            camera.setGamePosY(camera.getGamePosY()- (input.isKeyPressed(Input.Keys.W)? 3: 0));
-            camera.setGamePosY(camera.getGamePosY()+ (input.isKeyPressed(Input.Keys.S)? 3: 0));
-            camera.setGamePosX(camera.getGamePosX()+ (input.isKeyPressed(Input.Keys.D)? 3: 0));
-            camera.setGamePosX(camera.getGamePosX()- (input.isKeyPressed(Input.Keys.A)? 3: 0));
             
             //walk
             if (getPlayer() != null){
@@ -91,15 +86,24 @@ public class CustomGameController extends Controller {
                         .25f+(input.isKeyPressed(Input.Keys.SHIFT_LEFT)? 0.75f: 0)
                     );
                 if (input.isKeyPressed(Input.Keys.SPACE)) getPlayer().jump();
+            } else {
+                //update camera position
+                WECamera camera = getCameras().get(0);
+                camera.setGamePosY( camera.getGamePosY()
+                    - (input.isKeyPressed(Input.Keys.W)? 3: 0)
+                    + (input.isKeyPressed(Input.Keys.S)? 3: 0)
+                    );
+                camera.setGamePosX( camera.getGamePosX()
+                    + (input.isKeyPressed(Input.Keys.D)? 3: 0)
+                    - (input.isKeyPressed(Input.Keys.A)? 3: 0)
+                    );
             }
             
         } else {
+            Gdx.input.setOnscreenKeyboardVisible(true);
             //fetch input and write it down
             //to-do!
         }
-        
-        //toggle input for msgSystem
-        if (input.isKeyPressed(Input.Keys.ENTER)) GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
         
         super.update(delta);
     }
@@ -109,12 +113,13 @@ public class CustomGameController extends Controller {
 
         @Override
         public boolean keyDown(int keycode) {
+            
            //toggle minimap
-            if (keycode ==Input.Keys.M){
+            if (keycode == Input.Keys.M){
                 GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
             }
             
-                        //toggle fullscreen
+            //toggle fullscreen
             //if (input.isKeyPressed(Input.Keys.F)) Gdx.graphics.setDisplayMode(new DisplayMode());.setFullscreen(!gc.isFullscreen()); 
 
             //toggle eathquake
@@ -136,6 +141,10 @@ public class CustomGameController extends Controller {
             if (keycode == Input.Keys.L) {
                 getLightengine().RenderData(!getLightengine().getRenderPosition());
              } 
+            
+            //toggle input for msgSystem
+            if (keycode == Input.Keys.ENTER)
+                GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
             
             return true;
             

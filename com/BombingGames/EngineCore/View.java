@@ -20,7 +20,7 @@ public class View {
      * The default render width.
      * Every resolution smaller than this get's scaled down and every resolution bigger scaled up. 
      */
-    public static final int ENGINE_RENDER_WIDTH = 1920;
+    public static final int RENDER_RESOLUTION_WIDTH = 1920;
 
     private static BitmapFont font;
     private float equalizationScale;
@@ -46,7 +46,7 @@ public class View {
         font.setColor(Color.GREEN);
         
         //default rendering size is FullHD
-        equalizationScale = Gdx.graphics.getWidth() / (float) ENGINE_RENDER_WIDTH;
+        equalizationScale = Gdx.graphics.getWidth() / (float) RENDER_RESOLUTION_WIDTH;
         Gdx.app.log("DEBUG","Scale is:" + Float.toString(equalizationScale));
  
         hudCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -66,9 +66,10 @@ public class View {
     public void render(){
         //clear & set background to black
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);        
+        //Gdx.gl10.glViewport(0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
         //render every camera
-        for (Camera camera : controller.getCameras()) {
+        for (WECamera camera : controller.getCameras()) {
             camera.render(this);
         }
         

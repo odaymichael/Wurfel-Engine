@@ -276,7 +276,7 @@ public class Map {
      * @param view 
      * @param camera 
      */
-    public void render(View view, Camera camera) {
+    public void render(View view, WECamera camera) {
         //if (Gameplay.getController().hasGoodGraphics()) Block.getSpritesheet().bind();
         //if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
