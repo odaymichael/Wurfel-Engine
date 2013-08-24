@@ -271,7 +271,7 @@ public class Coordinate {
      *
      * @return
      */
-    public int getScreenPosX() {
+    public int get2DPosX() {
         return getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
                + (getRelY() % 2) * DIM2; //y-coordinate multiplied by it's dimension in this direction
     }
@@ -280,7 +280,7 @@ public class Coordinate {
      *
      * @return
      */
-    public int getScreenPosY() {
+    public int get2DPosY() {
         return getRelY() * DIM4 //x-coordinate * the tile's size
                - (int) (getHeight() / Math.sqrt(2)); //take axis shortening into account
     }

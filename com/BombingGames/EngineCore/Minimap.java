@@ -118,8 +118,8 @@ public class Minimap {
             shapeRenderer.rect(
                 renderPosX + scaleX * camera.getGamePosX() / Block.DIMENSION,
                 renderPosY + scaleY * camera.getGamePosY() / (Block.DIM2/2),
-                scaleX*camera.getOutputWidth() / Block.DIMENSION,
-                scaleY*camera.getOutputHeight() / (Block.DIM2/2)
+                scaleX*camera.get2DWidth() / Block.DIMENSION,
+                scaleY*camera.get2DHeight() / (Block.DIM2/2)
             );
 
             if (controller.getPlayer()!=null){
@@ -129,8 +129,8 @@ public class Minimap {
                     renderPosX + scaleX * camera.getGamePosX() / Block.DIMENSION,
                     renderPosY + scaleY * camera.getGamePosY() / (Block.DIM2/2)
                     + scaleY *2*(controller.getPlayer().getCoords().getZ() * (Block.DIM2/2))/ (float) (Block.DIMENSION),
-                    scaleX*camera.getOutputWidth() / Block.DIMENSION,
-                    scaleY*camera.getOutputHeight() / (Block.DIM2/2)
+                    scaleX*camera.get2DWidth() / Block.DIMENSION,
+                    scaleY*camera.get2DHeight() / (Block.DIM2/2)
                 );
             }
 
@@ -140,8 +140,8 @@ public class Minimap {
                 renderPosX + scaleX * camera.getGamePosX() / Block.DIMENSION,
                 renderPosY + scaleY * camera.getGamePosY() / (Block.DIM2/2)
                 + scaleY *2*(Chunk.getBlocksZ() * Block.DIM2)/ (float) (Block.DIMENSION),
-                scaleX*camera.getOutputWidth() / Block.DIMENSION,
-                scaleY*camera.getOutputHeight() / (Block.DIM2/2)
+                scaleX*camera.get2DWidth() / Block.DIMENSION,
+                scaleY*camera.get2DHeight() / (Block.DIM2/2)
             );
             shapeRenderer.end();
             
@@ -149,10 +149,10 @@ public class Minimap {
                 view.drawString(
                         camera.getRightBorder() +" | "+ camera.getBottomBorder(),
                         (int) (renderPosX + scaleX * camera.getGamePosX() / Block.DIMENSION
-                        + scaleX*camera.getOutputWidth() / Block.DIMENSION),
+                        + scaleX*camera.get2DWidth() / Block.DIMENSION),
                         (int) (renderPosY + scaleY * camera.getGamePosY() / Block.DIM2
                         + scaleY *2*(controller.getPlayer().getCoords().getZ() * Block.DIM2)/ (float) (Block.DIMENSION)
-                        + scaleY*camera.getOutputHeight() / Block.DIM2),
+                        + scaleY*camera.get2DHeight() / Block.DIM2),
                         Color.BLACK
                     );
 

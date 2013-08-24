@@ -112,7 +112,7 @@ public class View {
      * @return the relative game coordinate
      */
     public int ScreenXtoGame(int x){
-        return (int) ((x - controller.getCameras().get(0).getScreenPosX()) / controller.getCameras().get(0).getTotalScale()
+        return (int) ((x - controller.getCameras().get(0).getViewportPosX()) / controller.getCameras().get(0).getTotalScale()
             + controller.getCameras().get(0).getGamePosX());
     }
     
@@ -122,7 +122,7 @@ public class View {
      * @return the relative game coordinate
      */
     public int ScreenYtoGame(int y){
-        return (int) ((y - controller.getCameras().get(0).getScreenPosY()) / controller.getCameras().get(0).getTotalScale()
+        return (int) ((y - controller.getCameras().get(0).getViewportPosY()) / controller.getCameras().get(0).getTotalScale()
             + controller.getCameras().get(0).getGamePosY()) * 2;
     }
     

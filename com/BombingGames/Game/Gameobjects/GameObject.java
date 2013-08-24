@@ -125,14 +125,14 @@ public abstract class GameObject {
      * @param coords
      * @return
      */
-    public abstract int getScreenPosX(Coordinate coords);
+    public abstract int get2DPosX(Coordinate coords);
     
     /**
      *
      * @param coords
      * @return
      */
-    public abstract int getScreenPosY(Coordinate coords);
+    public abstract int get2DPosY(Coordinate coords);
     
     /**
      * Draws an object.
@@ -156,8 +156,8 @@ public abstract class GameObject {
         if (!hidden && visible) {
             AtlasRegion texture = getSprite(id, value);
              
-            int xPos = getScreenPosX(coords) + OFFSETLIST[id][value][0];
-            int yPos = getScreenPosY(coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
+            int xPos = get2DPosX(coords) + OFFSETLIST[id][value][0];
+            int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
             
             Color filter;
             if (brightness <= 127){

@@ -44,7 +44,7 @@ public class CustomGameController extends Controller {
                 0, //left
                 0, //top
                 Gdx.graphics.getWidth(), //full width 
-                Gdx.graphics.getHeight()/2//full height
+                Gdx.graphics.getHeight()//full height
             )
         );
         
@@ -182,8 +182,7 @@ public class CustomGameController extends Controller {
 
         @Override
         public boolean scrolled(int amount) {
-            zoom = zoom + amount/1000f;
-            if (zoom < 1) zoom = 1;
+            zoom = zoom + amount/100f;
             getCameras().get(0).setZoom(zoom);
             
             GameplayScreen.msgSystem().add("Zoom: " + getCameras().get(0).getZoom());   

@@ -18,7 +18,7 @@ public class Map {
     /**
      *
      */
-    public final static boolean ENABLECHUNKSWITCH = true;
+    public final static boolean ENABLECHUNKSWITCH = false;
     
     /**in which direction is the world spinning? This is needed for the light engine.
      * WEST->SOUTH->EAST = 0

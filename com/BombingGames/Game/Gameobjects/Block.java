@@ -203,8 +203,8 @@ public class Block extends GameObject {
      * @return The screen X-position in pixels.
      */
    @Override
-    public int getScreenPosX(Coordinate coords) {
-        return coords.getScreenPosX() + (int) (coords.getCellOffset()[0]); //add the objects position inside this coordinate
+    public int get2DPosX(Coordinate coords) {
+        return coords.get2DPosX() + (int) (coords.getCellOffset()[0]); //add the objects position inside this coordinate
     }
 
     /**
@@ -213,8 +213,8 @@ public class Block extends GameObject {
      * @return The screen Y-position in pixels.
      */
    @Override
-    public int getScreenPosY(Coordinate coords) {
-        return coords.getScreenPosY()
+    public int get2DPosY(Coordinate coords) {
+        return coords.get2DPosY()
                + (int) (coords.getCellOffset()[1] / 2) //add the objects position inside this coordinate
                - (int) (coords.getCellOffset()[2] / Math.sqrt(2)); //add the objects position inside this coordinate
     }
@@ -269,10 +269,10 @@ public class Block extends GameObject {
         AtlasRegion image = getBlockSprite(getId(), getValue(), sidenumb);
         
         //right side is  half a block more to the right
-        int xPos = getScreenPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);
+        int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);
         
         //the top is drawn a quarter blocks higher
-        int yPos = getScreenPosY(coords) + (sidenumb != 1 ? DIM4 : 0);
+        int yPos = get2DPosY(coords) + (sidenumb != 1 ? DIM4 : 0);
         
         brightness -= 127-getLightlevel();
             

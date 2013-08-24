@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import java.util.ArrayList;
-import org.lwjgl.opengl.GL11;
 
 /**
  *Creates a virtual camera wich displays the game world on the viewport.  
@@ -18,7 +17,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class WECamera extends Camera {
     private final int viewportPosX, viewportPosY;
-    private int gamePosX, gamePosY;
+    private int outputPosX, outputPosY;
     private int leftborder, topborder, rightborder, bottomborder;
     private float zoom = 1;
     private float equalizationScale = 1;
@@ -49,8 +48,8 @@ public class WECamera extends Camera {
         equalizationScale = viewportWidth / (float) View.RENDER_RESOLUTION_WIDTH;
         
         //set the camera's focus to the center of the map
-        gamePosX = Coordinate.getMapCenter().getScreenPosX() - getOutputWidth() / 2;
-        gamePosY = Coordinate.getMapCenter().getScreenPosY() - getOutputHeight() / 2;
+        outputPosX = Coordinate.getMapCenter().get2DPosX() - get2DWidth() / 2;
+        outputPosY = Coordinate.getMapCenter().get2DPosY() - get2DHeight() / 2;
     }
     
    /**
@@ -91,17 +90,19 @@ public class WECamera extends Camera {
      */
     @Override
     public void update() {
-        apply(Gdx.gl10);//don't know what this does
+       // apply(Gdx.gl10);//don't know what this does
        
         //orthographic camera, libgdx stuff
         projection.setToOrtho(
-            zoom * -viewportWidth / 2,
-            zoom * viewportWidth / 2,
-            zoom * -viewportHeight / 2,
-            zoom * viewportHeight / 2,
+            1/zoom * -viewportWidth / 2,
+            1/zoom * viewportWidth / 2,
+            1/zoom * -viewportHeight / 2,
+            1/zoom * viewportHeight / 2,
             0,
             Math.abs(far)
         );
+        
+
         Vector3 tmp = new Vector3();
         view.setToLookAt(position, tmp.set(position).add(direction), up);
         combined.set(projection);
@@ -113,25 +114,25 @@ public class WECamera extends Camera {
         
         //refrehs the camera's position in the game world
         if (focusCoordinates != null) {
-            gamePosX = focusCoordinates.getBlock().getScreenPosX(focusCoordinates) - getOutputWidth() / 2 - GameObject.DIM2;
-            gamePosY = focusCoordinates.getBlock().getScreenPosY(focusCoordinates) - getOutputHeight() / 2;
+            outputPosX = focusCoordinates.getBlock().get2DPosX(focusCoordinates) - get2DWidth() / 2 - GameObject.DIM2;
+            outputPosY = focusCoordinates.getBlock().get2DPosY(focusCoordinates) - get2DHeight() / 2;
         } else if (focusentity != null ){
-            gamePosX = focusentity.getScreenPosX(null) - getOutputWidth() / 2;            
-            gamePosY = focusentity.getScreenPosY(null) - getOutputHeight() / 2 ;
+            outputPosX = focusentity.get2DPosX(null) - get2DWidth() / 2;            
+            outputPosY = focusentity.get2DPosY(null) - get2DHeight() / 2 ;
         }
         
         //maybe unneccessary and can be done when the getter is called.
         //update borders once every update
-        leftborder = gamePosX / GameObject.DIMENSION - 1;
+        leftborder = outputPosX / GameObject.DIMENSION - 1;
         if (leftborder < 0) leftborder= 0;
         
-        rightborder = (gamePosX + getOutputWidth()) / GameObject.DIMENSION + 2;
+        rightborder = (outputPosX + get2DWidth()) / GameObject.DIMENSION + 2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
         
-        topborder = gamePosY / GameObject.DIM4 - 3;
+        topborder = outputPosY / GameObject.DIM4 - 3;
         if (topborder < 0) topborder= 0;
         
-        bottomborder = (gamePosY+getOutputHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
+        bottomborder = (outputPosY+get2DHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
     }
     
@@ -151,7 +152,8 @@ public class WECamera extends Camera {
             
             //scale(getTotalScale(), getTotalScale());
             
-            translate(new Vector3(-gamePosX, -gamePosY, 0));
+            translate(new Vector3(outputPosX, outputPosY, 0));
+            //System.out.println("Translate:" + outputPosX +"," +outputPosY);
             
             Rectangle scissors = new Rectangle();
             Rectangle clipBounds = new Rectangle(viewportPosX, viewportPosY, viewportWidth, viewportHeight);
@@ -169,7 +171,10 @@ public class WECamera extends Camera {
             //g.scale(1/getTotalScale(), 1/getTotalScale());
                         
             //reverse both translations
-            translate(new Vector3(gamePosX*getTotalScale() - viewportPosX, gamePosY*getTotalScale() - viewportPosY, 0));
+            //move the viewport           
+            translate(new Vector3(-viewportPosX, -viewportPosY, 0));
+            translate(new Vector3(-outputPosX, -outputPosY, 0));
+            //translate(new Vector3(gamePosX*getTotalScale() - viewportPosX, gamePosY*getTotalScale() - viewportPosY, 0));
             
         }
     }
@@ -214,7 +219,7 @@ public class WECamera extends Camera {
      * @return 
      */
     public int getLeftBorder(){
-        leftborder = gamePosX / GameObject.DIMENSION - 1;
+        leftborder = outputPosX / GameObject.DIMENSION - 1;
         if (leftborder < 0) leftborder= 0;
         
         return leftborder;
@@ -225,7 +230,7 @@ public class WECamera extends Camera {
      * @return
      */
     public int getRightBorder(){
-        rightborder = (gamePosX + getOutputWidth()) / GameObject.DIMENSION + 2;
+        rightborder = (outputPosX + get2DWidth()) / GameObject.DIMENSION + 2;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
 
         return rightborder;
@@ -236,7 +241,7 @@ public class WECamera extends Camera {
      * @return measured in blocks
      */
     public int getTopBorder(){    
-        topborder = gamePosY / GameObject.DIM4 - 3;
+        topborder = outputPosY / GameObject.DIM4 - 3;
         if (topborder < 0) topborder= 0;
         
         return topborder;
@@ -247,7 +252,7 @@ public class WECamera extends Camera {
      * @return measured in blocks
      */
     public int getBottomBorder(){
-        bottomborder = (gamePosY+getOutputHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
+        bottomborder = (outputPosY+get2DHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
         return bottomborder;
     }
@@ -257,7 +262,7 @@ public class WECamera extends Camera {
      * @return in pixels
      */
     public int getGamePosX() {
-        return gamePosX;
+        return outputPosX;
     }
 
     /**
@@ -265,7 +270,7 @@ public class WECamera extends Camera {
      * @param x in pixels
      */
     public void setGamePosX(int x) {
-        this.gamePosX = x;
+        this.outputPosX = x;
     }
 
     /**
@@ -273,7 +278,7 @@ public class WECamera extends Camera {
      * @return in camera position game space
      */
     public int getGamePosY() {
-        return gamePosY;
+        return outputPosY;
     }
 
     /**
@@ -281,7 +286,7 @@ public class WECamera extends Camera {
      * @param y in game space
      */
     public void setGamePosY(int y) {
-        this.gamePosY = y;
+        this.outputPosY = y;
     }
 
     /**
@@ -289,7 +294,7 @@ public class WECamera extends Camera {
      * For screen pixels use <i>ScreenWidth()</i>.
      * @return in pixels
      */
-    public final int getOutputWidth() {
+    public final int get2DWidth() {
         return (int) (viewportWidth / getTotalScale());
     }
     
@@ -297,7 +302,7 @@ public class WECamera extends Camera {
     * The amount of pixel which are visible in Y direction (game pixels). For screen pixels use <i>ScreenHeight()</i>.
     * @return  in pixels
     */
-   public final int getOutputHeight() {
+   public final int get2DHeight() {
         return (int) (viewportHeight / getTotalScale());
     }
 
@@ -305,7 +310,7 @@ public class WECamera extends Camera {
      * Returns the position of the cameras output (on the screen)
      * @return  in pixels
      */
-    public int getScreenPosX() {
+    public int getViewportPosX() {
         return viewportPosX;
     }
 
@@ -313,7 +318,7 @@ public class WECamera extends Camera {
      * Returns the position of the camera (on the screen)
      * @return
      */
-    public int getScreenPosY() {
+    public int getViewportPosY() {
         return viewportPosY;
     }
     
@@ -322,7 +327,7 @@ public class WECamera extends Camera {
      * To get the real display size multiply it with scale values.
      * @return the value before scaling
      */
-    public float getScreenHeight() {
+    public float getViewportHeight() {
         return viewportHeight;
     }
 
@@ -331,7 +336,7 @@ public class WECamera extends Camera {
      * To get the real display size multiply it with scale value.
      * @return the value before scaling
      */
-    public float getScreenWidth() {
+    public float getViewportWidth() {
         return viewportWidth;
     }
 
@@ -351,9 +356,9 @@ public class WECamera extends Camera {
                     if (! coord.getBlock().isHidden()
                         && coord.getBlock().isVisible()
                         && 
-                            coord.getBlock().getScreenPosY(coord)
+                            coord.getBlock().get2DPosY(coord)
                         <
-                            gamePosY + getOutputHeight()
+                            outputPosY + get2DHeight()
                     ) {
                         depthsort.add(new Renderobject(coord, -1));
                     }
@@ -364,11 +369,11 @@ public class WECamera extends Camera {
             AbstractEntity entity = Controller.getMap().getEntitylist().get(i);
             if (!entity.isHidden() && entity.isVisible()
                         && 
-                            entity.getScreenPosY(
+                            entity.get2DPosY(
                                 entity.getCoords()
                             )
                         <
-                            gamePosY + getOutputHeight()
+                            outputPosY + get2DHeight()
                     )
                     depthsort.add(
                         new Renderobject(entity, i)
@@ -421,9 +426,9 @@ public class WECamera extends Camera {
         * @param i index of the depthsort list
         * @return the entityindex
         */
-        protected int getEntityIndex(int i) {
-            return depthsort.get(i).getEntityindex();
-        }
+    protected int getEntityIndex(int i) {
+        return depthsort.get(i).getEntityindex();
+    }
 
         /**
         * Returns the lenght of list of ranking for the rendering order

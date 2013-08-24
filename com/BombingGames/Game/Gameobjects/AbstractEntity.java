@@ -114,7 +114,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * @return The screen X-position in pixels.
      */
    @Override
-    public int getScreenPosX(Coordinate coords) {
+    public int get2DPosX(Coordinate coords) {
         return this.coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
                + (this.coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
                + (int) (offsetX); //add the objects position inside this coordinate
@@ -126,7 +126,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * @return The screen Y-position in pixels.
      */
    @Override
-    public int getScreenPosY(Coordinate coords) {
+    public int get2DPosY(Coordinate coords) {
         return this.coords.getRelY() * DIM4 //y-coordinate * the tile's size
                + (int) (offsetY / 2) //add the objects position inside this coordinate
                - (int) (this.coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
