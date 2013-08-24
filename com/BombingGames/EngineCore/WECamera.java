@@ -90,7 +90,6 @@ public class WECamera extends Camera {
      */
     @Override
     public void update() {
-       // apply(Gdx.gl10);//don't know what this does
        
         //orthographic camera, libgdx stuff
         projection.setToOrtho(
@@ -117,8 +116,8 @@ public class WECamera extends Camera {
             outputPosX = focusCoordinates.getBlock().get2DPosX(focusCoordinates) - get2DWidth() / 2 - GameObject.DIM2;
             outputPosY = focusCoordinates.getBlock().get2DPosY(focusCoordinates) - get2DHeight() / 2;
         } else if (focusentity != null ){
-            outputPosX = focusentity.get2DPosX(null) - get2DWidth() / 2;            
-            outputPosY = focusentity.get2DPosY(null) - get2DHeight() / 2 ;
+            outputPosX = focusentity.get2DPosX(null) - get2DWidth()/2 ;            
+            outputPosY = focusentity.get2DPosY(null) - get2DHeight()/2 ;
         }
         
         //maybe unneccessary and can be done when the getter is called.
@@ -134,6 +133,8 @@ public class WECamera extends Camera {
         
         bottomborder = (outputPosY+get2DHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
+        
+       apply(Gdx.gl10);//don't know what this does
     }
     
     /**
@@ -146,13 +147,14 @@ public class WECamera extends Camera {
             //Gdx.gl10.glViewport(viewportPosX, viewportPosY+(int) viewportHeight, (int) viewportWidth, (int) viewportHeight);
             
             view.getBatch().setProjectionMatrix(combined);
-                        
-            //move the viewport           
+               
+            //move the viewport    
             translate(new Vector3(viewportPosX, viewportPosY, 0));
+            position.set(new Vector3(outputPosX+ get2DWidth()/2 , outputPosY+ get2DHeight()/2 , 0));
             
             //scale(getTotalScale(), getTotalScale());
             
-            translate(new Vector3(outputPosX, outputPosY, 0));
+            //translate(new Vector3(outputPosX, outputPosY, 0));
             //System.out.println("Translate:" + outputPosX +"," +outputPosY);
             
             Rectangle scissors = new Rectangle();
@@ -173,7 +175,7 @@ public class WECamera extends Camera {
             //reverse both translations
             //move the viewport           
             translate(new Vector3(-viewportPosX, -viewportPosY, 0));
-            translate(new Vector3(-outputPosX, -outputPosY, 0));
+            //translate(new Vector3(-outputPosX, -outputPosY, 0));
             //translate(new Vector3(gamePosX*getTotalScale() - viewportPosX, gamePosY*getTotalScale() - viewportPosY, 0));
             
         }

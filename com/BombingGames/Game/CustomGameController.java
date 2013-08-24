@@ -49,10 +49,10 @@ public class CustomGameController extends Controller {
         );
         
 //        addCamera(
-//            new Camera(
+//            new WECamera(
 //                0, //left
 //                Gdx.graphics.getHeight()/2, //top
-//                Gdx.graphics.getWidth(), //full width 
+//                Gdx.graphics.getWidth()/2, //full width 
 //                Gdx.graphics.getHeight()/2//full height
 //            )
 //        );
