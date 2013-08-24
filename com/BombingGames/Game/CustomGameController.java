@@ -58,7 +58,7 @@ public class CustomGameController extends Controller {
 //        );
         
         setMinimap(
-            new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 10,10)
+            new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 100,10)
         );
         
         Gdx.input.setInputProcessor(new listener());
@@ -74,7 +74,6 @@ public class CustomGameController extends Controller {
             if (input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
 
 
-            
             //walk
             if (getPlayer() != null){
                 if ("WASD".equals(getPlayer().getControls()))
@@ -109,7 +108,6 @@ public class CustomGameController extends Controller {
     }
     
     class listener implements InputProcessor {
-        private float zoom = 1;
 
         @Override
         public boolean keyDown(int keycode) {
@@ -182,8 +180,7 @@ public class CustomGameController extends Controller {
 
         @Override
         public boolean scrolled(int amount) {
-            zoom = zoom + amount/100f;
-            getCameras().get(0).setZoom(zoom);
+            getCameras().get(0).setZoom(getCameras().get(0).getZoom() - amount/100f);
             
             GameplayScreen.msgSystem().add("Zoom: " + getCameras().get(0).getZoom());   
             return true;

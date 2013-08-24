@@ -65,7 +65,8 @@ public class View {
      */
     public void render(){
         //clear & set background to black
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);        
+        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);  
+        
         //Gdx.gl10.glViewport(0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
         //render every camera
@@ -75,11 +76,14 @@ public class View {
         
         
         //render HUD
+       // hudCamera.zoom = 1/equalizationScale;
         hudCamera.update();
+        hudCamera.apply(Gdx.gl10);
+         
         batch.setProjectionMatrix(hudCamera.combined);
         shapeRenderer.setProjectionMatrix(hudCamera.combined);
         
-        drawString("FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
+        drawString("FPS:"+ Gdx.graphics.getFramesPerSecond(), 10, 10);
         
         //scale to fit
         //g.scale(equalizationScale, equalizationScale);

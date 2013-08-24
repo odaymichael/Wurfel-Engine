@@ -151,11 +151,7 @@ public class WECamera extends Camera {
             //move the viewport    
             translate(new Vector3(viewportPosX, viewportPosY, 0));
             position.set(new Vector3(outputPosX+ get2DWidth()/2 , outputPosY+ get2DHeight()/2 , 0));
-            
-            //scale(getTotalScale(), getTotalScale());
-            
-            //translate(new Vector3(outputPosX, outputPosY, 0));
-            //System.out.println("Translate:" + outputPosX +"," +outputPosY);
+                        
             
             Rectangle scissors = new Rectangle();
             Rectangle clipBounds = new Rectangle(viewportPosX, viewportPosY, viewportWidth, viewportHeight);
@@ -168,16 +164,10 @@ public class WECamera extends Camera {
 
             //reset clipping
             ScissorStack.popScissors();
-            
-            //reverse scale
-            //g.scale(1/getTotalScale(), 1/getTotalScale());
-                        
+                                    
             //reverse both translations
             //move the viewport           
             translate(new Vector3(-viewportPosX, -viewportPosY, 0));
-            //translate(new Vector3(-outputPosX, -outputPosY, 0));
-            //translate(new Vector3(gamePosX*getTotalScale() - viewportPosX, gamePosY*getTotalScale() - viewportPosY, 0));
-            
         }
     }
   
@@ -232,7 +222,7 @@ public class WECamera extends Camera {
      * @return
      */
     public int getRightBorder(){
-        rightborder = (outputPosX + get2DWidth()) / GameObject.DIMENSION + 2;
+        rightborder = (outputPosX + get2DWidth()) / GameObject.DIMENSION + 1;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
 
         return rightborder;
