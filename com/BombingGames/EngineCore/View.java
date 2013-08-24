@@ -83,7 +83,7 @@ public class View {
         //scale to fit
         //g.scale(equalizationScale, equalizationScale);
         
-        
+        if (Controller.getLightengine() != null)
         Controller.getLightengine().render(this);
         
         if (controller.getMinimap() != null)
