@@ -20,9 +20,6 @@ public class Map {
      */
     public final static boolean ENABLECHUNKSWITCH = true;
     
-    
-    private boolean newMap;
-    
     /**in which direction is the world spinning? This is needed for the light engine.
      * WEST->SOUTH->EAST = 0
       * SOUTH->WEST->NORTH = -90
@@ -31,6 +28,7 @@ public class Map {
        **/
     private static int worldSpinDirection;
     
+    private boolean newMap;
     
     //A list which has all current nine chunk coordinates in it.
     private static int[][] coordlist = new int[9][2];
