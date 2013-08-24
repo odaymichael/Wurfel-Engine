@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -28,6 +29,8 @@ public class View {
     private int drawmode;
     
     private SpriteBatch batch;
+    
+    private ShapeRenderer shapeRenderer;
     
     private OrthographicCamera hudCamera;
     
@@ -50,6 +53,8 @@ public class View {
         hudCamera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
+        
         Block.loadSheet();
      }
     
@@ -71,10 +76,9 @@ public class View {
         //render HUD
         hudCamera.update();
         batch.setProjectionMatrix(hudCamera.combined);
+        shapeRenderer.setProjectionMatrix(hudCamera.combined);
         
-        batch.begin();
-        font.draw(batch, "FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
-        batch.end();
+        drawString("FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
         
         //scale to fit
         //g.scale(equalizationScale, equalizationScale);
@@ -206,6 +210,10 @@ public class View {
         return batch;
     }
 
+    public ShapeRenderer getShapeRenderer() {
+        return shapeRenderer;
+    }
+    
     public OrthographicCamera getHudCamera() {
         return hudCamera;
     }

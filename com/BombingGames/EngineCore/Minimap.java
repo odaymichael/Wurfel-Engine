@@ -3,6 +3,8 @@ package com.BombingGames.EngineCore;
 
 import com.BombingGames.Game.Gameobjects.Block;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 /**
  *A minimap is a view that draws the map from top in a small window.
@@ -59,86 +61,90 @@ public class Minimap {
      */
     public void render(View view) {
         if (visible) {
+            ShapeRenderer shapeRenderer = view.getShapeRenderer();
             int renderPosX = (int) (posX/view.getEqualizationScale() - (int) (Map.getBlocksX()*scaleX));
             int renderPosY = (int) (posY/view.getEqualizationScale());
-            
-            //maybe this speeds up rendering the minimap
-            //g.setAntiAlias(false);
-
+                        
             //render the map
+            shapeRenderer.begin(ShapeType.FilledRectangle);
             for (int x = 0; x < Map.getBlocksX(); x++) {
                 for (int y = 0; y < Map.getBlocksY(); y++) {
-//                    g.setColor(mapdata[x][y]);
-//                    g.fillRect(
-//                        renderPosX + (x + (y%2 == 1 ? 0.5f : 0) ) * scaleX,
-//                        renderPosY + y*scaleY,
-//                        scaleX,
-//                        scaleY
-//                    );   
+                    shapeRenderer.setColor(mapdata[x][y]);
+                    shapeRenderer.filledRect(
+                        renderPosX + (x + (y%2 == 1 ? 0.5f : 0) ) * scaleX,
+                        renderPosY + y*scaleY,
+                        scaleX,
+                        scaleY
+                    );   
                 }
             }
-
-            for (int pos = 0; pos < 9; pos++) {
-                //player
-                if (controller.getPlayer()!=null){
-//                    g.setColor(Color.blue);
-//                    g.drawRect(
-//                        renderPosX + (controller.getPlayer().getCoords().getRelX() + (controller.getPlayer().getCoords().getRelY()%2==1?0.5f:0) ) * scaleX,
-//                        renderPosY + controller.getPlayer().getCoords().getRelY() * scaleY,
-//                        scaleX,
-//                        scaleY
-//                    );
-                }
-
-
+            
+            //show player position
+            if (controller.getPlayer()!=null){
+                shapeRenderer.setColor(Color.BLUE);
+                shapeRenderer.filledRect(
+                    renderPosX + (controller.getPlayer().getCoords().getRelX()
+                    + (controller.getPlayer().getCoords().getRelY()%2==1?0.5f:0) ) * scaleX,
+                    renderPosY + controller.getPlayer().getCoords().getRelY() * scaleY,
+                    scaleX,
+                    scaleY
+                );
+            }
+            
+            shapeRenderer.setColor(Color.BLACK);
+            for (int chunk = 0; chunk < 9; chunk++) {
                 //Chunk outline
-//                g.setColor(Color.black);
-//                g.drawRect(
-//                    renderPosX + pos%3 *(Chunk.getBlocksX()*scaleX),
-//                    renderPosY + pos/3*(Chunk.getBlocksY()*scaleY),
-//                    Chunk.getBlocksX()*scaleX,
-//                    Chunk.getBlocksY()*scaleY
-//                );
+                shapeRenderer.filledRect(
+                    renderPosX + chunk%3 *(Chunk.getBlocksX()*scaleX),
+                    renderPosY + chunk/3*(Chunk.getBlocksY()*scaleY),
+                    Chunk.getBlocksX()*scaleX,
+                    Chunk.getBlocksY()*scaleY
+                );
+            }
+            shapeRenderer.end();
 
+            for (int chunk = 0; chunk < 9; chunk++) {
                 view.drawString(
-                    Controller.getMap().getChunkCoords(pos)[0] +" | "+ Controller.getMap().getChunkCoords(pos)[1],
-                    (int) (renderPosX + 10 + pos%3 *Chunk.getBlocksX()*scaleX),
-                    (int) (posY + 10 + pos/3 *(Chunk.getBlocksY()*scaleY)),
+                    Controller.getMap().getChunkCoords(chunk)[0] +" | "+ Controller.getMap().getChunkCoords(chunk)[1],
+                    (int) (renderPosX + 10 + chunk%3 *Chunk.getBlocksX()*scaleX),
+                    (int) (posY + 10 + chunk/3 *(Chunk.getBlocksY()*scaleY)),
                     Color.BLACK
                 );
             }
 
             //bottom getCameras() rectangle
-//            g.setColor(Color.green);
-//            g.drawRect(
-//                renderPosX + scaleX * camera.getGamePosX() / Block.DIMENSION,
-//                renderPosY + scaleY * camera.getOutputPosY() / (Block.DIM2/2),
-//                scaleX*camera.getOutputWidth() / Block.DIMENSION,
-//                scaleY*camera.getOutputHeight() / (Block.DIM2/2)
-//            );
+            shapeRenderer.begin(ShapeType.Rectangle);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.rect(
+                renderPosX + scaleX * camera.getGamePosX() / Block.DIMENSION,
+                renderPosY + scaleY * camera.getGamePosY() / (Block.DIM2/2),
+                scaleX*camera.getOutputWidth() / Block.DIMENSION,
+                scaleY*camera.getOutputHeight() / (Block.DIM2/2)
+            );
 
             if (controller.getPlayer()!=null){
                 //player level getCameras() rectangle
-//                g.setColor(Color.gray);
-//                g.drawRect(
-//                    renderPosX + scaleX * camera.getGamePosX() / Block.DIMENSION,
-//                    renderPosY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
-//                    + scaleY *2*(controller.getPlayer().getCoords().getZ() * (Block.DIM2/2))/ (float) (Block.DIMENSION),
-//                    scaleX*camera.getOutputWidth() / Block.DIMENSION,
-//                    scaleY*camera.getOutputHeight() / (Block.DIM2/2)
-//                );
+                shapeRenderer.setColor(Color.GRAY);
+                shapeRenderer.rect(
+                    renderPosX + scaleX * camera.getGamePosX() / Block.DIMENSION,
+                    renderPosY + scaleY * camera.getGamePosY() / (Block.DIM2/2)
+                    + scaleY *2*(controller.getPlayer().getCoords().getZ() * (Block.DIM2/2))/ (float) (Block.DIMENSION),
+                    scaleX*camera.getOutputWidth() / Block.DIMENSION,
+                    scaleY*camera.getOutputHeight() / (Block.DIM2/2)
+                );
             }
 
             //top level getCameras() rectangle
-//            g.setColor(Color.white);
-//            g.drawRect(
-//                renderPosX + scaleX * camera.getGamePosX() / Block.DIMENSION,
-//                renderPosY + scaleY * camera.getOutputPosY() / (Block.DIM2/2)
-//                + scaleY *2*(Chunk.getBlocksZ() * Block.DIM2)/ (float) (Block.DIMENSION),
-//                scaleX*camera.getOutputWidth() / Block.DIMENSION,
-//                scaleY*camera.getOutputHeight() / (Block.DIM2/2)
-//            );
-
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.rect(
+                renderPosX + scaleX * camera.getGamePosX() / Block.DIMENSION,
+                renderPosY + scaleY * camera.getGamePosY() / (Block.DIM2/2)
+                + scaleY *2*(Chunk.getBlocksZ() * Block.DIM2)/ (float) (Block.DIMENSION),
+                scaleX*camera.getOutputWidth() / Block.DIMENSION,
+                scaleY*camera.getOutputHeight() / (Block.DIM2/2)
+            );
+            shapeRenderer.end();
+            
             if (controller.getPlayer()!=null){
                 view.drawString(
                         camera.getRightBorder() +" | "+ camera.getBottomBorder(),
@@ -151,14 +157,12 @@ public class Minimap {
                     );
 
                 //player coord
-                //g.setColor(Color.blue);
                 view.drawString(
                     controller.getPlayer().getCoords().getRelX() +" | "+ controller.getPlayer().getCoords().getRelY() +" | "+ controller.getPlayer().getCoords().getZ(),
                     (int) (renderPosX + (controller.getPlayer().getCoords().getRelX() + (controller.getPlayer().getCoords().getRelY()%2==1?0.5f:0) ) * scaleX+20),
                     (int) (renderPosY + controller.getPlayer().getCoords().getRelY() * scaleY - 30),
                     Color.BLACK
                 );
-
 
                 //player pos
                 view.drawString(
