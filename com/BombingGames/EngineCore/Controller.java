@@ -15,9 +15,6 @@ import java.util.ArrayList;
  */
 public class Controller {
     private final boolean ENABLECHUNKSWITCH = true;
-    /**
-     *
-     */
     private static LightEngine lightEngine;
     private static Map map;
     private static boolean recalcRequested;
@@ -27,7 +24,6 @@ public class Controller {
     private ArrayList<Camera> cameras = new ArrayList();
     private Minimap minimap;
 
-    
     
     /**
      * Constructor is called when entering the gamemode.
@@ -47,7 +43,7 @@ public class Controller {
      * @param delta time since last call
      * @throws SlickException
      */
-    public void update(float delta) {
+    public void update(int delta) {
         if (lightEngine != null) lightEngine.update(delta);
         if (ENABLECHUNKSWITCH){
             //earth to right
@@ -85,9 +81,6 @@ public class Controller {
         for (int i = 0; i < cameras.size(); i++) {
             cameras.get(i).update();
         }
-                
-        //update the log
-        GameplayScreen.msgSystem().update(delta);
     }
 
     /**

@@ -67,7 +67,7 @@ public class LightEngine {
      * 
      * @param delta
      */
-    public void update(float delta) {
+    public void update(int delta) {
         sun.update(delta);
         moon.update(delta);
         

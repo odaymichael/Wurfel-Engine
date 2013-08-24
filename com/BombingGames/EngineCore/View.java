@@ -147,7 +147,7 @@ public class View {
         
         //find the block
         Coordinate tmpcoords = GameObject.sideIDtoNeighbourCoords(new Coordinate(x, y, y, true),
-                                GameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION));
+        GameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION));
         coords[0] = tmpcoords.getRelX();
         coords[1] = tmpcoords.getRelY() + coords[2]*2;
         
@@ -217,6 +217,4 @@ public class View {
     public OrthographicCamera getHudCamera() {
         return hudCamera;
     }
-    
-    
 }

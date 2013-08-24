@@ -87,8 +87,9 @@ public class Camera extends OrthographicCamera{
      */
     @Override
     public void update() {
-        apply(Gdx.gl10);
         super.update();
+        apply(Gdx.gl10);//don't know what this does
+                
         //refrehs the camera's position in the game world
         if (focusCoordinates != null) {
             gamePosX = focusCoordinates.getBlock().getScreenPosX(focusCoordinates) - getOutputWidth() / 2 - GameObject.DIM2;

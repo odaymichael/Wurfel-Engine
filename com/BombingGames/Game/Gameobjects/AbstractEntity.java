@@ -106,7 +106,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         return new Coordinate(coords.getRelX(), coords.getRelY(), z, true).getBlock().isObstacle();
     }
     
-    public void update(float delta) {
+    public void update(int delta) {
     }
         
      /**

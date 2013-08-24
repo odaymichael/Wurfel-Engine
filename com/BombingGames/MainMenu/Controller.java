@@ -36,13 +36,13 @@ public class Controller {
      * @param sbg
      * @param delta
      */
-    public void update(float delta){
+    public void update(int delta){
         if (menuItems[0].isClicked()){
-            MainMenuScreen.setLoadMap(false);
+            MainMenuScreen.setLoadMap(true);
             fx.play();
             Wurfelengine.CORE.setScreen(new GameplayScreen());
         } else if (menuItems[1].isClicked()) { 
-                MainMenuScreen.setLoadMap(true);
+                MainMenuScreen.setLoadMap(false);
                 fx.play();
                 Wurfelengine.CORE.setScreen(new GameplayScreen());
             } else if (menuItems[2].isClicked()){

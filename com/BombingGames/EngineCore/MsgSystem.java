@@ -109,17 +109,17 @@ public class MsgSystem extends ArrayList<Msg> {
      * Updates the Message System
      * @param delta
      */
-    public void update(float delta){
-       //decrease importance
+    public void update(int delta){
        timelastupdate += delta;
-       //delay 30*100 = 3000ms
+       
+       //derease importance every 30ms
        if (timelastupdate >= 30) {
             timelastupdate = 0;
             for (int i=0; i < size(); i++) {
                 Msg temp = get(i);
-                if (temp.getImportance()>0)
+                if (temp.getImportance() > 0)
                     temp.setImportance(temp.getImportance()-1); 
-                    else remove(i);
+                else remove(i);
             }
         }
     }

@@ -12,7 +12,7 @@ class SimpleEntity extends AbstractEntity {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(int delta) {
     }
 
     @Override

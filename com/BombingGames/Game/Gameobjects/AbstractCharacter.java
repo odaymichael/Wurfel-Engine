@@ -98,7 +98,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
      * @param delta time since last update
      */
     @Override
-    public void update(float delta) {
+    public void update(int delta) {
         //scale that the velocity vector is always an unit vector (only x and y)
         double vectorLenght = Math.sqrt(dir[0]*dir[0] + dir[1]*dir[1]);
         if (vectorLenght > 0){

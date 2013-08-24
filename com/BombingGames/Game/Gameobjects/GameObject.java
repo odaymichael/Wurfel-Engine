@@ -109,13 +109,13 @@ public abstract class GameObject {
      * Updates the logic of the object.
      * @param delta time since last update
      */
-    public abstract void update(float delta);
+    public abstract void update(int delta);
     
     /**
      * Place you static update Methods here.
      * @param delta 
      */
-    public static void updateStaticUpdates(float delta){
+    public static void updateStaticUpdates(int delta){
         Sea.staticUpdate(delta);
     }
         
