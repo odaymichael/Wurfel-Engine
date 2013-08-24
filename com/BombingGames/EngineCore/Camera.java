@@ -77,7 +77,7 @@ public class Camera extends OrthographicCamera{
         this(x,y,width,height);
         if (focusentity == null)
             throw new NullPointerException("Parameter 'focusentity' is null");
-        GameplayScreen.msgSystem().add("Camera is focusing an entity");
+        GameplayScreen.msgSystem().add("Camera is focusing an entity: "+focusentity.getName());
         this.focusentity = focusentity;
         this.focusCoordinates = null;
     }
