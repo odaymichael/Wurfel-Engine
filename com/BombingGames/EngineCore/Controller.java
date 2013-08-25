@@ -45,6 +45,14 @@ public class Controller {
      */
     public void update(int delta) {
         if (lightEngine != null) lightEngine.update(delta);
+        
+         //update the log
+        GameplayScreen.msgSystem().update(delta);
+        
+        for (WECamera camera : cameras) {
+            camera.update();
+        }
+                
         if (ENABLECHUNKSWITCH){
             //earth to right
             if (cameras.get(0).getLeftBorder() <= 0)
@@ -53,7 +61,7 @@ public class Controller {
                 if (cameras.get(0).getRightBorder() >= Map.getBlocksX()-1) 
                     map.setCenter(5);
 
-        //scroll up, earth down            
+            //scroll up, earth down            
             if (cameras.get(0).getTopBorder() <= 0)
                 map.setCenter(1);
             else //scroll down, earth up
@@ -78,9 +86,6 @@ public class Controller {
         //recalculates the light if requested
         recalcIfRequested(cameras.get(0));      
        
-        for (int i = 0; i < cameras.size(); i++) {
-            cameras.get(i).update();
-        }
     }
 
     /**

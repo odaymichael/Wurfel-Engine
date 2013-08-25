@@ -17,6 +17,7 @@ import java.util.ArrayList;
  */
 public class WECamera extends Camera {
     private final int viewportPosX, viewportPosY;
+    
     private int outputPosX, outputPosY;
     private int leftborder, topborder, rightborder, bottomborder;
     private float zoom = 1;
@@ -90,7 +91,6 @@ public class WECamera extends Camera {
      */
     @Override
     public void update() {
-       
         //orthographic camera, libgdx stuff
         projection.setToOrtho(
             1/zoom * -viewportWidth / 2,
@@ -101,7 +101,6 @@ public class WECamera extends Camera {
             Math.abs(far)
         );
         
-
         Vector3 tmp = new Vector3();
         view.setToLookAt(position, tmp.set(position).add(direction), up);
         combined.set(projection);
@@ -116,7 +115,7 @@ public class WECamera extends Camera {
             outputPosX = focusCoordinates.getBlock().get2DPosX(focusCoordinates) - get2DWidth() / 2 - GameObject.DIM2;
             outputPosY = focusCoordinates.getBlock().get2DPosY(focusCoordinates) - get2DHeight() / 2;
         } else if (focusentity != null ){
-            outputPosX = focusentity.get2DPosX(null) - get2DWidth()/2 ;            
+            outputPosX = focusentity.get2DPosX(null) - get2DWidth()/2 - GameObject.DIM2;            
             outputPosY = focusentity.get2DPosY(null) - get2DHeight()/2 ;
         }
         
@@ -144,26 +143,23 @@ public class WECamera extends Camera {
      */
     public void render(View view) {
         if (Controller.getMap() != null) {  
-            //Gdx.gl10.glViewport(viewportPosX, viewportPosY+(int) viewportHeight, (int) viewportWidth, (int) viewportHeight);
             
             view.getBatch().setProjectionMatrix(combined);
-               
+             
+            //the parameter for the posY  is a bit strange because the y-axis is turned
+            Gdx.gl.glViewport((int) viewportPosX, (int) (Gdx.graphics.getHeight()-viewportHeight-viewportPosY),
+                          (int) viewportWidth, (int) (viewportHeight));
+            
             //move the viewport    
             translate(new Vector3(viewportPosX, viewportPosY, 0));
             position.set(new Vector3(outputPosX+ get2DWidth()/2 , outputPosY+ get2DHeight()/2 , 0));
                         
             
-            Rectangle scissors = new Rectangle();
-            Rectangle clipBounds = new Rectangle(viewportPosX, viewportPosY, viewportWidth, viewportHeight);
-            ScissorStack.calculateScissors(view.getHudCamera(), view.getBatch().getTransformMatrix(), clipBounds, scissors);
-            ScissorStack.pushScissors(scissors);
 
             //render map
             createDepthList();
             Controller.getMap().render(view, this);
 
-            //reset clipping
-            ScissorStack.popScissors();
                                     
             //reverse both translations
             //move the viewport           
@@ -282,8 +278,8 @@ public class WECamera extends Camera {
     }
 
     /**
-     * The amount of pixel which are visible in Y direction (game pixels).
-     * For screen pixels use <i>ScreenWidth()</i>.
+     * The amount of pixel which are visible in Y direction (game pixels). It should be equal View.RENDER_RESOLUTION_WIDTH
+     * For screen pixels use <i>ViewportWidth()</i>.
      * @return in pixels
      */
     public final int get2DWidth() {
@@ -291,7 +287,7 @@ public class WECamera extends Camera {
     }
     
   /**
-    * The amount of pixel which are visible in Y direction (game pixels). For screen pixels use <i>ScreenHeight()</i>.
+    * The amount of pixel which are visible in Y direction (game pixels). For screen pixels use <i>ViewportHeight()</i>.
     * @return  in pixels
     */
    public final int get2DHeight() {
@@ -422,13 +418,13 @@ public class WECamera extends Camera {
         return depthsort.get(i).getEntityindex();
     }
 
-        /**
+    /**
         * Returns the lenght of list of ranking for the rendering order
         * @return length of the render list
         */
-        protected int depthsortlistSize(){
-            return depthsort.size();
-        }
+    protected int depthsortlistSize(){
+        return depthsort.size();
+    }
     
     
     /**

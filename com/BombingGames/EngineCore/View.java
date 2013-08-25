@@ -83,6 +83,9 @@ public class View {
         batch.setProjectionMatrix(hudCamera.combined);
         shapeRenderer.setProjectionMatrix(hudCamera.combined);
         
+        Gdx.gl.glViewport((int) 0, (int) 0,
+                          (int) Gdx.graphics.getWidth(), (int) Gdx.graphics.getHeight());
+        
         drawString("FPS:"+ Gdx.graphics.getFramesPerSecond(), 10, 10);
         
         //scale to fit
