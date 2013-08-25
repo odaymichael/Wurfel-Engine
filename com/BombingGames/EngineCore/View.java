@@ -89,7 +89,7 @@ public class View {
         drawString("FPS:"+ Gdx.graphics.getFramesPerSecond(), 10, 10);
         
         //scale to fit
-        hudCamera.zoom = 1/equalizationScale;
+        //hudCamera.zoom = 1/equalizationScale;
         
         if (Controller.getLightengine() != null)
         Controller.getLightengine().render(this);

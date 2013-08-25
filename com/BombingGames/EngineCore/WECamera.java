@@ -154,8 +154,6 @@ public class WECamera extends Camera {
             translate(new Vector3(viewportPosX, viewportPosY, 0));
             position.set(new Vector3(outputPosX+ get2DWidth()/2 , outputPosY+ get2DHeight()/2 , 0));
                         
-            
-
             //render map
             createDepthList();
             Controller.getMap().render(view, this);
