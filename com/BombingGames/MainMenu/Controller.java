@@ -27,6 +27,7 @@ public class Controller {
         menuItems[1] = new MenuItem(1, texture.getRegions().get(0));
         menuItems[2] = new MenuItem(2, texture.getRegions().get(1));
         
+        
         fx = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/MainMenu/click2.wav"));
     }
     
@@ -55,4 +56,7 @@ public class Controller {
         return menuItems;
     }
 
+    public void dispose(){
+        fx.dispose();
+    }
 }
