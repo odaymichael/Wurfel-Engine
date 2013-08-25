@@ -5,6 +5,7 @@ import com.BombingGames.EngineCore.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import org.lwjgl.opengl.GL11;
@@ -40,6 +41,7 @@ public abstract class GameObject {
             
     /**The sprite texture which contains every object texture*/
     private static TextureAtlas spritesheet;
+    private static Pixmap pixmap;
     
     private final int id; 
     private int value;
@@ -181,6 +183,7 @@ public abstract class GameObject {
      */
     public static void loadSheet()  {
         spritesheet = new TextureAtlas(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.txt"), true);
+        pixmap = new Pixmap(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.png"));
         Gdx.app.debug("DEBUG","Spritesheet loaded");
     }
 
@@ -306,6 +309,12 @@ public abstract class GameObject {
     public static TextureAtlas getSpritesheet() {
         return spritesheet;
     }
+
+    public static Pixmap getPixmap() {
+        return pixmap;
+    }
+    
+    
     
     /**
      * returns the id of a object

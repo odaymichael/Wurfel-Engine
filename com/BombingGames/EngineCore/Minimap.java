@@ -32,6 +32,12 @@ public class Minimap {
         this.posY = outputY;
         this.controller = controller;
         this.camera = camera;
+        
+        for (int x = 0; x < Map.getBlocksX(); x++) {
+            for (int y = 0; y < Map.getBlocksY(); y++) {
+                mapdata[x][y] = new Color();
+            }
+        }
     }
     
     /**
@@ -40,14 +46,15 @@ public class Minimap {
     public void update(){
         for (int x = 0; x < Map.getBlocksX(); x++) {
             for (int y = 0; y < Map.getBlocksY(); y++) {
-                int z = Map.getBlocksZ() -1;
+                int z = Map.getBlocksZ() -1;//start at top
                 Block block = new Coordinate(x, y, z, true).getBlock();
-                while ( z>0 && (block = new Coordinate(x, y, z, true).getBlock()).isHidden() ) {
-                    z--;
+                while ( z>0 && block.getId() ==0 ) {
+                    z--;//find topmost block
+                    block = new Coordinate(x, y, z, true).getBlock();
                 }
-                mapdata[x][y] = Block.getRepresentingColor(block.getId(), block.getValue());
+                mapdata[x][y] = Block.getRepresentingColor(block.getId(), block.getValue()).cpy();
                 mapdata[x][y].a = 1;
-                //mapdata[x][y].mul(z/(float)Map.getBlocksZ());
+                mapdata[x][y].mul(1.3f).mul((float)z/(float)Map.getBlocksZ());
             }
         }
     }

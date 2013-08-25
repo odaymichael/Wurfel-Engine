@@ -6,11 +6,10 @@ import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.EngineCore.View;
+import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
 import static com.BombingGames.Game.Gameobjects.GameObject.getSprite;
 import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import org.lwjgl.opengl.GL11;
@@ -162,27 +161,25 @@ public class Block extends GameObject {
      */
     public static Color getRepresentingColor(int id, int value){
         if (colorlist[id][value] == null){ //if not in list, add it to the list
-            Pixmap pixmap = new Pixmap(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.png"));
-            colorlist[id][value] =new Color();
+            colorlist[id][value] = new Color();
             int colorInt;
             
             if (Block.getInstance(id,value, new Coordinate(0,0,0,false)).hasSides){    
                 AtlasRegion texture = getBlockSprite(id, value, 1);
                 if (texture == null) return new Color();
-                colorInt = pixmap.getPixel(
-                    (int) (texture.offsetX+DIM2),
-                    (int) (texture.offsetY+DIM4)
+                colorInt = getPixmap().getPixel(
+                    (int) (texture.getRegionX()+DIM2),
+                    (int) (texture.getRegionY()-DIM4)
                 );
-                Color.rgba8888ToColor(colorlist[id][value], colorInt);
             } else {
                 AtlasRegion texture = getSprite(id, value);
                 if (texture == null) return new Color();
-                colorInt = pixmap.getPixel(
-                    (int) (texture.offsetX+DIM2),
-                    (int) (texture.offsetY+DIM2)
+                colorInt = getPixmap().getPixel(
+                    (int) (texture.getRegionX()+DIM2),
+                    (int) (texture.getRegionY()-DIM2)
                 );
-                Color.rgba8888ToColor(colorlist[id][value], colorInt);
             }
+            Color.rgba8888ToColor(colorlist[id][value], colorInt);
             return colorlist[id][value]; 
         } else return colorlist[id][value]; //return value when in list
     }
