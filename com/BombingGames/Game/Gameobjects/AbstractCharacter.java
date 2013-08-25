@@ -22,7 +22,9 @@ public abstract class AbstractCharacter extends AbstractEntity {
    /**provides a factor for the vector*/
    private float speed;
    private Sound fallingSound;
+   private boolean fallingSoundPlaying;
    private Sound runningSound;
+   private boolean runningSoundPlaying;
    
    private int walkingAnimationCounter;
 
@@ -86,7 +88,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
         setOffsetX(getOffsetX() -x*Block.DIM2);
         setOffsetY(getOffsetY() -y*Block.DIM2);
 
-        
         setCoords(getCoords().addVector(0, y, 0));
         if (x < 0 && getCoords().getRelY() % 2 == 1) setCoords(getCoords().addVector(-1, 0, 0));
         if (x > 0 && getCoords().getRelY() % 2 == 0) setCoords(getCoords().addVector(1, 0, 0));
@@ -211,16 +212,30 @@ public abstract class AbstractCharacter extends AbstractEntity {
         
         /* SOUNDS */
         //should the runningsound be played?
-//        if (runningSound != null)
-//            if (speed < 0.5f) runningSound.stop();
-//            else runningSound.loop(0.5f);
-//        
-//        //should the fallingsound be played?
-//        if (fallingSound != null
-//            && dir[2] < -1
-//            && ! fallingSound.playing()
-//           )
-//            fallingSound.play();
+        if (runningSound != null) {
+            if (speed < 0.5f) {
+                runningSound.stop();
+                runningSoundPlaying = false;
+            } else {
+                if (!runningSoundPlaying){
+                    runningSound.play();
+                    runningSoundPlaying = true;
+                }
+            }
+        }
+
+        
+        //should the fallingsound be played?
+        if (fallingSound != null)
+            if (dir[2] < -1
+                && !fallingSoundPlaying
+            ){
+                fallingSound.play();
+                fallingSoundPlaying = true;
+            }else {
+                fallingSound.stop();
+                fallingSoundPlaying = false;
+            }
     }
     
     /**
