@@ -306,7 +306,29 @@ public class Map {
         return coordlist[pos];
     }
     
+   
+    
     /**
+     * Returns  a Block without checking the parameters first. Good for debugging and also faster.
+     * @param x position
+     * @param y position
+     * @param z position
+     * @return the single renderobject you wanted
+     */
+    public static Block getData(int x, int y, int z){
+        return data[x][y][z];  
+    }
+    
+    /**
+     *
+     * @param coord
+     * @return
+     */
+    public Block getData(Coordinate coord){
+        return data[coord.getRelX()][coord.getRelY()][coord.getZ()];  
+    }
+    
+     /**
      * Returns a renderobject of the map.
      * @param x If too high or too low, it takes the highest/deepest value possible
      * @param y If too high or too low, it takes the highest/deepest value possible
@@ -352,26 +374,6 @@ public class Map {
     }
     
     /**
-     * Returns  a Block without checking the parameters first. Good for debugging and also faster.
-     * @param x position
-     * @param y position
-     * @param z position
-     * @return the single renderobject you wanted
-     */
-    public static Block getData(int x, int y, int z){
-        return data[x][y][z];  
-    }
-    
-    /**
-     *
-     * @param coord
-     * @return
-     */
-    public Block getData(Coordinate coord){
-        return data[coord.getRelX()][coord.getRelY()][coord.getZ()];  
-    }
-    
-    /**
      * Set a block at a specific coordinate.
      * @param x position
      * @param y position
@@ -387,52 +389,16 @@ public class Map {
      * @param coords
      * @param block
      */
-    public void setData(int[] coords, Block block) {
-        data[coords[0]][coords[1]][coords[2]] = block;
+    public void setData(Coordinate coords, Block block) {
+        data[coords.getRelX()][coords.getRelY()][coords.getZ()] = block;
     }
-    
-    /**
-     * Set a renderobject at a specific coordinate
-     * @param x position
-     * @param y position
-     * @param z position
-     * @param block 
-     * @deprecated 
-     * @see com.BombingGames.Game.Map#setData(int x, int y, int z, Block renderobject)
-     */
-    public void setDataSafe(int x, int y, int z, Block block){
-        if (x >= blocksX){
-            x = blocksX-1;
-        } else if( x<0 ){
-            x = 0;
-        }
         
-        if (y >= blocksY){
-            y = blocksY-1;
-        } else if( y < 0 ){
-            y = 0;
-        }
-        
-        if (z >= blocksZ){
-            z = blocksZ-1;
-        } else if( z < 0 ){
-            z = 0;
-        }
-        
-        data[x][y][z] = block;
-    }
-    
-    /**
+   /**
      * 
      * @param coords
      * @param block
      */
-    public void setDataSafe(Coordinate coord, Block block) {
-        int[] coords = new int[3];
-        coords[0] = coord.getRelX();
-        coords[1] = coord.getRelY();
-        coords[2] = coord.getZ();
-        
+    public void setDataSafe(int[] coords, Block block) {       
         if (coords[0] >= blocksX){
             coords[0] = blocksX-1;
         } else if( coords[0]<0 ){
@@ -452,6 +418,19 @@ public class Map {
         }
         
         data[coords[0]][coords[1]][coords[2]] = block;
+    }
+    
+    /**
+     * 
+     * @param coords
+     * @param block
+     */
+    public void setDataSafe(Coordinate coord, Block block) {        
+        setDataSafe(new int[]{
+            coord.getRelX(),
+            coord.getRelY(),
+            coord.getZ()},
+            block);
     }
     
     

@@ -159,26 +159,14 @@ public class Controller {
         map.setData(x, y, z, block);
     }
     
-    /**
-     * Shortcut to  "Map.getDataSafe(int, int, int)"
-     * @param x
-     * @param y
-     * @param z
-     * @param block
-     * @deprecated 
-     * @see com.BombingGames.Game.Map#getData(int, int, int) 
-     */
-    public static void setMapDataSafe(int x, int y, int z, Block block){
-        map.setDataSafe(x, y, z, block);
-    }
     
      /**
      * 
      * @param relCoords
      * @param block
      */
-    public static void setMapData(int[] relCoords, Block block) {
-        map.setData(relCoords, block);
+    public static void setMapData(Coordinate coords, Block block) {
+        map.setData(coords, block);
     }
     
     /**
