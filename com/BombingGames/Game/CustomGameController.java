@@ -45,19 +45,19 @@ public class CustomGameController extends Controller {
                 getPlayer(),
                 0, //left
                 0, //top
-                Gdx.graphics.getWidth()/2, //width 
+                Gdx.graphics.getWidth(), //width 
                 Gdx.graphics.getHeight()//height
             )
         );
         
-        addCamera(
-            new WECamera(
-                Gdx.graphics.getWidth()/2, //left
-                0, //top
-                Gdx.graphics.getWidth()/2, //width 
-                Gdx.graphics.getHeight()//height
-            )
-        );
+//        addCamera(
+//            new WECamera(
+//                Gdx.graphics.getWidth()/2, //left
+//                0, //top
+//                Gdx.graphics.getWidth()/2, //width 
+//                Gdx.graphics.getHeight()//height
+//            )
+//        );
         
         setMinimap(
             new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 400,10)

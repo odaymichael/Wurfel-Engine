@@ -6,9 +6,7 @@ import com.BombingGames.Game.Gameobjects.GameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import java.util.ArrayList;
 
 /**
@@ -41,12 +39,14 @@ public class WECamera extends Camera {
         viewportPosX = x;
         viewportPosY = y;
         
+        equalizationScale = viewportWidth / (float) View.RENDER_RESOLUTION_WIDTH;
+                
 	near = 0;
 	up.set(0, -1, 0);
 	direction.set(0, 0, 1);
-	position.set(zoom * viewportWidth / 2.0f, zoom * viewportHeight / 2.0f, 0);        
+	position.set(equalizationScale*zoom * viewportWidth / 2.0f, equalizationScale*zoom * viewportHeight / 2.0f, 0);        
         
-        equalizationScale = viewportWidth / (float) View.RENDER_RESOLUTION_WIDTH;
+
         
         //set the camera's focus to the center of the map
         outputPosX = Coordinate.getMapCenter().get2DPosX() - get2DWidth() / 2;
@@ -93,10 +93,10 @@ public class WECamera extends Camera {
     public void update() {
         //orthographic camera, libgdx stuff
         projection.setToOrtho(
-            1/zoom * -viewportWidth / 2,
-            1/zoom * viewportWidth / 2,
-            1/zoom * -viewportHeight / 2,
-            1/zoom * viewportHeight / 2,
+            1/zoom/equalizationScale * -viewportWidth / 2,
+            1/zoom/equalizationScale * viewportWidth / 2,
+            1/zoom/equalizationScale * -viewportHeight / 2,
+            1/zoom/equalizationScale * viewportHeight / 2,
             0,
             Math.abs(far)
         );
