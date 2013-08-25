@@ -1,7 +1,7 @@
 package com.BombingGames.Game.Lighting;
 
 import com.BombingGames.EngineCore.Map;
-import org.newdawn.slick.Color;
+import com.badlogic.gdx.graphics.Color;
 
 /**
  *

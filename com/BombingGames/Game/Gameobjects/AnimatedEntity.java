@@ -1,10 +1,5 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.EngineCore.Coordinate;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
-
 /**
  *An entity wich is animated.
  * @author Benedikt

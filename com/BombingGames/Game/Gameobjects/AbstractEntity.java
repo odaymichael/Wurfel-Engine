@@ -8,10 +8,6 @@ import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
 import static com.BombingGames.Game.Gameobjects.GameObject.GAMEDIMENSION;
 import com.BombingGames.EngineCore.Map;
 import com.BombingGames.EngineCore.View;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 
 /**
  *An entity is a game object wich is self aware that means it knows it's position.
@@ -44,11 +40,8 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         //define the default SideSprites
         switch (id){
             case 40:
-                    try {
-                        entity = new Player(id);
-                    } catch (SlickException ex) {
-                        Logger.getLogger(Block.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                entity = new Player(id);
+
                     break;
             case 41: 
                     entity = new AnimatedEntity(
@@ -113,32 +106,30 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         return new Coordinate(coords.getRelX(), coords.getRelY(), z, true).getBlock().isObstacle();
     }
     
-    @Override
-    public void update(int delta) {
-    }
+
         
      /**
      * Get the screen x-position where the object is rendered without regarding the camera.
-     * @param coords  The relative coordinates where the object is rendered 
+     * @param coords  this parameter get's ignored because entitys know their own coordinates. You can pass <i>null</i> here.
      * @return The screen X-position in pixels.
      */
    @Override
-    public int getScreenPosX(Coordinate coords) {
-        return coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
-               + (coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
+    public int get2DPosX(Coordinate coords) {
+        return this.coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
+               + (this.coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
                + (int) (offsetX); //add the objects position inside this coordinate
     }
 
     /**
      * Get the screen y-position where the object is rendered without regarding the camera.
-     * @param coords The coordinates where the object is rendered 
+     * @param coords  this parameter get's ignored because entitys know their own coordinates. You can pass <i>null</i> here.
      * @return The screen Y-position in pixels.
      */
    @Override
-    public int getScreenPosY(Coordinate coords) {
-        return coords.getRelY() * DIM4 //y-coordinate * the tile's size
+    public int get2DPosY(Coordinate coords) {
+        return this.coords.getRelY() * DIM4 //y-coordinate * the tile's size
                + (int) (offsetY / 2) //add the objects position inside this coordinate
-               - (int) (coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
+               - (int) (this.coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
     }
     
     /**
@@ -147,8 +138,8 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * @param g 
      * @param view 
      */
-    public void render(Graphics g, View view){
-        this.render(g, view, getCoords());
+    public void render(View view){
+        this.render(view, getCoords());
     }
     
     /**

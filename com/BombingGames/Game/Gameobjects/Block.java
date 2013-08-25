@@ -6,10 +6,13 @@ import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.EngineCore.View;
+import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
+import static com.BombingGames.Game.Gameobjects.GameObject.getSprite;
+import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 
 /**
  * A Block is a wonderful piece of information and a geometrical object.
@@ -143,8 +146,11 @@ public class Block extends GameObject {
      * @param side Which side? (0 - 2)
      * @return an image of the side
      */
-    public static Image getBlockSprite(int id, int value, int side) {
-        return getSpritesheet().getSprite(id+"-"+value+"-"+side);
+    public static TextureAtlas.AtlasRegion getBlockSprite(int id, int value, int side) {
+        AtlasRegion sprite = getSpritesheet().findRegion(id+"-"+value+"-"+side);
+        if (sprite == null)
+            return getSpritesheet().findRegion(0+"-"+0+"-"+side);
+            else return sprite;
     }
     
    /**
@@ -155,10 +161,25 @@ public class Block extends GameObject {
      */
     public static Color getRepresentingColor(int id, int value){
         if (colorlist[id][value] == null){ //if not in list, add it to the list
-            if (Block.getInstance(id,0,new Coordinate(0,0,0,false)).hasSides)
-                colorlist[id][value] = getBlockSprite(id, value, 1).getColor(DIM2, DIM4);
-            else
-                colorlist[id][value] = getSprite(id, value).getColor(DIM2, DIM2);
+            colorlist[id][value] = new Color();
+            int colorInt;
+            
+            if (Block.getInstance(id,value, new Coordinate(0,0,0,false)).hasSides){    
+                AtlasRegion texture = getBlockSprite(id, value, 1);
+                if (texture == null) return new Color();
+                colorInt = getPixmap().getPixel(
+                    (int) (texture.getRegionX()+DIM2),
+                    (int) (texture.getRegionY()-DIM4)
+                );
+            } else {
+                AtlasRegion texture = getSprite(id, value);
+                if (texture == null) return new Color();
+                colorInt = getPixmap().getPixel(
+                    (int) (texture.getRegionX()+DIM2),
+                    (int) (texture.getRegionY()-DIM2)
+                );
+            }
+            Color.rgba8888ToColor(colorlist[id][value], colorInt);
             return colorlist[id][value]; 
         } else return colorlist[id][value]; //return value when in list
     }
@@ -201,8 +222,8 @@ public class Block extends GameObject {
      * @return The screen X-position in pixels.
      */
    @Override
-    public int getScreenPosX(Coordinate coords) {
-        return coords.getScreenPosX() + (int) (coords.getCellOffset()[0]); //add the objects position inside this coordinate
+    public int get2DPosX(Coordinate coords) {
+        return coords.get2DPosX() + (int) (coords.getCellOffset()[0]); //add the objects position inside this coordinate
     }
 
     /**
@@ -211,8 +232,8 @@ public class Block extends GameObject {
      * @return The screen Y-position in pixels.
      */
    @Override
-    public int getScreenPosY(Coordinate coords) {
-        return coords.getScreenPosY()
+    public int get2DPosY(Coordinate coords) {
+        return coords.get2DPosY()
                + (int) (coords.getCellOffset()[1] / 2) //add the objects position inside this coordinate
                - (int) (coords.getCellOffset()[2] / Math.sqrt(2)); //add the objects position inside this coordinate
     }
@@ -229,27 +250,27 @@ public class Block extends GameObject {
     
     
     @Override
-    public void render(Graphics g, View view, Coordinate coords) {
+    public void render(View view, Coordinate coords) {
         if (!isHidden() && isVisible()) {
             
             if (Controller.getLightengine() != null){
                 if (hasSides) {
                     if (renderTop)
-                        renderSide(g, view, coords, Block.TOPSIDE, LightEngine.getBrightness(Block.TOPSIDE));
+                        renderSide(view, coords, Block.TOPSIDE, LightEngine.getBrightness(Block.TOPSIDE));
                     if (renderLeft)
-                        renderSide(g, view, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE));
+                        renderSide(view, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE));
                     if (renderRight)
-                        renderSide(g, view, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE));
-                } else super.render(g, view, coords, LightEngine.getBrightness());
+                        renderSide(view, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE));
+                } else super.render(view, coords, LightEngine.getBrightness());
             } else 
                 if (hasSides){
                     if (renderTop)
-                        renderSide(g, view, coords, Block.TOPSIDE, getLightlevel());
+                        renderSide(view, coords, Block.TOPSIDE, getLightlevel());
                     if (renderLeft)
-                        renderSide(g, view, coords, Block.LEFTSIDE, getLightlevel());
+                        renderSide(view, coords, Block.LEFTSIDE, getLightlevel());
                     if (renderRight)
-                        renderSide(g, view, coords, Block.RIGHTSIDE, getLightlevel());
-                } else super.render(g, view, coords, getLightlevel());
+                        renderSide(view, coords, Block.RIGHTSIDE, getLightlevel());
+                } else super.render(view, coords, getLightlevel());
         }
     }
 
@@ -263,42 +284,43 @@ public class Block extends GameObject {
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      * @param brightness  The brightness of the side. Value between 0  and 255.
      */
-    protected void renderSide(final Graphics g, final View view, Coordinate coords, final int sidenumb, int brightness){
-        Image image = getBlockSprite(getId(), getValue(), sidenumb);
+    protected void renderSide(final View view, Coordinate coords, final int sidenumb, int brightness){
+        AtlasRegion image = getBlockSprite(getId(), getValue(), sidenumb);
         
         //right side is  half a block more to the right
-        int xPos = getScreenPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);
+        int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);
         
         //the top is drawn a quarter blocks higher
-        int yPos = getScreenPosY(coords) + (sidenumb != 1 ? DIM4 : 0);
+        int yPos = get2DPosY(coords) + (sidenumb != 1 ? DIM4 : 0);
         
         brightness -= 127-getLightlevel();
             
         Color filter;
         if (brightness <= 127){
             view.setDrawmode(GL11.GL_MODULATE);
-            filter = new Color(brightness/127f, brightness/127f, brightness/127f);
+            filter = new Color(brightness/127f, brightness/127f, brightness/127f, 1);
         } else {
             view.setDrawmode(GL11.GL_ADD);
-            filter = new Color((brightness-127)/127f, (brightness-127)/127f, (brightness-127)/127f);
+            filter = new Color((brightness-127)/127f, (brightness-127)/127f, (brightness-127)/127f, 1);
         }
             
         if (Controller.getLightengine() != null){
-            filter = filter.multiply(Controller.getLightengine().getLightColor());
+            filter = filter.mul(Controller.getLightengine().getLightColor());
         } else {
             //calc  verticalGradient
             float verticalGradient = getLightlevel();
-
-            image.setColor(0, verticalGradient,verticalGradient,verticalGradient);
-            image.setColor(1, verticalGradient,verticalGradient, verticalGradient);
+            
+            //image.setColor(0, verticalGradient,verticalGradient,verticalGradient);
+            //image.setColor(1, verticalGradient,verticalGradient, verticalGradient);
 
             if (sidenumb != 1) verticalGradient -= .3f;
 
-            image.setColor(2, verticalGradient, verticalGradient, verticalGradient);
-            image.setColor(3, verticalGradient, verticalGradient, verticalGradient);
+            //image.setColor(2, verticalGradient, verticalGradient, verticalGradient);
+            //image.setColor(3, verticalGradient, verticalGradient, verticalGradient);
         }
         
-        image.drawEmbedded(xPos, yPos, xPos+image.getWidth(), yPos+image.getHeight(), 0, 0, image.getWidth(), image.getHeight(), filter);
+        view.getBatch().setColor(filter);
+        view.getBatch().draw(image, xPos, yPos);
     }
 
     @Override

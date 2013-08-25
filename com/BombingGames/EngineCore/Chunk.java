@@ -2,6 +2,7 @@ package com.BombingGames.EngineCore;
 
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Wurfelengine;
+import com.badlogic.gdx.Gdx;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,7 +10,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import org.newdawn.slick.util.Log;
 
 /**
  * A Chunk is filled with many Blocks and is a part of the map.
@@ -60,8 +60,8 @@ public class Chunk {
     private void generate(int pos, int coordX, int coordY){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
-        Log.debug("Creating new chunk: "+ coordX + ", "+ coordY);
-        Gameplay.msgSystem().add("Creating new chunk: "+coordX+", "+ coordY);
+        Gdx.app.log("DEBUG","Creating new chunk: "+ coordX + ", "+ coordY);
+        GameplayScreen.msgSystem().add("Creating new chunk: "+coordX+", "+ coordY);
         switch (GENERATOR){
             case 0:{//random pillars
                 for (int x=0; x < blocksX; x++)
@@ -163,7 +163,7 @@ public class Chunk {
             case 6: {//every block                
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = Block.getInstance(y);
+                        data[x][y][0] = Block.getInstance(y, 0, new Coordinate(x, y, 0, true));
                     }
                 break;
             }
@@ -190,8 +190,8 @@ public class Chunk {
         try {
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
             File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/chunk"+coordX+","+coordY+"."+CHUNKFILESUFFIX);
-            Log.debug("Trying to load Chunk: "+ coordX + ", "+ coordY + " from \"" + path.getAbsolutePath() + "\"");
-            Gameplay.msgSystem().add("Load: "+coordX+","+coordY);
+            Gdx.app.log("DEBUG","Trying to load Chunk: "+ coordX + ", "+ coordY + " from \"" + path.getAbsolutePath() + "\"");
+            GameplayScreen.msgSystem().add("Load: "+coordX+","+coordY);
             
             if (path.isFile()) {
                 //FileReader input = new FileReader("map/chunk"+coordX+","+coordY+".otmc");
@@ -249,11 +249,11 @@ public class Chunk {
                     z++;
                 } while (lastline != null);
             } else {
-                Log.debug("...but it could not be found. Creating new.");
+                Gdx.app.log("DEBUG","...but it could not be found. Creating new.");
                 generate(pos, coordX, coordY);
             }
         } catch (IOException ex) {
-            Log.debug("Loading of chunk "+coordX+","+coordY + "failed: "+ex);
+            Gdx.app.log("ERROR","Loading of chunk "+coordX+","+coordY + "failed: "+ex);
         }
     }
     
@@ -264,29 +264,29 @@ public class Chunk {
         BufferedReader bufRead = null;
         try {
             File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/map."+METAFILESUFFIX);
-            Log.debug("Trying to load Map Info from \"" + path.getAbsolutePath() + "\"");
+            Gdx.app.log("DEBUG","Trying to load Map Info from \"" + path.getAbsolutePath() + "\"");
             bufRead = new BufferedReader(new FileReader(path));
             String mapname = bufRead.readLine();
             mapname = mapname.substring(2, mapname.length());
-            Log.info("Loading map: "+mapname);
-            Gameplay.msgSystem().add("Loading map: "+mapname);   
+            Gdx.app.log("INFO","Loading map: "+mapname);
+            GameplayScreen.msgSystem().add("Loading map: "+mapname);   
             
             String mapversion = bufRead.readLine(); 
             mapversion = mapversion.substring(2, mapversion.length());
-            Log.info("Map Version:"+mapversion);
+            Gdx.app.log("DEBUG","Map Version:"+mapversion);
             
             String blocksXString = bufRead.readLine();
-            Log.debug("sizeX:"+blocksXString);
+            Gdx.app.log("DEBUG","sizeX:"+blocksXString);
             blocksXString = blocksXString.substring(2, blocksXString.length());
             blocksX = Integer.parseInt(blocksXString);
             
             String blocksYString = bufRead.readLine();
-            Log.debug("sizeY:"+blocksYString);
+            Gdx.app.log("DEBUG","sizeY:"+blocksYString);
             blocksYString = blocksYString.substring(2, blocksYString.length());
             blocksY = Integer.parseInt(blocksYString);
             
             String blocksZString = bufRead.readLine();
-            Log.debug("sizeZ:"+blocksZString);
+            Gdx.app.log("DEBUG","sizeZ:"+blocksZString);
             blocksZString = blocksZString.substring(2, blocksZString.length());
             blocksZ = Integer.parseInt(blocksZString);
         } catch (IOException ex) {

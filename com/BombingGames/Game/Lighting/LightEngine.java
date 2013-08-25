@@ -2,8 +2,11 @@ package com.BombingGames.Game.Lighting;
 
 import com.BombingGames.EngineCore.Chunk;
 import com.BombingGames.EngineCore.Map;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
+import com.BombingGames.EngineCore.View;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+
 
 /**
  *This Light engine calculates phong shading for three normals over the day.
@@ -87,7 +90,7 @@ public class LightEngine {
         
         //specular
         
-        //it is impossible to get specular with a GLS over the horizon on side 0 and 2. Just left here if it someday helps.
+        //it is impossible to get specular light with a GlobalLightSource over the horizon on side 0 and 2. Just left in case i it someday helps somebody.
 //        I_spec0 =(int) (
 //                        sun.getBrightness()
 //                        * k_specular
@@ -117,7 +120,7 @@ public class LightEngine {
                         ,n_spec)
                         *(n_spec+2)/(2*Math.PI)
                         );
-      //it is impossible to get specular with a GLS over the horizon on side 0 and 2. Just left here if it someday helps.
+      //it is impossible to get specular light with a GlobalLightSource over the horizon on side 0 and 2. Just left in case i it someday helps somebody.
         //        I_spec2 =(int) (
         //                        sun.getBrightness()
         //                        * k_specular
@@ -157,8 +160,8 @@ public class LightEngine {
      * @return
      */
     public Color getLightColor(){
-        Color tmp = sun.getColor().scaleCopy(sun.getBrightness());
-        tmp = tmp.addToCopy(moon.getColor().scaleCopy(moon.getBrightness()));
+        Color tmp = sun.getColor().cpy().mul(sun.getBrightness());
+        tmp.add(moon.getColor().cpy().mul(moon.getBrightness()));
         tmp.a = 1;
         return tmp;
     }
@@ -221,87 +224,89 @@ public class LightEngine {
     
     
     /**
-     *
+     *Shows the data of the light engine in diagramms.
      * @param g
      */
-    public void render(Graphics g){
+    public void render(View view){
         if (renderData) {
+            
             //sun position
-            g.setLineWidth(2);
-
+            //g.setLineWidth(2);
+            ShapeRenderer shapeRenderer = view.getShapeRenderer();
             //longitude
-            g.setColor(Color.red);
-            g.drawLine(
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.begin(ShapeType.Line);
+            shapeRenderer.line(
                 posX +(int) (size* Math.sin((sun.getLongPos()-90)*Math.PI/180)),
                 posY +(int) (size/2*Math.cos((sun.getLongPos()-90)*Math.PI/180)),
                 posX,
                 posY
             );
-
+            
             //latitude
-            g.setColor(Color.magenta);
-            g.drawLine(
+            shapeRenderer.setColor(Color.MAGENTA);
+            shapeRenderer.line(
                 posX +(int) (size * Math.sin((sun.getLatPos()-90)*Math.PI/180)),
                 posY -(int) (size/2*Math.sin((sun.getLatPos())*Math.PI/180)),
                 posX,
                 posY
             );
-
+            
             //long+lat of sun position
-            g.setColor(Color.yellow);
-            g.drawLine(
+            shapeRenderer.setColor(Color.YELLOW);
+            shapeRenderer.line(
                 posX +(int) ( size*Math.sin((sun.getLongPos()+90)*Math.PI/180) * Math.sin((sun.getLatPos()-90)*Math.PI/180) ),
                 posY -(int) ( size/2*Math.sin((sun.getLongPos())*Math.PI/180) * Math.sin((sun.getLatPos()-90)*Math.PI/180)) -(int) (size/2*Math.sin((sun.getLatPos())*Math.PI/180)),
                 posX,
                 posY
              );
-            
-            g.setColor(Color.blue);
-            g.drawLine(
+
+            shapeRenderer.setColor(Color.BLUE);
+            shapeRenderer.line(
                 posX +(int) ( size*Math.sin((moon.getLongPos()+90)*Math.PI/180) * Math.sin((moon.getLatPos()-90)*Math.PI/180) ),
                 posY -(int) ( size/2*Math.sin((moon.getLongPos())*Math.PI/180) * Math.sin((moon.getLatPos()-90)*Math.PI/180)) -(int) (size/2*Math.sin((moon.getLatPos())*Math.PI/180)),
                 posX,
                 posY
              );
+             shapeRenderer.end();
 
-            g.setColor(Color.white);
-            g.drawString("Lat: "+sun.getLatPos(), 400, 110);
-            g.drawString("Long: "+sun.getLongPos(), 400, 100);
-            g.drawString("BrightnessSun: "+sun.getBrightness(), 400, 120);
-            g.drawString("BrightnessMoon: "+moon.getBrightness(), 400, 130);
-            g.drawString("Long: "+getLightColor().toString(), 400, 140);
-            
+            view.drawString("Lat: "+sun.getLatPos(), 400, 110, Color.WHITE);
+            view.drawString("Long: "+sun.getLongPos(), 400, 100, Color.WHITE);
+            view.drawString("BrightnessSun: "+sun.getBrightness(), 400, 120, Color.WHITE);
+            view.drawString("BrightnessMoon: "+moon.getBrightness(), 400, 130, Color.WHITE);
+            view.drawString("Long: "+getLightColor().toString(), 400, 140, Color.WHITE);
+
              //info bars
-        
+
+            shapeRenderer.begin(ShapeType.FilledRectangle);
             //left side
-            g.setColor(Color.white);
-            g.drawString("Left:"+I_ambient+"+"+I_diff0+"+"+ I_spec0+"="+I_0, I_0, 100);
-            g.setColor(Color.green);
-            g.fillRect(0, 100, I_ambient, 10);
-            g.setColor(Color.red);
-            g.fillRect(I_ambient, 100, I_diff0, 8);
-            g.setColor(Color.blue);
-            g.fillRect(I_ambient+I_diff0, 100, I_spec0, 6);
+            view.drawString("Left:"+I_ambient+"+"+I_diff0+"+"+ I_spec0+"="+I_0, I_0, 100, Color.WHITE);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.filledRect(0, 100, I_ambient, 10);
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.filledRect(I_ambient, 100, I_diff0, 8);
+            shapeRenderer.setColor(Color.BLUE);
+            shapeRenderer.filledRect(I_ambient+I_diff0, 100, I_spec0, 6);
 
             //top side
-            g.setColor(Color.white);
-            g.drawString("Top:"+I_ambient+"+"+I_diff1+"+"+ I_spec1+"="+I_1, I_1, 120);
-            g.setColor(Color.green);
-            g.fillRect(0, 120, I_ambient, 10);
-            g.setColor(Color.red);
-            g.fillRect(I_ambient, 120, I_diff1, 8);
-            g.setColor(Color.blue);
-            g.fillRect(I_ambient+I_diff1, 120, I_spec1, 6);
+            view.drawString("Top:"+I_ambient+"+"+I_diff1+"+"+ I_spec1+"="+I_1, I_1, 120, Color.WHITE);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.filledRect(0, 120, I_ambient, 10);
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.filledRect(I_ambient, 120, I_diff1, 8);
+            shapeRenderer.setColor(Color.BLUE);
+            shapeRenderer.filledRect(I_ambient+I_diff1, 120, I_spec1, 6);
 
             //right side
-            g.setColor(Color.white);
-            g.drawString("Right:"+I_ambient+"+"+I_diff2+"+"+ I_spec2+"="+I_2, I_2, 140);
-            g.setColor(Color.green);
-            g.fillRect(0, 140, I_ambient, 10);
-            g.setColor(Color.red);
-            g.fillRect(I_ambient, 140, I_diff2, 8);
-            g.setColor(Color.blue);
-            g.fillRect(I_ambient+I_diff2, 140, I_spec2, 6);
+            view.drawString("Right:"+I_ambient+"+"+I_diff2+"+"+ I_spec2+"="+I_2, I_2, 140, Color.WHITE);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.filledRect(0, 140, I_ambient, 10);
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.filledRect(I_ambient, 140, I_diff2, 8);
+            shapeRenderer.setColor(Color.BLUE);
+            shapeRenderer.filledRect(I_ambient+I_diff2, 140, I_spec2, 6);
+            
+            shapeRenderer.end();
         }
     }
 }

@@ -3,9 +3,12 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Coordinate;
 import com.BombingGames.EngineCore.View;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.*;
-import org.newdawn.slick.util.Log;
 
 /**
  *An object is something wich can be found in the game world.
@@ -36,8 +39,9 @@ public abstract class GameObject {
     
 
             
-    /**The sprite image which contains every object image*/
-    private static PackedSpriteSheet spritesheet;
+    /**The sprite texture which contains every object texture*/
+    private static TextureAtlas spritesheet;
+    private static Pixmap pixmap;
     
     private final int id; 
     private int value;
@@ -123,14 +127,14 @@ public abstract class GameObject {
      * @param coords
      * @return
      */
-    public abstract int getScreenPosX(Coordinate coords);
+    public abstract int get2DPosX(Coordinate coords);
     
     /**
      *
      * @param coords
      * @return
      */
-    public abstract int getScreenPosY(Coordinate coords);
+    public abstract int get2DPosY(Coordinate coords);
     
     /**
      * Draws an object.
@@ -138,8 +142,8 @@ public abstract class GameObject {
      * @param coords the relative coordinates
      * @param view  
      */
-    public void render(Graphics g,View view, Coordinate coords) {
-        render(g, view, coords, lightlevel);
+    public void render(View view, Coordinate coords) {
+        render(view, coords, lightlevel);
     }
     
      /**
@@ -149,25 +153,27 @@ public abstract class GameObject {
      * @param view 
      * @param brightness  
      */
-    public void render(Graphics g, View view, Coordinate coords, int brightness) {
+    public void render(View view, Coordinate coords, int brightness) {
         //draw the object except not visible ones
         if (!hidden && visible) {
-            Image image = getSprite(id, value);
+            AtlasRegion texture = getSprite(id, value);
              
-            int xPos = getScreenPosX(coords) + OFFSETLIST[id][value][0];
-            int yPos = getScreenPosY(coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
+            int xPos = get2DPosX(coords) + OFFSETLIST[id][value][0];
+            int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
             
             Color filter;
             if (brightness <= 127){
                 view.setDrawmode(GL11.GL_MODULATE);
-                filter = new Color(brightness/127f, brightness/127f, brightness/127f);
+                filter = new Color(brightness/127f, brightness/127f, brightness/127f, 1);
             } else {
                 view.setDrawmode(GL11.GL_ADD);
-                filter = new Color((brightness-127)/127f, (brightness-127)/127f, (brightness-127)/127f);
+                filter = new Color((brightness-127)/127f, (brightness-127)/127f, (brightness-127)/127f, 1);
             }
 
-            if (Controller.getLightengine() != null) filter = filter.multiply(Controller.getLightengine().getLightColor());
-            image.drawEmbedded(xPos, yPos, xPos+image.getWidth(), yPos+image.getHeight(), 0, 0, image.getWidth(), image.getHeight(), filter);
+            if (Controller.getLightengine() != null) filter = filter.mul(Controller.getLightengine().getLightColor());
+            view.getBatch().setColor(filter);
+            view.getBatch().draw(texture, xPos, yPos);
+            //texture.drawEmbedded(xPos, yPos, xPos + texture.getWidth(), yPos + texture.getHeight(), 0, 0, texture.getWidth(), texture.getHeight(), filter);
         }
     } 
 
@@ -175,9 +181,10 @@ public abstract class GameObject {
      * Load the spritesheet from memory.
      * @throws SlickException
      */
-    public static void loadSheet() throws SlickException {
-        spritesheet = new PackedSpriteSheet("com/BombingGames/Game/Blockimages/Spritesheet.def");
-        Log.debug("Spritesheet loaded");
+    public static void loadSheet()  {
+        spritesheet = new TextureAtlas(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.txt"), true);
+        pixmap = new Pixmap(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.png"));
+        Gdx.app.debug("DEBUG","Spritesheet loaded");
     }
 
     /**
@@ -283,13 +290,13 @@ public abstract class GameObject {
     
 
     /**
-     * Returns a sprite image of non-block image
+     * Returns a sprite texture of non-block texture
      * @param id
      * @param value
      * @return
      */
-    public static Image getSprite(int id, int value) {
-        return spritesheet.getSprite(id+"-"+value);
+    public static AtlasRegion getSprite(int id, int value) {
+        return spritesheet.findRegion(id+"-"+value);
     }
 
 
@@ -299,9 +306,15 @@ public abstract class GameObject {
      * Returns the spritesheet used for rendering.
      * @return the spritesheet used by the objects
      */
-    public static PackedSpriteSheet getSpritesheet() {
+    public static TextureAtlas getSpritesheet() {
         return spritesheet;
     }
+
+    public static Pixmap getPixmap() {
+        return pixmap;
+    }
+    
+    
     
     /**
      * returns the id of a object

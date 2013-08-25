@@ -2,12 +2,14 @@ package com.BombingGames.EngineCore;
 
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.AngelCodeFont;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.util.Log;
 
 /**
  * The View manages everything what should be drawn.
@@ -18,13 +20,19 @@ public class View {
      * The default render width.
      * Every resolution smaller than this get's scaled down and every resolution bigger scaled up. 
      */
-    public static final int ENGINE_RENDER_WIDTH = 1920;
+    public static final int RENDER_RESOLUTION_WIDTH = 1920;
 
-    private static AngelCodeFont baseFont;
+    private static BitmapFont font;
     private float equalizationScale;
     private Controller controller;
     
     private int drawmode;
+    
+    private SpriteBatch batch;
+    
+    private ShapeRenderer shapeRenderer;
+    
+    private OrthographicCamera hudCamera;
     
     /**
      * Creates a View.
@@ -32,14 +40,21 @@ public class View {
      * @param controller 
      * @throws SlickException
      */
-    public View(GameContainer gc, Controller controller) throws SlickException {
+    public View(Controller controller){
         this.controller = controller;
-        baseFont = new AngelCodeFont("com/BombingGames/Game/arial.fnt","com/BombingGames/Game/arial.png");
+        font = new BitmapFont(Gdx.files.internal("com/BombingGames/EngineCore/arial.fnt"), true);
+        font.setColor(Color.GREEN);
         
         //default rendering size is FullHD
-        equalizationScale = gc.getWidth() / (float) ENGINE_RENDER_WIDTH;
-        Log.debug("Scale is:" + Float.toString(equalizationScale));
+        equalizationScale = Gdx.graphics.getWidth() / (float) RENDER_RESOLUTION_WIDTH;
+        Gdx.app.log("DEBUG","Scale is:" + Float.toString(equalizationScale));
  
+        hudCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        hudCamera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        
+        batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
+        
         Block.loadSheet();
      }
     
@@ -48,27 +63,45 @@ public class View {
      * @param g the graphics context
      * @throws SlickException
      */
-    public void render(Graphics g) throws SlickException {
+    public void render(){
+        //clear & set background to black
+        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);  
+        
+        //Gdx.gl10.glViewport(0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        
         //render every camera
-        for (Camera camera : controller.getCameras()) {
-            camera.render(g, this);
+        for (WECamera camera : controller.getCameras()) {
+            camera.render(this);
         }
         
+        
         //render HUD
+        // hudCamera.zoom = 1/equalizationScale;
+        hudCamera.update();
+        hudCamera.apply(Gdx.gl10);
+         
+        batch.setProjectionMatrix(hudCamera.combined);
+        shapeRenderer.setProjectionMatrix(hudCamera.combined);
+        
+        Gdx.gl.glViewport(
+            0,
+            0,
+            (int) Gdx.graphics.getWidth(),
+            (int) Gdx.graphics.getHeight()
+        );
+        
+        drawString("FPS:"+ Gdx.graphics.getFramesPerSecond(), 10, 10);
         
         //scale to fit
-        g.scale(equalizationScale, equalizationScale);
+        //hudCamera.zoom = 1/equalizationScale;
         
-        
-        Controller.getLightengine().render(g);
+        if (Controller.getLightengine() != null)
+            Controller.getLightengine().render(this);
         
         if (controller.getMinimap() != null)
-            controller.getMinimap().render(g, this); 
+            controller.getMinimap().render(this); 
         
-        Gameplay.msgSystem().render(g);
-        
-        //reverse scale
-        g.scale(1/equalizationScale, 1/equalizationScale);
+        GameplayScreen.msgSystem().render(this);
     }
        
 
@@ -87,8 +120,8 @@ public class View {
      * @return the relative game coordinate
      */
     public int ScreenXtoGame(int x){
-        return (int) ((x - controller.getCameras().get(0).getScreenPosX()) / controller.getCameras().get(0).getTotalScale()
-            + controller.getCameras().get(0).getOutputPosX());
+        return (int) ((x - controller.getCameras().get(0).getViewportPosX()) / controller.getCameras().get(0).getTotalScale()
+            + controller.getCameras().get(0).getGamePosX());
     }
     
    /**
@@ -97,8 +130,8 @@ public class View {
      * @return the relative game coordinate
      */
     public int ScreenYtoGame(int y){
-        return (int) ((y - controller.getCameras().get(0).getScreenPosY()) / controller.getCameras().get(0).getTotalScale()
-            + controller.getCameras().get(0).getOutputPosY()) * 2;
+        return (int) ((y - controller.getCameras().get(0).getViewportPosY()) / controller.getCameras().get(0).getTotalScale()
+            + controller.getCameras().get(0).getGamePosY()) * 2;
     }
     
     /**
@@ -123,7 +156,7 @@ public class View {
         
         //find the block
         Coordinate tmpcoords = GameObject.sideIDtoNeighbourCoords(new Coordinate(x, y, y, true),
-                                GameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION));
+        GameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION));
         coords[0] = tmpcoords.getRelX();
         coords[1] = tmpcoords.getRelY() + coords[2]*2;
         
@@ -143,8 +176,8 @@ public class View {
      * 
      * @return
      */
-    public static AngelCodeFont getFont() {
-        return baseFont;
+    public BitmapFont getFont() {
+        return font;
     }
 
     /**
@@ -162,11 +195,35 @@ public class View {
     public void setDrawmode(int drawmode) {
         if (drawmode != this.drawmode){
             this.drawmode = drawmode;
-            GameObject.getSpritesheet().getFullImage().endUse();
+            batch.end();
+            //GameObject.getSpritesheet().getFullImage().endUse();
             GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, drawmode);
-            GameObject.getSpritesheet().getFullImage().startUse();
+            //GameObject.getSpritesheet().getFullImage().startUse();
+            batch.begin();
         }
     }
+
+    public void drawString(String msg, int xPos, int yPos) {
+        batch.begin();
+        font.draw(batch, msg, xPos, yPos);
+        batch.end();
+    }
     
+    public void drawString(String msg, int xPos, int yPos, Color color) {
+        batch.begin();
+        font.draw(batch, msg, xPos, yPos);
+        batch.end();
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
+    }
+
+    public ShapeRenderer getShapeRenderer() {
+        return shapeRenderer;
+    }
     
+    public OrthographicCamera getHudCamera() {
+        return hudCamera;
+    } 
 }

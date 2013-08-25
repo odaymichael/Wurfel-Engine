@@ -2,10 +2,9 @@ package com.BombingGames.EngineCore;
 
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.MainMenu.MainMenuState;
+import com.BombingGames.MainMenu.MainMenuScreen;
+import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.util.Log;
 
 /**
  *A map stores nine chunks as part of a bigger map.
@@ -19,10 +18,7 @@ public class Map {
     /**
      *
      */
-    public final static boolean ENABLECHUNKSWITCH = true;
-    
-    
-    private boolean newMap;
+    public final static boolean ENABLECHUNKSWITCH = false;
     
     /**in which direction is the world spinning? This is needed for the light engine.
      * WEST->SOUTH->EAST = 0
@@ -32,6 +28,7 @@ public class Map {
        **/
     private static int worldSpinDirection;
     
+    private boolean newMap;
     
     //A list which has all current nine chunk coordinates in it.
     private static int[][] coordlist = new int[9][2];
@@ -59,7 +56,7 @@ public class Map {
      * @see fillMapWithBlocks(boolean load)
      */
     public Map(boolean newMap, int worldSpinDirection) {
-        Log.debug("Should the Engine generate a new map: "+newMap);
+        Gdx.app.log("DEBUG","Should the Engine generate a new map: "+newMap);
         this.newMap = newMap;
         Map.worldSpinDirection = worldSpinDirection;
         
@@ -87,7 +84,7 @@ public class Map {
      * Fill the data array of the map with blocks.
      */
     public void fillMapWithBlocks(){
-        Log.debug("Filling the map with blocks...");
+        Gdx.app.log("DEBUG","Filling the map with blocks...");
 
         //Fill the nine chunks
         Chunk tempchunk;
@@ -102,7 +99,7 @@ public class Map {
                 chunkpos++;
         }
        
-        Log.debug("...Finished filling the map");
+        Gdx.app.log("DEBUG","...Finished filling the map");
     }
     
      /**
@@ -169,7 +166,7 @@ public class Map {
      */
     public void setCenter(int newmiddle){
         if (ENABLECHUNKSWITCH){
-            Log.debug("ChunkSwitch:"+newmiddle);
+            Gdx.app.log("DEBUG","ChunkSwitch:"+newmiddle);
             if (newmiddle==1 || newmiddle==3 || newmiddle==5 || newmiddle==7) {
 
             //make a copy of the data
@@ -189,7 +186,7 @@ public class Map {
                             new Chunk(pos,
                                 coordlist[pos][0],
                                 coordlist[pos][1],
-                                MainMenuState.shouldLoadMap()
+                                MainMenuScreen.shouldLoadMap()
                             )
                     );
 
@@ -198,7 +195,7 @@ public class Map {
 
             Controller.requestRecalc();
             } else {
-                Log.error("setCenter was called with center:"+newmiddle);
+                Gdx.app.log("ERROR","setCenter was called with center:"+newmiddle);
             }
         }
     }
@@ -279,23 +276,24 @@ public class Map {
      * @param view 
      * @param camera 
      */
-    public void render(Graphics g, View view, Camera camera) {
+    public void render(View view, WECamera camera) {
         //if (Gameplay.getController().hasGoodGraphics()) Block.getSpritesheet().bind();
         //if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
         
-        Block.getSpritesheet().getFullImage().startUse();
+        view.getBatch().begin();
+        //Block.getSpritesheet().getFullImage().startUse();
         //render vom bottom to top
         for (int i=0; i < camera.depthsortlistSize() ;i++) {
             Coordinate coords = camera.getDepthsortCoord(i);//get the coords of the current renderobject
             int entitynumber = camera.getEntityIndex(i); //get the entityindex to check if it is an entity
             
             if (entitynumber == -1) //if a block then  get it and draw it
-                getData(coords).render(g,view, coords);
+                getData(coords).render(view, coords);
             else //if it's an entity get it and draw it
-                entitylist.get(entitynumber).render(g, view);        
+                entitylist.get(entitynumber).render(view);        
         }
-            
-       Block.getSpritesheet().getFullImage().endUse(); 
+        view.getBatch().end();
+       //Block.getSpritesheet().getFullImage().endUse(); 
       // if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
     }
 
@@ -319,26 +317,26 @@ public class Map {
     public Block getDataSafe(int x, int y, int z){
         if (x >= blocksX){
             x = blocksX-1;
-            Log.debug("X:"+x);
+            Gdx.app.log("DEBUG","X:"+x);
         } else if( x<0 ){
             x = 0;
-            Log.debug("X:"+x);
+            Gdx.app.log("DEBUG","X:"+x);
         }
         
         if (y >= blocksY){
             y = blocksY-1;
-            Log.debug("Y:"+y);
+            Gdx.app.log("DEBUG","Y:"+y);
         } else if( y < 0 ){
             y = 0;
-            Log.debug("Y:"+y);
+            Gdx.app.log("DEBUG","Y:"+y);
         }
         
         if (z >= blocksZ){
             z = blocksZ-1;
-            Log.debug("Z:"+z);
+            Gdx.app.log("DEBUG","Z:"+z);
         } else if( z < 0 ){
             z = 0;
-            Log.debug("Z:"+z);
+            Gdx.app.log("DEBUG","Z:"+z);
         }
         
         return data[x][y][z];    

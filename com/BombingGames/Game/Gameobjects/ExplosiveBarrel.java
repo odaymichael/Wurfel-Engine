@@ -2,10 +2,8 @@ package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Coordinate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 
 /**
  *An example for a special block: barrel block which can explode
@@ -27,11 +25,8 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
         if (coords == null) throw new NullPointerException("No coordinates given to ExplosiveBarrel during creation."); 
         this.coords = coords;
         setObstacle(true);
-        try {
-            explosionsound = new Sound("com/BombingGames/Game/Sounds/explosion2.wav");
-        } catch (SlickException ex) {
-            Logger.getLogger(ExplosiveBarrel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        explosionsound = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/explosion2.wav"));
+        
     }
     
     /**
@@ -67,6 +62,5 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
     public void setCoords(Coordinate coords) {
         this.coords = coords;
     }
-
 
 }

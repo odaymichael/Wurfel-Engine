@@ -5,11 +5,9 @@ import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
 import com.BombingGames.Game.Lighting.LightEngine;
-import com.BombingGames.MainMenu.MainMenuState;
+import com.BombingGames.MainMenu.MainMenuScreen;
+import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *A controller manages the map and the game data.
@@ -17,19 +15,15 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class Controller {
     private final boolean ENABLECHUNKSWITCH = true;
-    /**
-     *
-     */
     private static LightEngine lightEngine;
     private static Map map;
     private static boolean recalcRequested;
         
     private AbstractCharacter player;
     private View view;
-    private ArrayList<Camera> cameras = new ArrayList();
+    private ArrayList<WECamera> cameras = new ArrayList();
     private Minimap minimap;
 
-    
     
     /**
      * Constructor is called when entering the gamemode.
@@ -37,9 +31,9 @@ public class Controller {
      * @param game The StateBasedGame containing this class.
      * @throws SlickException
      */
-    public Controller(GameContainer gc, StateBasedGame game) throws SlickException{  
+    public Controller(){  
         newMap();
-        lightEngine = new LightEngine(gc.getWidth()/2, gc.getHeight()/2);
+        lightEngine = new LightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         
         recalcRequested = true;
     }
@@ -49,8 +43,13 @@ public class Controller {
      * @param delta time since last call
      * @throws SlickException
      */
-    public void update(int delta) throws SlickException{
+    public void update(int delta) {
         if (lightEngine != null) lightEngine.update(delta);
+        
+         //update the log
+        GameplayScreen.msgSystem().update(delta);
+        
+                
         if (ENABLECHUNKSWITCH){
             //earth to right
             if (cameras.get(0).getLeftBorder() <= 0)
@@ -59,7 +58,7 @@ public class Controller {
                 if (cameras.get(0).getRightBorder() >= Map.getBlocksX()-1) 
                     map.setCenter(5);
 
-        //scroll up, earth down            
+            //scroll up, earth down            
             if (cameras.get(0).getTopBorder() <= 0)
                 map.setCenter(1);
             else //scroll down, earth up
@@ -81,22 +80,18 @@ public class Controller {
         for (AbstractEntity entity : map.getEntitylist())
             entity.update(delta);
         
+        for (WECamera camera : cameras)
+            camera.update();
+                
         //recalculates the light if requested
         recalcIfRequested(cameras.get(0));      
-       
-        for (int i = 0; i < cameras.size(); i++) {
-            cameras.get(i).update();
-        }
-                
-        //update the log
-        Gameplay.msgSystem().update(delta);
     }
 
     /**
      * Creates a new Map.
      */
     public static void newMap(){
-        map = new Map(!MainMenuState.shouldLoadMap());
+        map = new Map(!MainMenuScreen.shouldLoadMap());
         map.fillMapWithBlocks();
     }
     
@@ -252,7 +247,7 @@ public class Controller {
      * Request a recalc with <i>reuqestRecalc()</i>. 
      * @param camera 
      */
-    public void recalcIfRequested(Camera camera){
+    public void recalcIfRequested(WECamera camera){
         if (recalcRequested) {
             camera.raytracing();
             LightEngine.calcSimpleLight();
@@ -273,7 +268,7 @@ public class Controller {
      * Returns a camera.
      * @return The virtual cameras rendering the scene
      */
-    protected ArrayList<Camera> getCameras() {
+    protected ArrayList<WECamera> getCameras() {
         return cameras;
     }
 
@@ -281,7 +276,7 @@ public class Controller {
      * Add a camera.
      * @param camera
      */
-    protected void addCamera(Camera camera) {
+    protected void addCamera(WECamera camera) {
         this.cameras.add(camera);
     }
 

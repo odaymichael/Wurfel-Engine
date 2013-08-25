@@ -1,8 +1,8 @@
 package com.BombingGames.EngineCore;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import java.util.ArrayList;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 
 /**
  * A message is put into the MsgSystem. It contains the message, the sender and the importance.
@@ -81,6 +81,7 @@ public class MsgSystem extends ArrayList<Msg> {
      */
     public void add(String message) {
         add(new Msg(message, "System", 100));
+        Gdx.app.log("DEBUG",message);
     }
     
     /**
@@ -90,6 +91,7 @@ public class MsgSystem extends ArrayList<Msg> {
      */
     public void add(String message, String sender){
         add(new Msg(message, sender, 100));
+        Gdx.app.log("DEBUG",message);
     }
     
     /**
@@ -100,6 +102,7 @@ public class MsgSystem extends ArrayList<Msg> {
      */
     public void add(String message, String sender, int importance){
         add(new Msg(message, sender, importance));
+        Gdx.app.log("DEBUG",message);
     }
     
     /**
@@ -107,16 +110,16 @@ public class MsgSystem extends ArrayList<Msg> {
      * @param delta
      */
     public void update(int delta){
-       //decrease importance
        timelastupdate += delta;
-       //delay 30*100 = 3000ms
+       
+       //derease importance every 30ms
        if (timelastupdate >= 30) {
             timelastupdate = 0;
             for (int i=0; i < size(); i++) {
                 Msg temp = get(i);
-                if (temp.getImportance()>0)
+                if (temp.getImportance() > 0)
                     temp.setImportance(temp.getImportance()-1); 
-                    else remove(i);
+                else remove(i);
             }
         }
     }
@@ -125,23 +128,21 @@ public class MsgSystem extends ArrayList<Msg> {
      * Draws the Messages
      * @param g The graphics context.
      */
-    public void render(Graphics g){
-        if (waitforinput) g.drawString("MSG:", xPos, yPos);
+    public void render(View view){
+        if (waitforinput) view.drawString("MSG:", xPos, yPos);
         
+                    view.getBatch().begin();
         for (int i=0; i < size(); i++){
             Msg msg = get(i);
-            Color clr = Color.blue;
-            if ("System".equals(msg.getSender())) clr = Color.green;
-                else if ("Warning".equals(msg.getSender())) clr = Color.red;
+            Color color = Color.BLUE;
+            if ("System".equals(msg.getSender())) color = Color.GREEN;
+                else if ("Warning".equals(msg.getSender())) color = Color.RED;
             
             //draw
-            View.getFont().drawString(
-                10,
-                50+i*20,
-                msg.getMessage(),
-                clr
-            );
+            view.getBatch().setColor(color);
+            view.getFont().draw(view.getBatch(), msg.getMessage(), 10,50+i*20);
         }
+         view.getBatch().end();
     }
 
     /**
