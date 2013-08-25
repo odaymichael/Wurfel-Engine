@@ -115,24 +115,10 @@ public class WECamera extends Camera {
             outputPosX = focusCoordinates.getBlock().get2DPosX(focusCoordinates) - get2DWidth() / 2 - GameObject.DIM2;
             outputPosY = focusCoordinates.getBlock().get2DPosY(focusCoordinates) - get2DHeight() / 2;
         } else if (focusentity != null ){
-            outputPosX = focusentity.get2DPosX(null) - get2DWidth()/2 - GameObject.DIM2;            
+            outputPosX = focusentity.get2DPosX(null) - get2DWidth()/2 + GameObject.DIM2;            
             outputPosY = focusentity.get2DPosY(null) - get2DHeight()/2 ;
         }
-        
-        //maybe unneccessary and can be done when the getter is called.
-        //update borders once every update
-        leftborder = outputPosX / GameObject.DIMENSION - 1;
-        if (leftborder < 0) leftborder= 0;
-        
-        rightborder = (outputPosX + get2DWidth()) / GameObject.DIMENSION + 2;
-        if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
-        
-        topborder = outputPosY / GameObject.DIM4 - 3;
-        if (topborder < 0) topborder= 0;
-        
-        bottomborder = (outputPosY+get2DHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
-        if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
-        
+                
        apply(Gdx.gl10);//don't know what this does
     }
     
@@ -147,8 +133,13 @@ public class WECamera extends Camera {
             view.getBatch().setProjectionMatrix(combined);
              
             //the parameter for the posY  is a bit strange because the y-axis is turned
-            Gdx.gl.glViewport((int) viewportPosX, (int) (Gdx.graphics.getHeight()-viewportHeight-viewportPosY),
-                          (int) viewportWidth, (int) (viewportHeight));
+            Gdx.gl.glViewport(
+                (int) viewportPosX,
+                (int) (Gdx.graphics.getHeight()-viewportHeight-viewportPosY),
+                (int) viewportWidth,
+                (int) (viewportHeight)
+            );
+            
             
             //move the viewport    
             translate(new Vector3(viewportPosX, viewportPosY, 0));
