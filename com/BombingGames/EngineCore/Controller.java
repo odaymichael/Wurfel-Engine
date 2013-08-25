@@ -49,9 +49,6 @@ public class Controller {
          //update the log
         GameplayScreen.msgSystem().update(delta);
         
-        for (WECamera camera : cameras) {
-            camera.update();
-        }
                 
         if (ENABLECHUNKSWITCH){
             //earth to right
@@ -83,9 +80,11 @@ public class Controller {
         for (AbstractEntity entity : map.getEntitylist())
             entity.update(delta);
         
+        for (WECamera camera : cameras)
+            camera.update();
+                
         //recalculates the light if requested
         recalcIfRequested(cameras.get(0));      
-       
     }
 
     /**
