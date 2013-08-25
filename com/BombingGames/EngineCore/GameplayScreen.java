@@ -2,7 +2,9 @@ package com.BombingGames.EngineCore;
 
 import com.BombingGames.Game.CustomGameController;
 import com.BombingGames.Game.CustomGameView;
+import com.BombingGames.Wurfelengine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
 
 /**
@@ -50,6 +52,7 @@ public class GameplayScreen implements Screen{
 
     @Override
     public void resize(int width, int height) {
+        Gdx.graphics.setTitle("Wurfelengine V" + Wurfelengine.VERSION + " " + Gdx.graphics.getWidth() + "x"+Gdx.graphics.getHeight());
     }
 
     @Override

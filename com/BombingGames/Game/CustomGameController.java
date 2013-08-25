@@ -11,7 +11,9 @@ import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Player;
 import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Wurfelengine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
@@ -116,9 +118,10 @@ public class CustomGameController extends Controller {
             if (keycode == Input.Keys.M){
                 GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
             }
-            
             //toggle fullscreen
-            //if (input.isKeyPressed(Input.Keys.F)) Gdx.graphics.setDisplayMode(new DisplayMode());.setFullscreen(!gc.isFullscreen()); 
+            if (keycode == Input.Keys.F){
+                Wurfelengine.setFullscreen(!Wurfelengine.isFullscreen());
+            }
 
             //toggle eathquake
             if (keycode == Input.Keys.E){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();

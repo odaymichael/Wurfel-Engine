@@ -3,6 +3,8 @@ package com.BombingGames;
 import com.BombingGames.EngineCore.WorkingDirectory;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,6 +21,8 @@ public class Wurfelengine {
     public static final String VERSION = "1.0.4";    
     private static File workingDirectory;
     public static final Core CORE = new Core();
+    private static boolean fullscreen = false;;
+    
 
     public static class Core extends Game {
         
@@ -54,13 +58,12 @@ public class Wurfelengine {
                 config.fullscreen = ("true".equals(args[2]));
         }    
         
-        config.title = title;     
+        config.title = title + " " + config.width + "x"+config.height;     
 
         workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
         
         Texture.setEnforcePotImages(false);
         LwjglApplication application = new LwjglApplication(CORE, config);
-        
         //basic engine setting
         
         //LIBGDX: no equivalent found in libGDX yet
@@ -93,4 +96,14 @@ public class Wurfelengine {
     public static File getWorkingDirectory() {
         return workingDirectory;
     }
+
+    public static void setFullscreen(boolean fullscreen) {
+        Wurfelengine.fullscreen = fullscreen;
+        Gdx.graphics.setDisplayMode(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), fullscreen);
+        Gdx.graphics.setTitle("Wurfelengine V" + Wurfelengine.VERSION + " " + Gdx.graphics.getWidth() + "x"+Gdx.graphics.getHeight());
+    }
+
+    public static boolean isFullscreen() {
+        return fullscreen;
+    } 
 }
