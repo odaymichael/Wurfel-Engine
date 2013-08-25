@@ -148,9 +148,6 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>sprites unlit/0-0.png</filename>
-            <filename>sprites unlit/0-1.png</filename>
-            <filename>sprites unlit/0-2.png</filename>
             <filename>sprites unlit/1-0-0.png</filename>
             <filename>sprites unlit/1-0-1.png</filename>
             <filename>sprites unlit/1-0-2.png</filename>
@@ -196,6 +193,9 @@
             <filename>sprites unlit/70-0.png</filename>
             <filename>sprites unlit/71-0.png</filename>
             <filename>sprites unlit/71-1.png</filename>
+            <filename>sprites unlit/0-0-0.png</filename>
+            <filename>sprites unlit/0-0-1.png</filename>
+            <filename>sprites unlit/0-0-2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
