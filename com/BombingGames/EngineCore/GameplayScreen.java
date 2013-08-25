@@ -4,7 +4,6 @@ import com.BombingGames.Game.CustomGameController;
 import com.BombingGames.Game.CustomGameView;
 import com.BombingGames.Wurfelengine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
 
 /**
