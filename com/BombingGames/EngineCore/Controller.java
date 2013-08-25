@@ -186,8 +186,8 @@ public class Controller {
      * @param relCoords
      * @param block the block you want to set
      */
-    public static void setMapDataSafe(int[] relCoords, Block block) {
-        map.setDataSafe(relCoords, block);
+    public static void setMapDataSafe(Coordinate coords, Block block) {
+        map.setDataSafe(coords, block);
     }
 
     

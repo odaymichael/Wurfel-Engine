@@ -427,7 +427,12 @@ public class Map {
      * @param coords
      * @param block
      */
-    public void setDataSafe(int[] coords, Block block) {
+    public void setDataSafe(Coordinate coord, Block block) {
+        int[] coords = new int[3];
+        coords[0] = coord.getRelX();
+        coords[1] = coord.getRelY();
+        coords[2] = coord.getZ();
+        
         if (coords[0] >= blocksX){
             coords[0] = blocksX-1;
         } else if( coords[0]<0 ){
