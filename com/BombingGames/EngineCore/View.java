@@ -89,7 +89,7 @@ public class View {
         drawString("FPS:"+ Gdx.graphics.getFramesPerSecond(), 10, 10);
         
         //scale to fit
-        //g.scale(equalizationScale, equalizationScale);
+        hudCamera.zoom = 1/equalizationScale;
         
         if (Controller.getLightengine() != null)
         Controller.getLightengine().render(this);
@@ -98,9 +98,6 @@ public class View {
             controller.getMinimap().render(this); 
         
         GameplayScreen.msgSystem().render(this);
-        
-        //reverse scale
-        //Gdx.graphics.scale(1/equalizationScale, 1/equalizationScale);
     }
        
 
@@ -175,7 +172,7 @@ public class View {
      * 
      * @return
      */
-    public static BitmapFont getFont() {
+    public BitmapFont getFont() {
         return font;
     }
 
@@ -224,5 +221,5 @@ public class View {
     
     public OrthographicCamera getHudCamera() {
         return hudCamera;
-    }
+    } 
 }
