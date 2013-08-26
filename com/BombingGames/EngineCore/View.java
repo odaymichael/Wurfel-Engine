@@ -119,9 +119,8 @@ public class View {
      * @param x the x position on the screen
      * @return the relative game coordinate
      */
-    public int ScreenXtoGame(int x){
-        return (int) ((x - controller.getCameras().get(0).getViewportPosX()) / controller.getCameras().get(0).getTotalScale()
-            + controller.getCameras().get(0).getGamePosX());
+    public int ScreenXtoGame(int x, WECamera camera){
+        return (int) ((x - camera.getViewportPosX()) / camera.getTotalScale()+ camera.getGamePosX());
     }
     
    /**
@@ -129,9 +128,8 @@ public class View {
      * @param y the y position on the screen
      * @return the relative game coordinate
      */
-    public int ScreenYtoGame(int y){
-        return (int) ((y - controller.getCameras().get(0).getViewportPosY()) / controller.getCameras().get(0).getTotalScale()
-            + controller.getCameras().get(0).getGamePosY()) * 2;
+    public int ScreenYtoGame(int y, WECamera camera){
+        return (int) ((y - camera.getViewportPosY()) / camera.getTotalScale() + camera.getGamePosY()) * 2;
     }
     
     /**
@@ -140,33 +138,48 @@ public class View {
      * @param y the y position on the screen
      * @return the relative map coordinates
      */
-    public int[] ScreenToGameCoords(int x, int y){
-        int[] coords = new int[3];  
+    public Coordinate ScreenToGameCoords(int x, int y){
+        int i = 0;
+
+        
+        //find camera
+         WECamera camera;
+         do {          
+            camera = controller.getCameras().get(i);
+            i++;
+        } while (i < controller.getCameras().size()
+            && !(x > camera.getViewportPosX() && x < camera.getViewportPosX()+camera.getViewportWidth()
+                && y > camera.getViewportPosY() && y < camera.getViewportPosY()+camera.getViewportHeight()));
+ 
         
         //reverse y to game niveau, first the zoom:
-        x = ScreenXtoGame(x);
-        y = ScreenYtoGame(y);
+        x = ScreenXtoGame(x, camera);
+        y = ScreenYtoGame(y, camera);
+        
         
         //find out where the click went
-        coords[0] = x / Block.DIMENSION -1;
-        
-        coords[1] = (int) (y / Block.DIMENSION)*2-1;
-            
-        coords[2] = Map.getBlocksZ()-1;
-        
-        //find the block
-        Coordinate tmpcoords = GameObject.sideIDtoNeighbourCoords(new Coordinate(x, y, y, true),
-        GameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION));
-        coords[0] = tmpcoords.getRelX();
-        coords[1] = tmpcoords.getRelY() + coords[2]*2;
+        Coordinate coords = new Coordinate(
+                       x / Block.DIMENSION -1,
+                       (int) (y / Block.DIMENSION)*2-1,
+                       Map.getBlocksZ()-1,
+                        true
+        );
+       
+        //find the specific coordinate
+        Coordinate specificCoords = GameObject.sideIDtoNeighbourCoords(
+                            coords,
+                            GameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION)
+        );
+        coords.setRelX(specificCoords.getRelX());
+        coords.setRelY(specificCoords.getRelY() + coords.getZ()*2);
         
         //if selection is not found by that specify it
-        if (new Coordinate(coords[0], coords[1], coords[2], true).getBlock().isHidden()){
+        if (coords.getBlock().isHidden()){
             //trace ray down to bottom
             do {
-                coords[1] = coords[1]-2;
-                coords[2] = coords[2]-1;
-            } while (new Coordinate(coords[0], coords[1], coords[2], true).getBlock().isHidden() && coords[2]>0);
+                coords.setRelY(coords.getRelY()-2);
+                coords.setZ(coords.getZ()-1);
+            } while (coords.getBlock().isHidden() && coords.getZ()>0);
         }
         
         return coords;
