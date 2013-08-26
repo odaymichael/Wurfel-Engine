@@ -132,15 +132,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
                - (int) (this.coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
     }
     
-    /**
-     * Renders the entity
-     *
-     * @param g 
-     * @param view 
-     */
-    public void render(View view){
-        this.render(view, getCoords());
-    }
+
     
     /**
      * add this entity to the map-> let it exist

@@ -1,15 +1,20 @@
 package com.BombingGames.Game.Gameobjects;
 
+import com.BombingGames.EngineCore.Chunk;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Coordinate;
+import com.BombingGames.EngineCore.Map;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.EngineCore.View;
+import com.BombingGames.EngineCore.WECamera;
 import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
 import static com.BombingGames.Game.Gameobjects.GameObject.getSprite;
 import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import org.lwjgl.opengl.GL11;
@@ -250,27 +255,27 @@ public class Block extends GameObject {
     
     
     @Override
-    public void render(View view, Coordinate coords) {
+    public void render(View view, WECamera camera, Coordinate coords) {
         if (!isHidden() && isVisible()) {
             
             if (Controller.getLightengine() != null){
                 if (hasSides) {
                     if (renderTop)
-                        renderSide(view, coords, Block.TOPSIDE, LightEngine.getBrightness(Block.TOPSIDE));
+                        renderSide(view, camera, coords, Block.TOPSIDE, LightEngine.getBrightness(Block.TOPSIDE));
                     if (renderLeft)
-                        renderSide(view, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE));
+                        renderSide(view, camera, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE));
                     if (renderRight)
-                        renderSide(view, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE));
-                } else super.render(view, coords, LightEngine.getBrightness());
+                        renderSide(view, camera, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE));
+                } else super.render(view, camera, coords, LightEngine.getBrightness());
             } else 
                 if (hasSides){
                     if (renderTop)
-                        renderSide(view, coords, Block.TOPSIDE, getLightlevel());
+                        renderSide(view, camera, coords, Block.TOPSIDE, getLightlevel());
                     if (renderLeft)
-                        renderSide(view, coords, Block.LEFTSIDE, getLightlevel());
+                        renderSide(view, camera, coords, Block.LEFTSIDE, getLightlevel());
                     if (renderRight)
-                        renderSide(view, coords, Block.RIGHTSIDE, getLightlevel());
-                } else super.render(view, coords, getLightlevel());
+                        renderSide(view, camera, coords, Block.RIGHTSIDE, getLightlevel());
+                } else super.render(view, camera, coords, getLightlevel());
         }
     }
 
@@ -284,8 +289,8 @@ public class Block extends GameObject {
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      * @param brightness  The brightness of the side. Value between 0  and 255.
      */
-    protected void renderSide(final View view, Coordinate coords, final int sidenumb, int brightness){
-        AtlasRegion image = getBlockSprite(getId(), getValue(), sidenumb);
+    protected void renderSide(final View view, WECamera camera, Coordinate coords, final int sidenumb, int brightness){
+        Sprite image = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         
         //right side is  half a block more to the right
         int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);
@@ -305,22 +310,31 @@ public class Block extends GameObject {
         }
             
         if (Controller.getLightengine() != null){
+            //uncomment these two lines to add a depth-effect (note that it is very dark)
             filter = filter.mul(Controller.getLightengine().getLightColor());
-        } else {
-            //calc  verticalGradient
-            float verticalGradient = getLightlevel();
-            
-            //image.setColor(0, verticalGradient,verticalGradient,verticalGradient);
-            //image.setColor(1, verticalGradient,verticalGradient, verticalGradient);
-
-            if (sidenumb != 1) verticalGradient -= .3f;
-
-            //image.setColor(2, verticalGradient, verticalGradient, verticalGradient);
-            //image.setColor(3, verticalGradient, verticalGradient, verticalGradient);
         }
+        //filter.mul((coords.getRelY()-camera.getTopBorder())/
+           // (camera.getBottomBorder()-camera.getTopBorder()));
+        //filter.g *= (coords.getRelY()-camera.getTopBorder())
+        //   /(camera.getBottomBorder()-camera.getTopBorder());
+        //calc  verticalGradient
+        float verticalGradient = getLightlevel()/100f;
         
-        view.getBatch().setColor(filter);
-        view.getBatch().draw(image, xPos, yPos);
+        Color verticeColor = filter.cpy().mul(verticalGradient);
+        verticeColor.a = 1; 
+        image.getVertices()[SpriteBatch.C4] = verticeColor.toFloatBits();
+        image.getVertices()[SpriteBatch.C1] = verticeColor.toFloatBits();
+
+        if (sidenumb != 1) verticalGradient -= .3f;
+        
+        verticeColor = filter.cpy().mul(verticalGradient);
+        verticeColor.a = 1; 
+
+        image.getVertices()[SpriteBatch.C2] = verticeColor.cpy().toFloatBits();
+        image.getVertices()[SpriteBatch.C3] = verticeColor.cpy().toFloatBits();
+        
+        image.setPosition(xPos, yPos);
+        image.draw(view.getBatch());
     }
 
     @Override

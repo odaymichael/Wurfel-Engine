@@ -3,6 +3,7 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Coordinate;
 import com.BombingGames.EngineCore.View;
+import com.BombingGames.EngineCore.WECamera;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -142,8 +143,8 @@ public abstract class GameObject {
      * @param coords the relative coordinates
      * @param view  
      */
-    public void render(View view, Coordinate coords) {
-        render(view, coords, lightlevel);
+    public void render(View view, WECamera camera, Coordinate coords) {
+        render(view, camera, coords, lightlevel);
     }
     
      /**
@@ -153,7 +154,7 @@ public abstract class GameObject {
      * @param view 
      * @param brightness  
      */
-    public void render(View view, Coordinate coords, int brightness) {
+    public void render(View view, WECamera camera, Coordinate coords, int brightness) {
         //draw the object except not visible ones
         if (!hidden && visible) {
             AtlasRegion texture = getSprite(id, value);

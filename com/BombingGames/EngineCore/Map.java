@@ -288,9 +288,9 @@ public class Map {
             int entitynumber = camera.getEntityIndex(i); //get the entityindex to check if it is an entity
             
             if (entitynumber == -1) //if a block then  get it and draw it
-                getData(coords).render(view, coords);
+                getData(coords).render(view, camera, coords);
             else //if it's an entity get it and draw it
-                entitylist.get(entitynumber).render(view);        
+                entitylist.get(entitynumber).render(view, camera, coords);        
         }
         view.getBatch().end();
        //Block.getSpritesheet().getFullImage().endUse(); 
