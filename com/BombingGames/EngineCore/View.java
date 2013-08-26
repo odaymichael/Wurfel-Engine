@@ -63,10 +63,7 @@ public class View {
      * @param g the graphics context
      * @throws SlickException
      */
-    public void render(){
-        //clear & set background to black
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);  
-        
+    public void render(){       
         //Gdx.gl10.glViewport(0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
         //render every camera
@@ -141,7 +138,6 @@ public class View {
     public Coordinate ScreenToGameCoords(int x, int y){
         int i = 0;
 
-        
         //find camera
          WECamera camera;
          do {          
