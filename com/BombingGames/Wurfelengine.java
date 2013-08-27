@@ -14,7 +14,7 @@ import java.io.File;
  * @author Benedikt Vogler
  * 
  */
-public class Wurfelengine extends Game{
+public class Wurfelengine extends Game {
     /**
      * The Version of the Engine
      */
