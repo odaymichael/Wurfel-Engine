@@ -1,9 +1,9 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.EngineCore.Chunk;
+import com.BombingGames.EngineCore.Map.Chunk;
 import com.BombingGames.EngineCore.Controller;
-import com.BombingGames.EngineCore.Coordinate;
-import com.BombingGames.EngineCore.Map;
+import com.BombingGames.EngineCore.Map.Coordinate;
+import com.BombingGames.EngineCore.Map.Map;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import com.BombingGames.Game.Lighting.LightEngine;

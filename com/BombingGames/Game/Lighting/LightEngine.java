@@ -1,7 +1,7 @@
 package com.BombingGames.Game.Lighting;
 
-import com.BombingGames.EngineCore.Chunk;
-import com.BombingGames.EngineCore.Map;
+import com.BombingGames.EngineCore.Map.Chunk;
+import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.EngineCore.View;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

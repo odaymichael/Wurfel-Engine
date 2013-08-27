@@ -1,8 +1,8 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
-import com.BombingGames.EngineCore.Coordinate;
-import com.BombingGames.EngineCore.Map;
+import com.BombingGames.EngineCore.Map.Coordinate;
+import com.BombingGames.EngineCore.Map.Map;
 import com.badlogic.gdx.audio.Sound;
 
 /**

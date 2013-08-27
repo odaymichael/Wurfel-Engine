@@ -1,5 +1,6 @@
-package com.BombingGames.EngineCore;
+package com.BombingGames.EngineCore.Map;
 
+import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Wurfelengine;
 import com.badlogic.gdx.Gdx;

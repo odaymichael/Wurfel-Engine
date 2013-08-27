@@ -1,5 +1,6 @@
-package com.BombingGames.EngineCore;
+package com.BombingGames.EngineCore.Map;
 
+import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.Game.Gameobjects.Block;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
@@ -147,7 +148,7 @@ public class Coordinate {
      * @return an array with the offset of the cell
      */
     public float[] getCellOffset(){
-        return Controller.getMap().getCellOffset(this);
+        return Map.getCellOffset(this);
     }
  
     
@@ -189,7 +190,7 @@ public class Coordinate {
      * @param height
      */
     public void setCellOffsetZ(float height){
-        Controller.getMap().setCelloffset(this, 2, height);
+        Map.setCelloffset(this, 2, height);
     }
     
     /**

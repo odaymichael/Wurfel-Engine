@@ -1,7 +1,7 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
-import com.BombingGames.EngineCore.Coordinate;
+import com.BombingGames.EngineCore.Map.Coordinate;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 

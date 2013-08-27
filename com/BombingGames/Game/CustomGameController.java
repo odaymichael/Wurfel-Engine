@@ -1,9 +1,9 @@
 package com.BombingGames.Game;
 
-import com.BombingGames.EngineCore.Map;
-import com.BombingGames.EngineCore.Minimap;
+import com.BombingGames.EngineCore.Map.Map;
+import com.BombingGames.EngineCore.Map.Minimap;
 import com.BombingGames.EngineCore.WECamera;
-import com.BombingGames.EngineCore.Coordinate;
+import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Controller;
 import static com.BombingGames.EngineCore.Controller.getLightengine;
 import static com.BombingGames.EngineCore.Controller.getMap;

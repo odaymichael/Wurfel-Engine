@@ -1,5 +1,8 @@
-package com.BombingGames.EngineCore;
+package com.BombingGames.EngineCore.Map;
 
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.View;
+import com.BombingGames.EngineCore.WECamera;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.MainMenu.MainMenuScreen;

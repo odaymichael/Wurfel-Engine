@@ -1,5 +1,6 @@
 package com.BombingGames.EngineCore;
 
+import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 

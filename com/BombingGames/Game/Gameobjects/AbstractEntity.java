@@ -1,12 +1,12 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
-import com.BombingGames.EngineCore.Coordinate;
+import com.BombingGames.EngineCore.Map.Coordinate;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
 import static com.BombingGames.Game.Gameobjects.GameObject.GAMEDIMENSION;
-import com.BombingGames.EngineCore.Map;
+import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.EngineCore.View;
 
 /**

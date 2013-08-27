@@ -1,5 +1,8 @@
 package com.BombingGames.EngineCore;
 
+import com.BombingGames.EngineCore.Map.Chunk;
+import com.BombingGames.EngineCore.Map.Coordinate;
+import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
@@ -392,7 +395,7 @@ public class WECamera extends Camera {
         * @param index the index
         * @return the coordinate triple with x,y,z
         */
-    protected Coordinate getDepthsortCoord(int index) {
+    public Coordinate getDepthsortCoord(int index) {
         Renderobject item = depthsort.get(index);
         Coordinate triple = item.getCoords();
         return triple;
@@ -403,7 +406,7 @@ public class WECamera extends Camera {
         * @param i index of the depthsort list
         * @return the entityindex
         */
-    protected int getEntityIndex(int i) {
+    public int getEntityIndex(int i) {
         return depthsort.get(i).getEntityindex();
     }
 
@@ -411,7 +414,7 @@ public class WECamera extends Camera {
         * Returns the lenght of list of ranking for the rendering order
         * @return length of the render list
         */
-    protected int depthsortlistSize(){
+    public int depthsortlistSize(){
         return depthsort.size();
     }
     
