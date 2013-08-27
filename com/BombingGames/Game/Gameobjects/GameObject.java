@@ -27,7 +27,7 @@ public abstract class GameObject {
     public static final int OBJECTTYPESCOUNT = 99;
     
    /** A list containing the offset of the objects. */
-    public static final int[][][] OFFSETLIST = new int[OBJECTTYPESCOUNT][10][2];
+    public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][10][2];
     
     /**The real game world dimension in pixel. Usually the use of DIMENSION is fine because of the map format every coordinate center is straight.
         * The value is DIMENSION/sqrt(2).
@@ -66,36 +66,36 @@ public abstract class GameObject {
         NAMELIST[32] = "sandbags";
         NAMELIST[33] = "crate";
         NAMELIST[34] = "flower";
-        OFFSETLIST[34][0][0] = 71;
-        OFFSETLIST[34][0][1] = 78;
+        OFFSET[34][0][0] = 71;
+        OFFSET[34][0][1] = 78;
         NAMELIST[35] = "round bush";
-        OFFSETLIST[35][0][0] = 22;
-        OFFSETLIST[35][0][1] = 2;
+        OFFSET[35][0][0] = 22;
+        OFFSET[35][0][1] = 2;
         NAMELIST[40] = "player";
-        OFFSETLIST[40][0][0] = 54;
-        OFFSETLIST[40][0][1] = 37;
-        OFFSETLIST[40][1][0] = 55;
-        OFFSETLIST[40][1][1] = 38;
-        OFFSETLIST[40][2][0] = 53;
-        OFFSETLIST[40][2][1] = 35;
-        OFFSETLIST[40][3][0] = 46;
-        OFFSETLIST[40][3][1] = 33;
-        OFFSETLIST[40][4][0] = 53;
-        OFFSETLIST[40][4][1] = 35;
-        OFFSETLIST[40][5][0] = 64;
-        OFFSETLIST[40][5][1] = 33;
-        OFFSETLIST[40][6][0] = 53;
-        OFFSETLIST[40][6][1] = 33;
-        OFFSETLIST[40][7][0] = 46;
-        OFFSETLIST[40][7][1] = 33;
+        OFFSET[40][0][0] = 54;
+        OFFSET[40][0][1] = 37;
+        OFFSET[40][1][0] = 55;
+        OFFSET[40][1][1] = 38;
+        OFFSET[40][2][0] = 53;
+        OFFSET[40][2][1] = 35;
+        OFFSET[40][3][0] = 46;
+        OFFSET[40][3][1] = 33;
+        OFFSET[40][4][0] = 53;
+        OFFSET[40][4][1] = 35;
+        OFFSET[40][5][0] = 64;
+        OFFSET[40][5][1] = 33;
+        OFFSET[40][6][0] = 53;
+        OFFSET[40][6][1] = 33;
+        OFFSET[40][7][0] = 46;
+        OFFSET[40][7][1] = 33;
         NAMELIST[41] = "smoke test";
         NAMELIST[50] = "strewbed";
         NAMELIST[70] = "campfire";
         NAMELIST[71] = "explosive barrel";
-        OFFSETLIST[71][0][0] = 39;
-        OFFSETLIST[71][0][1] = 19;
-        OFFSETLIST[71][1][0] = 35;
-        OFFSETLIST[71][1][1] = 16;
+        OFFSET[71][0][0] = 39;
+        OFFSET[71][0][1] = 19;
+        OFFSET[71][1][0] = 35;
+        OFFSET[71][1][1] = 16;
         NAMELIST[72] = "animation test";
     }
     
@@ -115,7 +115,7 @@ public abstract class GameObject {
     public abstract void update(int delta);
     
     /**
-     * Place you static update Methods here.
+     * Place you static update methods here.
      * @param delta 
      */
     public static void updateStaticUpdates(int delta){
@@ -159,8 +159,8 @@ public abstract class GameObject {
         if (!hidden && visible) {
             AtlasRegion texture = getSprite(id, value);
              
-            int xPos = get2DPosX(coords) + OFFSETLIST[id][value][0];
-            int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
+            int xPos = get2DPosX(coords) + OFFSET[id][value][0];
+            int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + OFFSET[id][value][1];
             
             Color filter;
             if (brightness <= 127){
