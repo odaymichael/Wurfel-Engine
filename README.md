@@ -1,7 +1,7 @@
 Wurfelengine V1.1
 ============
 
-Wurfelengine is a 2.5D isometric Java game engine build with Slick (soon: libgdx).
+Wurfelengine is a 2.5D isometric Java game engine build with the support of libGDX.
 The name comes from the german word for cube (Würfel).
 
 Version 1.1. tries to introduce many new features and bugfixes.
