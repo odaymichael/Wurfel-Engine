@@ -41,11 +41,11 @@ public class Controller {
         if (menuItems[0].isClicked()){
             MainMenuScreen.setLoadMap(true);
             fx.play();
-            Wurfelengine.CORE.setScreen(new GameplayScreen());
+            Wurfelengine.getInstance().setScreen(new GameplayScreen());
         } else if (menuItems[1].isClicked()) { 
                 MainMenuScreen.setLoadMap(false);
                 fx.play();
-                Wurfelengine.CORE.setScreen(new GameplayScreen());
+                Wurfelengine.getInstance().setScreen(new GameplayScreen());
             } else if (menuItems[2].isClicked()){
                 fx.play();
                 Gdx.app.exit();
