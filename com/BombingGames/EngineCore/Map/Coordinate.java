@@ -5,6 +5,8 @@ import com.BombingGames.Game.Gameobjects.Block;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *A coordinate is a reference to a specific cell in the map. The coordinate can transfer between relative and absolute coordiantes.
@@ -212,17 +214,35 @@ public class Coordinate {
     public int[] getAbs(){
         return new int[]{getAbsX(), getAbsY(), getZ()};
     }
+    
     /**
-     * Add a vector to the coordinates. This method does not change the coordinates.
+     * Add a vector to the coordinates. If you just want the result and don't change the coordiantes use addVectorCpy.
      * @param vector
      * @return the new coordiantes which resulted of the addition
      */
     public Coordinate addVector(int[] vector) {
-            Coordinate newvec = this;
+            this.x += vector[0];
+            this.y += vector[1];
+            this.height += vector[2]*Block.GAMEDIMENSION;
+            return this;
+    }
+    
+   /**
+     * Add a vector to the coordinates. This method does not change the coordinates.
+     * @param vector
+     * @return the new coordiantes which resulted of the addition
+     */
+    public Coordinate addVectorCpy(int[] vector) {
+        try {
+            Coordinate newvec = (Coordinate) this.clone();
             newvec.x += vector[0];
             newvec.y += vector[1];
             newvec.height += vector[2]*Block.GAMEDIMENSION;
             return newvec;
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Coordinate.class.getName()).log(Level.SEVERE, null, ex);
+            return this;
+        }
     }
 
     /**
@@ -235,6 +255,19 @@ public class Coordinate {
     public Coordinate addVector(int x, int y, int z) {
         return addVector(new int[]{x,y,z});
     }
+    
+      /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @return the new coordiantes which resulted of the addition
+     */
+    public Coordinate addVectorCpy(int x, int y, int z) {
+        return addVectorCpy(new int[]{x,y,z});
+    }
+    
+    
     
     /**
      *
