@@ -38,7 +38,7 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
                 for (int z=-RADIUS; z<RADIUS; z++){
                     //place air
                     Controller.getMap().setDataSafe(
-                        new int[]{relcoords[0]+x, relcoords[1]+y, relcoords[2]+z}, Block.getInstance(0)
+                        coords.addVector(x, y, z) , Block.getInstance(0)
                     );
                     
                     //spawn effect
