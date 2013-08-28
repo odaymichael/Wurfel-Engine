@@ -8,8 +8,8 @@ import com.BombingGames.EngineCore.Controller;
 import static com.BombingGames.EngineCore.Controller.getLightengine;
 import static com.BombingGames.EngineCore.Controller.getMap;
 import com.BombingGames.EngineCore.GameplayScreen;
+import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
-import com.BombingGames.Game.Gameobjects.Player;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Wurfelengine;
 import com.badlogic.gdx.Gdx;
@@ -31,7 +31,7 @@ public class CustomGameController extends Controller {
     public CustomGameController() {
         super();
 
-        Player player = (Player) AbstractEntity.getInstance(
+         AbstractCharacter player = (AbstractCharacter) AbstractEntity.getInstance(
                 40,
                 0,
                 Coordinate.getMapCenter(Map.getBlocksZ()*Block.GAMEDIMENSION)
