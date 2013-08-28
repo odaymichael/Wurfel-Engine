@@ -209,9 +209,9 @@ public class Coordinate {
         return new int[]{getAbsX(), getAbsY(), getZ()};
     }
     /**
-     *
+     * Add a vector to the coordinates. This method does not change the coordinates.
      * @param vector
-     * @return
+     * @return the new coordiantes which resulted of the addition
      */
     public Coordinate addVector(int[] vector) {
             Coordinate newvec = this;
@@ -226,7 +226,7 @@ public class Coordinate {
      * @param x
      * @param y
      * @param z
-     * @return
+     * @return the new coordiantes which resulted of the addition
      */
     public Coordinate addVector(int x, int y, int z) {
         return addVector(new int[]{x,y,z});

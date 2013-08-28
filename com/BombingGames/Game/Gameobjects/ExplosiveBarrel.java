@@ -44,7 +44,7 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
                     //spawn effect
                     if (x*x + y*y >= RADIUS*RADIUS){
                         AbstractEntity.getInstance(41, 0,
-                                coords.addVector(new int[]{x,y,z}) 
+                                coords.addVector(x, y, z) 
                             ).exist();
                     }
                 }

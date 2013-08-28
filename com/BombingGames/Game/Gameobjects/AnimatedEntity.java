@@ -4,14 +4,14 @@ package com.BombingGames.Game.Gameobjects;
  *An entity wich is animated.
  * @author Benedikt
  */
-public class AnimatedEntity extends AbstractEntity implements Animatable{
+public class AnimatedEntity extends AbstractEntity implements Animatable {
     private int[] animationsduration;
     private int counter = 0;
     private boolean running;
     private boolean loop;
     
    /**
-     * Create this Block with an array wich has the time of every animation step in ms in it.
+     * Create an entity with an animation with an array wich has the time of every animation step in ms in it.
      * @param id The id of the object
      * @param value the starting value
      * @param  autostart True when it should automatically start.

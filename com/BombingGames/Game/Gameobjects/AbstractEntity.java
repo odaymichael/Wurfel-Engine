@@ -7,7 +7,6 @@ import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
 import static com.BombingGames.Game.Gameobjects.GameObject.GAMEDIMENSION;
 import com.BombingGames.EngineCore.Map.Map;
-import com.BombingGames.EngineCore.View;
 
 /**
  *An entity is a game object wich is self aware that means it knows it's position.
@@ -40,8 +39,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         //define the default SideSprites
         switch (id){
             case 40:
-                entity = new Player(id);
-
+                    entity = new Player(id);
                     break;
             case 41: 
                     entity = new AnimatedEntity(
@@ -56,7 +54,6 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         }
         
         entity.setCoords(coords);
-
         entity.setValue(value);
         entity.setVisible(true);
         return entity;
