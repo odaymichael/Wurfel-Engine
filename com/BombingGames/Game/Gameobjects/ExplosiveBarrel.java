@@ -13,7 +13,7 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
     /**Defines the radius of the explosion.*/
     public static int RADIUS = 2;
     private Coordinate coords;
-    private Sound explosionsound;
+    private static Sound explosionsound;
 
     /**
      * Create a explosive barrel.
@@ -25,8 +25,7 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
         if (coords == null) throw new NullPointerException("No coordinates given to ExplosiveBarrel during creation."); 
         this.coords = coords;
         setObstacle(true);
-        explosionsound = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/explosion2.wav"));
-        
+        if (explosionsound == null) explosionsound = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/explosion2.wav"));
     }
     
     /**
@@ -62,5 +61,4 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
     public void setCoords(Coordinate coords) {
         this.coords = coords;
     }
-
 }
