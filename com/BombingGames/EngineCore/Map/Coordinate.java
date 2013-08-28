@@ -7,8 +7,8 @@ import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
 
 /**
- *A coordinate poitns to a cell in the map. The coordainte can transfer between relative and absolute coordiantes.
- * Relative coordinates are similar to the currently laoded map array. Absolute coordinates  are indipendent of the current map but to acces themyou must have the chunk loaded.
+ *A coordinate is a reference to a specific cell in the map. The coordinate can transfer between relative and absolute coordiantes.
+ * Relative coordinates are similar to the currently loaded map array. Absolute coordinates  are indipendent of the current map but to acces them you must have the chunk thet the coordiantes are in the currently loaded chunks.
  * @author Benedikt Vogler
  */
 public class Coordinate {
