@@ -1,12 +1,11 @@
 package com.BombingGames.EngineCore.Map;
 
 import com.BombingGames.EngineCore.Controller;
+import static com.BombingGames.EngineCore.Map.Coordinate.getMapCenter;
 import com.BombingGames.Game.Gameobjects.Block;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *A coordinate is a reference to a specific cell in the map. The coordinate can transfer between relative and absolute coordiantes.
@@ -62,6 +61,18 @@ public class Coordinate {
         this.height = height;
     }
     
+    /**
+     * Creates a new relative(!) coordinate from an existing coordinate
+     * @param coord the Coordinate
+     */
+    public Coordinate(Coordinate coord) {
+        this.x = coord.getRelX();
+        this.y = coord.getRelY();
+        this.height = coord.getHeight();
+        
+        topleftX = Controller.getMap().getChunkCoords(0)[0];
+        topleftY = Controller.getMap().getChunkCoords(0)[1];
+    }
     
     /**
      *Returns a coordinate pointing to the absolute(?) center of the map. Height is half the map's height.
@@ -171,7 +182,7 @@ public class Coordinate {
     }
     
     /**
-     *Set the coordiantes Z component. It will be transversed into a float value (height).
+     *Set the coordinates Z component. It will be transversed into a float value (height).
      * @param z
      */
     public void setZ(int z){
@@ -233,16 +244,11 @@ public class Coordinate {
      * @return the new coordiantes which resulted of the addition
      */
     public Coordinate addVectorCpy(int[] vector) {
-        try {
-            Coordinate newvec = (Coordinate) this.clone();
+            Coordinate newvec = this.cpy();
             newvec.x += vector[0];
             newvec.y += vector[1];
             newvec.height += vector[2]*Block.GAMEDIMENSION;
             return newvec;
-        } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(Coordinate.class.getName()).log(Level.SEVERE, null, ex);
-            return this;
-        }
     }
 
     /**
@@ -321,5 +327,10 @@ public class Coordinate {
     public int get2DPosY() {
         return getRelY() * DIM4 //x-coordinate * the tile's size
                - (int) (getHeight() / Math.sqrt(2)); //take axis shortening into account
+    }
+    
+    /** @return a copy of this coordinate */
+    public Coordinate cpy () {
+            return new Coordinate(this);
     }
 }
