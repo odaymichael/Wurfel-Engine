@@ -100,9 +100,10 @@ public class CustomGameController extends Controller {
             }
             
         } else {
-            Gdx.input.setOnscreenKeyboardVisible(true);
             //fetch input and write it down
             //to-do!
+            //Gdx.input.getTextInput(new textInput(), "Überschrift", "test");
+            //TextField textfield = new TextField("enter text", new Skin());           
         }
         
         super.update(delta);
