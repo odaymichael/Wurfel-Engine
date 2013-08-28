@@ -137,7 +137,7 @@ public class Controller {
      * @see com.BombingGames.Game.Map#getData(int, int, int) 
      */
     public static Block getMapData(int x, int y, int z){
-        return Map.getData(x, y, z);
+        return map.getData(x, y, z);
     }
     
     /**

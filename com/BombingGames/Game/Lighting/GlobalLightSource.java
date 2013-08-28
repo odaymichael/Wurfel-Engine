@@ -1,5 +1,6 @@
 package com.BombingGames.Game.Lighting;
 
+import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Map;
 import com.badlogic.gdx.graphics.Color;
 
@@ -120,7 +121,7 @@ public class GlobalLightSource {
         //automove
         if (LONGSPEED != 0) {
             longPos += LONGSPEED * delta;
-            latPos = (float) (amplitude * Math.sin((longPos + Map.getWorldSpinDirection()) * Math.PI / 180));
+            latPos = (float) (amplitude * Math.sin((longPos + Controller.getMap().getWorldSpinDirection()) * Math.PI / 180));
         }
             
         //brightness calculation

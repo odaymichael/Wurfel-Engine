@@ -1,6 +1,6 @@
 package com.BombingGames.Game.Lighting;
 
-import com.BombingGames.EngineCore.Map.Map;
+import com.BombingGames.EngineCore.Controller;
 import com.badlogic.gdx.graphics.Color;
 
 /**
@@ -13,6 +13,6 @@ public class Sun extends GlobalLightSource {
      *
      */
     public Sun() {
-        super(-Map.getWorldSpinDirection(), 0, new Color(255, 255, 255, 1), 70);
+        super(-Controller.getMap().getWorldSpinDirection(), 0, new Color(255, 255, 255, 1), 70);
     }
 }

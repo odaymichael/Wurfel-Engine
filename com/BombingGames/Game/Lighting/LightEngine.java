@@ -1,5 +1,6 @@
 package com.BombingGames.Game.Lighting;
 
+import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Chunk;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.EngineCore.View;
@@ -175,14 +176,14 @@ public class LightEngine {
                 
                 //find top most renderobject
                 int topmost = Chunk.getBlocksZ()-1;
-                while (Map.getData(x,y,topmost).isTransparent() && topmost > 0 ){
+                while (Controller.getMap().getData(x,y,topmost).isTransparent() && topmost > 0 ){
                     topmost--;
                 }
                 
                 if (topmost>0) {
                     //start at topmost renderobject and go down. Every step make it a bit darker
                     for (int level = topmost; level > -1; level--){
-                        Map.getData(x,y,level).setLightlevel(63 + 64 * level / topmost);
+                        Controller.getMap().getData(x,y,level).setLightlevel(63 + 64 * level / topmost);
                     }
                 }
             }
