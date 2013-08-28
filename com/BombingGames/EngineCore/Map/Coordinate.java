@@ -148,7 +148,7 @@ public class Coordinate {
      * @return an array with the offset of the cell
      */
     public float[] getCellOffset(){
-        return Map.getCellOffset(this);
+        return Controller.getMap().getCellOffset(this);
     }
  
     
@@ -190,7 +190,11 @@ public class Coordinate {
      * @param height
      */
     public void setCellOffsetZ(float height){
-        Map.setCelloffset(this, 2, height);
+        Controller.getMap().setCelloffset(this, 2, height);
+    }
+    
+    public void setBlock(Block block){
+        Controller.getMap().setData(this, block);
     }
     
     /**

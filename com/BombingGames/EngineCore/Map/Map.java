@@ -29,18 +29,18 @@ public class Map {
       * EAST->NORTH->WEST = -180
        *NORTH->EAST->SOUT = -270
        **/
-    private static int worldSpinDirection;
+    private int worldSpinDirection;
     
     private boolean newMap;
     
     //A list which has all current nine chunk coordinates in it.
-    private static int[][] coordlist = new int[9][2];
+    private int[][] coordlist = new int[9][2];
     
     private static int blocksX, blocksY, blocksZ;    
-    private static Block[][][] data;
-    private static float[][][][] cellOffset;
+    private Block[][][] data;
+    private float[][][][] cellOffset;
     
-    private static ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
+    private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
     
   
@@ -61,7 +61,7 @@ public class Map {
     public Map(boolean newMap, int worldSpinDirection) {
         Gdx.app.log("DEBUG","Should the Engine generate a new map: "+newMap);
         this.newMap = newMap;
-        Map.worldSpinDirection = worldSpinDirection;
+        this.worldSpinDirection = worldSpinDirection;
         
         
         if (!newMap) Chunk.readMapInfo();
@@ -318,7 +318,7 @@ public class Map {
      * @param z position
      * @return the single renderobject you wanted
      */
-    public static Block getData(int x, int y, int z){
+    public Block getData(int x, int y, int z){
         return data[x][y][z];  
     }
     
@@ -476,7 +476,7 @@ public class Map {
      *
      * @return
      */
-    public static int getWorldSpinDirection() {
+    public int getWorldSpinDirection() {
         return worldSpinDirection;
     }
     
@@ -484,7 +484,7 @@ public class Map {
      *
      * @return
      */
-    public static float[][][][] getCellOffset() {
+    public float[][][][] getCellOffset() {
         return cellOffset;
     }
     
@@ -493,7 +493,7 @@ public class Map {
      * @param coord
      * @return
      */
-    public static float[] getCellOffset(Coordinate coord) {
+    public float[] getCellOffset(Coordinate coord) {
         return cellOffset[coord.getRelX()][coord.getRelY()][coord.getZ()];
     }   
     
@@ -503,7 +503,7 @@ public class Map {
      * @param field 0 = X, 1 = y, 2 = z
      * @param value the value you want to set the field
      */
-    public static void setCelloffset(Coordinate coord, int field, float value){
+    public void setCelloffset(Coordinate coord, int field, float value){
         cellOffset[coord.getRelX()][coord.getRelY()][coord.getZSafe()][field] = value;
     }
 }
