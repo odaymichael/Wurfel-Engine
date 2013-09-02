@@ -121,6 +121,7 @@ public class CustomGameController extends Controller {
             //toggle fullscreen
             if (keycode == Input.Keys.F){
                 Wurfelengine.setFullscreen(!Wurfelengine.isFullscreen());
+                Gdx.app.log("DEBUG","Set to fullscreen:"+!Wurfelengine.isFullscreen());
             }
 
             //toggle eathquake
@@ -140,7 +141,8 @@ public class CustomGameController extends Controller {
             
             //show/hide light engine
             if (keycode == Input.Keys.L) {
-                getLightengine().RenderData(!getLightengine().getRenderPosition());
+                getLightengine().RenderData(!getLightengine().isRenderingData());
+                Gdx.app.log("DEBUG","Toggled lightengine data rendering:"+ !getLightengine().isRenderingData());
              } 
             
             //toggle input for msgSystem

@@ -210,16 +210,16 @@ public class LightEngine {
      *
      * @return
      */
-    public boolean getRenderPosition() {
+    public boolean isRenderingData() {
         return renderData;
     }
 
     /**
-     *
-     * @param renderData
+     *Should diagrams be rendered showing the data of the LE.
+     * @param render
      */
-    public void RenderData(boolean renderPosition) {
-        this.renderData = renderPosition;
+    public void RenderData(boolean render) {
+        this.renderData = render;
     }
     
     

@@ -66,7 +66,7 @@ public class WECamera extends Camera {
      */
     public WECamera(Coordinate focus, int x, int y, int width, int height) {
         this(x, y, width, height);   
-        GameplayScreen.msgSystem().add("Camera is focusing a coordinate");
+        GameplayScreen.msgSystem().add("Creating new camera which is focusing a coordinate");
         this.focusCoordinates = focus;
         this.focusentity = null;
     }
@@ -84,7 +84,7 @@ public class WECamera extends Camera {
         this(x,y,width,height);
         if (focusentity == null)
             throw new NullPointerException("Parameter 'focusentity' is null");
-        GameplayScreen.msgSystem().add("Camera is focusing an entity: "+focusentity.getName());
+        GameplayScreen.msgSystem().add("Creating new camera which is focusing an entity: "+focusentity.getName());
         this.focusentity = focusentity;
         this.focusCoordinates = null;
     }
