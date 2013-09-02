@@ -4,7 +4,6 @@ import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.GameObject;
-import com.BombingGames.Game.Lighting.LightEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,8 +35,6 @@ public class View {
     
     private OrthographicCamera hudCamera;
     
-    private static LightEngine lightEngine;
-    
     /**
      * Creates a View.
      * @param gc
@@ -59,13 +56,11 @@ public class View {
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         
-        lightEngine = new LightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
                 
         Block.loadSheet();
      }
     
     public void update(int delta){
-        if (lightEngine != null) lightEngine.update(delta);
     }
     
     /**
@@ -102,8 +97,8 @@ public class View {
         //scale to fit
         //hudCamera.zoom = 1/equalizationScale;
         
-        if (getLightengine() != null)
-            getLightengine().render(this);
+        if (Controller.getLightengine() != null)
+            Controller.getLightengine().render(this);
         
         if (controller.getMinimap() != null)
             controller.getMinimap().render(this); 
@@ -245,12 +240,4 @@ public class View {
     public OrthographicCamera getHudCamera() {
         return hudCamera;
     } 
-    
-    /**
-     *
-     * @return
-     */
-    public static LightEngine getLightengine() {
-        return lightEngine;
-    }
 }
