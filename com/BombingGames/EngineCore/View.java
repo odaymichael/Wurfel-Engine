@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class View {
     /**
-     * The default render width.
+     * The virtual render width (resolution).
      * Every resolution smaller than this get's scaled down and every resolution bigger scaled up. 
      */
     public static final int RENDER_RESOLUTION_WIDTH = 1920;
