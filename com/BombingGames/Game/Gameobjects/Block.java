@@ -7,6 +7,7 @@ import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
+import static com.BombingGames.Game.Gameobjects.GameObject.OBJECTTYPESCOUNT;
 import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
 import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
 import com.badlogic.gdx.graphics.Color;
@@ -31,8 +32,45 @@ public class Block extends GameObject {
     
     public static final char CATEGORY = 'b';
     
+    /**Containts the names of the objects. index=id*/
+    public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT];
+    
+       /** A list containing the offset of the objects. */
+    public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][10][2];
+    
     private boolean liquid, renderRight, renderTop, renderLeft;
     private boolean hasSides = true;
+    
+    static {
+        NAMELIST[0] = "air";
+        NAMELIST[1] = "grass";
+        NAMELIST[2] = "dirt";
+        NAMELIST[3] = "stone";
+        NAMELIST[4] = "asphalt";
+        NAMELIST[5] = "cobblestone";
+        NAMELIST[6] = "pavement";
+        NAMELIST[7] = "concrete";
+        NAMELIST[8] = "sand";
+        NAMELIST[9] = "water";
+        NAMELIST[20] = "red brick wall";
+        NAMELIST[30] = "fence";
+        NAMELIST[32] = "sandbags";
+        NAMELIST[33] = "crate";
+        NAMELIST[34] = "flower";
+        NAMELIST[35] = "round bush";
+        OFFSET[34][0][0] = 71;
+        OFFSET[34][0][1] = 78;
+        OFFSET[35][0][0] = 22;
+        OFFSET[35][0][1] = 2;
+        NAMELIST[50] = "strewbed";
+        NAMELIST[70] = "campfire";
+        NAMELIST[71] = "explosive barrel";
+        OFFSET[71][0][0] = 39;
+        OFFSET[71][0][1] = 19;
+        OFFSET[71][1][0] = 35;
+        OFFSET[71][1][1] = 16;
+        NAMELIST[72] = "animation test";
+    }
     
     /**
      * Don't use this constructor to get a new block. Use the static <i>getInstance</i> methods instead.
@@ -361,6 +399,19 @@ public class Block extends GameObject {
     public char getCategory() {
         return CATEGORY;
     }
-    
-    
+
+    @Override
+    public String getName() {
+        return NAMELIST[getId()];
+    }
+
+    @Override
+    public int getOffsetX() {
+        return OFFSET[getId()][getValue()][0];
+    }
+
+    @Override
+    public int getOffsetY() {
+        return OFFSET[getId()][getValue()][1];
+    } 
 }

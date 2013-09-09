@@ -178,7 +178,7 @@ public class Minimap {
 
                 //player pos
                 view.drawString(
-                    (int) controller.getPlayer().getOffsetX() +" | "+ (int) controller.getPlayer().getOffsetY() +" | "+ (int) controller.getPlayer().getCoords().getHeight(),
+                    (int) controller.getPlayer().getPositionX() +" | "+ (int) controller.getPlayer().getPositionY() +" | "+ (int) controller.getPlayer().getCoords().getHeight(),
                     (int) (viewportPosX + (controller.getPlayer().getCoords().getRelX() + (controller.getPlayer().getCoords().getRelY()%2==1?0.5f:0) ) * scaleX+20),
                     (int) (viewportPosY + controller.getPlayer().getCoords().getRelY() * scaleY - 10),
                     Color.RED

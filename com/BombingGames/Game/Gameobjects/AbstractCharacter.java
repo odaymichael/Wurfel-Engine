@@ -85,8 +85,8 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     private void makeCoordinateStep(int x, int y){
         //mirror the position around the center
-        setOffsetX(getOffsetX() -x*Block.DIM2);
-        setOffsetY(getOffsetY() -y*Block.DIM2);
+        setPositionX(getPositionX() -x*Block.DIM2);
+        setPositionY(getPositionY() -y*Block.DIM2);
 
         setCoords(getCoords().addVector(0, y, 0));
         if (x < 0 && getCoords().getRelY() % 2 == 1) setCoords(getCoords().addVector(-1, 0, 0));
@@ -111,8 +111,8 @@ public abstract class AbstractCharacter extends AbstractEntity {
         if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
         if (speed < 0) speed = 0;
             
-        float oldOffsetX = getOffsetX();
-        float oldOffsetY = getOffsetY();
+        float oldPositionX = getPositionX();
+        float oldPositionY = getPositionY();
         float oldHeight = getCoords().getHeight();
         
         /*VERTICAL MOVEMENT*/
@@ -135,13 +135,13 @@ public abstract class AbstractCharacter extends AbstractEntity {
         
         /*HORIZONTAL MOVEMENT*/
         //calculate new position
-        float newx = getOffsetX() + delta * speed * dir[0];
-        float newy = getOffsetY() + delta * speed * dir[1];
+        float newx = getPositionX() + delta * speed * dir[0];
+        float newy = getPositionY() + delta * speed * dir[1];
 
         //if movement allowed => move player   
-        if (! horizontalColission(newx, newy, oldOffsetX, oldOffsetY)) {                
-            setOffsetX(newx);
-            setOffsetY(newy);
+        if (! horizontalColission(newx, newy, oldPositionX, oldPositionY)) {                
+            setPositionX(newx);
+            setPositionY(newy);
 
             //track the coordiante change, if there is one
             int sidennumb = getSideNumb();              
@@ -346,7 +346,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         tempcoords.setHeight(getCoords().getHeight()-1);
         setCoords(tempcoords);
         
-        boolean colission = horizontalColission(getOffsetX(), getOffsetY(), getOffsetX(), getOffsetY());
+        boolean colission = horizontalColission(getPositionX(), getPositionY(), getPositionX(), getPositionY());
         tempcoords.setHeight(getCoords().getHeight()+1);
         setCoords(tempcoords);
         

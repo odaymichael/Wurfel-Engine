@@ -26,20 +26,13 @@ public abstract class GameObject {
     /**the max. amount of different object types*/
     public static final int OBJECTTYPESCOUNT = 99;
     
-   /** A list containing the offset of the objects. */
-    public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][10][2];
+
     
     /**The real game world dimension in pixel. Usually the use of DIMENSION is fine because of the map format every coordinate center is straight.
         * The value is DIMENSION/sqrt(2).
         */
     public static final int GAMEDIMENSION = (int) (DIMENSION / Math.sqrt(2));
-
-    
-     /**Containts the names of the objects. index=id*/
-    public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT];   
-    
-
-            
+        
     /**The sprite texture which contains every object texture*/
     private static TextureAtlas spritesheet;
     private static Pixmap pixmap;
@@ -49,56 +42,6 @@ public abstract class GameObject {
     private boolean obstacle, transparent, visible, hidden; 
     private int lightlevel = 127;
     private int dimensionY = 1;    
-    
-    
-    static {
-        NAMELIST[0] = "air";
-        NAMELIST[1] = "grass";
-        NAMELIST[2] = "dirt";
-        NAMELIST[3] = "stone";
-        NAMELIST[4] = "asphalt";
-        NAMELIST[5] = "cobblestone";
-        NAMELIST[6] = "pavement";
-        NAMELIST[7] = "concrete";
-        NAMELIST[8] = "sand";
-        NAMELIST[9] = "water";
-        NAMELIST[20] = "red brick wall";
-        NAMELIST[30] = "fence";
-        NAMELIST[32] = "sandbags";
-        NAMELIST[33] = "crate";
-        NAMELIST[34] = "flower";
-        OFFSET[34][0][0] = 71;
-        OFFSET[34][0][1] = 78;
-        NAMELIST[35] = "round bush";
-        OFFSET[35][0][0] = 22;
-        OFFSET[35][0][1] = 2;
-        NAMELIST[40] = "player";
-        OFFSET[40][0][0] = 54;
-        OFFSET[40][0][1] = 37;
-        OFFSET[40][1][0] = 55;
-        OFFSET[40][1][1] = 38;
-        OFFSET[40][2][0] = 53;
-        OFFSET[40][2][1] = 35;
-        OFFSET[40][3][0] = 46;
-        OFFSET[40][3][1] = 33;
-        OFFSET[40][4][0] = 53;
-        OFFSET[40][4][1] = 35;
-        OFFSET[40][5][0] = 64;
-        OFFSET[40][5][1] = 33;
-        OFFSET[40][6][0] = 53;
-        OFFSET[40][6][1] = 33;
-        OFFSET[40][7][0] = 46;
-        OFFSET[40][7][1] = 33;
-        NAMELIST[41] = "smoke test";
-        NAMELIST[50] = "strewbed";
-        NAMELIST[70] = "campfire";
-        NAMELIST[71] = "explosive barrel";
-        OFFSET[71][0][0] = 39;
-        OFFSET[71][0][1] = 19;
-        OFFSET[71][1][0] = 35;
-        OFFSET[71][1][1] = 16;
-        NAMELIST[72] = "animation test";
-    }
     
     /**
      * Creates an object. Use getInterface() to create blocks or entitys.
@@ -163,8 +106,8 @@ public abstract class GameObject {
         if (!hidden && visible) {             
             AtlasRegion texture = getSprite(getCategory(), id, value);
              
-            int xPos = get2DPosX(coords) + OFFSET[id][value][0];
-            int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + OFFSET[id][value][1];
+            int xPos = get2DPosX(coords) + getOffsetX();
+            int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + getOffsetY();
             
             Color filter;
             if (brightness <= 127){
@@ -354,9 +297,11 @@ public abstract class GameObject {
      * Returns the name of the object
      * @return the name of the object
      */
-    public String getName() {
-        return NAMELIST[getId()];
-    }
+    public abstract String getName();
+    
+    public abstract int getOffsetX();
+    
+    public abstract int getOffsetY();
 
     /**
      * Get the value. It is like a sub-id and can identify the status.
@@ -463,6 +408,4 @@ public abstract class GameObject {
     public void setDimensionY(int dimensionY) {
         this.dimensionY = dimensionY;
     }
-
-
 }

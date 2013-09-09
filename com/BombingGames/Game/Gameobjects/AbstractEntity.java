@@ -7,6 +7,7 @@ import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
 import static com.BombingGames.Game.Gameobjects.GameObject.GAMEDIMENSION;
 import com.BombingGames.EngineCore.Map.Map;
+import static com.BombingGames.Game.Gameobjects.GameObject.OBJECTTYPESCOUNT;
 
 /**
  *An entity is a game object wich is self aware that means it knows it's position.
@@ -14,11 +15,37 @@ import com.BombingGames.EngineCore.Map.Map;
  */
 public abstract class AbstractEntity extends GameObject implements IsSelfAware {
    private Coordinate coords;//the position in the map-grid
-   private float offsetX = DIM2; //the horizontal offset
-   private float offsetY = DIM2;
+   private float positionX = DIM2; //the horizontal offset
+   private float positionY = DIM2;
    
    public static final char CATEGORY = 'e';
+   
+    /**Containts the names of the objects. index=id*/
+    public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT]; 
+    
+    /** A list containing the offset of the objects. */
+    public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][10][2];
 
+    static {
+        NAMELIST[40] = "player";
+        OFFSET[40][0][0] = 54;
+        OFFSET[40][0][1] = 37;
+        OFFSET[40][1][0] = 55;
+        OFFSET[40][1][1] = 38;
+        OFFSET[40][2][0] = 53;
+        OFFSET[40][2][1] = 35;
+        OFFSET[40][3][0] = 46;
+        OFFSET[40][3][1] = 33;
+        OFFSET[40][4][0] = 53;
+        OFFSET[40][4][1] = 35;
+        OFFSET[40][5][0] = 64;
+        OFFSET[40][5][1] = 33;
+        OFFSET[40][6][0] = 53;
+        OFFSET[40][6][1] = 33;
+        OFFSET[40][7][0] = 46;
+        OFFSET[40][7][1] = 33;
+        NAMELIST[41] = "smoke test";
+    }
    
     /**
      * Create an abstractEntity. You should use Block.getInstance(int) 
@@ -65,7 +92,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     public int getDepth(Coordinate coords){
         return (int) (
             coords.getRelY() * (DIM4+1)//Y
-            + getOffsetY()
+            + getPositionY()
             + coords.getHeight() / Math.sqrt(2) /2//Z
             + (getDimensionY() - 1) * DIM4 / Math.sqrt(2) /2
         );
@@ -116,7 +143,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     public int get2DPosX(Coordinate coords) {
         return this.coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
                + (this.coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
-               + (int) (offsetX); //add the objects position inside this coordinate
+               + (int) (positionX); //add the objects position inside this coordinate
     }
 
     /**
@@ -127,7 +154,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
    @Override
     public int get2DPosY(Coordinate coords) {
         return this.coords.getRelY() * DIM4 //y-coordinate * the tile's size
-               + (int) (offsetY / 2) //add the objects position inside this coordinate
+               + (int) (positionY / 2) //add the objects position inside this coordinate
                - (int) (this.coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
     }
     
@@ -146,43 +173,58 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * @see com.BombingGames.Game.Blocks.Block#getSideNumb(int, int) 
      */
     protected int getSideNumb() {
-        return Block.getSideID(offsetX, offsetY);
+        return Block.getSideID(positionX, positionY);
     }  
 
     /**
      *
      * @return
      */
-    public float getOffsetX() {
-        return offsetX;
+    public float getPositionX() {
+        return positionX;
     }
 
     /**
      *
      * @param offsetX
      */
-    public void setOffsetX(float offsetX) {
-        this.offsetX = offsetX;
+    public void setPositionX(float offsetX) {
+        this.positionX = offsetX;
     }
 
     /**
      *
      * @return
      */
-    public float getOffsetY() {
-        return offsetY;
+    public float getPositionY() {
+        return positionY;
     }
 
     /**
      *
      * @param offsetY
      */
-    public void setOffsetY(float offsetY) {
-        this.offsetY = offsetY;
+    public void setPositionY(float offsetY) {
+        this.positionY = offsetY;
     }
 
     @Override
     public char getCategory() {
         return CATEGORY;
+    } 
+    
+    @Override
+    public String getName() {
+        return NAMELIST[getId()];
+    }
+    
+    @Override
+    public int getOffsetX() {
+        return OFFSET[getId()][getValue()][0];
+    }
+
+    @Override
+    public int getOffsetY() {
+        return OFFSET[getId()][getValue()][1];
     } 
 }
