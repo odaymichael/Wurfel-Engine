@@ -1,8 +1,8 @@
 package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -50,11 +50,7 @@ public class EntitySpawner extends Block implements IsSelfAware {
     }
 
     private void trigger() {
-        Gdx.app.log("debug", "trigger des entitty spawners");
+        GameplayScreen.msgSystem().add("You are standing on: " + coords.getRelX() +"," + coords.getRelY() +","+ coords.getZ(), "System");
     }
-    
-    
-    
-    
     
 }
