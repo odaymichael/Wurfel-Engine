@@ -12,6 +12,7 @@ import java.util.Arrays;
  */
 public class EntitySpawner extends Block implements IsSelfAware {
     private Coordinate coords;//this field is needed because of it is selfAware
+    private boolean up = true;
 
     protected EntitySpawner(int id, Coordinate coords){
         super(id);
@@ -35,8 +36,12 @@ public class EntitySpawner extends Block implements IsSelfAware {
             i++;
         }
         
-        if (i < entitylist.size() && Arrays.equals(entitylist.get(i).getCoords().getRel(), coordsOnTop))
-            trigger();
+        if (i < entitylist.size() && Arrays.equals(entitylist.get(i).getCoords().getRel(), coordsOnTop)) {
+            if (up) trigger();
+            up = false;
+        } else {
+            up = true;
+        }
     }
 
     @Override
