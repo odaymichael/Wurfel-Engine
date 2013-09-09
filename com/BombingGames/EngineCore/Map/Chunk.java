@@ -81,8 +81,8 @@ public class Chunk {
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         data[x][y][0] = Block.getInstance(8);
-                        data[x][y][1] = Block.getInstance(9,0, new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, 1, true));
-                        data[x][y][2] = Block.getInstance(9,0, new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, 2, true));
+                        data[x][y][1] = Block.getInstance(9);
+                        data[x][y][2] = Block.getInstance(9);
                     }
                 
                 //mountain
@@ -112,7 +112,7 @@ public class Chunk {
                 break;
             }
                 
-            case 2: {//flat block
+            case 2: {//flat block (grass?)
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
                         if (blocksZ>1){
@@ -164,7 +164,7 @@ public class Chunk {
             case 6: {//every block                
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = Block.getInstance(y, 0, new Coordinate(x, y, 0, true));
+                        data[x][y][0] = Block.getInstance(y, 0, new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, 0, true));
                     }
                 break;
             }
