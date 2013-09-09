@@ -118,7 +118,10 @@ public class Block extends GameObject {
             case 35: block = new Block(id); //bush
                     block.setTransparent(true);
                     block.hasSides = false;
-                    break;       
+                    break;     
+            case 40: block = new EntitySpawner(id, coords);
+                    block.hasSides = true;
+                    break;
             case 70:block = new Block(id); 
                     block.setTransparent(true);
                     block.hasSides = false;
