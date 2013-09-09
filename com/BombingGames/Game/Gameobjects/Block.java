@@ -6,7 +6,6 @@ import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.EngineCore.View;
-import com.BombingGames.EngineCore.WECamera;
 import static com.BombingGames.Game.Gameobjects.GameObject.OBJECTTYPESCOUNT;
 import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
 import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
