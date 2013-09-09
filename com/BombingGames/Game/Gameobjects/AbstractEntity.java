@@ -28,7 +28,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     }
     
     /**
-     * Create an entity.
+     * Create an entity through this factory method..
      * @param id the object id of the entity.
      * @param value The value at start.
      * @param coords The coordiantes where you place it.

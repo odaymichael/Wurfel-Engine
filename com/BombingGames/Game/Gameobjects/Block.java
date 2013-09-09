@@ -64,13 +64,13 @@ public class Block extends GameObject {
     }
     
     /**
-     * Create a block. If the block needs to know it's position you have to use this method and give the coordinates.
+     * Create a block through this factory method. If the block needs to know it's position you have to use this method and give the coordinates.
      * @param id the id of the block
      * @param value the value of the block, which is like a sub-id
-     * @param coord 
+     * @param coords the coordinates where the block is going to be places. If the block does not need this information it can be null.
      * @return the Block
      */
-    public static Block getInstance(int id, int value, Coordinate coord){
+    public static Block getInstance(int id, int value, Coordinate coords){
         Block block;
         //define the default SideSprites
         switch (id){
@@ -119,15 +119,11 @@ public class Block extends GameObject {
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;       
-            case 40://already reserverd
-                    break;
-            case 41://already reserverd
-                    break;    
             case 70:block = new Block(id); 
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;
-            case 71:block = new ExplosiveBarrel(id, coord);
+            case 71:block = new ExplosiveBarrel(id, coords);
                     block.hasSides = false;
                     break;
             case 72:block = new AnimatedBlock(id, new int[]{1000,1000},true, true);//animation lighting
