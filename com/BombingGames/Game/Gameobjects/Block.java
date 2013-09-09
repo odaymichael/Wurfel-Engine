@@ -71,7 +71,7 @@ public class Block extends GameObject {
      * @return the Block
      */
     public static Block getInstance(int id, int value, Coordinate coord){
-        Block block = null;
+        Block block;
         //define the default SideSprites
         switch (id){
             case 0: 

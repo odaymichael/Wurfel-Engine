@@ -35,7 +35,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * @return the entity.
      */
     public static AbstractEntity getInstance(int id, int value, Coordinate coords){
-        AbstractEntity entity = null;
+        AbstractEntity entity;
         //define the default SideSprites
         switch (id){
             case 40:
