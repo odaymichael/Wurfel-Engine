@@ -3,7 +3,7 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
-import com.BombingGames.EngineCore.WECamera;
+import static com.BombingGames.Game.Gameobjects.Block.CATEGORY;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -49,6 +49,7 @@ public abstract class GameObject {
     private boolean obstacle, transparent, visible, hidden; 
     private int lightlevel = 127;
     private int dimensionY = 1;    
+    
     
     static {
         NAMELIST[0] = "air";
@@ -102,6 +103,7 @@ public abstract class GameObject {
     /**
      * Creates an object. Use getInterface() to create blocks or entitys.
      * @param id the id of the object
+     * @param value 
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
     protected GameObject(int id, int value) {
@@ -115,6 +117,7 @@ public abstract class GameObject {
      */
     public abstract void update(int delta);
     
+    public abstract char getCategory();
     /**
      * Place you static update methods here.
      * @param delta 
@@ -140,25 +143,25 @@ public abstract class GameObject {
     
     /**
      * Draws an object.
-     * @param g 
      * @param coords the relative coordinates
+     * @param camera 
      * @param view  
      */
-    public void render(View view, WECamera camera, Coordinate coords) {
-        render(view, camera, coords, lightlevel);
+    public void render(View view, Coordinate coords) {
+        render(view, coords, lightlevel);
     }
     
      /**
      * Draws an object.
-     * @param g 
      * @param coords the relative coordinates
+     * @param camera 
      * @param view 
      * @param brightness  
      */
-    public void render(View view, WECamera camera, Coordinate coords, int brightness) {
+    public void render(View view, Coordinate coords, int brightness) {
         //draw the object except not visible ones
-        if (!hidden && visible) {
-            AtlasRegion texture = getSprite(id, value);
+        if (!hidden && visible) {             
+            AtlasRegion texture = getSprite(getCategory(), id, value);
              
             int xPos = get2DPosX(coords) + OFFSET[id][value][0];
             int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + OFFSET[id][value][1];
@@ -178,10 +181,9 @@ public abstract class GameObject {
             //texture.drawEmbedded(xPos, yPos, xPos + texture.getWidth(), yPos + texture.getHeight(), 0, 0, texture.getWidth(), texture.getHeight(), filter);
         }
     } 
-
+    
     /**
      * Load the spritesheet from memory.
-     * @throws SlickException
      */
     public static void loadSheet()  {
         spritesheet = new TextureAtlas(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.txt"), true);
@@ -283,22 +285,24 @@ public abstract class GameObject {
         return new Coordinate(result[0], result[1], result[2], true);
     }
     
-    /**
-     * Returns the depth of the object. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
-     * @param coords 
-     * @return the depth
-     */
-    public abstract int getDepth(Coordinate coords);
+
     
 
     /**
      * Returns a sprite texture of non-block texture
+     * @param category 
      * @param id
      * @param value
      * @return
      */
-    public static AtlasRegion getSprite(int id, int value) {
-        return spritesheet.findRegion(id+"-"+value);
+    public static AtlasRegion getSprite(char category, int id, int value) {
+        AtlasRegion sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
+        if (sprite == null){ //if there is no sprite show the default "sprite not found sprite"
+            sprite = getSpritesheet().findRegion(CATEGORY+"0-0-0");
+            if (sprite==null)
+                throw new NullPointerException("Sprite not found but even the default error sprite could not be found:"+CATEGORY+"0-0-0");
+        }
+        return sprite;
     }
 
 
@@ -312,6 +316,10 @@ public abstract class GameObject {
         return spritesheet;
     }
 
+    /**
+     *
+     * @return
+     */
     public static Pixmap getPixmap() {
         return pixmap;
     }
@@ -335,6 +343,13 @@ public abstract class GameObject {
         return lightlevel;
     }
 
+    /**
+     * Returns the depth of the object. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
+     * @param coords 
+     * @return the depth
+     */
+    public abstract int getDepth(Coordinate coords);
+    
     /**
      * Returns the name of the object
      * @return the name of the object

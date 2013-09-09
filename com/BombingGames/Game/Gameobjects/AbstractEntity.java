@@ -16,6 +16,8 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
    private Coordinate coords;//the position in the map-grid
    private float offsetX = DIM2; //the horizontal offset
    private float offsetY = DIM2;
+   
+   public static final char CATEGORY = 'e';
 
    
     /**
@@ -178,4 +180,9 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     public void setOffsetY(float offsetY) {
         this.offsetY = offsetY;
     }
+
+    @Override
+    public char getCategory() {
+        return CATEGORY;
+    } 
 }

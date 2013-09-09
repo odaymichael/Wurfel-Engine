@@ -21,7 +21,7 @@ public class Map {
     /**
      *
      */
-    public final static boolean ENABLECHUNKSWITCH = false;
+    public final static boolean ENABLECHUNKSWITCH = true;
     
     /**in which direction is the world spinning? This is needed for the light engine.
      * WEST->SOUTH->EAST = 0
@@ -291,9 +291,9 @@ public class Map {
             int entitynumber = camera.getEntityIndex(i); //get the entityindex to check if it is an entity
             
             if (entitynumber == -1) //if a block then  get it and draw it
-                getData(coords).render(view, camera, coords);
+                getData(coords).render(view, coords);
             else //if it's an entity get it and draw it
-                entitylist.get(entitynumber).render(view, camera, coords);        
+                entitylist.get(entitynumber).render(view, coords);        
         }
         view.getBatch().end();
        //Block.getSpritesheet().getFullImage().endUse(); 

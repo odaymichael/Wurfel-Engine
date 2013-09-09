@@ -1,16 +1,13 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.EngineCore.Map.Chunk;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import com.BombingGames.EngineCore.Map.Map;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
 import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
-import static com.BombingGames.Game.Gameobjects.GameObject.getSprite;
 import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -31,6 +28,8 @@ public class Block extends GameObject {
     public static final int TOPSIDE=1;
     /**The id of the right side of a block.*/
     public static final int RIGHTSIDE=2;
+    
+    public static final char CATEGORY = 'b';
     
     private boolean liquid, renderRight, renderTop, renderLeft;
     private boolean hasSides = true;
@@ -111,7 +110,7 @@ public class Block extends GameObject {
             case 20: block = new Block(id);
                     block.setObstacle(true);
                     break;
-            case 34: block = new Block(id); //water
+            case 34: block = new Block(id); //flower
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;
@@ -152,11 +151,16 @@ public class Block extends GameObject {
      * @return an image of the side
      */
     public static TextureAtlas.AtlasRegion getBlockSprite(int id, int value, int side) {
-        AtlasRegion sprite = getSpritesheet().findRegion(id+"-"+value+"-"+side);
-        if (sprite == null)
-            return getSpritesheet().findRegion(0+"-"+0+"-"+side);
-            else return sprite;
+        AtlasRegion sprite = getSpritesheet().findRegion(CATEGORY+Integer.toString(id)+"-"+value+"-"+side);
+        if (sprite == null){ //if there is no sprite show the default "sprite not found sprite"
+            sprite = getSpritesheet().findRegion(CATEGORY+"0-0-"+side);
+            if (sprite==null)
+                throw new NullPointerException("Sprite not found but even the default error sprite could not be found:"+CATEGORY+"0-0-"+side);
+        }
+        return sprite;
     }
+    
+
     
    /**
      * Returns a color representing the block. Picks from the sprite image.
@@ -177,7 +181,7 @@ public class Block extends GameObject {
                     (int) (texture.getRegionY()-DIM4)
                 );
             } else {
-                AtlasRegion texture = getSprite(id, value);
+                AtlasRegion texture = getSprite(CATEGORY, id, value);
                 if (texture == null) return new Color();
                 colorInt = getPixmap().getPixel(
                     (int) (texture.getRegionX()+DIM2),
@@ -255,27 +259,27 @@ public class Block extends GameObject {
     
     
     @Override
-    public void render(View view, WECamera camera, Coordinate coords) {
+    public void render(View view, Coordinate coords) {
         if (!isHidden() && isVisible()) {
             
             if (Controller.getLightengine() != null){
                 if (hasSides) {
                     if (renderTop)
-                        renderSide(view, camera, coords, Block.TOPSIDE, LightEngine.getBrightness(Block.TOPSIDE));
+                        renderSide(view, coords, Block.TOPSIDE, LightEngine.getBrightness(Block.TOPSIDE));
                     if (renderLeft)
-                        renderSide(view, camera, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE));
+                        renderSide(view, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE));
                     if (renderRight)
-                        renderSide(view, camera, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE));
-                } else super.render(view, camera, coords, LightEngine.getBrightness());
+                        renderSide(view, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE));
+                } else super.render(view, coords, LightEngine.getBrightness());
             } else 
                 if (hasSides){
                     if (renderTop)
-                        renderSide(view, camera, coords, Block.TOPSIDE, getLightlevel());
+                        renderSide(view, coords, Block.TOPSIDE, getLightlevel());
                     if (renderLeft)
-                        renderSide(view, camera, coords, Block.LEFTSIDE, getLightlevel());
+                        renderSide(view, coords, Block.LEFTSIDE, getLightlevel());
                     if (renderRight)
-                        renderSide(view, camera, coords, Block.RIGHTSIDE, getLightlevel());
-                } else super.render(view, camera, coords, getLightlevel());
+                        renderSide(view, coords, Block.RIGHTSIDE, getLightlevel());
+                } else super.render(view, coords, getLightlevel());
         }
     }
 
@@ -289,7 +293,7 @@ public class Block extends GameObject {
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      * @param brightness  The brightness of the side. Value between 0  and 255.
      */
-    protected void renderSide(final View view, WECamera camera, Coordinate coords, final int sidenumb, int brightness){
+    protected void renderSide(final View view, Coordinate coords, final int sidenumb, int brightness){
         Sprite image = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         
         //right side is  half a block more to the right
@@ -352,4 +356,11 @@ public class Block extends GameObject {
             + (getDimensionY() - 1) * DIM4
         );
     }
+
+    @Override
+    public char getCategory() {
+        return CATEGORY;
+    }
+    
+    
 }
