@@ -40,7 +40,7 @@
             </struct>
         </struct>
         <key>shapePadding</key>
-        <uint>0</uint>
+        <uint>1</uint>
         <key>jpgQuality</key>
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
@@ -148,54 +148,54 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>sprites unlit/b0-0-0.png</filename>
-            <filename>sprites unlit/b0-0-1.png</filename>
-            <filename>sprites unlit/b0-0-2.png</filename>
-            <filename>sprites unlit/b1-0-0.png</filename>
-            <filename>sprites unlit/b1-0-1.png</filename>
-            <filename>sprites unlit/b1-0-2.png</filename>
-            <filename>sprites unlit/b2-0-0.png</filename>
-            <filename>sprites unlit/b2-0-1.png</filename>
-            <filename>sprites unlit/b2-0-2.png</filename>
-            <filename>sprites unlit/b3-0-0.png</filename>
-            <filename>sprites unlit/b3-0-1.png</filename>
-            <filename>sprites unlit/b3-0-2.png</filename>
-            <filename>sprites unlit/b4-0-0.png</filename>
-            <filename>sprites unlit/b4-0-1.png</filename>
-            <filename>sprites unlit/b4-0-2.png</filename>
-            <filename>sprites unlit/b5-0-0.png</filename>
-            <filename>sprites unlit/b5-0-1.png</filename>
-            <filename>sprites unlit/b5-0-2.png</filename>
-            <filename>sprites unlit/b6-0-0.png</filename>
-            <filename>sprites unlit/b6-0-1.png</filename>
-            <filename>sprites unlit/b6-0-2.png</filename>
-            <filename>sprites unlit/b7-0-0.png</filename>
-            <filename>sprites unlit/b7-0-1.png</filename>
-            <filename>sprites unlit/b7-0-2.png</filename>
-            <filename>sprites unlit/b8-0-0.png</filename>
-            <filename>sprites unlit/b8-0-1.png</filename>
-            <filename>sprites unlit/b8-0-2.png</filename>
-            <filename>sprites unlit/b9-0-0.png</filename>
-            <filename>sprites unlit/b9-0-1.png</filename>
-            <filename>sprites unlit/b9-0-2.png</filename>
-            <filename>sprites unlit/b20-0-0.png</filename>
-            <filename>sprites unlit/b20-0-1.png</filename>
-            <filename>sprites unlit/b20-0-2.png</filename>
-            <filename>sprites unlit/b34-0.png</filename>
-            <filename>sprites unlit/b35-0.png</filename>
-            <filename>sprites unlit/b70-0.png</filename>
-            <filename>sprites unlit/b71-0.png</filename>
-            <filename>sprites unlit/b71-1.png</filename>
-            <filename>sprites unlit/e40-0.png</filename>
-            <filename>sprites unlit/e40-1.png</filename>
-            <filename>sprites unlit/e40-2.png</filename>
-            <filename>sprites unlit/e40-3.png</filename>
-            <filename>sprites unlit/e40-4.png</filename>
-            <filename>sprites unlit/e40-5.png</filename>
-            <filename>sprites unlit/e40-6.png</filename>
-            <filename>sprites unlit/e40-7.png</filename>
-            <filename>sprites unlit/e41-0.png</filename>
-            <filename>sprites unlit/e41-1.png</filename>
+            <filename>sprites/b0-0-0.png</filename>
+            <filename>sprites/b0-0-1.png</filename>
+            <filename>sprites/b0-0-2.png</filename>
+            <filename>sprites/b1-0-0.png</filename>
+            <filename>sprites/b1-0-1.png</filename>
+            <filename>sprites/b1-0-2.png</filename>
+            <filename>sprites/b2-0-0.png</filename>
+            <filename>sprites/b2-0-1.png</filename>
+            <filename>sprites/b2-0-2.png</filename>
+            <filename>sprites/b3-0-0.png</filename>
+            <filename>sprites/b3-0-1.png</filename>
+            <filename>sprites/b3-0-2.png</filename>
+            <filename>sprites/b4-0-0.png</filename>
+            <filename>sprites/b4-0-1.png</filename>
+            <filename>sprites/b4-0-2.png</filename>
+            <filename>sprites/b5-0-0.png</filename>
+            <filename>sprites/b5-0-1.png</filename>
+            <filename>sprites/b5-0-2.png</filename>
+            <filename>sprites/b6-0-0.png</filename>
+            <filename>sprites/b6-0-1.png</filename>
+            <filename>sprites/b6-0-2.png</filename>
+            <filename>sprites/b7-0-0.png</filename>
+            <filename>sprites/b7-0-1.png</filename>
+            <filename>sprites/b7-0-2.png</filename>
+            <filename>sprites/b8-0-0.png</filename>
+            <filename>sprites/b8-0-1.png</filename>
+            <filename>sprites/b8-0-2.png</filename>
+            <filename>sprites/b9-0-0.png</filename>
+            <filename>sprites/b9-0-1.png</filename>
+            <filename>sprites/b9-0-2.png</filename>
+            <filename>sprites/b20-0-0.png</filename>
+            <filename>sprites/b20-0-1.png</filename>
+            <filename>sprites/b20-0-2.png</filename>
+            <filename>sprites/b34-0.png</filename>
+            <filename>sprites/b35-0.png</filename>
+            <filename>sprites/b70-0.png</filename>
+            <filename>sprites/b71-0.png</filename>
+            <filename>sprites/b71-1.png</filename>
+            <filename>sprites/e40-0.png</filename>
+            <filename>sprites/e40-1.png</filename>
+            <filename>sprites/e40-2.png</filename>
+            <filename>sprites/e40-3.png</filename>
+            <filename>sprites/e40-4.png</filename>
+            <filename>sprites/e40-5.png</filename>
+            <filename>sprites/e40-6.png</filename>
+            <filename>sprites/e40-7.png</filename>
+            <filename>sprites/e41-0.png</filename>
+            <filename>sprites/e41-1.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
