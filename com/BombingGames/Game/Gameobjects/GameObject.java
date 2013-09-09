@@ -104,8 +104,9 @@ public abstract class GameObject {
      * @param id the id of the object
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
-    protected GameObject(int id) {
+    protected GameObject(int id, int value) {
         this.id = id;
+        this.value = value;
     }
     
     /**

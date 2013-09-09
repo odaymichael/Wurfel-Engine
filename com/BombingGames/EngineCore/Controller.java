@@ -80,7 +80,7 @@ public class Controller {
                     mapdata[x][y][z].update(delta);
         
         //update every entity
-        for (AbstractEntity entity : map.getEntitylist())
+        for (AbstractEntity entity : map.getEntitys())
             entity.update(delta);
         
         for (WECamera camera : cameras)
@@ -95,7 +95,7 @@ public class Controller {
      */
     public static void newMap(){
         map = new Map(!MainMenuScreen.shouldLoadMap());
-        map.fillMapWithBlocks();
+        map.fillWithBlocks();
     }
     
     /**

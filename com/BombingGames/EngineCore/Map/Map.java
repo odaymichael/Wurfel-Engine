@@ -33,30 +33,31 @@ public class Map {
     
     private boolean newMap;
     
-    //A list which has all current nine chunk coordinates in it.
+    /**A list which has all current nine chunk coordinates in it.*/
     private int[][] coordlist = new int[9][2];
     
-    private static int blocksX, blocksY, blocksZ;    
+    private static int blocksX, blocksY, blocksZ;
+    /** the map data are the blocks in their cells */
     private Block[][][] data;
     private float[][][][] cellOffset;
-    
+    /** every entity on the map is stored in this field */
     private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
     
   
     /**
      *
-     * @param newMap 
+     * @param newMap  when "true" a new map os generated, when "false" a map is loaded from disk 
      */
     public Map(boolean newMap){
         this(newMap,0);
     }  
     
     /**
-     * Creates a map. Fill the map with fillMapWithBlocks(boolean load);
-     * @param newMap 
+     * Creates a map. Fill the map with fillWithBlocks(boolean load);
+     * @param newMap when "true" a new map os generated, when "false" a map is loaded from disk
      * @param worldSpinDirection the angle of the "morning" (0° is left).
-     * @see fillMapWithBlocks(boolean load)
+     * @see fillWithBlocks(boolean load)
      */
     public Map(boolean newMap, int worldSpinDirection) {
         Gdx.app.log("DEBUG","Should the Engine generate a new map: "+newMap);
@@ -86,7 +87,7 @@ public class Map {
     /**
      * Fill the data array of the map with blocks.
      */
-    public void fillMapWithBlocks(){
+    public void fillWithBlocks(){
         Gdx.app.log("DEBUG","Filling the map with blocks...");
 
         //Fill the nine chunks
@@ -275,7 +276,6 @@ public class Map {
     
     /**
      * Draws the map
-     * @param g 
      * @param view 
      * @param camera 
      */
@@ -425,7 +425,7 @@ public class Map {
     
     /**
      * 
-     * @param coords
+     * @param coord 
      * @param block
      */
     public void setDataSafe(Coordinate coord, Block block) {        
@@ -468,7 +468,7 @@ public class Map {
      * Returns the entitylist
      * @return
      */
-    public ArrayList<AbstractEntity> getEntitylist() {
+    public ArrayList<AbstractEntity> getEntitys() {
         return entitylist;
     }
 
@@ -505,5 +505,17 @@ public class Map {
      */
     public void setCelloffset(Coordinate coord, int field, float value){
         cellOffset[coord.getRelX()][coord.getRelY()][coord.getZSafe()][field] = value;
+    }
+    
+    public <type> ArrayList<type> getAllEntitysOfType(Class type) {
+        ArrayList<type> list=new ArrayList<type>();
+        //e inst=(e) e.newInstance();
+
+        for (AbstractEntity entity : entitylist) {
+            if (type.isInstance(entity)) {
+                list.add((type) entity);
+            }
+        }
+        return list;
     }
 }

@@ -24,7 +24,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
      */
     protected AbstractEntity(int id){
-        super(id);
+        super(id,0);
     }
     
     /**
@@ -135,7 +135,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
      * add this entity to the map-> let it exist
      */
     public void exist(){
-        Controller.getMap().getEntitylist().add(this);
+        Controller.getMap().getEntitys().add(this);
     }
     
     /**

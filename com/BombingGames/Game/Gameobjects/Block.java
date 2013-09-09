@@ -41,7 +41,7 @@ public class Block extends GameObject {
      *  @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
     protected Block(int id){
-        super(id);
+        super(id,0);
     } 
     
     /**

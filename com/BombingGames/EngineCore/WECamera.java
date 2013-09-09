@@ -345,8 +345,8 @@ public class WECamera extends Camera {
                 }
         
         //add entitys
-        for (int i=0; i< Controller.getMap().getEntitylist().size(); i++) {
-            AbstractEntity entity = Controller.getMap().getEntitylist().get(i);
+        for (int i=0; i< Controller.getMap().getEntitys().size(); i++) {
+            AbstractEntity entity = Controller.getMap().getEntitys().get(i);
             if (!entity.isHidden() && entity.isVisible()
                         && 
                             entity.get2DPosY(
