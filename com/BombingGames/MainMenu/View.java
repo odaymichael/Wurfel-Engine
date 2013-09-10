@@ -1,5 +1,6 @@
 package com.BombingGames.MainMenu;
 
+import com.BombingGames.Wurfelengine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -37,7 +38,7 @@ public class View {
         camera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
         font = new BitmapFont(Gdx.files.internal("com/BombingGames/EngineCore/arial.fnt"), true);
-        font.setColor(Color.GREEN);
+        font.setColor(Color.WHITE);
     }
 
     /**
@@ -74,6 +75,10 @@ public class View {
         batch.begin();
         font.draw(batch, "FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
         font.draw(batch, Gdx.input.getX()+ ","+Gdx.input.getY(), Gdx.input.getX(), Gdx.input.getY());
+        batch.end();
+        
+        batch.begin();
+        font.drawMultiLine(batch, Wurfelengine.getCredits(), 50, 50);
         batch.end();
     }
 }
