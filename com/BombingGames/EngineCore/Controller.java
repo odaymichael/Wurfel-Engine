@@ -86,6 +86,28 @@ public class Controller {
         recalcIfRequested(cameras.get(0));      
     }
 
+    
+     /**
+     * Informs the map that a recalc is requested. It will do it in the next update. This method  to limit update calls to to per frame
+     */
+    public static void requestRecalc(){
+        recalcRequested = true;
+    }
+    
+    /**
+     * When the recalc was requested it calls raytracing and light recalculing. This method should be called every update.
+     * Request a recalc with <i>reuqestRecalc()</i>. 
+     * @param camera 
+     */
+    public void recalcIfRequested(WECamera camera){
+        if (recalcRequested) {
+            camera.raytracing();
+            LightEngine.calcSimpleLight();
+            if (minimap != null) minimap.update();
+            recalcRequested = false;
+        }
+    }
+    
     /**
      * Creates a new Map.
      */
@@ -222,26 +244,7 @@ public class Controller {
         return Controller.getMapDataSafe(Block.sideIDtoNeighbourCoords(coords, side));
     }
     
-   /**
-     * Informs the map that a recalc is requested. It will do it in the next update. This method  to limit update calls to to per frame
-     */
-    public static void requestRecalc(){
-        recalcRequested = true;
-    }
-    
-    /**
-     * When the recalc was requested it calls raytracing and light recalculing. This method should be called every update.
-     * Request a recalc with <i>reuqestRecalc()</i>. 
-     * @param camera 
-     */
-    public void recalcIfRequested(WECamera camera){
-        if (recalcRequested) {
-            camera.raytracing();
-            LightEngine.calcSimpleLight();
-            if (minimap != null) minimap.update();
-            recalcRequested = false;
-        }
-    }
+  
     
     /**
      * Returns the minimap.
