@@ -128,7 +128,7 @@ public class LightEngine {
         //                        );   
         
         I_0 = I_ambient + I_diff0 + I_spec0;
-        I_1 = I_ambient + I_diff1 + I_spec1;
+        I_1 = I_ambient + I_diff1;
         I_2 = I_ambient + I_diff2 + I_spec2;
     }
     
