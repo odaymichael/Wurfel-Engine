@@ -12,7 +12,7 @@ public class GlobalLightSource {
      *The higher the value the faster/shorter is the day.
      */
     protected final float LONGSPEED = 1/64f;
-    private Color brightness;
+    private float power;
     private Color tone; //the color of the light
     private float latPos;
     private float longPos;
@@ -22,24 +22,23 @@ public class GlobalLightSource {
      * A GlobalLightSource can be the moon, the sun or even something new.
      * @param longPos The starting position.
      * @param latPos The starting position.
-     * @param tone the starting color of the light
+     * @param color the starting color of the light. With this parameter you controll its brightness.
      * @param amplitude the maximum degree during a day the LightSource rises
      */
-    public GlobalLightSource(float longPos, float latPos, Color tone, int amplitude) {
+    public GlobalLightSource(float longPos, float latPos, Color color, int amplitude) {
         this.longPos = longPos;
         this.latPos = latPos;
-        this.tone = tone;
+        this.tone = color;
         this.amplitude = amplitude;
     }
 
     /**
-     * The light color has an intensity which can be get by this function.
+     * A light source shines can shine brighter and darker. This amplitude is called power. What it real emits says the brightness.
      * @return a value between 0 and 1
      */
-    public float getBrightness() {
-        return PseudoGrey.toFloat(getLight());
+    public float getPower() {
+        return power;
     }
-    
     
     /**
      *
@@ -117,9 +116,7 @@ public class GlobalLightSource {
      *
      * @param delta
      */
-    public void update(int delta) {
-        float numBrightness = 0; //should raise at morning and fall at night but stay over teh day
-            
+    public void update(int delta) {    
         //automove
         if (LONGSPEED != 0) {
             longPos += LONGSPEED * delta;
@@ -128,29 +125,24 @@ public class GlobalLightSource {
             
         //brightness calculation
         if (latPos > amplitude/2 && latPos < 180)
-                numBrightness = 1;//day
+                power = 1;//day
         else if (latPos < -amplitude/2)
-                 numBrightness = 0;//night
+                 power = 0;//night
             else if (latPos < amplitude/2) 
-                    numBrightness = (float) (0.5f + 0.5f*Math.sin(latPos * Math.PI/amplitude)); //morning   & evening
+                    power = (float) (0.5f + 0.5f*Math.sin(latPos * Math.PI/amplitude)); //morning   & evening
         
 
-        if (numBrightness > 1) numBrightness=1;
-        if (numBrightness < 0) numBrightness=0;
-        
-        //value to color;
-        brightness = PseudoGrey.toColor(numBrightness);
+        if (power > 1) power=1;
+        if (power < 0) power=0;    
         
         //if (longPos>180+IGLPrototype.TWISTDIRECTION)
-        //color = new Color(127 + (int) (brightness * 128), 255, 255);
+        //color = new Color(127 + (int) (power * 128), 255, 255);
         //else color = new Color(1f,1f,1f);
         //I_a = (int) ((90-latPos)*0.1f);
     }
 
     
     public Color getLight() {
-        return getTone().cpy().mul(brightness);
+        return getTone().cpy().mul(power);
     }
-    
-
 }

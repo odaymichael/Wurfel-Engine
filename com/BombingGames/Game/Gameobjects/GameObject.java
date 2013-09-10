@@ -1,6 +1,5 @@
 package com.BombingGames.Game.Gameobjects;
 
-import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import static com.BombingGames.Game.Gameobjects.Block.CATEGORY;
@@ -92,16 +91,16 @@ public abstract class GameObject {
      * @param view  
      */
     public void render(View view, Coordinate coords) {
-        render(view, coords, lightlevel, Color.WHITE);
+        render(view, coords, PseudoGrey.toColor(lightlevel));
     }
     
      /**
      * Draws an object.
      * @param coords the relative coordinates
      * @param view 
-     * @param brightness the brightness between 0 and 1  
+     * @param color 
      */
-    public void render(View view, Coordinate coords, float brightness, Color color) {
+    public void render(View view, Coordinate coords, Color color) {
         //draw the object except not visible ones
         if (!hidden && visible) {             
             Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
@@ -110,21 +109,20 @@ public abstract class GameObject {
             int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + getOffsetY();
             sprite.setPosition(xPos, yPos);
             
-            Color filter = PseudoGrey.toColor(brightness).cpy().mul(color);
+            float brightness = PseudoGrey.toFloat(color);
         
-            float renderBrightness = brightness* (color.r+color.g+color.b)/3;
-            if (renderBrightness < .5f){
+            if (brightness < .5f){
                 view.setDrawmode(GL11.GL_MODULATE);
-                filter.mul(2);
-                filter.a = 1;
+                color.mul(2);
+                color.a = 1;
             } else {
                 view.setDrawmode(GL11.GL_ADD);
-                filter.r -= .5f;
-                filter.g -= .5f;
-                filter.b -= .5f;
+                color.r -= .5f;
+                color.g -= .5f;
+                color.b -= .5f;
             }
 
-            sprite.setColor(filter);
+            sprite.setColor(color);
             sprite.draw(view.getBatch());
         }
     } 

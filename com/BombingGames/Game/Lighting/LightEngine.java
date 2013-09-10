@@ -17,7 +17,7 @@ public class LightEngine {
     /**
      * The Version of the light engine.
      */
-    public static final String Version = "1.1.0";
+    public static final String Version = "1.1.1";
     
     private boolean renderData = false;
     //diagramm data
@@ -70,24 +70,27 @@ public class LightEngine {
         sun.update(delta);
         moon.update(delta);
         
+        float sunlightBrightness = PseudoGrey.toFloat(sun.getLight());
+        float moonlightBrightness = PseudoGrey.toFloat(moon.getLight());
+        
         //light intensitiy of enviroment. the normal level. value between 0 and 1
-        I_ambient = (ambientBaseLevel + sun.getBrightness() + moon.getBrightness()) * k_ambient;
+        I_ambient = (ambientBaseLevel + sunlightBrightness + moonlightBrightness) * k_ambient;
                 
         //diffusion
-        I_diff0 = (float) (sun.getBrightness() *  k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180) * Math.cos(((sun.getLongPos()-45)*Math.PI)/180));  
-        I_diff0 += moon.getBrightness() * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180) * Math.cos(((moon.getLongPos()-45)*Math.PI)/180);
+        I_diff0 = (float) (sunlightBrightness *  k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180) * Math.cos(((sun.getLongPos()-45)*Math.PI)/180));  
+        I_diff0 += moonlightBrightness * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180) * Math.cos(((moon.getLongPos()-45)*Math.PI)/180);
         
-        I_diff1 = (float) (sun.getBrightness() * k_diff * Math.cos(((sun.getLatPos()-90)*Math.PI)/180));     
-        I_diff1 += moon.getBrightness() * k_diff * Math.cos(((moon.getLatPos()-90)*Math.PI)/180);   
+        I_diff1 = (float) (sunlightBrightness * k_diff * Math.cos(((sun.getLatPos()-90)*Math.PI)/180));     
+        I_diff1 += moonlightBrightness * k_diff * Math.cos(((moon.getLatPos()-90)*Math.PI)/180);   
         
-        I_diff2 = (float) (sun.getBrightness() * k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180)*Math.cos(((sun.getLongPos()-135)*Math.PI)/180));
-        I_diff2 += moon.getBrightness()  * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180)*Math.cos(((moon.getLongPos()-135)*Math.PI)/180);
+        I_diff2 = (float) (sunlightBrightness * k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180)*Math.cos(((sun.getLongPos()-135)*Math.PI)/180));
+        I_diff2 += moonlightBrightness  * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180)*Math.cos(((moon.getLongPos()-135)*Math.PI)/180);
         
         //specular
         
         //it is impossible to get specular light with a GlobalLightSource over the horizon on side 0 and 2. Just left in case i it someday helps somebody.
 //        I_spec0 =(int) (
-//                        sun.getPseudoGrey()
+//                        sunlightBrightness
 //                        * k_specular
 //                        * Math.pow(
 //                            Math.sin((sun.getLatPos())*Math.PI/180)*Math.sin((sun.getLongPos())*Math.PI/180)* Math.sqrt(2)/Math.sqrt(3)//y
@@ -98,7 +101,7 @@ public class LightEngine {
 
         
         I_spec1 = (float) (
-                            sun.getBrightness()
+                            sunlightBrightness
                             * k_specular
                             * Math.pow(
                                 Math.sin(sun.getLatPos()*Math.PI/180)*Math.sin(sun.getLongPos()*Math.PI/180)/ Math.sqrt(2)//y
@@ -107,7 +110,7 @@ public class LightEngine {
                             *(n_spec+2)/(2*Math.PI)
                         );
          I_spec1 +=(float) (
-                        moon.getBrightness()
+                        moonlightBrightness
                         * k_specular
                         * Math.pow(
                             Math.sin((moon.getLatPos())*Math.PI/180)*Math.sin((moon.getLongPos())*Math.PI/180)/Math.sqrt(2)//y
@@ -118,7 +121,7 @@ public class LightEngine {
          
       //it is impossible to get specular light with a GlobalLightSource over the horizon on side 0 and 2. Just left in case it someday may help somebody.
         //        I_spec2 =(int) (
-        //                        sun.getPseudoGrey()
+        //                        sunlightBrightness
         //                        * k_specular
         //                        * Math.pow(
         //                            Math.cos((sun.getLatPos() - 35.26) * Math.PI/360)
@@ -145,21 +148,18 @@ public class LightEngine {
      * @param side
      * @return a color on the (pseudo) greyscale
      */
-    public static float getBrightness(int side){
-        if (side==0) return I_0;
-            else if (side==1) return I_1;
-                else return I_2;
+    public Color getColorOfSide(int side){
+        if (side==0) return getGlobalLight().mul(I_0);
+            else if (side==1) return getGlobalLight().mul(I_1);
+                else return getGlobalLight().mul(I_2);
     }
     
     /**
-     * Returns the global light color.
+     * Returns the sum of every light
      * @return a color with a tone
      */
-    public Color getLightTone(){
-        Color tmp = sun.getTone().cpy().mul(sun.getBrightness());
-        tmp.add(moon.getTone().cpy().mul(moon.getBrightness()));
-        tmp.a = 1;
-        return tmp;
+    public Color getGlobalLight(){
+        return sun.getLight().cpy().add(moon.getLight());
     }
     
      /**
@@ -267,13 +267,13 @@ public class LightEngine {
 
             view.drawString("Lat: "+sun.getLatPos(), 600, 110, Color.WHITE);
             view.drawString("Long: "+sun.getLongPos(), 600, 100, Color.WHITE);
-            view.drawString("BrightnessSun: "+sun.getBrightness(), 600, 120, Color.WHITE);
-            view.drawString("BrightnessMoon: "+moon.getBrightness(), 600, 130, Color.WHITE);
-            view.drawString("LightColor: "+getLightTone().toString(), 600, 140, Color.WHITE);
+            view.drawString("PowerSun: "+sun.getPower()*100+"%", 600, 120, Color.WHITE);
+            view.drawString("PowerMoon: "+moon.getPower()*100+"%", 600, 130, Color.WHITE);
+            view.drawString("LightColor: "+getGlobalLight().toString(), 600, 140, Color.WHITE);
             shapeRenderer.begin(ShapeType.FilledRectangle);
             shapeRenderer.setColor(Color.WHITE);
             shapeRenderer.filledRect(600, 160, 70, 70);
-            shapeRenderer.setColor(getLightTone());
+            shapeRenderer.setColor(getGlobalLight());
             shapeRenderer.filledRect(610, 170, 50, 50);
 
              //info bars

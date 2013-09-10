@@ -4,7 +4,6 @@ import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
-import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.EngineCore.View;
 import static com.BombingGames.Game.Gameobjects.GameObject.OBJECTTYPESCOUNT;
 import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
@@ -295,28 +294,28 @@ public class Block extends GameObject {
     @Override
     public void render(View view, Coordinate coords) {
         if (!isHidden() && isVisible()) {
-            Color color = Color.WHITE;
+            Color color = Color.GRAY;
             if (Controller.getLightengine() != null){
-                color = Controller.getLightengine().getLightTone();
+                color = Controller.getLightengine().getGlobalLight();
             }
             if (Controller.getLightengine() != null){
                 if (hasSides) {
                     if (renderTop)
-                        renderSide(view, coords, Block.TOPSIDE, LightEngine.getBrightness(Block.TOPSIDE), color);
+                        renderSide(view, coords, Block.TOPSIDE, Controller.getLightengine().getColorOfSide(Block.TOPSIDE));
                     if (renderLeft)
-                        renderSide(view, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE), color);
+                        renderSide(view, coords, Block.LEFTSIDE, Controller.getLightengine().getColorOfSide(Block.LEFTSIDE));
                     if (renderRight)
-                        renderSide(view, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE), color);
-                } else super.render(view, coords, LightEngine.getBrightness(), color);
+                        renderSide(view, coords, Block.RIGHTSIDE, Controller.getLightengine().getColorOfSide(Block.RIGHTSIDE));
+                } else super.render(view, coords, PseudoGrey.toColor(getLightlevel()));
             } else 
                 if (hasSides){
                     if (renderTop)
-                        renderSide(view, coords, Block.TOPSIDE, getLightlevel(), color);
+                        renderSide(view, coords, Block.TOPSIDE, color);
                     if (renderLeft)
-                        renderSide(view, coords, Block.LEFTSIDE, getLightlevel(), color);
+                        renderSide(view, coords, Block.LEFTSIDE, color);
                     if (renderRight)
-                        renderSide(view, coords, Block.RIGHTSIDE, getLightlevel(), color);
-                } else super.render(view, coords, getLightlevel(), color);
+                        renderSide(view, coords, Block.RIGHTSIDE, color);
+                } else super.render(view, coords, PseudoGrey.toColor(getLightlevel()));
         }
     }
     
@@ -326,10 +325,9 @@ public class Block extends GameObject {
      * @param view the view using this render method
      * @param coords the coordinates where to render 
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
-     * @param brightness  The brightness of the side between 0 and 1
      * @param color  a tint in which the sprite get's rendered
      */
-    protected void renderSide(final View view, Coordinate coords, final int sidenumb, float brightness, Color color){
+    protected void renderSide(final View view, Coordinate coords, final int sidenumb, Color color){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         
         int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);//right side is  half a block more to the right
@@ -338,18 +336,17 @@ public class Block extends GameObject {
         
         //brightness += getLightlevel()-0.5f;
             
-        Color filter = PseudoGrey.toColor(brightness).cpy().mul(color);
+        float brightness = PseudoGrey.toFloat(color);
         
-        float renderBrightness = brightness* (color.r+color.g+color.b)/3;
-        if (renderBrightness < .5f){
+        if (brightness < .5f){
             view.setDrawmode(GL11.GL_MODULATE);
-            filter.mul(2);
-            filter.a = 1;
+            color.mul(2);
+            color.a = 1;
         } else {
             view.setDrawmode(GL11.GL_ADD);
-            filter.r -= .5f;
-            filter.g -= .5f;
-            filter.b -= .5f;
+            color.r -= .5f;
+            color.g -= .5f;
+            color.b -= .5f;
         }
             
         //uncomment these two lines to add a depth-effect (note that it is very dark)
@@ -359,7 +356,7 @@ public class Block extends GameObject {
 //           /(camera.getBottomBorder()-camera.getTopBorder());
         
         //Color verticeColor = filter.cpy().mul(getLightlevel());
-        Color verticeColor = filter;
+        Color verticeColor = color;
         verticeColor.a = 1; 
         sprite.getVertices()[SpriteBatch.C4] = verticeColor.toFloatBits();
         sprite.getVertices()[SpriteBatch.C1] = verticeColor.toFloatBits();
