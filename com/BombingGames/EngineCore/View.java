@@ -43,6 +43,7 @@ public class View {
         this.controller = controller;
         font = new BitmapFont(Gdx.files.internal("com/BombingGames/EngineCore/arial.fnt"), true);
         font.setColor(Color.GREEN);
+        font.scale(-0.5f);
         
         //default rendering size is FullHD
         equalizationScale = Gdx.graphics.getWidth() / (float) RENDER_RESOLUTION_WIDTH;
@@ -216,18 +217,29 @@ public class View {
     }
 
     public void drawString(String msg, int xPos, int yPos) {
+        GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
         batch.begin();
         font.draw(batch, msg, xPos, yPos);
         batch.end();
     }
     
     public void drawString(String msg, int xPos, int yPos, Color color) {
+        GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
         batch.begin();
         font.draw(batch, msg, xPos, yPos);
         batch.end();
     }
     
     public void drawText(String msg, int xPos, int yPos, Color color){
+        GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+        font.setColor(Color.BLACK);
+        font.setScale(0.51f);
+        batch.begin();
+        font.drawMultiLine(batch, msg, xPos, yPos);
+        batch.end();
+        
+        font.setColor(Color.WHITE);
+        font.setScale(0.5f);
         batch.begin();
         font.drawMultiLine(batch, msg, xPos, yPos);
         batch.end();
