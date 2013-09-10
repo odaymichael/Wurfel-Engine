@@ -181,11 +181,11 @@ public class Block extends GameObject {
     
     
      /**
-     *  Returns a sprite image of a specific side of the block
+     *  Returns a sprite sprite of a specific side of the block
      * @param id the id of the block
      * @param value the value of teh block
      * @param side Which side? (0 - 2)
-     * @return an image of the side
+     * @return an sprite of the side
      */
     public static TextureAtlas.AtlasRegion getBlockSprite(int id, int value, int side) {
         AtlasRegion sprite = getSpritesheet().findRegion(CATEGORY+Integer.toString(id)+"-"+value+"-"+side);
@@ -200,7 +200,7 @@ public class Block extends GameObject {
 
     
    /**
-     * Returns a color representing the block. Picks from the sprite image.
+     * Returns a color representing the block. Picks from the sprite sprite.
      * @param id id of the Block
      * @param value the value of the block.
      * @return a color representing the block
@@ -325,52 +325,46 @@ public class Block extends GameObject {
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      * @param brightness  The brightness of the side. Value between 0  and 255.
      */
-    protected void renderSide(final View view, Coordinate coords, final int sidenumb, int brightness){
-        Sprite image = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
+    protected void renderSide(final View view, Coordinate coords, final int sidenumb, float brightness){
+        Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         
-        //right side is  half a block more to the right
-        int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);
+        int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);//right side is  half a block more to the right
+        int yPos = get2DPosY(coords) + (sidenumb != 1 ? DIM4 : 0);//the top is drawn a quarter blocks higher
+        sprite.setPosition(xPos, yPos);
         
-        //the top is drawn a quarter blocks higher
-        int yPos = get2DPosY(coords) + (sidenumb != 1 ? DIM4 : 0);
-        
-        brightness -= 127-getLightlevel();
+        brightness += getLightlevel()-0.5f;
             
         Color filter;
-        if (brightness <= 127){
-            view.setDrawmode(GL11.GL_MODULATE);
-            filter = new Color(brightness/127f, brightness/127f, brightness/127f, 1);
+        if (brightness < .5f){
+                view.setDrawmode(GL11.GL_MODULATE);
+                filter = new Color(brightness/0.5f, brightness/0.5f, brightness/0.5f, 1);
         } else {
-            view.setDrawmode(GL11.GL_ADD);
-            filter = new Color((brightness-127)/127f, (brightness-127)/127f, (brightness-127)/127f, 1);
+                view.setDrawmode(GL11.GL_ADD);
+                filter = new Color((brightness-0.5f)/0.5f, (brightness-0.5f)/0.5f, (brightness-0.5f)/0.5f, 1);
         }
             
         if (Controller.getLightengine() != null){
-            //uncomment these two lines to add a depth-effect (note that it is very dark)
             filter = filter.mul(Controller.getLightengine().getLightColor());
         }
+        
+        //uncomment these two lines to add a depth-effect (note that it is very dark)
         //filter.mul((coords.getRelY()-camera.getTopBorder())/
            // (camera.getBottomBorder()-camera.getTopBorder()));
         //filter.g *= (coords.getRelY()-camera.getTopBorder())
         //   /(camera.getBottomBorder()-camera.getTopBorder());
-        //calc  verticalGradient
-        float verticalGradient = getLightlevel()/100f;
         
-        Color verticeColor = filter.cpy().mul(verticalGradient);
+        Color verticeColor = filter.cpy().mul(getLightlevel());
         verticeColor.a = 1; 
-        image.getVertices()[SpriteBatch.C4] = verticeColor.toFloatBits();
-        image.getVertices()[SpriteBatch.C1] = verticeColor.toFloatBits();
+        sprite.getVertices()[SpriteBatch.C4] = verticeColor.toFloatBits();
+        sprite.getVertices()[SpriteBatch.C1] = verticeColor.toFloatBits();
 
-        if (sidenumb != 1) verticalGradient -= .3f;
-        
-        verticeColor = filter.cpy().mul(verticalGradient);
+        verticeColor = filter.cpy().mul(getLightlevel()-((sidenumb != 1)?0.3f:0));
         verticeColor.a = 1; 
 
-        image.getVertices()[SpriteBatch.C2] = verticeColor.cpy().toFloatBits();
-        image.getVertices()[SpriteBatch.C3] = verticeColor.cpy().toFloatBits();
-        
-        image.setPosition(xPos, yPos);
-        image.draw(view.getBatch());
+        sprite.getVertices()[SpriteBatch.C2] = verticeColor.cpy().toFloatBits();
+        sprite.getVertices()[SpriteBatch.C3] = verticeColor.cpy().toFloatBits();
+ 
+        sprite.draw(view.getBatch());
     }
 
     @Override

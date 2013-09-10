@@ -20,31 +20,27 @@ public class LightEngine {
     public static final String Version = "1.0.2";
     
     private boolean renderData = false;
+    //diagramm data
     private int posX = 250;
     private int posY = 250;
     private final int size = 500;
     
     //ambient light
-    private final int ambientBaseLevel = 40;//value 0-255
+    private final float ambientBaseLevel = .5f;//value 0-1
     private float k_ambient = 0.32f;//material constant, value 0-1
-    private int I_ambient;//ambient light
+    private float I_ambient;//ambient light
     
     //diffuse light
-    private final int k_diff = 60; //the min and max span. value between 0 and 255 empirisch bestimmter Reflexionsfaktor für diffuse Komponente der Reflexion
-    private int I_diff0;
-    private int I_diff1;
-    private int I_diff2;
+    private final float k_diff = 60/255f; //the min and max span. value between 0 and 1 empirisch bestimmter Reflexionsfaktor für diffuse Komponente der Reflexion
+    private float I_diff0, I_diff1, I_diff2;
     
     //specular light
-    private int n_spec = 8; // ... konstanter Faktor zur Beschreibung der Oberflächenbeschaffenheit (rau kleiner 32, glatt größer 32,  wäre ein perfekter Spiegel)
-    private int k_specular = 8; //empirisch bestimmter Reflexionsfaktor für spiegelnde Komponente der Reflexion
-    private int I_spec0;
-    private int I_spec1;
-    private int I_spec2;
-                
-    private static int I_0;
-    private static int I_1;
-    private static int I_2;
+    private final int n_spec = 8; // ... konstanter Faktor zur Beschreibung der Oberflächenbeschaffenheit (rau kleiner 32, glatt größer 32,  infinity wäre ein perfekter Spiegel)
+    private final int k_specular = 8; //empirisch bestimmter Reflexionsfaktor für spiegelnde Komponente der Reflexion
+    private float I_spec0, I_spec1, I_spec2;
+             
+    /**the brightness of each side. The value should be between 0 and 1*/
+    private static float I_0, I_1, I_2;
     
     private Sun sun;
     private Moon moon; 
@@ -74,20 +70,19 @@ public class LightEngine {
         sun.update(delta);
         moon.update(delta);
         
-        
         //light intensitiy of enviroment. the normal level. value between 0 and 255
-        int I_a = (int) (ambientBaseLevel + sun.getBrightness()*255 + moon.getBrightness()*255);
-        I_ambient = (int) (I_a * k_ambient);
+        float I_a = ambientBaseLevel + sun.getBrightness() + moon.getBrightness();
+        I_ambient = I_a * k_ambient;
                 
         //diffusion
-        I_diff0 = (int) (sun.getBrightness() *  k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180) * Math.cos(((sun.getLongPos()-45)*Math.PI)/180));  
-        I_diff0 +=(int) (moon.getBrightness() * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180) * Math.cos(((moon.getLongPos()-45)*Math.PI)/180));
+        I_diff0 = (float) (sun.getBrightness() *  k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180) * Math.cos(((sun.getLongPos()-45)*Math.PI)/180));  
+        I_diff0 += moon.getBrightness() * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180) * Math.cos(((moon.getLongPos()-45)*Math.PI)/180);
         
-        I_diff1 = (int) (sun.getBrightness() * k_diff * Math.cos(((sun.getLatPos()-90)*Math.PI)/180));     
-        I_diff1 += (int) (moon.getBrightness() * k_diff * Math.cos(((moon.getLatPos()-90)*Math.PI)/180));   
+        I_diff1 = (float) (sun.getBrightness() * k_diff * Math.cos(((sun.getLatPos()-90)*Math.PI)/180));     
+        I_diff1 += moon.getBrightness() * k_diff * Math.cos(((moon.getLatPos()-90)*Math.PI)/180);   
         
-        I_diff2 = (int) (sun.getBrightness() * k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180)*Math.cos(((sun.getLongPos()-135)*Math.PI)/180));
-        I_diff2 += (int) (moon.getBrightness()  * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180)*Math.cos(((moon.getLongPos()-135)*Math.PI)/180));
+        I_diff2 = (float) (sun.getBrightness() * k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180)*Math.cos(((sun.getLongPos()-135)*Math.PI)/180));
+        I_diff2 += moon.getBrightness()  * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180)*Math.cos(((moon.getLongPos()-135)*Math.PI)/180);
         
         //specular
         
@@ -103,16 +98,16 @@ public class LightEngine {
 //                        );
 
         
-        I_spec1 =(int) (
-                        sun.getBrightness()
-                        * k_specular
-                        * Math.pow(
-                            Math.sin(sun.getLatPos()*Math.PI/180)*Math.sin(sun.getLongPos()*Math.PI/180)/ Math.sqrt(2)//y
-                          + Math.sin((sun.getLatPos()-90)*Math.PI/180)/ Math.sqrt(2)//z
-                        ,n_spec)
-                        *(n_spec+2)/(2*Math.PI)
+        I_spec1 = (float) (
+                            sun.getBrightness()
+                            * k_specular
+                            * Math.pow(
+                                Math.sin(sun.getLatPos()*Math.PI/180)*Math.sin(sun.getLongPos()*Math.PI/180)/ Math.sqrt(2)//y
+                              + Math.sin((sun.getLatPos()-90)*Math.PI/180)/ Math.sqrt(2)//z
+                            ,n_spec)
+                            *(n_spec+2)/(2*Math.PI)
                         );
-         I_spec1 +=(int) (
+         I_spec1 +=(float) (
                         moon.getBrightness()
                         * k_specular
                         * Math.pow(
@@ -141,8 +136,8 @@ public class LightEngine {
      * Returns the average brightness.
      * @return
      */
-    public static int getBrightness() {
-        return (I_0+I_1+I_2)/3;
+    public static float getBrightness() {
+        return (I_0+I_1+I_2)/3f;
     }
         
     /**
@@ -150,19 +145,19 @@ public class LightEngine {
      * @param side
      * @return
      */
-    public static int getBrightness(int side){
+    public static float getBrightness(int side){
         if (side==0) return I_0;
             else if (side==1) return I_1;
                 else return I_2;
     }
     
     /**
-     * Returns the global lightcolor.
+     * Returns the global light color.
      * @return
      */
     public Color getLightColor(){
-        Color tmp = sun.getColor().cpy().mul(sun.getBrightness());
-        tmp.add(moon.getColor().cpy().mul(moon.getBrightness()));
+        Color tmp = sun.getLight().cpy();
+        tmp.add(moon.getLight());
         tmp.a = 1;
         return tmp;
     }
@@ -173,7 +168,6 @@ public class LightEngine {
     public static void calcSimpleLight(){
         for (int x=0; x < Map.getBlocksX(); x++){
             for (int y=0; y < Map.getBlocksY(); y++) {
-                
                 //find top most renderobject
                 int topmost = Chunk.getBlocksZ()-1;
                 while (Controller.getMap().getData(x,y,topmost).isTransparent() && topmost > 0 ){
@@ -183,7 +177,7 @@ public class LightEngine {
                 if (topmost>0) {
                     //start at topmost renderobject and go down. Every step make it a bit darker
                     for (int level = topmost; level > -1; level--){
-                        Controller.getMap().getData(x,y,level).setLightlevel(63 + 64 * level / topmost);
+                        Controller.getMap().getData(x,y,level).setLightlevel(.25f + .25f*level / (float) topmost);
                     }
                 }
             }
@@ -280,32 +274,33 @@ public class LightEngine {
              //info bars
 
             shapeRenderer.begin(ShapeType.FilledRectangle);
+            
             //left side
-            view.drawString("Left:"+I_ambient+"+"+I_diff0+"+"+ I_spec0+"="+I_0, I_0, 100, Color.WHITE);
+            view.drawText("Left:"+I_ambient+"\n+"+I_diff0+"\n+"+ I_spec0+"\n="+I_0, (int) (I_0*size), 100, Color.WHITE);
             shapeRenderer.setColor(Color.GREEN);
-            shapeRenderer.filledRect(0, 100, I_ambient, 10);
+            shapeRenderer.filledRect(0, 100, I_ambient*size, 10);
             shapeRenderer.setColor(Color.RED);
-            shapeRenderer.filledRect(I_ambient, 100, I_diff0, 8);
+            shapeRenderer.filledRect(I_ambient*size, 100, I_diff0*size, 8);
             shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.filledRect(I_ambient+I_diff0, 100, I_spec0, 6);
+            shapeRenderer.filledRect((I_ambient+I_diff0)*size, 100, I_spec0*size, 6);
 
             //top side
-            view.drawString("Top:"+I_ambient+"+"+I_diff1+"+"+ I_spec1+"="+I_1, I_1, 120, Color.WHITE);
+            view.drawText("Top:"+I_ambient+"\n+"+I_diff1+"\n+"+ I_spec1+"\n="+I_1, (int) (I_1*size), 120, Color.WHITE);
             shapeRenderer.setColor(Color.GREEN);
-            shapeRenderer.filledRect(0, 120, I_ambient, 10);
+            shapeRenderer.filledRect(0, 120, I_ambient*size, 10);
             shapeRenderer.setColor(Color.RED);
-            shapeRenderer.filledRect(I_ambient, 120, I_diff1, 8);
+            shapeRenderer.filledRect(I_ambient*size, 120, I_diff1*size, 8);
             shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.filledRect(I_ambient+I_diff1, 120, I_spec1, 6);
+            shapeRenderer.filledRect((I_ambient+I_diff1)*size, 120, I_spec1*size, 6);
 
             //right side
-            view.drawString("Right:"+I_ambient+"+"+I_diff2+"+"+ I_spec2+"="+I_2, I_2, 140, Color.WHITE);
+            view.drawText("Right:"+I_ambient+"\n+"+I_diff2+"\n+"+ I_spec2+"\n="+I_2, (int) (I_2*size), 140, Color.WHITE);
             shapeRenderer.setColor(Color.GREEN);
-            shapeRenderer.filledRect(0, 140, I_ambient, 10);
+            shapeRenderer.filledRect(0, 140, I_ambient*size, 10);
             shapeRenderer.setColor(Color.RED);
-            shapeRenderer.filledRect(I_ambient, 140, I_diff2, 8);
+            shapeRenderer.filledRect(I_ambient*size, 140, I_diff2*size, 8);
             shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.filledRect(I_ambient+I_diff2, 140, I_spec2, 6);
+            shapeRenderer.filledRect((I_ambient+I_diff2)*size, 140, I_spec2*size, 6);
             
             shapeRenderer.end();
         }

@@ -7,6 +7,7 @@ import static com.BombingGames.Game.Gameobjects.Block.CATEGORY;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import org.lwjgl.opengl.GL11;
@@ -40,7 +41,7 @@ public abstract class GameObject {
     private final int id; 
     private int value;
     private boolean obstacle, transparent, visible, hidden; 
-    private int lightlevel = 127;
+    private float lightlevel = 0.5f;
     private int dimensionY = 1;    
     
     /**
@@ -97,29 +98,29 @@ public abstract class GameObject {
      * Draws an object.
      * @param coords the relative coordinates
      * @param view 
-     * @param brightness  
+     * @param brightness the brightness between 0 and 1  
      */
-    public void render(View view, Coordinate coords, int brightness) {
+    public void render(View view, Coordinate coords, float brightness) {
         //draw the object except not visible ones
         if (!hidden && visible) {             
-            AtlasRegion texture = getSprite(getCategory(), id, value);
+            Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
              
             int xPos = get2DPosX(coords) + getOffsetX();
             int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + getOffsetY();
+            sprite.setPosition(xPos, yPos);
             
             Color filter;
-            if (brightness <= 127){
+            if (brightness < .5f){
                 view.setDrawmode(GL11.GL_MODULATE);
-                filter = new Color(brightness/127f, brightness/127f, brightness/127f, 1);
+                filter = new Color(brightness/0.5f, brightness/0.5f, brightness/0.5f, 1);
             } else {
                 view.setDrawmode(GL11.GL_ADD);
-                filter = new Color((brightness-127)/127f, (brightness-127)/127f, (brightness-127)/127f, 1);
+                filter = new Color((brightness-0.5f)/0.5f, (brightness-0.5f)/0.5f, (brightness-0.5f)/0.5f, 1);
             }
 
             if (Controller.getLightengine() != null) filter = filter.mul(Controller.getLightengine().getLightColor());
-            view.getBatch().setColor(filter);
-            view.getBatch().draw(texture, xPos, yPos);
-            //texture.drawEmbedded(xPos, yPos, xPos + texture.getWidth(), yPos + texture.getHeight(), 0, 0, texture.getWidth(), texture.getHeight(), filter);
+            sprite.setColor(filter);
+            sprite.draw(view.getBatch());
         }
     } 
     
@@ -279,10 +280,10 @@ public abstract class GameObject {
 
     /**
      * How bright is the object?
-     * The lightlevel is a number between 0 and 255. 100 is full bright. 0 is black. Default is 50.
+     * The lightlevel is a number between 0 and 1. 1 is full bright. 0 is black. Default is .5.
      * @return
      */
-    public int getLightlevel() {
+    public float getLightlevel() {
         return lightlevel;
     }
 
@@ -354,10 +355,10 @@ public abstract class GameObject {
 
     /**
      * Set the brightness of the object.
-     * The lightlevel is a number between 0 and 255. 255 is full bright. 0 is black.
+     * The lightlevel is a number between 0 and 1. 1 is full bright. 0 is black.
      * @param lightlevel
      */
-    public void setLightlevel(int lightlevel) {
+    public void setLightlevel(float lightlevel) {
         this.lightlevel = lightlevel;
     }
 
