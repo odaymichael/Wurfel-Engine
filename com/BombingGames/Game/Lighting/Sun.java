@@ -15,4 +15,6 @@ public class Sun extends GlobalLightSource {
     public Sun() {
         super(-Controller.getMap().getWorldSpinDirection(), 0, new Color(255, 255, 255, 1), 70);
     }
+
+    
 }
