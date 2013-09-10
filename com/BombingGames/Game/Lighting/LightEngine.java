@@ -17,7 +17,7 @@ public class LightEngine {
     /**
      * The Version of the light engine.
      */
-    public static final String Version = "1.0.2";
+    public static final String Version = "1.1.0";
     
     private boolean renderData = false;
     //diagramm data
