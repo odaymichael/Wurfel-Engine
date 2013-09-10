@@ -4,6 +4,7 @@ import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import static com.BombingGames.Game.Gameobjects.Block.CATEGORY;
+import com.BombingGames.Game.Lighting.PseudoGrey;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -91,7 +92,7 @@ public abstract class GameObject {
      * @param view  
      */
     public void render(View view, Coordinate coords) {
-        render(view, coords, lightlevel);
+        render(view, coords, PseudoGrey.toColor(lightlevel));
     }
     
      /**
@@ -100,7 +101,7 @@ public abstract class GameObject {
      * @param view 
      * @param brightness the brightness between 0 and 1  
      */
-    public void render(View view, Coordinate coords, float brightness) {
+    public void render(View view, Coordinate coords, Color brightness) {
         //draw the object except not visible ones
         if (!hidden && visible) {             
             Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
@@ -110,15 +111,20 @@ public abstract class GameObject {
             sprite.setPosition(xPos, yPos);
             
             Color filter;
-            if (brightness < .5f){
-                view.setDrawmode(GL11.GL_MODULATE);
-                filter = new Color(brightness/0.5f, brightness/0.5f, brightness/0.5f, 1);
+            if (PseudoGrey.toFloat(brightness) < .5f){
+                    view.setDrawmode(GL11.GL_MODULATE);
+                    filter = brightness.cpy().mul(2);
+                    filter.a = 1;
             } else {
-                view.setDrawmode(GL11.GL_ADD);
-                filter = new Color((brightness-0.5f)/0.5f, (brightness-0.5f)/0.5f, (brightness-0.5f)/0.5f, 1);
+                    view.setDrawmode(GL11.GL_ADD);
+                    filter = brightness.cpy();
+                    filter.r -= .5f;
+                    filter.g -= .5f;
+                    filter.b -= .5f;
+                    filter.mul(2);
             }
 
-            if (Controller.getLightengine() != null) filter = filter.mul(Controller.getLightengine().getLightColor());
+            if (Controller.getLightengine() != null) filter = filter.mul(Controller.getLightengine().getLightTone());
             sprite.setColor(filter);
             sprite.draw(view.getBatch());
         }

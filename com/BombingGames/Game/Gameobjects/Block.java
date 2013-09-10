@@ -304,7 +304,7 @@ public class Block extends GameObject {
                         renderSide(view, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE));
                     if (renderRight)
                         renderSide(view, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE));
-                } else super.render(view, coords, LightEngine.getBrightness());
+                } else super.render(view, coords, PseudoGrey.toColor(LightEngine.getBrightness()));
             } else 
                 if (hasSides){
                     if (renderTop)
@@ -313,22 +313,29 @@ public class Block extends GameObject {
                         renderSide(view, coords, Block.LEFTSIDE, getLightlevel());
                     if (renderRight)
                         renderSide(view, coords, Block.RIGHTSIDE, getLightlevel());
-                } else super.render(view, coords, getLightlevel());
+                } else super.render(view, coords, PseudoGrey.toColor(getLightlevel()));
         }
     }
     
+    /**
+     * Transfe
+     * @param view
+     * @param coords
+     * @param sidenumb
+     * @param brightness the brightness get automaticall transferred into a color
+     * @see com.BombingGames.Game.Gameobjects.Block#renderSide(com.BombingGames.EngineCore.View, com.BombingGames.EngineCore.Map.Coordinate, int, com.badlogic.gdx.graphics.Color) 
+     */
     protected void renderSide(final View view, Coordinate coords, final int sidenumb, float brightness){
-        renderSide(view, coords, sidenumb, new Color(brightness,brightness,brightness,1));
+        renderSide(view, coords, sidenumb, PseudoGrey.toColor(brightness));
     }
 
 
-    
     /**
      * Draws a side of a block
      * @param view the view using this render method
      * @param coords the coordinates where to render 
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
-     * @param brightness  The brightness of the side. Value between 0  and 255.
+     * @param brightness  The brightness of the side in a (pseudo) grayscale color.
      */
     protected void renderSide(final View view, Coordinate coords, final int sidenumb, Color brightness){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
@@ -342,7 +349,7 @@ public class Block extends GameObject {
         Color filter;
         if (PseudoGrey.toFloat(brightness) < .5f){
                 view.setDrawmode(GL11.GL_MODULATE);
-                filter = brightness.cpy().mul(0.5f);
+                filter = brightness.cpy().mul(2);
                 filter.a = 1;
         } else {
                 view.setDrawmode(GL11.GL_ADD);
@@ -354,7 +361,7 @@ public class Block extends GameObject {
         }
             
         if (Controller.getLightengine() != null){
-            filter = filter.mul(Controller.getLightengine().getLightColor());
+            filter = filter.mul(Controller.getLightengine().getLightTone());
         }
         
         //uncomment these two lines to add a depth-effect (note that it is very dark)

@@ -143,21 +143,21 @@ public class LightEngine {
     /**
      * Get's the brightness of a side.
      * @param side
-     * @return
+     * @return a color on the (pseudo) greyscale
      */
-    public static float getBrightness(int side){
-        if (side==0) return I_0;
-            else if (side==1) return I_1;
-                else return I_2;
+    public static Color getBrightness(int side){
+        if (side==0) return PseudoGrey.toColor(I_0);
+            else if (side==1) return PseudoGrey.toColor(I_1);
+                else return PseudoGrey.toColor(I_2);
     }
     
     /**
      * Returns the global light color.
-     * @return
+     * @return a color with a tone
      */
-    public Color getLightColor(){
-        Color tmp = sun.getLight().cpy();
-        tmp.add(moon.getLight());
+    public Color getLightTone(){
+        Color tmp = sun.getTone().cpy().mul(sun.getBrightness());
+        tmp.add(moon.getTone().cpy().mul(moon.getBrightness()));
         tmp.a = 1;
         return tmp;
     }
@@ -269,11 +269,14 @@ public class LightEngine {
             view.drawString("Long: "+sun.getLongPos(), 600, 100, Color.WHITE);
             view.drawString("BrightnessSun: "+sun.getBrightness(), 600, 120, Color.WHITE);
             view.drawString("BrightnessMoon: "+moon.getBrightness(), 600, 130, Color.WHITE);
-            view.drawString("LightColor: "+getLightColor().toString(), 600, 140, Color.WHITE);
+            view.drawString("LightColor: "+getLightTone().toString(), 600, 140, Color.WHITE);
+            shapeRenderer.begin(ShapeType.FilledRectangle);
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.filledRect(600, 160, 70, 70);
+            shapeRenderer.setColor(getLightTone());
+            shapeRenderer.filledRect(610, 170, 50, 50);
 
              //info bars
-
-            shapeRenderer.begin(ShapeType.FilledRectangle);
             
             //left side
             view.drawText(I_ambient+"\n+"+I_diff0+"\n+"+ I_spec0+"\n="+I_0, (int) (I_0*size), 100, Color.WHITE);

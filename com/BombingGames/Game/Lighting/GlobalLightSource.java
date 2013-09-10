@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.Color;
  *
  * @author Benedikt Vogler
  */
-public class GlobalLightSource {
-    public final boolean PSEUDOGREY = false;
-    
+public class GlobalLightSource {   
     /**
      *The higher the value the faster/shorter is the day.
      */
@@ -39,9 +37,7 @@ public class GlobalLightSource {
      * @return a value between 0 and 1
      */
     public float getBrightness() {
-        if (PSEUDOGREY)
-            return PseudoGrey.toFloat(brightness);
-        else return (brightness.r + brightness.g +brightness.b)/3;
+        return PseudoGrey.toFloat(getLight());
     }
     
     
@@ -143,10 +139,7 @@ public class GlobalLightSource {
         if (numBrightness < 0) numBrightness=0;
         
         //value to color;
-        if (PSEUDOGREY)
-            brightness = PseudoGrey.toColor(numBrightness);
-        else
-            brightness = new Color(numBrightness, numBrightness, numBrightness, 1);
+        brightness = PseudoGrey.toColor(numBrightness);
         
         //if (longPos>180+IGLPrototype.TWISTDIRECTION)
         //color = new Color(127 + (int) (brightness * 128), 255, 255);
