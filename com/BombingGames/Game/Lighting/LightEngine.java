@@ -70,9 +70,8 @@ public class LightEngine {
         sun.update(delta);
         moon.update(delta);
         
-        //light intensitiy of enviroment. the normal level. value between 0 and 255
-        float I_a = ambientBaseLevel + sun.getBrightness() + moon.getBrightness();
-        I_ambient = I_a * k_ambient;
+        //light intensitiy of enviroment. the normal level. value between 0 and 1
+        I_ambient = (ambientBaseLevel + sun.getBrightness() + moon.getBrightness()) * k_ambient;
                 
         //diffusion
         I_diff0 = (float) (sun.getBrightness() *  k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180) * Math.cos(((sun.getLongPos()-45)*Math.PI)/180));  
@@ -88,7 +87,7 @@ public class LightEngine {
         
         //it is impossible to get specular light with a GlobalLightSource over the horizon on side 0 and 2. Just left in case i it someday helps somebody.
 //        I_spec0 =(int) (
-//                        sun.getBrightness()
+//                        sun.getPseudoGrey()
 //                        * k_specular
 //                        * Math.pow(
 //                            Math.sin((sun.getLatPos())*Math.PI/180)*Math.sin((sun.getLongPos())*Math.PI/180)* Math.sqrt(2)/Math.sqrt(3)//y
@@ -116,9 +115,10 @@ public class LightEngine {
                         ,n_spec)
                         *(n_spec+2)/(2*Math.PI)
                         );
-      //it is impossible to get specular light with a GlobalLightSource over the horizon on side 0 and 2. Just left in case i it someday helps somebody.
+         
+      //it is impossible to get specular light with a GlobalLightSource over the horizon on side 0 and 2. Just left in case it someday may help somebody.
         //        I_spec2 =(int) (
-        //                        sun.getBrightness()
+        //                        sun.getPseudoGrey()
         //                        * k_specular
         //                        * Math.pow(
         //                            Math.cos((sun.getLatPos() - 35.26) * Math.PI/360)
@@ -141,7 +141,7 @@ public class LightEngine {
     }
         
     /**
-     * 
+     * Get's the brightness of a side.
      * @param side
      * @return
      */
@@ -276,7 +276,7 @@ public class LightEngine {
             shapeRenderer.begin(ShapeType.FilledRectangle);
             
             //left side
-            view.drawText("Left:"+I_ambient+"\n+"+I_diff0+"\n+"+ I_spec0+"\n="+I_0, (int) (I_0*size), 100, Color.WHITE);
+            view.drawText(I_ambient+"\n+"+I_diff0+"\n+"+ I_spec0+"\n="+I_0, (int) (I_0*size), 100, Color.WHITE);
             shapeRenderer.setColor(Color.GREEN);
             shapeRenderer.filledRect(0, 100, I_ambient*size, 10);
             shapeRenderer.setColor(Color.RED);
@@ -285,22 +285,22 @@ public class LightEngine {
             shapeRenderer.filledRect((I_ambient+I_diff0)*size, 100, I_spec0*size, 6);
 
             //top side
-            view.drawText("Top:"+I_ambient+"\n+"+I_diff1+"\n+"+ I_spec1+"\n="+I_1, (int) (I_1*size), 140, Color.WHITE);
-            shapeRenderer.setColor(Color.GREEN);
-            shapeRenderer.filledRect(0, 140, I_ambient*size, 10);
-            shapeRenderer.setColor(Color.RED);
-            shapeRenderer.filledRect(I_ambient*size, 140, I_diff1*size, 8);
-            shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.filledRect((I_ambient+I_diff1)*size, 140, I_spec1*size, 6);
-
-            //right side
-            view.drawText("Right:"+I_ambient+"\n+"+I_diff2+"\n+"+ I_spec2+"\n="+I_2, (int) (I_2*size), 180, Color.WHITE);
+            view.drawText(I_ambient+"\n+"+I_diff1+"\n+"+ I_spec1+"\n="+I_1, (int) (I_1*size), 180, Color.WHITE);
             shapeRenderer.setColor(Color.GREEN);
             shapeRenderer.filledRect(0, 180, I_ambient*size, 10);
             shapeRenderer.setColor(Color.RED);
-            shapeRenderer.filledRect(I_ambient*size, 180, I_diff2*size, 8);
+            shapeRenderer.filledRect(I_ambient*size, 180, I_diff1*size, 8);
             shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.filledRect((I_ambient+I_diff2)*size, 180, I_spec2*size, 6);
+            shapeRenderer.filledRect((I_ambient+I_diff1)*size, 180, I_spec1*size, 6);
+
+            //right side
+            view.drawText(I_ambient+"\n+"+I_diff2+"\n+"+ I_spec2+"\n="+I_2, (int) (I_2*size), 260, Color.WHITE);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.filledRect(0, 260, I_ambient*size, 10);
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.filledRect(I_ambient*size, 260, I_diff2*size, 8);
+            shapeRenderer.setColor(Color.BLUE);
+            shapeRenderer.filledRect((I_ambient+I_diff2)*size, 260, I_spec2*size, 6);
             
             shapeRenderer.end();
         }

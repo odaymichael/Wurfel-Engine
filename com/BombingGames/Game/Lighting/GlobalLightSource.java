@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Color;
  * @author Benedikt Vogler
  */
 public class GlobalLightSource {
+    public final boolean PSEUDOGREY = false;
+    
     /**
      *The higher the value the faster/shorter is the day.
      */
@@ -36,47 +38,13 @@ public class GlobalLightSource {
      * The light color has an intensity which can be get by this function. It adds every component and then divides by three.
      * @return a value between 0 and 1
      */
-//    public float getBrightness() {
-//        return (brightness.r + brightness.g +brightness.b)/3;
-//    }
-    
     public float getBrightness() {
-	int	red, green, blue;
-	int	cMin, cMax;
-	int	base12;
-	float	grey;
-
-	red   = (int) (brightness.r*255);
-	green = (int) (brightness.g*255);
-	blue  = (int) (brightness.b*255);
-	cMin  = Math.min(red, Math.min(green, blue));
-	cMax  = Math.max(red, Math.max(green, blue));
-
-	if (cMin == 255)
-	    grey = 1.0f;
-	  else if (cMax == cMin)
-	  { // short-cut this common case
-	    base12 = cMin << 4;
-	    grey = base12 / 4095.0f;
-	  }
-	  else if ((cMax - cMin) < 2)
-	  { // pseudoGrey
-	    int	delta = 0;			// luma weights:
-	    if (cMax == blue)   delta += 2;	// .114 * 16 == 1.824
-	    if (cMax == red)    delta += 5;	// .299 * 16 == 4.784
-	    if (cMax == green)  delta += 9;	// .587 * 16 == 9.392
-	    if (cMin == 254)    delta *= 2;  // accelerate near "infinity"
-	    base12 = (cMin << 4) + delta;
-	    grey = base12 / 4095.0f;
-	  }
-	  else
-	  { // use luma conversion
-	    grey  = (.299f*red + .587f*green + .114f*blue) / 255.0f;
-	  }
-
-	return grey;
+        if (PSEUDOGREY)
+            return getPseudoGrey(brightness);
+        else return (brightness.r + brightness.g +brightness.b)/3;
     }
-
+    
+    
     /**
      *
      * @return
@@ -175,8 +143,10 @@ public class GlobalLightSource {
         if (numBrightness < 0) numBrightness=0;
         
         //value to color;
-        brightness = getPseudoGrey(numBrightness);
-        
+        if (PSEUDOGREY)
+            brightness = getPseudoGrey(numBrightness);
+        else
+            brightness = new Color(numBrightness, numBrightness, numBrightness, 1);
         
         //if (longPos>180+IGLPrototype.TWISTDIRECTION)
         //color = new Color(127 + (int) (brightness * 128), 255, 255);
@@ -251,4 +221,42 @@ public class GlobalLightSource {
 	  }
 	return new Color(r/256f, g/256f, b/256f,1);
     }
+
+    public static float getPseudoGrey(Color c) {
+	int	red, green, blue;
+	int	cMin, cMax;
+	int	base12;
+	float	grey;
+
+	red   = (int) (c.r*255);
+	green = (int) (c.g*255);
+	blue  = (int) (c.b*255);
+	cMin  = Math.min(red, Math.min(green, blue));
+	cMax  = Math.max(red, Math.max(green, blue));
+
+	if (cMin == 255)
+	    grey = 1.0f;
+	  else if (cMax == cMin)
+	  { // short-cut this common case
+	    base12 = cMin << 4;
+	    grey = base12 / 4095.0f;
+	  }
+	  else if ((cMax - cMin) < 2)
+	  { // pseudoGrey
+	    int	delta = 0;			// luma weights:
+	    if (cMax == blue)   delta += 2;	// .114 * 16 == 1.824
+	    if (cMax == red)    delta += 5;	// .299 * 16 == 4.784
+	    if (cMax == green)  delta += 9;	// .587 * 16 == 9.392
+	    if (cMin == 254)    delta *= 2;  // accelerate near "infinity"
+	    base12 = (cMin << 4) + delta;
+	    grey = base12 / 4095.0f;
+	  }
+	  else
+	  { // use luma conversion
+	    grey  = (.299f*red + .587f*green + .114f*blue) / 255.0f;
+	  }
+
+	return grey;
+    }
+
 }
