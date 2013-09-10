@@ -265,11 +265,11 @@ public class LightEngine {
              );
              shapeRenderer.end();
 
-            view.drawString("Lat: "+sun.getLatPos(), 400, 110, Color.WHITE);
-            view.drawString("Long: "+sun.getLongPos(), 400, 100, Color.WHITE);
-            view.drawString("BrightnessSun: "+sun.getBrightness(), 400, 120, Color.WHITE);
-            view.drawString("BrightnessMoon: "+moon.getBrightness(), 400, 130, Color.WHITE);
-            view.drawString("Long: "+getLightColor().toString(), 400, 140, Color.WHITE);
+            view.drawString("Lat: "+sun.getLatPos(), 600, 110, Color.WHITE);
+            view.drawString("Long: "+sun.getLongPos(), 600, 100, Color.WHITE);
+            view.drawString("BrightnessSun: "+sun.getBrightness(), 600, 120, Color.WHITE);
+            view.drawString("BrightnessMoon: "+moon.getBrightness(), 600, 130, Color.WHITE);
+            view.drawString("LightColor: "+getLightColor().toString(), 600, 140, Color.WHITE);
 
              //info bars
 
@@ -285,22 +285,22 @@ public class LightEngine {
             shapeRenderer.filledRect((I_ambient+I_diff0)*size, 100, I_spec0*size, 6);
 
             //top side
-            view.drawText("Top:"+I_ambient+"\n+"+I_diff1+"\n+"+ I_spec1+"\n="+I_1, (int) (I_1*size), 120, Color.WHITE);
-            shapeRenderer.setColor(Color.GREEN);
-            shapeRenderer.filledRect(0, 120, I_ambient*size, 10);
-            shapeRenderer.setColor(Color.RED);
-            shapeRenderer.filledRect(I_ambient*size, 120, I_diff1*size, 8);
-            shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.filledRect((I_ambient+I_diff1)*size, 120, I_spec1*size, 6);
-
-            //right side
-            view.drawText("Right:"+I_ambient+"\n+"+I_diff2+"\n+"+ I_spec2+"\n="+I_2, (int) (I_2*size), 140, Color.WHITE);
+            view.drawText("Top:"+I_ambient+"\n+"+I_diff1+"\n+"+ I_spec1+"\n="+I_1, (int) (I_1*size), 140, Color.WHITE);
             shapeRenderer.setColor(Color.GREEN);
             shapeRenderer.filledRect(0, 140, I_ambient*size, 10);
             shapeRenderer.setColor(Color.RED);
-            shapeRenderer.filledRect(I_ambient*size, 140, I_diff2*size, 8);
+            shapeRenderer.filledRect(I_ambient*size, 140, I_diff1*size, 8);
             shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.filledRect((I_ambient+I_diff2)*size, 140, I_spec2*size, 6);
+            shapeRenderer.filledRect((I_ambient+I_diff1)*size, 140, I_spec1*size, 6);
+
+            //right side
+            view.drawText("Right:"+I_ambient+"\n+"+I_diff2+"\n+"+ I_spec2+"\n="+I_2, (int) (I_2*size), 180, Color.WHITE);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.filledRect(0, 180, I_ambient*size, 10);
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.filledRect(I_ambient*size, 180, I_diff2*size, 8);
+            shapeRenderer.setColor(Color.BLUE);
+            shapeRenderer.filledRect((I_ambient+I_diff2)*size, 180, I_spec2*size, 6);
             
             shapeRenderer.end();
         }
