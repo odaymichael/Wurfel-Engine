@@ -226,6 +226,12 @@ public class View {
         font.draw(batch, msg, xPos, yPos);
         batch.end();
     }
+    
+    public void drawText(String msg, int xPos, int yPos, Color color){
+        batch.begin();
+        font.drawMultiLine(batch, msg, xPos, yPos);
+        batch.end();
+    }
 
     public SpriteBatch getBatch() {
         return batch;
