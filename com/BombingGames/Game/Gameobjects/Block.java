@@ -9,6 +9,7 @@ import com.BombingGames.EngineCore.View;
 import static com.BombingGames.Game.Gameobjects.GameObject.OBJECTTYPESCOUNT;
 import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
 import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
+import com.BombingGames.Game.Lighting.PseudoGrey;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -315,6 +316,10 @@ public class Block extends GameObject {
                 } else super.render(view, coords, getLightlevel());
         }
     }
+    
+    protected void renderSide(final View view, Coordinate coords, final int sidenumb, float brightness){
+        renderSide(view, coords, sidenumb, new Color(brightness,brightness,brightness,1));
+    }
 
 
     
@@ -325,22 +330,27 @@ public class Block extends GameObject {
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      * @param brightness  The brightness of the side. Value between 0  and 255.
      */
-    protected void renderSide(final View view, Coordinate coords, final int sidenumb, float brightness){
+    protected void renderSide(final View view, Coordinate coords, final int sidenumb, Color brightness){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         
         int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);//right side is  half a block more to the right
         int yPos = get2DPosY(coords) + (sidenumb != 1 ? DIM4 : 0);//the top is drawn a quarter blocks higher
         sprite.setPosition(xPos, yPos);
         
-        brightness += getLightlevel()-0.5f;
+        //brightness += getLightlevel()-0.5f;
             
         Color filter;
-        if (brightness < .5f){
+        if (PseudoGrey.toFloat(brightness) < .5f){
                 view.setDrawmode(GL11.GL_MODULATE);
-                filter = new Color(brightness/0.5f, brightness/0.5f, brightness/0.5f, 1);
+                filter = brightness.cpy().mul(0.5f);
+                filter.a = 1;
         } else {
                 view.setDrawmode(GL11.GL_ADD);
-                filter = new Color((brightness-0.5f)/0.5f, (brightness-0.5f)/0.5f, (brightness-0.5f)/0.5f, 1);
+                filter = brightness.cpy();
+                filter.r -= .5f;
+                filter.g -= .5f;
+                filter.b -= .5f;
+                filter.mul(2);
         }
             
         if (Controller.getLightengine() != null){
@@ -353,12 +363,12 @@ public class Block extends GameObject {
         //filter.g *= (coords.getRelY()-camera.getTopBorder())
         //   /(camera.getBottomBorder()-camera.getTopBorder());
         
-        Color verticeColor = filter.cpy().mul(getLightlevel());
+        Color verticeColor = filter.cpy();
         verticeColor.a = 1; 
         sprite.getVertices()[SpriteBatch.C4] = verticeColor.toFloatBits();
         sprite.getVertices()[SpriteBatch.C1] = verticeColor.toFloatBits();
 
-        verticeColor = filter.cpy().mul(getLightlevel()-((sidenumb != 1)?0.3f:0));
+       // verticeColor = filter.cpy().mul(getLightlevel()-((sidenumb != 1)?0.3f:0));
         verticeColor.a = 1; 
 
         sprite.getVertices()[SpriteBatch.C2] = verticeColor.cpy().toFloatBits();
