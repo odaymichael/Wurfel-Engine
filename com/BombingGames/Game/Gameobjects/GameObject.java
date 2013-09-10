@@ -238,10 +238,12 @@ public abstract class GameObject {
      */
     public static AtlasRegion getSprite(char category, int id, int value) {
         AtlasRegion sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
-        if (sprite == null){ //if there is no sprite show the default "sprite not found sprite"
-            sprite = getSpritesheet().findRegion(CATEGORY+"0-0-0");
-            if (sprite==null)
-                throw new NullPointerException("Sprite not found but even the default error sprite could not be found:"+CATEGORY+"0-0-0");
+        if (sprite == null){ //if there is no sprite show the default "sprite not found sprite" for this category
+            sprite = getSpritesheet().findRegion(CATEGORY+"0-0");
+            if (sprite==null) {//load generic error sprite if category sprite failed
+                sprite = getSpritesheet().findRegion("error");
+                if (sprite==null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
+            }
         }
         return sprite;
     }

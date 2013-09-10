@@ -23,6 +23,13 @@ b6-0-1
   orig: 160, 80
   offset: 0, 0
   index: -1
+error
+  rotate: false
+  xy: 0, 735
+  size: 160, 145
+  orig: 160, 145
+  offset: 0, 0
+  index: -1
 b3-0-2
   rotate: false
   xy: 565, 121

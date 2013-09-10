@@ -147,9 +147,9 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     }
 
     /**
-     * Get the screen y-position where the object is rendered without regarding the camera.
+     * Get the 2D-projection y-position where the object is rendered without regarding the camera.
      * @param coords  this parameter get's ignored because entitys know their own coordinates. You can pass <i>null</i> here.
-     * @return The screen Y-position in pixels.
+     * @return The 2D-projection Y-position in pixels.
      */
    @Override
     public int get2DPosY(Coordinate coords) {
@@ -157,9 +157,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
                + (int) (positionY / 2) //add the objects position inside this coordinate
                - (int) (this.coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
     }
-    
-
-    
+        
     /**
      * add this entity to the map-> let it exist
      */

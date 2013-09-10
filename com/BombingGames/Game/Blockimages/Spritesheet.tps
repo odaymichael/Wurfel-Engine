@@ -196,6 +196,7 @@
             <filename>sprites/e40-7.png</filename>
             <filename>sprites/e41-0.png</filename>
             <filename>sprites/e41-1.png</filename>
+            <filename>sprites/error.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
