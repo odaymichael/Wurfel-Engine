@@ -65,13 +65,12 @@ public class Minimap {
     
     /**
      * Renders the Minimap.
-     * @param g The graphics context.
      * @param view the view using this render method 
      */
     public void render(View view) {
         if (visible) {
-            int viewportPosX = (int) (posX);
-            int viewportPosY = (int) (posY);
+            int viewportPosX = posX;
+            int viewportPosY = posY;
             
             ShapeRenderer shapeRenderer = view.getShapeRenderer();
                         

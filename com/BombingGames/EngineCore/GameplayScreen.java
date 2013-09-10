@@ -21,7 +21,6 @@ public class GameplayScreen implements Screen{
 
     /**
      * Create the gameplay state.
-     * @param id the id used by this state.
      */
     public GameplayScreen() {
         msgSystem = new MsgSystem(Gdx.graphics.getWidth()/2, 3*Gdx.graphics.getHeight()/4);

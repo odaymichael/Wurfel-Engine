@@ -22,8 +22,6 @@ public class View {
     
     /**
      * Creates a View.
-     * @param gc
-     * @throws SlickException
      */
     public View(){
         //load textures

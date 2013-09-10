@@ -13,9 +13,7 @@ public class CustomGameView extends View{
  
      /**
      *
-     * @param gc
      * @param controller
-     * @throws SlickException
      */
     public CustomGameView(Controller controller) {
          super(controller);

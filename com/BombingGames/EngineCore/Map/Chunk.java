@@ -45,7 +45,7 @@ public class Chunk {
     * @param pos the position of the chunk. Value between 0-8
     * @param coordX 
     * @param coordY 
-    * @param loadmap load from HD(true) or generate new (false)?
+    * @param newMap load from HD(true) or generate new (false)?
     */
     public Chunk(int pos, int coordX, int coordY, boolean newMap){
         this();

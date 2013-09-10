@@ -18,7 +18,6 @@ public class Controller {
     
     /**
      * Creates a new Controller
-     * @throws SlickException
      */
     public Controller() {
         TextureAtlas texture = new TextureAtlas(Gdx.files.internal("com/BombingGames/MainMenu/Images/MainMenu.txt"), true);
@@ -33,8 +32,6 @@ public class Controller {
     
     /**
      * updates game logic
-     * @param gc
-     * @param sbg
      * @param delta
      */
     public void update(int delta){

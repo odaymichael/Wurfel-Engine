@@ -37,9 +37,7 @@ public class View {
     
     /**
      * Creates a View.
-     * @param gc
      * @param controller 
-     * @throws SlickException
      */
     public View(Controller controller){
         this.controller = controller;
@@ -65,8 +63,6 @@ public class View {
     
     /**
      * Main method which is called every time and renders everything.
-     * @param g the graphics context
-     * @throws SlickException
      */
     public void render(){       
         //Gdx.gl10.glViewport(0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -88,8 +84,8 @@ public class View {
         Gdx.gl.glViewport(
             0,
             0,
-            (int) Gdx.graphics.getWidth(),
-            (int) Gdx.graphics.getHeight()
+            Gdx.graphics.getWidth(),
+            Gdx.graphics.getHeight()
         );
         
         drawString("FPS:"+ Gdx.graphics.getFramesPerSecond(), 10, 10);
@@ -119,6 +115,7 @@ public class View {
    /**
      * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
      * @param x the x position on the screen
+     * @param camera 
      * @return the relative game coordinate
      */
     public int ScreenXtoGame(int x, WECamera camera){
@@ -128,6 +125,7 @@ public class View {
    /**
      * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
      * @param y the y position on the screen
+     * @param camera 
      * @return the relative game coordinate
      */
     public int ScreenYtoGame(int y, WECamera camera){
@@ -161,7 +159,7 @@ public class View {
         //find out where the click went
         Coordinate coords = new Coordinate(
                        x / Block.DIMENSION -1,
-                       (int) (y / Block.DIMENSION)*2-1,
+                       2*y / Block.DIMENSION -1,
                        Map.getBlocksZ()-1,
                         true
         );

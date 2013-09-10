@@ -87,7 +87,6 @@ public abstract class GameObject {
     /**
      * Draws an object.
      * @param coords the relative coordinates
-     * @param camera 
      * @param view  
      */
     public void render(View view, Coordinate coords) {
@@ -97,7 +96,6 @@ public abstract class GameObject {
      /**
      * Draws an object.
      * @param coords the relative coordinates
-     * @param camera 
      * @param view 
      * @param brightness  
      */

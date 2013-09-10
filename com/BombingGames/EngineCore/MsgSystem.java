@@ -126,7 +126,7 @@ public class MsgSystem extends ArrayList<Msg> {
     
     /**
      * Draws the Messages
-     * @param g The graphics context.
+     * @param view 
      */
     public void render(View view){
         if (waitforinput) view.drawString("MSG:", xPos, yPos);

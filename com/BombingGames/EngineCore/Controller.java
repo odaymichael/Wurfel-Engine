@@ -30,9 +30,6 @@ public class Controller {
     
     /**
      * Constructor is called when entering the gamemode.
-     * @param gc The gameContainer containing this class.
-     * @param game The StateBasedGame containing this class.
-     * @throws SlickException
      */
     public Controller(){  
         newMap();
@@ -44,7 +41,6 @@ public class Controller {
      /**
      * Main method which is called every refresh.
      * @param delta time since last call
-     * @throws SlickException
      */
     public void update(int delta) {
         if (lightEngine != null) lightEngine.update(delta);
@@ -165,7 +161,7 @@ public class Controller {
     
      /**
      * 
-     * @param relCoords
+     * @param coords 
      * @param block
      */
     public static void setMapData(Coordinate coords, Block block) {
@@ -174,7 +170,7 @@ public class Controller {
     
     /**
      * Shortcut to "map.setDataSafe". Set a block with safety checks.
-     * @param relCoords
+     * @param coords 
      * @param block the block you want to set
      */
     public static void setMapDataSafe(Coordinate coords, Block block) {
@@ -227,7 +223,7 @@ public class Controller {
     }
     
    /**
-     * Informs the map that a recalc is requested. It will do it in the next update. This method exist to minimize update calls.
+     * Informs the map that a recalc is requested. It will do it in the next update. This method  to limit update calls to to per frame
      */
     public static void requestRecalc(){
         recalcRequested = true;
@@ -286,5 +282,4 @@ public class Controller {
     public static LightEngine getLightengine() {
         return lightEngine;
     }
-    
 }

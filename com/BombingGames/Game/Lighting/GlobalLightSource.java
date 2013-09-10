@@ -1,7 +1,6 @@
 package com.BombingGames.Game.Lighting;
 
 import com.BombingGames.EngineCore.Controller;
-import com.BombingGames.EngineCore.Map.Map;
 import com.badlogic.gdx.graphics.Color;
 
 /**

@@ -127,7 +127,6 @@ public class WECamera extends Camera {
     
     /**
      * Renders the viewport
-     * @param g
      * @param view  
      */
     public void render(View view) {
@@ -137,7 +136,7 @@ public class WECamera extends Camera {
              
             //the parameter for the posY  is a bit strange because the y-axis is turned
             Gdx.gl.glViewport(
-                (int) viewportPosX,
+                viewportPosX,
                 (int) (Gdx.graphics.getHeight()-viewportHeight-viewportPosY),
                 (int) viewportWidth,
                 (int) (viewportHeight)

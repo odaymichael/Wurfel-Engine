@@ -214,16 +214,12 @@ public class Block extends GameObject {
                 AtlasRegion texture = getBlockSprite(id, value, 1);
                 if (texture == null) return new Color();
                 colorInt = getPixmap().getPixel(
-                    (int) (texture.getRegionX()+DIM2),
-                    (int) (texture.getRegionY()-DIM4)
-                );
+                    texture.getRegionX()+DIM2, texture.getRegionY()-DIM4);
             } else {
                 AtlasRegion texture = getSprite(CATEGORY, id, value);
                 if (texture == null) return new Color();
                 colorInt = getPixmap().getPixel(
-                    (int) (texture.getRegionX()+DIM2),
-                    (int) (texture.getRegionY()-DIM2)
-                );
+                    texture.getRegionX()+DIM2, texture.getRegionY()-DIM2);
             }
             Color.rgba8888ToColor(colorlist[id][value], colorInt);
             return colorlist[id][value]; 
@@ -324,7 +320,6 @@ public class Block extends GameObject {
     
     /**
      * Draws a side of a block
-     * @param g The graphics context where the side is rendered at.
      * @param view the view using this render method
      * @param coords the coordinates where to render 
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right

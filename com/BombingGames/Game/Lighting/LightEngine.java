@@ -132,9 +132,9 @@ public class LightEngine {
         //                        *(n_spec+2)/(2*Math.PI)
         //                        );   
         
-        I_0 = (int) (I_ambient + I_diff0 + I_spec0);
-        I_1 = (int) (I_ambient + I_diff1 + I_spec1);
-        I_2 = (int) (I_ambient + I_diff2 + I_spec2);
+        I_0 = I_ambient + I_diff0 + I_spec0;
+        I_1 = I_ambient + I_diff1 + I_spec1;
+        I_2 = I_ambient + I_diff2 + I_spec2;
     }
     
     /**
@@ -226,7 +226,7 @@ public class LightEngine {
     
     /**
      *Shows the data of the light engine in diagramms.
-     * @param g
+     * @param view 
      */
     public void render(View view){
         if (renderData) {

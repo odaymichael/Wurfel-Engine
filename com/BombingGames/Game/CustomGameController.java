@@ -24,9 +24,6 @@ public class CustomGameController extends Controller {
     
     /**
      * The custom game code belongs here.
-     * @param gc 
-     * @param game
-     * @throws SlickException
      */
     public CustomGameController() {
         super();

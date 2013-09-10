@@ -18,6 +18,7 @@ public class MenuItem extends Sprite {
     /**
      * 
      * @param index
+     * @param texture  
      */
     public MenuItem(int index, TextureRegion texture) {
         super(texture);
@@ -34,7 +35,6 @@ public class MenuItem extends Sprite {
 
     /**
      * 
-     * @param input
      * @return
      */
     public boolean isClicked() {
