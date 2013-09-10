@@ -11,7 +11,7 @@ public class GlobalLightSource {
     /**
      *The higher the value the faster/shorter is the day.
      */
-    protected final float LONGSPEED = 1/128f;
+    protected final float LONGSPEED = 1/64f;
     private Color brightness;
     private Color tone; //the color of the light
     private float latPos;

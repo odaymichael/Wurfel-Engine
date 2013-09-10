@@ -145,10 +145,10 @@ public class LightEngine {
      * @param side
      * @return a color on the (pseudo) greyscale
      */
-    public static Color getBrightness(int side){
-        if (side==0) return PseudoGrey.toColor(I_0);
-            else if (side==1) return PseudoGrey.toColor(I_1);
-                else return PseudoGrey.toColor(I_2);
+    public static float getBrightness(int side){
+        if (side==0) return I_0;
+            else if (side==1) return I_1;
+                else return I_2;
     }
     
     /**

@@ -304,7 +304,7 @@ public class Block extends GameObject {
                         renderSide(view, coords, Block.LEFTSIDE, LightEngine.getBrightness(Block.LEFTSIDE));
                     if (renderRight)
                         renderSide(view, coords, Block.RIGHTSIDE, LightEngine.getBrightness(Block.RIGHTSIDE));
-                } else super.render(view, coords, PseudoGrey.toColor(LightEngine.getBrightness()));
+                } else super.render(view, coords, LightEngine.getBrightness());
             } else 
                 if (hasSides){
                     if (renderTop)
@@ -313,22 +313,10 @@ public class Block extends GameObject {
                         renderSide(view, coords, Block.LEFTSIDE, getLightlevel());
                     if (renderRight)
                         renderSide(view, coords, Block.RIGHTSIDE, getLightlevel());
-                } else super.render(view, coords, PseudoGrey.toColor(getLightlevel()));
+                } else super.render(view, coords, getLightlevel());
         }
     }
     
-    /**
-     * Transfe
-     * @param view
-     * @param coords
-     * @param sidenumb
-     * @param brightness the brightness get automaticall transferred into a color
-     * @see com.BombingGames.Game.Gameobjects.Block#renderSide(com.BombingGames.EngineCore.View, com.BombingGames.EngineCore.Map.Coordinate, int, com.badlogic.gdx.graphics.Color) 
-     */
-    protected void renderSide(final View view, Coordinate coords, final int sidenumb, float brightness){
-        renderSide(view, coords, sidenumb, PseudoGrey.toColor(brightness));
-    }
-
 
     /**
      * Draws a side of a block
@@ -337,7 +325,7 @@ public class Block extends GameObject {
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      * @param brightness  The brightness of the side in a (pseudo) grayscale color.
      */
-    protected void renderSide(final View view, Coordinate coords, final int sidenumb, Color brightness){
+    protected void renderSide(final View view, Coordinate coords, final int sidenumb, float brightness){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         
         int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);//right side is  half a block more to the right
@@ -347,17 +335,16 @@ public class Block extends GameObject {
         //brightness += getLightlevel()-0.5f;
             
         Color filter;
-        if (PseudoGrey.toFloat(brightness) < .5f){
-                view.setDrawmode(GL11.GL_MODULATE);
-                filter = brightness.cpy().mul(2);
-                filter.a = 1;
+        if (brightness < .5f){
+            view.setDrawmode(GL11.GL_MODULATE);
+            filter = PseudoGrey.toColor(brightness).cpy().mul(2);
+            filter.a = 1;
         } else {
-                view.setDrawmode(GL11.GL_ADD);
-                filter = brightness.cpy();
-                filter.r -= .5f;
-                filter.g -= .5f;
-                filter.b -= .5f;
-                filter.mul(2);
+            view.setDrawmode(GL11.GL_ADD);
+            filter = PseudoGrey.toColor(brightness).cpy();
+            filter.r -= .5f;
+            filter.g -= .5f;
+            filter.b -= .5f;
         }
             
         if (Controller.getLightengine() != null){

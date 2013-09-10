@@ -92,7 +92,7 @@ public abstract class GameObject {
      * @param view  
      */
     public void render(View view, Coordinate coords) {
-        render(view, coords, PseudoGrey.toColor(lightlevel));
+        render(view, coords, lightlevel);
     }
     
      /**
@@ -101,7 +101,7 @@ public abstract class GameObject {
      * @param view 
      * @param brightness the brightness between 0 and 1  
      */
-    public void render(View view, Coordinate coords, Color brightness) {
+    public void render(View view, Coordinate coords, float brightness) {
         //draw the object except not visible ones
         if (!hidden && visible) {             
             Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
@@ -111,17 +111,16 @@ public abstract class GameObject {
             sprite.setPosition(xPos, yPos);
             
             Color filter;
-            if (PseudoGrey.toFloat(brightness) < .5f){
-                    view.setDrawmode(GL11.GL_MODULATE);
-                    filter = brightness.cpy().mul(2);
-                    filter.a = 1;
+            if (brightness < .5f){
+                view.setDrawmode(GL11.GL_MODULATE);
+                filter = PseudoGrey.toColor(brightness).cpy().mul(2);
+                filter.a = 1;
             } else {
-                    view.setDrawmode(GL11.GL_ADD);
-                    filter = brightness.cpy();
-                    filter.r -= .5f;
-                    filter.g -= .5f;
-                    filter.b -= .5f;
-                    filter.mul(2);
+                view.setDrawmode(GL11.GL_ADD);
+                filter = PseudoGrey.toColor(brightness).cpy();
+                filter.r -= .5f;
+                filter.g -= .5f;
+                filter.b -= .5f;
             }
 
             if (Controller.getLightengine() != null) filter = filter.mul(Controller.getLightengine().getLightTone());
