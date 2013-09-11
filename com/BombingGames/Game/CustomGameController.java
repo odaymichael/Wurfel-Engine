@@ -149,7 +149,7 @@ public class CustomGameController extends Controller {
             if (keycode == Input.Keys.ENTER)
                 GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
             
-             if (keycode == Input.Keys.C) {
+             if (keycode == Input.Keys.T) {
                 setTimespeed();
              } 
             return true;
