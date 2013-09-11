@@ -11,14 +11,14 @@ import java.io.File;
 
 /**
  *The Main class of the engine. To create a new engine use  {@link com.BombingGames.Wurfelengine#construct(java.lang.String, java.lang.String[]) Wurfelengine.construct}
+ * The Wurfel Engine needs the API libGDX0.9.8. It has not been tested with other versions.
  * @author Benedikt Vogler
- * 
  */
 public class Wurfelengine extends Game {
     /**
      * The Version of the Engine
      */
-    public static final String VERSION = "1.0.4";    
+    public static final String VERSION = "1.0.5";    
     private static File workingDirectory;
     private static boolean fullscreen = false;
     private static Wurfelengine instance;
@@ -52,7 +52,7 @@ public class Wurfelengine extends Game {
         
         Texture.setEnforcePotImages(false);
         LwjglApplication application = new LwjglApplication(this, config);
-        
+         
         //basic engine setting
         
         //LIBGDX: no equivalent found in libGDX yet

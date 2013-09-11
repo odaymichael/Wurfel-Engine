@@ -1,21 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.BombingGames.Game.Lighting;
 
 import com.badlogic.gdx.graphics.Color;
 
 /**
- *
- * @author Benedikt Vogler
+* Algorithm by Rich Franzen, 22 July 1999
+*mailto:rfranzen@my-deja.com
+*(c) 1999, Rich Franzen
+ * @author Rich Franzen, Benedikt Vogler
  */
 public class PseudoGrey {
-    
-        /**
-     * Algorithm by Rich Franzen, 22 July 1999
-     *mailto:rfranzen@my-deja.com
-     *(c) 1999, Rich Franzen
+    /**
      * @param grey
      * @return 
      */
@@ -111,5 +105,4 @@ public class PseudoGrey {
 
 	return grey;
     }
-
 }
