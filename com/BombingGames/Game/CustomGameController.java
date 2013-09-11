@@ -59,7 +59,7 @@ public class CustomGameController extends Controller {
             new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 400,10)
         );
         
-        Gdx.input.setInputProcessor(new listener());
+        Gdx.input.setInputProcessor(new InputListener());
     }
 
     
@@ -106,7 +106,7 @@ public class CustomGameController extends Controller {
         super.update(delta);
     }
     
-    class listener implements InputProcessor {
+    class InputListener implements InputProcessor {
 
         @Override
         public boolean keyDown(int keycode) {
