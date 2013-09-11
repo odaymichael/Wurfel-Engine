@@ -128,6 +128,10 @@ public class CustomGameController extends Controller {
             
             //pause
             //if (input.isKeyDown(Input.Keys.P)) Gdx.app.setPaused(true);
+            //time is set 0 but the game keeps running
+              if (keycode == Input.Keys.P) {
+                setTimespeed(0);
+             } 
 
 
             //reset zoom
@@ -146,6 +150,9 @@ public class CustomGameController extends Controller {
             if (keycode == Input.Keys.ENTER)
                 GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
             
+             if (keycode == Input.Keys.C) {
+                setTimespeed();
+             } 
             return true;
             
         }

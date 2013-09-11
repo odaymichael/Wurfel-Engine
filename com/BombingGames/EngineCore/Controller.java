@@ -11,6 +11,7 @@ import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *A controller manages the map and the game data.
@@ -22,10 +23,13 @@ public class Controller {
     private static Map map;
     private static boolean recalcRequested;
         
-    private AbstractCharacter player;
+
     private View view;
     private ArrayList<WECamera> cameras = new ArrayList();
     private Minimap minimap;
+    /** The speed of time. 1 = real time;*/
+    private float timespeed = 1;
+    private AbstractCharacter player;   
 
     
     /**
@@ -43,6 +47,7 @@ public class Controller {
      * @param delta time since last call
      */
     public void update(int delta) {
+        delta *= timespeed;
         if (lightEngine != null) lightEngine.update(delta);
         
          //update the log
@@ -285,4 +290,21 @@ public class Controller {
     public static LightEngine getLightengine() {
         return lightEngine;
     }
+
+    public float getTimespeed() {
+        return timespeed;
+    }
+
+    public void setTimespeed() {
+        this.timespeed = Float.parseFloat(JOptionPane.showInputDialog("Set the speed of time", "1"));
+    }
+    
+    public void setTimespeed(float timespeed) {
+        this.timespeed = timespeed;
+    }
+    
+    
+    
+    
+    
 }
