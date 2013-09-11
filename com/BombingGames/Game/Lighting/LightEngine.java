@@ -4,6 +4,7 @@ import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Chunk;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.EngineCore.View;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -225,9 +226,24 @@ public class LightEngine {
     public void render(View view){
         if (renderData) {
             
-            //sun position
             //g.setLineWidth(2);
             ShapeRenderer shapeRenderer = view.getShapeRenderer();
+            
+            Gdx.gl10.glLineWidth(2);
+            shapeRenderer.setColor(Color.BLACK);
+            shapeRenderer.begin(ShapeType.Circle);
+            shapeRenderer.circle(posX, posY, size);
+            shapeRenderer.end();
+            
+            shapeRenderer.begin(ShapeType.Circle);
+            shapeRenderer.translate(posX, posY, 0);
+            shapeRenderer.scale(1f, (0.5f), 1f);
+            shapeRenderer.circle(0, 0, size);
+            shapeRenderer.end();
+            shapeRenderer.scale(1f, (2), 1f);
+            shapeRenderer.translate(-posX, -posY, 0);
+            
+            //sun position
             //longitude
             shapeRenderer.setColor(Color.RED);
             shapeRenderer.begin(ShapeType.Line);
