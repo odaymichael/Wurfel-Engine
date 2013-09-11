@@ -133,7 +133,6 @@ public class CustomGameController extends Controller {
                 setTimespeed(0);
              } 
 
-
             //reset zoom
             if (keycode == Input.Keys.Z) {
                 getCameras().get(0).setZoom(1);

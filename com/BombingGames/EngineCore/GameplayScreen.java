@@ -18,7 +18,7 @@ public class GameplayScreen implements Screen{
     
     private View view = null;
     private Controller controller = null;
-
+    
     /**
      * Create the gameplay state.
      */
