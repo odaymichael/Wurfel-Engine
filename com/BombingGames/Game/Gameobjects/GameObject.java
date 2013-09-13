@@ -1,5 +1,6 @@
 package com.BombingGames.Game.Gameobjects;
 
+import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import static com.BombingGames.Game.Gameobjects.Block.CATEGORY;
@@ -91,7 +92,11 @@ public abstract class GameObject {
      * @param view  
      */
     public void render(View view, Coordinate coords) {
-        render(view, coords, PseudoGrey.toColor(lightlevel));
+        Color color = Color.GRAY;
+        if (Controller.getLightengine() != null){
+                color = Controller.getLightengine().getGlobalLight();
+            }
+        render(view, coords,  color.mul(lightlevel));
     }
     
      /**
@@ -109,23 +114,32 @@ public abstract class GameObject {
             int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + getOffsetY();
             sprite.setPosition(xPos, yPos);
             
-            float brightness = PseudoGrey.toFloat(color);
-        
-            if (brightness < .5f){
-                view.setDrawmode(GL11.GL_MODULATE);
-                color.mul(2);
-                color.a = 1;
-            } else {
-                view.setDrawmode(GL11.GL_ADD);
-                color.r -= .5f;
-                color.g -= .5f;
-                color.b -= .5f;
-            }
+            prepareColor(view, color);
 
             sprite.setColor(color);
             sprite.draw(view.getBatch());
         }
     } 
+    
+    /**
+     * Changes the color that it works with the blending.
+     * @param view
+     * @param color 
+     */
+    public void prepareColor(View view, Color color){
+        float brightness = PseudoGrey.toFloat(color);
+        
+        if (brightness < .5f){
+            view.setDrawmode(GL11.GL_MODULATE);
+            color.mul(2);
+            color.a = 1;
+        } else {
+            view.setDrawmode(GL11.GL_ADD);
+            color.r -= .5f;
+            color.g -= .5f;
+            color.b -= .5f;
+        }
+    }
     
     /**
      * Load the spritesheet from memory.

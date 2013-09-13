@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
+import org.lwjgl.opengl.GL11;
 
 /**
  *Creates a virtual camera wich displays the game world on the viewport.  
@@ -147,6 +148,8 @@ public class WECamera extends Camera {
             createDepthList();
                
             view.getBatch().begin();
+            view.setDrawmode(GL11.GL_MODULATE);
+            
             //render vom bottom to top
             for (Renderobject renderobject : depthsort) {
                 Coordinate coords = renderobject.getCoords();//get the coords of the current renderobject

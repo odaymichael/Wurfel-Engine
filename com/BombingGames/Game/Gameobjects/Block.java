@@ -8,13 +8,11 @@ import com.BombingGames.EngineCore.View;
 import static com.BombingGames.Game.Gameobjects.GameObject.OBJECTTYPESCOUNT;
 import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
 import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
-import com.BombingGames.Game.Lighting.PseudoGrey;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import org.lwjgl.opengl.GL11;
 
 /**
  * A Block is a wonderful piece of information and a geometrical object.
@@ -280,7 +278,6 @@ public class Block extends GameObject {
                - (int) (coords.getCellOffset()[2] / Math.sqrt(2)); //add the objects position inside this coordinate
     }
 
-
     /**
      * 
      * @param visible When it is set to false, every side will also get hidden.
@@ -294,7 +291,6 @@ public class Block extends GameObject {
             renderRight = false;
         }
     }
-    
     
     @Override
     public void render(View view, Coordinate coords) {
@@ -311,7 +307,7 @@ public class Block extends GameObject {
                         renderSide(view, coords, Block.LEFTSIDE, Controller.getLightengine().getColorOfSide(Block.LEFTSIDE));
                     if (renderRight)
                         renderSide(view, coords, Block.RIGHTSIDE, Controller.getLightengine().getColorOfSide(Block.RIGHTSIDE));
-                } else super.render(view, coords, PseudoGrey.toColor(getLightlevel()));
+                } else super.render(view, coords, color.mul(getLightlevel()));
             } else 
                 if (hasSides){
                     if (renderTop)
@@ -320,7 +316,7 @@ public class Block extends GameObject {
                         renderSide(view, coords, Block.LEFTSIDE, color);
                     if (renderRight)
                         renderSide(view, coords, Block.RIGHTSIDE, color);
-                } else super.render(view, coords, PseudoGrey.toColor(getLightlevel()));
+                } else super.render(view, coords);
         }
     }
     
@@ -341,18 +337,6 @@ public class Block extends GameObject {
         
         //brightness += getLightlevel()-0.5f;
             
-        float brightness = PseudoGrey.toFloat(color);
-        
-        if (brightness < .5f){
-            view.setDrawmode(GL11.GL_MODULATE);
-            color.mul(2);
-            color.a = 1;
-        } else {
-            view.setDrawmode(GL11.GL_ADD);
-            color.r -= .5f;
-            color.g -= .5f;
-            color.b -= .5f;
-        }
             
         //uncomment these two lines to add a depth-effect (note that it is very dark)
 //        filter.mul((coords.getRelY()-camera.getTopBorder())/
@@ -360,17 +344,19 @@ public class Block extends GameObject {
 //        filter.g *= (coords.getRelY()-camera.getTopBorder())
 //           /(camera.getBottomBorder()-camera.getTopBorder());
         
-        //Color verticeColor = filter.cpy().mul(getLightlevel());
-        Color verticeColor = color;
-        verticeColor.a = 1; 
-        sprite.getVertices()[SpriteBatch.C4] = verticeColor.toFloatBits();
-        sprite.getVertices()[SpriteBatch.C1] = verticeColor.toFloatBits();
+        color.mul(getLightlevel()*2);
+        //Color verticeColor = color;
+        color.a = 1; 
+        
+        prepareColor(view, color);
+        sprite.getVertices()[SpriteBatch.C4] = color.toFloatBits();
+        sprite.getVertices()[SpriteBatch.C1] = color.toFloatBits();
 
-        //verticeColor = filter.tmp().mul(getLightlevel()-((sidenumb != 1)?0.3f:0));
-        verticeColor.a = 1; 
+        color.mul(getLightlevel()*2-((sidenumb != 1)?0.3f:0));
+        color.a = 1; 
 
-        sprite.getVertices()[SpriteBatch.C2] = verticeColor.toFloatBits();
-        sprite.getVertices()[SpriteBatch.C3] = verticeColor.toFloatBits();
+        sprite.getVertices()[SpriteBatch.C2] = color.toFloatBits();
+        sprite.getVertices()[SpriteBatch.C3] = color.toFloatBits();
  
         sprite.draw(view.getBatch());
     }
