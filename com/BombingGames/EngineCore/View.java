@@ -70,7 +70,7 @@ public class View {
         
         //render every camera
         for (WECamera camera : controller.getCameras()) {
-            camera.render(this);
+            camera.render(this, camera);
         }
         
         

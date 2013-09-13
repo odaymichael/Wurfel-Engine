@@ -293,7 +293,7 @@ public class Block extends GameObject {
     }
     
     @Override
-    public void render(View view, Coordinate coords) {
+    public void render(View view, WECamera camera, Coordinate coords) {
         if (isVisible() && !isHidden()) {
             Color color = Color.GRAY;
             if (Controller.getLightengine() != null){
@@ -302,21 +302,21 @@ public class Block extends GameObject {
             if (Controller.getLightengine() != null){
                 if (hasSides) {
                     if (renderTop)
-                        renderSide(view, coords, Block.TOPSIDE, Controller.getLightengine().getColorOfSide(Block.TOPSIDE));
+                        renderSide(view, camera, coords, Block.TOPSIDE, Controller.getLightengine().getColorOfSide(Block.TOPSIDE));
                     if (renderLeft)
-                        renderSide(view, coords, Block.LEFTSIDE, Controller.getLightengine().getColorOfSide(Block.LEFTSIDE));
+                        renderSide(view, camera, coords, Block.LEFTSIDE, Controller.getLightengine().getColorOfSide(Block.LEFTSIDE));
                     if (renderRight)
-                        renderSide(view, coords, Block.RIGHTSIDE, Controller.getLightengine().getColorOfSide(Block.RIGHTSIDE));
-                } else super.render(view, coords, color.mul(getLightlevel()));
+                        renderSide(view, camera, coords, Block.RIGHTSIDE, Controller.getLightengine().getColorOfSide(Block.RIGHTSIDE));
+                } else super.render(view, camera, coords, color.mul(getLightlevel()));
             } else 
                 if (hasSides){
                     if (renderTop)
-                        renderSide(view, coords, Block.TOPSIDE, color);
+                        renderSide(view, camera, coords, Block.TOPSIDE, color);
                     if (renderLeft)
-                        renderSide(view, coords, Block.LEFTSIDE, color);
+                        renderSide(view, camera, coords, Block.LEFTSIDE, color);
                     if (renderRight)
-                        renderSide(view, coords, Block.RIGHTSIDE, color);
-                } else super.render(view, coords);
+                        renderSide(view, camera, coords, Block.RIGHTSIDE, color);
+                } else super.render(view, camera, coords);
         }
     }
     
@@ -324,11 +324,12 @@ public class Block extends GameObject {
     /**
      * Draws a side of a block
      * @param view the view using this render method
+     * @param camera The camera rendering the scene
      * @param coords the coordinates where to render 
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
      * @param color  a tint in which the sprite get's rendered
      */
-    protected void renderSide(final View view, Coordinate coords, final int sidenumb, Color color){
+    protected void renderSide(final View view, WECamera camera, Coordinate coords, final int sidenumb, Color color){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         
         int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);//right side is  half a block more to the right

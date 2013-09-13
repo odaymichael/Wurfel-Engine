@@ -125,9 +125,10 @@ public class WECamera extends Camera {
     
     /**
      * Renders the viewport
-     * @param view  
+     * @param view
+     * @param camera  
      */
-    public void render(View view) {
+    public void render(View view, WECamera camera) {
         if (Controller.getMap() != null) {  
             
             view.getBatch().setProjectionMatrix(combined);
@@ -156,9 +157,9 @@ public class WECamera extends Camera {
                 int indexposition = renderobject.getIndexposition(); //get the entityindex to check if it is an entity
                 
                 if (indexposition == -1) //if a block then get it and draw it
-                    Controller.getMap().getData(coords).render(view, coords);
+                    Controller.getMap().getData(coords).render(view, camera, coords);
                 else //if it's an entity get it and draw it
-                    Controller.getMap().getEntitys().get(indexposition).render(view, coords);    
+                    Controller.getMap().getEntitys().get(indexposition).render(view, camera, coords);    
             }
             
             view.getBatch().end();

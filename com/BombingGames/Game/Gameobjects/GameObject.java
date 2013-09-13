@@ -3,6 +3,7 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
+import com.BombingGames.EngineCore.WECamera;
 import static com.BombingGames.Game.Gameobjects.Block.CATEGORY;
 import com.BombingGames.Game.Lighting.PseudoGrey;
 import com.badlogic.gdx.Gdx;
@@ -89,23 +90,25 @@ public abstract class GameObject {
     /**
      * Draws an object.
      * @param coords the relative coordinates
+     * @param camera 
      * @param view  
      */
-    public void render(View view, Coordinate coords) {
+    public void render(View view, WECamera camera, Coordinate coords) {
         Color color = Color.GRAY;
         if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getGlobalLight();
             }
-        render(view, coords,  color.mul(lightlevel));
+        render(view, camera, coords, color.mul(lightlevel));
     }
     
      /**
      * Draws an object.
      * @param coords the relative coordinates
+     * @param camera 
      * @param view 
      * @param color 
      */
-    public void render(View view, Coordinate coords, Color color) {
+    public void render(View view, WECamera camera, Coordinate coords, Color color) {
         //draw the object except not visible ones
         if (!hidden && visible) {             
             Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
