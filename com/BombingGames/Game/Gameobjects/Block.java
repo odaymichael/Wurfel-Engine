@@ -336,9 +336,6 @@ public class Block extends GameObject {
         int yPos = get2DPosY(coords) + (sidenumb != 1 ? DIM4 : 0);//the top is drawn a quarter blocks higher
         sprite.setPosition(xPos, yPos);
         
-        //brightness += getLightlevel()-0.5f;
-            
-            
         //uncomment these two lines to add a depth-effect (note that it is very dark)
 //        filter.mul((coords.getRelY()-camera.getTopBorder())/
 //            (camera.getBottomBorder()-camera.getTopBorder()));
