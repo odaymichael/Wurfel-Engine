@@ -243,6 +243,21 @@ public class LightEngine {
             shapeRenderer.scale(1f, (2), 1f);
             shapeRenderer.translate(-posX, -posY, 0);
             
+            shapeRenderer.setColor(Color.ORANGE);
+            if ((sun.getMaxAngle()/90f-0.5f) != 0) {
+                shapeRenderer.begin(ShapeType.Circle);
+                shapeRenderer.translate(posX, posY, 0);
+                shapeRenderer.scale(1f, (sun.getMaxAngle()/90f-0.5f), 1f);
+                shapeRenderer.circle(0, 0, size);
+                shapeRenderer.end();
+                shapeRenderer.scale(1f, (1/(sun.getMaxAngle()/90f-0.5f)), 1f);
+                shapeRenderer.translate(-posX, -posY, 0);
+            } else {
+                shapeRenderer.begin(ShapeType.Line);
+                shapeRenderer.line(posX-size, posY, posX+size, posY);
+                shapeRenderer.end();
+            }
+            
             //sun position
             //longitude
             shapeRenderer.setColor(Color.RED);
