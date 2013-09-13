@@ -8,14 +8,14 @@ import com.BombingGames.EngineCore.Map.Coordinate;
  */
 public interface IsSelfAware{
    /**
-     * Return the coordinates.
-     * @return
+     * Return the coordinates of the SelfAware object.
+     * @return the coordinates where the object is located
      */
     public Coordinate getCoords();
     
     /**
      * Set the coordinates without safety check.
-     * @param coords 
+     * @param coords the coordiantes you want to set
      */
     public void setCoords(Coordinate coords);
 }
