@@ -134,7 +134,7 @@ public class WECamera extends Camera {
             
             view.getBatch().setProjectionMatrix(combined);
              
-            //the parameter for the posY  is a bit strange because the y-axis is turned
+            //the parameter for the posY is a bit strange because the y-axis is turned
             Gdx.gl.glViewport(
                 viewportPosX,
                 (int) (Gdx.graphics.getHeight()-viewportHeight-viewportPosY),
@@ -142,18 +142,28 @@ public class WECamera extends Camera {
                 (int) (viewportHeight)
             );
             
-            
             //move the viewport    
             translate(new Vector3(viewportPosX, viewportPosY, 0));
             position.set(new Vector3(outputPosX+ get2DWidth()/2 , outputPosY+ get2DHeight()/2 , 0));
                         
             //render map
             createDepthList();
-            Controller.getMap().render(view, this);
+               
+            view.getBatch().begin();
+            //render vom bottom to top
+            for (Renderobject renderobject : depthsort) {
+                Coordinate coords = renderobject.getCoords();//get the coords of the current renderobject
+                int indexposition = renderobject.getIndexposition(); //get the entityindex to check if it is an entity
+                
+                if (indexposition == -1) //if a block then get it and draw it
+                    Controller.getMap().getData(coords).render(view, coords);
+                else //if it's an entity get it and draw it
+                    Controller.getMap().getEntitys().get(indexposition).render(view, coords);    
+            }
+            
+            view.getBatch().end();
 
-                                    
-            //reverse both translations
-            //move the viewport           
+            //move the viewport back - reverse translation   
             translate(new Vector3(-viewportPosX, -viewportPosY, 0));
         }
     }
@@ -388,36 +398,7 @@ public class WECamera extends Camera {
         if(low < right) sortDepthList(low, right);
         if(left < high) sortDepthList(left, high);
     }
-    
-    /**
-        * Returns a coordiante triple of an ranking for the rendering order
-        * @param index the index
-        * @return the coordinate triple with x,y,z
-        */
-    public Coordinate getDepthsortCoord(int index) {
-        Renderobject item = depthsort.get(index);
-        Coordinate triple = item.getCoords();
-        return triple;
-    }
-
-        /**
-        * Returns the entityindex of a element i in the depthsort list.
-        * @param i index of the depthsort list
-        * @return the entityindex
-        */
-    public int getEntityIndex(int i) {
-        return depthsort.get(i).getEntityindex();
-    }
-
-    /**
-        * Returns the lenght of list of ranking for the rendering order
-        * @return length of the render list
-        */
-    public int depthsortlistSize(){
-        return depthsort.size();
-    }
-    
-    
+        
     /**
      * Filters every Block (and side) wich is not visible. Boosts rendering speed.
      */

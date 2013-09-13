@@ -5,12 +5,11 @@ import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
 
 /**
- *A map stores nine chunks as part of a bigger map.
+ *A map stores nine chunks as part of a bigger map. It also contains the entities.
  * @author Benedikt Vogler
  */
 public class Map {
@@ -19,7 +18,7 @@ public class Map {
      */
     public static final float GRAVITY = 9.81f;
     /**
-     *
+     *Set if the map should load or generate new chunks when the camera reaches an end of the map.
      */
     public final static boolean ENABLECHUNKSWITCH = true;
     
@@ -46,7 +45,7 @@ public class Map {
     
   
     /**
-     *
+     *Creates a map. Fill the map with fillWithBlocks(boolean load);
      * @param newMap  when "true" a new map os generated, when "false" a map is loaded from disk 
      */
     public Map(boolean newMap){
@@ -71,10 +70,16 @@ public class Map {
         blocksX = Chunk.getBlocksX()*3;
         blocksY = Chunk.getBlocksY()*3;
         blocksZ = Chunk.getBlocksZ();
-        data = new Block[blocksX][blocksY][blocksZ];//create Array where teh data is stored
-        
-        //set the offset for every cell
-        cellOffset = new float[blocksX][blocksY][blocksZ][];
+        data = new Block[blocksX][blocksY][blocksZ];//create Array where the data is stored
+        cellOffset = new float[blocksX][blocksY][blocksZ][];//set the offset for every cell
+    }
+    
+    /**
+     * Fill the data array of the map with blocks. Also resets the cellOffset.
+     */
+    public void fillWithBlocks(){
+        Gdx.app.log("DEBUG","Filling the map with blocks...");
+
         for (int x = 0; x < cellOffset.length; x++) {
             for (int y = 0; y < cellOffset[x].length; y++) {
                 for (int z = 0; z < cellOffset[x][y].length; z++) {
@@ -82,24 +87,16 @@ public class Map {
                 }
             }   
         }
-    }
-    
-    /**
-     * Fill the data array of the map with blocks.
-     */
-    public void fillWithBlocks(){
-        Gdx.app.log("DEBUG","Filling the map with blocks...");
-
+        
         //Fill the nine chunks
-        Chunk tempchunk;
+        Chunk tmpChunk;
         int chunkpos = 0;
         
         for (int y=-1; y < 2; y++)
             for (int x=-1; x < 2; x++){
                 coordlist[chunkpos][0] = x;
                 coordlist[chunkpos][1] = y;  
-                tempchunk = new Chunk(chunkpos, x, y, newMap);
-                insertChunk(chunkpos, tempchunk);
+                insertChunk(chunkpos, new Chunk(chunkpos, x, y, newMap));
                 chunkpos++;
         }
        
@@ -136,7 +133,7 @@ public class Map {
      * @param array
      * @return The copy of the array-
      */
-    private Block[][][] copyOf3Dim(Block[][][] array) {
+    private static Block[][][] copyOf3Dim(Block[][][] array) {
         Block[][][] copy;
         copy = new Block[array.length][][];
         for (int i = 0; i < array.length; i++) {
@@ -182,7 +179,7 @@ public class Map {
                 coordlist[pos][1] += (newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0));
 
                 if (isMovingChunkPossible(pos, newmiddle)){
-                    insertChunk(pos, getChunk(data_copy, pos - 4 + newmiddle));
+                    insertChunk(pos, copyChunk(data_copy, pos - 4 + newmiddle));
                 } else {
 
                     insertChunk(
@@ -190,7 +187,7 @@ public class Map {
                             new Chunk(pos,
                                 coordlist[pos][0],
                                 coordlist[pos][1],
-                                MainMenuScreen.shouldLoadMap()
+                                newMap
                             )
                     );
 
@@ -233,9 +230,9 @@ public class Map {
      * @param src The map
      * @param cellOffset The chunk number
      */ 
-    private Chunk getChunk(Block[][][] src, int pos) {
+    private Chunk copyChunk(Block[][][] src, int pos) {
         Chunk tmpChunk = new Chunk();
-        //copy the data in two loops and arraycopy
+        //copy the data in two loops and then do an arraycopy
         for (int x = Chunk.getBlocksX()*(pos % 3);
                 x < Chunk.getBlocksX()*(pos % 3+1);
                 x++
@@ -258,13 +255,13 @@ public class Map {
     /**
      * Inserts a chunk in the map.
      * @param cellOffset The position in the grid
-     * @param newChunk The chunk you want to insert
+     * @param chunk The chunk you want to insert
      */
-    private void insertChunk(int pos, Chunk newChunk) {
+    private void insertChunk(int pos, Chunk chunk) {
         for (int x=0;x < Chunk.getBlocksX(); x++)
             for (int y=0;y < Chunk.getBlocksY();y++) {
                 System.arraycopy(
-                    newChunk.getData()[x][y],
+                    chunk.getData()[x][y],
                     0,
                     data[x+ Chunk.getBlocksX()*(pos%3)][y+ Chunk.getBlocksY()*Math.abs(pos/3)],
                     0,
@@ -273,33 +270,6 @@ public class Map {
             }
     }
     
-    
-    /**
-     * Draws the map
-     * @param view 
-     * @param camera 
-     */
-    public void render(View view, WECamera camera) {
-        //if (Gameplay.getController().hasGoodGraphics()) Block.getSpritesheet().bind();
-        //if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
-        
-        view.getBatch().begin();
-        //Block.getSpritesheet().getFullImage().startUse();
-        //render vom bottom to top
-        for (int i=0; i < camera.depthsortlistSize() ;i++) {
-            Coordinate coords = camera.getDepthsortCoord(i);//get the coords of the current renderobject
-            int entitynumber = camera.getEntityIndex(i); //get the entityindex to check if it is an entity
-            
-            if (entitynumber == -1) //if a block then  get it and draw it
-                getData(coords).render(view, coords);
-            else //if it's an entity get it and draw it
-                entitylist.get(entitynumber).render(view, coords);        
-        }
-        view.getBatch().end();
-       //Block.getSpritesheet().getFullImage().endUse(); 
-      // if (Gameplay.getView().hasGoodGraphics()) GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
-    }
-
    /**
      *Get the coordinates of a chunk. 
      * @param pos 
@@ -308,7 +278,6 @@ public class Map {
     public int[] getChunkCoords(int pos) {
         return coordlist[pos];
     }
-    
    
     
     /**
@@ -397,7 +366,7 @@ public class Map {
     }
         
    /**
-     * 
+     * Set a block with safety checks.
      * @param coords
      * @param block
      */
@@ -424,7 +393,7 @@ public class Map {
     }
     
     /**
-     * 
+     * Set a block with safety checks.
      * @param coord 
      * @param block
      */
@@ -435,7 +404,6 @@ public class Map {
             coord.getZ()},
             block);
     }
-    
     
     /**
      * a method who gives random blocks offset
@@ -461,8 +429,6 @@ public class Map {
         }
         Controller.requestRecalc();
     }
-    
-   
     
     /**
      * Returns the entitylist
@@ -507,6 +473,12 @@ public class Map {
         cellOffset[coord.getRelX()][coord.getRelY()][coord.getZSafe()][field] = value;
     }
     
+    /**
+     * Find every instance of a special class e.g. find every AbstractCharacter
+     * @param <type>
+     * @param type
+     * @return a list with the entitys
+     */
     public <type> ArrayList<type> getAllEntitysOfType(Class type) {
         ArrayList<type> list=new ArrayList<type>();
         //e inst=(e) e.newInstance();

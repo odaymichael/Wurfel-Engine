@@ -48,7 +48,7 @@ public class Renderobject {
      * 
      * @return
      */
-    public int getEntityindex() {
+    public int getIndexposition() {
         return entityindex;
     }
 
