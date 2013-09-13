@@ -84,6 +84,8 @@ public class Controller {
         for (AbstractEntity entity : map.getEntitys())
             entity.update(delta);
         
+        
+        
         for (WECamera camera : cameras)
             camera.update();
                 

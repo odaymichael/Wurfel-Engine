@@ -391,7 +391,7 @@ public abstract class GameObject {
 
     /**
      * Hide this object and prevent it from beeing rendered.
-     * @param visible Sets the visibility. When it is false, every side will also get hidden
+     * @param visible Sets the visibility. When it is set to false, every side will also get hidden.
      */
     public void setVisible(boolean visible) {
         this.visible = visible;

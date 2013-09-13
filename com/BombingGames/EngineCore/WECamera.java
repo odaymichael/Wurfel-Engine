@@ -407,10 +407,10 @@ public class WECamera extends Camera {
                 for (int z=0; z < Map.getBlocksZ(); z++) {
                     Block block = mapdata[x][y][z];
                     
-                    //Blocks with offset are not in the grid, so can not be calculated => always visible
-                    boolean notCalculatable = !block.hasSides() || new Coordinate(x,y,z, true).hasOffset();
-                    block.setVisible(notCalculatable);
-                    if (notCalculatable) {
+                    //Blocks with offset are not in the grid, so can not be analysed => always visible
+                    boolean notAnalyzable = !block.hasSides() || new Coordinate(x,y,z, true).hasOffset();
+                    block.setVisible(notAnalyzable);
+                    if (notAnalyzable) {
                         block.setSideVisibility(0, true);
                         block.setSideVisibility(1, true);
                         block.setSideVisibility(2, true);
@@ -589,7 +589,7 @@ public class WECamera extends Camera {
     }
     
     /**
-     * Traces the ray to a specific block.
+     * Traces the ray to a specific block. This is like the raytracing but only a single ray.
      * @param coord The coordinate where the ray should point to.
      * @param neighbours True when neighbours block also should be scanned
      */
