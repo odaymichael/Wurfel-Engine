@@ -18,7 +18,7 @@ public class LightEngine {
     /**
      * The Version of the light engine.
      */
-    public static final String Version = "1.1.1";
+    public static final String Version = "1.1.2";
     
     private boolean renderData = false;
     //diagramm data
@@ -43,20 +43,19 @@ public class LightEngine {
     /**the brightness of each side. The value should be between 0 and 1*/
     private static float I_0, I_1, I_2;
     
-    private Sun sun;
-    private Moon moon; 
+    private GlobalLightSource sun;
+    private GlobalLightSource moon; 
 
     /**
      * 
      */
     public LightEngine() {
-        sun = new Sun();
-        moon = new Moon();
+        sun = new GlobalLightSource(-Controller.getMap().getWorldSpinDirection(), 0, new Color(255, 255, 255, 1), 70);
+        moon = new GlobalLightSource(180-Controller.getMap().getWorldSpinDirection(), 0, new Color(0.2f,0.4f,0.8f,1), 45);
     }
 
     public LightEngine(int xPos, int yPos) {
-        sun = new Sun();
-        moon = new Moon();
+        this();
         this.posX = xPos;
         this.posY = yPos;
     }
@@ -189,7 +188,7 @@ public class LightEngine {
      *
      * @return
      */
-    public Sun getSun() {
+    public GlobalLightSource getSun() {
         return sun;
     }
 
@@ -197,7 +196,7 @@ public class LightEngine {
      *
      * @return
      */
-    public Moon getMoon() {
+    public GlobalLightSource getMoon() {
         return moon;
     }
 
@@ -229,12 +228,14 @@ public class LightEngine {
             //g.setLineWidth(2);
             ShapeRenderer shapeRenderer = view.getShapeRenderer();
             
+            //surrounding sphere
             Gdx.gl10.glLineWidth(2);
             shapeRenderer.setColor(Color.BLACK);
             shapeRenderer.begin(ShapeType.Circle);
             shapeRenderer.circle(posX, posY, size);
             shapeRenderer.end();
             
+            //cut through
             shapeRenderer.begin(ShapeType.Circle);
             shapeRenderer.translate(posX, posY, 0);
             shapeRenderer.scale(1f, (0.5f), 1f);
