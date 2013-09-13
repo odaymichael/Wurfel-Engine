@@ -25,7 +25,7 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     
     /** A list containing the offset of the objects. */
     public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][10][2];
-
+    
     static {
         NAMELIST[40] = "player";
         OFFSET[40][0][0] = 54;
@@ -46,6 +46,8 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
         OFFSET[40][7][1] = 33;
         NAMELIST[41] = "smoke test";
     }
+    
+    private boolean destroy;
    
     /**
      * Create an abstractEntity. You should use Block.getInstance(int) 
@@ -225,4 +227,15 @@ public abstract class AbstractEntity extends GameObject implements IsSelfAware {
     public int getOffsetY() {
         return OFFSET[getId()][getValue()][1];
     } 
+    
+        /**
+     * Deletes the object from the map. The opposite to exist();
+     */
+    public void destroy(){
+        destroy=true;
+    }
+
+    public boolean shouldBeDestroyed() {
+        return destroy;
+    }
 }

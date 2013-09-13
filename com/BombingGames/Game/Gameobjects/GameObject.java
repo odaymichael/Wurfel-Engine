@@ -40,7 +40,7 @@ public abstract class GameObject {
     
     private final int id; 
     private int value;
-    private boolean obstacle, transparent, visible, hidden, destroy; 
+    private boolean obstacle, transparent, visible, hidden; 
     private float lightlevel = 0.5f;
     private int dimensionY = 1;    
     
@@ -412,16 +412,5 @@ public abstract class GameObject {
      */
     public void setDimensionY(int dimensionY) {
         this.dimensionY = dimensionY;
-    }
-    
-    /**
-     * Deletes the object from the map. The opposite to exist();
-     */
-    public void destroy(){
-        destroy=true;
-    }
-
-    public boolean shouldBeDestroyed() {
-        return destroy;
     }
 }
