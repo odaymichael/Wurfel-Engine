@@ -333,4 +333,13 @@ public class Coordinate {
     public Coordinate cpy () {
             return new Coordinate(this);
     }
+    
+    /**
+     * Checks if the coordiantes are accessable with the currently loaded Chunks.
+     * @return 
+     */
+    public boolean onLoadedMap(){
+        return (getRelX() >= 0 && getRelX() < Map.getBlocksX()
+            && getRelY() >= 0 && getRelY() < Map.getBlocksY());
+    }
 }
