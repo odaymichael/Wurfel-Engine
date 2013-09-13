@@ -325,7 +325,7 @@ public abstract class GameObject {
 
     /**
      * Returns true, when set as hidden. Hidden objects are not rendered even when they are visible ("visible" by the meaning of the raytracing).
-     * @return the locked visiblity
+     * @return if the object is invisible
      */
     public boolean isHidden() {
         return hidden;
@@ -374,7 +374,7 @@ public abstract class GameObject {
     }
 
     /**
-     * Make the Object transparent
+     * Has the object transparent areas?
      * @param transparent
      */
     public void setTransparent(boolean transparent) {
@@ -390,15 +390,16 @@ public abstract class GameObject {
     }
 
     /**
-     * Hide this object and prevent it from beeing rendered.
-     * @param visible Sets the visibility. When it is set to false, every side will also get hidden.
+     * Hide this object and prevent it from beeing rendered. Don't use this to hide objects. This data is only for rendering data and view specific not for gameworld information. This should be just used for setting during the rendering process.
+     * @param visible Sets the visibility.
+     * @see com.BombingGames.Game.Gameobjects.GameObject#setHidden(boolean) 
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
     /**
-     * 
+     * Hide an object. It won't be rendered even if it is visible.
      * @param hidden
      */
     public void setHidden(boolean hidden){

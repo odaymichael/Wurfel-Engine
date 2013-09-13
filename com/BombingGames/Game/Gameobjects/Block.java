@@ -280,6 +280,11 @@ public class Block extends GameObject {
                - (int) (coords.getCellOffset()[2] / Math.sqrt(2)); //add the objects position inside this coordinate
     }
 
+
+    /**
+     * 
+     * @param visible When it is set to false, every side will also get hidden.
+     */
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
@@ -293,7 +298,7 @@ public class Block extends GameObject {
     
     @Override
     public void render(View view, Coordinate coords) {
-        if (!isHidden() && isVisible()) {
+        if (isVisible() && !isHidden()) {
             Color color = Color.GRAY;
             if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getGlobalLight();
