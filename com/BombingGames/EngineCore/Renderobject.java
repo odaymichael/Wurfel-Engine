@@ -5,7 +5,7 @@ import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 
 /**
- *Saves the information for the rendering.
+ *Saves the information for the rendering. This class is only used in the renderin process.
  * @author Benedikt
  */
 public class Renderobject {
