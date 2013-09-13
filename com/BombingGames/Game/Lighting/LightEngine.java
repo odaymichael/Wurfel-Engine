@@ -169,7 +169,7 @@ public class LightEngine {
         for (int x=0; x < Map.getBlocksX(); x++){
             for (int y=0; y < Map.getBlocksY(); y++) {
                 //find top most renderobject
-                int topmost = Chunk.getBlocksZ()-1;
+                int topmost = Chunk.getBlocksZ()-1;//start at top
                 while (Controller.getMap().getData(x,y,topmost).isTransparent() && topmost > 0 ){
                     topmost--;
                 }
