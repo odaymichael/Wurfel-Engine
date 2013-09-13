@@ -116,7 +116,7 @@ public class GlobalLightSource {
      *
      * @param delta
      */
-    public void update(int delta) {    
+    public void update(float delta) {    
         //automove
         if (LONGSPEED != 0) {
             longPos += LONGSPEED * delta;

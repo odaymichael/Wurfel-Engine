@@ -376,7 +376,7 @@ public class Block extends GameObject {
     }
 
     @Override
-    public void update(int delta) {
+    public void update(float delta) {
     }
     
 

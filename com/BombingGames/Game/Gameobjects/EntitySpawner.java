@@ -23,7 +23,7 @@ public class EntitySpawner extends Block implements IsSelfAware {
     
 
     @Override
-    public void update(int delta) {
+    public void update(float delta) {
         int[] coordsOnTop = coords.addVectorCpy(0, 0, 1).getRel();
         
         //get every character

@@ -31,7 +31,7 @@ public class AnimatedEntity extends AbstractEntity implements Animatable {
      * @param delta the time wich has passed since last update
      */
     @Override
-    public void update(int delta) {
+    public void update(float delta) {
         if (running) {
             counter += delta;
             if (counter >= animationsduration[getValue()]){

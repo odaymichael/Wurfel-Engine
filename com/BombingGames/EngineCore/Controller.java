@@ -47,7 +47,7 @@ public class Controller {
      * Main method which is called every refresh.
      * @param delta time since last call
      */
-    public void update(int delta) {
+    public void update(float delta) {
         delta *= timespeed;
         if (lightEngine != null) lightEngine.update(delta);
         
@@ -314,9 +314,4 @@ public class Controller {
     public void setTimespeed(float timespeed) {
         this.timespeed = timespeed;
     }
-    
-    
-    
-    
-    
 }

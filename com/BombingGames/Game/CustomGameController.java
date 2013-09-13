@@ -64,7 +64,7 @@ public class CustomGameController extends Controller {
 
     
     @Override
-    public void update(int delta){
+    public void update(float delta){
         //get input and do actions
         Input input = Gdx.input;
         

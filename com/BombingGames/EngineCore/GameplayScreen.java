@@ -42,7 +42,7 @@ public class GameplayScreen implements Screen{
 
     @Override
     public void render(float delta) {
-        controller.update((int) (delta*1000));
+        controller.update(delta*1000);
         view.render();
     }
 

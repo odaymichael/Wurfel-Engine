@@ -39,7 +39,7 @@ public class Sea extends Block implements IsSelfAware{
     }
 
     @Override
-    public void update(int delta) {
+    public void update(float delta) {
         coords.setCellOffsetZ(
             startvalue +
             (float) (Math.sin(
@@ -50,7 +50,7 @@ public class Sea extends Block implements IsSelfAware{
         );
     }
     
-    public static void staticUpdate(int delta){
+    public static void staticUpdate(float delta){
         currentX += delta*wavespeed;
     }
     
