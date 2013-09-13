@@ -1,6 +1,5 @@
 package com.BombingGames.EngineCore;
 
-import com.BombingGames.EngineCore.Map.Chunk;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
@@ -48,8 +47,6 @@ public class WECamera extends Camera {
 	up.set(0, -1, 0);
 	direction.set(0, 0, 1);
 	position.set(equalizationScale*zoom * viewportWidth / 2.0f, equalizationScale*zoom * viewportHeight / 2.0f, 0);        
-        
-
         
         //set the camera's focus to the center of the map
         outputPosX = Coordinate.getMapCenter().get2DPosX() - get2DWidth() / 2;
