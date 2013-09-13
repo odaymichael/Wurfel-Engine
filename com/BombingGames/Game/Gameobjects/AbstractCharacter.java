@@ -61,7 +61,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
      * @param left move left?
      *  @param right move right?
      * @param walkingspeed the higher the speed the bigger the steps. Should be in m/s.
-     * @throws SlickException
      */
     public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed) {
         if (up || down || left || right){
@@ -100,142 +99,145 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     @Override
     public void update(int delta) {
-        //scale that the velocity vector is always an unit vector (only x and y)
-        double vectorLenght = Math.sqrt(dir[0]*dir[0] + dir[1]*dir[1]);
-        if (vectorLenght > 0){
-            dir[0] /= vectorLenght;
-            dir[1] /= vectorLenght;
-        }
-        
-        //slow walking down
-        if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
-        if (speed < 0) speed = 0;
-            
-        float oldPositionX = getPositionX();
-        float oldPositionY = getPositionY();
-        float oldHeight = getCoords().getHeight();
-        
-        /*VERTICAL MOVEMENT*/
-        //calculate new height
-        float t = delta/1000f; //t = time in s
-        dir[2] += -Map.GRAVITY*t; //in m/s
-        getCoords().setHeight(getCoords().getHeight() + dir[2] * GAMEDIMENSION * t); //in m
-        
-        //check new neight for colission
-        //land if standing in or under 0-level or there is an obstacle
-        if ((dir[2] <= 0 && onGround()) //land when moving down and standing on ground
-        ) {
-            //stop sound
-            if (fallingSound != null) fallingSound.stop();
-            dir[2] = 0;
-            //set on top of block
-            getCoords().setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION);
-        }
-        
-        
-        /*HORIZONTAL MOVEMENT*/
-        //calculate new position
-        float newx = getPositionX() + delta * speed * dir[0];
-        float newy = getPositionY() + delta * speed * dir[1];
-
-        //if movement allowed => move player   
-        if (! horizontalColission(newx, newy, oldPositionX, oldPositionY)) {                
-            setPositionX(newx);
-            setPositionY(newy);
-
-            //track the coordiante change, if there is one
-            int sidennumb = getSideNumb();              
-            switch(sidennumb) {
-                case 0:
-                case 1:
-                        makeCoordinateStep(1, -1);
-                        break;
-                case 2:    
-                case 3:
-                        makeCoordinateStep(1, 1);
-                        break;
-                case 4:
-                case 5:
-                        makeCoordinateStep(-1, 1);
-                        break;
-                case 6:
-                case 7:
-                        makeCoordinateStep(-1, -1);
-                        break;    
+        if (getCoords().onLoadedMap()) {
+            //scale that the velocity vector is always an unit vector (only x and y)
+            double vectorLenght = Math.sqrt(dir[0]*dir[0] + dir[1]*dir[1]);
+            if (vectorLenght > 0){
+                dir[0] /= vectorLenght;
+                dir[1] /= vectorLenght;
             }
-        }
-        
-        //graphic
-        if (dir[0] < -Math.sin(Math.PI/3)){
-            setValue(1);//west
-        } else {
-            if (dir[0] < - 0.5){
-                //y
-                if (dir[1]<0){
-                    setValue(2);//north-west
-                } else {
-                    setValue(0);//south-east
+
+            //slow walking down
+            if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
+            if (speed < 0) speed = 0;
+
+            float oldPositionX = getPositionX();
+            float oldPositionY = getPositionY();
+            float oldHeight = getCoords().getHeight();
+
+            /*VERTICAL MOVEMENT*/
+            //calculate new height
+            float t = delta/1000f; //t = time in s
+            dir[2] += -Map.GRAVITY*t; //in m/s
+            getCoords().setHeight(getCoords().getHeight() + dir[2] * GAMEDIMENSION * t); //in m
+
+            //check new neight for colission
+            //land if standing in or under 0-level or there is an obstacle
+            if ((dir[2] <= 0 && onGround()) //land when moving down and standing on ground
+            ) {
+                //stop sound
+                if (fallingSound != null) fallingSound.stop();
+                dir[2] = 0;
+                //set on top of block
+                getCoords().setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION);
+            }
+
+
+            /*HORIZONTAL MOVEMENT*/
+            //calculate new position
+            float newx = getPositionX() + delta * speed * dir[0];
+            float newy = getPositionY() + delta * speed * dir[1];
+
+            //if movement allowed => move player   
+            if (! horizontalColission(newx, newy, oldPositionX, oldPositionY)) {                
+                setPositionX(newx);
+                setPositionY(newy);
+
+                //track the coordiante change, if there is one
+                int sidennumb = getSideNumb();              
+                switch(sidennumb) {
+                    case 0:
+                    case 1:
+                            makeCoordinateStep(1, -1);
+                            break;
+                    case 2:    
+                    case 3:
+                            makeCoordinateStep(1, 1);
+                            break;
+                    case 4:
+                    case 5:
+                            makeCoordinateStep(-1, 1);
+                            break;
+                    case 6:
+                    case 7:
+                            makeCoordinateStep(-1, -1);
+                            break;    
                 }
+            }
+
+            //graphic
+            if (dir[0] < -Math.sin(Math.PI/3)){
+                setValue(1);//west
             } else {
-                if (dir[0] <  0.5){
+                if (dir[0] < - 0.5){
                     //y
                     if (dir[1]<0){
-                        setValue(3);//north
-                    }else{
-                        setValue(7);//south
+                        setValue(2);//north-west
+                    } else {
+                        setValue(0);//south-east
                     }
-                }else {
-                    if (dir[0] < Math.sin(Math.PI/3)) {
+                } else {
+                    if (dir[0] <  0.5){
                         //y
-                        if (dir[1] < 0){
-                            setValue(4);//north-east
-                        } else{
-                            setValue(6);//sout-east
+                        if (dir[1]<0){
+                            setValue(3);//north
+                        }else{
+                            setValue(7);//south
                         }
-                    } else{
-                        setValue(5);//east
+                    }else {
+                        if (dir[0] < Math.sin(Math.PI/3)) {
+                            //y
+                            if (dir[1] < 0){
+                                setValue(4);//north-east
+                            } else{
+                                setValue(6);//sout-east
+                            }
+                        } else{
+                            setValue(5);//east
+                        }
                     }
                 }
             }
-        }
-        if (SPRITESPERDIR==3){
-            //animation
-            walkingAnimationCounter += delta*speed*4;
-            if (walkingAnimationCounter > 1000) walkingAnimationCounter=0;    
+            if (SPRITESPERDIR==3){
+                //animation
+                walkingAnimationCounter += delta*speed*4;
+                if (walkingAnimationCounter > 1000) walkingAnimationCounter=0;    
 
-            if (walkingAnimationCounter >750) setValue(getValue()+16);
-            else if (walkingAnimationCounter >250 && walkingAnimationCounter <500) setValue(getValue()+8);
-        }
+                if (walkingAnimationCounter >750) setValue(getValue()+16);
+                else if (walkingAnimationCounter >250 && walkingAnimationCounter <500) setValue(getValue()+8);
+            }
 
-        //uncomment this line to see where to player stands:
-        //Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
-        
-        /* SOUNDS */
-        //should the runningsound be played?
-        if (runningSound != null) {
-            if (speed < 0.5f) {
-                runningSound.stop();
-                runningSoundPlaying = false;
-            } else {
-                if (!runningSoundPlaying){
-                    runningSound.play();
-                    runningSoundPlaying = true;
+            //uncomment this line to see where to player stands:
+            //Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
+
+            /* SOUNDS */
+            //should the runningsound be played?
+            if (runningSound != null) {
+                if (speed < 0.5f) {
+                    runningSound.stop();
+                    runningSoundPlaying = false;
+                } else {
+                    if (!runningSoundPlaying){
+                        runningSound.play();
+                        runningSoundPlaying = true;
+                    }
+                }
+            }
+
+
+            //should the fallingsound be played?
+            if (fallingSound != null) {
+                if (dir[2] < -1
+                    && !fallingSoundPlaying
+                ){
+                    fallingSound.play();
+                    fallingSoundPlaying = true;
+                }else {
+                    fallingSound.stop();
+                    fallingSoundPlaying = false;
                 }
             }
         }
-
-        
-        //should the fallingsound be played?
-        if (fallingSound != null)
-            if (dir[2] < -1
-                && !fallingSoundPlaying
-            ){
-                fallingSound.play();
-                fallingSoundPlaying = true;
-            }else {
-                fallingSound.stop();
-                fallingSoundPlaying = false;
-            }
     }
     
     /**
