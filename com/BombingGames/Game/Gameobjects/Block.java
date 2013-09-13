@@ -5,6 +5,7 @@ import com.BombingGames.EngineCore.Map.Coordinate;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
 import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
 import com.BombingGames.EngineCore.View;
+import com.BombingGames.EngineCore.WECamera;
 import static com.BombingGames.Game.Gameobjects.GameObject.OBJECTTYPESCOUNT;
 import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
 import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
@@ -337,10 +338,10 @@ public class Block extends GameObject {
         sprite.setPosition(xPos, yPos);
         
         //uncomment these two lines to add a depth-effect (note that it is very dark)
-//        filter.mul((coords.getRelY()-camera.getTopBorder())/
-//            (camera.getBottomBorder()-camera.getTopBorder()));
-//        filter.g *= (coords.getRelY()-camera.getTopBorder())
-//           /(camera.getBottomBorder()-camera.getTopBorder());
+        color.mul((float)(camera.getBottomBorder()-camera.getTopBorder())/(coords.getRelY()-camera.getTopBorder())
+            );
+        //color.g *= (coords.getRelY()-camera.getBottomBorder())
+         //  /(camera.getBottomBorder()-camera.getTopBorder());
         
         color.mul(getLightlevel()*2);
         //Color verticeColor = color;
