@@ -11,6 +11,7 @@ import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -301,7 +302,13 @@ public class Controller {
     }
 
     public void setTimespeed() {
-        this.timespeed = Float.parseFloat(JOptionPane.showInputDialog("Set the speed of time", "1"));
+        JFrame frame = new JFrame("InputDialog Example #2");
+        try {
+            this.timespeed = Float.parseFloat(JOptionPane.showInputDialog(frame, "Use dot as separator.", "Set the speed of time", JOptionPane.QUESTION_MESSAGE));
+        } catch(NumberFormatException e) {
+            this.timespeed = 1;
+            Gdx.app.log("Error", "Invalid nubmer entered: "+e.toString());
+        }
     }
     
     public void setTimespeed(float timespeed) {
