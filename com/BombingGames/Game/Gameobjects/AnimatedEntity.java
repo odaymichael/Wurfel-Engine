@@ -43,6 +43,7 @@ public class AnimatedEntity extends AbstractEntity implements Animatable {
                     else{//delete
                         setHidden(true);
                         setValue(getValue()-1);
+                        destroy();
                     }
             }
         }

@@ -56,7 +56,7 @@ public class EntitySpawner extends Block implements IsSelfAware {
 
     private void trigger() {
         GameplayScreen.msgSystem().add("You are standing on: " + coords.getRelX() +"," + coords.getRelY() +","+ coords.getZ(), "System");
-        AbstractEntity.getInstance(40, 0, coords.addVectorCpy(0, 2, 1)).exist();
+        AbstractEntity.getInstance(41, 0, coords.addVectorCpy(0, 2, 1)).exist();
     }
     
 }
