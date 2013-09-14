@@ -338,14 +338,12 @@ public class Block extends GameObject {
         sprite.setPosition(xPos, yPos);
         
         //uncomment these two lines to add a depth-effect (note that it is very dark)
-        color.mul((float)(camera.getBottomBorder()-camera.getTopBorder())/(coords.getRelY()-camera.getTopBorder())
-            );
+        //color.mul((float)(camera.getBottomBorder()-camera.getTopBorder())/(coords.getRelY()-camera.getTopBorder())
+         //   );
         //color.g *= (coords.getRelY()-camera.getBottomBorder())
          //  /(camera.getBottomBorder()-camera.getTopBorder());
         
         color.mul(getLightlevel()*2);
-        //Color verticeColor = color;
-        color.a = 1; 
         
         prepareColor(view, color);
         sprite.getVertices()[SpriteBatch.C4] = color.toFloatBits();
