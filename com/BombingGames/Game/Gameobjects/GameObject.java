@@ -132,16 +132,17 @@ public abstract class GameObject {
     public void prepareColor(View view, Color color){
         float brightness = PseudoGrey.toFloat(color);
         
-        if (brightness < .5f){
+        if (brightness < 0.5f){
             view.setDrawmode(GL11.GL_MODULATE);
             color.mul(2);
-            color.a = 1;
         } else {
             view.setDrawmode(GL11.GL_ADD);
             color.r -= .5f;
             color.g -= .5f;
             color.b -= .5f;
         }
+        color.clamp();
+        color.a = 1;
     }
     
     /**
