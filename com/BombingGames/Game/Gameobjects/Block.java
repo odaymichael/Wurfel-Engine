@@ -157,6 +157,10 @@ public class Block extends GameObject {
             case 40: block = new EntitySpawner(id, coords);
                     block.hasSides = true;
                     break;
+            case 44: block = new Block(id); //textureless
+                    block.hasSides = true;
+                    block.setObstacle(true);
+                    break;      
             case 70:block = new Block(id); 
                     block.setTransparent(true);
                     block.hasSides = false;
@@ -171,7 +175,6 @@ public class Block extends GameObject {
             default:
                     block = new Block(id); 
                     block.setTransparent(true);
-                    block.setHidden(false);
                     break; 
         }
         block.setValue(value);

@@ -197,6 +197,12 @@
             <filename>sprites/e41-0.png</filename>
             <filename>sprites/e41-1.png</filename>
             <filename>sprites/error.png</filename>
+            <filename>sprites/b44-0-1.png</filename>
+            <filename>sprites/b44-0-2.png</filename>
+            <filename>sprites/b44-0-0.png</filename>
+            <filename>sprites/b44-1-0.png</filename>
+            <filename>sprites/b44-1-1.png</filename>
+            <filename>sprites/b44-1-2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
