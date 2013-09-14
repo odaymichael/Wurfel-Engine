@@ -346,14 +346,22 @@ public class Block extends GameObject {
         color.mul(getLightlevel()*2);
         
         prepareColor(view, color);
-        sprite.getVertices()[SpriteBatch.C4] = color.toFloatBits();
-        sprite.getVertices()[SpriteBatch.C1] = color.toFloatBits();
+        
+        sprite.getVertices()[SpriteBatch.C4] = color.toFloatBits();//top right
+        
+        //color.mul(getLightlevel()*2-((sidenumb == 2)?0.01f:0));
+        //color.a = 1; 
+        sprite.getVertices()[SpriteBatch.C1] = color.toFloatBits();//top left
 
-        color.mul(getLightlevel()*2-((sidenumb != 1)?0.3f:0));
+        
+        color.mul(getLightlevel()*2-((sidenumb != 1)?0.05f:0));
         color.a = 1; 
 
-        sprite.getVertices()[SpriteBatch.C2] = color.toFloatBits();
-        sprite.getVertices()[SpriteBatch.C3] = color.toFloatBits();
+        sprite.getVertices()[SpriteBatch.C2] = color.toFloatBits();//bottom left
+        
+        color.mul(getLightlevel()*2-((sidenumb == 2)?0.1f:0));
+        color.a = 1; 
+        sprite.getVertices()[SpriteBatch.C3] = color.toFloatBits();//bottom right
  
         sprite.draw(view.getBatch());
     }
