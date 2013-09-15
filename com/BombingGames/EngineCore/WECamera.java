@@ -91,26 +91,7 @@ public class WECamera extends Camera {
      * Updates the camera.
      */
     @Override
-    public void update() {
-        //orthographic camera, libgdx stuff
-        projection.setToOrtho(
-            1/zoom/equalizationScale * -viewportWidth / 2,
-            1/zoom/equalizationScale * viewportWidth / 2,
-            1/zoom/equalizationScale * -viewportHeight / 2,
-            1/zoom/equalizationScale * viewportHeight / 2,
-            0,
-            Math.abs(far)
-        );
-        
-        Vector3 tmp = new Vector3();
-        view.setToLookAt(position, tmp.set(position).add(direction), up);
-        combined.set(projection);
-        Matrix4.mul(combined.val, view.val);
-
-        invProjectionView.set(combined);
-        Matrix4.inv(invProjectionView.val);
-        frustum.update(invProjectionView);
-        
+    public void update() {       
         //refrehs the camera's position in the game world
         if (focusCoordinates != null) {
             outputPosX = focusCoordinates.getBlock().get2DPosX(focusCoordinates) - get2DWidth() / 2 - GameObject.DIM2;
@@ -119,8 +100,28 @@ public class WECamera extends Camera {
             outputPosX = focusentity.get2DPosX(null) - get2DWidth()/2 + GameObject.DIM2;            
             outputPosY = focusentity.get2DPosY(null) - get2DHeight()/2 ;
         }
-                
-       apply(Gdx.gl10);//don't know what this does
+        
+        position.set(outputPosX+ get2DWidth()/2 , outputPosY+ get2DHeight()/2 , 0); 
+        view.setToLookAt(position, new Vector3(position).add(direction), up);//move camera to the focus 
+       
+        //orthographic camera, libgdx stuff
+        projection.setToOrtho(
+            1/(zoom*equalizationScale) * -viewportWidth / 2,
+            1/(zoom*equalizationScale) * viewportWidth / 2,
+            1/(zoom*equalizationScale) * -viewportHeight / 2,
+            1/(zoom*equalizationScale) * viewportHeight / 2,
+            0,
+            Math.abs(far)
+        );
+        
+        //set up projection matrices
+        combined.set(projection);
+        Matrix4.mul(combined.val, view.val);
+
+        invProjectionView.set(combined);
+        Matrix4.inv(invProjectionView.val);
+        frustum.update(invProjectionView);
+        apply(Gdx.gl10);//don't know what this does
     }
     
     /**
@@ -133,18 +134,14 @@ public class WECamera extends Camera {
             
             view.getBatch().setProjectionMatrix(combined);
              
-            //the parameter for the posY is a bit strange because the y-axis is turned
+            //set up the viewport
             Gdx.gl.glViewport(
                 viewportPosX,
-                (int) (Gdx.graphics.getHeight()-viewportHeight-viewportPosY),
+                (int) (Gdx.graphics.getHeight()-viewportHeight-viewportPosY),//the parameter for the posY is a bit strange because the y-axis is turned
                 (int) viewportWidth,
-                (int) (viewportHeight)
+                (int) viewportHeight
             );
             
-            //move the viewport    
-            translate(new Vector3(viewportPosX, viewportPosY, 0));
-            position.set(new Vector3(outputPosX+ get2DWidth()/2 , outputPosY+ get2DHeight()/2 , 0));
-                        
             //render map
             createDepthList();
                
@@ -163,9 +160,6 @@ public class WECamera extends Camera {
             }
             
             view.getBatch().end();
-
-            //move the viewport back - reverse translation   
-            translate(new Vector3(-viewportPosX, -viewportPosY, 0));
         }
     }
   
