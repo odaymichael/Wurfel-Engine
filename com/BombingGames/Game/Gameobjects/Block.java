@@ -357,12 +357,17 @@ public class Block extends GameObject {
         sprite.getVertices()[SpriteBatch.C1] = color.toFloatBits();//top left
 
         
-        color.mul(getLightlevel()*2-((sidenumb != 1)?0.05f:0));
+        if (sidenumb == 2)
+            color.mul(0.93f);
+        else if (sidenumb == 0)
+            color.mul(0.92f);
         color.a = 1; 
 
         sprite.getVertices()[SpriteBatch.C2] = color.toFloatBits();//bottom left
         
-        color.mul(getLightlevel()*2-((sidenumb == 2)?0.1f:0));
+        if (sidenumb == 2)
+            color.mul(0.97f);
+        else if (sidenumb == 0) color.mul(1);
         color.a = 1; 
         sprite.getVertices()[SpriteBatch.C3] = color.toFloatBits();//bottom right
  
