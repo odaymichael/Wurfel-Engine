@@ -1,10 +1,18 @@
 package com.BombingGames.Game.Gameobjects;
 
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.PackedSpriteSheet;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.util.Log;
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.Map.Coordinate;
+import com.BombingGames.EngineCore.View;
+import com.BombingGames.EngineCore.WECamera;
+import static com.BombingGames.Game.Gameobjects.Block.CATEGORY;
+import com.BombingGames.Game.Lighting.PseudoGrey;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import org.lwjgl.opengl.GL11;
 
 /**
  *An object is something wich can be found in the game world.
@@ -20,152 +28,130 @@ public abstract class GameObject {
     public static final int DIM4 = DIMENSION / 4;
     /**the max. amount of different object types*/
     public static final int OBJECTTYPESCOUNT = 99;
+    
+
+    
     /**The real game world dimension in pixel. Usually the use of DIMENSION is fine because of the map format every coordinate center is straight.
         * The value is DIMENSION/sqrt(2).
         */
-    public static int GAMEDIMENSION = (int) (DIMENSION / Math.sqrt(2));
-
-    /** A list containing the offset of the objects. */
-    public static final int[][][] OFFSETLIST = new int[OBJECTTYPESCOUNT][24][2];
-    
-     /**Containts the names of the objects. index=id*/
-    public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT];   
-    
-    /**The sprite image which contains every object image*/
-    private static PackedSpriteSheet spritesheet;
+    public static final int GAMEDIMENSION = (int) (DIMENSION / Math.sqrt(2));
+        
+    /**The sprite texture which contains every object texture*/
+    private static TextureAtlas spritesheet;
+    private static Pixmap pixmap;
     
     private final int id; 
     private int value;
-    private float[] pos = {DIM2, DIM2, 0};
     private boolean obstacle, transparent, visible, hidden; 
-    private int lightlevel = 50;
+    private float lightlevel = 0.5f;
     private int dimensionY = 1;    
-    
-    static {
-        
-        NAMELIST[0] = "air";
-        NAMELIST[1] = "grass";
-        NAMELIST[2] = "dirt";
-        NAMELIST[3] = "stone";
-        NAMELIST[4] = "asphalt";
-        NAMELIST[5] = "cobblestone";
-        NAMELIST[6] = "pavement";
-        NAMELIST[7] = "concrete";
-        NAMELIST[8] = "sand";
-        NAMELIST[9] = "water";
-        NAMELIST[17] = "tree trunk";
-        NAMELIST[18] = "leaves";
-        NAMELIST[20] = "red brick wall";
-        NAMELIST[30] = "fence";
-        NAMELIST[32] = "sandbags";
-        NAMELIST[33] = "crate";
-        NAMELIST[34] = "flower";
-        OFFSETLIST[34][0][0] = 71;
-        OFFSETLIST[34][0][1] = 78;
-        NAMELIST[35] = "round bush";
-        OFFSETLIST[35][0][0] = 22;
-        OFFSETLIST[35][0][1] = 40;
-        NAMELIST[40] = "player";
-        OFFSETLIST[40][0][0] = 24+21;
-        OFFSETLIST[40][0][1] = 30+20;
-        OFFSETLIST[40][1][0] = 39+21;
-        OFFSETLIST[40][1][1] = 34+20;
-        OFFSETLIST[40][2][0] = 24+21;
-        OFFSETLIST[40][2][1] = 30+20;
-        OFFSETLIST[40][3][0] = 20+21;
-        OFFSETLIST[40][3][1] = 34+20;
-        OFFSETLIST[40][4][0] = 24+21;
-        OFFSETLIST[40][4][1] = 30+20;
-        OFFSETLIST[40][5][0] = 40+21;
-        OFFSETLIST[40][5][1] = 34+20;
-        OFFSETLIST[40][6][0] = 24+21;
-        OFFSETLIST[40][6][1] = 30+20;
-        OFFSETLIST[40][7][0] = 20+21;
-        OFFSETLIST[40][7][1] = 34+20;
-        OFFSETLIST[40][8][0] = 15+21;
-        OFFSETLIST[40][8][1] = 30+20;
-        OFFSETLIST[40][9][0] = 17+21;
-        OFFSETLIST[40][9][1] = 34+20;
-        OFFSETLIST[40][10][0] = 5+21;
-        OFFSETLIST[40][10][1] = 30+20;
-        OFFSETLIST[40][11][0] = 20+21;
-        OFFSETLIST[40][11][1] = 34+20;
-        OFFSETLIST[40][12][0] = 16+21;
-        OFFSETLIST[40][12][1] = 30+20;
-        OFFSETLIST[40][13][0] = 18+21;
-        OFFSETLIST[40][13][1] = 34+20;
-        OFFSETLIST[40][14][0] = 5+21;
-        OFFSETLIST[40][14][1] = 30+20;
-        OFFSETLIST[40][15][0] = 20+21;
-        OFFSETLIST[40][15][1] = 34+20;
-        OFFSETLIST[40][16][0] = 6+21;
-        OFFSETLIST[40][16][1] = 30+20;
-        OFFSETLIST[40][17][0] = 17+21;
-        OFFSETLIST[40][17][1] = 34+20;
-        OFFSETLIST[40][18][0] = 15+21;
-        OFFSETLIST[40][18][1] = 30+20;
-        OFFSETLIST[40][19][0] = 20+21;
-        OFFSETLIST[40][19][1] = 34+20;
-        OFFSETLIST[40][20][0] = 5+21;
-        OFFSETLIST[40][20][1] = 30+20;
-        OFFSETLIST[40][21][0] = 18+21;
-        OFFSETLIST[40][21][1] = 34+20;
-        OFFSETLIST[40][22][0] = 16+21;
-        OFFSETLIST[40][22][1] = 30+20;
-        OFFSETLIST[40][23][0] = 20+21;
-        OFFSETLIST[40][23][1] = 34+20;
-        NAMELIST[41] = "smoke test";
-        NAMELIST[50] = "strewbed";
-        NAMELIST[70] = "campfire";
-        NAMELIST[71] = "explosive barrel";
-        NAMELIST[72] = "animation test";
-    }
     
     /**
      * Creates an object. Use getInterface() to create blocks or entitys.
      * @param id the id of the object
+     * @param value 
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
-    protected GameObject(int id) {
+    protected GameObject(int id, int value) {
         this.id = id;
+        this.value = value;
     }
     
     /**
      * Updates the logic of the object.
      * @param delta time since last update
      */
-    public abstract void update(int delta);
+    public abstract void update(float delta);
+    
+    public abstract char getCategory();
+    /**
+     * Place you static update methods here.
+     * @param delta 
+     */
+    public static void updateStaticUpdates(float delta){
+        Sea.staticUpdate(delta);
+    }
+        
+    
+    /**
+     *
+     * @param coords
+     * @return
+     */
+    public abstract int get2DPosX(Coordinate coords);
+    
+    /**
+     *
+     * @param coords
+     * @return
+     */
+    public abstract int get2DPosY(Coordinate coords);
+    
+    /**
+     * Draws an object.
+     * @param coords the relative coordinates
+     * @param camera 
+     * @param view  
+     */
+    public void render(View view, WECamera camera, Coordinate coords) {
+        Color color = Color.GRAY;
+        if (Controller.getLightengine() != null){
+                color = Controller.getLightengine().getGlobalLight();
+            }
+        render(view, camera, coords, color.mul(lightlevel));
+    }
     
      /**
      * Draws an object.
      * @param coords the relative coordinates
+     * @param camera 
+     * @param view 
+     * @param color 
      */
-    public void render(Graphics g, int[] coords) {
+    public void render(View view, WECamera camera, Coordinate coords, Color color) {
         //draw the object except not visible ones
-        if (!hidden && visible) {
-            Image image = getSprite(id, value);
-            //calc  brightness
-            float brightness = lightlevel / 50.0f;
+        if (!hidden && visible) {             
+            Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
+             
+            int xPos = get2DPosX(coords) + getOffsetX();
+            int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + getOffsetY();
+            sprite.setPosition(xPos, yPos);
             
-            image.setColor(0, brightness, brightness, brightness);
-            image.setColor(1, brightness, brightness, brightness);
-            brightness -= 0.1f;
-            image.setColor(2, brightness, brightness, brightness);
-            image.setColor(3, brightness, brightness, brightness);
-            
-            int xpos = getScreenPosX(this, coords) + OFFSETLIST[id][value][0];
-            int ypos = getScreenPosY(this, coords) - (dimensionY - 1) * DIM2 + OFFSETLIST[id][value][1];
-            image.drawEmbedded(xpos, ypos,image.getWidth(),image.getHeight());
+            prepareColor(view, color);
+
+            sprite.setColor(color);
+            sprite.draw(view.getBatch());
         }
     } 
-
+    
+    /**
+     * Changes the color that it works with the blending.
+     * @param view
+     * @param color 
+     */
+    public void prepareColor(View view, Color color){
+        float brightness = PseudoGrey.toFloat(color);
+        
+        if (brightness < 0.5f){
+            view.setDrawmode(GL11.GL_MODULATE);
+            color.mul(2);
+        } else {
+            view.setDrawmode(GL11.GL_ADD);
+            color.r -= .5f;
+            color.g -= .5f;
+            color.b -= .5f;
+        }
+        color.clamp();
+        color.a = 1;
+    }
+    
     /**
      * Load the spritesheet from memory.
-     * @throws SlickException
      */
-    public static void loadSheet() throws SlickException {
-        spritesheet = new PackedSpriteSheet("com/BombingGames/Game/Blockimages/Spritesheet.def");
-        Log.debug("Spritesheet loaded");
+    public static void loadSheet()  {
+        spritesheet = new TextureAtlas(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.txt"), true);
+        pixmap = new Pixmap(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.png"));
+        Gdx.app.debug("DEBUG","Spritesheet loaded");
     }
 
     /**
@@ -219,105 +205,71 @@ public abstract class GameObject {
      * @param sideID the side number of the given coordinates
      * @return The coordinates of the neighbour.
      */
-    public static int[] sideIDtoNeighbourCoords(int[] coords, int sideID) {
+    public static Coordinate sideIDtoNeighbourCoords(Coordinate coords, int sideID) {
         int[] result = new int[3];
         switch (sideID) {
             case 0:
-                result[0] = coords[0];
-                result[1] = coords[1] - 2;
+                result[0] = coords.getRelX();
+                result[1] = coords.getRelY() - 2;
                 break;
             case 1:
-                result[0] = coords[0] + (coords[1] % 2 == 1 ? 1 : 0);
-                result[1] = coords[1] - 1;
+                result[0] = coords.getRelX() + (coords.getRelY() % 2 == 1 ? 1 : 0);
+                result[1] = coords.getRelY() - 1;
                 break;
             case 2:
-                result[0] = coords[0] + 1;
-                result[1] = coords[1];
+                result[0] = coords.getRelX() + 1;
+                result[1] = coords.getRelY();
                 break;
             case 3:
-                result[0] = coords[0] + (coords[1] % 2 == 1 ? 1 : 0);
-                result[1] = coords[1] + 1;
+                result[0] = coords.getRelX() + (coords.getRelY() % 2 == 1 ? 1 : 0);
+                result[1] = coords.getRelY() + 1;
                 break;
             case 4:
-                result[0] = coords[0];
-                result[1] = coords[1] + 2;
+                result[0] = coords.getRelX();
+                result[1] = coords.getRelY() + 2;
                 break;
             case 5:
-                result[0] = coords[0] - (coords[1] % 2 == 0 ? 1 : 0);
-                result[1] = coords[1] + 1;
+                result[0] = coords.getRelX() - (coords.getRelY() % 2 == 0 ? 1 : 0);
+                result[1] = coords.getRelY() + 1;
                 break;
             case 6:
-                result[0] = coords[0] - 1;
-                result[1] = coords[1];
+                result[0] = coords.getRelX() - 1;
+                result[1] = coords.getRelY();
                 break;
             case 7:
-                result[0] = coords[0] - (coords[1] % 2 == 0 ? 1 : 0);
-                result[1] = coords[1] - 1;
+                result[0] = coords.getRelX() - (coords.getRelY() % 2 == 0 ? 1 : 0);
+                result[1] = coords.getRelY() - 1;
                 break;
             default:
-                result[0] = coords[0];
-                result[1] = coords[1];
+                result[0] = coords.getRelX();
+                result[1] = coords.getRelY();
         }
-        result[2] = coords[2];
-        return result;
+        result[2] = coords.getZ();
+        return new Coordinate(result[0], result[1], result[2], true);
     }
     
-    /**
-     * Returns the depth of the object. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
-     * @param y the y-coordinate
-     * @param z  the z-coordinate
-     * @return the depth
-     */
-    public int getDepth(int y, int z) {
-        return (int) (
-            DIMENSION * y
-            + (y % 2) * DIM2
-            + (DIM2-1) * z
-            + pos[1]
-            + pos[2]
-            + (dimensionY - 1) * DIM4
-        );
-    }
+
     
-  
 
     /**
-     * Get the screen x-position where the object is rendered without regarding the camera.
-     * @param object The object of wich you want the position
-     * @param coords  The relative coordinates where the object is rendered 
-     * @return The screen X-position in pixels.
-     */
-    public static int getScreenPosX(GameObject object, int[] coords) {
-        return coords[0] * DIMENSION //x-coordinate multiplied by it's dimension in this direction
-               + (coords[1] % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
-               + (int) (object.pos[0]); //add the objects position inside this coordinate
-    }
-
-    /**
-     * Get the screen y-position where the object is rendered without regarding the camera.
-     * @param object The object of wich you want the position
-     * @param coords The coordinates where the object is rendered 
-     * @return The screen Y-position in pixels.
-     */
-    public static int getScreenPosY(GameObject object, int[] coords) {
-        return coords[1] * DIM4 //x-coordinate * the tile's size
-               - coords[2] * DIM2 //put higher blocks higher
-               + (int) (object.pos[1] / 2) //add the objects position inside this coordinate
-               - (int) (object.pos[2] / Math.sqrt(2)); //take axis shortening into account
-    }
-
-    /**
-     * Returns a sprite image of non-block image
+     * Returns a sprite texture of non-block texture
+     * @param category 
      * @param id
      * @param value
-     * @param dimY the height of the object
      * @return
      */
-    public static Image getSprite(int id, int value) {
-        return spritesheet.getSprite(id+"-"+value);
+    public static AtlasRegion getSprite(char category, int id, int value) {
+        AtlasRegion sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
+        if (sprite == null){ //if there is no sprite show the default "sprite not found sprite" for this category
+            sprite = getSpritesheet().findRegion(CATEGORY+"0-0");
+            if (sprite==null) {//load generic error sprite if category sprite failed
+                sprite = getSpritesheet().findRegion("error");
+                if (sprite==null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
+            }
+        }
+        return sprite;
     }
 
-    
 
     //getter & setter
     
@@ -325,9 +277,19 @@ public abstract class GameObject {
      * Returns the spritesheet used for rendering.
      * @return the spritesheet used by the objects
      */
-    public static PackedSpriteSheet getSpritesheet() {
+    public static TextureAtlas getSpritesheet() {
         return spritesheet;
     }
+
+    /**
+     *
+     * @return
+     */
+    public static Pixmap getPixmap() {
+        return pixmap;
+    }
+    
+    
     
     /**
      * returns the id of a object
@@ -339,28 +301,29 @@ public abstract class GameObject {
 
     /**
      * How bright is the object?
-     * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black. Default is 50.
+     * The lightlevel is a number between 0 and 1. 1 is full bright. 0 is black. Default is .5.
      * @return
      */
-    public int getLightlevel() {
+    public float getLightlevel() {
         return lightlevel;
     }
 
     /**
+     * Returns the depth of the object. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
+     * @param coords 
+     * @return the depth
+     */
+    public abstract int getDepth(Coordinate coords);
+    
+    /**
      * Returns the name of the object
      * @return the name of the object
      */
-    public String getName() {
-        return NAMELIST[getId()];
-    }
-
-    /**
-     *  Gets the positon of the object inside it's coordinate field. Coordinate system starting at bottom rear.
-     * @return an array with three fields. [x,y,z]
-     */
-    public float[] getPos() {
-        return pos;
-    }
+    public abstract String getName();
+    
+    public abstract int getOffsetX();
+    
+    public abstract int getOffsetY();
 
     /**
      * Get the value. It is like a sub-id and can identify the status.
@@ -369,18 +332,18 @@ public abstract class GameObject {
     public int getValue() {
         return value;
     }
-
-    /**
-     * Has the object an offset (pos vector)?
-     * @return when it has offset true, else false
+    
+        /**
+     * 
+     * @return
      */
-    public boolean hasOffset() {
-        return pos[0] != DIM2 || pos[1] != DIM2 || pos[2] != 0;
+    public int getDimensionY() {
+        return dimensionY;
     }
 
     /**
      * Returns true, when set as hidden. Hidden objects are not rendered even when they are visible ("visible" by the meaning of the raytracing).
-     * @return the locked visiblity
+     * @return if the object is invisible
      */
     public boolean isHidden() {
         return hidden;
@@ -410,14 +373,13 @@ public abstract class GameObject {
         return visible;
     }
 
-  
 
     /**
      * Set the brightness of the object.
-     * The lightlevel is a number between 0 and 100. 100 is full bright. 0 is black.
+     * The lightlevel is a number between 0 and 1. 1 is full bright. 0 is black.
      * @param lightlevel
      */
-    public void setLightlevel(int lightlevel) {
+    public void setLightlevel(float lightlevel) {
         this.lightlevel = lightlevel;
     }
 
@@ -430,24 +392,7 @@ public abstract class GameObject {
     }
 
     /**
-     * Set a whole new array containing the positon of the object. Coordinate system starting at bottom rear.
-     * @param pos the new positon array
-     */
-    public void setPos(float[] pos) {
-        this.pos = pos;
-    }
-
-    /**
-     * Sets the position of the object. Coordinate system starting at bottom rear.
-     * @param i Select the field you want to write 0=>x, y=>1, z=>2
-     * @param value the value you want to set it to.
-     */
-    public void setPos(int i, float value) {
-        pos[i] = value;
-    }
-
-    /**
-     * Make the Object transparent
+     * Has the object transparent areas?
      * @param transparent
      */
     public void setTransparent(boolean transparent) {
@@ -463,15 +408,16 @@ public abstract class GameObject {
     }
 
     /**
-     * Hide this object and prevent it from beeing rendered.
-     * @param visible Sets the visibility. When it is false, every side will also get hidden
+     * Hide this object and prevent it from beeing rendered. Don't use this to hide objects. This data is only for rendering data and view specific not for gameworld information. This should be just used for setting during the rendering process.
+     * @param visible Sets the visibility.
+     * @see com.BombingGames.Game.Gameobjects.GameObject#setHidden(boolean) 
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
     /**
-     * 
+     * Hide an object. It won't be rendered even if it is visible.
      * @param hidden
      */
     public void setHidden(boolean hidden){
@@ -484,9 +430,5 @@ public abstract class GameObject {
      */
     public void setDimensionY(int dimensionY) {
         this.dimensionY = dimensionY;
-    }
-
-    public int getDimensionY() {
-        return dimensionY;
     }
 }

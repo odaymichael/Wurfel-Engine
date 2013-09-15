@@ -1,75 +1,59 @@
 package com.BombingGames.MainMenu;
 
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
-import org.newdawn.slick.state.StateBasedGame;
+import com.BombingGames.EngineCore.GameplayScreen;
+import com.BombingGames.Wurfelengine;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
 
 /**
  * The controlelr of the main Menu manages the data.
  * @author Benedikt
  */
 public class Controller {
-    private Sound fx;
     
-    private final MenuItem startGameOption = new MenuItem(0, "Generate Map");
-    private final MenuItem loadGameOption = new MenuItem(1, "Load Map");
-    private final MenuItem exitOption = new MenuItem(2, "Exit");
+    private MenuItem[] menuItems = new MenuItem[3];
+    private final Sound fx;
     
     /**
      * Creates a new Controller
-     * @throws SlickException
      */
-    public Controller() throws SlickException{
-        fx = new Sound("com/BombingGames/MainMenu/click2.wav");
+    public Controller() {
+        TextureAtlas texture = new TextureAtlas(Gdx.files.internal("com/BombingGames/MainMenu/Images/MainMenu.txt"), true);
+                
+        menuItems[0] = new MenuItem(0, texture.getRegions().get(2), "Generate Map");
+        menuItems[1] = new MenuItem(1, texture.getRegions().get(0), "Load Map");
+        menuItems[2] = new MenuItem(2, texture.getRegions().get(1), "Exit");
+        
+        
+        fx = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/MainMenu/click2.wav"));
     }
     
     /**
      * updates game logic
-     * @param gc
-     * @param sbg
      * @param delta
      */
-    public void update(GameContainer gc, StateBasedGame sbg, int delta){
-        Input input = gc.getInput();
-         
-        if (startGameOption.isClicked(input)){
-            MainMenuState.setLoadMap(false);
-            fx.play(); 
-            sbg.enterState(2);            
-        } else if (loadGameOption.isClicked(input)) { 
-                MainMenuState.setLoadMap(true);
+    public void update(int delta){
+        if (menuItems[0].isClicked()){
+            MainMenuScreen.setLoadMap(true);
+            fx.play();
+            Wurfelengine.getInstance().setScreen(new GameplayScreen());
+        } else if (menuItems[1].isClicked()) { 
+                MainMenuScreen.setLoadMap(false);
                 fx.play();
-                //fade in is a bad idea because afer the fade in is a lag.
-                //sbg.enterState(2, new FadeInTransition(), new FadeInTransition());
-                sbg.enterState(2); 
-        }else if (exitOption.isClicked(input)){
-            gc.exit();
-        }
+                Wurfelengine.getInstance().setScreen(new GameplayScreen());
+            } else if (menuItems[2].isClicked()){
+                fx.play();
+                Gdx.app.exit();
+            }
     }
 
-    /**
-     * 
-     * @return
-     */
-    public MenuItem getExitOption() {
-        return exitOption;
+    public MenuItem[] getMenuItems() {
+        return menuItems;
     }
 
-    /**
-     * 
-     * @return
-     */
-    public MenuItem getLoadGameOption() {
-        return loadGameOption;
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public MenuItem getStartGameOption() {
-        return startGameOption;
+    public void dispose(){
+        fx.dispose();
     }
 }

@@ -20,7 +20,7 @@
         <key>dpi</key>
         <uint>72</uint>
         <key>dataFormat</key>
-        <string>slick2d</string>
+        <string>libgdx</string>
         <key>textureFileName</key>
         <filename>Spritesheet.png</filename>
         <key>flipPVR</key>
@@ -40,7 +40,7 @@
             </struct>
         </struct>
         <key>shapePadding</key>
-        <uint>0</uint>
+        <uint>1</uint>
         <key>jpgQuality</key>
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
@@ -70,13 +70,13 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
-            <enum type="AlgorithmSettings::SizeConstraints">AnySize</enum>
+            <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
             <key>forceSquared</key>
-            <false/>
+            <true/>
             <key>forceWordAligned</key>
             <false/>
             <key>maxRects</key>
@@ -111,7 +111,9 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>Spritesheet.def</filename>
+        <filename>Spritesheet.txt</filename>
+        <key>multiPack</key>
+        <false/>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
@@ -140,93 +142,100 @@
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">Crop</enum>
+            <enum type="SpriteSettings::TrimMode">CropKeepPos</enum>
             <key>heuristicMask</key>
             <false/>
         </struct>
         <key>fileList</key>
         <array>
-            <filename>sprites/0-0.png</filename>
-            <filename>sprites/0-1.png</filename>
-            <filename>sprites/0-2.png</filename>
-            <filename>sprites/1-0-0.png</filename>
-            <filename>sprites/1-0-1.png</filename>
-            <filename>sprites/1-0-2.png</filename>
-            <filename>sprites/2-0-0.png</filename>
-            <filename>sprites/2-0-1.png</filename>
-            <filename>sprites/2-0-2.png</filename>
-            <filename>sprites/3-0-0.png</filename>
-            <filename>sprites/3-0-1.png</filename>
-            <filename>sprites/3-0-2.png</filename>
-            <filename>sprites/4-0-0.png</filename>
-            <filename>sprites/4-0-1.png</filename>
-            <filename>sprites/4-0-2.png</filename>
-            <filename>sprites/5-0-0.png</filename>
-            <filename>sprites/5-0-1.png</filename>
-            <filename>sprites/5-0-2.png</filename>
-            <filename>sprites/6-0-0.png</filename>
-            <filename>sprites/6-0-1.png</filename>
-            <filename>sprites/6-0-2.png</filename>
-            <filename>sprites/7-0-0.png</filename>
-            <filename>sprites/7-0-1.png</filename>
-            <filename>sprites/7-0-2.png</filename>
-            <filename>sprites/8-0-0.png</filename>
-            <filename>sprites/8-0-1.png</filename>
-            <filename>sprites/8-0-2.png</filename>
-            <filename>sprites/9-0-0.png</filename>
-            <filename>sprites/9-0-1.png</filename>
-            <filename>sprites/9-0-2.png</filename>
-            <filename>sprites/9-1-0.png</filename>
-            <filename>sprites/9-1-1.png</filename>
-            <filename>sprites/9-1-2.png</filename>
-            <filename>sprites/9-2-0.png</filename>
-            <filename>sprites/9-2-1.png</filename>
-            <filename>sprites/9-2-2.png</filename>
-            <filename>sprites/13-0.png</filename>
-            <filename>sprites/17-0-0.png</filename>
-            <filename>sprites/17-0-1.png</filename>
-            <filename>sprites/17-0-2.png</filename>
-            <filename>sprites/18-0-0.png</filename>
-            <filename>sprites/18-0-1.png</filename>
-            <filename>sprites/18-0-2.png</filename>
-            <filename>sprites/20-0-0.png</filename>
-            <filename>sprites/20-0-1.png</filename>
-            <filename>sprites/20-0-2.png</filename>
-            <filename>sprites/21-0-0.png</filename>
-            <filename>sprites/21-0-1.png</filename>
-            <filename>sprites/21-0-2.png</filename>
-            <filename>sprites/34-0.png</filename>
-            <filename>sprites/35-0.png</filename>
-            <filename>sprites/40-0.png</filename>
-            <filename>sprites/40-1.png</filename>
-            <filename>sprites/40-2.png</filename>
-            <filename>sprites/40-3.png</filename>
-            <filename>sprites/40-4.png</filename>
-            <filename>sprites/40-5.png</filename>
-            <filename>sprites/40-6.png</filename>
-            <filename>sprites/40-7.png</filename>
-            <filename>sprites/40-8.png</filename>
-            <filename>sprites/40-9.png</filename>
-            <filename>sprites/40-10.png</filename>
-            <filename>sprites/40-11.png</filename>
-            <filename>sprites/40-12.png</filename>
-            <filename>sprites/40-13.png</filename>
-            <filename>sprites/40-14.png</filename>
-            <filename>sprites/40-15.png</filename>
-            <filename>sprites/40-16.png</filename>
-            <filename>sprites/40-17.png</filename>
-            <filename>sprites/40-18.png</filename>
-            <filename>sprites/40-19.png</filename>
-            <filename>sprites/40-20.png</filename>
-            <filename>sprites/40-21.png</filename>
-            <filename>sprites/40-22.png</filename>
-            <filename>sprites/40-23.png</filename>
-            <filename>sprites/41-0.png</filename>
-            <filename>sprites/41-1.png</filename>
-            <filename>sprites/70-0.png</filename>
-            <filename>sprites/71-0-0.png</filename>
-            <filename>sprites/71-0-1.png</filename>
-            <filename>sprites/71-0-2.png</filename>
+            <filename>sprites/b0-0-0.png</filename>
+            <filename>sprites/b0-0-1.png</filename>
+            <filename>sprites/b0-0-2.png</filename>
+            <filename>sprites/b1-0-0.png</filename>
+            <filename>sprites/b1-0-1.png</filename>
+            <filename>sprites/b1-0-2.png</filename>
+            <filename>sprites/b2-0-0.png</filename>
+            <filename>sprites/b2-0-1.png</filename>
+            <filename>sprites/b2-0-2.png</filename>
+            <filename>sprites/b3-0-0.png</filename>
+            <filename>sprites/b3-0-1.png</filename>
+            <filename>sprites/b3-0-2.png</filename>
+            <filename>sprites/b4-0-0.png</filename>
+            <filename>sprites/b4-0-1.png</filename>
+            <filename>sprites/b4-0-2.png</filename>
+            <filename>sprites/b5-0-0.png</filename>
+            <filename>sprites/b5-0-1.png</filename>
+            <filename>sprites/b5-0-2.png</filename>
+            <filename>sprites/b6-0-0.png</filename>
+            <filename>sprites/b6-0-1.png</filename>
+            <filename>sprites/b6-0-2.png</filename>
+            <filename>sprites/b7-0-0.png</filename>
+            <filename>sprites/b7-0-1.png</filename>
+            <filename>sprites/b7-0-2.png</filename>
+            <filename>sprites/b8-0-0.png</filename>
+            <filename>sprites/b8-0-1.png</filename>
+            <filename>sprites/b8-0-2.png</filename>
+            <filename>sprites/b9-0-0.png</filename>
+            <filename>sprites/b9-0-1.png</filename>
+            <filename>sprites/b9-0-2.png</filename>
+            <filename>sprites/b9-1-0.png</filename>
+            <filename>sprites/b9-1-1.png</filename>
+            <filename>sprites/b9-1-2.png</filename>
+            <filename>sprites/b9-2-0.png</filename>
+            <filename>sprites/b9-2-1.png</filename>
+            <filename>sprites/b9-2-2.png</filename>
+            <filename>sprites/b17-0-0.png</filename>
+            <filename>sprites/b17-0-1.png</filename>
+            <filename>sprites/b17-0-2.png</filename>
+            <filename>sprites/b18-0-0.png</filename>
+            <filename>sprites/b18-0-1.png</filename>
+            <filename>sprites/b18-0-2.png</filename>
+            <filename>sprites/b20-0-0.png</filename>
+            <filename>sprites/b20-0-1.png</filename>
+            <filename>sprites/b20-0-2.png</filename>
+            <filename>sprites/b21-0-0.png</filename>
+            <filename>sprites/b21-0-1.png</filename>
+            <filename>sprites/b21-0-2.png</filename>
+            <filename>sprites/b34-0.png</filename>
+            <filename>sprites/b35-0.png</filename>
+            <filename>sprites/b44-0-0.png</filename>
+            <filename>sprites/b44-0-1.png</filename>
+            <filename>sprites/b44-0-2.png</filename>
+            <filename>sprites/b44-1-0.png</filename>
+            <filename>sprites/b44-1-1.png</filename>
+            <filename>sprites/b44-1-2.png</filename>
+            <filename>sprites/b70-0.png</filename>
+            <filename>sprites/b71-0-0.png</filename>
+            <filename>sprites/b71-0-1.png</filename>
+            <filename>sprites/b71-0-2.png</filename>
+            <filename>sprites/e13-0.png</filename>
+            <filename>sprites/e40-0.png</filename>
+            <filename>sprites/e40-1.png</filename>
+            <filename>sprites/e40-2.png</filename>
+            <filename>sprites/e40-3.png</filename>
+            <filename>sprites/e40-4.png</filename>
+            <filename>sprites/e40-5.png</filename>
+            <filename>sprites/e40-6.png</filename>
+            <filename>sprites/e40-7.png</filename>
+            <filename>sprites/e40-8.png</filename>
+            <filename>sprites/e40-9.png</filename>
+            <filename>sprites/e40-10.png</filename>
+            <filename>sprites/e40-11.png</filename>
+            <filename>sprites/e40-12.png</filename>
+            <filename>sprites/e40-13.png</filename>
+            <filename>sprites/e40-14.png</filename>
+            <filename>sprites/e40-15.png</filename>
+            <filename>sprites/e40-16.png</filename>
+            <filename>sprites/e40-17.png</filename>
+            <filename>sprites/e40-18.png</filename>
+            <filename>sprites/e40-19.png</filename>
+            <filename>sprites/e40-20.png</filename>
+            <filename>sprites/e40-21.png</filename>
+            <filename>sprites/e40-22.png</filename>
+            <filename>sprites/e40-23.png</filename>
+            <filename>sprites/e41-0.png</filename>
+            <filename>sprites/e41-1.png</filename>
+            <filename>sprites/error.png</filename>
             <filename>sprites/selection.png</filename>
             <filename>sprites/toolbar.png</filename>
         </array>

@@ -1,8 +1,19 @@
 package com.BombingGames.Game.Gameobjects;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.Map.Coordinate;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
+import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
+import com.BombingGames.EngineCore.View;
+import com.BombingGames.EngineCore.WECamera;
+import static com.BombingGames.Game.Gameobjects.GameObject.OBJECTTYPESCOUNT;
+import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
+import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
 /**
  * A Block is a wonderful piece of information and a geometrical object.
@@ -17,8 +28,53 @@ public class Block extends GameObject {
     /**The id of the right side of a block.*/
     public static final int RIGHTSIDE=2;
     
+    public static final char CATEGORY = 'b';
+    
+    /**Containts the names of the objects. index=id*/
+    public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT];
+    
+       /** A list containing the offset of the objects. */
+    public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][10][2];
+    
     private boolean liquid, renderRight, renderTop, renderLeft;
     private boolean hasSides = true;
+    
+    static {
+        NAMELIST[0] = "air";
+        NAMELIST[1] = "grass";
+        NAMELIST[2] = "dirt";
+        NAMELIST[3] = "stone";
+        NAMELIST[4] = "asphalt";
+        NAMELIST[5] = "cobblestone";
+        NAMELIST[6] = "pavement";
+        NAMELIST[7] = "concrete";
+        NAMELIST[8] = "sand";
+        NAMELIST[9] = "water";
+        NAMELIST[17] = "tree trunk";
+        NAMELIST[18] = "leaves";
+        NAMELIST[20] = "red brick wall";
+        NAMELIST[30] = "fence";
+        NAMELIST[32] = "sandbags";
+        NAMELIST[33] = "crate";
+        NAMELIST[34] = "flower";
+        OFFSET[34][0][0] = 71;
+        OFFSET[34][0][1] = 78;
+        NAMELIST[35] = "round bush";
+        OFFSET[35][0][0] = 22;
+        OFFSET[35][0][1] = 40;
+        OFFSET[34][0][0] = 71;
+        OFFSET[34][0][1] = 78;
+        OFFSET[35][0][0] = 22;
+        OFFSET[35][0][1] = 2;
+        NAMELIST[50] = "strewbed";
+        NAMELIST[70] = "campfire";
+        NAMELIST[71] = "explosive barrel";
+        OFFSET[71][0][0] = 39;
+        OFFSET[71][0][1] = 19;
+        OFFSET[71][1][0] = 35;
+        OFFSET[71][1][1] = 16;
+        NAMELIST[72] = "animation test";
+    }
     
     /**
      * Don't use this constructor to get a new block. Use the static <i>getInstance</i> methods instead.
@@ -26,7 +82,7 @@ public class Block extends GameObject {
      *  @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
     protected Block(int id){
-        super(id);
+        super(id,0);
     } 
     
     /**
@@ -49,14 +105,14 @@ public class Block extends GameObject {
     }
     
     /**
-     * Create a block. If the block needs to know it's position you have to use this method and give the coordinates.
+     * Create a block through this factory method. If the block needs to know it's position you have to use this method and give the coordinates.
      * @param id the id of the block
      * @param value the value of the block, which is like a sub-id
-     * @param absCoords the absolute coordinates where the bloks should be created. Only SelfAware Blocks should use this.
+     * @param coords the coordinates where the block is going to be places. If the block does not need this information it can be null.
      * @return the Block
      */
-    public static Block getInstance(int id, int value, int[] absCoords){
-        Block block = null;
+    public static Block getInstance(int id, int value, Coordinate coords){
+        Block block;
         //define the default SideSprites
         switch (id){
             case 0: 
@@ -92,6 +148,7 @@ public class Block extends GameObject {
             case 9: block = new AnimatedBlock(id, new int[]{500,500,500},true, true); //water
                     block.setTransparent(true);
                     block.liquid = true;
+                    block.setTransparent(true);
                     break;
             case 17:block = new Block(id); //trunk
                     block.setObstacle(true);
@@ -103,36 +160,38 @@ public class Block extends GameObject {
             case 20:block = new Block(id);
                     block.setObstacle(true);
                     break;
-            case 21:block = new AirLift(absCoords, id);
+            case 21:block = new AirLift(coords, id);
                     block.hasSides = true;
                     break;
-            case 34:block = new Block(id); //
+            case 34: block = new Block(id); //flower
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;
-            case 35:block = new Block(id); //
+            case 35: block = new Block(id); //bush
                     block.setTransparent(true);
                     block.hasSides = false;
-                    break;       
-            case 40://already reserverd
+                    break;     
+            case 40: block = new EntitySpawner(id, coords);
+                    block.hasSides = true;
                     break;
-            case 41://already reserverd
-                    break;    
+            case 44: block = new Block(id); //textureless
+                    block.hasSides = true;
+                    block.setObstacle(true);
+                    break;      
             case 70:block = new Block(id); 
                     block.setTransparent(true);
                     block.hasSides = false;
                     break;
-            case 71:block = new ExplosiveBarrel(id,absCoords);
-                    block.hasSides = true;
+            case 71:block = new ExplosiveBarrel(id, coords);
+                    block.hasSides = false;
                     break;
-            case 72:block = new AnimatedBlock(id, new int[]{1000,1000},true, true);//animation test
+            case 72:block = new AnimatedBlock(id, new int[]{1000,1000},true, true);//animation lighting
                     block.setObstacle(true);
                     block.hasSides = true;
                     break;
             default:
                     block = new Block(id); 
                     block.setTransparent(true);
-                    block.setHidden(false);
                     break; 
         }
         block.setValue(value);
@@ -141,28 +200,47 @@ public class Block extends GameObject {
     
     
      /**
-     *  Returns a sprite image of a specific side of the block
+     *  Returns a sprite sprite of a specific side of the block
      * @param id the id of the block
      * @param value the value of teh block
      * @param side Which side? (0 - 2)
-     * @return an image of the side
+     * @return an sprite of the side
      */
-    public static Image getBlockSprite(int id, int value, int side) {
-        return getSpritesheet().getSprite(id+"-"+value+"-"+side);
+    public static TextureAtlas.AtlasRegion getBlockSprite(int id, int value, int side) {
+        AtlasRegion sprite = getSpritesheet().findRegion(CATEGORY+Integer.toString(id)+"-"+value+"-"+side);
+        if (sprite == null){ //if there is no sprite show the default "sprite not found sprite"
+            sprite = getSpritesheet().findRegion(CATEGORY+"0-0-"+side);
+            if (sprite==null)
+                throw new NullPointerException("Sprite not found but even the default error sprite could not be found:"+CATEGORY+"0-0-"+side);
+        }
+        return sprite;
     }
     
-        /**
-     * Returns a color representing the block. Picks from the sprite image.
+
+    
+   /**
+     * Returns a color representing the block. Picks from the sprite sprite.
      * @param id id of the Block
      * @param value the value of the block.
      * @return a color representing the block
      */
     public static Color getRepresentingColor(int id, int value){
         if (colorlist[id][value] == null){ //if not in list, add it to the list
-            if (Block.getInstance(id,0,new int[]{0,0,0}).hasSides)
-                colorlist[id][value] = getBlockSprite(id, value, 1).getColor(DIM2, DIM4);
-            else
-                colorlist[id][value] = getSprite(id, value).getColor(DIM2, DIM2);
+            colorlist[id][value] = new Color();
+            int colorInt;
+            
+            if (Block.getInstance(id,value, new Coordinate(0,0,0,false)).hasSides){    
+                AtlasRegion texture = getBlockSprite(id, value, 1);
+                if (texture == null) return new Color();
+                colorInt = getPixmap().getPixel(
+                    texture.getRegionX()+DIM2, texture.getRegionY()-DIM4);
+            } else {
+                AtlasRegion texture = getSprite(CATEGORY, id, value);
+                if (texture == null) return new Color();
+                colorInt = getPixmap().getPixel(
+                    texture.getRegionX()+DIM2, texture.getRegionY()-DIM2);
+            }
+            Color.rgba8888ToColor(colorlist[id][value], colorInt);
             return colorlist[id][value]; 
         } else return colorlist[id][value]; //return value when in list
     }
@@ -184,13 +262,6 @@ public class Block extends GameObject {
     }   
     
     /**
-     * The block hides the past block when it has sides and is not transparent (like normal block)
-     * @return true when hiding the past Block
-     */
-    public boolean hidingPastBlock(){
-        return (hasSides && ! isTransparent() && ! hasOffset());
-    }
-    /**
      * Make a side (in)visible. If one side is visible, the whole block is visible.
      * @param side 0 = left, 1 = top, 2 = right
      * @param visible The value
@@ -205,7 +276,33 @@ public class Block extends GameObject {
                 else if (side==2)
                     renderRight = visible;
     }
+    
+       /**
+     * Get the screen x-position where the object is rendered without regarding the camera.
+     * @param coords  The relative coordinates where the object is rendered 
+     * @return The screen X-position in pixels.
+     */
+   @Override
+    public int get2DPosX(Coordinate coords) {
+        return coords.get2DPosX() + (int) (coords.getCellOffset()[0]); //add the objects position inside this coordinate
+    }
 
+    /**
+     * Get the screen y-position where the object is rendered without regarding the camera.
+     * @param coords The coordinates where the object is rendered 
+     * @return The screen Y-position in pixels.
+     */
+   @Override
+    public int get2DPosY(Coordinate coords) {
+        return coords.get2DPosY()
+               + (int) (coords.getCellOffset()[1] / 2) //add the objects position inside this coordinate
+               - (int) (coords.getCellOffset()[2] / Math.sqrt(2)); //add the objects position inside this coordinate
+    }
+
+    /**
+     * 
+     * @param visible When it is set to false, every side will also get hidden.
+     */
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
@@ -216,65 +313,117 @@ public class Block extends GameObject {
         }
     }
     
-    
-
     @Override
-    public void render(Graphics g, int[] coords) {
-        if (!isHidden() && isVisible()) {
-            if (hasSides) {
-                    if (renderTop) {
-                        renderSide(coords, Block.TOPSIDE);
-                    }
-                    if (renderLeft) {
-                        renderSide(coords, Block.LEFTSIDE);
-                    }
-                    if (renderRight) {
-                        renderSide(coords, Block.RIGHTSIDE);
-                    }
-                } else super.render(g, coords);
+    public void render(View view, WECamera camera, Coordinate coords) {
+        if (isVisible() && !isHidden()) {
+            Color color = Color.GRAY;
+            if (Controller.getLightengine() != null){
+                color = Controller.getLightengine().getGlobalLight();
             }
+            if (Controller.getLightengine() != null){
+                if (hasSides) {
+                    if (renderTop)
+                        renderSide(view, camera, coords, Block.TOPSIDE, Controller.getLightengine().getColorOfSide(Block.TOPSIDE));
+                    if (renderLeft)
+                        renderSide(view, camera, coords, Block.LEFTSIDE, Controller.getLightengine().getColorOfSide(Block.LEFTSIDE));
+                    if (renderRight)
+                        renderSide(view, camera, coords, Block.RIGHTSIDE, Controller.getLightengine().getColorOfSide(Block.RIGHTSIDE));
+                } else super.render(view, camera, coords, color.mul(getLightlevel()));
+            } else 
+                if (hasSides){
+                    if (renderTop)
+                        renderSide(view, camera, coords, Block.TOPSIDE, color);
+                    if (renderLeft)
+                        renderSide(view, camera, coords, Block.LEFTSIDE, color);
+                    if (renderRight)
+                        renderSide(view, camera, coords, Block.RIGHTSIDE, color);
+                } else super.render(view, camera, coords);
+        }
     }
     
+
     /**
      * Draws a side of a block
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
      * @param coords the coordinates where to render 
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
+     * @param color  a tint in which the sprite get's rendered
      */
-    protected void renderSide(int[] coords, int sidenumb){
-        Image image = getBlockSprite(getId(), getValue(), sidenumb);
+    protected void renderSide(final View view, WECamera camera, Coordinate coords, final int sidenumb, Color color){
+        Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         
-//        if (Gameplay.getView().hasGoodGraphics()){
-//                GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MULT);
-//        
-//            if (sidenumb == 0){
-//                int brightness = getLightlevel() * 255 / 100;
-//                new Color(brightness,brightness,brightness).bind();
-//            } else {
-//                Color.black.bind();
-//            }
-        //}
+        int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);//right side is  half a block more to the right
+        int yPos = get2DPosY(coords) + (sidenumb != 1 ? DIM4 : 0);//the top is drawn a quarter blocks higher
+        sprite.setPosition(xPos, yPos);
         
-        //calc  brightness
-        float brightness = getLightlevel() / 50f;
-                
-        image.setColor(0, brightness,brightness,brightness);
-        image.setColor(1, brightness,brightness, brightness);
+        //uncomment these two lines to add a depth-effect (note that it is very dark)
+        //color.mul((float)(camera.getBottomBorder()-camera.getTopBorder())/(coords.getRelY()-camera.getTopBorder())
+         //   );
+        //color.g *= (coords.getRelY()-camera.getBottomBorder())
+         //  /(camera.getBottomBorder()-camera.getTopBorder());
+        
+        color.mul(getLightlevel()*2);
+        
+        prepareColor(view, color);
+        
+        sprite.getVertices()[SpriteBatch.C4] = color.toFloatBits();//top right
+        
+        //color.mul(getLightlevel()*2-((sidenumb == 2)?0.01f:0));
+        //color.a = 1; 
+        sprite.getVertices()[SpriteBatch.C1] = color.toFloatBits();//top left
 
-        if (sidenumb != 1) brightness -= .3f;
+        
+        if (sidenumb == 2)
+            color.mul(0.93f);
+        else if (sidenumb == 0)
+            color.mul(0.92f);
+        color.a = 1; 
 
-        image.setColor(2, brightness, brightness, brightness);
-        image.setColor(3, brightness, brightness, brightness);
+        sprite.getVertices()[SpriteBatch.C2] = color.toFloatBits();//bottom left
         
-        //right side is  half a block more to the right
-        int xpos = getScreenPosX(this, coords) + ( sidenumb == 2 ? DIM2 : 0);
-        
-        //the top is drawn a quarter blocks higher
-        int ypos = getScreenPosY(this, coords) + (sidenumb != 1 ? DIM4 : 0);
-        
-        image.drawEmbedded(xpos, ypos,image.getWidth(),image.getHeight());
+        if (sidenumb == 2)
+            color.mul(0.97f);
+        else if (sidenumb == 0) color.mul(1);
+        color.a = 1; 
+        sprite.getVertices()[SpriteBatch.C3] = color.toFloatBits();//bottom right
+ 
+        sprite.draw(view.getBatch());
     }
 
     @Override
-    public void update(int delta) {
+    public void update(float delta) {
     }
+    
+
+    @Override
+    public int getDepth(Coordinate coords){
+        return (int) (
+            coords.getRelY() *(Block.DIM4+1)//Y
+            + coords.getCellOffset()[1]
+            + coords.getZ()*Block.DIM4//Z
+            + coords.getCellOffset()[2] / Math.sqrt(2) /2
+            + (getDimensionY() - 1) * DIM4
+        );
+    }
+
+    @Override
+    public char getCategory() {
+        return CATEGORY;
+    }
+
+    @Override
+    public String getName() {
+        return NAMELIST[getId()];
+    }
+
+    @Override
+    public int getOffsetX() {
+        return OFFSET[getId()][getValue()][0];
+    }
+
+    @Override
+    public int getOffsetY() {
+        return OFFSET[getId()][getValue()][1];
+    } 
 }

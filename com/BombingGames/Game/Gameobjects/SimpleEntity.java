@@ -10,6 +10,6 @@ class SimpleEntity extends AbstractEntity {
     }
 
     @Override
-    public void update(int delta) {
+    public void update(float delta) {
     }
 }

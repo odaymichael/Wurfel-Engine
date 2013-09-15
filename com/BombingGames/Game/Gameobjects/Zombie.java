@@ -1,8 +1,11 @@
 package com.BombingGames.Game.Gameobjects;
 
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.Map.Coordinate;
+import com.BombingGames.EngineCore.View;
+import com.BombingGames.EngineCore.WECamera;
+import com.badlogic.gdx.graphics.Color;
 import java.util.Arrays;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 
 /**
  *A zombie which can follow a character.
@@ -12,7 +15,7 @@ public class Zombie extends AbstractCharacter{
     private AbstractCharacter target;
     private int runningagainstwallCounter = 0;
     private float[] lastPos;
-    private int[] lastCoord;
+    private Coordinate lastCoord;
     
     /**
      * Zombie constructor. Use AbstractEntitiy.getInstance to create an zombie.
@@ -31,41 +34,35 @@ public class Zombie extends AbstractCharacter{
     }
 
     @Override
-    public void render(Graphics g) {
-        //draw the object except not visible ones
-        if (!isHidden() && isVisible()) {
-            //get the player sprite
-            Image image = getSprite(40, getValue());
-            //color it green
-            image.setImageColor(0, 0.5f, 0);
-            
-            int xpos = getScreenPosX(this, getRelCoords()) + OFFSETLIST[40][getValue()][0];
-            int ypos = getScreenPosY(this, getRelCoords()) - (getDimensionY() - 1) * DIM2 + OFFSETLIST[40][getValue()][1];
-            image.drawEmbedded(xpos, ypos,image.getWidth(),image.getHeight());
-        }
+    public void render(View view, WECamera camera, Coordinate coords) {
+       Color color = Color.GRAY;
+        if (Controller.getLightengine() != null){
+                color = Controller.getLightengine().getGlobalLight();
+            }
+        render(view, camera, coords, color.mul(Color.GREEN));
     }
 
     @Override
-    public void update(int delta) {
+    public void update(float delta) {
         //follow the target
         walk(
-            target.getRelCoords()[1]<getRelCoords()[1]?true:false,
-            target.getRelCoords()[1]>getRelCoords()[1]?true:false,
-            target.getRelCoords()[0]<getRelCoords()[0]?true:false,
-            target.getRelCoords()[0]>getRelCoords()[0]?true:false,
+            target.getCoords().getAbsY()<getCoords().getAbsY()?true:false,
+            target.getCoords().getAbsY()>getCoords().getAbsY()?true:false,
+            target.getCoords().getAbsX()<getCoords().getAbsX()?true:false,
+            target.getCoords().getAbsX()>getCoords().getAbsX()?true:false,
             0.35f);
         
         //update as usual
         super.update(delta);
         
         //if standing on same position as in last update
-        if (Arrays.equals(getPos(), lastPos) && Arrays.equals(getAbsCoords(), lastCoord))
-            runningagainstwallCounter += delta;
-        else {
-            runningagainstwallCounter=0;
-            lastPos = getPos().clone();
-            lastCoord = getAbsCoords().clone();
-        }
+//        if (Arrays.equals(new int[]{getPositionX(),getPositionY()}, lastPos) && getCoords().equals(lastCoord))
+//            runningagainstwallCounter += delta;
+//        else {
+//            runningagainstwallCounter=0;
+//            lastPos = getPos().clone();
+//            lastCoord = getCoords().cpy();
+//        }
         
         //jump after one second
         if (runningagainstwallCounter > 50) {

@@ -1,64 +1,101 @@
 package com.BombingGames.MainMenu;
 
-import org.newdawn.slick.*;
+import com.BombingGames.Wurfelengine;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 
 /**
  * The View manages ouput
  * @author Benedikt
  */
 public class View {
-    //private float startGameScale = 1;
-    //private float exitScale = 1;
-    private final Image lettering;
-    private final Image background;
-    private GameContainer gc;
-    
+    private final Sprite lettering;    
+    private final Sprite background;
+    private final SpriteBatch batch;
+    private final OrthographicCamera camera;
+    private final BitmapFont font;
     
     /**
      * Creates a View.
-     * @param gc
-     * @throws SlickException
      */
-    public View(GameContainer gc) throws SlickException{
-        lettering = new Image("com/BombingGames/MainMenu/Images/Lettering.png");
-        background = new Image("com/BombingGames/MainMenu/Images/background.png");
-        this.gc = gc;
-        MenuItem.setSpritesheet(new SpriteSheet("com/BombingGames/MainMenu/Images/MainMenu.png",800,80));
+    public View(){
+        //load textures
+        lettering = new Sprite(new Texture(Gdx.files.internal("com/BombingGames/MainMenu/Images/Lettering.png")));
+        lettering.setX((Gdx.graphics.getWidth() - lettering.getWidth())/2);
+        lettering.setY(50);
+        lettering.flip(false, true);
         
-        MenuItem startgame = MainMenuState.getController().getStartGameOption();
-        startgame.setX((gc.getWidth() - MenuItem.getSpritesheet().getWidth())/2);
-        startgame.setY(gc.getHeight()/2 - 100);
+        background = new Sprite(new Texture(Gdx.files.internal("com/BombingGames/MainMenu/Images/background.png")));
+        background.setX((Gdx.graphics.getWidth() - lettering.getWidth())/2);
+        background.setY(50);
+        background.flip(false, true);
         
-        MenuItem loadgame = MainMenuState.getController().getLoadGameOption();
-        loadgame.setX((gc.getWidth()- MenuItem.getSpritesheet().getWidth())/2);
-        loadgame.setY(gc.getHeight()/2);
+        batch = new SpriteBatch();
         
-        MenuItem exit = MainMenuState.getController().getExitOption();
-        exit.setX((gc.getWidth()- MenuItem.getSpritesheet().getWidth())/2);
-        exit.setY(gc.getHeight()/2 + 100);
+        //set the center to the top left
+        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
+        font = new BitmapFont(Gdx.files.internal("com/BombingGames/EngineCore/arial.fnt"), true);
+        font.setColor(Color.WHITE);
     }
 
     /**
      * renders the scene
      * @param controller
-     * @param g
      */
-    void render(Controller Controller, Graphics g) {
-                //Background        
-        for (int x = 0; x-1 < gc.getWidth()/background.getWidth(); x++) {
-            for (int y = 0; y-1 < gc.getHeight()/background.getHeight(); y++) {
-                background.draw(x*background.getWidth(), y*background.getHeight());
+    public void render(Controller pController){
+        
+
+        
+        //update camera and set the projection matrix
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+        
+        //Background        
+        batch.begin();
+        for (int x = 0; x-1 < Gdx.graphics.getWidth()/background.getWidth(); x++) {
+            for (int y = 0; y-1 < Gdx.graphics.getHeight()/background.getHeight(); y++) {
+                background.setPosition(x*background.getWidth(), y*background.getHeight());
+                background.draw(batch);
             }
         }
+        batch.end();
+        
+        batch.begin();
+        font.draw(batch, "FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
+        font.draw(batch, Gdx.input.getX()+ ","+Gdx.input.getY(), Gdx.input.getX(), Gdx.input.getY());
+        batch.end();
+        
+
+        
         
         // render the lettering
-        lettering.draw((gc.getWidth() - lettering.getWidth())/2,80);
+        batch.begin();
+        lettering.draw(batch);
+        batch.end();
         
-        // Draw menu
-        MainMenuState.getController().getStartGameOption().draw(g);
-        MainMenuState.getController().getLoadGameOption().draw(g);
-        MainMenuState.getController().getExitOption().draw(g);
+        // Draw the menu items
+        batch.begin();
+        for (MenuItem mI : MainMenuScreen.getController().getMenuItems()) {
+            mI.draw(batch, camera);
+        }
+        batch.end();
+        
+        batch.begin();
+        font.draw(batch, "FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
+        font.draw(batch, Gdx.input.getX()+ ","+Gdx.input.getY(), Gdx.input.getX(), Gdx.input.getY());
+        batch.end();
+        
+        batch.begin();
+        font.drawMultiLine(batch, Wurfelengine.getCredits(), 50, 50);
+        batch.end();
     }
 }
 
