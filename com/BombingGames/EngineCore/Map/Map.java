@@ -168,31 +168,29 @@ public class Map {
             Gdx.app.log("DEBUG","ChunkSwitch:"+newmiddle);
             if (newmiddle==1 || newmiddle==3 || newmiddle==5 || newmiddle==7) {
 
-            //make a copy of the data
-            Block data_copy[][][] = copyOf3Dim(data);
+                //make a copy of the data
+                Block data_copy[][][] = copyOf3Dim(data);
 
-            for (int pos=0; pos<9; pos++){
-                //refresh coordinates
-                coordlist[pos][0] += (newmiddle == 3 ? -1 : (newmiddle == 5 ? 1 : 0));
-                coordlist[pos][1] += (newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0));
+                for (int pos=0; pos<9; pos++){
+                    //refresh coordinates
+                    coordlist[pos][0] += (newmiddle == 3 ? -1 : (newmiddle == 5 ? 1 : 0));
+                    coordlist[pos][1] += (newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0));
 
-                if (isMovingChunkPossible(pos, newmiddle)){
-                    insertChunk(pos, copyChunk(data_copy, pos - 4 + newmiddle));
-                } else {
-
-                    insertChunk(
-                            pos,
-                            new Chunk(pos,
-                                coordlist[pos][0],
-                                coordlist[pos][1],
-                                newMap
-                            )
-                    );
-
+                    if (isMovingChunkPossible(pos, newmiddle)){
+                        insertChunk(pos, copyChunk(data_copy, pos - 4 + newmiddle));
+                    } else {
+                        insertChunk(
+                                pos,
+                                new Chunk(pos,
+                                    coordlist[pos][0],
+                                    coordlist[pos][1],
+                                    newMap
+                                )
+                        );
+                    }
                 }
-            }
 
-            Controller.requestRecalc();
+                Controller.requestRecalc();
             } else {
                 Gdx.app.log("ERROR","setCenter was called with center:"+newmiddle);
             }
