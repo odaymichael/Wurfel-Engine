@@ -6,7 +6,7 @@ import com.BombingGames.EngineCore.Map.Minimap;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.GameObject;
+import com.BombingGames.Game.Gameobjects.AbstractGameObject;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Gdx;
@@ -72,7 +72,7 @@ public class Controller {
         }
         
         //update every static update method
-        GameObject.updateStaticUpdates(delta);
+        AbstractGameObject.updateStaticUpdates(delta);
         
         //update every block on the map
         Block[][][] mapdata = map.getData();

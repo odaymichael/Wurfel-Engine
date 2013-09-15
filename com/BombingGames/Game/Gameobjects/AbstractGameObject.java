@@ -4,7 +4,6 @@ import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
-import static com.BombingGames.Game.Gameobjects.Block.CATEGORY;
 import com.BombingGames.Game.Lighting.PseudoGrey;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -18,7 +17,7 @@ import org.lwjgl.opengl.GL11;
  *An object is something wich can be found in the game world.
  * @author Benedikt
  */
-public abstract class GameObject {
+public abstract class AbstractGameObject {
     /**Screen DIMENSION of a block/object in pixels. This is the length from the left to the right border of the block.
      * In game coordinates this is also the dimension from top to bottom.*/
     public static final int DIMENSION = 160;
@@ -52,7 +51,7 @@ public abstract class GameObject {
      * @param value 
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
-    protected GameObject(int id, int value) {
+    protected AbstractGameObject(int id, int value) {
         this.id = id;
         this.value = value;
     }
@@ -166,7 +165,7 @@ public abstract class GameObject {
      * @param x game-space-coordinates, value in pixels
      * @param y game-space-coordinates, value in pixels
      * @return Returns the fieldnumber of the coordinates. 8 is the field itself.
-     * @see com.BombingGames.Game.Gameobjects.GameObject#sideIDtoNeighbourCoords(int[], int)
+     * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#sideIDtoNeighbourCoords(int[], int)
      */
     public static int getSideID(float x, float y) {
         int result = 8;
@@ -261,7 +260,7 @@ public abstract class GameObject {
     public static AtlasRegion getSprite(char category, int id, int value) {
         AtlasRegion sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
         if (sprite == null){ //if there is no sprite show the default "sprite not found sprite" for this category
-            sprite = getSpritesheet().findRegion(CATEGORY+"0-0");
+            sprite = getSpritesheet().findRegion(category+"0-0");
             if (sprite==null) {//load generic error sprite if category sprite failed
                 sprite = getSpritesheet().findRegion("error");
                 if (sprite==null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
@@ -410,7 +409,7 @@ public abstract class GameObject {
     /**
      * Hide this object and prevent it from beeing rendered. Don't use this to hide objects. This data is only for rendering data and view specific not for gameworld information. This should be just used for setting during the rendering process.
      * @param visible Sets the visibility.
-     * @see com.BombingGames.Game.Gameobjects.GameObject#setHidden(boolean) 
+     * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#setHidden(boolean) 
      */
     public void setVisible(boolean visible) {
         this.visible = visible;

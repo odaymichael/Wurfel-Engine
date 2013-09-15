@@ -10,7 +10,7 @@ import com.badlogic.gdx.audio.Sound;
  * @author Benedikt
  */
 public abstract class AbstractCharacter extends AbstractEntity {
-   private final int COLISSIONRADIUS = GameObject.DIM4;
+   private final int COLISSIONRADIUS = AbstractGameObject.DIM4;
    private final int SPRITESPERDIR;
       
    private float[] dir = {1, 0, 0};

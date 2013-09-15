@@ -4,7 +4,7 @@ import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.GameObject;
+import com.BombingGames.Game.Gameobjects.AbstractGameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
@@ -94,10 +94,10 @@ public class WECamera extends Camera {
     public void update() {       
         //refrehs the camera's position in the game world
         if (focusCoordinates != null) {
-            outputPosX = focusCoordinates.getBlock().get2DPosX(focusCoordinates) - get2DWidth() / 2 - GameObject.DIM2;
+            outputPosX = focusCoordinates.getBlock().get2DPosX(focusCoordinates) - get2DWidth() / 2 - AbstractGameObject.DIM2;
             outputPosY = focusCoordinates.getBlock().get2DPosY(focusCoordinates) - get2DHeight() / 2;
         } else if (focusentity != null ){
-            outputPosX = focusentity.get2DPosX(null) - get2DWidth()/2 + GameObject.DIM2;            
+            outputPosX = focusentity.get2DPosX(null) - get2DWidth()/2 + AbstractGameObject.DIM2;            
             outputPosY = focusentity.get2DPosY(null) - get2DHeight()/2 ;
         }
         
@@ -203,7 +203,7 @@ public class WECamera extends Camera {
      * @return 
      */
     public int getLeftBorder(){
-        leftborder = outputPosX / GameObject.DIMENSION - 1;
+        leftborder = outputPosX / AbstractGameObject.DIMENSION - 1;
         if (leftborder < 0) leftborder= 0;
         
         return leftborder;
@@ -214,7 +214,7 @@ public class WECamera extends Camera {
      * @return
      */
     public int getRightBorder(){
-        rightborder = (outputPosX + get2DWidth()) / GameObject.DIMENSION + 1;
+        rightborder = (outputPosX + get2DWidth()) / AbstractGameObject.DIMENSION + 1;
         if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
 
         return rightborder;
@@ -225,7 +225,7 @@ public class WECamera extends Camera {
      * @return measured in blocks
      */
     public int getTopBorder(){    
-        topborder = outputPosY / GameObject.DIM4 - 3;
+        topborder = outputPosY / AbstractGameObject.DIM4 - 3;
         if (topborder < 0) topborder= 0;
         
         return topborder;
@@ -236,7 +236,7 @@ public class WECamera extends Camera {
      * @return measured in blocks
      */
     public int getBottomBorder(){
-        bottomborder = (outputPosY+get2DHeight()) / GameObject.DIM4 + Map.getBlocksZ()*2;
+        bottomborder = (outputPosY+get2DHeight()) / AbstractGameObject.DIM4 + Map.getBlocksZ()*2;
         if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
         return bottomborder;
     }

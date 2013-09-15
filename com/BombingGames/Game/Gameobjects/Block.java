@@ -2,13 +2,13 @@ package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM2;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM4;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
-import static com.BombingGames.Game.Gameobjects.GameObject.OBJECTTYPESCOUNT;
-import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
-import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getPixmap;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getSpritesheet;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,7 +19,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
  * A Block is a wonderful piece of information and a geometrical object.
  * @author Benedikt Vogler
  */
-public class Block extends GameObject {
+public class Block extends AbstractGameObject {
     private static Color[][] colorlist = new Color[OBJECTTYPESCOUNT][9];
     /**The id of the left side of a block.*/
     public static final int LEFTSIDE=0;

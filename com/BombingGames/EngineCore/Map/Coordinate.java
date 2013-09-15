@@ -3,9 +3,9 @@ package com.BombingGames.EngineCore.Map;
 import com.BombingGames.EngineCore.Controller;
 import static com.BombingGames.EngineCore.Map.Coordinate.getMapCenter;
 import com.BombingGames.Game.Gameobjects.Block;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM2;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM4;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIMENSION;
 
 /**
  *A coordinate is a reference to a specific cell in the map. The coordinate can transfer between relative and absolute coordiantes.

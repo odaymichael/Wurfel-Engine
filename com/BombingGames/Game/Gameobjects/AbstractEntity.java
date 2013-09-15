@@ -2,18 +2,18 @@ package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIMENSION;
-import static com.BombingGames.Game.Gameobjects.GameObject.GAMEDIMENSION;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM2;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM4;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIMENSION;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.GAMEDIMENSION;
 import com.BombingGames.EngineCore.Map.Map;
-import static com.BombingGames.Game.Gameobjects.GameObject.OBJECTTYPESCOUNT;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
 
 /**
  *An entity is a game object wich is self aware that means it knows it's position.
  * @author Benedikt
  */
-public abstract class AbstractEntity extends GameObject implements IsSelfAware {
+public abstract class AbstractEntity extends AbstractGameObject implements IsSelfAware {
    private Coordinate coords;//the position in the map-grid
    private float positionX = DIM2; //the horizontal offset
    private float positionY = DIM2;
