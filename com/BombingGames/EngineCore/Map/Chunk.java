@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
  */
 public class Chunk {
     /**The number of the mapgenerator used.*/
-    public static final int GENERATOR = 9;
+    public static final int GENERATOR = 1;
     /**The suffix of a chunk file.*/
     protected static final String CHUNKFILESUFFIX = "wec";
     /**The suffix of the metafile */
