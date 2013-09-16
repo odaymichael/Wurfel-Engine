@@ -398,7 +398,7 @@ public class WECamera extends Camera {
     /**
      * Filters every Block (and side) wich is not visible. Boosts rendering speed.
      */
-    protected void raytracing(){ 
+    protected static void raytracing(){ 
         //set visibility of every block to false, except blocks with offset
         Cell[][][] mapdata = Controller.getMap().getData();
         for (int x=0; x < Map.getBlocksX(); x++)
@@ -433,7 +433,7 @@ public class WECamera extends Camera {
      * @param z The starting z-coordinate.
      * @param side The side the ray should check
      */
-    private void traceRay(int[] coords, int side){
+    private static void traceRay(int[] coords, int side){
         int x = coords[0];
         int y = coords[1];
         int z = coords[2];
@@ -592,7 +592,7 @@ public class WECamera extends Camera {
      * @param coord The coordinate where the ray should point to.
      * @param neighbours True when neighbours block also should be scanned
      */
-    public void traceRayTo(Coordinate coord, boolean neighbours){
+    public static void traceRayTo(Coordinate coord, boolean neighbours){
         Block block = coord.getBlock();
         int[] coords = coord.getRel();
                     
