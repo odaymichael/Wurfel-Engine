@@ -59,7 +59,7 @@ public class Controller {
         if (ENABLECHUNKSWITCH){
             //earth to right
             if (cameras.get(0).getLeftBorder() <= 0)
-            map.setCenter(3);
+                map.setCenter(3);
             else //earth to the left
                 if (cameras.get(0).getRightBorder() >= Map.getBlocksX()-1) 
                     map.setCenter(5);
