@@ -25,7 +25,7 @@ public class ExplosiveBarrel extends Block implements IsSelfAware {
         if (coords == null) throw new NullPointerException("No coordinates given to ExplosiveBarrel during creation."); 
         this.coords = coords;
         setObstacle(true);
-        if (explosionsound == null) explosionsound = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/explosion2.wav"));
+        if (explosionsound == null) explosionsound = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/explosion2.ogg"));
     }
     
     /**

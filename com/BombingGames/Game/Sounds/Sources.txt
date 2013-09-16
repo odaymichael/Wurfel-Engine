@@ -1,10 +1,10 @@
 Sources of the sounds:
 
-"victorcenusa_running.wav"
+"victorcenusa_running.wav"->converted to .ogg
 http://www.freesound.org/people/victorcenusa/sounds/22862/
 
-edited file "wind-loud.wav"
+edited file "wind-loud.wav"->converted to .ogg
 http://soundbible.com/1810-Wind.html
 
-"explosion2.wav" by steveygos93
+"explosion2.wav" by steveygos93->converted to .ogg
 http://freesound.org/people/steveygos93/sounds/80401/
