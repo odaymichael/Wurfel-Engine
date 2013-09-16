@@ -68,6 +68,8 @@ public class View {
     public void render(){       
         //Gdx.gl10.glViewport(0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
+        //Gdx.gl10.glClear(GL10.GL_DEPTH_BUFFER_BIT); //clearing the screen is ~5-10% slower than without.
+        
         //render every camera
         for (WECamera camera : controller.getCameras()) {
             camera.render(this, camera);
