@@ -1,7 +1,6 @@
 package com.BombingGames.EngineCore.Map;
 
 import com.BombingGames.EngineCore.GameplayScreen;
-import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Wurfelengine;
 import com.badlogic.gdx.Gdx;
 import java.io.BufferedReader;
@@ -28,16 +27,18 @@ public class Chunk {
     private static int blocksY = 40;//blocksY must be even number
     private static int blocksZ = 10;
     
-    private Block data[][][] = new Block[blocksX][blocksY][blocksZ];
+    private Cell data[][][];
   
     /**
      * Creates a Chunk filled with air
      */
     public Chunk() {
+        data = new Cell[blocksX][blocksY][blocksZ];
+        
         for (int x=0; x < blocksX; x++)
             for (int y=0; y < blocksY; y++)
                 for (int z=0; z < blocksZ; z++)
-                    data[x][y][z] = Block.getInstance(0);
+                    data[x][y][z] = new Cell();
     }
     
     /**
@@ -69,9 +70,9 @@ public class Chunk {
                     for (int y=0; y < blocksY; y++){
                         int height = (int) (Math.random()*blocksZ-1)+1;
                         for (int z=0; z < height; z++){
-                            data[x][y][z] = Block.getInstance(2);
+                            data[x][y][z].newBlock(2);
                             }
-                        data[x][y][height] = Block.getInstance(1);
+                        data[x][y][height].newBlock(1);
                     }
                 break;
             }
@@ -80,9 +81,9 @@ public class Chunk {
                 //water
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = Block.getInstance(8);
-                        data[x][y][1] = Block.getInstance(9);
-                        data[x][y][2] = Block.getInstance(9);
+                        data[x][y][0].newBlock(8);
+                        data[x][y][1].newBlock(9);
+                        data[x][y][2].newBlock(9);
                     }
                 
                 //mountain
@@ -95,18 +96,18 @@ public class Chunk {
                         if (height>0){
                             for (int z=0; z < height; z++) {
                                 if (height > 2)
-                                    data[x][y][z] = Block.getInstance(2);
+                                    data[x][y][z].newBlock(2);
                                 else
-                                    data[x][y][z] = Block.getInstance(8);
+                                    data[x][y][z].newBlock(8);
                                     
                             }
                             if (height > 2)
-                                    data[x][y][height] = Block.getInstance(1);
+                                    data[x][y][height].newBlock(1);
                                 else
-                                    data[x][y][height] = Block.getInstance(8);
+                                    data[x][y][height].newBlock(8);
                             
-                            if (Math.random() < 0.15f && height < getBlocksZ()-1 && height > 2) data[x][y][height+1] = Block.getInstance(34);
-                            if (Math.random() < 0.15f && height < getBlocksZ()-1 && height > 2) data[x][y][height+1] = Block.getInstance(35);
+                            if (Math.random() < 0.15f && height < getBlocksZ()-1 && height > 2) data[x][y][height+1].newBlock(34);
+                            if (Math.random() < 0.15f && height < getBlocksZ()-1 && height > 2) data[x][y][height+1].newBlock(35);
                         }
                     }
                 break;
@@ -118,10 +119,10 @@ public class Chunk {
                         if (blocksZ>1){
                             int z;
                             for (z=0; z < blocksZ/2; z++){
-                                data[x][y][z] = Block.getInstance(2);
+                                data[x][y][z].newBlock(2);
                             }
-                            data[x][y][z-1] = Block.getInstance(1);
-                        }else data[x][y][0] = Block.getInstance(2);
+                            data[x][y][z-1].newBlock(1);
+                        }else data[x][y][0].newBlock(2);
                     }
                 break;
             }
@@ -130,13 +131,13 @@ public class Chunk {
                 int pillarx = (int) (Math.random()*blocksX-1);
                 int pillary = (int) (Math.random()*blocksY-1);
                 //pillar
-                for (int z=0; z < blocksZ; z++) data[pillarx][pillary][z] = Block.getInstance(1);
+                for (int z=0; z < blocksZ; z++) data[pillarx][pillary][z].newBlock(1);
                 
                 //flat grass
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = Block.getInstance(2);
-                        data[x][y][1] = Block.getInstance(3);
+                        data[x][y][0].newBlock(2);
+                        data[x][y][1].newBlock(3);
                     }
                 break;
             }
@@ -146,25 +147,25 @@ public class Chunk {
                     for (int y=0; y < blocksY; y++)
                         for (int z=0; z < blocksZ-1; z++){
                             if (z!=blocksZ-2)
-                                 data[x][y][z] = Block.getInstance(2);
-                            else data[x][y][z] = Block.getInstance(1);
+                                 data[x][y][z].newBlock(2);
+                            else data[x][y][z].newBlock(1);
                     }
             }
                 
             case 5: {//animation test                
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = Block.getInstance(72);
+                        data[x][y][0].newBlock(72);
                     }
-                //data[blocksX/2][blocksY/2][2] = Block.getInstance(72);//animation test
-                //data[blocksX/2][blocksY/2][1] = Block.getInstance(2);
+                //data[blocksX/2][blocksY/2][2].newBlock(72);//animation test
+                //data[blocksX/2][blocksY/2][1].newBlock(2);
                 
                 break;
             } 
             case 6: {//every block                
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = Block.getInstance(y, 0, new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, 0, true));
+                        data[x][y][0].newBlock(y, 0, new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, 0, true));
                     }
                 break;
             }
@@ -174,9 +175,9 @@ public class Chunk {
                         if (blocksZ>1){
                             int z;
                             for (z=0; z < blocksZ/2; z++){
-                                data[x][y][z] = Block.getInstance(9);
+                                data[x][y][z].newBlock(9);
                             }
-                        }else data[x][y][0] = Block.getInstance(9);
+                        }else data[x][y][0].newBlock(9);
                     }
                 break;
             }
@@ -184,14 +185,14 @@ public class Chunk {
                 //flat grass
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
-                        data[x][y][0] = Block.getInstance(2);
-                        data[x][y][1] = Block.getInstance(3);
+                        data[x][y][0].newBlock(2);
+                        data[x][y][1].newBlock(3);
                     }
                 
                 int specialx = (int) (Math.random()*blocksX-1);
                 int specialy = (int) (Math.random()*blocksY-1);
                 //pillar
-                data[specialx][specialy][1] = Block.getInstance(40, 0, new Coordinate(specialx + pos % 3 * blocksX, specialy + pos / 3 * blocksY, 1, true));
+                data[specialx][specialy][1].newBlock(40, 0, new Coordinate(specialx + pos % 3 * blocksX, specialy + pos / 3 * blocksY, 1, true));
                 break;
             }
                 
@@ -200,7 +201,7 @@ public class Chunk {
                     for (int y=0; y < blocksY; y++){
                         int height = (int) (Math.random()*blocksZ-1)+1;
                         for (int z=0; z < height; z++){
-                            data[x][y][z] = Block.getInstance(44,1);
+                            data[x][y][z].newBlock(44,1);
                             }
                     }
                 break;
@@ -257,7 +258,7 @@ public class Chunk {
                                 posend++;
                             }
 
-                            data[x][y][z] = Block.getInstance(
+                            data[x][y][z].newBlock(
                                         Integer.parseInt(line.substring(0,posdots)),
                                         Integer.parseInt(line.substring(posdots+1, posend)),
                                         new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, z, true)
@@ -360,7 +361,7 @@ public class Chunk {
      * Returns the data of the chunk
      * @return 
      */
-    public Block[][][] getData() {
+    public Cell[][][] getData() {
         return data;
     }
 
@@ -368,9 +369,7 @@ public class Chunk {
      * 
      * @param data
      */
-    public void setData(Block[][][] data) {
+    public void setData(Cell[][][] data) {
         this.data = data;
     }
-
-
 }

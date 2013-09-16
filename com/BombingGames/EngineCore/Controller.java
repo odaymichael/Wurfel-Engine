@@ -1,5 +1,6 @@
 package com.BombingGames.EngineCore;
 
+import com.BombingGames.EngineCore.Map.Cell;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.EngineCore.Map.Minimap;
@@ -75,11 +76,11 @@ public class Controller {
         AbstractGameObject.updateStaticUpdates(delta);
         
         //update every block on the map
-        Block[][][] mapdata = map.getData();
+        Cell[][][] mapdata = map.getData();
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY(); y++)
                 for (int z=0; z < Map.getBlocksZ(); z++)
-                    mapdata[x][y][z].update(delta);
+                    mapdata[x][y][z].getBlock().update(delta);
         
         //update every entity
         for (AbstractEntity entity : map.getEntitys())
@@ -90,11 +91,12 @@ public class Controller {
                 map.getEntitys().remove(i);
         }
         
-        for (WECamera camera : cameras)
+        for (WECamera camera : cameras) {
             camera.update();
+        }
                 
         //recalculates the light if requested
-        recalcIfRequested(cameras.get(0));      
+        recalcIfRequested();      
     }
 
     
@@ -102,17 +104,18 @@ public class Controller {
      * Informs the map that a recalc is requested. It will do it in the next update. This method  to limit update calls to to per frame
      */
     public static void requestRecalc(){
+        Gdx.app.log("DEBUG", "A recalc was requested.");
         recalcRequested = true;
     }
     
     /**
      * When the recalc was requested it calls raytracing and light recalculing. This method should be called every update.
      * Request a recalc with <i>reuqestRecalc()</i>. 
-     * @param camera 
      */
-    public void recalcIfRequested(WECamera camera){
+    public void recalcIfRequested(){
         if (recalcRequested) {
-            camera.raytracing();
+            Gdx.app.log("DEBUG", "Recalcing.");
+            WECamera.raytracing();
             LightEngine.calcSimpleLight();
             if (minimap != null) minimap.update();
             recalcRequested = false;

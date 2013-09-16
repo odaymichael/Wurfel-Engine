@@ -1,5 +1,6 @@
 package com.BombingGames.EngineCore;
 
+import com.BombingGames.EngineCore.Map.Cell;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
@@ -399,11 +400,11 @@ public class WECamera extends Camera {
      */
     protected void raytracing(){ 
         //set visibility of every block to false, except blocks with offset
-        Block[][][] mapdata = Controller.getMap().getData();
+        Cell[][][] mapdata = Controller.getMap().getData();
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY(); y++)
                 for (int z=0; z < Map.getBlocksZ(); z++) {
-                    Block block = mapdata[x][y][z];
+                    Block block = mapdata[x][y][z].getBlock();
                     
                     //Blocks with offset are not in the grid, so can not be analysed => always visible
                     boolean notAnalyzable = !block.hasSides() || new Coordinate(x,y,z, true).hasOffset();
