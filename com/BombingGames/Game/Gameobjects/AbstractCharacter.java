@@ -224,7 +224,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
                 }
             }
 
-
             //should the fallingsound be played?
             if (fallingSound != null) {
                 if (dir[2] < -1
