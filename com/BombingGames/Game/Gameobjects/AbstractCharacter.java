@@ -226,11 +226,11 @@ public abstract class AbstractCharacter extends AbstractEntity {
 
             //should the fallingsound be played?
             if (fallingSound != null) {
-                if (dir[2] < -1
-                    && !fallingSoundPlaying
-                ){
-                    fallingSound.play();
-                    fallingSoundPlaying = true;
+                if (dir[2] < -1) {
+                    if (!fallingSoundPlaying){
+                        fallingSound.play();
+                        fallingSoundPlaying = true;
+                    }
                 }else {
                     fallingSound.stop();
                     fallingSoundPlaying = false;
