@@ -624,5 +624,4 @@ public class WECamera extends Camera {
         traceRay(coords[0], coords[1], Block.RIGHTSIDE);
     }
 
-
 }
