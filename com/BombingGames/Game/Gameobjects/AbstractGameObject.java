@@ -411,7 +411,7 @@ public abstract class AbstractGameObject {
      * @param visible Sets the visibility.
      * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#setHidden(boolean) 
      */
-    public void setVisible(boolean visible) {
+    public void setClipped(boolean visible) {
         this.visible = visible;
     }
 

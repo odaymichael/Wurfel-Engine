@@ -28,6 +28,7 @@ public class WECamera extends Camera {
     private Coordinate focusCoordinates;
     private AbstractEntity focusentity;
     private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
+    private final Block groundBlock;
     
 
     /**
@@ -53,6 +54,10 @@ public class WECamera extends Camera {
         //set the camera's focus to the center of the map
         outputPosX = Coordinate.getMapCenter().get2DPosX() - get2DWidth() / 2;
         outputPosY = Coordinate.getMapCenter().get2DPosY() - get2DHeight() / 2;
+        
+        groundBlock = Block.getInstance(44);//set the ground level groundBlock
+        groundBlock.setSideClipping(0, false);
+        groundBlock.setSideClipping(2, false);
     }
     
    /**
@@ -125,6 +130,11 @@ public class WECamera extends Camera {
         apply(Gdx.gl10);//don't know what this does
     }
     
+   @Override
+    public void update(boolean updateFrustum) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     /**
      * Renders the viewport
      * @param view
@@ -145,19 +155,14 @@ public class WECamera extends Camera {
             
             //render map
             createDepthList();
-               
+                        
             view.getBatch().begin();
             view.setDrawmode(GL11.GL_MODULATE);
             
             //render vom bottom to top
             for (Renderobject renderobject : depthsort) {
                 Coordinate coords = renderobject.getCoords();//get the coords of the current renderobject
-                int indexposition = renderobject.getIndexposition(); //get the entityindex to check if it is an entity
-                
-                if (indexposition == -1) //if a block then get it and draw it
-                    Controller.getMap().getData(coords).render(view, camera, coords);
-                else //if it's an entity get it and draw it
-                    Controller.getMap().getEntitys().get(indexposition).render(view, camera, coords);    
+                renderobject.getObject().render(view, camera, coords); 
             }
             
             view.getBatch().end();
@@ -190,8 +195,8 @@ public class WECamera extends Camera {
 
     
     /**
-     * Use this if you want to focus on a special block.
-     * @param coord the coordaintes of the block.
+     * Use this if you want to focus on a special groundBlock.
+     * @param coord the coordaintes of the groundBlock.
      */
     public void focusOnCoords(Coordinate coord){
         focusCoordinates = coord;
@@ -222,7 +227,7 @@ public class WECamera extends Camera {
     }
     
     /**
-     * Returns the top seight border of the deepest block
+     * Returns the top seight border of the deepest groundBlock
      * @return measured in blocks
      */
     public int getTopBorder(){    
@@ -233,7 +238,7 @@ public class WECamera extends Camera {
     }
     
      /**
-     * Returns the bottom seight border of the highest block
+     * Returns the bottom seight border of the highest groundBlock
      * @return measured in blocks
      */
     public int getBottomBorder(){
@@ -333,8 +338,14 @@ public class WECamera extends Camera {
      */
     private void createDepthList() {
         depthsort.clear();
-        for (int x = leftborder; x < rightborder;x++)
-            for (int y = topborder; y < bottomborder;y++)
+        
+        for (int x = leftborder; x < rightborder; x++)
+            for (int y = topborder; y < bottomborder; y++){
+
+                if (Controller.getMap().getDeepestLayerVisibility()[x][y])
+                    depthsort.add(new Renderobject(groundBlock, new Coordinate(x, y, -1, true)));
+                
+                //add blocks
                 for (int z=0; z < Map.getBlocksZ(); z++){
                     
                     Coordinate coord = new Coordinate(x, y, z, true); 
@@ -345,9 +356,10 @@ public class WECamera extends Camera {
                         <
                             outputPosY + get2DHeight()
                     ) {
-                        depthsort.add(new Renderobject(coord, -1));
+                        depthsort.add(new Renderobject(Controller.getMapData(coord), coord));
                     }
                 }
+            }
         
         //add entitys
         for (int i=0; i< Controller.getMap().getEntitys().size(); i++) {
@@ -361,7 +373,7 @@ public class WECamera extends Camera {
                             outputPosY + get2DHeight()
                     )
                     depthsort.add(
-                        new Renderobject(entity, i)
+                        new Renderobject(entity, entity.getCoords())
                     );
         }
         //sort the list
@@ -399,7 +411,7 @@ public class WECamera extends Camera {
      * Filters every Block (and side) wich is not visible. Boosts rendering speed.
      */
     protected static void raytracing(){ 
-        //set visibility of every block to false, except blocks with offset
+        //set visibility of every groundBlock to false, except blocks with offset
         Cell[][][] mapdata = Controller.getMap().getData();
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY(); y++)
@@ -408,20 +420,20 @@ public class WECamera extends Camera {
                     
                     //Blocks with offset are not in the grid, so can not be analysed => always visible
                     boolean notAnalyzable = !block.hasSides() || new Coordinate(x,y,z, true).hasOffset();
-                    block.setVisible(notAnalyzable);
+                    block.setClipped(notAnalyzable);
                     if (notAnalyzable) {
-                        block.setSideVisibility(0, true);
-                        block.setSideVisibility(1, true);
-                        block.setSideVisibility(2, true);
+                        block.setSideClipping(0, true);
+                        block.setSideClipping(1, true);
+                        block.setSideClipping(2, true);
                     }
                 }
                 
         //send the rays through top of the map
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY() + Map.getBlocksZ()*2; y++){
-                traceRay(new int[]{x,y, Map.getBlocksZ()-1}, 0);
-                traceRay(new int[]{x,y, Map.getBlocksZ()-1}, 1);
-                traceRay(new int[]{x,y, Map.getBlocksZ()-1}, 2);
+                traceRay(x,y, 0);
+                traceRay(x,y, 1);
+                traceRay(x,y, 2);
             }     
     }
     
@@ -430,13 +442,10 @@ public class WECamera extends Camera {
     * This costs less performance than a whole raytracing.
      * @param x The starting x-coordinate.
      * @param y The starting y-coordinate.
-     * @param z The starting z-coordinate.
      * @param side The side the ray should check
      */
-    private static void traceRay(int[] coords, int side){
-        int x = coords[0];
-        int y = coords[1];
-        int z = coords[2];
+    private static void traceRay(int x, int y, int side){
+        int z = Map.getBlocksZ()-1;//start always from top
         
         boolean left = true;
         boolean right = true;
@@ -455,13 +464,13 @@ public class WECamera extends Camera {
 
         y += 2;
         z++;  
-        if (z > 0) 
+        if (z > 0) {
             do {
                 y -= 2;
                 z--;
 
                 if (side == 0){
-                    //direct neighbour block on left hiding the complete left side
+                    //direct neighbour groundBlock on left hiding the complete left side
                     if (Controller.getMapData(x, y, z).hasSides()//block on top
                         && x > 0 && y < Map.getBlocksY()-1
                         && new Coordinate(x - (y%2 == 0 ? 1:0), y+1, z, true).hidingPastBlock())
@@ -556,48 +565,45 @@ public class WECamera extends Camera {
                             //two blocks hiding the right side
                             if (y+2 < Map.getBlocksY()
                                 &&
-                                new Coordinate(x, y+2, z, true).hidingPastBlock())
+                                new Coordinate(x, y+2, z, true).hidingPastBlock()
+                            )
                                 left = false;
                             
                             if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY() && z+1 < Map.getBlocksZ()
                                 &&
-                                new Coordinate(x + (y%2 == 0 ? 0:1), y+1, z+1, true).hidingPastBlock())
+                                new Coordinate(x + (y%2 == 0 ? 0:1), y+1, z+1, true).hidingPastBlock()
+                            )
                                 right = false;
-                        } else {
-//                            if (side == 4) {//check top side
-//                                if (Controller.getMapData(x, y, z).hasSides()//block on top
-//                                    && z+1 < Map.getBlocksZ()
-//                                    && Controller.getMapData(x, y, z+1).hidingPastBlock())
-//                                    break;
-//                                }
                         }
                     }
                 }
                 
-                if (left || right){ //as long one part of the side is visible save it
+                if (left || right){ //unless both sides are clipped don't clip the whole groundBlock
                     Block temp = Controller.getMapData(x, y, z);
 
                     if (!(liquidfilter && temp.isLiquid())){
                         liquidfilter = false;
-                        temp.setSideVisibility(side, true);  
+                        temp.setSideClipping(side, true);  
                     }                                
                 }                
-            } while (y >= 2 && z >= 1 //not on bottom of map
+            } while (y > 1 && z > 0 //not on bottom of map
                 && (left || right) //left and right still visible
-                && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset()));
+                );
+           Controller.getMap().getDeepestLayerVisibility()[x][y] = (z < 0);
+        }
     }
     
     /**
-     * Traces the ray to a specific block. This is like the raytracing but only a single ray.
+     * Traces the ray to a specific groundBlock. This is like the raytracing but only a single ray.
      * @param coord The coordinate where the ray should point to.
-     * @param neighbours True when neighbours block also should be scanned
+     * @param neighbours True when neighbours groundBlock also should be scanned
      */
     public static void traceRayTo(Coordinate coord, boolean neighbours){
         Block block = coord.getBlock();
         int[] coords = coord.getRel();
                     
         //Blocks with offset are not in the grid, so can not be calculated => always visible
-        block.setVisible(
+        block.setClipped(
             !block.hasSides() || coord.hasOffset()
         );
                     
@@ -609,17 +615,14 @@ public class WECamera extends Camera {
         
         //trace rays
         if (neighbours){
-            traceRay(new int[]{coords[0] - (coords[1]%2 == 0 ? 1:0), coords[1]-1, coords[2]}, Block.RIGHTSIDE);
-            traceRay(new int[]{coords[0] + (coords[1]%2 == 0 ? 0:1), coords[1]-1, coords[2]}, Block.LEFTSIDE);
-            traceRay(new int[]{coords[0], coords[1], coords[2]-1}, Block.TOPSIDE);
+            traceRay(coords[0] - (coords[1]%2 == 0 ? 1:0), coords[1]-1, Block.RIGHTSIDE);
+            traceRay(coords[0] + (coords[1]%2 == 0 ? 0:1), coords[1]-1, Block.LEFTSIDE);
+            traceRay(coords[0], coords[1]+2, Block.TOPSIDE);
         }
-        traceRay(coords, Block.LEFTSIDE);
-        traceRay(coords, Block.TOPSIDE);             
-        traceRay(coords, Block.RIGHTSIDE);
+        traceRay(coords[0], coords[1], Block.LEFTSIDE);
+        traceRay(coords[0], coords[1], Block.TOPSIDE);             
+        traceRay(coords[0], coords[1], Block.RIGHTSIDE);
     }
 
-    @Override
-    public void update(boolean updateFrustum) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 }

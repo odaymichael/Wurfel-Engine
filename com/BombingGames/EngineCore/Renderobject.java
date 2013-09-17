@@ -40,7 +40,7 @@ public class Renderobject {
         return coords;
     }
 
-    public AbstractGameObject getContent() {
+    public AbstractGameObject getObject() {
         return content;
     }
 

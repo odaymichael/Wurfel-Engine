@@ -36,8 +36,11 @@ public class Block extends AbstractGameObject {
        /** A list containing the offset of the objects. */
     public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][10][2];
     
-    private boolean liquid, renderRight, renderTop, renderLeft;
+    private boolean liquid;
     private boolean hasSides = true;
+    private boolean renderRight = true;
+    private boolean renderTop = true;
+    private boolean renderLeft = true;
     
     static {
         NAMELIST[0] = "air";
@@ -178,6 +181,7 @@ public class Block extends AbstractGameObject {
                     break; 
         }
         block.setValue(value);
+        block.setClipped(true);
         return block;
     }  
     
@@ -249,8 +253,8 @@ public class Block extends AbstractGameObject {
      * @param side 0 = left, 1 = top, 2 = right
      * @param visible The value
      */
-    public void setSideVisibility(int side, boolean visible) {
-        if (visible) this.setVisible(true);
+    public void setSideClipping(int side, boolean visible) {
+        if (visible) this.setClipped(true);
         
         if (side==0)
             renderLeft = visible;
@@ -287,8 +291,8 @@ public class Block extends AbstractGameObject {
      * @param visible When it is set to false, every side will also get hidden.
      */
     @Override
-    public void setVisible(boolean visible) {
-        super.setVisible(visible);
+    public void setClipped(boolean visible) {
+        super.setClipped(visible);
         if (!visible) {
             renderLeft = false;
             renderTop = false;
@@ -299,11 +303,8 @@ public class Block extends AbstractGameObject {
     @Override
     public void render(View view, WECamera camera, Coordinate coords) {
         if (isVisible() && !isHidden()) {
-            Color color = Color.GRAY;
             if (Controller.getLightengine() != null){
-                color = Controller.getLightengine().getGlobalLight();
-            }
-            if (Controller.getLightengine() != null){
+                Color color = Controller.getLightengine().getGlobalLight();
                 if (hasSides) {
                     if (renderTop)
                         renderSide(view, camera, coords, Block.TOPSIDE, Controller.getLightengine().getColorOfSide(Block.TOPSIDE));
@@ -312,7 +313,8 @@ public class Block extends AbstractGameObject {
                     if (renderRight)
                         renderSide(view, camera, coords, Block.RIGHTSIDE, Controller.getLightengine().getColorOfSide(Block.RIGHTSIDE));
                 } else super.render(view, camera, coords, color.mul(getLightlevel()));
-            } else 
+            } else {
+                Color color = Color.GRAY;
                 if (hasSides){
                     if (renderTop)
                         renderSide(view, camera, coords, Block.TOPSIDE, color);
@@ -321,6 +323,7 @@ public class Block extends AbstractGameObject {
                     if (renderRight)
                         renderSide(view, camera, coords, Block.RIGHTSIDE, color);
                 } else super.render(view, camera, coords);
+            }
         }
     }
     
