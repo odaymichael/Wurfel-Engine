@@ -588,7 +588,7 @@ public class WECamera extends Camera {
                 }                
             } while (y > 1 && z > 0 //not on bottom of map
                 && (left || right) //left and right still visible
-                );
+                && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset()));
            Controller.getMap().getDeepestLayerVisibility()[x][y] = (z < 0);
         }
     }
