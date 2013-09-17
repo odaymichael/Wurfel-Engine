@@ -36,7 +36,7 @@ public class Map {
     private static int blocksX, blocksY, blocksZ;
     /** the map data are the blocks in their cells */
     private Cell[][][] data;
-    private boolean[][][] deepestLayerVisibility;
+    private boolean[][] deepestLayerVisibility;
     
     /** every entity on the map is stored in this field */
     private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
@@ -67,7 +67,7 @@ public class Map {
         blocksY = Chunk.getBlocksY()*3;
         blocksZ = Chunk.getBlocksZ();
         data = new Cell[blocksX][blocksY][blocksZ];//create Array where the data is stored
-        deepestLayerVisibility = new boolean[blocksX][blocksY][blocksZ];
+        deepestLayerVisibility = new boolean[blocksX][blocksY];
     }
     
     /**
@@ -477,4 +477,10 @@ public class Map {
         }
         return list;
     }
+
+    public boolean[][] getDeepestLayerVisibility() {
+        return deepestLayerVisibility;
+    }
+    
+    
 }
