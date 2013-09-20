@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 
 /**
 * Algorithm by Rich Franzen, 22 July 1999
-*mailto:rfranzen@my-deja.com
+*mailto:rich@r0k.us
 *(c) 1999, Rich Franzen
  * @author Rich Franzen, Benedikt Vogler
  */
