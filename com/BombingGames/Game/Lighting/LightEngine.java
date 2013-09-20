@@ -77,14 +77,14 @@ public class LightEngine {
         I_ambient = (ambientBaseLevel + sunlightBrightness + moonlightBrightness) * k_ambient;
                 
         //diffusion
-        I_diff0 = (float) (sunlightBrightness *  k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180) * Math.cos(((sun.getLongPos()-45)*Math.PI)/180));  
-        I_diff0 += moonlightBrightness * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180) * Math.cos(((moon.getLongPos()-45)*Math.PI)/180);
+        I_diff0 = (float) (sunlightBrightness *  k_diff * Math.cos(((sun.getHeight())*Math.PI)/180) * Math.cos(((sun.getAzimuth()-45)*Math.PI)/180));  
+        I_diff0 += moonlightBrightness * k_diff * Math.cos(((moon.getHeight())*Math.PI)/180) * Math.cos(((moon.getAzimuth()-45)*Math.PI)/180);
         
-        I_diff1 = (float) (sunlightBrightness * k_diff * Math.cos(((sun.getLatPos()-90)*Math.PI)/180));     
-        I_diff1 += moonlightBrightness * k_diff * Math.cos(((moon.getLatPos()-90)*Math.PI)/180);   
+        I_diff1 = (float) (sunlightBrightness * k_diff * Math.cos(((sun.getHeight()-90)*Math.PI)/180));     
+        I_diff1 += moonlightBrightness * k_diff * Math.cos(((moon.getHeight()-90)*Math.PI)/180);   
         
-        I_diff2 = (float) (sunlightBrightness * k_diff * Math.cos(((sun.getLatPos())*Math.PI)/180)*Math.cos(((sun.getLongPos()-135)*Math.PI)/180));
-        I_diff2 += moonlightBrightness  * k_diff * Math.cos(((moon.getLatPos())*Math.PI)/180)*Math.cos(((moon.getLongPos()-135)*Math.PI)/180);
+        I_diff2 = (float) (sunlightBrightness * k_diff * Math.cos(((sun.getHeight())*Math.PI)/180)*Math.cos(((sun.getAzimuth()-135)*Math.PI)/180));
+        I_diff2 += moonlightBrightness  * k_diff * Math.cos(((moon.getHeight())*Math.PI)/180)*Math.cos(((moon.getAzimuth()-135)*Math.PI)/180);
         
         //specular
         
@@ -93,8 +93,8 @@ public class LightEngine {
 //                        sunlightBrightness
 //                        * k_specular
 //                        * Math.pow(
-//                            Math.sin((sun.getLatPos())*Math.PI/180)*Math.sin((sun.getLongPos())*Math.PI/180)* Math.sqrt(2)/Math.sqrt(3)//y
-//                          + Math.sin((sun.getLatPos()-75)*Math.PI/180)/Math.sqrt(3)//z
+//                            Math.sin((sun.getHeight())*Math.PI/180)*Math.sin((sun.getAzimuth())*Math.PI/180)* Math.sqrt(2)/Math.sqrt(3)//y
+//                          + Math.sin((sun.getHeight()-75)*Math.PI/180)/Math.sqrt(3)//z
 //                        ,n_spec)
 //                        *(n_spec+2)/(2*Math.PI)
 //                        );
@@ -104,8 +104,8 @@ public class LightEngine {
                             sunlightBrightness
                             * k_specular
                             * Math.pow(
-                                Math.sin(sun.getLatPos()*Math.PI/180)*Math.sin(sun.getLongPos()*Math.PI/180)/ Math.sqrt(2)//y
-                              + Math.sin((sun.getLatPos()-90)*Math.PI/180)/ Math.sqrt(2)//z
+                                Math.sin(sun.getHeight()*Math.PI/180)*Math.sin(sun.getAzimuth()*Math.PI/180)/ Math.sqrt(2)//y
+                              + Math.sin((sun.getHeight()-90)*Math.PI/180)/ Math.sqrt(2)//z
                             ,n_spec)
                             *(n_spec+2)/(2*Math.PI)
                         );
@@ -113,8 +113,8 @@ public class LightEngine {
                         moonlightBrightness
                         * k_specular
                         * Math.pow(
-                            Math.sin((moon.getLatPos())*Math.PI/180)*Math.sin((moon.getLongPos())*Math.PI/180)/Math.sqrt(2)//y
-                          + Math.sin((moon.getLatPos()-90)*Math.PI/180)/Math.sqrt(2)//z
+                            Math.sin((moon.getHeight())*Math.PI/180)*Math.sin((moon.getAzimuth())*Math.PI/180)/Math.sqrt(2)//y
+                          + Math.sin((moon.getHeight()-90)*Math.PI/180)/Math.sqrt(2)//z
                         ,n_spec)
                         *(n_spec+2)/(2*Math.PI)
                         );
@@ -124,8 +124,8 @@ public class LightEngine {
         //                        sunlightBrightness
         //                        * k_specular
         //                        * Math.pow(
-        //                            Math.cos((sun.getLatPos() - 35.26) * Math.PI/360)
-        //                           *Math.cos((sun.getLongPos() + 180) * Math.PI/360)
+        //                            Math.cos((sun.getHeight() - 35.26) * Math.PI/360)
+        //                           *Math.cos((sun.getAzimuth() + 180) * Math.PI/360)
         //                        ,n_spec)
         //                        *(n_spec+2)/(2*Math.PI)
         //                        );   
@@ -264,8 +264,8 @@ public class LightEngine {
             shapeRenderer.setColor(Color.RED);
             shapeRenderer.begin(ShapeType.Line);
             shapeRenderer.line(
-                posX +(int) (size* Math.sin((sun.getLongPos()-90)*Math.PI/180)),
-                posY +(int) (size/2*Math.cos((sun.getLongPos()-90)*Math.PI/180)),
+                posX +(int) (size* Math.sin((sun.getAzimuth()-90)*Math.PI/180)),
+                posY +(int) (size/2*Math.cos((sun.getAzimuth()-90)*Math.PI/180)),
                 posX,
                 posY
             );
@@ -273,8 +273,8 @@ public class LightEngine {
             //latitude
             shapeRenderer.setColor(Color.MAGENTA);
             shapeRenderer.line(
-                posX +(int) (size * Math.sin((sun.getLatPos()-90)*Math.PI/180)),
-                posY -(int) (size/2*Math.sin((sun.getLatPos())*Math.PI/180)),
+                posX +(int) (size * Math.sin((sun.getHeight()-90)*Math.PI/180)),
+                posY -(int) (size/2*Math.sin((sun.getHeight())*Math.PI/180)),
                 posX,
                 posY
             );
@@ -282,23 +282,23 @@ public class LightEngine {
             //long+lat of sun position
             shapeRenderer.setColor(Color.YELLOW);
             shapeRenderer.line(
-                posX +(int) ( size*Math.sin((sun.getLongPos()+90)*Math.PI/180) * Math.sin((sun.getLatPos()-90)*Math.PI/180) ),
-                posY -(int) ( size/2*Math.sin((sun.getLongPos())*Math.PI/180) * Math.sin((sun.getLatPos()-90)*Math.PI/180)) -(int) (size/2*Math.sin((sun.getLatPos())*Math.PI/180)),
+                posX +(int) ( size*Math.sin((sun.getAzimuth()+90)*Math.PI/180) * Math.sin((sun.getHeight()-90)*Math.PI/180) ),
+                posY -(int) ( size/2*Math.sin((sun.getAzimuth())*Math.PI/180) * Math.sin((sun.getHeight()-90)*Math.PI/180)) -(int) (size/2*Math.sin((sun.getHeight())*Math.PI/180)),
                 posX,
                 posY
              );
 
             shapeRenderer.setColor(Color.BLUE);
             shapeRenderer.line(
-                posX +(int) ( size*Math.sin((moon.getLongPos()+90)*Math.PI/180) * Math.sin((moon.getLatPos()-90)*Math.PI/180) ),
-                posY -(int) ( size/2*Math.sin((moon.getLongPos())*Math.PI/180) * Math.sin((moon.getLatPos()-90)*Math.PI/180)) -(int) (size/2*Math.sin((moon.getLatPos())*Math.PI/180)),
+                posX +(int) ( size*Math.sin((moon.getAzimuth()+90)*Math.PI/180) * Math.sin((moon.getHeight()-90)*Math.PI/180) ),
+                posY -(int) ( size/2*Math.sin((moon.getAzimuth())*Math.PI/180) * Math.sin((moon.getHeight()-90)*Math.PI/180)) -(int) (size/2*Math.sin((moon.getHeight())*Math.PI/180)),
                 posX,
                 posY
              );
              shapeRenderer.end();
 
-            view.drawString("Lat: "+sun.getLatPos(), 600, 110, Color.WHITE);
-            view.drawString("Long: "+sun.getLongPos(), 600, 100, Color.WHITE);
+            view.drawString("Lat: "+sun.getHeight(), 600, 110, Color.WHITE);
+            view.drawString("Long: "+sun.getAzimuth(), 600, 100, Color.WHITE);
             view.drawString("PowerSun: "+sun.getPower()*100+"%", 600, 120, Color.WHITE);
             view.drawString("PowerMoon: "+moon.getPower()*100+"%", 600, 130, Color.WHITE);
             view.drawString("LightColor: "+getGlobalLight().toString(), 600, 140, Color.WHITE);
