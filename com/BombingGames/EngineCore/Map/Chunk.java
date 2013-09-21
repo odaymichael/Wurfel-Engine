@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
  */
 public class Chunk {
     /**The number of the mapgenerator used.*/
-    public static final int GENERATOR = 9;
+    public static final int GENERATOR = 8;
     /**The suffix of a chunk file.*/
     protected static final String CHUNKFILESUFFIX = "wec";
     /**The suffix of the metafile */
@@ -191,7 +191,7 @@ public class Chunk {
                 
                 int specialx = (int) (Math.random()*blocksX-1);
                 int specialy = (int) (Math.random()*blocksY-1);
-                //pillar
+                //special block
                 data[specialx][specialy][1].newBlock(40, 0, new Coordinate(specialx + pos % 3 * blocksX, specialy + pos / 3 * blocksY, 1, true));
                 break;
             }
