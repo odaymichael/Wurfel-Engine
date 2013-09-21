@@ -59,7 +59,7 @@ public abstract class AbstractGameObject {
     /**The sprite texture which contains every object texture*/
     private static TextureAtlas spritesheet;
     private static Pixmap pixmap;
-    private static int referencObject[][][][] = new int[(int) 'z'][OBJECTTYPESCOUNT][VALUESCOUNT][];//{category}{id}{value}{category, id, value}
+    private static AtlasRegion[][][] sprites = new AtlasRegion[(int) 'z'][OBJECTTYPESCOUNT][VALUESCOUNT];//{category}{id}{value}
     
     private final int id; 
     private int value;
@@ -173,10 +173,8 @@ public abstract class AbstractGameObject {
     public static void loadSheet()  {
         spritesheet = new TextureAtlas(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.txt"), true);
         pixmap = new Pixmap(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.png"));
-        Gdx.app.debug("DEBUG","Spritesheet loaded");
+        Gdx.app.log("DEBUG","Spritesheet loaded");
     }
-
-    
 
     /**
      * Returns a sprite texture. You may use your own method like in <i>Block</i>.
@@ -186,9 +184,8 @@ public abstract class AbstractGameObject {
      * @return 
      */
     public static AtlasRegion getSprite(char category, int id, int value) {
-        AtlasRegion sprite;
-        if (referencObject[category][id][value] == null){
-            sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
+        if (sprites[category][id][value] == null){ //load if not already loaded
+            AtlasRegion sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
             if (sprite == null){ //if there is no sprite show the default "sprite not found sprite" for this category
                 Gdx.app.log("debug", category+Integer.toString(id)+"-"+value + " not found");
                 sprite = getSpritesheet().findRegion(category+"0-0");
@@ -197,12 +194,11 @@ public abstract class AbstractGameObject {
                     if (sprite == null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
                 }
             }
+            sprites[category][id][value] = sprite;
+            return sprite;
         } else {
-            int[] reference = referencObject[category][id][value];
-            sprite = getSprite((char) reference[0], reference[1], reference[2]);
+            return sprites[category][id][value];
         }
-        
-        return sprite;
     }
 
 
@@ -363,9 +359,5 @@ public abstract class AbstractGameObject {
      */
     public void setDimensionZ(int dimensionZ) {
         this.dimensionZ = dimensionZ;
-    }
-
-    public static int[][][][] getReferencObject() {
-        return referencObject;
     }
 }

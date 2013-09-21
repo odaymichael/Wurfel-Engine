@@ -24,7 +24,7 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT]; 
     
     /** A list containing the offset of the objects. */
-    public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][10][2];
+    public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][VALUESCOUNT][2];
     
     static {
         NAMELIST[40] = "player";

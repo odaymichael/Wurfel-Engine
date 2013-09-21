@@ -8,12 +8,13 @@ import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.GAMEDIMENSION;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.VALUESCOUNT;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getPixmap;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getSpritesheet;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
 /**
@@ -42,6 +43,8 @@ public class Block extends AbstractGameObject {
     private boolean renderRight = true;
     private boolean renderTop = true;
     private boolean renderLeft = true;
+    
+    private static AtlasRegion[][][] blocksprites = new AtlasRegion[OBJECTTYPESCOUNT][VALUESCOUNT][3];//{id}{value}{side}
     
     static {
         NAMELIST[0] = "air";
@@ -194,14 +197,22 @@ public class Block extends AbstractGameObject {
      * @param side Which side? (0 - 2)
      * @return an sprite of the side
      */
-    public static TextureAtlas.AtlasRegion getBlockSprite(int id, int value, int side) {
-        AtlasRegion sprite = getSpritesheet().findRegion(CATEGORY+Integer.toString(id)+"-"+value+"-"+side);
-        if (sprite == null){ //if there is no sprite show the default "sprite not found sprite"
-            sprite = getSpritesheet().findRegion(CATEGORY+"0-0-"+side);
-            if (sprite==null)
-                throw new NullPointerException("Sprite not found but even the default error sprite could not be found:"+CATEGORY+"0-0-"+side);
+    public static AtlasRegion getBlockSprite(int id, int value, int side) {
+        if (blocksprites[id][value][side] == null){ //load if not already loaded
+            AtlasRegion sprite = getSpritesheet().findRegion(CATEGORY+Integer.toString(id)+"-"+value+"-"+side);
+            if (sprite == null){ //if there is no sprite show the default "sprite not found sprite" for this category
+                Gdx.app.log("debug", CATEGORY+Integer.toString(id)+"-"+value +"-"+ side +" not found");
+                sprite = getSpritesheet().findRegion(CATEGORY+"0-0-"+side);
+                if (sprite == null) {//load generic error sprite if category sprite failed
+                    sprite = getSpritesheet().findRegion("error");
+                    if (sprite == null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
+                }
+            }
+            blocksprites[CATEGORY][id][value] = sprite;
+            return sprite;
+        } else {
+            return blocksprites[CATEGORY][id][value];
         }
-        return sprite;
     }
     
 
