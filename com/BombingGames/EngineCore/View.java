@@ -162,7 +162,7 @@ public class View {
         //find out where the click went
         Coordinate coords = new Coordinate(
                        x / Block.SCREEN_WIDTH -1,
-                       2*y / Block.SCREEN_DEPTH2 -1,
+                       2*y / Block.SCREEN_DEPTH*2 -1,
                        Map.getBlocksZ()-1,
                         true
         );
@@ -170,7 +170,7 @@ public class View {
         //find the specific coordinate
         Coordinate specificCoords = Coordinate.neighbourSidetoCoords(
                             coords,
-                            Coordinate.getNeighbourSide(x % Block.SCREEN_WIDTH, y % Block.SCREEN_DEPTH2)
+                            Coordinate.getNeighbourSide(x % Block.SCREEN_WIDTH, y % Block.SCREEN_DEPTH*2)
         );
         coords.setRelX(specificCoords.getRelX());
         coords.setRelY(specificCoords.getRelY() + coords.getZ()*2);
