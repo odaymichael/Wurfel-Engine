@@ -203,6 +203,7 @@
             <filename>sprites/b44-1-0.png</filename>
             <filename>sprites/b44-1-1.png</filename>
             <filename>sprites/b44-1-2.png</filename>
+            <filename>sprites/e42-0.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

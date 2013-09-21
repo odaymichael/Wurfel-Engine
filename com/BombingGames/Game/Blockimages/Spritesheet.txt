@@ -25,7 +25,7 @@ b6-0-1
   index: -1
 error
   rotate: false
-  xy: 709, 695
+  xy: 0, 872
   size: 160, 145
   orig: 160, 145
   offset: 0, 0
@@ -337,6 +337,13 @@ b34-0
   size: 26, 42
   orig: 26, 42
   offset: 70, -78
+  index: -1
+e42-0
+  rotate: false
+  xy: 709, 695
+  size: 160, 80
+  orig: 160, 80
+  offset: 0, 0
   index: -1
 e40-3
   rotate: false

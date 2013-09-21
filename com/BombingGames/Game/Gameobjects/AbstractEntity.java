@@ -48,6 +48,9 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
         OFFSET[40][7][0] = 46;
         OFFSET[40][7][1] = 33;
         NAMELIST[41] = "smoke test";
+        OFFSET[42][0][0] = 0;
+        OFFSET[42][0][1] = 80;
+        NAMELIST[42] = "character shadow";
     }
     
     private boolean destroy;
@@ -73,7 +76,7 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
         //define the default SideSprites
         switch (id){
             case 40:
-                    entity = new Player(id);
+                    entity = new Player(id, coords);
                     break;
             case 41: //explosion
                     entity = new AnimatedEntity(
@@ -84,6 +87,9 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
                                 false
                             );
                     break;
+            case 42: entity = new CharacterShadow(id);
+                    break;
+             
             default: entity = new SimpleEntity(id);
         }
         

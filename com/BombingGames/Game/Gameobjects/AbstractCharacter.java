@@ -17,7 +17,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private String controls = "NPC";
 
    /** Set value how fast the character brakes or slides. 1 is "immediately". The higher the value, the more "slide". Value >1**/
-   private final int smoothBreaks = 5;
+   private final int smoothBreaks = 8;
       
    /**provides a factor for the vector*/
    private float speed;
@@ -25,6 +25,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private boolean fallingSoundPlaying;
    private Sound runningSound;
    private boolean runningSoundPlaying;
+   private CharacterShadow shadow;
    
    private int walkingAnimationCounter;
 
@@ -32,10 +33,12 @@ public abstract class AbstractCharacter extends AbstractEntity {
     * Constructor of AbstractCharacter.
     * @param id
     * @param spritesPerDir The number of animation sprites per walking direction
+    * @param coords  
     */
-   protected AbstractCharacter(final int id, final int spritesPerDir) {
+   protected AbstractCharacter(final int id, final int spritesPerDir, Coordinate coords) {
         super(id);
         SPRITESPERDIR = spritesPerDir;
+        shadow = (CharacterShadow) AbstractEntity.getInstance(42,0,coords.cpy());
     }
    
    /**
@@ -232,6 +235,8 @@ public abstract class AbstractCharacter extends AbstractEntity {
                     fallingSoundPlaying = false;
                 }
             }
+            
+            shadow.update(delta, this);
             //slow walking down
             if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
             if (speed < 0) speed = 0;
@@ -352,4 +357,20 @@ public abstract class AbstractCharacter extends AbstractEntity {
         
         return (super.onGround() || colission);
     }
+
+    @Override
+    public void exist() {
+        super.exist();
+        shadow.exist();
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        shadow.destroy();
+    }
+    
+    
+    
+    
 }
