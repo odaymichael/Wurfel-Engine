@@ -10,14 +10,14 @@ import com.badlogic.gdx.audio.Sound;
  * @author Benedikt
  */
 public abstract class AbstractCharacter extends AbstractEntity {
-   private final int COLISSIONRADIUS = AbstractGameObject.DIM4;
+   private final int COLISSIONRADIUS = SCREEN_DEPTH2;
    private final int SPRITESPERDIR;
       
    private float[] dir = {1, 0, 0};
    private String controls = "NPC";
 
-   /** Set value how fast the character brakes or slides. 1 is "immediately". The hgiher the value, teh more "slide". Value >1**/
-   private final int smoothBreaks = 80;
+   /** Set value how fast the character brakes or slides. 1 is "immediately". The higher the value, the more "slide". Value >1**/
+   private final int smoothBreaks = 1;
       
    /**provides a factor for the vector*/
    private float speed;
@@ -64,16 +64,16 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     public void walk(boolean up, boolean down, boolean left, boolean right, float walkingspeed) {
         if (up || down || left || right){
-        speed = walkingspeed;
+            speed = walkingspeed;
 
-        //update the movement vector
-        dir[0] = 0;
-        dir[1] = 0;
+            //update the movement vector
+            dir[0] = 0;
+            dir[1] = 0;
 
-        if (up)    dir[1] = -1;
-        if (down)  dir[1] = 1;
-        if (left)  dir[0] = -1;
-        if (right) dir[0] = 1;
+            if (up)    dir[1] = -1;
+            if (down)  dir[1] = 1;
+            if (left)  dir[0] = -1;
+            if (right) dir[0] = 1;
         }
    }
     
@@ -84,8 +84,8 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     private void makeCoordinateStep(int x, int y){
         //mirror the position around the center
-        setPositionX(getPositionX() -x*Block.DIM2);
-        setPositionY(getPositionY() -y*Block.DIM2);
+        setPositionX(getPositionX() -x*Block.SCREEN_WIDTH2);
+        setPositionY(getPositionY() -y*Block.SCREEN_DEPTH);
 
         setCoords(getCoords().addVector(0, y, 0));
         if (x < 0 && getCoords().getRelY() % 2 == 1) setCoords(getCoords().addVector(-1, 0, 0));
@@ -106,10 +106,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
                 dir[0] /= vectorLenght;
                 dir[1] /= vectorLenght;
             }
-
-            //slow walking down
-            if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
-            if (speed < 0) speed = 0;
 
             float oldPositionX = getPositionX();
             float oldPositionY = getPositionY();
@@ -236,6 +232,9 @@ public abstract class AbstractCharacter extends AbstractEntity {
                     fallingSoundPlaying = false;
                 }
             }
+            //slow walking down
+            if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
+            if (speed < 0) speed = 0;
         }
     }
     
@@ -250,46 +249,46 @@ public abstract class AbstractCharacter extends AbstractEntity {
         
         //check for movement in x
         //top corner
-        int neighbourNumber = Block.getSideID(newx, newy - COLISSIONRADIUS); 
+        int neighbourNumber = Coordinate.getNeighbourSide(newx, newy - COLISSIONRADIUS); 
         if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
             validmovement = true;
         //bottom corner
-        neighbourNumber = Block.getSideID(newx, newy + COLISSIONRADIUS); 
+        neighbourNumber = Coordinate.getNeighbourSide(newx, newy + COLISSIONRADIUS); 
         if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
             validmovement = true;
 
         //find out the direction of the movement
         if (oldx - newx > 0) {
             //check left corner
-            neighbourNumber = Block.getSideID(newx - COLISSIONRADIUS, newy);
+            neighbourNumber = Coordinate.getNeighbourSide(newx - COLISSIONRADIUS, newy);
             if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
                 validmovement = true;
         } else {
             //check right corner
-            neighbourNumber = Block.getSideID(newx + COLISSIONRADIUS, newy);
+            neighbourNumber = Coordinate.getNeighbourSide(newx + COLISSIONRADIUS, newy);
             if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
                 validmovement = true;
         }
 
         //check for movement in y
         //left corner
-        neighbourNumber = Block.getSideID(newx - COLISSIONRADIUS, newy); 
+        neighbourNumber = Coordinate.getNeighbourSide(newx - COLISSIONRADIUS, newy); 
         if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
             validmovement = true;
 
         //right corner
-        neighbourNumber = Block.getSideID(newx + COLISSIONRADIUS, newy); 
+        neighbourNumber = Coordinate.getNeighbourSide(newx + COLISSIONRADIUS, newy); 
         if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
             validmovement = true; 
 
         if (oldy - newy > 0) {
             //check top corner
-            neighbourNumber = Block.getSideID(newx, newy - COLISSIONRADIUS);
+            neighbourNumber = Coordinate.getNeighbourSide(newx, newy - COLISSIONRADIUS);
             if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
                 validmovement = true;
         } else {
             //check bottom corner
-            neighbourNumber = Block.getSideID(newx, newy + COLISSIONRADIUS);
+            neighbourNumber = Coordinate.getNeighbourSide(newx, newy + COLISSIONRADIUS);
             if (neighbourNumber != 8 && Controller.getNeighbourBlock(getCoords(), neighbourNumber).isObstacle())
                 validmovement = true;
         }

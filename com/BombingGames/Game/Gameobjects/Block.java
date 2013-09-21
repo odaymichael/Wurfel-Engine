@@ -2,10 +2,11 @@ package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM2;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM4;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH4;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.GAMEDIMENSION;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getPixmap;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getSpritesheet;
@@ -220,12 +221,12 @@ public class Block extends AbstractGameObject {
                 AtlasRegion texture = getBlockSprite(id, value, 1);
                 if (texture == null) return new Color();
                 colorInt = getPixmap().getPixel(
-                    texture.getRegionX()+DIM2, texture.getRegionY()-DIM4);
+                    texture.getRegionX()+SCREEN_DEPTH2, texture.getRegionY()-SCREEN_DEPTH4);
             } else {
                 AtlasRegion texture = getSprite(CATEGORY, id, value);
                 if (texture == null) return new Color();
                 colorInt = getPixmap().getPixel(
-                    texture.getRegionX()+DIM2, texture.getRegionY()-DIM2);
+                    texture.getRegionX()+SCREEN_DEPTH2, texture.getRegionY()-SCREEN_DEPTH2);
             }
             Color.rgba8888ToColor(colorlist[id][value], colorInt);
             return colorlist[id][value]; 
@@ -339,8 +340,8 @@ public class Block extends AbstractGameObject {
     protected void renderSide(final View view, WECamera camera, Coordinate coords, final int sidenumb, Color color){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         
-        int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);//right side is  half a block more to the right
-        int yPos = get2DPosY(coords) + (sidenumb != 1 ? DIM4 : 0);//the top is drawn a quarter blocks higher
+        int xPos = get2DPosX(coords) + ( sidenumb == 2 ? SCREEN_WIDTH2 : 0);//right side is  half a block more to the right
+        int yPos = get2DPosY(coords) + (sidenumb != 1 ? SCREEN_WIDTH4 : 0);//the top is drawn a quarter blocks higher
         sprite.setPosition(xPos, yPos);
         
         //uncomment these two lines to add a depth-effect (note that it is very dark)
@@ -385,11 +386,11 @@ public class Block extends AbstractGameObject {
     @Override
     public int getDepth(Coordinate coords){
         return (int) (
-            coords.getRelY() *(Block.DIM4+1)//Y
+            coords.getRelY() *(Block.SCREEN_DEPTH+1)//Y
             + coords.getCellOffset()[1]
-            + coords.getZ()*Block.DIM4//Z
-            + coords.getCellOffset()[2] / Math.sqrt(2) /2
-            + (getDimensionY() - 1) * DIM4
+            + coords.getHeight()/Math.sqrt(2)//Z
+            + coords.getCellOffset()[2]/Math.sqrt(2)
+            + (getDimensionZ() - 1) *GAMEDIMENSION/Math.sqrt(2)
         );
     }
 

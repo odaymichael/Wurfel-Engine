@@ -19,7 +19,7 @@ public class Player extends AbstractCharacter{
         setRunningSound(Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/victorcenusa_running.ogg")));
         setTransparent(true);
         setObstacle(true);
-        setDimensionY(2);
+        setDimensionZ(2);
     }   
 
     /**

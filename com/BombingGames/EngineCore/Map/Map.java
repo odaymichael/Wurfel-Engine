@@ -416,8 +416,8 @@ public class Map {
         }
         
         for (int i=0;i < numberofblocks; i++){
-                //cellPos[x[i]][y[i]][z[i]][0] = (float) (Math.random()*Block.DIM2);
-                //cellPos[x[i]][y[i]][z[i]][1] = (float) (Math.random()*Block.DIM2);
+                //cellPos[x[i]][y[i]][z[i]][0] = (float) (Math.random()*Block.SCREEN_DEPTH2);
+                //cellPos[x[i]][y[i]][z[i]][1] = (float) (Math.random()*Block.SCREEN_DEPTH2);
                 data[x[i]][y[i]][z[i]].setCellOffset(2, (float) (Math.random()*Block.GAMEDIMENSION));//vertical shake
             
         }

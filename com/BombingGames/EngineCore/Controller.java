@@ -255,7 +255,7 @@ public class Controller {
      * @return the neighbour block
      */
     public static Block getNeighbourBlock(Coordinate coords, int side){
-        return Controller.getMapDataSafe(Block.sideIDtoNeighbourCoords(coords, side));
+        return Controller.getMapDataSafe(Coordinate.neighbourSidetoCoords(coords, side));
     }
     
   

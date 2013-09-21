@@ -161,16 +161,16 @@ public class View {
         
         //find out where the click went
         Coordinate coords = new Coordinate(
-                       x / Block.DIMENSION -1,
-                       2*y / Block.DIMENSION -1,
+                       x / Block.SCREEN_WIDTH -1,
+                       2*y / Block.SCREEN_DEPTH -1,
                        Map.getBlocksZ()-1,
                         true
         );
        
         //find the specific coordinate
-        Coordinate specificCoords = AbstractGameObject.sideIDtoNeighbourCoords(
+        Coordinate specificCoords = Coordinate.neighbourSidetoCoords(
                             coords,
-                            AbstractGameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION)
+                            Coordinate.getNeighbourSide(x % Block.SCREEN_DEPTH, y % Block.SCREEN_DEPTH)
         );
         coords.setRelX(specificCoords.getRelX());
         coords.setRelY(specificCoords.getRelY() + coords.getZ()*2);

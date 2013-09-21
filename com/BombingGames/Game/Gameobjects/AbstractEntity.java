@@ -2,12 +2,12 @@ package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM2;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM4;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIMENSION;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.GAMEDIMENSION;
 import com.BombingGames.EngineCore.Map.Map;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_WIDTH;
 
 /**
  *An entity is a game object wich is self aware that means it knows it's position.
@@ -15,8 +15,8 @@ import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCO
  */
 public abstract class AbstractEntity extends AbstractGameObject implements IsSelfAware {
    private Coordinate coords;//the position in the map-grid
-   private float positionX = DIM2; //the horizontal offset
-   private float positionY = DIM2;
+   private float positionX = 0; //the horizontal offset
+   private float positionY = 0;
    
    public static final char CATEGORY = 'e';
    
@@ -93,10 +93,10 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     @Override
     public int getDepth(Coordinate coords){
         return (int) (
-            coords.getRelY() * (DIM4+1)//Y
+            coords.getRelY() * (SCREEN_DEPTH+1)//Y
             + getPositionY()
-            + coords.getHeight() / Math.sqrt(2) /2//Z
-            + (getDimensionY() - 1) * DIM4 / Math.sqrt(2) /2
+            + coords.getHeight()/Math.sqrt(2)//Z
+            + (getDimensionZ() - 1) * GAMEDIMENSION/6/Math.sqrt(2)
         );
     }
     
@@ -112,11 +112,13 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     }
     
     
-    
+    /**
+     * 
+     * @param height 
+     */
     public void setHeight(float height) {
         coords.setHeight(height);
     }
-    
     
     
   
@@ -143,8 +145,8 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
      */
    @Override
     public int get2DPosX(Coordinate coords) {
-        return this.coords.getRelX() * DIMENSION //x-coordinate multiplied by it's dimension in this direction
-               + (this.coords.getRelY() % 2) * DIM2 //y-coordinate multiplied by it's dimension in this direction
+        return this.coords.getRelX() * SCREEN_WIDTH //x-coordinate multiplied by it's dimension in this direction
+               + (this.coords.getRelY() % 2) * SCREEN_DEPTH //y-coordinate multiplied by it's dimension in this direction
                + (int) (positionX); //add the objects position inside this coordinate
     }
 
@@ -155,7 +157,7 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
      */
    @Override
     public int get2DPosY(Coordinate coords) {
-        return this.coords.getRelY() * DIM4 //y-coordinate * the tile's size
+        return this.coords.getRelY() * SCREEN_DEPTH2 //y-coordinate * the tile's size
                + (int) (positionY / 2) //add the objects position inside this coordinate
                - (int) (this.coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
     }
@@ -168,16 +170,16 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     }
     
     /**
-     * Returns the side with the current offset.
+     * Returns the side with the current position.
      * @return
      * @see com.BombingGames.Game.Blocks.Block#getSideNumb(int, int) 
      */
     protected int getSideNumb() {
-        return Block.getSideID(positionX, positionY);
+        return Coordinate.getNeighbourSide(positionX, positionY);
     }  
 
     /**
-     *
+     *The positon coordiante system has it's center in the top left corner of the cell, like the offset.
      * @return
      */
     public float getPositionX() {
@@ -185,7 +187,7 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     }
 
     /**
-     *
+     *The positon coordiante system has it's center in the top left corner of the cell, like the offset.
      * @param offsetX
      */
     public void setPositionX(float offsetX) {
@@ -193,7 +195,7 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     }
 
     /**
-     *
+     *The positon coordiante system has it's center in the top left corner of the cell, like the offset.
      * @return
      */
     public float getPositionY() {
@@ -201,7 +203,7 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     }
 
     /**
-     *
+     *The positon coordiante system has it's center in the top left corner of the cell, like the offset.
      * @param offsetY
      */
     public void setPositionY(float offsetY) {
@@ -228,7 +230,7 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
         return OFFSET[getId()][getValue()][1];
     } 
     
-        /**
+   /**
      * Deletes the object from the map. The opposite to exist();
      */
     public void destroy(){
