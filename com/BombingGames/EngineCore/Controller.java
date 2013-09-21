@@ -311,6 +311,8 @@ public class Controller {
         } catch(NumberFormatException e) {
             this.timespeed = 1;
             Gdx.app.log("Error", "Invalid nubmer entered: "+e.toString());
+        } catch(NullPointerException e){
+            Gdx.app.log("DEBUG", "Canceled: "+e.toString());
         }
     }
     
