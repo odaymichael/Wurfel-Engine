@@ -126,7 +126,7 @@ public class Controller {
      * Creates a new Map.
      */
     public static void newMap(){
-        map = new Map(!MainMenuScreen.shouldLoadMap());
+        map = new Map(!MainMenuScreen.shouldLoadMap(),-45);
         map.fillWithBlocks();
     }
     

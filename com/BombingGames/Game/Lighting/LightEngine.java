@@ -50,7 +50,7 @@ public class LightEngine {
      * 
      */
     public LightEngine() {
-        sun = new GlobalLightSource(-Controller.getMap().getWorldSpinDirection(), 0, new Color(255, 255, 255, 1), 70);
+        sun = new GlobalLightSource(-Controller.getMap().getWorldSpinDirection(), 0, new Color(255, 255, 255, 1), 60);
         moon = new GlobalLightSource(180-Controller.getMap().getWorldSpinDirection(), 0, new Color(0.2f,0.4f,0.8f,1), 45);
     }
 
@@ -244,14 +244,17 @@ public class LightEngine {
             shapeRenderer.scale(1f, (2), 1f);
             shapeRenderer.translate(-posX, -posY, 0);
             
+            //perfect/correct line
             shapeRenderer.setColor(Color.ORANGE);
             if ((sun.getMaxAngle()/90f-0.5f) != 0) {
                 shapeRenderer.begin(ShapeType.Circle);
                 shapeRenderer.translate(posX, posY, 0);
+                                shapeRenderer.rotate(0, 0, 1, Controller.getMap().getWorldSpinDirection());
                 shapeRenderer.scale(1f, (sun.getMaxAngle()/90f-0.5f), 1f);
                 shapeRenderer.circle(0, 0, size);
                 shapeRenderer.end();
                 shapeRenderer.scale(1f, (1/(sun.getMaxAngle()/90f-0.5f)), 1f);
+                                shapeRenderer.rotate(0, 0, 1, -Controller.getMap().getWorldSpinDirection());
                 shapeRenderer.translate(-posX, -posY, 0);
             } else {
                 shapeRenderer.begin(ShapeType.Line);
