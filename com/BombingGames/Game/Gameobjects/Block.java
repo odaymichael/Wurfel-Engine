@@ -424,4 +424,8 @@ public class Block extends AbstractGameObject {
     public int getOffsetY() {
         return OFFSET[getId()][getValue()][1];
     } 
+
+    public static AtlasRegion[][][] getBlocksprites() {
+        return blocksprites;
+    }
 }

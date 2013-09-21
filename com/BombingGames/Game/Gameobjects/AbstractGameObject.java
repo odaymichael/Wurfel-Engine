@@ -360,4 +360,8 @@ public abstract class AbstractGameObject {
     public void setDimensionZ(int dimensionZ) {
         this.dimensionZ = dimensionZ;
     }
+
+    public static AtlasRegion[][][] getSprites() {
+        return sprites;
+    }
 }
