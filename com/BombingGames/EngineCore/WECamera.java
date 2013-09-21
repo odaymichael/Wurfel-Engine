@@ -251,8 +251,7 @@ public class WECamera extends Camera {
                 for (int z=0; z < Map.getBlocksZ(); z++) {
                     Block block = mapdata[x][y][z].getBlock();
                     
-                    //Blocks with offset are not in the grid, so can not be analysed => always visible
-                    boolean notAnalyzable = !block.hasSides() || new Coordinate(x,y,z, true).hasOffset();
+                    boolean notAnalyzable = !block.hasSides() || new Coordinate(x,y,z, true).hasOffset();//Blocks with offset are not in the grid, so can not be analysed => always visible
                     block.setClipped(notAnalyzable);
                     if (notAnalyzable) {
                         block.setSideClipping(0, true);
@@ -287,7 +286,7 @@ public class WECamera extends Camera {
         boolean liquidfilter = false;
 
         //bring ray to start position
-        if (y >= Map.getBlocksY()) {
+        if (y > Map.getBlocksY()-1) {
             z -= (y-Map.getBlocksY())/2;
             if (y % 2 == 0)
                 y = Map.getBlocksY()-1;
@@ -297,133 +296,132 @@ public class WECamera extends Camera {
 
         y += 2;
         z++;  
-        if (z > 0) {
-            do {
-                y -= 2;
-                z--;
+        do {
+            y -= 2;
+            z--;
 
-                if (side == 0){
-                    //direct neighbour groundBlock on left hiding the complete left side
-                    if (Controller.getMapData(x, y, z).hasSides()//block on top
-                        && x > 0 && y < Map.getBlocksY()-1
-                        && new Coordinate(x - (y%2 == 0 ? 1:0), y+1, z, true).hidingPastBlock())
-                        break; //stop ray
-                    
-                    //liquid
-                    if (Controller.getMapData(x, y, z).isLiquid()){
-                        if (x > 0 && y+1 < Map.getBlocksY()
-                        && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z).isLiquid())
-                            liquidfilter = true;
-                        
-                        if (x > 0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                            && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
-                            leftliquid = true;
-                        
-                        if (y < Map.getBlocksY()-2 &&
-                            Controller.getMapData(x, y+2, z).isLiquid())
-                            rightliquid = true;
-                        
-                        if (leftliquid && rightliquid) liquidfilter = true;
-                    } 
+            if (side == 0){
+                //direct neighbour groundBlock on left hiding the complete left side
+                if (Controller.getMapData(x, y, z).hasSides()//block on top
+                    && x > 0 && y < Map.getBlocksY()-1
+                    && new Coordinate(x - (y%2 == 0 ? 1:0), y+1, z, true).hidingPastBlock())
+                    break; //stop ray
 
-                    //two blocks hiding the left side
+                //liquid
+                if (Controller.getMapData(x, y, z).isLiquid()){
+                    if (x > 0 && y+1 < Map.getBlocksY()
+                    && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z).isLiquid())
+                        liquidfilter = true;
+
                     if (x > 0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                        && new Coordinate(x - (y%2 == 0 ? 1:0), y+1, z+1, true).hidingPastBlock())
-                        left = false;
-                    if (y < Map.getBlocksY()-2
-                        && new Coordinate(x, y+2, z, true).hidingPastBlock()
-                        )
-                        right = false;
-                    
-                } else {              
-                    if (side == 1) {//check top side
-                        if (Controller.getMapData(x, y, z).hasSides()//block on top
-                            && z+1 < Map.getBlocksZ()
-                            && new Coordinate(x, y, z+1, true).hidingPastBlock())
-                            break;
-                        
-                        //liquid
-                        if (Controller.getMapData(x, y, z).isLiquid()){
-                            if (z < Map.getBlocksZ()-1 && Controller.getMapData(x, y, z+1).isLiquid())
-                                liquidfilter = true;
-                            
-                            if (x>0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                                && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
-                                leftliquid = true;
-                            
-                            if (x < Map.getBlocksX()-1  && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                                &&  Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
-                                rightliquid = true;
-                            
-                            if (leftliquid && rightliquid) liquidfilter = true;
-                        }
-                    
-                        //two 0- and 2-sides hiding the side 1
-                        if (x>0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                            && new Coordinate(x - (y%2 == 0 ? 1:0), y+1, z+1, true).hidingPastBlock())
-                            left = false;
-                        
-                        if (x < Map.getBlocksX()-1  && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
-                            && new Coordinate(x + (y%2 == 0 ? 0:1), y+1, z+1, true).hidingPastBlock()
-                            )
-                            right = false;
-                          
-                    } else {
-                        if (side==2){
-                            //block on right hiding the whole right side
-                            if (Controller.getMapData(x, y, z).hasSides()//block on top
-                                && x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY()
-                                && new Coordinate(x + (y%2 == 0 ? 0:1), y+1, z, true).hidingPastBlock()
-                                ) break;
-                            
-                            //liquid
-                            if (Controller.getMapData(x, y, z).isLiquid()){
-                               if (x < Map.getBlocksX()-1 && y < Map.getBlocksY()-1
-                                    && Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).isLiquid()
-                                   ) liquidfilter = true;
-                               
-                                if (y+2 < Map.getBlocksY()
-                                    &&
-                                    Controller.getMapData(x, y+2, z).isLiquid())
-                                    leftliquid = true;
-                                
-                                if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY() && z+1 < Map.getBlocksZ()
-                                    &&
-                                    Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
-                                    rightliquid = true;
-                                
-                                if (leftliquid && rightliquid) liquidfilter = true;
-                            }
+                        && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
+                        leftliquid = true;
 
-                            //two blocks hiding the right side
-                            if (y+2 < Map.getBlocksY()
-                                &&
-                                new Coordinate(x, y+2, z, true).hidingPastBlock()
-                            )
-                                left = false;
-                            
-                            if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY() && z+1 < Map.getBlocksZ()
-                                &&
-                                new Coordinate(x + (y%2 == 0 ? 0:1), y+1, z+1, true).hidingPastBlock()
-                            )
-                                right = false;
-                        }
-                    }
+                    if (y < Map.getBlocksY()-2 &&
+                        Controller.getMapData(x, y+2, z).isLiquid())
+                        rightliquid = true;
+
+                    if (leftliquid && rightliquid) liquidfilter = true;
+                } 
+
+                //two blocks hiding the left side
+                if (x > 0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
+                    && new Coordinate(x - (y%2 == 0 ? 1:0), y+1, z+1, true).hidingPastBlock())
+                    left = false;
+                if (y < Map.getBlocksY()-2
+                    && new Coordinate(x, y+2, z, true).hidingPastBlock()
+                    )
+                    right = false;
+
+            } else if (side == 1) {//check top side
+                if (Controller.getMapData(x, y, z).hasSides()//block on top
+                    && z+1 < Map.getBlocksZ()
+                    && new Coordinate(x, y, z+1, true).hidingPastBlock())
+                    break;
+
+                //liquid
+                if (Controller.getMapData(x, y, z).isLiquid()){
+                    if (z < Map.getBlocksZ()-1 && Controller.getMapData(x, y, z+1).isLiquid())
+                        liquidfilter = true;
+
+                    if (x>0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
+                        && Controller.getMapData(x - (y%2 == 0 ? 1:0), y+1, z+1).isLiquid())
+                        leftliquid = true;
+
+                    if (x < Map.getBlocksX()-1  && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
+                        &&  Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
+                        rightliquid = true;
+
+                    if (leftliquid && rightliquid) liquidfilter = true;
                 }
-                
-                if (left || right){ //unless both sides are clipped don't clip the whole groundBlock
-                    Block temp = Controller.getMapData(x, y, z);
 
-                    if (!(liquidfilter && temp.isLiquid())){
-                        liquidfilter = false;
-                        temp.setSideClipping(side, true);  
-                    }                                
-                }                
-            } while (y > 1 && z > 0 //not on bottom of map
-                && (left || right) //left and right still visible
-                && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset()));
-           Controller.getMap().getDeepestLayerVisibility()[x][y] = (z <= 0);
-        }
+                //two 0- and 2-sides hiding the side 1
+                if (x>0 && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
+                    && new Coordinate(x - (y%2 == 0 ? 1:0), y+1, z+1, true).hidingPastBlock())
+                    left = false;
+
+                if (x < Map.getBlocksX()-1  && y < Map.getBlocksY()-1 && z < Map.getBlocksZ()-1
+                    && new Coordinate(x + (y%2 == 0 ? 0:1), y+1, z+1, true).hidingPastBlock()
+                    )
+                    right = false;
+
+            } else if (side==2){
+                //block on right hiding the whole right side
+                if (Controller.getMapData(x, y, z).hasSides()//block on top
+                    && x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY()
+                    && new Coordinate(x + (y%2 == 0 ? 0:1), y+1, z, true).hidingPastBlock()
+                    ) break;
+
+                //liquid
+                if (Controller.getMapData(x, y, z).isLiquid()){
+                   if (x < Map.getBlocksX()-1 && y < Map.getBlocksY()-1
+                        && Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z).isLiquid()
+                       ) liquidfilter = true;
+
+                    if (y+2 < Map.getBlocksY()
+                        &&
+                        Controller.getMapData(x, y+2, z).isLiquid())
+                        leftliquid = true;
+
+                    if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY() && z+1 < Map.getBlocksZ()
+                        &&
+                        Controller.getMapData(x + (y%2 == 0 ? 0:1), y+1, z+1).isLiquid())
+                        rightliquid = true;
+
+                    if (leftliquid && rightliquid) liquidfilter = true;
+                }
+
+                //two blocks hiding the right side
+                if (y+2 < Map.getBlocksY()
+                    &&
+                    new Coordinate(x, y+2, z, true).hidingPastBlock()
+                )
+                    left = false;
+
+                if (x+1 < Map.getBlocksX() && y+1 < Map.getBlocksY() && z+1 < Map.getBlocksZ()
+                    &&
+                    new Coordinate(x + (y%2 == 0 ? 0:1), y+1, z+1, true).hidingPastBlock()
+                )
+                    right = false;
+            }
+
+            if ((left || right) && !(liquidfilter && Controller.getMapData(x, y, z).isLiquid())){ //unless both sides are clipped don't clip the whole groundBlock
+                liquidfilter = false;
+                Controller.getMapData(x, y, z).setSideClipping(side, true);                            
+            }                
+        } while (y > 1 && z > 0 //not on bottom of map
+            && (left || right) //left or right still visible
+            && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset()));
+        
+        //check last layer
+        if ((z <= 0)
+            && (left || right) //left or right still visible
+            && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset())
+            ) {
+            Controller.getMap().getDeepestLayerVisibility()[x][y] = true;
+            Gdx.app.log("DEBUG", "Ray hit ground at:["+x+"|"+y+"] "+left+":"+right);
+        } else
+            Controller.getMap().getDeepestLayerVisibility()[x][y]=false;
     }
     
     /**

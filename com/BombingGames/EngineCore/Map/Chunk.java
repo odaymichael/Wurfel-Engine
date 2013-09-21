@@ -202,7 +202,7 @@ public class Chunk {
                         int height = (int) (Math.random()*blocksZ-1)+1;
                         for (int z=0; z < height; z++){
                             data[x][y][z].newBlock(44,0);
-                            }
+                        }
                     }
                 break;
             }    
