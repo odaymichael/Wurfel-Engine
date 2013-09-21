@@ -132,7 +132,7 @@ public class WECamera extends Camera {
     
    @Override
     public void update(boolean updateFrustum) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     /**
@@ -153,197 +153,32 @@ public class WECamera extends Camera {
                 (int) viewportHeight
             );
             
-            //render map
-            createDepthList();
-                        
             view.getBatch().begin();
             view.setDrawmode(GL11.GL_MODULATE);
             
+            //render map
+            createDepthList();
+            
             //render vom bottom to top
             for (Renderobject renderobject : depthsort) {
-                Coordinate coords = renderobject.getCoords();//get the coords of the current renderobject
-                renderobject.getObject().render(view, camera, coords); 
+                renderobject.getObject().render(view, camera, renderobject.getCoords()); 
             }
             
             view.getBatch().end();
         }
     }
   
-    /**
-     * Set the zoom factor and regenerates the sprites.
-     * @param zoom
-     */
-    public void setZoom(float zoom) {
-        this.zoom = zoom;
-    }
-    
-    /**
-     * Returns the zoomfactor.
-     * @return
-     */
-    public float getZoom() {
-        return zoom;
-    }
-    
-    /**
-     * Returns the zoom multiplied by the EqualizationScale
-     * @return 
-     */
-    public float getTotalScale() {
-        return zoom*equalizationScale;
-    }
-
-    
-    /**
-     * Use this if you want to focus on a special groundBlock.
-     * @param coord the coordaintes of the groundBlock.
-     */
-    public void focusOnCoords(Coordinate coord){
-        focusCoordinates = coord;
-        focusentity = null;
-    }
-    
-    
-    /**
-     * Returns the left border of the visible area.
-     * @return 
-     */
-    public int getLeftBorder(){
-        leftborder = outputPosX / AbstractGameObject.SCREEN_WIDTH - 1;
-        if (leftborder < 0) leftborder= 0;
-        
-        return leftborder;
-    }
-    
-    /**
-     * Returns the right border of the visible area.
-     * @return
-     */
-    public int getRightBorder(){
-        rightborder = (outputPosX + get2DWidth()) / AbstractGameObject.SCREEN_WIDTH + 1;
-        if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
-
-        return rightborder;
-    }
-    
-    /**
-     * Returns the top seight border of the deepest groundBlock
-     * @return measured in blocks
-     */
-    public int getTopBorder(){    
-        topborder = outputPosY / AbstractGameObject.SCREEN_DEPTH2 - 3;
-        if (topborder < 0) topborder= 0;
-        
-        return topborder;
-    }
-    
-     /**
-     * Returns the bottom seight border of the highest groundBlock
-     * @return measured in blocks
-     */
-    public int getBottomBorder(){
-        bottomborder = (outputPosY+get2DHeight()) / AbstractGameObject.SCREEN_DEPTH2 + Map.getBlocksZ()*2;
-        if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
-        return bottomborder;
-    }
-    
-  /**
-     * The Camera Position in the game world.
-     * @return in pixels
-     */
-    public int getGamePosX() {
-        return outputPosX;
-    }
-
-    /**
-     * The Camera left Position in the game world.
-     * @param x in pixels
-     */
-    public void setGamePosX(int x) {
-        this.outputPosX = x;
-    }
-
-    /**
-     * The Camera top-position in the game world.
-     * @return in camera position game space
-     */
-    public int getGamePosY() {
-        return outputPosY;
-    }
-
-    /**
-     * The Camera top-position in the game world.
-     * @param y in game space
-     */
-    public void setGamePosY(int y) {
-        this.outputPosY = y;
-    }
-
-    /**
-     * The amount of pixel which are visible in Y direction (game pixels). It should be equal View.RENDER_RESOLUTION_WIDTH
-     * For screen pixels use <i>ViewportWidth()</i>.
-     * @return in pixels
-     */
-    public final int get2DWidth() {
-        return (int) (viewportWidth / getTotalScale());
-    }
-    
-  /**
-    * The amount of pixel which are visible in Y direction (game pixels). For screen pixels use <i>ViewportHeight()</i>.
-    * @return  in pixels
-    */
-   public final int get2DHeight() {
-        return (int) (viewportHeight / getTotalScale());
-    }
-
-    /**
-     * Returns the position of the cameras output (on the screen)
-     * @return  in pixels
-     */
-    public int getViewportPosX() {
-        return viewportPosX;
-    }
-
-    /**
-     * Returns the position of the camera (on the screen)
-     * @return
-     */
-    public int getViewportPosY() {
-        return viewportPosY;
-    }
-    
-    /**
-     * Returns the height of the camera output.
-     * To get the real display size multiply it with scale values.
-     * @return the value before scaling
-     */
-    public float getViewportHeight() {
-        return viewportHeight;
-    }
-
-    /**
-     * Returns the width of the camera output before scale.
-     * To get the real display size multiply it with scale value.
-     * @return the value before scaling
-     */
-    public float getViewportWidth() {
-        return viewportWidth;
-    }
-
-
-   
-    
      /**
      * Fills the map into a list and sorts it in the order of the rendering, called the "depthlist".
      */
-    private void createDepthList() {
+    protected void createDepthList() {
         depthsort.clear();
         
         for (int x = leftborder; x < rightborder; x++)
             for (int y = topborder; y < bottomborder; y++){
 
                 if (Controller.getMap().getDeepestLayerVisibility()[x][y])
-                    depthsort.add(new Renderobject(groundBlock, new Coordinate(x, y, -1, true)));
+                    depthsort.add(new Renderobject(groundBlock, new Coordinate(x, y,0, true)));
                 
                 //add blocks
                 for (int z=0; z < Map.getBlocksZ(); z++){
@@ -365,13 +200,11 @@ public class WECamera extends Camera {
         for (int i=0; i< Controller.getMap().getEntitys().size(); i++) {
             AbstractEntity entity = Controller.getMap().getEntitys().get(i);
             if (!entity.isHidden() && entity.isVisible()
-                        && 
-                            entity.get2DPosY(
-                                entity.getCoords()
-                            )
-                        <
-                            outputPosY + get2DHeight()
-                    )
+                && 
+                entity.get2DPosY(entity.getCoords())
+                <
+                outputPosY + get2DHeight()
+                )
                     depthsort.add(
                         new Renderobject(entity, entity.getCoords())
                     );
@@ -382,7 +215,7 @@ public class WECamera extends Camera {
     
     /**
      * Using Quicksort to sort.
-     * From big to small values.
+     * From small to big values.
      * @param low the lower border
      * @param high the higher border
      */
@@ -589,7 +422,7 @@ public class WECamera extends Camera {
             } while (y > 1 && z > 0 //not on bottom of map
                 && (left || right) //left and right still visible
                 && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset()));
-           Controller.getMap().getDeepestLayerVisibility()[x][y] = (z < 0);
+           Controller.getMap().getDeepestLayerVisibility()[x][y] = (z <= 0);
         }
     }
     
@@ -623,5 +456,164 @@ public class WECamera extends Camera {
         traceRay(coords[0], coords[1], Block.TOPSIDE);             
         traceRay(coords[0], coords[1], Block.RIGHTSIDE);
     }
+    /**
+     * Set the zoom factor and regenerates the sprites.
+     * @param zoom
+     */
+    public void setZoom(float zoom) {
+        this.zoom = zoom;
+    }
+    
+    /**
+     * Returns the zoomfactor.
+     * @return
+     */
+    public float getZoom() {
+        return zoom;
+    }
+    
+    /**
+     * Returns the zoom multiplied by the EqualizationScale
+     * @return 
+     */
+    public float getTotalScale() {
+        return zoom*equalizationScale;
+    }
 
+    
+    /**
+     * Use this if you want to focus on a special groundBlock.
+     * @param coord the coordaintes of the groundBlock.
+     */
+    public void focusOnCoords(Coordinate coord){
+        focusCoordinates = coord;
+        focusentity = null;
+    }
+    
+    
+    /**
+     * Returns the left border of the visible area.
+     * @return 
+     */
+    public int getLeftBorder(){
+        leftborder = outputPosX / AbstractGameObject.SCREEN_WIDTH - 1;
+        if (leftborder < 0) leftborder= 0;
+        
+        return leftborder;
+    }
+    
+    /**
+     * Returns the right border of the visible area.
+     * @return
+     */
+    public int getRightBorder(){
+        rightborder = (outputPosX + get2DWidth()) / AbstractGameObject.SCREEN_WIDTH + 1;
+        if (rightborder >= Map.getBlocksX()) rightborder = Map.getBlocksX()-1;
+
+        return rightborder;
+    }
+    
+    /**
+     * Returns the top seight border of the deepest groundBlock
+     * @return measured in blocks
+     */
+    public int getTopBorder(){    
+        topborder = outputPosY / AbstractGameObject.SCREEN_DEPTH2 - 3;
+        if (topborder < 0) topborder= 0;
+        
+        return topborder;
+    }
+    
+     /**
+     * Returns the bottom seight border of the highest groundBlock
+     * @return measured in blocks
+     */
+    public int getBottomBorder(){
+        bottomborder = (outputPosY+get2DHeight()) / AbstractGameObject.SCREEN_DEPTH2 + Map.getBlocksZ()*2;
+        if (bottomborder >= Map.getBlocksY()) bottomborder = Map.getBlocksY()-1;
+        return bottomborder;
+    }
+    
+  /**
+     * The Camera Position in the game world.
+     * @return in pixels
+     */
+    public int getGamePosX() {
+        return outputPosX;
+    }
+
+    /**
+     * The Camera left Position in the game world.
+     * @param x in pixels
+     */
+    public void setGamePosX(int x) {
+        this.outputPosX = x;
+    }
+
+    /**
+     * The Camera top-position in the game world.
+     * @return in camera position game space
+     */
+    public int getGamePosY() {
+        return outputPosY;
+    }
+
+    /**
+     * The Camera top-position in the game world.
+     * @param y in game space
+     */
+    public void setGamePosY(int y) {
+        this.outputPosY = y;
+    }
+
+    /**
+     * The amount of pixel which are visible in Y direction (game pixels). It should be equal View.RENDER_RESOLUTION_WIDTH
+     * For screen pixels use <i>ViewportWidth()</i>.
+     * @return in pixels
+     */
+    public final int get2DWidth() {
+        return (int) (viewportWidth / getTotalScale());
+    }
+    
+  /**
+    * The amount of pixel which are visible in Y direction (game pixels). For screen pixels use <i>ViewportHeight()</i>.
+    * @return  in pixels
+    */
+   public final int get2DHeight() {
+        return (int) (viewportHeight / getTotalScale());
+    }
+
+    /**
+     * Returns the position of the cameras output (on the screen)
+     * @return  in pixels
+     */
+    public int getViewportPosX() {
+        return viewportPosX;
+    }
+
+    /**
+     * Returns the position of the camera (on the screen)
+     * @return
+     */
+    public int getViewportPosY() {
+        return viewportPosY;
+    }
+    
+    /**
+     * Returns the height of the camera output.
+     * To get the real display size multiply it with scale values.
+     * @return the value before scaling
+     */
+    public float getViewportHeight() {
+        return viewportHeight;
+    }
+
+    /**
+     * Returns the width of the camera output before scale.
+     * To get the real display size multiply it with scale value.
+     * @return the value before scaling
+     */
+    public float getViewportWidth() {
+        return viewportWidth;
+    }
 }

@@ -22,7 +22,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
  * @author Benedikt Vogler
  */
 public class Block extends AbstractGameObject {
-    private static Color[][] colorlist = new Color[OBJECTTYPESCOUNT][9];
+    private static Color[][] colorlist = new Color[OBJECTTYPESCOUNT][VALUESCOUNT];
     /**The id of the left side of a block.*/
     public static final int LEFTSIDE=0;
     /**The id of the top side of a block.*/
@@ -36,7 +36,7 @@ public class Block extends AbstractGameObject {
     public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT];
     
        /** A list containing the offset of the objects. */
-    public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][10][2];
+    public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][VALUESCOUNT][2];
     
     private boolean liquid;
     private boolean hasSides = true;
@@ -208,10 +208,10 @@ public class Block extends AbstractGameObject {
                     if (sprite == null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
                 }
             }
-            blocksprites[CATEGORY][id][value] = sprite;
+            blocksprites[id][value][side] = sprite;
             return sprite;
         } else {
-            return blocksprites[CATEGORY][id][value];
+            return blocksprites[id][value][side];
         }
     }
     
@@ -283,7 +283,7 @@ public class Block extends AbstractGameObject {
      */
    @Override
     public int get2DPosX(Coordinate coords) {
-        return coords.get2DPosX() + (int) (coords.getCellOffset()[0]); //add the objects position inside this coordinate
+        return coords.get2DPosX();
     }
 
     /**
@@ -293,9 +293,7 @@ public class Block extends AbstractGameObject {
      */
    @Override
     public int get2DPosY(Coordinate coords) {
-        return coords.get2DPosY()
-               + (int) (coords.getCellOffset()[1] / 2) //add the objects position inside this coordinate
-               - (int) (coords.getCellOffset()[2] / Math.sqrt(2)); //add the objects position inside this coordinate
+        return coords.get2DPosY();
     }
 
     /**

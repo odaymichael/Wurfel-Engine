@@ -309,21 +309,24 @@ public class Coordinate {
     }
     
     /**
-     *
+     *Returns the screen x-position where the object is rendered without regarding the camera. It also adds the cell offset.
      * @return
      */
     public int get2DPosX() {
         return getRelX() * Block.SCREEN_WIDTH //x-coordinate multiplied by it's dimension in this direction
-               + (getRelY() % 2) * AbstractGameObject.SCREEN_WIDTH2; //y-coordinate multiplied by it's dimension in this direction
+               + (getRelY() % 2) * AbstractGameObject.SCREEN_WIDTH2 //offset by y
+             + (int) (getCellOffset()[0]);
     }
     
     /**
-     *
+     *Returns the screen y-position where the object is rendered without regarding the camera. It also adds the cell offset.
      * @return
      */
     public int get2DPosY() {
         return getRelY() * Block.SCREEN_DEPTH2 //y-coordinate * the tile's half size size
-               - (int) (getHeight() / Math.sqrt(2)); //take axis shortening into account
+               - (int) (getHeight() / Math.sqrt(2)) //take axis shortening into account
+               + (int) (getCellOffset()[1] / 2) //add the objects position inside this coordinate
+               - (int) (getCellOffset()[2] / Math.sqrt(2)); //add the objects position inside this coordinate
     }
     
     /** @return a copy of this coordinate */

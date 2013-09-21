@@ -96,14 +96,14 @@ public abstract class AbstractGameObject {
         
     
     /**
-     *
+     *Get the screen position of this object.
      * @param coords
      * @return
      */
     public abstract int get2DPosX(Coordinate coords);
     
     /**
-     *
+     *Get the screen position of this object.
      * @param coords
      * @return
      */
