@@ -17,7 +17,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private String controls = "NPC";
 
    /** Set value how fast the character brakes or slides. 1 is "immediately". The higher the value, the more "slide". Value >1**/
-   private final int smoothBreaks = 1;
+   private final int smoothBreaks = 5;
       
    /**provides a factor for the vector*/
    private float speed;

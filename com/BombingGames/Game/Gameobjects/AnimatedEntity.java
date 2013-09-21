@@ -16,14 +16,13 @@ public class AnimatedEntity extends AbstractEntity implements Animatable {
      * @param value the starting value
      * @param  autostart True when it should automatically start.
      * @param loop Set to true when it should loop, when false it stops after one time.
-     * @param animationsinformation  
+     * @param animationsinformation  the time in ms for each animation step
      */
     protected AnimatedEntity(int id, int value, int[] animationsinformation, boolean autostart, boolean loop){
         super(id);
         this.animationsduration = animationsinformation;
         this.running = autostart;
         this.loop = loop;
-        setLightlevel(0.5f);
     }
     
    /**

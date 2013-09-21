@@ -159,8 +159,8 @@ public class Minimap {
             if (controller.getPlayer()!=null){
                 view.drawString(
                         camera.getRightBorder() +" | "+ camera.getBottomBorder(),
-                        (int) (viewportPosX + scaleX * camera.getGamePosX() / Block.SCREEN_DEPTH
-                        + scaleX*camera.get2DWidth() / Block.SCREEN_DEPTH),
+                        (int) (viewportPosX + scaleX * camera.getGamePosX() / Block.SCREEN_WIDTH
+                        + scaleX*camera.get2DWidth() / Block.SCREEN_WIDTH),
                         (int) (viewportPosY + scaleY * camera.getGamePosY() / Block.SCREEN_DEPTH2
                         + scaleY *2*(controller.getPlayer().getCoords().getZ() * Block.SCREEN_DEPTH2)/ (float) (Block.SCREEN_DEPTH)
                         + scaleY*camera.get2DHeight() / Block.SCREEN_DEPTH2),
