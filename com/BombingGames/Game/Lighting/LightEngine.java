@@ -54,6 +54,11 @@ public class LightEngine {
         moon = new GlobalLightSource(180-Controller.getMap().getWorldSpinDirection(), 0, new Color(0.2f,0.4f,0.8f,1), 45);
     }
 
+    /**
+     *
+     * @param xPos
+     * @param yPos
+     */
     public LightEngine(int xPos, int yPos) {
         this();
         this.posX = xPos;
@@ -226,7 +231,7 @@ public class LightEngine {
         if (renderData) {
             
             //g.setLineWidth(2);
-            ShapeRenderer shapeRenderer = view.getShapeRenderer();
+            ShapeRenderer shapeRenderer = view.SHAPE_RENDERER;
             
             //surrounding sphere
             Gdx.gl10.glLineWidth(2);

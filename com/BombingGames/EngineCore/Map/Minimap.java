@@ -72,7 +72,7 @@ public class Minimap {
             int viewportPosX = posX;
             int viewportPosY = posY;
             
-            ShapeRenderer shapeRenderer = view.getShapeRenderer();
+            ShapeRenderer shapeRenderer = view.SHAPE_RENDERER;
                         
             //render the map
             shapeRenderer.begin(ShapeType.FilledRectangle);

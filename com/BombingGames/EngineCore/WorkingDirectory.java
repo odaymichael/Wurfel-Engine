@@ -7,6 +7,11 @@ import java.io.File;
  * @author Martin Brunokowsky
  */
 public class WorkingDirectory {
+    /**
+     *
+     * @param applicationName
+     * @return
+     */
     public static File getWorkingDirectory(String applicationName) {
         String userHome = System.getProperty("user.home", ".");
         File workingDirectory;

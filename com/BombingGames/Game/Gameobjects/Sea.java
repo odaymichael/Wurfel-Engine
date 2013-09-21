@@ -8,6 +8,9 @@ import com.BombingGames.EngineCore.Map.Map;
  * @author Benedikt Vogler
  */
 public class Sea extends Block implements IsSelfAware{
+    /**
+     *
+     */
     public static int waveAmplitude = 50;
     private static float wavespeed = 1/600f; //the smaller the slower
     private static float currentX = 0;
@@ -17,6 +20,11 @@ public class Sea extends Block implements IsSelfAware{
     
     Coordinate coords;
         
+    /**
+     *
+     * @param id
+     * @param coords
+     */
     public Sea(int id, Coordinate coords) {
         super(id);
         setTransparent(true);
@@ -50,6 +58,10 @@ public class Sea extends Block implements IsSelfAware{
         );
     }
     
+    /**
+     *
+     * @param delta
+     */
     public static void staticUpdate(float delta){
         currentX += delta*wavespeed;
     }

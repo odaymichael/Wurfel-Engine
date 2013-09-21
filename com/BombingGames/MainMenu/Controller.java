@@ -49,10 +49,17 @@ public class Controller {
             }
     }
 
+    /**
+     *
+     * @return
+     */
     public MenuItem[] getMenuItems() {
         return menuItems;
     }
 
+    /**
+     *
+     */
     public void dispose(){
         fx.dispose();
     }

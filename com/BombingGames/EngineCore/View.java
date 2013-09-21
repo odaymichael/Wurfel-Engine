@@ -3,7 +3,6 @@ package com.BombingGames.EngineCore;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.AbstractGameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,14 +23,15 @@ public class View {
     public static final int RENDER_RESOLUTION_WIDTH = 1920;
 
     private static BitmapFont font;
+    
+    public final SpriteBatch BATCH;    
+    public final ShapeRenderer SHAPE_RENDERER;
+    
     private float equalizationScale;
     private Controller controller;
     
     private int drawmode;
     
-    private SpriteBatch batch;
-    
-    private ShapeRenderer shapeRenderer;
     
     private OrthographicCamera hudCamera;
     
@@ -52,13 +52,16 @@ public class View {
         hudCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hudCamera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
-        batch = new SpriteBatch();
-        shapeRenderer = new ShapeRenderer();
+        BATCH = new SpriteBatch();
+        SHAPE_RENDERER = new ShapeRenderer();
         
-                
         Block.loadSheet();
      }
     
+    /**
+     *
+     * @param delta
+     */
     public void update(int delta){
     }
     
@@ -81,8 +84,8 @@ public class View {
         hudCamera.update();
         hudCamera.apply(Gdx.gl10);
          
-        batch.setProjectionMatrix(hudCamera.combined);
-        shapeRenderer.setProjectionMatrix(hudCamera.combined);
+        BATCH.setProjectionMatrix(hudCamera.combined);
+        SHAPE_RENDERER.setProjectionMatrix(hudCamera.combined);
         
         Gdx.gl.glViewport(
             0,
@@ -210,51 +213,68 @@ public class View {
     public void setDrawmode(int drawmode) {
         if (drawmode != this.drawmode){
             this.drawmode = drawmode;
-            batch.end();
+            BATCH.end();
             //GameObject.getSpritesheet().getFullImage().endUse();
             GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, drawmode);
             //GameObject.getSpritesheet().getFullImage().startUse();
-            batch.begin();
+            BATCH.begin();
         }
     }
 
+    /**
+     *Draw a string using the last active color.
+     * @param msg
+     * @param xPos
+     * @param yPos
+     */
     public void drawString(String msg, int xPos, int yPos) {
         GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
-        batch.begin();
-        font.draw(batch, msg, xPos, yPos);
-        batch.end();
+        BATCH.begin();
+        font.draw(BATCH, msg, xPos, yPos);
+        BATCH.end();
     }
     
+    /**
+     *Draw a string in a color.
+     * @param msg
+     * @param xPos
+     * @param yPos
+     * @param color
+     */
     public void drawString(String msg, int xPos, int yPos, Color color) {
         GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
-        batch.begin();
-        font.draw(batch, msg, xPos, yPos);
-        batch.end();
+        font.setColor(color);
+        BATCH.begin();
+        font.draw(BATCH, msg, xPos, yPos);
+        BATCH.end();
     }
     
-    public void drawText(String msg, int xPos, int yPos, Color color){
+    /**
+     *Draw multi-lines with this method
+     * @param text
+     * @param xPos space from left
+     * @param yPos space from top
+     * @param color the colro of the text.
+     */
+    public void drawText(String text, int xPos, int yPos, Color color){
         GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
         font.setColor(Color.BLACK);
         font.setScale(0.51f);
-        batch.begin();
-        font.drawMultiLine(batch, msg, xPos, yPos);
-        batch.end();
+        BATCH.begin();
+        font.drawMultiLine(BATCH, text, xPos, yPos);
+        BATCH.end();
         
         font.setColor(Color.WHITE);
         font.setScale(0.5f);
-        batch.begin();
-        font.drawMultiLine(batch, msg, xPos, yPos);
-        batch.end();
-    }
-
-    public SpriteBatch getBatch() {
-        return batch;
-    }
-
-    public ShapeRenderer getShapeRenderer() {
-        return shapeRenderer;
+        BATCH.begin();
+        font.drawMultiLine(BATCH, text, xPos, yPos);
+        BATCH.end();
     }
     
+    /**
+     *
+     * @return
+     */
     public OrthographicCamera getHudCamera() {
         return hudCamera;
     } 

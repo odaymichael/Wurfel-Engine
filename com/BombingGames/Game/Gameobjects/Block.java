@@ -30,6 +30,9 @@ public class Block extends AbstractGameObject {
     /**The id of the right side of a block.*/
     public static final int RIGHTSIDE=2;
     
+    /**
+     *
+     */
     public static final char CATEGORY = 'b';
     
     /**Containts the names of the objects. index=id*/
@@ -384,7 +387,7 @@ public class Block extends AbstractGameObject {
         color.a = 1; 
         sprite.getVertices()[SpriteBatch.C3] = color.toFloatBits();//bottom right
  
-        sprite.draw(view.getBatch());
+        sprite.draw(view.BATCH);
     }
 
     @Override
@@ -403,6 +406,10 @@ public class Block extends AbstractGameObject {
         );
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public char getCategory() {
         return CATEGORY;
@@ -413,16 +420,28 @@ public class Block extends AbstractGameObject {
         return NAMELIST[getId()];
     }
 
+    /**
+     *Returning the
+     * @return
+     */
     @Override
     public int getOffsetX() {
         return OFFSET[getId()][getValue()][0];
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getOffsetY() {
         return OFFSET[getId()][getValue()][1];
     } 
 
+    /**
+     *
+     * @return
+     */
     public static AtlasRegion[][][] getBlocksprites() {
         return blocksprites;
     }

@@ -338,6 +338,9 @@ public class Map {
         return getDataSafe(coords.getRelX(), coords.getRelY(), coords.getZ());
     }
     
+   
+    
+
     /**
      * Set a block at a specific coordinate.
      * @param x position
@@ -478,6 +481,10 @@ public class Map {
         return list;
     }
 
+    /**
+     *Gets an array where the visiblity of the deepest layer is stored.
+     * @return
+     */
     public boolean[][] getDeepestLayerVisibility() {
         return deepestLayerVisibility;
     }

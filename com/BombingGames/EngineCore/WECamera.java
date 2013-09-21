@@ -143,7 +143,7 @@ public class WECamera extends Camera {
     public void render(View view, WECamera camera) {
         if (Controller.getMap() != null) {  
             
-            view.getBatch().setProjectionMatrix(combined);
+            view.BATCH.setProjectionMatrix(combined);
              
             //set up the viewport
             Gdx.gl.glViewport(
@@ -153,7 +153,7 @@ public class WECamera extends Camera {
                 (int) viewportHeight
             );
             
-            view.getBatch().begin();
+            view.BATCH.begin();
             view.setDrawmode(GL11.GL_MODULATE);
             
             //render map
@@ -164,7 +164,7 @@ public class WECamera extends Camera {
                 renderobject.getObject().render(view, camera, renderobject.getCoords()); 
             }
             
-            view.getBatch().end();
+            view.BATCH.end();
         }
     }
   

@@ -14,6 +14,11 @@ public class EntitySpawner extends Block implements IsSelfAware {
     private Coordinate coords;//this field is needed because of it is selfAware
     private boolean up = true;
 
+    /**
+     *
+     * @param id
+     * @param coords
+     */
     protected EntitySpawner(int id, Coordinate coords){
         super(id);
         if (coords == null) throw new NullPointerException("No coordinates given to EntitySpawner during creation."); 

@@ -85,6 +85,10 @@ public abstract class AbstractGameObject {
      */
     public abstract void update(float delta);
     
+    /**
+     *
+     * @return
+     */
     public abstract char getCategory();
     /**
      * Place you static update methods here.
@@ -142,7 +146,7 @@ public abstract class AbstractGameObject {
             prepareColor(view, color);
 
             sprite.setColor(color);
-            sprite.draw(view.getBatch());
+            sprite.draw(view.BATCH);
         }
     } 
     
@@ -250,8 +254,16 @@ public abstract class AbstractGameObject {
      */
     public abstract String getName();
     
+    /**
+     *Get the offset of the sprite. Center is top left corner.
+     * @return
+     */
     public abstract int getOffsetX();
     
+    /**
+     *Get the offset of the sprite. Center is top left corner.
+     * @return
+     */
     public abstract int getOffsetY();
 
     /**
@@ -361,6 +373,10 @@ public abstract class AbstractGameObject {
         this.dimensionZ = dimensionZ;
     }
 
+    /**
+     *
+     * @return
+     */
     public static AtlasRegion[][][] getSprites() {
         return sprites;
     }

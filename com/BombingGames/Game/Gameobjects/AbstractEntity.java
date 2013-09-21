@@ -18,7 +18,10 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
    private float positionX = 0; //the horizontal offset
    private float positionY = 0;
    
-   public static final char CATEGORY = 'e';
+    /**
+     *
+     */
+    public static final char CATEGORY = 'e';
    
     /**Containts the names of the objects. index=id*/
     public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT]; 
@@ -210,6 +213,10 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
         this.positionY = offsetY;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public char getCategory() {
         return CATEGORY;
@@ -220,11 +227,19 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
         return NAMELIST[getId()];
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public int getOffsetX() {
         return OFFSET[getId()][getValue()][0];
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getOffsetY() {
         return OFFSET[getId()][getValue()][1];
@@ -237,6 +252,10 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
         destroy=true;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean shouldBeDestroyed() {
         return destroy;
     }

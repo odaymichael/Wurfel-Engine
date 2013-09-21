@@ -203,6 +203,10 @@ public class Coordinate {
         Controller.getMap().setCelloffset(this, 2, height);
     }
     
+    /**
+     *
+     * @param block
+     */
     public void setBlock(Block block){
         Controller.getMap().setData(this, block);
     }
