@@ -32,12 +32,12 @@ public class LightEngine {
     private float I_ambient;//ambient light
     
     //diffuse light
-    private final float k_diff = 60/255f; //the min and max span. value between 0 and 1 empirisch bestimmter Reflexionsfaktor für diffuse Komponente der Reflexion
+    private final float k_diff = 100/255f; //the min and max span. value between 0 and 1 empirisch bestimmter Reflexionsfaktor für diffuse Komponente der Reflexion
     private float I_diff0, I_diff1, I_diff2;
     
     //specular light
-    private final int n_spec = 8; // ... konstanter Faktor zur Beschreibung der Oberflächenbeschaffenheit (rau kleiner 32, glatt größer 32,  infinity wäre ein perfekter Spiegel)
-    private final int k_specular = 8; //empirisch bestimmter Reflexionsfaktor für spiegelnde Komponente der Reflexion
+    private final int n_spec = 12; //  constant factor describing the Oberflächenbeschaffenheit (rau smaller 32, glatt bigger 32, infinity would be a perfect mirror)
+    private final float k_specular = 1-k_diff; //empirisch bestimmter reflection factor of mirroring component of reflection. Value "k_diff+kspecular <= 1" therefore 1-k_diff is biggest possible value 
     private float I_spec0, I_spec1, I_spec2;
              
     /**the brightness of each side. The value should be between 0 and 1*/
@@ -131,7 +131,7 @@ public class LightEngine {
         //                        );   
         
         I_0 = I_ambient + I_diff0 + I_spec0;
-        I_1 = I_ambient + I_diff1;
+        I_1 = I_ambient + I_diff1 + I_spec1;
         I_2 = I_ambient + I_diff2 + I_spec2;
     }
     
