@@ -27,6 +27,8 @@ public abstract class AbstractGameObject {
     public static final int DIM4 = DIMENSION / 4;
     /**the max. amount of different object types*/
     public static final int OBJECTTYPESCOUNT = 99;
+      /**the max. amount of different values*/
+    public static final int VALUESCOUNT = 25;
     
 
     
@@ -38,12 +40,14 @@ public abstract class AbstractGameObject {
     /**The sprite texture which contains every object texture*/
     private static TextureAtlas spritesheet;
     private static Pixmap pixmap;
+    private static int referencObject[][][][] = new int[(int) 'z'][OBJECTTYPESCOUNT][VALUESCOUNT][];//{category}{id}{value}{category, id, value}
     
     private final int id; 
     private int value;
     private boolean obstacle, transparent, visible, hidden; 
     private float lightlevel = 0.5f;
-    private int dimensionY = 1;    
+    private int dimensionY = 1;  
+
     
     /**
      * Creates an object. Use getInterface() to create blocks or entitys.
@@ -251,21 +255,29 @@ public abstract class AbstractGameObject {
     
 
     /**
-     * Returns a sprite texture of non-block texture
-     * @param category 
-     * @param id
-     * @param value
-     * @return
+     * Returns a sprite texture. You may use your own method like in <i>Block</i>.
+     * @param category the category of the sprite e.g. "b" for blocks
+     * @param id the id of the object
+     * @param value the value of the object
+     * @return 
      */
     public static AtlasRegion getSprite(char category, int id, int value) {
-        AtlasRegion sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
-        if (sprite == null){ //if there is no sprite show the default "sprite not found sprite" for this category
-            sprite = getSpritesheet().findRegion(category+"0-0");
-            if (sprite==null) {//load generic error sprite if category sprite failed
-                sprite = getSpritesheet().findRegion("error");
-                if (sprite==null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
+        AtlasRegion sprite;
+        if (referencObject[category][id][value] == null){
+            sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
+            if (sprite == null){ //if there is no sprite show the default "sprite not found sprite" for this category
+                Gdx.app.log("debug", category+Integer.toString(id)+"-"+value + " not found");
+                sprite = getSpritesheet().findRegion(category+"0-0");
+                if (sprite == null) {//load generic error sprite if category sprite failed
+                    sprite = getSpritesheet().findRegion("error");
+                    if (sprite == null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
+                }
             }
+        } else {
+            int[] reference = referencObject[category][id][value];
+            sprite = getSprite((char) reference[0], reference[1], reference[2]);
         }
+        
         return sprite;
     }
 
@@ -429,5 +441,9 @@ public abstract class AbstractGameObject {
      */
     public void setDimensionY(int dimensionY) {
         this.dimensionY = dimensionY;
+    }
+
+    public static int[][][][] getReferencObject() {
+        return referencObject;
     }
 }
