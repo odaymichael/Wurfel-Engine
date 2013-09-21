@@ -15,8 +15,8 @@ public class Player extends AbstractCharacter{
      */
     public Player(int id) {
         super(id, 3);
-       // setFallingSound(Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/wind.ogg")));
-        setRunningSound(Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/victorcenusa_running.wav")));
+        setFallingSound(Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/wind.ogg")));
+        setRunningSound(Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/victorcenusa_running.ogg")));
         setTransparent(true);
         setObstacle(true);
         setDimensionY(2);

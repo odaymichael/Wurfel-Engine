@@ -11,25 +11,25 @@ public class GlobalLightSource {
     /**
      *The higher the value the faster/shorter is the day.
      */
-    protected final float LONGSPEED = 1/64f;
+    protected final float AZIMUTH_SPEED = 1/64f;
     private float power;
     private Color tone; //the color of the light
-    private float latPos;
-    private float longPos;
+    private float height;
+    private float azimuth;
     private int amplitude; //the max possible angle (from horizon) the sun can has
 
     /**
      * A GlobalLightSource can be the moon, the sun or even something new.
-     * @param longPos The starting position.
-     * @param latPos The starting position.
+     * @param azimuth The starting position.
+     * @param height The starting position.
      * @param color the starting color of the light. With this parameter you controll its brightness.
-     * @param amplitude the maximum degree during a day the LightSource rises
+     * @param amplitudeHeight the maximum degree during a day the LightSource rises
      */
-    public GlobalLightSource(float longPos, float latPos, Color color, int amplitude) {
-        this.longPos = longPos;
-        this.latPos = latPos;
+    public GlobalLightSource(float azimuth, float height, Color color, int amplitudeHeight) {
+        this.azimuth = azimuth;
+        this.height = height;
         this.tone = color;
-        this.amplitude = amplitude;
+        this.amplitude = amplitudeHeight;
     }
 
     /**
@@ -52,24 +52,24 @@ public class GlobalLightSource {
      *
      * @return
      */
-    public float getLatPos() {
-        return latPos;
+    public float getHeight() {
+        return height;
     }
 
     /**
      *
      * @return
      */
-    public float getLongPos() {
-        return longPos;
+    public float getAzimuth() {
+        return azimuth;
     }
 
     /**
      *
      * @return
      */
-    public float getLongSpeed() {
-        return LONGSPEED;
+    public float getAzimuthSpeed() {
+        return AZIMUTH_SPEED;
     }
 
     /**
@@ -81,25 +81,23 @@ public class GlobalLightSource {
     }
 
     /**
-     *
-     * @param latPos
+     *The Latitude posiiton. 
+     * @param height
      */
-    public void setLatPos(float latPos) {
-        this.latPos = latPos;
-        if (this.latPos >= 360) {
-            this.latPos -= 360;
-        } else if (this.latPos < 0) this.latPos += 360; 
+    public void setHeight(float height) {
+        if (height >= 360) {
+            this.height = height % 360;
+        } else if (this.height < 0) this.height += 360; 
     }
 
     /**
-     *
-     * @param longPos
+     *The longitudinal position
+     * @param azimuth
      */
-    public void setLongPos(float longPos) {
-        this.longPos = longPos;
-        if (this.longPos >= 360) {
-            this.longPos -= 360;
-        }else if (this.longPos < 0) this.longPos += 360;
+    public void setAzimuth(float azimuth) {
+        if (azimuth >= 360) {
+            this.azimuth = azimuth % 360;
+        } else if (this.azimuth < 0) this.azimuth += 360;
     }
 
     /**
@@ -109,8 +107,6 @@ public class GlobalLightSource {
     public void setTone(Color tone) {
         this.tone = tone;
     }
-    
-    
 
     /**
      *
@@ -118,30 +114,33 @@ public class GlobalLightSource {
      */
     public void update(float delta) {    
         //automove
-        if (LONGSPEED != 0) {
-            longPos += LONGSPEED * delta;
-            latPos = (float) (amplitude * Math.sin((longPos + Controller.getMap().getWorldSpinDirection()) * Math.PI / 180));
+        if (AZIMUTH_SPEED != 0) {
+            azimuth += AZIMUTH_SPEED * delta;
+            height = (float) (amplitude * Math.sin((azimuth + Controller.getMap().getWorldSpinDirection()) * Math.PI / 180));
         }
             
         //brightness calculation
-        if (latPos > amplitude/2 && latPos < 180)
+        if (height > amplitude/2 && height < 180)
                 power = 1;//day
-        else if (latPos < -amplitude/2)
+        else if (height < -amplitude/2)
                  power = 0;//night
-            else if (latPos < amplitude/2) 
-                    power = (float) (0.5f + 0.5f*Math.sin(latPos * Math.PI/amplitude)); //morning   & evening
+            else if (height < amplitude/2) 
+                    power = (float) (0.5f + 0.5f*Math.sin(height * Math.PI/amplitude)); //morning   & evening
         
 
         if (power > 1) power=1;
         if (power < 0) power=0;    
         
-        //if (longPos>180+IGLPrototype.TWISTDIRECTION)
+        //if (azimuth>180+IGLPrototype.TWISTDIRECTION)
         //color = new Color(127 + (int) (power * 128), 255, 255);
         //else color = new Color(1f,1f,1f);
-        //I_a = (int) ((90-latPos)*0.1f);
+        //I_a = (int) ((90-height)*0.1f);
     }
 
-    
+    /**
+     * Returns the light the GLS emits.
+     * @return 
+     */
     public Color getLight() {
         return getTone().cpy().mul(power);
     }

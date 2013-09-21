@@ -10,7 +10,7 @@ import com.badlogic.gdx.audio.Sound;
  * @author Benedikt
  */
 public abstract class AbstractCharacter extends AbstractEntity {
-   private final int COLISSIONRADIUS = GameObject.DIM4;
+   private final int COLISSIONRADIUS = AbstractGameObject.DIM4;
    private final int SPRITESPERDIR;
       
    private float[] dir = {1, 0, 0};
@@ -225,14 +225,13 @@ public abstract class AbstractCharacter extends AbstractEntity {
                 }
             }
 
-
             //should the fallingsound be played?
             if (fallingSound != null) {
-                if (dir[2] < -1
-                    && !fallingSoundPlaying
-                ){
-                    fallingSound.play();
-                    fallingSoundPlaying = true;
+                if (dir[2] < -1) {
+                    if (!fallingSoundPlaying){
+                        fallingSound.play();
+                        fallingSoundPlaying = true;
+                    }
                 }else {
                     fallingSound.stop();
                     fallingSoundPlaying = false;

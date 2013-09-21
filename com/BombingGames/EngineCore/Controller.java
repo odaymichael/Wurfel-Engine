@@ -1,12 +1,13 @@
 package com.BombingGames.EngineCore;
 
+import com.BombingGames.EngineCore.Map.Cell;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.EngineCore.Map.Minimap;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.GameObject;
+import com.BombingGames.Game.Gameobjects.AbstractGameObject;
 import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Gdx;
@@ -58,7 +59,7 @@ public class Controller {
         if (ENABLECHUNKSWITCH){
             //earth to right
             if (cameras.get(0).getLeftBorder() <= 0)
-            map.setCenter(3);
+                map.setCenter(3);
             else //earth to the left
                 if (cameras.get(0).getRightBorder() >= Map.getBlocksX()-1) 
                     map.setCenter(5);
@@ -72,14 +73,14 @@ public class Controller {
         }
         
         //update every static update method
-        GameObject.updateStaticUpdates(delta);
+        AbstractGameObject.updateStaticUpdates(delta);
         
         //update every block on the map
-        Block[][][] mapdata = map.getData();
+        Cell[][][] mapdata = map.getData();
         for (int x=0; x < Map.getBlocksX(); x++)
             for (int y=0; y < Map.getBlocksY(); y++)
                 for (int z=0; z < Map.getBlocksZ(); z++)
-                    mapdata[x][y][z].update(delta);
+                    mapdata[x][y][z].getBlock().update(delta);
         
         //update every entity
         for (AbstractEntity entity : map.getEntitys())
@@ -90,11 +91,12 @@ public class Controller {
                 map.getEntitys().remove(i);
         }
         
-        for (WECamera camera : cameras)
+        for (WECamera camera : cameras) {
             camera.update();
+        }
                 
         //recalculates the light if requested
-        recalcIfRequested(cameras.get(0));      
+        recalcIfRequested();      
     }
 
     
@@ -102,17 +104,18 @@ public class Controller {
      * Informs the map that a recalc is requested. It will do it in the next update. This method  to limit update calls to to per frame
      */
     public static void requestRecalc(){
+        Gdx.app.log("DEBUG", "A recalc was requested.");
         recalcRequested = true;
     }
     
     /**
      * When the recalc was requested it calls raytracing and light recalculing. This method should be called every update.
      * Request a recalc with <i>reuqestRecalc()</i>. 
-     * @param camera 
      */
-    public void recalcIfRequested(WECamera camera){
+    public void recalcIfRequested(){
         if (recalcRequested) {
-            camera.raytracing();
+            Gdx.app.log("DEBUG", "Recalcing.");
+            WECamera.raytracing();
             LightEngine.calcSimpleLight();
             if (minimap != null) minimap.update();
             recalcRequested = false;
@@ -123,7 +126,7 @@ public class Controller {
      * Creates a new Map.
      */
     public static void newMap(){
-        map = new Map(!MainMenuScreen.shouldLoadMap());
+        map = new Map(!MainMenuScreen.shouldLoadMap(),-45);
         map.fillWithBlocks();
     }
     
@@ -308,6 +311,8 @@ public class Controller {
         } catch(NumberFormatException e) {
             this.timespeed = 1;
             Gdx.app.log("Error", "Invalid nubmer entered: "+e.toString());
+        } catch(NullPointerException e){
+            Gdx.app.log("DEBUG", "Canceled: "+e.toString());
         }
     }
     

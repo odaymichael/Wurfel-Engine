@@ -4,8 +4,9 @@ import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
+import static com.BombingGames.Game.Gameobjects.AbstractEntity.CATEGORY;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getReferencObject;
 import com.badlogic.gdx.graphics.Color;
-import java.util.Arrays;
 
 /**
  *A zombie which can follow a character.
@@ -26,6 +27,7 @@ public class Zombie extends AbstractCharacter{
         setTransparent(true);
         setObstacle(true);
         setDimensionY(2);
+        getReferencObject()[CATEGORY][id][getValue()] = new int[]{CATEGORY,40,0};
     }
 
     @Override
@@ -40,6 +42,7 @@ public class Zombie extends AbstractCharacter{
                 color = Controller.getLightengine().getGlobalLight();
             }
         render(view, camera, coords, color.mul(Color.GREEN));
+        super.render(view, camera, coords);
     }
 
     @Override

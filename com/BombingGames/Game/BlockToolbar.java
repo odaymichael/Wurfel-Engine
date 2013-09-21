@@ -1,8 +1,7 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.EngineCore.View;
-import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.GameObject;
+import com.BombingGames.Game.Gameobjects.AbstractGameObject;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -48,8 +47,8 @@ public class BlockToolbar {
     public void render(View view){
         SpriteBatch batch = view.getBatch();
         batch.begin();
-        batch.draw(GameObject.getSpritesheet().findRegion("toolbar"), posX, posX);
-        batch.draw(GameObject.getSpritesheet().findRegion("selection"), posX+80*selection, posY-5);
+        batch.draw(AbstractGameObject.getSpritesheet().findRegion("toolbar"), posX, posX);
+        batch.draw(AbstractGameObject.getSpritesheet().findRegion("selection"), posX+80*selection, posY-5);
         
         for (int i = 0; i < 9; i++) {
             if (slot[i]!=0){

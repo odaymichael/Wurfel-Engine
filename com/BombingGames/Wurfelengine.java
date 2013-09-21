@@ -18,7 +18,7 @@ public class Wurfelengine extends Game {
     /**
      * The Version of the Engine
      */
-    public static final String VERSION = "1.0.5";    
+    public static final String VERSION = "1.1.6";    
     private static File workingDirectory;
     private static boolean fullscreen = false;
     private static Wurfelengine instance;

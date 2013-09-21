@@ -1,40 +1,28 @@
 package com.BombingGames.EngineCore;
 
 import com.BombingGames.EngineCore.Map.Coordinate;
-import com.BombingGames.Game.Gameobjects.AbstractEntity;
-import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Gameobjects.AbstractGameObject;
 
 /**
- *Saves the information for the rendering. This class is only used in the renderin process.
+ *Saves the information for the rendering. This class is only used in the rendering process.
  * @author Benedikt
  */
 public class Renderobject {
     private final Coordinate coords;
     private final int depth;
-    private final int entityindex;
+    private AbstractGameObject content;
 
      /**
-         * Create an Renderobject with a Block
-         * @param coords 
-         * @param entitynumber when it is an entity put the number here. When it is not then set it to -1.
+         * Create an Renderobject with a regular Block in the map
+         * @param object 
+         * @param coords The coordinates where the object should be rendered
          */
-    protected Renderobject(Coordinate coords, int entitynumber) {
+    protected Renderobject(AbstractGameObject object, Coordinate coords) {
         this.coords = coords;
-        Block block = Controller.getMapData(coords); 
-        this.depth = block.getDepth(coords);
-        this.entityindex = entitynumber;
+        this.depth = object.getDepth(coords);
+        content = object;
     }
-    
-    /**
-         * Create an Renderobject with an entity
-         * @param entity The entity which should be contained by the renderobject.
-         * @param entitynumber when it is an entity put the number here. When it is not then set it to -1.
-         */
-    protected Renderobject(AbstractEntity entity, int entitynumber) {
-        this.coords = entity.getCoords();
-        this.depth = entity.getDepth(coords);
-        this.entityindex = entitynumber;
-    }
+
 
     /**
      * 
@@ -48,16 +36,13 @@ public class Renderobject {
      * 
      * @return
      */
-    public int getIndexposition() {
-        return entityindex;
-    }
-
-    /**
-     * 
-     * @return
-     */
     public Coordinate getCoords() {
         return coords;
     }
 
+    public AbstractGameObject getObject() {
+        return content;
+    }
+
+    
 }

@@ -4,7 +4,6 @@ import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
-import static com.BombingGames.Game.Gameobjects.Block.CATEGORY;
 import com.BombingGames.Game.Lighting.PseudoGrey;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -18,7 +17,7 @@ import org.lwjgl.opengl.GL11;
  *An object is something wich can be found in the game world.
  * @author Benedikt
  */
-public abstract class GameObject {
+public abstract class AbstractGameObject {
     /**Screen DIMENSION of a block/object in pixels. This is the length from the left to the right border of the block.
      * In game coordinates this is also the dimension from top to bottom.*/
     public static final int DIMENSION = 160;
@@ -28,6 +27,8 @@ public abstract class GameObject {
     public static final int DIM4 = DIMENSION / 4;
     /**the max. amount of different object types*/
     public static final int OBJECTTYPESCOUNT = 99;
+      /**the max. amount of different values*/
+    public static final int VALUESCOUNT = 25;
     
 
     
@@ -39,12 +40,14 @@ public abstract class GameObject {
     /**The sprite texture which contains every object texture*/
     private static TextureAtlas spritesheet;
     private static Pixmap pixmap;
+    private static int referencObject[][][][] = new int[(int) 'z'][OBJECTTYPESCOUNT][VALUESCOUNT][];//{category}{id}{value}{category, id, value}
     
     private final int id; 
     private int value;
     private boolean obstacle, transparent, visible, hidden; 
     private float lightlevel = 0.5f;
-    private int dimensionY = 1;    
+    private int dimensionY = 1;  
+
     
     /**
      * Creates an object. Use getInterface() to create blocks or entitys.
@@ -52,7 +55,7 @@ public abstract class GameObject {
      * @param value 
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
-    protected GameObject(int id, int value) {
+    protected AbstractGameObject(int id, int value) {
         this.id = id;
         this.value = value;
     }
@@ -166,7 +169,7 @@ public abstract class GameObject {
      * @param x game-space-coordinates, value in pixels
      * @param y game-space-coordinates, value in pixels
      * @return Returns the fieldnumber of the coordinates. 8 is the field itself.
-     * @see com.BombingGames.Game.Gameobjects.GameObject#sideIDtoNeighbourCoords(int[], int)
+     * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#sideIDtoNeighbourCoords(int[], int)
      */
     public static int getSideID(float x, float y) {
         int result = 8;
@@ -252,21 +255,29 @@ public abstract class GameObject {
     
 
     /**
-     * Returns a sprite texture of non-block texture
-     * @param category 
-     * @param id
-     * @param value
-     * @return
+     * Returns a sprite texture. You may use your own method like in <i>Block</i>.
+     * @param category the category of the sprite e.g. "b" for blocks
+     * @param id the id of the object
+     * @param value the value of the object
+     * @return 
      */
     public static AtlasRegion getSprite(char category, int id, int value) {
-        AtlasRegion sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
-        if (sprite == null){ //if there is no sprite show the default "sprite not found sprite" for this category
-            sprite = getSpritesheet().findRegion(CATEGORY+"0-0");
-            if (sprite==null) {//load generic error sprite if category sprite failed
-                sprite = getSpritesheet().findRegion("error");
-                if (sprite==null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
+        AtlasRegion sprite;
+        if (referencObject[category][id][value] == null){
+            sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
+            if (sprite == null){ //if there is no sprite show the default "sprite not found sprite" for this category
+                Gdx.app.log("debug", category+Integer.toString(id)+"-"+value + " not found");
+                sprite = getSpritesheet().findRegion(category+"0-0");
+                if (sprite == null) {//load generic error sprite if category sprite failed
+                    sprite = getSpritesheet().findRegion("error");
+                    if (sprite == null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
+                }
             }
+        } else {
+            int[] reference = referencObject[category][id][value];
+            sprite = getSprite((char) reference[0], reference[1], reference[2]);
         }
+        
         return sprite;
     }
 
@@ -410,9 +421,9 @@ public abstract class GameObject {
     /**
      * Hide this object and prevent it from beeing rendered. Don't use this to hide objects. This data is only for rendering data and view specific not for gameworld information. This should be just used for setting during the rendering process.
      * @param visible Sets the visibility.
-     * @see com.BombingGames.Game.Gameobjects.GameObject#setHidden(boolean) 
+     * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#setHidden(boolean) 
      */
-    public void setVisible(boolean visible) {
+    public void setClipped(boolean visible) {
         this.visible = visible;
     }
 
@@ -430,5 +441,9 @@ public abstract class GameObject {
      */
     public void setDimensionY(int dimensionY) {
         this.dimensionY = dimensionY;
+    }
+
+    public static int[][][][] getReferencObject() {
+        return referencObject;
     }
 }

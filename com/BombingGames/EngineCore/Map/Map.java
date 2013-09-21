@@ -1,8 +1,6 @@
 package com.BombingGames.EngineCore.Map;
 
 import com.BombingGames.EngineCore.Controller;
-import com.BombingGames.EngineCore.View;
-import com.BombingGames.EngineCore.WECamera;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.badlogic.gdx.Gdx;
@@ -37,24 +35,23 @@ public class Map {
     
     private static int blocksX, blocksY, blocksZ;
     /** the map data are the blocks in their cells */
-    private Block[][][] data;
-    private float[][][][] cellOffset;
+    private Cell[][][] data;
+    private boolean[][] deepestLayerVisibility;
+    
     /** every entity on the map is stored in this field */
     private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
-    
-  
     /**
-     *Creates a map. Fill the map with fillWithBlocks(boolean load);
-     * @param newMap  when "true" a new map os generated, when "false" a map is loaded from disk 
+     *Creates an empty  map. Fill the map with fillWithBlocks(boolean load);
+     * @param newMap when "true" a new map will be generated, when "false" a map will be loaded from disk 
      */
     public Map(boolean newMap){
         this(newMap,0);
     }  
     
     /**
-     * Creates a map. Fill the map with fillWithBlocks(boolean load);
-     * @param newMap when "true" a new map os generated, when "false" a map is loaded from disk
+     * Creates an empty map. Fill the map with fillWithBlocks(boolean load);
+     * @param newMap when "true" a new map will be generated, when "false" a map will be loaded from disk 
      * @param worldSpinDirection the angle of the "morning" (0° is left).
      * @see fillWithBlocks(boolean load)
      */
@@ -63,15 +60,14 @@ public class Map {
         this.newMap = newMap;
         this.worldSpinDirection = worldSpinDirection;
         
-        
         if (!newMap) Chunk.readMapInfo();
         
         //save chunk size, which are now loaded
         blocksX = Chunk.getBlocksX()*3;
         blocksY = Chunk.getBlocksY()*3;
         blocksZ = Chunk.getBlocksZ();
-        data = new Block[blocksX][blocksY][blocksZ];//create Array where the data is stored
-        cellOffset = new float[blocksX][blocksY][blocksZ][];//set the offset for every cell
+        data = new Cell[blocksX][blocksY][blocksZ];//create Array where the data is stored
+        deepestLayerVisibility = new boolean[blocksX][blocksY];
     }
     
     /**
@@ -79,17 +75,16 @@ public class Map {
      */
     public void fillWithBlocks(){
         Gdx.app.log("DEBUG","Filling the map with blocks...");
-
-        for (int x = 0; x < cellOffset.length; x++) {
-            for (int y = 0; y < cellOffset[x].length; y++) {
-                for (int z = 0; z < cellOffset[x][y].length; z++) {
-                    cellOffset[x][y][z] = new float[]{Block.DIM2, Block.DIM2,0};
+        
+        for (int x = 0; x < data.length; x++) {
+            for (int y = 0; y < data[x].length; y++) {
+                for (int z = 0; z < data[x][y].length; z++) {
+                    data[x][y][z] = new Cell();
                 }
             }   
         }
         
         //Fill the nine chunks
-        Chunk tmpChunk;
         int chunkpos = 0;
         
         for (int y=-1; y < 2; y++)
@@ -131,27 +126,27 @@ public class Map {
     /**
      * Copies an array with three dimensions. Code by Kevin Brock from http://stackoverflow.com/questions/2068370/efficient-system-arraycopy-on-multidimensional-arrays
      * @param array
-     * @return The copy of the array-
+     * @return The chunk of the array-
      */
-    private static Block[][][] copyOf3Dim(Block[][][] array) {
-        Block[][][] copy;
-        copy = new Block[array.length][][];
+    private static Cell[][][] copyOf3Dim(Cell[][][] array) {
+        Cell[][][] copy;
+        copy = new Cell[array.length][][];
         for (int i = 0; i < array.length; i++) {
-            copy[i] = new Block[array[i].length][];
+            copy[i] = new Cell[array[i].length][];
             for (int j = 0; j < array[i].length; j++) {
-                copy[i][j] = new Block[array[i][j].length];
+                copy[i][j] = new Cell[array[i][j].length];
                 System.arraycopy(array[i][j], 0, copy[i][j], 0, 
                     array[i][j].length);
             }
         }
         return copy;
     } 
-    
+        
     /**
      * Get the data of the map
      * @return
      */
-    public Block[][][] getData() {
+    public Cell[][][] getData() {
         return data;
     }
     
@@ -170,31 +165,28 @@ public class Map {
             Gdx.app.log("DEBUG","ChunkSwitch:"+newmiddle);
             if (newmiddle==1 || newmiddle==3 || newmiddle==5 || newmiddle==7) {
 
-            //make a copy of the data
-            Block data_copy[][][] = copyOf3Dim(data);
+                //make a chunk of the data
+                Cell blockData_copy[][][] = copyOf3Dim(data);
+                
+                for (int pos=0; pos<9; pos++){
+                    //refresh coordinates
+                    coordlist[pos][0] += (newmiddle == 3 ? -1 : (newmiddle == 5 ? 1 : 0));
+                    coordlist[pos][1] += (newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0));
 
-            for (int pos=0; pos<9; pos++){
-                //refresh coordinates
-                coordlist[pos][0] += (newmiddle == 3 ? -1 : (newmiddle == 5 ? 1 : 0));
-                coordlist[pos][1] += (newmiddle == 1 ? -1 : (newmiddle == 7 ? 1 : 0));
-
-                if (isMovingChunkPossible(pos, newmiddle)){
-                    insertChunk(pos, copyChunk(data_copy, pos - 4 + newmiddle));
-                } else {
-
-                    insertChunk(
-                            pos,
-                            new Chunk(pos,
-                                coordlist[pos][0],
-                                coordlist[pos][1],
-                                newMap
-                            )
-                    );
-
+                    Chunk chunk;
+                    if (isMovingChunkPossible(pos, newmiddle)){
+                        chunk = copyChunk(blockData_copy, pos - 4 + newmiddle);
+                    } else {
+                        chunk = new Chunk(pos,
+                                    coordlist[pos][0],
+                                    coordlist[pos][1],
+                                    newMap
+                                );
+                    }
+                    insertChunk(pos,chunk);
                 }
-            }
 
-            Controller.requestRecalc();
+                Controller.requestRecalc();
             } else {
                 Gdx.app.log("ERROR","setCenter was called with center:"+newmiddle);
             }
@@ -203,7 +195,7 @@ public class Map {
     
     /**
      * checks if the number can be reached by moving the net in a newmiddle
-     * @param cellOffset the position you want to check
+     * @param pos the position you want to check
      * @param newmiddle the newmiddle the chunkswitch is made to
      * @return 
      */
@@ -226,35 +218,36 @@ public class Map {
     }
      
     /**
-     * Get a chunk out of a map (should be a copy of Map.data)
-     * @param src The map
-     * @param cellOffset The chunk number
+     * Get a chunk out of a map (should be a chunk of a part of the field data)
+     * @param cellData The data where you want to read from
+     * @param offsetData the offset data
+     * @param pos The chunk number where the chunk is located
      */ 
-    private Chunk copyChunk(Block[][][] src, int pos) {
-        Chunk tmpChunk = new Chunk();
+    private Chunk copyChunk(Cell[][][] cellData, int pos) {
+        Chunk chunk = new Chunk();
         //copy the data in two loops and then do an arraycopy
         for (int x = Chunk.getBlocksX()*(pos % 3);
-                x < Chunk.getBlocksX()*(pos % 3+1);
-                x++
+                 x < Chunk.getBlocksX()*(pos % 3+1);
+                 x++
             )
                 for (int y = Chunk.getBlocksY()*Math.abs(pos / 3);
-                        y < Chunk.getBlocksY()*Math.abs(pos / 3+1);
-                        y++
+                         y < Chunk.getBlocksY()*Math.abs(pos / 3+1);
+                         y++
                     ) {
                     System.arraycopy(
-                        src[x][y],                
+                        cellData[x][y],                
                         0,
-                        tmpChunk.getData()[x-Chunk.getBlocksX()*(pos % 3)][y - Chunk.getBlocksY()*(pos / 3)],
+                        chunk.getData()[x-Chunk.getBlocksX()*(pos % 3)][y - Chunk.getBlocksY()*(pos / 3)],
                         0,
                         Chunk.getBlocksZ()
                     );
                 }
-        return tmpChunk;
+        return chunk;
     }
 
     /**
      * Inserts a chunk in the map.
-     * @param cellOffset The position in the grid
+     * @param pos The position in the grid
      * @param chunk The chunk you want to insert
      */
     private void insertChunk(int pos, Chunk chunk) {
@@ -288,7 +281,7 @@ public class Map {
      * @return the single renderobject you wanted
      */
     public Block getData(int x, int y, int z){
-        return data[x][y][z];  
+        return data[x][y][z].getBlock();  
     }
     
     /**
@@ -297,7 +290,7 @@ public class Map {
      * @return
      */
     public Block getData(Coordinate coord){
-        return data[coord.getRelX()][coord.getRelY()][coord.getZ()];  
+        return data[coord.getRelX()][coord.getRelY()][coord.getZ()].getBlock();  
     }
     
      /**
@@ -333,7 +326,7 @@ public class Map {
             Gdx.app.log("DEBUG","Z:"+z);
         }
         
-        return data[x][y][z];    
+        return data[x][y][z].getBlock();    
     }
     
     /**
@@ -353,7 +346,7 @@ public class Map {
      * @param block  
      */
     public void setData(int x, int y, int z, Block block){
-        data[x][y][z] = block;
+        data[x][y][z].setBlock(block);
     }
     
     /**
@@ -362,7 +355,7 @@ public class Map {
      * @param block
      */
     public void setData(Coordinate coords, Block block) {
-        data[coords.getRelX()][coords.getRelY()][coords.getZ()] = block;
+        data[coords.getRelX()][coords.getRelY()][coords.getZ()].setBlock(block);
     }
         
    /**
@@ -389,7 +382,7 @@ public class Map {
             coords[2] = 0;
         }
         
-        data[coords[0]][coords[1]][coords[2]] = block;
+        data[coords[0]][coords[1]][coords[2]].setBlock(block);
     }
     
     /**
@@ -402,7 +395,8 @@ public class Map {
             coord.getRelX(),
             coord.getRelY(),
             coord.getZ()},
-            block);
+            block
+        );
     }
     
     /**
@@ -424,7 +418,7 @@ public class Map {
         for (int i=0;i < numberofblocks; i++){
                 //cellPos[x[i]][y[i]][z[i]][0] = (float) (Math.random()*Block.DIM2);
                 //cellPos[x[i]][y[i]][z[i]][1] = (float) (Math.random()*Block.DIM2);
-                cellOffset[x[i]][y[i]][z[i]][2] = (float) (Math.random()*Block.GAMEDIMENSION);
+                data[x[i]][y[i]][z[i]].setCellOffset(2, (float) (Math.random()*Block.GAMEDIMENSION));//vertical shake
             
         }
         Controller.requestRecalc();
@@ -439,20 +433,13 @@ public class Map {
     }
 
     /**
-     *
-     * @return
+     *Returns the degree of the world spin. This changes where the sun rises and falls.
+     * @return a number between 0 and 360
      */
     public int getWorldSpinDirection() {
         return worldSpinDirection;
     }
     
-    /**
-     *
-     * @return
-     */
-    public float[][][][] getCellOffset() {
-        return cellOffset;
-    }
     
     /**
      *
@@ -460,7 +447,7 @@ public class Map {
      * @return
      */
     public float[] getCellOffset(Coordinate coord) {
-        return cellOffset[coord.getRelX()][coord.getRelY()][coord.getZ()];
+        return data[coord.getRelX()][coord.getRelY()][coord.getZ()].getCellOffset();
     }   
     
     /**
@@ -470,7 +457,7 @@ public class Map {
      * @param value the value you want to set the field
      */
     public void setCelloffset(Coordinate coord, int field, float value){
-        cellOffset[coord.getRelX()][coord.getRelY()][coord.getZSafe()][field] = value;
+        data[coord.getRelX()][coord.getRelY()][coord.getZSafe()].setCellOffset(field, value);
     }
     
     /**
@@ -490,4 +477,10 @@ public class Map {
         }
         return list;
     }
+
+    public boolean[][] getDeepestLayerVisibility() {
+        return deepestLayerVisibility;
+    }
+    
+    
 }

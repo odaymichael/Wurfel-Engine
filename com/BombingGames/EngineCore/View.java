@@ -3,7 +3,7 @@ package com.BombingGames.EngineCore;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.GameObject;
+import com.BombingGames.Game.Gameobjects.AbstractGameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -67,6 +67,8 @@ public class View {
      */
     public void render(){       
         //Gdx.gl10.glViewport(0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        
+        //Gdx.gl10.glClear(GL10.GL_DEPTH_BUFFER_BIT); //clearing the screen is ~5-10% slower than without.
         
         //render every camera
         for (WECamera camera : controller.getCameras()) {
@@ -166,9 +168,9 @@ public class View {
         );
        
         //find the specific coordinate
-        Coordinate specificCoords = GameObject.sideIDtoNeighbourCoords(
+        Coordinate specificCoords = AbstractGameObject.sideIDtoNeighbourCoords(
                             coords,
-                            GameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION)
+                            AbstractGameObject.getSideID(x % Block.DIMENSION, y % Block.DIMENSION)
         );
         coords.setRelX(specificCoords.getRelX());
         coords.setRelY(specificCoords.getRelY() + coords.getZ()*2);

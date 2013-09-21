@@ -2,13 +2,13 @@ package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIM2;
-import static com.BombingGames.Game.Gameobjects.GameObject.DIM4;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM2;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM4;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
-import static com.BombingGames.Game.Gameobjects.GameObject.OBJECTTYPESCOUNT;
-import static com.BombingGames.Game.Gameobjects.GameObject.getPixmap;
-import static com.BombingGames.Game.Gameobjects.GameObject.getSpritesheet;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getPixmap;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getSpritesheet;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,7 +19,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
  * A Block is a wonderful piece of information and a geometrical object.
  * @author Benedikt Vogler
  */
-public class Block extends GameObject {
+
+public class Block extends AbstractGameObject {
     private static Color[][] colorlist = new Color[OBJECTTYPESCOUNT][24];
     /**The id of the left side of a block.*/
     public static final int LEFTSIDE=0;
@@ -36,8 +37,11 @@ public class Block extends GameObject {
        /** A list containing the offset of the objects. */
     public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][10][2];
     
-    private boolean liquid, renderRight, renderTop, renderLeft;
+    private boolean liquid;
     private boolean hasSides = true;
+    private boolean renderRight = true;
+    private boolean renderTop = true;
+    private boolean renderLeft = true;
     
     static {
         NAMELIST[0] = "air";
@@ -195,6 +199,7 @@ public class Block extends GameObject {
                     break; 
         }
         block.setValue(value);
+        block.setClipped(true);
         return block;
     }  
     
@@ -266,8 +271,8 @@ public class Block extends GameObject {
      * @param side 0 = left, 1 = top, 2 = right
      * @param visible The value
      */
-    public void setSideVisibility(int side, boolean visible) {
-        if (visible) this.setVisible(true);
+    public void setSideClipping(int side, boolean visible) {
+        if (visible) this.setClipped(true);
         
         if (side==0)
             renderLeft = visible;
@@ -304,8 +309,8 @@ public class Block extends GameObject {
      * @param visible When it is set to false, every side will also get hidden.
      */
     @Override
-    public void setVisible(boolean visible) {
-        super.setVisible(visible);
+    public void setClipped(boolean visible) {
+        super.setClipped(visible);
         if (!visible) {
             renderLeft = false;
             renderTop = false;
@@ -316,11 +321,8 @@ public class Block extends GameObject {
     @Override
     public void render(View view, WECamera camera, Coordinate coords) {
         if (isVisible() && !isHidden()) {
-            Color color = Color.GRAY;
             if (Controller.getLightengine() != null){
-                color = Controller.getLightengine().getGlobalLight();
-            }
-            if (Controller.getLightengine() != null){
+                Color color = Controller.getLightengine().getGlobalLight();
                 if (hasSides) {
                     if (renderTop)
                         renderSide(view, camera, coords, Block.TOPSIDE, Controller.getLightengine().getColorOfSide(Block.TOPSIDE));
@@ -329,7 +331,8 @@ public class Block extends GameObject {
                     if (renderRight)
                         renderSide(view, camera, coords, Block.RIGHTSIDE, Controller.getLightengine().getColorOfSide(Block.RIGHTSIDE));
                 } else super.render(view, camera, coords, color.mul(getLightlevel()));
-            } else 
+            } else {
+                Color color = Color.GRAY;
                 if (hasSides){
                     if (renderTop)
                         renderSide(view, camera, coords, Block.TOPSIDE, color);
@@ -338,6 +341,7 @@ public class Block extends GameObject {
                     if (renderRight)
                         renderSide(view, camera, coords, Block.RIGHTSIDE, color);
                 } else super.render(view, camera, coords);
+            }
         }
     }
     
