@@ -349,9 +349,9 @@ public class Block extends AbstractGameObject {
      * @param camera The camera rendering the scene
      * @param coords the coordinates where to render 
      * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
-     * @param color  a tint in which the sprite get's rendered
+     * @param color a tint in which the sprite get's rendered
      */
-    protected void renderSide(final View view, WECamera camera, Coordinate coords, final int sidenumb, Color color){
+    protected void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb, Color color){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         
         int xPos = get2DPosX(coords) + ( sidenumb == 2 ? SCREEN_WIDTH2 : 0);//right side is  half a block more to the right
