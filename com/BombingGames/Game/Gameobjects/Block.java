@@ -358,11 +358,11 @@ public class Block extends AbstractGameObject {
         int yPos = get2DPosY(coords) + (sidenumb != 1 ? SCREEN_WIDTH4 : 0);//the top is drawn a quarter blocks higher
         sprite.setPosition(xPos, yPos);
         
-        //uncomment these two lines to add a depth-effect (note that it is very dark)
-        color.mul((float)(camera.getBottomBorder()-camera.getTopBorder())/(coords.getRelY()-camera.getTopBorder())
-            );
-        color.g *= (coords.getRelY()-camera.getBottomBorder())
-          /(camera.getBottomBorder()-camera.getTopBorder());
+        //uncomment these two lines to add a depth-effect (note that it is very dark and still a prototype)
+//        color.mul((camera.getBottomBorder()-coords.getRelY())
+//            /
+//            (float)(camera.getBottomBorder()-camera.getTopBorder())
+//            );
         
         color.mul(getLightlevel()*2);
         
