@@ -95,7 +95,6 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
         
         entity.setCoords(coords);
         entity.setValue(value);
-        entity.setClipped(true);
         return entity;
     }
     

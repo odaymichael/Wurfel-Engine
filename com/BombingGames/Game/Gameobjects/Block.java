@@ -43,9 +43,9 @@ public class Block extends AbstractGameObject {
     
     private boolean liquid;
     private boolean hasSides = true;
-    private boolean renderRight = true;
-    private boolean renderTop = true;
-    private boolean renderLeft = true;
+    private boolean clippedRight = false;
+    private boolean clippedTop = false;
+    private boolean clippedLeft = false;
     
     private static AtlasRegion[][][] blocksprites = new AtlasRegion[OBJECTTYPESCOUNT][VALUESCOUNT][3];//{id}{value}{side}
     
@@ -261,22 +261,36 @@ public class Block extends AbstractGameObject {
      */
     public boolean hasSides() {
         return hasSides;
-    }   
+    } 
+    
+        /**
+     * 
+     * @param clipped When it is set to false, every side will also get clipped..
+     */
+    @Override
+    public void setClipped(boolean clipped) {
+        super.setClipped(clipped);
+        if (clipped) {
+            clippedLeft = true;
+            clippedTop = true;
+            clippedRight = true;
+        }
+    }
     
     /**
-     * Make a side (in)visible. If one side is visible, the whole block is visible.
+     * Make a side (in)clipping. If one side is clipping, the whole block is clipping.
      * @param side 0 = left, 1 = top, 2 = right
-     * @param visible The value
+     * @param clipping true when it should be clipped.
      */
-    public void setSideClipping(int side, boolean visible) {
-        if (visible) this.setClipped(true);
+    public void setSideClipping(int side, boolean clipping) {
+        if (!clipping) this.setClipped(false);
         
         if (side==0)
-            renderLeft = visible;
+            clippedLeft = clipping;
         else if (side==1)
-            renderTop = visible;
+            clippedTop = clipping;
                 else if (side==2)
-                    renderRight = visible;
+                    clippedRight = clipping;
     }
     
        /**
@@ -299,41 +313,29 @@ public class Block extends AbstractGameObject {
         return coords.get2DPosY();
     }
 
-    /**
-     * 
-     * @param visible When it is set to false, every side will also get hidden.
-     */
-    @Override
-    public void setClipped(boolean visible) {
-        super.setClipped(visible);
-        if (!visible) {
-            renderLeft = false;
-            renderTop = false;
-            renderRight = false;
-        }
-    }
+
     
     @Override
     public void render(View view, WECamera camera, Coordinate coords) {
-        if (isVisible() && !isHidden()) {
+        if (!isClipped() && !isHidden()) {
             if (Controller.getLightengine() != null){
                 Color color = Controller.getLightengine().getGlobalLight();
                 if (hasSides) {
-                    if (renderTop)
+                    if (!clippedTop)
                         renderSide(view, camera, coords, Block.TOPSIDE, Controller.getLightengine().getColorOfSide(Block.TOPSIDE));
-                    if (renderLeft)
+                    if (!clippedLeft)
                         renderSide(view, camera, coords, Block.LEFTSIDE, Controller.getLightengine().getColorOfSide(Block.LEFTSIDE));
-                    if (renderRight)
+                    if (!clippedRight)
                         renderSide(view, camera, coords, Block.RIGHTSIDE, Controller.getLightengine().getColorOfSide(Block.RIGHTSIDE));
                 } else super.render(view, camera, coords, color.mul(getLightlevel()));
             } else {
                 Color color = Color.GRAY;
                 if (hasSides){
-                    if (renderTop)
+                    if (!clippedTop)
                         renderSide(view, camera, coords, Block.TOPSIDE, color);
-                    if (renderLeft)
+                    if (!clippedLeft)
                         renderSide(view, camera, coords, Block.LEFTSIDE, color);
-                    if (renderRight)
+                    if (!clippedRight)
                         renderSide(view, camera, coords, Block.RIGHTSIDE, color);
                 } else super.render(view, camera, coords);
             }
@@ -357,10 +359,10 @@ public class Block extends AbstractGameObject {
         sprite.setPosition(xPos, yPos);
         
         //uncomment these two lines to add a depth-effect (note that it is very dark)
-        //color.mul((float)(camera.getBottomBorder()-camera.getTopBorder())/(coords.getRelY()-camera.getTopBorder())
-         //   );
-        //color.g *= (coords.getRelY()-camera.getBottomBorder())
-         //  /(camera.getBottomBorder()-camera.getTopBorder());
+        color.mul((float)(camera.getBottomBorder()-camera.getTopBorder())/(coords.getRelY()-camera.getTopBorder())
+            );
+        color.g *= (coords.getRelY()-camera.getBottomBorder())
+          /(camera.getBottomBorder()-camera.getTopBorder());
         
         color.mul(getLightlevel()*2);
         

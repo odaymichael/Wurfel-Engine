@@ -56,8 +56,8 @@ public class WECamera extends Camera {
         outputPosY = Coordinate.getMapCenter().get2DPosY() - get2DHeight() / 2;
         
         groundBlock = Block.getInstance(44);//set the ground level groundBlock
-        groundBlock.setSideClipping(0, false);
-        groundBlock.setSideClipping(2, false);
+        groundBlock.setSideClipping(0, true);
+        groundBlock.setSideClipping(2, true);
     }
     
    /**
@@ -185,7 +185,7 @@ public class WECamera extends Camera {
                     
                     Coordinate coord = new Coordinate(x, y, z, true); 
                     if (! coord.getBlock().isHidden()
-                        && coord.getBlock().isVisible()
+                        && !coord.getBlock().isClipped()
                         && 
                             coord.getBlock().get2DPosY(coord)
                         <
@@ -199,7 +199,7 @@ public class WECamera extends Camera {
         //add entitys
         for (int i=0; i< Controller.getMap().getEntitys().size(); i++) {
             AbstractEntity entity = Controller.getMap().getEntitys().get(i);
-            if (!entity.isHidden() && entity.isVisible()
+            if (!entity.isHidden() && !entity.isClipped()
                 && 
                 entity.get2DPosY(entity.getCoords())
                 <
@@ -251,13 +251,9 @@ public class WECamera extends Camera {
                 for (int z=0; z < Map.getBlocksZ(); z++) {
                     Block block = mapdata[x][y][z].getBlock();
                     
-                    boolean notAnalyzable = !block.hasSides() || new Coordinate(x,y,z, true).hasOffset();//Blocks with offset are not in the grid, so can not be analysed => always visible
-                    block.setClipped(notAnalyzable);
-                    if (notAnalyzable) {
-                        block.setSideClipping(0, true);
-                        block.setSideClipping(1, true);
-                        block.setSideClipping(2, true);
-                    }
+                    boolean notAnalyzable = !block.hasSides()
+                        || new Coordinate(x,y,z, true).hasOffset();//Blocks with offset are not in the grid, so can not be analysed => always visible
+                    block.setClipped(!notAnalyzable);
                 }
                 
         //send the rays through top of the map
@@ -407,7 +403,7 @@ public class WECamera extends Camera {
 
             if ((left || right) && !(liquidfilter && Controller.getMapData(x, y, z).isLiquid())){ //unless both sides are clipped don't clip the whole groundBlock
                 liquidfilter = false;
-                Controller.getMapData(x, y, z).setSideClipping(side, true);                            
+                Controller.getMapData(x, y, z).setSideClipping(side, false);                            
             }                
         } while (y > 1 && z > 0 //not on bottom of map
             && (left || right) //left or right still visible

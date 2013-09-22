@@ -63,7 +63,7 @@ public abstract class AbstractGameObject {
     
     private final int id; 
     private int value;
-    private boolean obstacle, transparent, visible, hidden; 
+    private boolean obstacle, transparent, clipped, hidden; 
     private float lightlevel = 0.5f;
     private int dimensionZ = 1;  
 
@@ -135,8 +135,8 @@ public abstract class AbstractGameObject {
      * @param color 
      */
     public void render(View view, WECamera camera, Coordinate coords, Color color) {
-        //draw the object except not visible ones
-        if (!hidden && visible) {             
+        //draw the object except not clipped ones
+        if (!hidden && !clipped) {             
             Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
              
             int xPos = get2DPosX(coords) + getOffsetX();
@@ -283,7 +283,7 @@ public abstract class AbstractGameObject {
     }
 
     /**
-     * Returns true, when set as hidden. Hidden objects are not rendered even when they are visible ("visible" by the meaning of the raytracing).
+     * Returns true, when set as hidden. Hidden objects are not rendered even when they are clipped ("clipped" by the meaning of the raytracing).
      * @return if the object is invisible
      */
     public boolean isHidden() {
@@ -307,11 +307,11 @@ public abstract class AbstractGameObject {
     }
 
     /**
-     * Is the object visible?
-     * @return true when visible
+     * Is the object clipped?
+     * @return true when clipped
      */
-    public boolean isVisible() {
-        return visible;
+    public boolean isClipped() {
+        return clipped;
     }
 
 
@@ -350,15 +350,15 @@ public abstract class AbstractGameObject {
 
     /**
      * Hide this object and prevent it from beeing rendered. Don't use this to hide objects. This data is only for rendering data and view specific not for gameworld information. This should be just used for setting during the rendering process.
-     * @param visible Sets the visibility.
+     * @param clipped Sets the visibility.
      * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#setHidden(boolean) 
      */
-    public void setClipped(boolean visible) {
-        this.visible = visible;
+    public void setClipped(boolean clipped) {
+        this.clipped = clipped;
     }
 
     /**
-     * Hide an object. It won't be rendered even if it is visible.
+     * Hide an object. It won't be rendered even if it is clipped.
      * @param hidden
      */
     public void setHidden(boolean hidden){
