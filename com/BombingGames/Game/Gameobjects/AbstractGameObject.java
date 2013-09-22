@@ -151,21 +151,22 @@ public abstract class AbstractGameObject {
     } 
     
     /**
-     * Changes the color that it works with the blending.
+     * Changes the color that it works with the blending. Sets the blending mode.
      * @param view
      * @param color 
      */
     public void prepareColor(View view, Color color){
         float brightness = PseudoGrey.toFloat(color);
+        //float brightness = (color.r+color.g+color.b)/3;
         
-        if (brightness < 0.5f){
-            view.setDrawmode(GL11.GL_MODULATE);
-            color.mul(2);
-        } else {
+        if (brightness > 0.5f){
             view.setDrawmode(GL11.GL_ADD);
             color.r -= .5f;
             color.g -= .5f;
             color.b -= .5f;
+        } else {
+            view.setDrawmode(GL11.GL_MODULATE);
+            color.mul(2);
         }
         color.clamp();
         color.a = 1;
