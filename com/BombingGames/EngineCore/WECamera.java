@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL11;
  * @author Benedikt Vogler
  */
 public class WECamera extends Camera {
+    /** the position on the screen*/
     private final int viewportPosX, viewportPosY;
     
     private int outputPosX, outputPosY;
