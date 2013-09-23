@@ -350,7 +350,21 @@ public class Block extends AbstractGameObject {
                 } else super.renderAt(view, xPos, yPos);
         }
     }
-     
+
+    @Override
+    public void renderAt(View view, int xPos, int yPos, Color color) {
+        if (!isClipped() && !isHidden()) {
+            if (hasSides) {
+                if (!clippedTop)
+                    renderSideAt(view, xPos, yPos, Block.TOPSIDE, color);
+                if (!clippedLeft)
+                    renderSideAt(view, xPos, yPos, Block.LEFTSIDE, color);
+                if (!clippedRight)
+                    renderSideAt(view, xPos, yPos, Block.RIGHTSIDE, color);
+                } else super.renderAt(view, xPos, yPos, color);
+        }
+    }
+       
     /**
      * Render a side of a block at the position of the coordinates.
      * @param view the view using this render method
