@@ -27,7 +27,8 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private Sound runningSound;
    private boolean runningSoundPlaying;
    private Sound jumpingSound;
-   
+   private Sound landingSound;
+
    private CharacterShadow shadow;
    
    private int walkingAnimationCounter;
@@ -121,19 +122,17 @@ public abstract class AbstractCharacter extends AbstractEntity {
             float oldHeight = getCoords().getHeight();
 
             /*VERTICAL MOVEMENT*/
-            //calculate new height
             float t = delta/1000f; //t = time in s
-            dir[2] += -Map.GRAVITY*t; //in m/s
+            if (!onGround()) dir[2] += -Map.GRAVITY*t; //in m/s
             getCoords().setHeight(getCoords().getHeight() + dir[2] * GAMEDIMENSION * t); //in m
-
-            //check new neight for colission
+            
+            //check new height for colission
             //land if standing in or under 0-level or there is an obstacle
-            if ((dir[2] <= 0 && onGround()) //land when moving down and standing on ground
-            ) {
-                //stop sound
-                if (fallingSound != null) fallingSound.stop();
+            if (dir[2] < 0 && onGround()){
+                if (landingSound != null) landingSound.play();//play landing sound
+                if (fallingSound != null) fallingSound.stop();//stop falling sound
                 dir[2] = 0;
-                //set on top of block
+                                //set on top of block
                 getCoords().setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION);
             }
 
@@ -215,6 +214,11 @@ public abstract class AbstractCharacter extends AbstractEntity {
             //uncomment this line to see where to player stands:
             //Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
 
+            shadow.update(delta, this);
+            //slow walking down
+            if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
+            if (speed < 0) speed = 0;
+            
             /* SOUNDS */
             //should the runningsound be played?
             if (runningSound != null) {
@@ -241,11 +245,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
                     fallingSoundPlaying = false;
                 }
             }
-            
-            shadow.update(delta, this);
-            //slow walking down
-            if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
-            if (speed < 0) speed = 0;
         }
     }
     
@@ -340,6 +339,15 @@ public abstract class AbstractCharacter extends AbstractEntity {
         this.jumpingSound = jumpingSound;
     }
     
+        /**
+     * Set sound played when the character lands on the feet.
+     *
+     * @param landingSound new value of landingSound
+     */
+    public void setLandingSound(Sound landingSound) {
+        this.landingSound = landingSound;
+    }
+    
     
     
    /**
@@ -384,9 +392,5 @@ public abstract class AbstractCharacter extends AbstractEntity {
     public void destroy() {
         super.destroy();
         shadow.destroy();
-    }
-    
-    
-    
-    
+    } 
 }
