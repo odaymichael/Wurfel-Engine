@@ -8,6 +8,8 @@ import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.GAMEDIMENSION;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_WIDTH2;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_WIDTH4;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.VALUESCOUNT;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getPixmap;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getSpritesheet;
@@ -316,46 +318,95 @@ public class Block extends AbstractGameObject {
 
     
     @Override
-    public void render(View view, WECamera camera, Coordinate coords) {
+    public void render(final View view, final WECamera camera, Coordinate coords) {
         if (!isClipped() && !isHidden()) {
-            if (Controller.getLightengine() != null){
-                Color color = Controller.getLightengine().getGlobalLight();
-                if (hasSides) {
-                    if (!clippedTop)
-                        renderSide(view, camera, coords, Block.TOPSIDE, Controller.getLightengine().getColorOfSide(Block.TOPSIDE));
-                    if (!clippedLeft)
-                        renderSide(view, camera, coords, Block.LEFTSIDE, Controller.getLightengine().getColorOfSide(Block.LEFTSIDE));
-                    if (!clippedRight)
-                        renderSide(view, camera, coords, Block.RIGHTSIDE, Controller.getLightengine().getColorOfSide(Block.RIGHTSIDE));
-                } else super.render(view, camera, coords, color.mul(getLightlevel()));
-            } else {
-                Color color = Color.GRAY;
-                if (hasSides){
-                    if (!clippedTop)
-                        renderSide(view, camera, coords, Block.TOPSIDE, color);
-                    if (!clippedLeft)
-                        renderSide(view, camera, coords, Block.LEFTSIDE, color);
-                    if (!clippedRight)
-                        renderSide(view, camera, coords, Block.RIGHTSIDE, color);
-                } else super.render(view, camera, coords);
-            }
+            if (hasSides) {
+                if (!clippedTop)
+                    renderSide(view, camera, coords, Block.TOPSIDE);
+                if (!clippedLeft)
+                    renderSide(view, camera, coords, Block.LEFTSIDE);
+                if (!clippedRight)
+                    renderSide(view, camera, coords, Block.RIGHTSIDE);
+            } else super.render(view, camera, coords);
         }
     }
     
+    /**
+     * Render the whole block at a custom position and checks for clipping and hidden.
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param xPos rendering position
+     * @param yPos rendering position
+     */
+    @Override
+    public void renderAt(final View view, final WECamera camera, int xPos, int yPos) {
+        if (!isClipped() && !isHidden()) {
+            if (hasSides) {
+                if (!clippedTop)
+                    renderSideAt(view, camera, xPos, yPos, Block.TOPSIDE);
+                if (!clippedLeft)
+                    renderSideAt(view, camera, xPos, yPos, Block.LEFTSIDE);
+                if (!clippedRight)
+                    renderSideAt(view, camera, xPos, yPos, Block.RIGHTSIDE);
+                } else super.renderAt(view, camera, xPos, yPos);
+        }
+    }
+     
+    /**
+     * Render a side of a block at the position of the coordinates.
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param coords the coordinates where the side is rendered 
+     * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
+     */
+    public void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb){
+        Color color = Color.GRAY;
+        if (Controller.getLightengine() != null){
+                color = Controller.getLightengine().getColorOfSide(sidenumb);
+        }
+        renderSide(view, camera, coords, sidenumb, color);
+    }
 
     /**
-     * Draws a side of a block
+     * Render a side of a block at the position of the coordinates.
      * @param view the view using this render method
      * @param camera The camera rendering the scene
      * @param coords the coordinates where to render 
-     * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
-     * @param color a tint in which the sprite get's rendered
+     * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
+     * @param color a tint in which the sprite gets rendered
      */
-    protected void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb, Color color){
-        Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
-        
+    public void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb, Color color){
         int xPos = get2DPosX(coords) + ( sidenumb == 2 ? SCREEN_WIDTH2 : 0);//right side is  half a block more to the right
         int yPos = get2DPosY(coords) + (sidenumb != 1 ? SCREEN_WIDTH4 : 0);//the top is drawn a quarter blocks higher
+        renderSideAt(view, camera, xPos, yPos, sidenumb, color);
+    }
+    
+    /**
+     * 
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param xPos rendering position
+     * @param yPos rendering position
+     * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
+     */
+    public void renderSideAt(final View view, final WECamera camera, int xPos, int yPos, final int sidenumb){
+        Color color = Color.GRAY;
+        if (Controller.getLightengine() != null){
+                color = Controller.getLightengine().getColorOfSide(sidenumb);
+        }
+        renderSideAt(view, camera, xPos, yPos, sidenumb, color);
+    }
+    /**
+     * Draws a side of a block at a custom position. Apllies color before rendering and takes the lightlevel into account.
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param xPos rendering position
+     * @param yPos rendering position
+     * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
+     * @param color a tint in which the sprite gets rendered
+     */
+    public void renderSideAt(final View view, final WECamera camera, int xPos, int yPos, final int sidenumb, Color color){
+        Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         sprite.setPosition(xPos, yPos);
         
         //uncomment these two lines to add a depth-effect (note that it is very dark and still a prototype)
@@ -390,6 +441,7 @@ public class Block extends AbstractGameObject {
         sprite.getVertices()[SpriteBatch.C3] = color.toFloatBits();//bottom right
  
         sprite.draw(view.BATCH);
+    
     }
 
     @Override

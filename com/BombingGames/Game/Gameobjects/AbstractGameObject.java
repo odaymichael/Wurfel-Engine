@@ -114,46 +114,74 @@ public abstract class AbstractGameObject {
     public abstract int get2DPosY(Coordinate coords);
     
     /**
-     * Draws an object.
-     * @param coords the relative coordinates
-     * @param camera 
-     * @param view  
+     * Draws an object in the color of the light engine and with the lightlevel. Only draws if not hidden and not clipped.
+     * @param coords the coordinates where the object should be rendered
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
      */
     public void render(View view, WECamera camera, Coordinate coords) {
         Color color = Color.GRAY;
         if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getGlobalLight();
-            }
+        }
         render(view, camera, coords, color.mul(lightlevel));
     }
     
      /**
-     * Draws an object.
-     * @param coords the relative coordinates
-     * @param camera 
-     * @param view 
-     * @param color 
+     * Draws an object if it is not hidden and not clipped.
+     * @param coords the coordinates where the object is rendered
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param color  custom blending color
      */
     public void render(View view, WECamera camera, Coordinate coords, Color color) {
         //draw the object except not clipped ones
         if (!hidden && !clipped) {             
-            Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
              
             int xPos = get2DPosX(coords) + getOffsetX();
             int yPos = get2DPosY(coords) - (dimensionZ - 1) * SCREEN_HEIGHT + getOffsetY();
-            sprite.setPosition(xPos, yPos);
             
-            prepareColor(view, color);
-
-            sprite.setColor(color);
-            sprite.draw(view.BATCH);
+            renderAt(view, camera, xPos, yPos, color);
         }
-    } 
+    }
+    
+        /**
+     * Renders at a custom position with the global light.
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param xPos rendering position
+     * @param yPos rendering position
+     */
+    public void renderAt(View view, WECamera camera, int xPos, int yPos) {
+        Color color = Color.GRAY;
+        if (Controller.getLightengine() != null){
+                color = Controller.getLightengine().getGlobalLight();
+        }
+        renderAt(view, camera, xPos, yPos, color);
+    }
+    
+    /**
+     * Renders at a custom position with a custom light.
+     * @param view
+     * @param camera
+     * @param xPos rendering position
+     * @param yPos rendering position
+     * @param color  custom blending color
+     */
+    public void renderAt(View view, WECamera camera, int xPos, int yPos, Color color) {
+        Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
+        sprite.setPosition(xPos, yPos);
+        
+        prepareColor(view, color);
+
+        sprite.setColor(color);
+        sprite.draw(view.BATCH);
+    }
     
     /**
      * Changes the color that it works with the blending. Sets the blending mode.
      * @param view
-     * @param color 
+     * @param color a tint in which the sprite should be rendered
      */
     public void prepareColor(View view, Color color){
         float brightness = PseudoGrey.toFloat(color);
