@@ -141,32 +141,34 @@ public abstract class AbstractGameObject {
             int xPos = get2DPosX(coords) + getOffsetX();
             int yPos = get2DPosY(coords) - (dimensionZ - 1) * SCREEN_HEIGHT + getOffsetY();
             
-            renderAt(view, xPos, yPos, color);
+            renderAt(view, camera, xPos, yPos, color);
         }
     }
     
         /**
      * Renders at a custom position with the global light.
      * @param view the view using this render method
+     * @param camera The camera rendering the scene
      * @param xPos rendering position
      * @param yPos rendering position
      */
-    public void renderAt(View view, int xPos, int yPos) {
+    public void renderAt(View view, WECamera camera, int xPos, int yPos) {
         Color color = Color.GRAY;
         if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getGlobalLight();
         }
-        renderAt(view, xPos, yPos, color);
+        renderAt(view, camera, xPos, yPos, color);
     }
     
     /**
      * Renders at a custom position with a custom light.
      * @param view
+     * @param camera
      * @param xPos rendering position
      * @param yPos rendering position
      * @param color  custom blending color
      */
-    public void renderAt(View view, int xPos, int yPos, Color color) {
+    public void renderAt(View view, WECamera camera, int xPos, int yPos, Color color) {
         Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
         sprite.setPosition(xPos, yPos);
         

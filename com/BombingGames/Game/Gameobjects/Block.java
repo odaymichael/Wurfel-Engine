@@ -352,20 +352,21 @@ public class Block extends AbstractGameObject {
     /**
      * Render the whole block at a custom position and checks for clipping and hidden.
      * @param view the view using this render method
+     * @param camera The camera rendering the scene
      * @param xPos rendering position
      * @param yPos rendering position
      */
     @Override
-    public void renderAt(final View view, int xPos, int yPos) {
+    public void renderAt(final View view, final WECamera camera, int xPos, int yPos) {
         if (!isClipped() && !isHidden()) {
             if (hasSides) {
                 if (!clippedTop)
-                    renderSideAt(view, xPos, yPos, Block.TOPSIDE);
+                    renderSideAt(view, camera, xPos, yPos, Block.TOPSIDE);
                 if (!clippedLeft)
-                    renderSideAt(view, xPos, yPos, Block.LEFTSIDE);
+                    renderSideAt(view, camera, xPos, yPos, Block.LEFTSIDE);
                 if (!clippedRight)
-                    renderSideAt(view, xPos, yPos, Block.RIGHTSIDE);
-                } else super.renderAt(view, xPos, yPos);
+                    renderSideAt(view, camera, xPos, yPos, Block.RIGHTSIDE);
+                } else super.renderAt(view, camera, xPos, yPos);
         }
     }
      
@@ -395,39 +396,42 @@ public class Block extends AbstractGameObject {
     public void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb, Color color){
         int xPos = get2DPosX(coords) + ( sidenumb == 2 ? SCREEN_WIDTH2 : 0);//right side is  half a block more to the right
         int yPos = get2DPosY(coords) + (sidenumb != 1 ? SCREEN_WIDTH4 : 0);//the top is drawn a quarter blocks higher
-                //uncomment these two lines to add a depth-effect (note that it is very dark and still a prototype)
-//        color.mul((camera.getBottomBorder()-coords.getRelY())
-//            /
-//            (float)(camera.getBottomBorder()-camera.getTopBorder())
-//            );
-        renderSideAt(view, xPos, yPos, sidenumb, color);
+        renderSideAt(view, camera, xPos, yPos, sidenumb, color);
     }
     
     /**
      * Ignores lightlevel.
      * @param view the view using this render method
+     * @param camera The camera rendering the scene
      * @param xPos rendering position
      * @param yPos rendering position
      * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
      */
-    public void renderSideAt(final View view, int xPos, int yPos, final int sidenumb){
+    public void renderSideAt(final View view, final WECamera camera, int xPos, int yPos, final int sidenumb){
         Color color = Color.GRAY;
         if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getColorOfSide(sidenumb);
         }
-        renderSideAt(view, xPos, yPos, sidenumb, color);
+        renderSideAt(view, camera, xPos, yPos, sidenumb, color);
     }
     /**
      * Draws a side of a block at a custom position. Apllies color before rendering and takes the lightlevel into account.
      * @param view the view using this render method
+     * @param camera The camera rendering the scene
      * @param xPos rendering position
      * @param yPos rendering position
      * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
      * @param color a tint in which the sprite gets rendered
      */
-    public void renderSideAt(final View view, int xPos, int yPos, final int sidenumb, Color color){
+    public void renderSideAt(final View view, final WECamera camera, int xPos, int yPos, final int sidenumb, Color color){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         sprite.setPosition(xPos, yPos);
+        
+        //uncomment these two lines to add a depth-effect (note that it is very dark and still a prototype)
+//        color.mul((camera.getBottomBorder()-coords.getRelY())
+//            /
+//            (float)(camera.getBottomBorder()-camera.getTopBorder())
+//            );
         
         color.mul(getLightlevel()*2);
         
