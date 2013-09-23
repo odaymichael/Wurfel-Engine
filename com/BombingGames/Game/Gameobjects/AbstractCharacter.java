@@ -3,6 +3,7 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 /**
@@ -23,12 +24,13 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private float speed;
    private Sound fallingSound;
    
+   private static Sound waterSound;
    private boolean fallingSoundPlaying;
    private Sound runningSound;
    private boolean runningSoundPlaying;
    private Sound jumpingSound;
    private Sound landingSound;
-   private Sound waterSound;
+
 
    private boolean inliquid;
        
@@ -46,6 +48,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         super(id);
         SPRITESPERDIR = spritesPerDir;
         shadow = (CharacterShadow) AbstractEntity.getInstance(42,0,coords.cpy());
+        if (waterSound == null) waterSound = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/splash.ogg"));
     }
    
    /**
@@ -367,8 +370,8 @@ public abstract class AbstractCharacter extends AbstractEntity {
      *
      * @param waterSound new value of waterSound
      */
-    public void setWaterSound(Sound waterSound) {
-        this.waterSound = waterSound;
+    public static void setWaterSound(Sound waterSound) {
+        AbstractCharacter.waterSound = waterSound;
     }
     
     
