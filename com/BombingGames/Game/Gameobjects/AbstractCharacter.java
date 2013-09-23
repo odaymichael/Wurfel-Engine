@@ -3,6 +3,7 @@ package com.BombingGames.Game.Gameobjects;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 /**
@@ -16,16 +17,24 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private float[] dir = {1, 0, 0};
    private String controls = "NPC";
 
-   /** Set value how fast the character brakes or slides. 1 is "immediately". The higher the value, the more "slide". Value >1**/
-   private final int smoothBreaks = 8;
+   /** Set value how fast the character brakes or slides. 1 is "immediately". The higher the value, the more "slide". Can cause problems with running sound. Value >1**/
+   private final int smoothBreaks = 200;
       
-   /**provides a factor for the vector*/
+   /**The walking/running speed of the character. provides a factor for the movement vector*/
    private float speed;
    
    private Sound fallingSound;
+   
+   private static Sound waterSound;
    private boolean fallingSoundPlaying;
    private Sound runningSound;
    private boolean runningSoundPlaying;
+   private Sound jumpingSound;
+   private Sound landingSound;
+
+
+   private boolean inliquid;
+       
    private CharacterShadow shadow;
    
    private int walkingAnimationCounter;
@@ -40,6 +49,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
         super(id);
         SPRITESPERDIR = spritesPerDir;
         shadow = (CharacterShadow) AbstractEntity.getInstance(42,0,coords.cpy());
+        if (waterSound == null) waterSound = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/splash.ogg"));
     }
    
    /**
@@ -53,7 +63,10 @@ public abstract class AbstractCharacter extends AbstractEntity {
      * @param velo the velocity in m/s
      */
     public void jump(float velo) {
-        if (onGround()) dir[2] = velo;
+        if (onGround()) {
+            dir[2] = velo;
+            if (jumpingSound != null) jumpingSound.play();
+        }
     }
     
 
@@ -116,21 +129,28 @@ public abstract class AbstractCharacter extends AbstractEntity {
             float oldHeight = getCoords().getHeight();
 
             /*VERTICAL MOVEMENT*/
-            //calculate new height
             float t = delta/1000f; //t = time in s
-            dir[2] += -Map.GRAVITY*t; //in m/s
+            if (!onGround()) dir[2] += -Map.GRAVITY*t; //in m/s
             getCoords().setHeight(getCoords().getHeight() + dir[2] * GAMEDIMENSION * t); //in m
-
-            //check new neight for colission
+            
+            
+            //check new height for colission            
             //land if standing in or under 0-level or there is an obstacle
-            if ((dir[2] <= 0 && onGround()) //land when moving down and standing on ground
-            ) {
-                //stop sound
-                if (fallingSound != null) fallingSound.stop();
+            if (dir[2] < 0 && onGround()){
+                if (landingSound != null)
+                    landingSound.play();//play landing sound
+                if (fallingSound != null)
+                    fallingSound.stop();//stop falling sound
                 dir[2] = 0;
+                
                 //set on top of block
                 getCoords().setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION);
             }
+            
+            if (!inliquid  && getCoords().getBlockSafe().isLiquid())
+                waterSound.play();
+            
+            inliquid = getCoords().getBlockSafe().isLiquid();
 
 
             /*HORIZONTAL MOVEMENT*/
@@ -210,6 +230,12 @@ public abstract class AbstractCharacter extends AbstractEntity {
             //uncomment this line to see where to player stands:
             //Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
 
+            shadow.update(delta, this);
+
+            //slow walking down
+            if (speed > 0) speed -= delta/(float) smoothBreaks;
+            if (speed < 0) speed = 0;
+            
             /* SOUNDS */
             //should the runningsound be played?
             if (runningSound != null) {
@@ -237,10 +263,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
                 }
             }
             
-            shadow.update(delta, this);
-            //slow walking down
-            if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
-            if (speed < 0) speed = 0;
         }
     }
     
@@ -325,6 +347,36 @@ public abstract class AbstractCharacter extends AbstractEntity {
         this.runningSound = runningSound;
     }
     
+
+    /**
+     * Set the value of jumpingSound
+     *
+     * @param jumpingSound new value of jumpingSound
+     */
+    public void setJumpingSound(Sound jumpingSound) {
+        this.jumpingSound = jumpingSound;
+    }
+    
+        /**
+     * Set sound played when the character lands on the feet.
+     *
+     * @param landingSound new value of landingSound
+     */
+    public void setLandingSound(Sound landingSound) {
+        this.landingSound = landingSound;
+    }
+    
+   /**
+     * Set the value of waterSound
+     *
+     * @param waterSound new value of waterSound
+     */
+    public static void setWaterSound(Sound waterSound) {
+        AbstractCharacter.waterSound = waterSound;
+    }
+    
+    
+    
    /**
      * Set the controls.
      * @param controls either "arrows", "WASD" or "NPC"
@@ -348,14 +400,12 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     @Override
     public boolean onGround() {
-        Coordinate tempcoords = getCoords();
-        tempcoords.setHeight(getCoords().getHeight()-1);
-        setCoords(tempcoords);
+        getCoords().setHeight(getCoords().getHeight()-1);
         
         boolean colission = horizontalColission(getPositionX(), getPositionY(), getPositionX(), getPositionY());
-        tempcoords.setHeight(getCoords().getHeight()+1);
-        setCoords(tempcoords);
+        getCoords().setHeight(getCoords().getHeight()+1);
         
+        //if standing on ground on own or neighbour block then true
         return (super.onGround() || colission);
     }
 
@@ -369,9 +419,15 @@ public abstract class AbstractCharacter extends AbstractEntity {
     public void destroy() {
         super.destroy();
         shadow.destroy();
+    } 
+
+    /**
+     * Is the character standing in a liquid?
+     * @return 
+     */
+    public boolean isInliquid() {
+        return inliquid;
     }
-    
-    
     
     
 }
