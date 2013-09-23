@@ -22,15 +22,10 @@ public class CustomGameView extends View{
          this.controller = (CustomGameController) controller;
          
          this.controller.getBlockToolbar().setPos(
-             (int) (
-                (Gdx.graphics.getWidth()/2 / getEqualizationScale())
-                - Block.getSpritesheet().findRegion("toolbar").originalWidth/2
-             ),
-             (int) (
-                (Gdx.graphics.getHeight()/getEqualizationScale())
-                - Block.getSpritesheet().findRegion("toolbar").originalWidth
-             )
-         );
+            (Gdx.graphics.getWidth()/2)
+            - Block.getSpritesheet().findRegion("toolbar").originalWidth/2,
+            (Gdx.graphics.getHeight())
+            - Block.getSpritesheet().findRegion("toolbar").originalHeight);
      }
 
 
