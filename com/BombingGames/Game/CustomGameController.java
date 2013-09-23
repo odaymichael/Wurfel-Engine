@@ -99,7 +99,7 @@ public class CustomGameController extends Controller {
         super.update(delta);
     }
     
-    class InputListener implements InputProcessor {
+    private class InputListener implements InputProcessor {
 
         @Override
         public boolean keyDown(int keycode) {
