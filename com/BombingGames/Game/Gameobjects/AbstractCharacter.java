@@ -16,10 +16,10 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private float[] dir = {1, 0, 0};
    private String controls = "NPC";
 
-   /** Set value how fast the character brakes or slides. 1 is "immediately". The higher the value, the more "slide". Value >1**/
-   private final int smoothBreaks = 8;
+   /** Set value how fast the character brakes or slides. 1 is "immediately". The higher the value, the more "slide". Can cause problems with running sound. Value >1**/
+   private final int smoothBreaks = 200;
       
-   /**provides a factor for the vector*/
+   /**The walking/running speed of the character. provides a factor for the movement vector*/
    private float speed;
    private Sound fallingSound;
    
@@ -28,7 +28,10 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private boolean runningSoundPlaying;
    private Sound jumpingSound;
    private Sound landingSound;
+   private Sound waterSound;
 
+   private boolean inliquid;
+       
    private CharacterShadow shadow;
    
    private int walkingAnimationCounter;
@@ -126,15 +129,24 @@ public abstract class AbstractCharacter extends AbstractEntity {
             if (!onGround()) dir[2] += -Map.GRAVITY*t; //in m/s
             getCoords().setHeight(getCoords().getHeight() + dir[2] * GAMEDIMENSION * t); //in m
             
-            //check new height for colission
+            
+            //check new height for colission            
             //land if standing in or under 0-level or there is an obstacle
             if (dir[2] < 0 && onGround()){
-                if (landingSound != null) landingSound.play();//play landing sound
-                if (fallingSound != null) fallingSound.stop();//stop falling sound
+                if (landingSound != null)
+                    landingSound.play();//play landing sound
+                if (fallingSound != null)
+                    fallingSound.stop();//stop falling sound
                 dir[2] = 0;
-                                //set on top of block
+                
+                //set on top of block
                 getCoords().setHeight((int)(oldHeight/GAMEDIMENSION)*GAMEDIMENSION);
             }
+            
+            if (!inliquid  && getCoords().getBlockSafe().isLiquid())
+                waterSound.play();
+            
+            inliquid = getCoords().getBlockSafe().isLiquid();
 
 
             /*HORIZONTAL MOVEMENT*/
@@ -215,8 +227,9 @@ public abstract class AbstractCharacter extends AbstractEntity {
             //Controller.getMapDataSafe(getRelCoords()[0], getRelCoords()[1], getRelCoords()[2]-1).setLightlevel(30);
 
             shadow.update(delta, this);
+
             //slow walking down
-            if (speed > 0) speed -= speed*delta/(float) smoothBreaks;
+            if (speed > 0) speed -= delta/(float) smoothBreaks;
             if (speed < 0) speed = 0;
             
             /* SOUNDS */
@@ -245,6 +258,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
                     fallingSoundPlaying = false;
                 }
             }
+            
         }
     }
     
@@ -348,6 +362,15 @@ public abstract class AbstractCharacter extends AbstractEntity {
         this.landingSound = landingSound;
     }
     
+   /**
+     * Set the value of waterSound
+     *
+     * @param waterSound new value of waterSound
+     */
+    public void setWaterSound(Sound waterSound) {
+        this.waterSound = waterSound;
+    }
+    
     
     
    /**
@@ -393,4 +416,14 @@ public abstract class AbstractCharacter extends AbstractEntity {
         super.destroy();
         shadow.destroy();
     } 
+
+    /**
+     * Is the character standing in a liquid?
+     * @return 
+     */
+    public boolean isInliquid() {
+        return inliquid;
+    }
+    
+    
 }
