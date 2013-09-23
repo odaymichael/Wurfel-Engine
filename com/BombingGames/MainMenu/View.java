@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import org.lwjgl.opengl.GL11;
 
 
 /**
@@ -17,6 +16,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class View {
     private final Sprite lettering;    
+    private final Sprite background;
     private final SpriteBatch batch;
     private final OrthographicCamera camera;
     private final BitmapFont font;
@@ -31,6 +31,11 @@ public class View {
         lettering.setY(50);
         lettering.flip(false, true);
         
+        background = new Sprite(new Texture(Gdx.files.internal("com/BombingGames/MainMenu/Images/background.png")));
+        background.setX((Gdx.graphics.getWidth() - lettering.getWidth())/2);
+        background.setY(50);
+        background.flip(false, true);
+        
         batch = new SpriteBatch();
         
         //set the center to the top left
@@ -43,21 +48,32 @@ public class View {
 
     /**
      * renders the scene
-     * @param pController
+     * @param controller
      */
     public void render(Controller pController){
-        //clear & set background to black
-        GL11.glClearColor( 0f, 0f, 0f, 1f );
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+        
+
         
         //update camera and set the projection matrix
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         
+        //Background        
+        batch.begin();
+        for (int x = 0; x-1 < Gdx.graphics.getWidth()/background.getWidth(); x++) {
+            for (int y = 0; y-1 < Gdx.graphics.getHeight()/background.getHeight(); y++) {
+                background.setPosition(x*background.getWidth(), y*background.getHeight());
+                background.draw(batch);
+            }
+        }
+        batch.end();
+        
         batch.begin();
         font.draw(batch, "FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
         font.draw(batch, Gdx.input.getX()+ ","+Gdx.input.getY(), Gdx.input.getX(), Gdx.input.getY());
         batch.end();
+        
+
         
         
         // render the lettering

@@ -22,9 +22,9 @@ public class Controller {
     public Controller() {
         TextureAtlas texture = new TextureAtlas(Gdx.files.internal("com/BombingGames/MainMenu/Images/MainMenu.txt"), true);
                 
-        menuItems[0] = new MenuItem(0, texture.getRegions().get(2));
-        menuItems[1] = new MenuItem(1, texture.getRegions().get(0));
-        menuItems[2] = new MenuItem(2, texture.getRegions().get(1));
+        menuItems[0] = new MenuItem(0, texture.getRegions().get(2), "Generate Map");
+        menuItems[1] = new MenuItem(1, texture.getRegions().get(0), "Load Map");
+        menuItems[2] = new MenuItem(2, texture.getRegions().get(1), "Exit");
         
         
         fx = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/MainMenu/click2.wav"));

@@ -13,7 +13,7 @@ public class AnimatedBlock extends Block implements Animatable{
     /**
      * Create this Block with an array wich has the time of every animation step in ms in it.
      * @param id the id of the block.
-     * @param animationsinformation  an array wich has the duraion of every animationstep inside
+     * @param animationsinformation  an array wich has the duration of every animationstep inside
      * @param  autostart True when it should automatically start.
      * @param loop Set to true when it should loop, when false it stops after one time. 
      */

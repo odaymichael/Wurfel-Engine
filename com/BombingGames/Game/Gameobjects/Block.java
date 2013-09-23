@@ -45,6 +45,7 @@ public class Block extends AbstractGameObject {
     
     private boolean liquid;
     private boolean hasSides = true;
+
     private boolean clippedRight = false;
     private boolean clippedTop = false;
     private boolean clippedLeft = false;
@@ -62,12 +63,18 @@ public class Block extends AbstractGameObject {
         NAMELIST[7] = "concrete";
         NAMELIST[8] = "sand";
         NAMELIST[9] = "water";
+        NAMELIST[17] = "tree trunk";
+        NAMELIST[18] = "leaves";
         NAMELIST[20] = "red brick wall";
         NAMELIST[30] = "fence";
         NAMELIST[32] = "sandbags";
         NAMELIST[33] = "crate";
         NAMELIST[34] = "flower";
+        OFFSET[34][0][0] = 71;
+        OFFSET[34][0][1] = 78;
         NAMELIST[35] = "round bush";
+        OFFSET[35][0][0] = 22;
+        OFFSET[35][0][1] = 40;
         OFFSET[34][0][0] = 71;
         OFFSET[34][0][1] = 78;
         OFFSET[35][0][0] = 22;
@@ -151,12 +158,23 @@ public class Block extends AbstractGameObject {
             case 8: block = new Block(id); //sand
                     block.setObstacle(true);
                     break;      
-            case 9: block = new Block(id); //water
+            case 9: block = new AnimatedBlock(id, new int[]{500,500,500},true, true); //water
+                    block.setTransparent(true);
                     block.liquid = true;
                     block.setTransparent(true);
                     break;
-            case 20: block = new Block(id);
+            case 17:block = new Block(id); //trunk
                     block.setObstacle(true);
+                    break;
+            case 18:block = new Block(id); //leaves
+                    block.setObstacle(true);
+                    block.setTransparent(true);
+                    break;    
+            case 20:block = new Block(id);
+                    block.setObstacle(true);
+                    break;
+            case 21:block = new AirLift(coords, id);
+                    block.hasSides = true;
                     break;
             case 34: block = new Block(id); //flower
                     block.setTransparent(true);

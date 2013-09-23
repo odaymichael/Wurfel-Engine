@@ -16,7 +16,7 @@ public class Player extends AbstractCharacter{
      * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
      */
     public Player(int id, Coordinate coord) {
-        super(id, 1, coord);
+        super(id, 3, coord);
         setFallingSound(Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/wind.ogg")));
         setRunningSound(Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/victorcenusa_running.ogg")));
         setJumpingSound(Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/jump_man.wav")));

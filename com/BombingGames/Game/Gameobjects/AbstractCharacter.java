@@ -22,6 +22,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
       
    /**The walking/running speed of the character. provides a factor for the movement vector*/
    private float speed;
+   
    private Sound fallingSound;
    
    private static Sound waterSound;
@@ -323,7 +324,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
     }
     
     /**
-     * Returns a normalized vector wich contains the direction of the block.
+     * Returns a normalized vector wich contains the direction of the entitiy.
      * @return 
      */
     public float[] getDirectionVector(){
