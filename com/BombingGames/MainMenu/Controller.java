@@ -3,6 +3,7 @@ package com.BombingGames.MainMenu;
 import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.Wurfelengine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -47,6 +48,7 @@ public class Controller {
                 fx.play();
                 Gdx.app.exit();
             }
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
     }
 
     /**
