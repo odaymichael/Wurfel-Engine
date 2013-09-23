@@ -45,7 +45,6 @@ public class Block extends AbstractGameObject {
     
     private boolean liquid;
     private boolean hasSides = true;
-
     private boolean clippedRight = false;
     private boolean clippedTop = false;
     private boolean clippedLeft = false;
@@ -63,18 +62,12 @@ public class Block extends AbstractGameObject {
         NAMELIST[7] = "concrete";
         NAMELIST[8] = "sand";
         NAMELIST[9] = "water";
-        NAMELIST[17] = "tree trunk";
-        NAMELIST[18] = "leaves";
         NAMELIST[20] = "red brick wall";
         NAMELIST[30] = "fence";
         NAMELIST[32] = "sandbags";
         NAMELIST[33] = "crate";
         NAMELIST[34] = "flower";
-        OFFSET[34][0][0] = 71;
-        OFFSET[34][0][1] = 78;
         NAMELIST[35] = "round bush";
-        OFFSET[35][0][0] = 22;
-        OFFSET[35][0][1] = 40;
         OFFSET[34][0][0] = 71;
         OFFSET[34][0][1] = 78;
         OFFSET[35][0][0] = 22;
@@ -158,23 +151,12 @@ public class Block extends AbstractGameObject {
             case 8: block = new Block(id); //sand
                     block.setObstacle(true);
                     break;      
-            case 9: block = new AnimatedBlock(id, new int[]{500,500,500},true, true); //water
-                    block.setTransparent(true);
+            case 9: block = new Block(id); //water
                     block.liquid = true;
                     block.setTransparent(true);
                     break;
-            case 17:block = new Block(id); //trunk
+            case 20: block = new Block(id);
                     block.setObstacle(true);
-                    break;
-            case 18:block = new Block(id); //leaves
-                    block.setObstacle(true);
-                    block.setTransparent(true);
-                    break;    
-            case 20:block = new Block(id);
-                    block.setObstacle(true);
-                    break;
-            case 21:block = new AirLift(coords, id);
-                    block.hasSides = true;
                     break;
             case 34: block = new Block(id); //flower
                     block.setTransparent(true);
@@ -352,21 +334,20 @@ public class Block extends AbstractGameObject {
     /**
      * Render the whole block at a custom position and checks for clipping and hidden.
      * @param view the view using this render method
-     * @param camera The camera rendering the scene
      * @param xPos rendering position
      * @param yPos rendering position
      */
     @Override
-    public void renderAt(final View view, final WECamera camera, int xPos, int yPos) {
+    public void renderAt(final View view, int xPos, int yPos) {
         if (!isClipped() && !isHidden()) {
             if (hasSides) {
                 if (!clippedTop)
-                    renderSideAt(view, camera, xPos, yPos, Block.TOPSIDE);
+                    renderSideAt(view, xPos, yPos, Block.TOPSIDE);
                 if (!clippedLeft)
-                    renderSideAt(view, camera, xPos, yPos, Block.LEFTSIDE);
+                    renderSideAt(view, xPos, yPos, Block.LEFTSIDE);
                 if (!clippedRight)
-                    renderSideAt(view, camera, xPos, yPos, Block.RIGHTSIDE);
-                } else super.renderAt(view, camera, xPos, yPos);
+                    renderSideAt(view, xPos, yPos, Block.RIGHTSIDE);
+                } else super.renderAt(view, xPos, yPos);
         }
     }
      
@@ -396,42 +377,39 @@ public class Block extends AbstractGameObject {
     public void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb, Color color){
         int xPos = get2DPosX(coords) + ( sidenumb == 2 ? SCREEN_WIDTH2 : 0);//right side is  half a block more to the right
         int yPos = get2DPosY(coords) + (sidenumb != 1 ? SCREEN_WIDTH4 : 0);//the top is drawn a quarter blocks higher
-        renderSideAt(view, camera, xPos, yPos, sidenumb, color);
+                //uncomment these two lines to add a depth-effect (note that it is very dark and still a prototype)
+//        color.mul((camera.getBottomBorder()-coords.getRelY())
+//            /
+//            (float)(camera.getBottomBorder()-camera.getTopBorder())
+//            );
+        renderSideAt(view, xPos, yPos, sidenumb, color);
     }
     
     /**
      * Ignores lightlevel.
      * @param view the view using this render method
-     * @param camera The camera rendering the scene
      * @param xPos rendering position
      * @param yPos rendering position
      * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
      */
-    public void renderSideAt(final View view, final WECamera camera, int xPos, int yPos, final int sidenumb){
+    public void renderSideAt(final View view, int xPos, int yPos, final int sidenumb){
         Color color = Color.GRAY;
         if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getColorOfSide(sidenumb);
         }
-        renderSideAt(view, camera, xPos, yPos, sidenumb, color);
+        renderSideAt(view, xPos, yPos, sidenumb, color);
     }
     /**
      * Draws a side of a block at a custom position. Apllies color before rendering and takes the lightlevel into account.
      * @param view the view using this render method
-     * @param camera The camera rendering the scene
      * @param xPos rendering position
      * @param yPos rendering position
      * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
      * @param color a tint in which the sprite gets rendered
      */
-    public void renderSideAt(final View view, final WECamera camera, int xPos, int yPos, final int sidenumb, Color color){
+    public void renderSideAt(final View view, int xPos, int yPos, final int sidenumb, Color color){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         sprite.setPosition(xPos, yPos);
-        
-        //uncomment these two lines to add a depth-effect (note that it is very dark and still a prototype)
-//        color.mul((camera.getBottomBorder()-coords.getRelY())
-//            /
-//            (float)(camera.getBottomBorder()-camera.getTopBorder())
-//            );
         
         color.mul(getLightlevel()*2);
         

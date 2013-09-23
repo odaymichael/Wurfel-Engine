@@ -11,32 +11,23 @@ import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.Zombie;
 import com.BombingGames.Wurfelengine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.backends.openal.Ogg.Sound;
 
 /**
  *The <i>CustomGameController</i> is for the game code. Put engine code into <i>Controller</i>.
  * @author Benedikt
  */
 public class CustomGameController extends Controller {
-    private AbstractEntity focusentity;
-    private Sound gras1;
-    private Sound gras2;
-    private final BlockToolbar blockToolbar;
+    
     /**
      * The custom game code belongs here.
      */
     public CustomGameController() {
         super();
 
-        gras1 = (Sound) Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/grass1.ogg"));
-        gras2 = (Sound) Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/grass2.ogg"));
-        
-        
          AbstractCharacter player = (AbstractCharacter) AbstractEntity.getInstance(
                 40,
                 0,
@@ -67,12 +58,6 @@ public class CustomGameController extends Controller {
         setMinimap(
             new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 400,10)
         );
-        
-        blockToolbar = new BlockToolbar();
-        
-        focusentity = AbstractEntity.getInstance(13, 0, new Coordinate(0, 0, Map.getBlocksZ()-1, true));
-        //focusentity.setPositionY(Block.DIM2+1f);
-        focusentity.exist();
         
         Gdx.input.setInputProcessor(new InputListener());
     }
@@ -164,30 +149,9 @@ public class CustomGameController extends Controller {
             if (keycode == Input.Keys.ENTER)
                 GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
             
-                    
              if (keycode == Input.Keys.T) {
                 setTimespeed();
              } 
-             if (keycode == Input.Keys.K) {
-                Zombie zombie = (Zombie) AbstractEntity.getInstance(
-                    43,
-                    0,
-                    focusentity.getCoords()
-                );
-                zombie.setTarget(getPlayer());
-                zombie.exist();   
-             }
-             
-            if (keycode == Input.Keys.NUM_1) blockToolbar.setSelection(0);
-            if (keycode == Input.Keys.NUM_2) blockToolbar.setSelection(1);
-            if (keycode == Input.Keys.NUM_3) blockToolbar.setSelection(2);
-            if (keycode == Input.Keys.NUM_4) blockToolbar.setSelection(3);
-            if (keycode == Input.Keys.NUM_5) blockToolbar.setSelection(4);
-            if (keycode == Input.Keys.NUM_6) blockToolbar.setSelection(5);
-            if (keycode == Input.Keys.NUM_7) blockToolbar.setSelection(6);
-            if (keycode == Input.Keys.NUM_8) blockToolbar.setSelection(7);
-            if (keycode == Input.Keys.NUM_9) blockToolbar.setSelection(8);
-             
             return true;
             
         }
@@ -204,22 +168,7 @@ public class CustomGameController extends Controller {
 
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            Coordinate coords = getView().ScreenToGameCoords(screenX,screenY);
-            if (coords.getZ() < Map.getBlocksZ()-1) coords.addVector(0, 0, 1);
-            
-            if (button == 0){ //left click
-                setMapData(coords, Block.getInstance(0));
-                requestRecalc();
-                //getCameras().get(0).traceRayTo(coords, true);
-                gras1.play();
-            } else {//right click
-                if (getMapData(coords).getId() == 0){
-                    setMapData(coords, Block.getInstance(blockToolbar.getSelectionID(),0,coords));
-                    requestRecalc();
-                    gras2.play();
-                }
-            }    
-            return true;
+            return false;
         }
 
         @Override
@@ -234,8 +183,7 @@ public class CustomGameController extends Controller {
 
         @Override
         public boolean mouseMoved(int screenX, int screenY) {
-            focusentity.setCoords(getView().ScreenToGameCoords(screenX,screenY).addVector(0, 0, 1));
-            return true;
+            return false;
         }
 
         @Override
@@ -245,13 +193,7 @@ public class CustomGameController extends Controller {
             GameplayScreen.msgSystem().add("Zoom: " + getCameras().get(0).getZoom());   
             return true;
         }
-    }
-    
-    public BlockToolbar getBlockToolbar() {
-        return blockToolbar;
-    }
-    
-    public AbstractEntity getFocusentity() {
-        return focusentity;
+        
+       
     }
 }

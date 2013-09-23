@@ -27,10 +27,6 @@ public class MenuItem extends Sprite {
         this.setY(200+index*80);
     }
 
-    MenuItem(int index, TextureRegion texture, String title) {
-        this(index, texture);
-    }
-
 
     /**
      *
