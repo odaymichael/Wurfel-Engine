@@ -30,7 +30,7 @@ public class Controller {
         
         
         fx = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/MainMenu/click2.wav"));
-         Gdx.input.setInputProcessor(new InputListener());
+        Gdx.input.setInputProcessor(new InputListener());
     }
     
     /**

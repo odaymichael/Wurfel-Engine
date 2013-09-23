@@ -24,7 +24,7 @@ public class MenuItem extends Sprite {
         super(texture);
         this.index = index;
         this.setX((Gdx.graphics.getWidth()-getWidth())/2);
-        this.setY(200+index*80);
+        this.setY(Gdx.graphics.getHeight()/2-120+index*80);
     }
 
 
