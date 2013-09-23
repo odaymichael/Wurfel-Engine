@@ -22,9 +22,12 @@ public abstract class AbstractCharacter extends AbstractEntity {
    /**provides a factor for the vector*/
    private float speed;
    private Sound fallingSound;
+   
    private boolean fallingSoundPlaying;
    private Sound runningSound;
    private boolean runningSoundPlaying;
+   private Sound jumpingSound;
+   
    private CharacterShadow shadow;
    
    private int walkingAnimationCounter;
@@ -52,7 +55,10 @@ public abstract class AbstractCharacter extends AbstractEntity {
      * @param velo the velocity in m/s
      */
     public void jump(float velo) {
-        if (onGround()) dir[2] = velo;
+        if (onGround()) {
+            dir[2] = velo;
+            if (jumpingSound != null) jumpingSound.play();
+        }
     }
     
 
@@ -324,6 +330,18 @@ public abstract class AbstractCharacter extends AbstractEntity {
         this.runningSound = runningSound;
     }
     
+
+    /**
+     * Set the value of jumpingSound
+     *
+     * @param jumpingSound new value of jumpingSound
+     */
+    public void setJumpingSound(Sound jumpingSound) {
+        this.jumpingSound = jumpingSound;
+    }
+    
+    
+    
    /**
      * Set the controls.
      * @param controls either "arrows", "WASD" or "NPC"
@@ -347,14 +365,12 @@ public abstract class AbstractCharacter extends AbstractEntity {
      */
     @Override
     public boolean onGround() {
-        Coordinate tempcoords = getCoords();
-        tempcoords.setHeight(getCoords().getHeight()-1);
-        setCoords(tempcoords);
+        getCoords().setHeight(getCoords().getHeight()-1);
         
         boolean colission = horizontalColission(getPositionX(), getPositionY(), getPositionX(), getPositionY());
-        tempcoords.setHeight(getCoords().getHeight()+1);
-        setCoords(tempcoords);
+        getCoords().setHeight(getCoords().getHeight()+1);
         
+        //if standing on ground on own or neighbour block then true
         return (super.onGround() || colission);
     }
 
