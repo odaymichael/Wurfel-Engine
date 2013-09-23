@@ -19,8 +19,6 @@ public class BlockToolbar {
 
     public BlockToolbar() {
         slot[0] = Block.getInstance(1);
-        slot[0].setSideClipping(0, false);
-        slot[0].setSideClipping(1, false);
         slot[1] = Block.getInstance(2);
         slot[2] = Block.getInstance(3);
         slot[3] = Block.getInstance(4);
@@ -60,9 +58,6 @@ public class BlockToolbar {
         for (int i = 0; i < 9; i++) {
             if (slot[i].getId() != 0){
                 slot[i].renderAt(view, posX+i*80+17, posY+15, Color.GRAY);
-                //batch.draw(Block.getBlockSprite(slot[i], 0,1),posX+i*80+17, posY+15, 0.35f);
-                //Block.getBlockSprite(slot[i], 0,0).draw(posX+i*80+17, posY+15+14, 0.35f);
-               // Block.getBlockSprite(slot[i], 0,2).draw(posX+i*80+17+28, posY+15+14, 0.35f);
             }
         }
         batch.end();
