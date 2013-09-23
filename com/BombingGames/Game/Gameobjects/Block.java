@@ -382,7 +382,7 @@ public class Block extends AbstractGameObject {
     }
     
     /**
-     * 
+     * Ignores lightlevel.
      * @param view the view using this render method
      * @param camera The camera rendering the scene
      * @param xPos rendering position

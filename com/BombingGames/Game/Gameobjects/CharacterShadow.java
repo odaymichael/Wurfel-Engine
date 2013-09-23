@@ -29,7 +29,7 @@ class CharacterShadow extends AbstractEntity {
         this.character = character;
         Coordinate tmpCoords = character.getCoords().cpy();
         tmpCoords.setZ(tmpCoords.getZ());
-        while (tmpCoords.addVectorCpy(0, 0, -1).getBlock().isTransparent())
+        while (tmpCoords.getZ() > 0 && tmpCoords.addVectorCpy(0, 0, -1).getBlock().isTransparent())
             tmpCoords.addVector(0, 0, -1);
         this.setCoords(tmpCoords);
         this.setPositionX(character.getPositionX());

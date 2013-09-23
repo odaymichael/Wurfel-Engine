@@ -317,9 +317,12 @@ public class Coordinate {
      * @return
      */
     public int get2DPosX() {
+         int offset = 0;
+        if (getZ()>=0)
+            offset = (int) (getCellOffset()[0]);
         return getRelX() * Block.SCREEN_WIDTH //x-coordinate multiplied by it's dimension in this direction
                + (getRelY() % 2) * AbstractGameObject.SCREEN_WIDTH2 //offset by y
-             + (int) (getCellOffset()[0]);
+               + offset;
     }
     
     /**
@@ -327,10 +330,13 @@ public class Coordinate {
      * @return
      */
     public int get2DPosY() {
+        int offset = 0;
+        if (getZ()>=0)
+            offset = (int) (getCellOffset()[1] / 2) //add the objects position inside this coordinate
+                    - (int) (getCellOffset()[2] / Math.sqrt(2)); //add the objects position inside this coordinate
         return getRelY() * Block.SCREEN_DEPTH2 //y-coordinate * the tile's half size size
                - (int) (getHeight() / Math.sqrt(2)) //take axis shortening into account
-               + (int) (getCellOffset()[1] / 2) //add the objects position inside this coordinate
-               - (int) (getCellOffset()[2] / Math.sqrt(2)); //add the objects position inside this coordinate
+               + offset;
     }
     
     /** @return a copy of this coordinate */
