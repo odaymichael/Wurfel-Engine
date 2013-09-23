@@ -69,6 +69,11 @@ public class PseudoGrey {
 	return new Color(r/256f, g/256f, b/256f,1);
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     public static float toFloat(Color c) {
 	int	red, green, blue;
 	int	cMin, cMax;

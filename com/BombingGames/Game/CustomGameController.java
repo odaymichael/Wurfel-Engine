@@ -71,7 +71,7 @@ public class CustomGameController extends Controller {
         blockToolbar = new BlockToolbar();
         
         focusentity = AbstractEntity.getInstance(13, 0, new Coordinate(0, 0, Map.getBlocksZ()-1, true));
-        focusentity.setPositionY(Block.DIM2+1f);
+        //focusentity.setPositionY(Block.DIM2+1f);
         focusentity.exist();
         
         Gdx.input.setInputProcessor(new InputListener());
@@ -170,7 +170,7 @@ public class CustomGameController extends Controller {
              } 
              if (keycode == Input.Keys.K) {
                 Zombie zombie = (Zombie) AbstractEntity.getInstance(
-                    42,
+                    43,
                     0,
                     focusentity.getCoords()
                 );

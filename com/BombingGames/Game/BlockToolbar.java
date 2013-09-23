@@ -45,7 +45,7 @@ public class BlockToolbar {
     }
     
     public void render(View view){
-        SpriteBatch batch = view.getBatch();
+        SpriteBatch batch = view.BATCH;
         batch.begin();
         batch.draw(AbstractGameObject.getSpritesheet().findRegion("toolbar"), posX, posX);
         batch.draw(AbstractGameObject.getSpritesheet().findRegion("selection"), posX+80*selection, posY-5);

@@ -36,7 +36,6 @@ public class Map {
     private static int blocksX, blocksY, blocksZ;
     /** the map data are the blocks in their cells */
     private Cell[][][] data;
-    private boolean[][] deepestLayerVisibility;
     
     /** every entity on the map is stored in this field */
     private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
@@ -67,7 +66,6 @@ public class Map {
         blocksY = Chunk.getBlocksY()*3;
         blocksZ = Chunk.getBlocksZ();
         data = new Cell[blocksX][blocksY][blocksZ];//create Array where the data is stored
-        deepestLayerVisibility = new boolean[blocksX][blocksY];
     }
     
     /**
@@ -338,6 +336,9 @@ public class Map {
         return getDataSafe(coords.getRelX(), coords.getRelY(), coords.getZ());
     }
     
+   
+    
+
     /**
      * Set a block at a specific coordinate.
      * @param x position
@@ -416,8 +417,8 @@ public class Map {
         }
         
         for (int i=0;i < numberofblocks; i++){
-                //cellPos[x[i]][y[i]][z[i]][0] = (float) (Math.random()*Block.DIM2);
-                //cellPos[x[i]][y[i]][z[i]][1] = (float) (Math.random()*Block.DIM2);
+                //cellPos[x[i]][y[i]][z[i]][0] = (float) (Math.random()*Block.SCREEN_DEPTH2);
+                //cellPos[x[i]][y[i]][z[i]][1] = (float) (Math.random()*Block.SCREEN_DEPTH2);
                 data[x[i]][y[i]][z[i]].setCellOffset(2, (float) (Math.random()*Block.GAMEDIMENSION));//vertical shake
             
         }
@@ -477,10 +478,4 @@ public class Map {
         }
         return list;
     }
-
-    public boolean[][] getDeepestLayerVisibility() {
-        return deepestLayerVisibility;
-    }
-    
-    
 }

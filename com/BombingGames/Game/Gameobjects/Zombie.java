@@ -4,8 +4,6 @@ import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
-import static com.BombingGames.Game.Gameobjects.AbstractEntity.CATEGORY;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getReferencObject;
 import com.badlogic.gdx.graphics.Color;
 
 /**
@@ -21,15 +19,15 @@ public class Zombie extends AbstractCharacter{
     /**
      * Zombie constructor. Use AbstractEntitiy.getInstance to create an zombie.
      * @param id
+     * @param coords  
      */
-    protected Zombie(int id) {
-        super(id, 3);
+    protected Zombie(int id, Coordinate coords) {
+        super(id, 3, coords);
         setTransparent(true);
         setObstacle(true);
-        setDimensionY(2);
-        for (int i = 0; i < VALUESCOUNT; i++) {
-            getReferencObject()[CATEGORY][id][i] = new int[]{CATEGORY,40,i};    
-        }
+        setDimensionZ(2);
+        System.arraycopy(getSprites()[CATEGORY][40], 0, getSprites()[CATEGORY][id], 0, VALUESCOUNT);
+ 
 
     }
 

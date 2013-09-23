@@ -32,6 +32,11 @@ public class MenuItem extends Sprite {
     }
 
 
+    /**
+     *
+     * @param spriteBatch
+     * @param camera The camera rendering the MenuItem
+     */
     public void draw(SpriteBatch spriteBatch, Camera camera) {
         super.draw(spriteBatch);        
     }

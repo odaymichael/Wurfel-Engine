@@ -2,26 +2,29 @@ package com.BombingGames.Game.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM2;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.DIM4;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH4;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.GAMEDIMENSION;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_WIDTH2;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_WIDTH4;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.VALUESCOUNT;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getPixmap;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getSpritesheet;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
 /**
  * A Block is a wonderful piece of information and a geometrical object.
  * @author Benedikt Vogler
  */
-
 public class Block extends AbstractGameObject {
-    private static Color[][] colorlist = new Color[OBJECTTYPESCOUNT][24];
+    private static Color[][] colorlist = new Color[OBJECTTYPESCOUNT][VALUESCOUNT];
     /**The id of the left side of a block.*/
     public static final int LEFTSIDE=0;
     /**The id of the top side of a block.*/
@@ -29,19 +32,25 @@ public class Block extends AbstractGameObject {
     /**The id of the right side of a block.*/
     public static final int RIGHTSIDE=2;
     
+    /**
+     *
+     */
     public static final char CATEGORY = 'b';
     
     /**Containts the names of the objects. index=id*/
     public static final String[] NAMELIST = new String[OBJECTTYPESCOUNT];
     
        /** A list containing the offset of the objects. */
-    public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][10][2];
+    public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][VALUESCOUNT][2];
     
     private boolean liquid;
     private boolean hasSides = true;
-    private boolean renderRight = true;
-    private boolean renderTop = true;
-    private boolean renderLeft = true;
+
+    private boolean clippedRight = false;
+    private boolean clippedTop = false;
+    private boolean clippedLeft = false;
+    
+    private static AtlasRegion[][][] blocksprites = new AtlasRegion[OBJECTTYPESCOUNT][VALUESCOUNT][3];//{id}{value}{side}
     
     static {
         NAMELIST[0] = "air";
@@ -211,14 +220,22 @@ public class Block extends AbstractGameObject {
      * @param side Which side? (0 - 2)
      * @return an sprite of the side
      */
-    public static TextureAtlas.AtlasRegion getBlockSprite(int id, int value, int side) {
-        AtlasRegion sprite = getSpritesheet().findRegion(CATEGORY+Integer.toString(id)+"-"+value+"-"+side);
-        if (sprite == null){ //if there is no sprite show the default "sprite not found sprite"
-            sprite = getSpritesheet().findRegion(CATEGORY+"0-0-"+side);
-            if (sprite==null)
-                throw new NullPointerException("Sprite not found but even the default error sprite could not be found:"+CATEGORY+"0-0-"+side);
+    public static AtlasRegion getBlockSprite(int id, int value, int side) {
+        if (blocksprites[id][value][side] == null){ //load if not already loaded
+            AtlasRegion sprite = getSpritesheet().findRegion(CATEGORY+Integer.toString(id)+"-"+value+"-"+side);
+            if (sprite == null){ //if there is no sprite show the default "sprite not found sprite" for this category
+                Gdx.app.log("debug", CATEGORY+Integer.toString(id)+"-"+value +"-"+ side +" not found");
+                sprite = getSpritesheet().findRegion(CATEGORY+"0-0-"+side);
+                if (sprite == null) {//load generic error sprite if category sprite failed
+                    sprite = getSpritesheet().findRegion("error");
+                    if (sprite == null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
+                }
+            }
+            blocksprites[id][value][side] = sprite;
+            return sprite;
+        } else {
+            return blocksprites[id][value][side];
         }
-        return sprite;
     }
     
 
@@ -238,12 +255,12 @@ public class Block extends AbstractGameObject {
                 AtlasRegion texture = getBlockSprite(id, value, 1);
                 if (texture == null) return new Color();
                 colorInt = getPixmap().getPixel(
-                    texture.getRegionX()+DIM2, texture.getRegionY()-DIM4);
+                    texture.getRegionX()+SCREEN_DEPTH2, texture.getRegionY()-SCREEN_DEPTH4);
             } else {
                 AtlasRegion texture = getSprite(CATEGORY, id, value);
                 if (texture == null) return new Color();
                 colorInt = getPixmap().getPixel(
-                    texture.getRegionX()+DIM2, texture.getRegionY()-DIM2);
+                    texture.getRegionX()+SCREEN_DEPTH2, texture.getRegionY()-SCREEN_DEPTH2);
             }
             Color.rgba8888ToColor(colorlist[id][value], colorInt);
             return colorlist[id][value]; 
@@ -264,22 +281,36 @@ public class Block extends AbstractGameObject {
      */
     public boolean hasSides() {
         return hasSides;
-    }   
+    } 
+    
+        /**
+     * 
+     * @param clipped When it is set to false, every side will also get clipped..
+     */
+    @Override
+    public void setClipped(boolean clipped) {
+        super.setClipped(clipped);
+        if (clipped) {
+            clippedLeft = true;
+            clippedTop = true;
+            clippedRight = true;
+        }
+    }
     
     /**
-     * Make a side (in)visible. If one side is visible, the whole block is visible.
+     * Make a side (in)clipping. If one side is clipping, the whole block is clipping.
      * @param side 0 = left, 1 = top, 2 = right
-     * @param visible The value
+     * @param clipping true when it should be clipped.
      */
-    public void setSideClipping(int side, boolean visible) {
-        if (visible) this.setClipped(true);
+    public void setSideClipping(int side, boolean clipping) {
+        if (!clipping) this.setClipped(false);
         
         if (side==0)
-            renderLeft = visible;
+            clippedLeft = clipping;
         else if (side==1)
-            renderTop = visible;
+            clippedTop = clipping;
                 else if (side==2)
-                    renderRight = visible;
+                    clippedRight = clipping;
     }
     
        /**
@@ -289,7 +320,7 @@ public class Block extends AbstractGameObject {
      */
    @Override
     public int get2DPosX(Coordinate coords) {
-        return coords.get2DPosX() + (int) (coords.getCellOffset()[0]); //add the objects position inside this coordinate
+        return coords.get2DPosX();
     }
 
     /**
@@ -299,73 +330,108 @@ public class Block extends AbstractGameObject {
      */
    @Override
     public int get2DPosY(Coordinate coords) {
-        return coords.get2DPosY()
-               + (int) (coords.getCellOffset()[1] / 2) //add the objects position inside this coordinate
-               - (int) (coords.getCellOffset()[2] / Math.sqrt(2)); //add the objects position inside this coordinate
+        return coords.get2DPosY();
     }
 
+
+    
+    @Override
+    public void render(final View view, final WECamera camera, Coordinate coords) {
+        if (!isClipped() && !isHidden()) {
+            if (hasSides) {
+                if (!clippedTop)
+                    renderSide(view, camera, coords, Block.TOPSIDE);
+                if (!clippedLeft)
+                    renderSide(view, camera, coords, Block.LEFTSIDE);
+                if (!clippedRight)
+                    renderSide(view, camera, coords, Block.RIGHTSIDE);
+            } else super.render(view, camera, coords);
+        }
+    }
+    
     /**
-     * 
-     * @param visible When it is set to false, every side will also get hidden.
+     * Render the whole block at a custom position and checks for clipping and hidden.
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param xPos rendering position
+     * @param yPos rendering position
      */
     @Override
-    public void setClipped(boolean visible) {
-        super.setClipped(visible);
-        if (!visible) {
-            renderLeft = false;
-            renderTop = false;
-            renderRight = false;
+    public void renderAt(final View view, final WECamera camera, int xPos, int yPos) {
+        if (!isClipped() && !isHidden()) {
+            if (hasSides) {
+                if (!clippedTop)
+                    renderSideAt(view, camera, xPos, yPos, Block.TOPSIDE);
+                if (!clippedLeft)
+                    renderSideAt(view, camera, xPos, yPos, Block.LEFTSIDE);
+                if (!clippedRight)
+                    renderSideAt(view, camera, xPos, yPos, Block.RIGHTSIDE);
+                } else super.renderAt(view, camera, xPos, yPos);
         }
     }
-    
-    @Override
-    public void render(View view, WECamera camera, Coordinate coords) {
-        if (isVisible() && !isHidden()) {
-            if (Controller.getLightengine() != null){
-                Color color = Controller.getLightengine().getGlobalLight();
-                if (hasSides) {
-                    if (renderTop)
-                        renderSide(view, camera, coords, Block.TOPSIDE, Controller.getLightengine().getColorOfSide(Block.TOPSIDE));
-                    if (renderLeft)
-                        renderSide(view, camera, coords, Block.LEFTSIDE, Controller.getLightengine().getColorOfSide(Block.LEFTSIDE));
-                    if (renderRight)
-                        renderSide(view, camera, coords, Block.RIGHTSIDE, Controller.getLightengine().getColorOfSide(Block.RIGHTSIDE));
-                } else super.render(view, camera, coords, color.mul(getLightlevel()));
-            } else {
-                Color color = Color.GRAY;
-                if (hasSides){
-                    if (renderTop)
-                        renderSide(view, camera, coords, Block.TOPSIDE, color);
-                    if (renderLeft)
-                        renderSide(view, camera, coords, Block.LEFTSIDE, color);
-                    if (renderRight)
-                        renderSide(view, camera, coords, Block.RIGHTSIDE, color);
-                } else super.render(view, camera, coords);
-            }
+     
+    /**
+     * Render a side of a block at the position of the coordinates.
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param coords the coordinates where the side is rendered 
+     * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
+     */
+    public void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb){
+        Color color = Color.GRAY;
+        if (Controller.getLightengine() != null){
+                color = Controller.getLightengine().getColorOfSide(sidenumb);
         }
+        renderSide(view, camera, coords, sidenumb, color);
     }
-    
 
     /**
-     * Draws a side of a block
+     * Render a side of a block at the position of the coordinates.
      * @param view the view using this render method
      * @param camera The camera rendering the scene
      * @param coords the coordinates where to render 
-     * @param sidenumb The number of the side. 0 =  left, 1=top, 2= right
-     * @param color  a tint in which the sprite get's rendered
+     * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
+     * @param color a tint in which the sprite gets rendered
      */
-    protected void renderSide(final View view, WECamera camera, Coordinate coords, final int sidenumb, Color color){
+    public void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb, Color color){
+        int xPos = get2DPosX(coords) + ( sidenumb == 2 ? SCREEN_WIDTH2 : 0);//right side is  half a block more to the right
+        int yPos = get2DPosY(coords) + (sidenumb != 1 ? SCREEN_WIDTH4 : 0);//the top is drawn a quarter blocks higher
+        renderSideAt(view, camera, xPos, yPos, sidenumb, color);
+    }
+    
+    /**
+     * Ignores lightlevel.
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param xPos rendering position
+     * @param yPos rendering position
+     * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
+     */
+    public void renderSideAt(final View view, final WECamera camera, int xPos, int yPos, final int sidenumb){
+        Color color = Color.GRAY;
+        if (Controller.getLightengine() != null){
+                color = Controller.getLightengine().getColorOfSide(sidenumb);
+        }
+        renderSideAt(view, camera, xPos, yPos, sidenumb, color);
+    }
+    /**
+     * Draws a side of a block at a custom position. Apllies color before rendering and takes the lightlevel into account.
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param xPos rendering position
+     * @param yPos rendering position
+     * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
+     * @param color a tint in which the sprite gets rendered
+     */
+    public void renderSideAt(final View view, final WECamera camera, int xPos, int yPos, final int sidenumb, Color color){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
-        
-        int xPos = get2DPosX(coords) + ( sidenumb == 2 ? DIM2 : 0);//right side is  half a block more to the right
-        int yPos = get2DPosY(coords) + (sidenumb != 1 ? DIM4 : 0);//the top is drawn a quarter blocks higher
         sprite.setPosition(xPos, yPos);
         
-        //uncomment these two lines to add a depth-effect (note that it is very dark)
-        //color.mul((float)(camera.getBottomBorder()-camera.getTopBorder())/(coords.getRelY()-camera.getTopBorder())
-         //   );
-        //color.g *= (coords.getRelY()-camera.getBottomBorder())
-         //  /(camera.getBottomBorder()-camera.getTopBorder());
+        //uncomment these two lines to add a depth-effect (note that it is very dark and still a prototype)
+//        color.mul((camera.getBottomBorder()-coords.getRelY())
+//            /
+//            (float)(camera.getBottomBorder()-camera.getTopBorder())
+//            );
         
         color.mul(getLightlevel()*2);
         
@@ -378,21 +444,22 @@ public class Block extends AbstractGameObject {
         sprite.getVertices()[SpriteBatch.C1] = color.toFloatBits();//top left
 
         
-        if (sidenumb == 2)
-            color.mul(0.93f);
-        else if (sidenumb == 0)
-            color.mul(0.92f);
-        color.a = 1; 
+//        if (sidenumb == 2)
+//            color.mul(0.93f);
+//        else if (sidenumb == 0)
+//            color.mul(0.92f);
+//        color.a = 1; 
 
         sprite.getVertices()[SpriteBatch.C2] = color.toFloatBits();//bottom left
         
-        if (sidenumb == 2)
-            color.mul(0.97f);
-        else if (sidenumb == 0) color.mul(1);
-        color.a = 1; 
+//        if (sidenumb == 2)
+//            color.mul(0.97f);
+//        else if (sidenumb == 0) color.mul(1);
+//        color.a = 1; 
         sprite.getVertices()[SpriteBatch.C3] = color.toFloatBits();//bottom right
  
-        sprite.draw(view.getBatch());
+        sprite.draw(view.BATCH);
+    
     }
 
     @Override
@@ -403,14 +470,18 @@ public class Block extends AbstractGameObject {
     @Override
     public int getDepth(Coordinate coords){
         return (int) (
-            coords.getRelY() *(Block.DIM4+1)//Y
+            coords.getRelY() *(Block.SCREEN_DEPTH+1)//Y
             + coords.getCellOffset()[1]
-            + coords.getZ()*Block.DIM4//Z
-            + coords.getCellOffset()[2] / Math.sqrt(2) /2
-            + (getDimensionY() - 1) * DIM4
+            + coords.getHeight()/Math.sqrt(2)//Z
+            + coords.getCellOffset()[2]/Math.sqrt(2)
+            + (getDimensionZ() - 1) *GAMEDIMENSION/Math.sqrt(2)
         );
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public char getCategory() {
         return CATEGORY;
@@ -421,13 +492,29 @@ public class Block extends AbstractGameObject {
         return NAMELIST[getId()];
     }
 
+    /**
+     *Returning the
+     * @return
+     */
     @Override
     public int getOffsetX() {
         return OFFSET[getId()][getValue()][0];
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getOffsetY() {
         return OFFSET[getId()][getValue()][1];
     } 
+
+    /**
+     *
+     * @return
+     */
+    public static AtlasRegion[][][] getBlocksprites() {
+        return blocksprites;
+    }
 }

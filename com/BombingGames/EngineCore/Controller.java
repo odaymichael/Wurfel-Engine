@@ -255,7 +255,7 @@ public class Controller {
      * @return the neighbour block
      */
     public static Block getNeighbourBlock(Coordinate coords, int side){
-        return Controller.getMapDataSafe(Block.sideIDtoNeighbourCoords(coords, side));
+        return Controller.getMapDataSafe(Coordinate.neighbourSidetoCoords(coords, side));
     }
     
   
@@ -300,10 +300,17 @@ public class Controller {
         return lightEngine;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getTimespeed() {
         return timespeed;
     }
 
+    /**
+     *
+     */
     public void setTimespeed() {
         JFrame frame = new JFrame("InputDialog Example #2");
         try {
@@ -316,6 +323,10 @@ public class Controller {
         }
     }
     
+    /**
+     *
+     * @param timespeed
+     */
     public void setTimespeed(float timespeed) {
         this.timespeed = timespeed;
     }

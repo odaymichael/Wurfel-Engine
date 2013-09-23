@@ -235,6 +235,7 @@
             <filename>sprites/e40-23.png</filename>
             <filename>sprites/e41-0.png</filename>
             <filename>sprites/e41-1.png</filename>
+            <filename>sprites/e42-0.png</filename>
             <filename>sprites/error.png</filename>
             <filename>sprites/selection.png</filename>
             <filename>sprites/toolbar.png</filename>

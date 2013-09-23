@@ -40,9 +40,11 @@ public class Renderobject {
         return coords;
     }
 
+    /**
+     *
+     * @return
+     */
     public AbstractGameObject getObject() {
         return content;
     }
-
-    
 }

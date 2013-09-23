@@ -18,13 +18,32 @@ import org.lwjgl.opengl.GL11;
  * @author Benedikt
  */
 public abstract class AbstractGameObject {
-    /**Screen DIMENSION of a block/object in pixels. This is the length from the left to the right border of the block.
+    /**Screen SCREEN_DEPTH of a block/object sprite in pixels. This is the length from the top to the middle border of the block.
      * In game coordinates this is also the dimension from top to bottom.*/
-    public static final int DIMENSION = 160;
-    /**The half (2) of DIMENSION. The short form of: DIMENSION/2*/
-    public static final int DIM2 = DIMENSION / 2;
-    /**A quarter (4) of DIMENSION. The short form of: DIMENSION/4*/
-    public static final int DIM4 = DIMENSION / 4;
+    public static final int SCREEN_DEPTH = 80;
+    /**The half (2) of SCREEN_DEPTH. The short form of: SCREEN_DEPTH/2*/
+    public static final int SCREEN_DEPTH2 = SCREEN_DEPTH / 2;
+    /**A quarter (4) of SCREEN_DEPTH. The short form of: SCREEN_DEPTH/4*/
+    public static final int SCREEN_DEPTH4 = SCREEN_DEPTH / 4;
+    
+    /**
+     * The width (x-axis) of the sprite size
+     */
+    public static final int SCREEN_WIDTH = 160;
+    /**The half (2) of SCREEN_WIDTH. The short form of: SCREEN_WIDTH/2*/
+    public static final int SCREEN_WIDTH2 = SCREEN_WIDTH / 2;
+    /**A quarter (4) of SCREEN_WIDTH. The short form of: SCREEN_WIDTH/4*/
+    public static final int SCREEN_WIDTH4 = SCREEN_WIDTH / 4;
+    
+    /**
+     * The width (x-axis) of the sprite size
+     */
+    public static final int SCREEN_HEIGHT = 80;
+    /**The half (2) of SCREEN_WIDTH. The short form of: SCREEN_WIDTH/2*/
+    public static final int SCREEN_HEIGHT2 = SCREEN_HEIGHT / 2;
+    /**A quarter (4) of SCREEN_WIDTH. The short form of: SCREEN_WIDTH/4*/
+    public static final int SCREEN_HEIGHT4 = SCREEN_HEIGHT / 4;
+    
     /**the max. amount of different object types*/
     public static final int OBJECTTYPESCOUNT = 99;
       /**the max. amount of different values*/
@@ -32,21 +51,21 @@ public abstract class AbstractGameObject {
     
 
     
-    /**The real game world dimension in pixel. Usually the use of DIMENSION is fine because of the map format every coordinate center is straight.
-        * The value is DIMENSION/sqrt(2).
+    /**The real game world dimension in pixel. Usually the use of SCREEN_DEPTH is fine because of the map format every coordinate center is straight.
+        * The value is SCREEN_DEPTH/sqrt(2).
         */
-    public static final int GAMEDIMENSION = (int) (DIMENSION / Math.sqrt(2));
+    public static final int GAMEDIMENSION = (int) (SCREEN_HEIGHT*2 / Math.sqrt(2));
         
     /**The sprite texture which contains every object texture*/
     private static TextureAtlas spritesheet;
     private static Pixmap pixmap;
-    private static int referencObject[][][][] = new int[(int) 'z'][OBJECTTYPESCOUNT][VALUESCOUNT][];//{category}{id}{value}{category, id, value}
+    private static AtlasRegion[][][] sprites = new AtlasRegion[(int) 'z'][OBJECTTYPESCOUNT][VALUESCOUNT];//{category}{id}{value}
     
     private final int id; 
     private int value;
-    private boolean obstacle, transparent, visible, hidden; 
+    private boolean obstacle, transparent, clipped, hidden; 
     private float lightlevel = 0.5f;
-    private int dimensionY = 1;  
+    private int dimensionZ = 1;  
 
     
     /**
@@ -66,6 +85,10 @@ public abstract class AbstractGameObject {
      */
     public abstract void update(float delta);
     
+    /**
+     *
+     * @return
+     */
     public abstract char getCategory();
     /**
      * Place you static update methods here.
@@ -77,72 +100,101 @@ public abstract class AbstractGameObject {
         
     
     /**
-     *
+     *Get the screen position of this object.
      * @param coords
      * @return
      */
     public abstract int get2DPosX(Coordinate coords);
     
     /**
-     *
+     *Get the screen position of this object.
      * @param coords
      * @return
      */
     public abstract int get2DPosY(Coordinate coords);
     
     /**
-     * Draws an object.
-     * @param coords the relative coordinates
-     * @param camera 
-     * @param view  
+     * Draws an object in the color of the light engine and with the lightlevel. Only draws if not hidden and not clipped.
+     * @param coords the coordinates where the object should be rendered
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
      */
     public void render(View view, WECamera camera, Coordinate coords) {
         Color color = Color.GRAY;
         if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getGlobalLight();
-            }
+        }
         render(view, camera, coords, color.mul(lightlevel));
     }
     
      /**
-     * Draws an object.
-     * @param coords the relative coordinates
-     * @param camera 
-     * @param view 
-     * @param color 
+     * Draws an object if it is not hidden and not clipped.
+     * @param coords the coordinates where the object is rendered
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param color  custom blending color
      */
     public void render(View view, WECamera camera, Coordinate coords, Color color) {
-        //draw the object except not visible ones
-        if (!hidden && visible) {             
-            Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
+        //draw the object except not clipped ones
+        if (!hidden && !clipped) {             
              
             int xPos = get2DPosX(coords) + getOffsetX();
-            int yPos = get2DPosY(coords) - (dimensionY - 1) * DIM2 + getOffsetY();
-            sprite.setPosition(xPos, yPos);
+            int yPos = get2DPosY(coords) - (dimensionZ - 1) * SCREEN_HEIGHT + getOffsetY();
             
-            prepareColor(view, color);
-
-            sprite.setColor(color);
-            sprite.draw(view.getBatch());
+            renderAt(view, camera, xPos, yPos, color);
         }
-    } 
+    }
+    
+        /**
+     * Renders at a custom position with the global light.
+     * @param view the view using this render method
+     * @param camera The camera rendering the scene
+     * @param xPos rendering position
+     * @param yPos rendering position
+     */
+    public void renderAt(View view, WECamera camera, int xPos, int yPos) {
+        Color color = Color.GRAY;
+        if (Controller.getLightengine() != null){
+                color = Controller.getLightengine().getGlobalLight();
+        }
+        renderAt(view, camera, xPos, yPos, color);
+    }
     
     /**
-     * Changes the color that it works with the blending.
+     * Renders at a custom position with a custom light.
      * @param view
-     * @param color 
+     * @param camera
+     * @param xPos rendering position
+     * @param yPos rendering position
+     * @param color  custom blending color
+     */
+    public void renderAt(View view, WECamera camera, int xPos, int yPos, Color color) {
+        Sprite sprite = new Sprite(getSprite(getCategory(), id, value));
+        sprite.setPosition(xPos, yPos);
+        
+        prepareColor(view, color);
+
+        sprite.setColor(color);
+        sprite.draw(view.BATCH);
+    }
+    
+    /**
+     * Changes the color that it works with the blending. Sets the blending mode.
+     * @param view
+     * @param color a tint in which the sprite should be rendered
      */
     public void prepareColor(View view, Color color){
         float brightness = PseudoGrey.toFloat(color);
+        //float brightness = (color.r+color.g+color.b)/3;
         
-        if (brightness < 0.5f){
-            view.setDrawmode(GL11.GL_MODULATE);
-            color.mul(2);
-        } else {
+        if (brightness > 0.5f){
             view.setDrawmode(GL11.GL_ADD);
             color.r -= .5f;
             color.g -= .5f;
             color.b -= .5f;
+        } else {
+            view.setDrawmode(GL11.GL_MODULATE);
+            color.mul(2);
         }
         color.clamp();
         color.a = 1;
@@ -154,105 +206,8 @@ public abstract class AbstractGameObject {
     public static void loadSheet()  {
         spritesheet = new TextureAtlas(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.txt"), true);
         pixmap = new Pixmap(Gdx.files.internal("com/BombingGames/Game/Blockimages/Spritesheet.png"));
-        Gdx.app.debug("DEBUG","Spritesheet loaded");
+        Gdx.app.log("DEBUG","Spritesheet loaded");
     }
-
-    /**
-     * Returns the field-id where the coordiantes are inside in relation to the current field. Field id count clockwise, starting with the top with 0.
-     * If you want to get the neighbour you can use sideIDtoNeighbourCoords(int[], int) with the second parameter foudn by this function.
-     * The counting:<br>
-     * 7 \ 0 / 1<br>
-     * -------<br>
-     * 6 | 8 | 2<br>
-     * -------<br>
-     * 5 / 4 \ 3<br>
-     * @param x game-space-coordinates, value in pixels
-     * @param y game-space-coordinates, value in pixels
-     * @return Returns the fieldnumber of the coordinates. 8 is the field itself.
-     * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#sideIDtoNeighbourCoords(int[], int)
-     */
-    public static int getSideID(float x, float y) {
-        int result = 8;
-        if (x + y <= Block.DIM2) {
-            result = 7;
-        }
-        if (x - y >= Block.DIM2) {
-            if (result == 7) {
-                result = 0;
-            } else {
-                result = 1;
-            }
-        }
-        if (x + y >= 3 * Block.DIM2) {
-            if (result == 1) {
-                result = 2;
-            } else {
-                result = 3;
-            }
-        }
-        if (-x + y >= Block.DIM2) {
-            if (result == 3) {
-                result = 4;
-            } else if (result == 7) {
-                result = 6;
-            } else {
-                result = 5;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Get the neighbour coordinates of the neighbour of the coords you give.
-     * @param coords the coordinates of the field
-     * @param sideID the side number of the given coordinates
-     * @return The coordinates of the neighbour.
-     */
-    public static Coordinate sideIDtoNeighbourCoords(Coordinate coords, int sideID) {
-        int[] result = new int[3];
-        switch (sideID) {
-            case 0:
-                result[0] = coords.getRelX();
-                result[1] = coords.getRelY() - 2;
-                break;
-            case 1:
-                result[0] = coords.getRelX() + (coords.getRelY() % 2 == 1 ? 1 : 0);
-                result[1] = coords.getRelY() - 1;
-                break;
-            case 2:
-                result[0] = coords.getRelX() + 1;
-                result[1] = coords.getRelY();
-                break;
-            case 3:
-                result[0] = coords.getRelX() + (coords.getRelY() % 2 == 1 ? 1 : 0);
-                result[1] = coords.getRelY() + 1;
-                break;
-            case 4:
-                result[0] = coords.getRelX();
-                result[1] = coords.getRelY() + 2;
-                break;
-            case 5:
-                result[0] = coords.getRelX() - (coords.getRelY() % 2 == 0 ? 1 : 0);
-                result[1] = coords.getRelY() + 1;
-                break;
-            case 6:
-                result[0] = coords.getRelX() - 1;
-                result[1] = coords.getRelY();
-                break;
-            case 7:
-                result[0] = coords.getRelX() - (coords.getRelY() % 2 == 0 ? 1 : 0);
-                result[1] = coords.getRelY() - 1;
-                break;
-            default:
-                result[0] = coords.getRelX();
-                result[1] = coords.getRelY();
-        }
-        result[2] = coords.getZ();
-        return new Coordinate(result[0], result[1], result[2], true);
-    }
-    
-
-    
 
     /**
      * Returns a sprite texture. You may use your own method like in <i>Block</i>.
@@ -262,9 +217,8 @@ public abstract class AbstractGameObject {
      * @return 
      */
     public static AtlasRegion getSprite(char category, int id, int value) {
-        AtlasRegion sprite;
-        if (referencObject[category][id][value] == null){
-            sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
+        if (sprites[category][id][value] == null){ //load if not already loaded
+            AtlasRegion sprite = spritesheet.findRegion(category+Integer.toString(id)+"-"+value);
             if (sprite == null){ //if there is no sprite show the default "sprite not found sprite" for this category
                 Gdx.app.log("debug", category+Integer.toString(id)+"-"+value + " not found");
                 sprite = getSpritesheet().findRegion(category+"0-0");
@@ -273,12 +227,11 @@ public abstract class AbstractGameObject {
                     if (sprite == null) throw new NullPointerException("Sprite and category error not found and even the generic error sprite could not be found. Something with the sprites is fucked up.");
                 }
             }
+            sprites[category][id][value] = sprite;
+            return sprite;
         } else {
-            int[] reference = referencObject[category][id][value];
-            sprite = getSprite((char) reference[0], reference[1], reference[2]);
+            return sprites[category][id][value];
         }
-        
-        return sprite;
     }
 
 
@@ -300,8 +253,6 @@ public abstract class AbstractGameObject {
         return pixmap;
     }
     
-    
-    
     /**
      * returns the id of a object
      * @return getId
@@ -322,7 +273,7 @@ public abstract class AbstractGameObject {
     /**
      * Returns the depth of the object. The depth is an int value wich is needed for producing the list of the renderorder. The higher the value the later it will be drawn.
      * @param coords 
-     * @return the depth
+     * @return the depth in game size
      */
     public abstract int getDepth(Coordinate coords);
     
@@ -332,8 +283,16 @@ public abstract class AbstractGameObject {
      */
     public abstract String getName();
     
+    /**
+     *Get the offset of the sprite. Center is top left corner.
+     * @return
+     */
     public abstract int getOffsetX();
     
+    /**
+     *Get the offset of the sprite. Center is top left corner.
+     * @return
+     */
     public abstract int getOffsetY();
 
     /**
@@ -348,12 +307,12 @@ public abstract class AbstractGameObject {
      * 
      * @return
      */
-    public int getDimensionY() {
-        return dimensionY;
+    public int getDimensionZ() {
+        return dimensionZ;
     }
 
     /**
-     * Returns true, when set as hidden. Hidden objects are not rendered even when they are visible ("visible" by the meaning of the raytracing).
+     * Returns true, when set as hidden. Hidden objects are not rendered even when they are clipped ("clipped" by the meaning of the raytracing).
      * @return if the object is invisible
      */
     public boolean isHidden() {
@@ -377,11 +336,11 @@ public abstract class AbstractGameObject {
     }
 
     /**
-     * Is the object visible?
-     * @return true when visible
+     * Is the object clipped?
+     * @return true when clipped
      */
-    public boolean isVisible() {
-        return visible;
+    public boolean isClipped() {
+        return clipped;
     }
 
 
@@ -420,15 +379,15 @@ public abstract class AbstractGameObject {
 
     /**
      * Hide this object and prevent it from beeing rendered. Don't use this to hide objects. This data is only for rendering data and view specific not for gameworld information. This should be just used for setting during the rendering process.
-     * @param visible Sets the visibility.
+     * @param clipped Sets the visibility.
      * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#setHidden(boolean) 
      */
-    public void setClipped(boolean visible) {
-        this.visible = visible;
+    public void setClipped(boolean clipped) {
+        this.clipped = clipped;
     }
 
     /**
-     * Hide an object. It won't be rendered even if it is visible.
+     * Hide an object. It won't be rendered even if it is clipped.
      * @param hidden
      */
     public void setHidden(boolean hidden){
@@ -437,13 +396,17 @@ public abstract class AbstractGameObject {
 
     /**
      * Set the height of the object.
-     * @param dimensionY
+     * @param dimensionZ
      */
-    public void setDimensionY(int dimensionY) {
-        this.dimensionY = dimensionY;
+    public void setDimensionZ(int dimensionZ) {
+        this.dimensionZ = dimensionZ;
     }
 
-    public static int[][][][] getReferencObject() {
-        return referencObject;
+    /**
+     *
+     * @return
+     */
+    public static AtlasRegion[][][] getSprites() {
+        return sprites;
     }
 }
