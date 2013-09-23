@@ -165,7 +165,7 @@ public class View {
         //find out where the click went
         Coordinate coords = new Coordinate(
                        x / Block.SCREEN_WIDTH -1,
-                       2*y / Block.SCREEN_DEPTH*2 -1,
+                       2*y / (Block.SCREEN_DEPTH*2) -1,
                        Map.getBlocksZ()-1,
                         true
         );
