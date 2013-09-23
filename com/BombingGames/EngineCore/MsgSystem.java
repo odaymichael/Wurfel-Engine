@@ -62,6 +62,7 @@ public class MsgSystem extends ArrayList<Msg> {
     private int timelastupdate = 0;
     private boolean waitforinput = false;
     private int xPos, yPos;    
+    private String input = "";
 
     /**
      * 
@@ -129,9 +130,9 @@ public class MsgSystem extends ArrayList<Msg> {
      * @param view 
      */
     public void render(View view){
-        if (waitforinput) view.drawString("MSG:", xPos, yPos);
+        if (waitforinput) view.drawString("MSG:"+input, xPos, yPos);
         
-                    view.BATCH.begin();
+        view.BATCH.begin();
         for (int i=0; i < size(); i++){
             Msg msg = get(i);
             Color color = Color.BLUE;
@@ -147,10 +148,14 @@ public class MsgSystem extends ArrayList<Msg> {
 
     /**
      * 
-     * @param input
+     * @param listen
      */
-    public void listenForInput(boolean input) {
-        waitforinput = input;
+    public void listenForInput(boolean listen) {
+        if (listen != waitforinput && !"".equals(input)) {
+            add(input);
+            input = "";
+        }
+        waitforinput = listen;
     }
     
     /**
@@ -159,5 +164,9 @@ public class MsgSystem extends ArrayList<Msg> {
      */
     public boolean isListeningForInput() {
         return waitforinput;
+    }
+    
+    public void getInput(char characterInput){
+        input += String.valueOf(characterInput);
     }
 }
