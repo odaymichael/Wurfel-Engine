@@ -190,7 +190,6 @@ public class Block extends AbstractGameObject {
                     break; 
         }
         block.setValue(value);
-        block.setClipped(true);
         return block;
     }  
     
@@ -344,9 +343,9 @@ public class Block extends AbstractGameObject {
                 if (!clippedTop)
                     renderSideAt(view, xPos, yPos, Block.TOPSIDE);
                 if (!clippedLeft)
-                    renderSideAt(view, xPos, yPos, Block.LEFTSIDE);
+                    renderSideAt(view, xPos, yPos+SCREEN_WIDTH4, Block.LEFTSIDE);
                 if (!clippedRight)
-                    renderSideAt(view, xPos, yPos, Block.RIGHTSIDE);
+                    renderSideAt(view, xPos+SCREEN_WIDTH2, yPos+SCREEN_WIDTH4, Block.RIGHTSIDE);
                 } else super.renderAt(view, xPos, yPos);
         }
     }
@@ -358,9 +357,9 @@ public class Block extends AbstractGameObject {
                 if (!clippedTop)
                     renderSideAt(view, xPos, yPos, Block.TOPSIDE, color);
                 if (!clippedLeft)
-                    renderSideAt(view, xPos, yPos, Block.LEFTSIDE, color);
+                    renderSideAt(view, xPos, yPos+SCREEN_WIDTH4, Block.LEFTSIDE, color);
                 if (!clippedRight)
-                    renderSideAt(view, xPos, yPos, Block.RIGHTSIDE, color);
+                    renderSideAt(view, xPos+SCREEN_WIDTH2, yPos+SCREEN_WIDTH4, Block.RIGHTSIDE, color);
                 } else super.renderAt(view, xPos, yPos, color);
         }
     }
