@@ -4,6 +4,8 @@ import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
+import static com.BombingGames.Game.Gameobjects.AbstractEntity.CATEGORY;
+import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getSprites;
 import com.badlogic.gdx.graphics.Color;
 
 /**
@@ -26,9 +28,6 @@ public class Zombie extends AbstractCharacter{
         setTransparent(true);
         setObstacle(true);
         setDimensionZ(2);
-        System.arraycopy(getSprites()[CATEGORY][40], 0, getSprites()[CATEGORY][id], 0, VALUESCOUNT);
- 
-
     }
 
     @Override
@@ -38,6 +37,7 @@ public class Zombie extends AbstractCharacter{
 
     @Override
     public void render(View view, WECamera camera, Coordinate coords) {
+        getSprites()[CATEGORY][43][getValue()] = getSprites()[CATEGORY][40][getValue()];
        Color color = Color.GRAY;
         if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getGlobalLight();
