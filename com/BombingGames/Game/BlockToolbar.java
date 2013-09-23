@@ -2,6 +2,8 @@ package com.BombingGames.Game;
 
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.Game.Gameobjects.AbstractGameObject;
+import com.BombingGames.Game.Gameobjects.Block;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -11,23 +13,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class BlockToolbar {
     private int posX;
     private int posY;
-    private int[] slot = new int[9];
+    private Block[] slot = new Block[9];
     private int selection = 0;
 
     public BlockToolbar() {
-        slot[0] = 1;
-        slot[1] = 2;
-        slot[2] = 3;
-        slot[3] = 4;
-        slot[4] = 5;
-        slot[5] = 6;
-        slot[6] = 7;
-        slot[7] = 8;
-        slot[8] = 10;
+        slot[0] = Block.getInstance(1);
+        slot[1] = Block.getInstance(2);
+        slot[2] = Block.getInstance(3);
+        slot[3] = Block.getInstance(4);
+        slot[4] = Block.getInstance(5);
+        slot[5] = Block.getInstance(6);
+        slot[6] = Block.getInstance(7);
+        slot[7] = Block.getInstance(8);
+        slot[8] = Block.getInstance(10);
     }
 
     public void setSlot(int slot, int id) {
-        this.slot[slot] = id;
+        this.slot[slot] = Block.getInstance(id);
     } 
     
      
@@ -41,20 +43,21 @@ public class BlockToolbar {
     }
     
     public int getSelectionID(){
-        return slot[selection];
+        return slot[selection].getId();
     }
     
     public void render(View view){
         SpriteBatch batch = view.BATCH;
         batch.begin();
-        batch.draw(AbstractGameObject.getSpritesheet().findRegion("toolbar"), posX, posX);
+        batch.draw(AbstractGameObject.getSpritesheet().findRegion("toolbar"), posX, posY);
         batch.draw(AbstractGameObject.getSpritesheet().findRegion("selection"), posX+80*selection, posY-5);
         
         for (int i = 0; i < 9; i++) {
-            if (slot[i]!=0){
+            if (slot[i].getId() != 0){
+                slot[i].renderAt(view, null, posX+i*80+17, posY+15, Color.GRAY);
                 //batch.draw(Block.getBlockSprite(slot[i], 0,1),posX+i*80+17, posY+15, 0.35f);
-               // Block.getBlockSprite(slot[i], 0,0).draw(posX+i*80+17, posY+15+14, 0.35f);
-              //  Block.getBlockSprite(slot[i], 0,2).draw(posX+i*80+17+28, posY+15+14, 0.35f);
+                //Block.getBlockSprite(slot[i], 0,0).draw(posX+i*80+17, posY+15+14, 0.35f);
+               // Block.getBlockSprite(slot[i], 0,2).draw(posX+i*80+17+28, posY+15+14, 0.35f);
             }
         }
         batch.end();
