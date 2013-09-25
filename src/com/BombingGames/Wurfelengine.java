@@ -34,7 +34,7 @@ public class Wurfelengine extends Game {
     public Wurfelengine(){
         
     	
-    	workingDirectory = new File(Environment.getExternalStorageDirectory().getPath()+"/Wurfelengine/");
+    	workingDirectory = new File(Environment.getExternalStorageDirectory().getPath()+"/Wurfel-Engine/");
     	
         //workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
         
