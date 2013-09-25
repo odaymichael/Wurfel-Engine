@@ -166,7 +166,7 @@ public class WECamera extends Camera {
                     if (deepestLayerVisibility[x][y]){
                         int xPos = new Coordinate(x, y, -1, true).get2DPosX();//right side is  half a block more to the right
                         int yPos = new Coordinate(x, y, -1, true).get2DPosY();//the top is drawn a quarter blocks higher
-                        groundBlock.renderSideAt(view, camera, xPos, yPos, 1);
+                        groundBlock.renderSideAt(view, xPos, yPos, 1);
                     }
                 }
             }
