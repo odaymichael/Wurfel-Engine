@@ -15,6 +15,7 @@ import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.ExplosiveBarrel;
+import com.BombingGames.MainMenu.MainMenuScreen;
 import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -73,7 +74,7 @@ public class ExplosivesDemoController extends Controller {
         Input input = Gdx.input;
         
         if (!GameplayScreen.msgSystem().isListeningForInput()) {
-            if (input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
+            if (input.isKeyPressed(Input.Keys.ESCAPE)) WurfelEngine.getInstance().setScreen(new MainMenuScreen());
 
 
             //walk
