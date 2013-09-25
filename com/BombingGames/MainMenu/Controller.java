@@ -1,6 +1,5 @@
 package com.BombingGames.MainMenu;
 
-import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.Game.CustomGameController;
 import com.BombingGames.Game.CustomGameView;
 import com.BombingGames.Game.ExplosivesDemoController;
@@ -27,10 +26,10 @@ public class Controller {
     public Controller() {
         TextureAtlas texture = new TextureAtlas(Gdx.files.internal("com/BombingGames/MainMenu/Images/MainMenu.txt"), true);
                 
-        menuItems[0] = new MenuItem(0, texture.getRegions().get(2));
-        menuItems[1] = new MenuItem(1, texture.getRegions().get(0));
+        menuItems[0] = new MenuItem(0, texture.getRegions().get(3));
+        menuItems[1] = new MenuItem(1, texture.getRegions().get(1));
         menuItems[2] = new MenuItem(2, texture.getRegions().get(0));
-        menuItems[3] = new MenuItem(3, texture.getRegions().get(1));
+        menuItems[3] = new MenuItem(3, texture.getRegions().get(2));
         
         fx = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/MainMenu/click2.wav"));
         Gdx.input.setInputProcessor(new InputListener());
