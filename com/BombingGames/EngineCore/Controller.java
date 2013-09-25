@@ -24,6 +24,8 @@ public class Controller {
     private static LightEngine lightEngine;
     private static Map map;
     private static boolean recalcRequested;
+    
+    private View view;
         
     private ArrayList<WECamera> cameras = new ArrayList();
     private Minimap minimap;
@@ -309,5 +311,18 @@ public class Controller {
      */
     public void setTimespeed(float timespeed) {
         this.timespeed = timespeed;
+    }
+    
+    /**
+     * Set the coressponging main view.
+     *
+     * @param view new value of view
+     */
+    public void setView(View view) {
+        this.view = view;
+    }
+
+    public View getView() {
+        return view;
     }
 }

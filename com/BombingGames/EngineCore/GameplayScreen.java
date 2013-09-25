@@ -30,6 +30,7 @@ public class GameplayScreen implements Screen{
         this.controller.init();
         this.view = view;
         this.view.init(controller);
+        this.controller.setView(view);
     }
              
 
