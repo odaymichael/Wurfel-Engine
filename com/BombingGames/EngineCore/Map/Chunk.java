@@ -1,7 +1,7 @@
 package com.BombingGames.EngineCore.Map;
 
 import com.BombingGames.EngineCore.GameplayScreen;
-import com.BombingGames.Wurfelengine;
+import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
 import java.io.BufferedReader;
 import java.io.File;
@@ -226,7 +226,7 @@ public class Chunk {
         //Reading map files test
         try {
             // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
-            File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/chunk"+coordX+","+coordY+"."+CHUNKFILESUFFIX);
+            File path = new File(WurfelEngine.getWorkingDirectory().getAbsolutePath() + "/map/chunk"+coordX+","+coordY+"."+CHUNKFILESUFFIX);
             Gdx.app.log("DEBUG","Trying to load Chunk: "+ coordX + ", "+ coordY + " from \"" + path.getAbsolutePath() + "\"");
             GameplayScreen.msgSystem().add("Load: "+coordX+","+coordY);
             
@@ -300,7 +300,7 @@ public class Chunk {
     public static void readMapInfo(){
         BufferedReader bufRead = null;
         try {
-            File path = new File(Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/map."+METAFILESUFFIX);
+            File path = new File(WurfelEngine.getWorkingDirectory().getAbsolutePath() + "/map/map."+METAFILESUFFIX);
             Gdx.app.log("DEBUG","Trying to load Map Info from \"" + path.getAbsolutePath() + "\"");
             bufRead = new BufferedReader(new FileReader(path));
             String mapname = bufRead.readLine();
@@ -329,7 +329,7 @@ public class Chunk {
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(
                 null,
-                "The meta file could not be read. It must be named 'map."+ Chunk.METAFILESUFFIX + "' and must be at the maps directory:"+ Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/",
+                "The meta file could not be read. It must be named 'map."+ Chunk.METAFILESUFFIX + "' and must be at the maps directory:"+ WurfelEngine.getWorkingDirectory().getAbsolutePath() + "/map/",
                 "Loading error",
                  JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);

@@ -4,7 +4,7 @@ import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.Game.CustomGameController;
 import com.BombingGames.Game.CustomGameView;
 import com.BombingGames.Game.ExplosivesDemoController;
-import com.BombingGames.Wurfelengine;
+import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -44,30 +44,15 @@ public class Controller {
         if (menuItems[0].isClicked()){
             MainMenuScreen.setLoadMap(true);
             fx.play();
-            Wurfelengine.getInstance().setScreen(
-                new GameplayScreen(
-                    new CustomGameController(),
-                    new CustomGameView()
-                )
-            );
+            WurfelEngine.startGame(new CustomGameController(), new CustomGameView());
         } else if (menuItems[1].isClicked()) { 
                 MainMenuScreen.setLoadMap(false);
                 fx.play();
-                Wurfelengine.getInstance().setScreen(
-                    new GameplayScreen(
-                        new CustomGameController(),
-                        new CustomGameView()
-                    )
-                );
+                WurfelEngine.startGame(new CustomGameController(), new CustomGameView());
             } else if (menuItems[2].isClicked()){
                     MainMenuScreen.setLoadMap(false);
                     fx.play();
-                    Wurfelengine.getInstance().setScreen(
-                        new GameplayScreen(
-                            new ExplosivesDemoController(),
-                            new CustomGameView()
-                        )
-                    );
+                    WurfelEngine.startGame(new ExplosivesDemoController(), new CustomGameView());
                 } else if (menuItems[3].isClicked()){
                     fx.play();
                     Gdx.app.exit();

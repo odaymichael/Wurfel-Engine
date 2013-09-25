@@ -13,7 +13,7 @@ import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.MainMenu.MainMenuScreen;
-import com.BombingGames.Wurfelengine;
+import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -111,8 +111,8 @@ public class CustomGameController extends Controller {
                  }
                  //toggle fullscreen
                  if (keycode == Input.Keys.F){
-                     Wurfelengine.setFullscreen(!Wurfelengine.isFullscreen());
-                     Gdx.app.log("DEBUG","Set to fullscreen:"+!Wurfelengine.isFullscreen());
+                     WurfelEngine.setFullscreen(!WurfelEngine.isFullscreen());
+                     Gdx.app.log("DEBUG","Set to fullscreen:"+!WurfelEngine.isFullscreen());
                  }
 
                  //toggle eathquake
@@ -144,7 +144,7 @@ public class CustomGameController extends Controller {
                   } 
 
                  if (keycode == Input.Keys.ESCAPE)// Gdx.app.exit();
-                     Wurfelengine.getInstance().setScreen(new MainMenuScreen());
+                     WurfelEngine.getInstance().setScreen(new MainMenuScreen());
             }
             
              //toggle input for msgSystem

@@ -1,6 +1,6 @@
 package com.BombingGames.EngineCore;
 
-import com.BombingGames.Wurfelengine;
+import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
@@ -59,7 +59,7 @@ public class GameplayScreen implements Screen{
 
     @Override
     public void resize(int width, int height) {
-        Gdx.graphics.setTitle("Wurfelengine V" + Wurfelengine.VERSION + " " + Gdx.graphics.getWidth() + "x"+Gdx.graphics.getHeight());
+        Gdx.graphics.setTitle("Wurfelengine V" + WurfelEngine.VERSION + " " + Gdx.graphics.getWidth() + "x"+Gdx.graphics.getHeight());
     }
 
     @Override
