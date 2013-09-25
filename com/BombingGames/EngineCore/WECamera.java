@@ -18,6 +18,9 @@ import org.lwjgl.opengl.GL11;
  * @author Benedikt Vogler
  */
 public class WECamera extends Camera {
+    /**
+     *
+     */
     public static final boolean[][] DEEPEST_LAYER_VISIVBILITY = new boolean[Map.getBlocksX()][Map.getBlocksY()];
     
     /** the position on the screen*/

@@ -322,6 +322,10 @@ public class Controller {
         this.view = view;
     }
 
+    /**
+     *Returns the coressponging main view.
+     * @return
+     */
     public View getView() {
         return view;
     }

@@ -24,8 +24,7 @@ public class GameplayScreen implements Screen{
      */
     public GameplayScreen(Controller controller, View view) {
         msgSystem = new MsgSystem(Gdx.graphics.getWidth()/2, 3*Gdx.graphics.getHeight()/4);
-        //Wurfelengine.getGameContainer().setSmoothDeltas(true);
-        
+
         this.controller = controller;
         this.controller.init();
         this.view = view;
@@ -42,10 +41,18 @@ public class GameplayScreen implements Screen{
         return msgSystem;
     }
 
+    /**
+     *
+     * @return
+     */
     public View getView() {
         return view;
     }
 
+    /**
+     *
+     * @return
+     */
     public Controller getController() {
         return controller;
     }

@@ -69,7 +69,7 @@ public class View {
         // Draw the menu items
         batch.begin();
         for (MenuItem mI : MainMenuScreen.getController().getMenuItems()) {
-            mI.draw(batch, camera);
+            mI.render(batch, camera);
         }
         batch.end();
         

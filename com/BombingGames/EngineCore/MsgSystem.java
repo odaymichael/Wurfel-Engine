@@ -166,6 +166,10 @@ public class MsgSystem extends ArrayList<Msg> {
         return waitforinput;
     }
     
+    /**
+     *
+     * @param characterInput
+     */
     public void getInput(char characterInput){
         input += String.valueOf(characterInput);
     }

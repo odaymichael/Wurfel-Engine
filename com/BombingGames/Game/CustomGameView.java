@@ -11,7 +11,6 @@ public class CustomGameView extends View{
  
      /**
      *
-     * @param controller
      */
     public CustomGameView() {
          super();

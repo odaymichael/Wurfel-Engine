@@ -34,6 +34,10 @@ public class View {
     
     private OrthographicCamera hudCamera;
     
+    /**
+     *
+     * @param controller
+     */
     public void init(Controller controller){
         this.controller = controller;
         font = new BitmapFont(Gdx.files.internal("com/BombingGames/EngineCore/arial.fnt"), true);
@@ -274,10 +278,18 @@ public class View {
         return hudCamera;
     } 
 
+    /**
+     *
+     * @return
+     */
     public SpriteBatch getBatch() {
         return batch;
     }
 
+    /**
+     *
+     * @return
+     */
     public ShapeRenderer getShapeRenderer() {
         return shapeRenderer;
     }

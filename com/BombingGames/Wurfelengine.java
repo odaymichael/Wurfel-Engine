@@ -4,12 +4,9 @@ import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WorkingDirectory;
-import com.BombingGames.Game.CustomGameController;
-import com.BombingGames.Game.CustomGameView;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,15 +19,15 @@ import java.io.File;
  */
 public class WurfelEngine extends Game {
     /**
-     * The Version of the Engine
+     * The version of the Engine
      */
-    public static final String VERSION = "1.1.7";    
+    public static final String VERSION = "1.1.8";    
     private static File workingDirectory;
     private static boolean fullscreen = false;
     private static WurfelEngine instance;
 
     /**
-     * Create the Engine.
+     * Create the Engine. Don't use this. Use construct instead. 
      * @param title The title, which is displayed in the window.
      * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
      */
@@ -71,7 +68,7 @@ public class WurfelEngine extends Game {
     }
     
         /**
-     * Create the Engine.
+     * Create a new instance of the Engine.
      * @param title The title, which is displayed in the window.
      * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
      */
@@ -102,18 +99,20 @@ public class WurfelEngine extends Game {
     }
     
     /**
-     * Gives the credits of the engine.
+     * Get the credits of the engine.
      * @return a long string with breaks
      */
-    public static String getCredits(){
+    public static String getCredits() {
         String newline = System.getProperty("line.separator");
-        return "Idea:"+newline
+        return "Idea & Producing:"+newline
             + " Benedikt Vogler"+newline+newline
             + "Programming:"+newline
             + "Benedikt Vogler"+newline+newline
             + "Art:"+newline
             + "Benedikt Vogler"+newline
             + "Pia Lenßen"+newline+newline
+            + "Sound:"+newline
+            + "Benedikt Vogler"+newline+newline
             + "Quality Assurance"+newline
             + "Thomas Vogt";
     }
