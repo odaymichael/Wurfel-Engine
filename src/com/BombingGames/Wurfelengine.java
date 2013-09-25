@@ -50,13 +50,11 @@ public class WurfelEngine extends Game {
     
     @Override
     public void create() {
-        setScreen(
-            new MainMenuScreen()
-            );
+        setScreen(new MainMenuScreen());
     }
     
     /**
-     * Singleton method.
+     * Singleton method  to get the only instance.
      * @return the wurfelengine
      */
     public static WurfelEngine getInstance(){

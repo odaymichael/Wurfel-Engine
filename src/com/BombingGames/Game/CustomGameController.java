@@ -8,6 +8,7 @@ import com.BombingGames.EngineCore.Controller;
 import static com.BombingGames.EngineCore.Controller.getLightengine;
 import static com.BombingGames.EngineCore.Controller.getMap;
 import com.BombingGames.EngineCore.GameplayScreen;
+import com.BombingGames.EngineCore.Map.Chunk;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
@@ -58,6 +59,8 @@ public class CustomGameController extends Controller {
         setMinimap(
             new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 400,10)
         );
+        
+        Chunk.setGenerator(0);
         
         Gdx.input.setInputProcessor(new InputListener());
     }

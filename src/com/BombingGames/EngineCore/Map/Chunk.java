@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class Chunk {
     /**The number of the mapgenerator used.*/
-    public static final int GENERATOR = 8;
+    public static int generator = 8;
     /**The suffix of a chunk file.*/
     protected static final String CHUNKFILESUFFIX = "wec";
     /**The suffix of the metafile */
@@ -64,7 +64,7 @@ public class Chunk {
         //alternative to chunkdata.length ChunkBlocks
         Gdx.app.log("DEBUG","Creating new chunk: "+ coordX + ", "+ coordY);
         GameplayScreen.msgSystem().add("Creating new chunk: "+coordX+", "+ coordY);
-        switch (GENERATOR){
+        switch (generator){
             case 0:{//random pillars
                 for (int x=0; x < blocksX; x++)
                     for (int y=0; y < blocksY; y++){
@@ -384,4 +384,20 @@ public class Chunk {
     public void setData(Cell[][][] data) {
         this.data = data;
     }
+
+    /**
+     * 
+     * @return 
+     */
+    public static int getGenerator() {
+        return generator;
+    }
+
+    /**
+     * Set the algorithm used for generating chunks.
+     * @param generator 
+     */
+    public static void setGenerator(int generator) {
+        Chunk.generator = generator;
+    } 
 }
