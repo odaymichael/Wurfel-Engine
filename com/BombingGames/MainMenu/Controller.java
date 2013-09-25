@@ -1,6 +1,9 @@
 package com.BombingGames.MainMenu;
 
 import com.BombingGames.EngineCore.GameplayScreen;
+import com.BombingGames.Game.CustomGameController;
+import com.BombingGames.Game.CustomGameView;
+import com.BombingGames.Game.ExplosivesDemoController;
 import com.BombingGames.Wurfelengine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -15,7 +18,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
  */
 public class Controller {
     
-    private MenuItem[] menuItems = new MenuItem[3];
+    private MenuItem[] menuItems = new MenuItem[4];
     private final Sound fx;
     
     /**
@@ -26,8 +29,8 @@ public class Controller {
                 
         menuItems[0] = new MenuItem(0, texture.getRegions().get(2));
         menuItems[1] = new MenuItem(1, texture.getRegions().get(0));
-        menuItems[2] = new MenuItem(2, texture.getRegions().get(1));
-        
+        menuItems[2] = new MenuItem(2, texture.getRegions().get(0));
+        menuItems[3] = new MenuItem(3, texture.getRegions().get(1));
         
         fx = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/MainMenu/click2.wav"));
         Gdx.input.setInputProcessor(new InputListener());
@@ -41,15 +44,34 @@ public class Controller {
         if (menuItems[0].isClicked()){
             MainMenuScreen.setLoadMap(true);
             fx.play();
-            Wurfelengine.getInstance().setScreen(new GameplayScreen());
+            Wurfelengine.getInstance().setScreen(
+                new GameplayScreen(
+                    new CustomGameController(),
+                    new CustomGameView()
+                )
+            );
         } else if (menuItems[1].isClicked()) { 
                 MainMenuScreen.setLoadMap(false);
                 fx.play();
-                Wurfelengine.getInstance().setScreen(new GameplayScreen());
+                Wurfelengine.getInstance().setScreen(
+                    new GameplayScreen(
+                        new CustomGameController(),
+                        new CustomGameView()
+                    )
+                );
             } else if (menuItems[2].isClicked()){
-                fx.play();
-                Gdx.app.exit();
-            }
+                    MainMenuScreen.setLoadMap(false);
+                    fx.play();
+                    Wurfelengine.getInstance().setScreen(
+                        new GameplayScreen(
+                            new ExplosivesDemoController(),
+                            new CustomGameView()
+                        )
+                    );
+                } else if (menuItems[3].isClicked()){
+                    fx.play();
+                    Gdx.app.exit();
+                }
     }
 
     /**

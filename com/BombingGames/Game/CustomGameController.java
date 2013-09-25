@@ -23,12 +23,11 @@ import com.badlogic.gdx.InputProcessor;
  * @author Benedikt
  */
 public class CustomGameController extends Controller {
-    
-    /**
-     * The custom game code belongs here.
-     */
-    public CustomGameController() {
-        super();
+        
+    @Override
+    public void init(){
+         Chunk.setGenerator(0);
+         super.init();
 
          AbstractCharacter player = (AbstractCharacter) AbstractEntity.getInstance(
                 40,
@@ -61,7 +60,6 @@ public class CustomGameController extends Controller {
             new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 400,10)
         );
         
-        Chunk.setGenerator(0);
         
         Gdx.input.setInputProcessor(new InputListener());
     }
