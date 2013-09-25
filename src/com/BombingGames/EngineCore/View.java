@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import org.lwjgl.opengl.GL11;
+//import org.lwjgl.opengl.GL11;
 
 /**
  * The View manages everything what should be drawn.
@@ -215,7 +215,7 @@ public class View {
             this.drawmode = drawmode;
             BATCH.end();
             //GameObject.getSpritesheet().getFullImage().endUse();
-            GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, drawmode);
+            Gdx.gl11.glTexEnvi(Gdx.gl11.GL_TEXTURE_ENV, Gdx.gl11.GL_TEXTURE_ENV_MODE, drawmode);
             //GameObject.getSpritesheet().getFullImage().startUse();
             BATCH.begin();
         }
@@ -228,7 +228,7 @@ public class View {
      * @param yPos
      */
     public void drawString(String msg, int xPos, int yPos) {
-        GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+        Gdx.gl11.glTexEnvi(Gdx.gl11.GL_TEXTURE_ENV, Gdx.gl11.GL_TEXTURE_ENV_MODE, Gdx.gl11.GL_MODULATE);
         BATCH.begin();
         font.draw(BATCH, msg, xPos, yPos);
         BATCH.end();
@@ -242,7 +242,7 @@ public class View {
      * @param color
      */
     public void drawString(String msg, int xPos, int yPos, Color color) {
-        GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+        Gdx.gl11.glTexEnvi(Gdx.gl11.GL_TEXTURE_ENV, Gdx.gl11.GL_TEXTURE_ENV_MODE, Gdx.gl11.GL_MODULATE);
         font.setColor(color);
         BATCH.begin();
         font.draw(BATCH, msg, xPos, yPos);
@@ -257,7 +257,7 @@ public class View {
      * @param color the colro of the text.
      */
     public void drawText(String text, int xPos, int yPos, Color color){
-        GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+        Gdx.gl11.glTexEnvi(Gdx.gl11.GL_TEXTURE_ENV, Gdx.gl11.GL_TEXTURE_ENV_MODE, Gdx.gl11.GL_MODULATE);
         font.setColor(Color.BLACK);
         font.setScale(0.51f);
         BATCH.begin();

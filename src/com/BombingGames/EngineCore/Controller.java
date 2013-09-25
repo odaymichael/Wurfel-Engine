@@ -12,8 +12,8 @@ import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+//import javax.swing.JFrame;
+//import javax.swing.JOptionPane;
 
 /**
  *A controller manages the map and the game data.
@@ -312,7 +312,7 @@ public class Controller {
      *
      */
     public void setTimespeed() {
-        JFrame frame = new JFrame("InputDialog Example #2");
+        /*JFrame frame = new JFrame("InputDialog Example #2");
         try {
             this.timespeed = Float.parseFloat(JOptionPane.showInputDialog(frame, "Use dot as separator.", "Set the speed of time", JOptionPane.QUESTION_MESSAGE));
         } catch(NumberFormatException e) {
@@ -321,6 +321,9 @@ public class Controller {
         } catch(NullPointerException e){
             Gdx.app.log("DEBUG", "Canceled: "+e.toString());
         }
+        //Not availible on Android
+        */
+        
     }
     
     /**

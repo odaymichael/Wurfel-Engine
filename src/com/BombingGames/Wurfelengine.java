@@ -1,12 +1,15 @@
 package com.BombingGames;
 
+import android.os.Environment;
+
 import com.BombingGames.EngineCore.WorkingDirectory;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+//import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+//import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture;
+
 import java.io.File;
 
 /**
@@ -28,32 +31,16 @@ public class Wurfelengine extends Game {
      * @param title The title, which is displayed in the window.
      * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
      */
-    private Wurfelengine(String title, String[] args){
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-
-         config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
-         config.fullscreen = false;
-         config.vSyncEnabled = false;
-         
-        //arguments
-        //you can start the game with a custom resolution
-        if (args.length == 0){
-           config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
-        } else {
-            if (args.length >= 3)
-                config.width = Integer.parseInt(args[0]);
-                config.height = Integer.parseInt(args[1]);
-                config.fullscreen = ("true".equals(args[2]));
-        }    
+    public Wurfelengine(){
         
-        config.title = title + " " + config.width + "x"+config.height;     
-
-        workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
+    	
+    	workingDirectory = new File(Environment.getExternalStorageDirectory().getPath()+"/Wurfelengine/");
+    	
+        //workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
         
         Texture.setEnforcePotImages(false);
-        LwjglApplication application = new LwjglApplication(this, config);
-         
-        //basic engine setting
+
+
         
         //LIBGDX: no equivalent found in libGDX yet
         //setUpdateOnlyWhenVisible(true);        
@@ -82,8 +69,8 @@ public class Wurfelengine extends Game {
      * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
      * @return the engine
      */
-    public static Wurfelengine construct(String title, String[] args){
-        instance = new Wurfelengine(title,args);
+    public static Wurfelengine construct(){
+        instance = new Wurfelengine();
         return instance;
     }
     

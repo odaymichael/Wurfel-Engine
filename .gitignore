@@ -1,4 +1,9 @@
-.classpath
-.project
 *.class
 *.DS_Store
+bin/
+project.properties
+lint.xml
+proguard.cfg
+gen/
+.settings
+libs/

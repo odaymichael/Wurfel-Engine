@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+//import javax.swing.JOptionPane;
 
 /**
  * A Chunk is filled with many Blocks and is a part of the map.
@@ -327,11 +327,13 @@ public class Chunk {
             blocksZString = blocksZString.substring(2, blocksZString.length());
             blocksZ = Integer.parseInt(blocksZString);
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(
+            /*JOptionPane.showMessageDialog(
                 null,
                 "The meta file could not be read. It must be named 'map."+ Chunk.METAFILESUFFIX + "' and must be at the maps directory:"+ Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/",
                 "Loading error",
                  JOptionPane.ERROR_MESSAGE);
+                 //Na on android
+                 */
             Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
