@@ -449,7 +449,7 @@ public class Block extends AbstractGameObject {
 //        color.a = 1; 
         sprite.getVertices()[SpriteBatch.C3] = color.toFloatBits();//bottom right
  
-        sprite.draw(view.BATCH);
+        sprite.draw(view.getBatch());
     
     }
 

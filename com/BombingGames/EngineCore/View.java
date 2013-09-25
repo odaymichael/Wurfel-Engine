@@ -24,8 +24,8 @@ public class View {
 
     private static BitmapFont font;
     
-    public final SpriteBatch BATCH;    
-    public final ShapeRenderer SHAPE_RENDERER;
+    private SpriteBatch batch;    
+    private ShapeRenderer shapeRenderer;
     
     private float equalizationScale;
     private Controller controller;
@@ -52,8 +52,8 @@ public class View {
         hudCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hudCamera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
-        BATCH = new SpriteBatch();
-        SHAPE_RENDERER = new ShapeRenderer();
+        batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
         
         Block.loadSheet();
      }

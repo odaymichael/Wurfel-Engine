@@ -132,7 +132,7 @@ public class MsgSystem extends ArrayList<Msg> {
     public void render(View view){
         if (waitforinput) view.drawString("MSG:"+input, xPos, yPos);
         
-        view.BATCH.begin();
+        view.getBatch().begin();
         for (int i=0; i < size(); i++){
             Msg msg = get(i);
             Color color = Color.BLUE;
@@ -140,10 +140,10 @@ public class MsgSystem extends ArrayList<Msg> {
                 else if ("Warning".equals(msg.getSender())) color = Color.RED;
             
             //draw
-            view.BATCH.setColor(color);
-            view.getFont().draw(view.BATCH, msg.getMessage(), 10,50+i*20);
+            view.getBatch().setColor(color);
+            view.getFont().draw(view.getBatch(), msg.getMessage(), 10,50+i*20);
         }
-         view.BATCH.end();
+         view.getBatch().end();
     }
 
     /**
