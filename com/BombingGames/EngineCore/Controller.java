@@ -25,19 +25,16 @@ public class Controller {
     private static Map map;
     private static boolean recalcRequested;
         
-
-    private View view;
     private ArrayList<WECamera> cameras = new ArrayList();
     private Minimap minimap;
     /** The speed of time. 1 = real time;*/
     private float timespeed = 1;
     private AbstractCharacter player;   
 
-    
     /**
-     * Constructor is called when entering the gamemode.
+     * This method works like a constructor. Everything is loaded. Set you custom chunk generator before calling this method.
      */
-    public Controller(){  
+    public void init(){
         newMap();
         lightEngine = new LightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         
@@ -56,7 +53,7 @@ public class Controller {
         GameplayScreen.msgSystem().update(delta);
         
                 
-        if (ENABLECHUNKSWITCH){
+        if (ENABLECHUNKSWITCH && cameras.size() >0){
             //earth to right
             if (cameras.get(0).getLeftBorder() <= 0)
                 map.setCenter(3);
@@ -229,24 +226,7 @@ public class Controller {
     public void setPlayer(AbstractCharacter player) {
         this.player = player;
         player.exist();
-    }
-
-    /**
-     * Returns the view.
-     * @return
-     */
-    public View getView() {
-        return view;
-    }
-
-    /**
-     * Set the view.
-     * @param view
-     */
-    public void setView(View view) {
-        this.view = view;
-    }
-    
+    }   
 
     /**
      * Get the neighbour block to a side

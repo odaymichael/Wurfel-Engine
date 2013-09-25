@@ -18,6 +18,8 @@ import org.lwjgl.opengl.GL11;
  * @author Benedikt Vogler
  */
 public class WECamera extends Camera {
+    public static final boolean[][] DEEPEST_LAYER_VISIVBILITY = new boolean[Map.getBlocksX()][Map.getBlocksY()];
+    
     /** the position on the screen*/
     private final int viewportPosX, viewportPosY;
     
@@ -30,7 +32,6 @@ public class WECamera extends Camera {
     private AbstractEntity focusentity;
     private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
     
-    private static boolean[][] deepestLayerVisibility;
     private final Block groundBlock;
     
 
@@ -58,7 +59,6 @@ public class WECamera extends Camera {
         outputPosX = Coordinate.getMapCenter().get2DPosX() - get2DWidth() / 2;
         outputPosY = Coordinate.getMapCenter().get2DPosY() - get2DHeight() / 2;
         
-        deepestLayerVisibility = new boolean[Map.getBlocksX()][Map.getBlocksY()];
         groundBlock = Block.getInstance(44);//set the ground level groundBlock
         groundBlock.setSideClipping(0, true);
         groundBlock.setSideClipping(2, true);
@@ -163,7 +163,7 @@ public class WECamera extends Camera {
             //render last layer tiles if visible
             for (int x = 0; x < Map.getBlocksX(); x++) {
                 for (int y = 0; y < Map.getBlocksY(); y++) {
-                    if (deepestLayerVisibility[x][y]){
+                    if (DEEPEST_LAYER_VISIVBILITY[x][y]){
                         int xPos = new Coordinate(x, y, -1, true).get2DPosX();//right side is  half a block more to the right
                         int yPos = new Coordinate(x, y, -1, true).get2DPosY();//the top is drawn a quarter blocks higher
                         groundBlock.renderSideAt(view, xPos, yPos, 1);
@@ -426,10 +426,10 @@ public class WECamera extends Camera {
             && (left || right) //left or right still visible
             && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset())
             ) {
-            deepestLayerVisibility[x][y] = true;
+            DEEPEST_LAYER_VISIVBILITY[x][y] = true;
             //Gdx.app.log("DEBUG", "Ray hit ground at:["+x+"|"+y+"] "+left+":"+right);
         } else
-            deepestLayerVisibility[x][y]=false;
+            DEEPEST_LAYER_VISIVBILITY[x][y]=false;
     }
     
     /**
