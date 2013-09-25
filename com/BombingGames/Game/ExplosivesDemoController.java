@@ -10,6 +10,7 @@ import static com.BombingGames.EngineCore.Controller.getMap;
 import static com.BombingGames.EngineCore.Controller.getMapDataSafe;
 import static com.BombingGames.EngineCore.Controller.setMapData;
 import com.BombingGames.EngineCore.GameplayScreen;
+import com.BombingGames.EngineCore.Map.Chunk;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
@@ -28,6 +29,7 @@ public class ExplosivesDemoController extends Controller {
 
     @Override
     public void init(){
+        Chunk.setGenerator(4);
         super.init();
 
          AbstractCharacter player = (AbstractCharacter) AbstractEntity.getInstance(
