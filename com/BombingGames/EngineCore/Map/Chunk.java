@@ -62,7 +62,6 @@ public class Chunk {
     private void generate(int pos, int coordX, int coordY){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
-        Gdx.app.log("DEBUG","Creating new chunk: "+ coordX + ", "+ coordY);
         GameplayScreen.msgSystem().add("Creating new chunk: "+coordX+", "+ coordY);
         switch (generator){
             case 0:{//random pillars
