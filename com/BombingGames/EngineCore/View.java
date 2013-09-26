@@ -5,11 +5,11 @@ import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.EngineCore.Gameobjects.Block;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import org.lwjgl.opengl.GL11;
 
 /**
  * The View manages everything what should be drawn.
@@ -214,7 +214,7 @@ public class View {
             this.drawmode = drawmode;
             batch.end();
             //GameObject.getSpritesheet().getFullImage().endUse();
-            GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, drawmode);
+            Gdx.gl10.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, drawmode);
             //GameObject.getSpritesheet().getFullImage().startUse();
             batch.begin();
         }
@@ -227,7 +227,7 @@ public class View {
      * @param yPos
      */
     public void drawString(String msg, int xPos, int yPos) {
-        GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+        Gdx.gl10.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
         batch.begin();
         font.draw(batch, msg, xPos, yPos);
         batch.end();
@@ -241,7 +241,7 @@ public class View {
      * @param color
      */
     public void drawString(String msg, int xPos, int yPos, Color color) {
-        GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+        Gdx.gl10.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
         font.setColor(color);
         batch.begin();
         font.draw(batch, msg, xPos, yPos);
@@ -256,7 +256,7 @@ public class View {
      * @param color the colro of the text.
      */
     public void drawText(String text, int xPos, int yPos, Color color){
-        GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+        Gdx.gl10.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
         font.setColor(Color.BLACK);
         font.setScale(0.51f);
         batch.begin();
