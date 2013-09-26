@@ -199,14 +199,15 @@ public class WECamera extends Camera {
                 for (int z=0; z < Map.getBlocksZ(); z++){
                     
                     Coordinate coord = new Coordinate(x, y, z, true); 
-                    if (! coord.getBlock().isHidden()
-                        && !coord.getBlock().isClipped()
+                    Block blockAtCoord = coord.getBlock();
+                    if (! blockAtCoord.isHidden()
+                        && !blockAtCoord.isClipped()
                         && 
-                            coord.getBlock().get2DPosY(coord)
+                            coord.get2DPosY()
                         <
                             outputPosY + get2DHeight()
                     ) {
-                        depthsort.add(new Renderobject(Controller.getMapData(coord), coord));
+                        depthsort.add(new Renderobject(blockAtCoord, coord));
                     }
                 }
             }
@@ -216,9 +217,7 @@ public class WECamera extends Camera {
             AbstractEntity entity = Controller.getMap().getEntitys().get(i);
             if (!entity.isHidden() && !entity.isClipped()
                 && 
-                entity.get2DPosY(entity.getCoords())
-                <
-                outputPosY + get2DHeight()
+                entity.get2DPosY(null) < outputPosY + get2DHeight()
                 )
                     depthsort.add(
                         new Renderobject(entity, entity.getCoords())
