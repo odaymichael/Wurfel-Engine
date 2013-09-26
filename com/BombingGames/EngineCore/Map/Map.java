@@ -72,7 +72,7 @@ public class Map {
      * Fill the data array of the map with blocks. Also resets the cellOffset.
      */
     public void fillWithBlocks(){
-        Gdx.app.log("DEBUG","Filling the map with blocks...");
+        Gdx.app.log("DEBUG","Filling the map with air cells...");
         for (Cell[][] x : data) {
             for (Cell[] y : x) {
                 for (int z = 0; z < y.length; z++) {
