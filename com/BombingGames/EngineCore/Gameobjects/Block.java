@@ -363,7 +363,7 @@ public class Block extends AbstractGameObject {
      * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
      */
     public void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb){
-        Color color = Color.GRAY;
+        Color color = Color.GRAY.cpy();
         if (Controller.getLightengine() != null){
             color = Controller.getLightengine().getColorOfSide(sidenumb);
         }
@@ -397,9 +397,9 @@ public class Block extends AbstractGameObject {
      * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
      */
     public void renderSideAt(final View view, int xPos, int yPos, final int sidenumb){
-        Color color = Color.GRAY;
+        Color color = Color.GRAY.cpy();
         if (Controller.getLightengine() != null){
-                color = Controller.getLightengine().getColorOfSide(sidenumb);
+            color = Controller.getLightengine().getColorOfSide(sidenumb);
         }
         renderSideAt(view, xPos, yPos, sidenumb, color);
     }
