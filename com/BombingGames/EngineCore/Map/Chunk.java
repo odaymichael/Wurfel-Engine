@@ -53,7 +53,7 @@ public class Chunk {
 
         if (newMap)
             generate(pos, coordX, coordY);
-            else load(pos, coordX, coordY);
+        else load(pos, coordX, coordY);
     }
     
     /**
