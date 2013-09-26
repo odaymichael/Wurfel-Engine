@@ -12,6 +12,7 @@ import com.BombingGames.EngineCore.Map.Chunk;
 import com.BombingGames.EngineCore.Gameobjects.AbstractCharacter;
 import com.BombingGames.EngineCore.Gameobjects.AbstractEntity;
 import com.BombingGames.EngineCore.Gameobjects.Block;
+import com.BombingGames.EngineCore.LightEngine.LightEngine;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
@@ -59,6 +60,8 @@ public class CustomGameController extends Controller {
         setMinimap(
             new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 400,10)
         );
+        
+        setLightEngine(new LightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2));
         
         
         Gdx.input.setInputProcessor(new InputListener());

@@ -38,7 +38,6 @@ public class Controller {
      */
     public void init(){
         newMap();
-        lightEngine = new LightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         
         recalcRequested = true;
     }
@@ -327,5 +326,9 @@ public class Controller {
      */
     public View getView() {
         return view;
+    }
+
+    public static void setLightEngine(LightEngine lightEngine) {
+        Controller.lightEngine = lightEngine;
     }
 }
