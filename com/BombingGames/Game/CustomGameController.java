@@ -135,8 +135,7 @@ public class CustomGameController extends Controller {
 
                  //show/hide light engine
                  if (keycode == Input.Keys.L) {
-                     getLightengine().RenderData(!getLightengine().isRenderingData());
-                     Gdx.app.log("DEBUG","Toggled lightengine data rendering:"+ !getLightengine().isRenderingData());
+                     if (getLightengine() != null) getLightengine().RenderData(!getLightengine().isRenderingData());
                   } 
 
                   if (keycode == Input.Keys.T) {
