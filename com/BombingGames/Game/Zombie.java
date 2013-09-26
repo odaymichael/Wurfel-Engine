@@ -1,12 +1,14 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.Game;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
+import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import static com.BombingGames.Game.Gameobjects.AbstractEntity.CATEGORY;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getSprites;
 import com.badlogic.gdx.graphics.Color;
+import java.util.Arrays;
 
 /**
  *A zombie which can follow a character.
@@ -23,7 +25,7 @@ public class Zombie extends AbstractCharacter{
      * @param id
      * @param coords  
      */
-    protected Zombie(int id, Coordinate coords) {
+    public Zombie(int id, Coordinate coords) {
         super(id, 3, coords);
         setTransparent(true);
         setObstacle(true);
@@ -59,13 +61,13 @@ public class Zombie extends AbstractCharacter{
         super.update(delta);
         
         //if standing on same position as in last update
-//        if (Arrays.equals(new int[]{getPositionX(),getPositionY()}, lastPos) && getCoords().equals(lastCoord))
-//            runningagainstwallCounter += delta;
-//        else {
-//            runningagainstwallCounter=0;
-//            lastPos = getPos().clone();
-//            lastCoord = getCoords().cpy();
-//        }
+        if (Arrays.equals(new float[]{getPositionX(),getPositionY()}, lastPos) && getCoords().equals(lastCoord))
+            runningagainstwallCounter += delta;
+        else {
+            runningagainstwallCounter=0;
+            lastPos = new float[]{getPositionX(),getPositionY()};
+            lastCoord = getCoords().cpy();
+        }
         
         //jump after one second
         if (runningagainstwallCounter > 50) {

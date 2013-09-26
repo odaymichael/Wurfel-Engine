@@ -1,5 +1,6 @@
 package com.BombingGames.Game.Gameobjects;
 
+import com.BombingGames.Game.AirLift;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;

@@ -1,6 +1,8 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.Game;
 
 import com.BombingGames.EngineCore.Map.Coordinate;
+import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Gameobjects.IsSelfAware;
 
 
 /**
