@@ -111,7 +111,7 @@ public class ExplosivesDemoController extends Controller {
         super.update(delta);
     }
     
-    class InputListener implements InputProcessor {
+    private class InputListener implements InputProcessor {
 
         @Override
         public boolean keyDown(int keycode) {
@@ -171,7 +171,8 @@ public class ExplosivesDemoController extends Controller {
 
         @Override
         public boolean keyTyped(char character) {
-            return false;
+            GameplayScreen.msgSystem().getInput(character);
+            return true;
         }
 
         @Override
