@@ -1,5 +1,8 @@
 package com.BombingGames;
 
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.GameplayScreen;
+import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WorkingDirectory;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Game;
@@ -9,27 +12,28 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture;
 import java.io.File;
 
+
 /**
- *The Main class of the engine. To create a new engine use  {@link com.BombingGames.Wurfelengine#construct(java.lang.String, java.lang.String[]) Wurfelengine.construct}
+ *The Main class of the engine. To create a new engine use  {@link com.BombingGames.WurfelEngine#construct(java.lang.String, java.lang.String[]) WurfelEngine.construct}
  * The Wurfel Engine needs the API libGDX0.9.8. It has not been tested with other versions.
  * @author Benedikt Vogler
  */
-public class Wurfelengine extends Game {
+public class WurfelEngine extends Game {
     /**
-     * The Version of the Engine
+     * The version of the Engine
      */
-    public static final String VERSION = "1.1.6";    
+    public static final String VERSION = "1.1.8";    
     private static File workingDirectory;
     private static boolean fullscreen = false;
-    private static Wurfelengine instance;
-   
+    private static WurfelEngine instance;
+
     /**
-     * Create the Engine.
+     * Create the Engine. Don't use this. Use construct instead. 
      * @param title The title, which is displayed in the window.
      * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
      */
-    private Wurfelengine(String title, String[] args){
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+    private WurfelEngine(String title, String[] args){
+        final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
          config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
          config.fullscreen = false;
@@ -53,8 +57,6 @@ public class Wurfelengine extends Game {
         Texture.setEnforcePotImages(false);
         LwjglApplication application = new LwjglApplication(this, config);
          
-        //basic engine setting
-        
         //LIBGDX: no equivalent found in libGDX yet
         //setUpdateOnlyWhenVisible(true);        
         //setMaximumLogicUpdateInterval(200);//delta can not be bigger than 200ms ^= 5 FPS
@@ -63,43 +65,55 @@ public class Wurfelengine extends Game {
     
     @Override
     public void create() {
-        setScreen(
-            new MainMenuScreen()
-            );
+        setScreen(new MainMenuScreen());
     }
     
-    /**
-     * Singleton method.
-     * @return the wurfelengine
-     */
-    public static Wurfelengine getInstance(){
-        return instance;
-    }
-    
-    /**
-     * Create the Engine.
+        /**
+     * Create a new instance of the Engine.
      * @param title The title, which is displayed in the window.
      * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
-     * @return the engine
      */
-    public static Wurfelengine construct(String title, String[] args){
-        instance = new Wurfelengine(title,args);
+    public static void construct(String title, String[] args){
+        instance = new WurfelEngine(title,args);
+    }
+    
+    /**
+     * Singleton method to get the only instance.
+     * @return the wurfelengine
+     */
+    public static WurfelEngine getInstance(){
         return instance;
     }
     
     /**
-     * Gives the credits of the engine.
+     * Launch the main game with you custom controller and view.
+     * @param controller
+     * @param view 
+     */
+    public static void startGame(Controller controller, View view){
+        instance.setScreen(
+            new GameplayScreen(
+                controller,
+                view
+            )
+        );
+    }
+    
+    /**
+     * Get the credits of the engine.
      * @return a long string with breaks
      */
-    public static String getCredits(){
-        String newline = System.getProperty("line.separator");
-        return "Idea:"+newline
+    public static String getCredits() {
+        final String newline = System.getProperty("line.separator");
+        return "Idea & Producing:"+newline
             + " Benedikt Vogler"+newline+newline
             + "Programming:"+newline
             + "Benedikt Vogler"+newline+newline
             + "Art:"+newline
             + "Benedikt Vogler"+newline
             + "Pia Lenßen"+newline+newline
+            + "Sound:"+newline
+            + "Benedikt Vogler"+newline+newline
             + "Quality Assurance"+newline
             + "Thomas Vogt";
     }
@@ -117,9 +131,9 @@ public class Wurfelengine extends Game {
      * @param fullscreen
      */
     public static void setFullscreen(boolean fullscreen) {
-        Wurfelengine.fullscreen = fullscreen;
+        WurfelEngine.fullscreen = fullscreen;
         Gdx.graphics.setDisplayMode(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), fullscreen);
-        Gdx.graphics.setTitle("Wurfelengine V" + Wurfelengine.VERSION + " " + Gdx.graphics.getWidth() + "x"+Gdx.graphics.getHeight());
+        Gdx.graphics.setTitle("Wurfelengine V" + WurfelEngine.VERSION + " " + Gdx.graphics.getWidth() + "x"+Gdx.graphics.getHeight());
     }
 
     /**
@@ -129,4 +143,5 @@ public class Wurfelengine extends Game {
     public static boolean isFullscreen() {
         return fullscreen;
     } 
+    
 }

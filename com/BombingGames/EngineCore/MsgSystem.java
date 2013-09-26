@@ -62,6 +62,7 @@ public class MsgSystem extends ArrayList<Msg> {
     private int timelastupdate = 0;
     private boolean waitforinput = false;
     private int xPos, yPos;    
+    private String input = "";
 
     /**
      * 
@@ -129,9 +130,9 @@ public class MsgSystem extends ArrayList<Msg> {
      * @param view 
      */
     public void render(View view){
-        if (waitforinput) view.drawString("MSG:", xPos, yPos);
+        if (waitforinput) view.drawString("MSG:"+input, xPos, yPos);
         
-                    view.BATCH.begin();
+        view.getBatch().begin();
         for (int i=0; i < size(); i++){
             Msg msg = get(i);
             Color color = Color.BLUE;
@@ -139,18 +140,22 @@ public class MsgSystem extends ArrayList<Msg> {
                 else if ("Warning".equals(msg.getSender())) color = Color.RED;
             
             //draw
-            view.BATCH.setColor(color);
-            view.getFont().draw(view.BATCH, msg.getMessage(), 10,50+i*20);
+            view.getBatch().setColor(color);
+            view.getFont().draw(view.getBatch(), msg.getMessage(), 10,50+i*20);
         }
-         view.BATCH.end();
+         view.getBatch().end();
     }
 
     /**
      * 
-     * @param input
+     * @param listen
      */
-    public void listenForInput(boolean input) {
-        waitforinput = input;
+    public void listenForInput(boolean listen) {
+        if (listen != waitforinput && !"".equals(input)) {
+            add(input);
+            input = "";
+        }
+        waitforinput = listen;
     }
     
     /**
@@ -159,5 +164,13 @@ public class MsgSystem extends ArrayList<Msg> {
      */
     public boolean isListeningForInput() {
         return waitforinput;
+    }
+    
+    /**
+     *
+     * @param characterInput
+     */
+    public void getInput(char characterInput){
+        input += String.valueOf(characterInput);
     }
 }

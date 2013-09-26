@@ -24,22 +24,21 @@ public class View {
 
     private static BitmapFont font;
     
-    public final SpriteBatch BATCH;    
-    public final ShapeRenderer SHAPE_RENDERER;
+    private SpriteBatch batch;    
+    private ShapeRenderer shapeRenderer;
     
     private float equalizationScale;
     private Controller controller;
     
     private int drawmode;
     
-    
     private OrthographicCamera hudCamera;
     
     /**
-     * Creates a View.
-     * @param controller 
+     *
+     * @param controller
      */
-    public View(Controller controller){
+    public void init(Controller controller){
         this.controller = controller;
         font = new BitmapFont(Gdx.files.internal("com/BombingGames/EngineCore/arial.fnt"), true);
         font.setColor(Color.GREEN);
@@ -52,11 +51,11 @@ public class View {
         hudCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         hudCamera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
-        BATCH = new SpriteBatch();
-        SHAPE_RENDERER = new ShapeRenderer();
+        batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
         
         Block.loadSheet();
-     }
+    }
     
     /**
      *
@@ -84,8 +83,8 @@ public class View {
         hudCamera.update();
         hudCamera.apply(Gdx.gl10);
          
-        BATCH.setProjectionMatrix(hudCamera.combined);
-        SHAPE_RENDERER.setProjectionMatrix(hudCamera.combined);
+        batch.setProjectionMatrix(hudCamera.combined);
+        shapeRenderer.setProjectionMatrix(hudCamera.combined);
         
         Gdx.gl.glViewport(
             0,
@@ -213,11 +212,11 @@ public class View {
     public void setDrawmode(int drawmode) {
         if (drawmode != this.drawmode){
             this.drawmode = drawmode;
-            BATCH.end();
+            batch.end();
             //GameObject.getSpritesheet().getFullImage().endUse();
             GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, drawmode);
             //GameObject.getSpritesheet().getFullImage().startUse();
-            BATCH.begin();
+            batch.begin();
         }
     }
 
@@ -229,9 +228,9 @@ public class View {
      */
     public void drawString(String msg, int xPos, int yPos) {
         GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
-        BATCH.begin();
-        font.draw(BATCH, msg, xPos, yPos);
-        BATCH.end();
+        batch.begin();
+        font.draw(batch, msg, xPos, yPos);
+        batch.end();
     }
     
     /**
@@ -244,9 +243,9 @@ public class View {
     public void drawString(String msg, int xPos, int yPos, Color color) {
         GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
         font.setColor(color);
-        BATCH.begin();
-        font.draw(BATCH, msg, xPos, yPos);
-        BATCH.end();
+        batch.begin();
+        font.draw(batch, msg, xPos, yPos);
+        batch.end();
     }
     
     /**
@@ -260,15 +259,15 @@ public class View {
         GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
         font.setColor(Color.BLACK);
         font.setScale(0.51f);
-        BATCH.begin();
-        font.drawMultiLine(BATCH, text, xPos, yPos);
-        BATCH.end();
+        batch.begin();
+        font.drawMultiLine(batch, text, xPos, yPos);
+        batch.end();
         
         font.setColor(Color.WHITE);
         font.setScale(0.5f);
-        BATCH.begin();
-        font.drawMultiLine(BATCH, text, xPos, yPos);
-        BATCH.end();
+        batch.begin();
+        font.drawMultiLine(batch, text, xPos, yPos);
+        batch.end();
     }
     
     /**
@@ -278,4 +277,20 @@ public class View {
     public OrthographicCamera getHudCamera() {
         return hudCamera;
     } 
+
+    /**
+     *
+     * @return
+     */
+    public SpriteBatch getBatch() {
+        return batch;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public ShapeRenderer getShapeRenderer() {
+        return shapeRenderer;
+    }
 }

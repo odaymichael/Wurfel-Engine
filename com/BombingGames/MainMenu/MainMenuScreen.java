@@ -10,21 +10,22 @@ public class MainMenuScreen implements Screen{
     private static boolean loadMap = false;
  
     private static View View;
-    private static Controller Controller;
+    private static Controller controller;
     
     /**
      * Creates the main Menu
      */
     public MainMenuScreen() {
-        Controller = new Controller(); 
+        controller = new Controller(); 
         View = new View();
     }
 
     
     @Override
     public void render(float delta) {
-        Controller.update((int) (delta*1000));
-        View.render(Controller); 
+        controller.update((int) (delta*1000));
+        View.render(controller);
+        View.update(delta*1000);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class MainMenuScreen implements Screen{
      * @return
      */
     public static com.BombingGames.MainMenu.Controller getController() {
-        return Controller;
+        return controller;
     }
 
     /**

@@ -48,7 +48,7 @@ public class BlockToolbar {
     }
     
     public void render(View view){
-        SpriteBatch batch = view.BATCH;
+        SpriteBatch batch = view.getBatch();
         batch.begin();
         batch.setColor(Color.WHITE);
         view.setDrawmode(GL11.GL_MODULATE);

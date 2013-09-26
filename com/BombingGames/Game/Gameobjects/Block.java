@@ -466,8 +466,7 @@ public class Block extends AbstractGameObject {
 //        else if (sidenumb == 0) color.mul(1);
 //        color.a = 1; 
         sprite.getVertices()[SpriteBatch.C3] = color.toFloatBits();//bottom right
-        sprite.draw(view.BATCH);
-    
+        sprite.draw(view.getBatch());
     }
 
     @Override

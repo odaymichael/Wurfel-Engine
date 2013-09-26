@@ -6,11 +6,11 @@ package com.BombingGames;
  */
 public class Launcher{
     /**
-     * Main method wich starts the game. For a detailed description of the arguments see Wurfelengine class.
+     * Main method wich starts the game. For a detailed description of the arguments see WurfelEngine class.
      * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
-     * @see Wurfelengine
+     * @see WurfelEngine
      */
     public static void main(String[] args) {
-        Wurfelengine game = Wurfelengine.construct("Wurfelengine V" + Wurfelengine.VERSION, args);    
+        WurfelEngine.construct("Wurfelengine V" + WurfelEngine.VERSION, args); 
     }
 }

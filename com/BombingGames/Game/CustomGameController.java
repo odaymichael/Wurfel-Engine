@@ -8,11 +8,13 @@ import com.BombingGames.EngineCore.Controller;
 import static com.BombingGames.EngineCore.Controller.getLightengine;
 import static com.BombingGames.EngineCore.Controller.getMap;
 import com.BombingGames.EngineCore.GameplayScreen;
+import com.BombingGames.EngineCore.Map.Chunk;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.Zombie;
-import com.BombingGames.Wurfelengine;
+import com.BombingGames.MainMenu.MainMenuScreen;
+import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -26,12 +28,14 @@ public class CustomGameController extends Controller {
     private AbstractEntity focusentity;
     private Sound gras1;
     private Sound gras2;
-    private final BlockToolbar blockToolbar;
-    /**
-     * The custom game code belongs here.
-     */
-    public CustomGameController() {
-        super();
+    private BlockToolbar blockToolbar;
+
+        
+    @Override
+    public void init(){
+         Chunk.setGenerator(0);
+         super.init();
+
 
         gras1 = (Sound) Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/grass1.ogg"));
         gras2 = (Sound) Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/grass2.ogg"));
@@ -73,6 +77,7 @@ public class CustomGameController extends Controller {
         focusentity = AbstractEntity.getInstance(13, 0, new Coordinate(0, 0, Map.getBlocksZ()-1, true));
         //focusentity.setPositionY(Block.DIM2+1f);
         focusentity.exist();
+
         
         Gdx.input.setInputProcessor(new InputListener());
     }
@@ -84,8 +89,6 @@ public class CustomGameController extends Controller {
         Input input = Gdx.input;
         
         if (!GameplayScreen.msgSystem().isListeningForInput()) {
-            if (input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
-
 
             //walk
             if (getPlayer() != null){
@@ -110,86 +113,84 @@ public class CustomGameController extends Controller {
                     - (input.isKeyPressed(Input.Keys.A)? 3: 0)
                     );
             }
-            
-        } else {
-            //fetch input and write it down
-            //to-do!
-            //Gdx.input.getTextInput(new textInput(), "Überschrift", "test");
-            //TextField textfield = new TextField("enter text", new Skin());           
         }
         
         super.update(delta);
     }
     
-    class InputListener implements InputProcessor {
+    private class InputListener implements InputProcessor {
 
         @Override
         public boolean keyDown(int keycode) {
-            
-           //toggle minimap
-            if (keycode == Input.Keys.M){
-                GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
-            }
-            //toggle fullscreen
-            if (keycode == Input.Keys.F){
-                Wurfelengine.setFullscreen(!Wurfelengine.isFullscreen());
-                Gdx.app.log("DEBUG","Set to fullscreen:"+!Wurfelengine.isFullscreen());
+            if (!GameplayScreen.msgSystem().isListeningForInput()) {
+                //toggle minimap
+                 if (keycode == Input.Keys.M){
+                     GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
+                 }
+                 //toggle fullscreen
+                 if (keycode == Input.Keys.F){
+                     WurfelEngine.setFullscreen(!WurfelEngine.isFullscreen());
+                     Gdx.app.log("DEBUG","Set to fullscreen:"+!WurfelEngine.isFullscreen());
+                 }
+
+                 //toggle eathquake
+                 if (keycode == Input.Keys.E){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
+                     getMap().earthquake(5000);
+                 }
+
+                 //pause
+                 //if (input.isKeyDown(Input.Keys.P)) Gdx.app.setPaused(true);
+                 //time is set 0 but the game keeps running
+                   if (keycode == Input.Keys.P) {
+                     setTimespeed(0);
+                  } 
+
+                 //reset zoom
+                 if (keycode == Input.Keys.Z) {
+                     getCameras().get(0).setZoom(1);
+                     GameplayScreen.msgSystem().add("Zoom reset");
+                  }  
+
+                 //show/hide light engine
+                 if (keycode == Input.Keys.L) {
+                     getLightengine().RenderData(!getLightengine().isRenderingData());
+                     Gdx.app.log("DEBUG","Toggled lightengine data rendering:"+ !getLightengine().isRenderingData());
+                  } 
+
+                  if (keycode == Input.Keys.T) {
+                     setTimespeed();
+                  } 
+
+                 if (keycode == Input.Keys.ESCAPE)// Gdx.app.exit();
+                     WurfelEngine.getInstance().setScreen(new MainMenuScreen());
+                 
+                 if (keycode == Input.Keys.K) {
+                    Zombie zombie = (Zombie) AbstractEntity.getInstance(
+                        43,
+                        0,
+                        focusentity.getCoords()
+                    );
+                    zombie.setTarget(getPlayer());
+                    zombie.exist();   
+                 }
+             
+                if (keycode == Input.Keys.NUM_1) blockToolbar.setSelection(0);
+                if (keycode == Input.Keys.NUM_2) blockToolbar.setSelection(1);
+                if (keycode == Input.Keys.NUM_3) blockToolbar.setSelection(2);
+                if (keycode == Input.Keys.NUM_4) blockToolbar.setSelection(3);
+                if (keycode == Input.Keys.NUM_5) blockToolbar.setSelection(4);
+                if (keycode == Input.Keys.NUM_6) blockToolbar.setSelection(5);
+                if (keycode == Input.Keys.NUM_7) blockToolbar.setSelection(6);
+                if (keycode == Input.Keys.NUM_8) blockToolbar.setSelection(7);
+                if (keycode == Input.Keys.NUM_9) blockToolbar.setSelection(8);
             }
 
-            //toggle eathquake
-            if (keycode == Input.Keys.E){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
-                getMap().earthquake(5000);
-            }
-            
-            //pause
-            //if (input.isKeyDown(Input.Keys.P)) Gdx.app.setPaused(true);
-            //time is set 0 but the game keeps running
-              if (keycode == Input.Keys.P) {
-                setTimespeed(0);
-             } 
 
-            //reset zoom
-            if (keycode == Input.Keys.Z) {
-                getCameras().get(0).setZoom(1);
-                GameplayScreen.msgSystem().add("Zoom reset");
-             }  
-            
-            //show/hide light engine
-            if (keycode == Input.Keys.L) {
-                getLightengine().RenderData(!getLightengine().isRenderingData());
-                Gdx.app.log("DEBUG","Toggled lightengine data rendering:"+ !getLightengine().isRenderingData());
-             } 
-            
-            //toggle input for msgSystem
-            if (keycode == Input.Keys.ENTER)
-                GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
-            
-                    
-             if (keycode == Input.Keys.T) {
-                setTimespeed();
-             } 
-             if (keycode == Input.Keys.K) {
-                Zombie zombie = (Zombie) AbstractEntity.getInstance(
-                    43,
-                    0,
-                    focusentity.getCoords()
-                );
-                zombie.setTarget(getPlayer());
-                zombie.exist();   
-             }
-             
-            if (keycode == Input.Keys.NUM_1) blockToolbar.setSelection(0);
-            if (keycode == Input.Keys.NUM_2) blockToolbar.setSelection(1);
-            if (keycode == Input.Keys.NUM_3) blockToolbar.setSelection(2);
-            if (keycode == Input.Keys.NUM_4) blockToolbar.setSelection(3);
-            if (keycode == Input.Keys.NUM_5) blockToolbar.setSelection(4);
-            if (keycode == Input.Keys.NUM_6) blockToolbar.setSelection(5);
-            if (keycode == Input.Keys.NUM_7) blockToolbar.setSelection(6);
-            if (keycode == Input.Keys.NUM_8) blockToolbar.setSelection(7);
-            if (keycode == Input.Keys.NUM_9) blockToolbar.setSelection(8);
-             
-            return true;
-            
+             //toggle input for msgSystem
+             if (keycode == Input.Keys.ENTER)
+                 GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
+
+            return true;            
         }
 
         @Override
@@ -199,7 +200,8 @@ public class CustomGameController extends Controller {
 
         @Override
         public boolean keyTyped(char character) {
-            return false;
+            GameplayScreen.msgSystem().getInput(character);
+            return true;
         }
 
         @Override
