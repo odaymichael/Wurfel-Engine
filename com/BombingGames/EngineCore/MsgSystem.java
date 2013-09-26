@@ -135,9 +135,9 @@ public class MsgSystem extends ArrayList<Msg> {
         view.getBatch().begin();
         for (int i=0; i < size(); i++){
             Msg msg = get(i);
-            Color color = Color.BLUE;
-            if ("System".equals(msg.getSender())) color = Color.GREEN;
-                else if ("Warning".equals(msg.getSender())) color = Color.RED;
+            Color color = Color.BLUE.cpy();
+            if ("System".equals(msg.getSender())) color = Color.GREEN.cpy();
+                else if ("Warning".equals(msg.getSender())) color = Color.RED.cpy();
             
             //draw
             view.getBatch().setColor(color);

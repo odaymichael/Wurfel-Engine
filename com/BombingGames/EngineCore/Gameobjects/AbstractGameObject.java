@@ -120,7 +120,7 @@ public abstract class AbstractGameObject {
      * @param camera The camera rendering the scene
      */
     public void render(View view, WECamera camera, Coordinate coords) {
-        Color color = Color.GRAY;
+        Color color = Color.GRAY.cpy();
         if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getGlobalLight();
         }
@@ -152,7 +152,7 @@ public abstract class AbstractGameObject {
      * @param yPos rendering position
      */
     public void renderAt(View view, int xPos, int yPos) {
-        Color color = Color.GRAY;
+        Color color = Color.GRAY.cpy();
         if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getGlobalLight();
         }
