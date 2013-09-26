@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 import java.io.File;
 
 /**
- *The Main class of the engine. To create a new engine use  {@link com.BombingGames.WurfelEngine#construct(java.lang.String, java.lang.String[]) WurfelEngine.construct}
+ *aThe Main class of the engine. To create a new engine use  {@link com.BombingGames.WurfelEngine#construct(java.lang.String, java.lang.String[]) WurfelEngine.construct}
  * The Wurfel Engine needs the API libGDX0.9.8. It has not been tested with other versions.
  * @author Benedikt Vogler
  */
@@ -21,7 +21,7 @@ public class WurfelEngine extends Game {
     /**
      * The version of the Engine
      */
-    public static final String VERSION = "1.1.8";    
+    public static final String VERSION = "1.1.9";    
     private static File workingDirectory;
     private static boolean fullscreen = false;
     private static WurfelEngine instance;
