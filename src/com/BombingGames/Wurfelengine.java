@@ -1,7 +1,9 @@
 package com.BombingGames;
 
 import android.os.Environment;
-
+import com.BombingGames.EngineCore.GameplayScreen; 
+import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WorkingDirectory;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Game;
@@ -19,9 +21,9 @@ import java.io.File;
  */
 public class WurfelEngine extends Game {
     /**
-     * The Version of the Engine
+     * The version of the Engine
      */
-    public static final String VERSION = "1.1.6";    
+    public static final String VERSION = "1.1.7";    
     private static File workingDirectory;
     private static boolean fullscreen = false;
     private static WurfelEngine instance;
@@ -73,20 +75,38 @@ public class WurfelEngine extends Game {
     }
     
     /**
-     * Gives the credits of the engine.
+     * Launch the main game with you custom controller and view.
+     * @param controller
+     * @param view
+     */     
+    public static void startGame(Controller controller, View view){
+        instance.setScreen(
+            new GameplayScreen(
+                controller,
+                view
+            )
+        );   
+    }
+    
+    /**
+     * Get the credits of the engine.
      * @return a long string with breaks
      */
     public static String getCredits(){
         String newline = System.getProperty("line.separator");
-        return "Idea:"+newline
+        return "Idea & Producing:"+newline
             + " Benedikt Vogler"+newline+newline
             + "Programming:"+newline
             + "Benedikt Vogler"+newline+newline
             + "Art:"+newline
             + "Benedikt Vogler"+newline
-            + "Pia Len√üen"+newline+newline
+            + "Pia Lenﬂen"+newline+newline
+            + "Sound:"+newline
+            + "Bendikt Vogler"+newline+newline
             + "Quality Assurance"+newline
-            + "Thomas Vogt";
+            + "Thomas Vogt"+newline+newline
+        	+ "Android-Porting:"+newline
+        	+ "Thomas Vogt";
     }
     
    /**
@@ -113,5 +133,6 @@ public class WurfelEngine extends Game {
      */
     public static boolean isFullscreen() {
         return fullscreen;
-    } 
+    }
+    
 }

@@ -20,6 +20,7 @@ public class View {
     private final SpriteBatch batch;
     private final OrthographicCamera camera;
     private final BitmapFont font;
+    private float a =0;
     
     /**
      * Creates a View.
@@ -41,6 +42,11 @@ public class View {
         font.setColor(Color.WHITE);
     }
 
+    void update(float delta) {
+       a += delta/1000f;
+       if (a>1) a=1;
+    }
+     
     /**
      * renders the scene
      * @param pController
@@ -54,21 +60,16 @@ public class View {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         
-        batch.begin();
-        font.draw(batch, "FPS:"+ Gdx.graphics.getFramesPerSecond(), 20, 20);
-        font.draw(batch, Gdx.input.getX()+ ","+Gdx.input.getY(), Gdx.input.getX(), Gdx.input.getY());
-        batch.end();
-        
-        
         // render the lettering
         batch.begin();
+        lettering.setColor(1, 1, 1, a); 
         lettering.draw(batch);
         batch.end();
         
         // Draw the menu items
         batch.begin();
         for (MenuItem mI : MainMenuScreen.getController().getMenuItems()) {
-            mI.draw(batch, camera);
+            mI.render(batch, camera);
         }
         batch.end();
         
@@ -77,9 +78,12 @@ public class View {
         font.draw(batch, Gdx.input.getX()+ ","+Gdx.input.getY(), Gdx.input.getX(), Gdx.input.getY());
         batch.end();
         
+        font.scale(-0.5f); 
         batch.begin();
-        font.drawMultiLine(batch, WurfelEngine.getCredits(), 50, 50);
+        font.drawMultiLine(batch, WurfelEngine.getCredits(), 50, 100);
         batch.end();
+        font.scale(0.5f);
     }
+    
 }
 

@@ -173,7 +173,7 @@ public abstract class AbstractGameObject {
         prepareColor(view, color);
 
         sprite.setColor(color);
-        sprite.draw(view.BATCH);
+        sprite.draw(view.getBatch());
     }
     
     /**

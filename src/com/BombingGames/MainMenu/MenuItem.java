@@ -13,18 +13,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * @author Benedikt
  */
 public class MenuItem extends Sprite {
-    private final int index;
-
     /**
-     * 
+     * Create a new menu Item and say which texture it should have.
      * @param index
      * @param texture  
      */
     public MenuItem(int index, TextureRegion texture) {
         super(texture);
-        this.index = index;
         this.setX((Gdx.graphics.getWidth()-getWidth())/2);
-        this.setY(200+index*80);
+        this.setY(Gdx.graphics.getHeight()/2-120+index*80);
     }
 
 
@@ -33,13 +30,13 @@ public class MenuItem extends Sprite {
      * @param spriteBatch
      * @param camera The camera rendering the MenuItem
      */
-    public void draw(SpriteBatch spriteBatch, Camera camera) {
+    public void render(SpriteBatch spriteBatch, Camera camera) {
         super.draw(spriteBatch);        
     }
     
 
     /**
-     * 
+     * Check if ithe mouse clicked the menuItem.
      * @return
      */
     public boolean isClicked() {

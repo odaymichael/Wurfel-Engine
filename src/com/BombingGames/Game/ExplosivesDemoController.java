@@ -5,15 +5,16 @@ import com.BombingGames.EngineCore.Map.Minimap;
 import com.BombingGames.EngineCore.WECamera;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Controller;
-
 import static com.BombingGames.EngineCore.Controller.getLightengine;
 import static com.BombingGames.EngineCore.Controller.getMap;
-
+import static com.BombingGames.EngineCore.Controller.getMapDataSafe;
+import static com.BombingGames.EngineCore.Controller.setMapData;
 import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.EngineCore.Map.Chunk;
 import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.Game.Gameobjects.ExplosiveBarrel;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
@@ -24,12 +25,13 @@ import com.badlogic.gdx.InputProcessor;
  *The <i>CustomGameController</i> is for the game code. Put engine code into <i>Controller</i>.
  * @author Benedikt
  */
-public class CustomGameController extends Controller {
+public class ExplosivesDemoController extends Controller {
     
-    @Override 
-    public void init(){ 
-        Chunk.setGenerator(0); 
-        super.init(); 
+
+    @Override
+    public void init(){
+        Chunk.setGenerator(4);
+        super.init();
 
          AbstractCharacter player = (AbstractCharacter) AbstractEntity.getInstance(
                 40,
@@ -62,9 +64,6 @@ public class CustomGameController extends Controller {
             new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 400,10)
         );
         
-        Chunk.setGenerator(1);
-        
-        
         Gdx.input.setInputProcessor(new InputListener());
     }
 
@@ -75,6 +74,8 @@ public class CustomGameController extends Controller {
         Input input = Gdx.input;
         
         if (!GameplayScreen.msgSystem().isListeningForInput()) {
+            if (input.isKeyPressed(Input.Keys.ESCAPE)) WurfelEngine.getInstance().setScreen(new MainMenuScreen());
+
 
             //walk
             if (getPlayer() != null){
@@ -98,63 +99,64 @@ public class CustomGameController extends Controller {
                     + (input.isKeyPressed(Input.Keys.D)? 3: 0)
                     - (input.isKeyPressed(Input.Keys.A)? 3: 0)
                     );
-            }         
+            }
+            
+        } else {
+            //fetch input and write it down
+            //to-do!
+            //Gdx.input.getTextInput(new textInput(), "Überschrift", "test");
+            //TextField textfield = new TextField("enter text", new Skin());           
         }
         
         super.update(delta);
     }
     
-    private class InputListener implements InputProcessor {
+    class InputListener implements InputProcessor {
 
         @Override
         public boolean keyDown(int keycode) {
-        	if(!GameplayScreen.msgSystem().isListeningForInput()){
-                //toggle minimap
-                if (keycode == Input.Keys.M){
-                    GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
-                }
-                //toggle fullscreen
-                if (keycode == Input.Keys.F){
-                    WurfelEngine.setFullscreen(!WurfelEngine.isFullscreen());
-                    Gdx.app.log("DEBUG","Set to fullscreen:"+!WurfelEngine.isFullscreen());
-                }
-
-                //toggle eathquake
-                if (keycode == Input.Keys.E){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
-                    getMap().earthquake(5000);
-                }
-
-                //pause
-                //if (input.isKeyDown(Input.Keys.P)) Gdx.app.setPaused(true);
-                //time is set 0 but the game keeps running
-                if (keycode == Input.Keys.P) {
-                    setTimespeed(0);
-                } 
-
-                //reset zoom
-                if (keycode == Input.Keys.Z) {
-                    getCameras().get(0).setZoom(1);
-                    GameplayScreen.msgSystem().add("Zoom reset");
-                }  
-
-                //show/hide light engine
-                if (keycode == Input.Keys.L) {
-                    getLightengine().RenderData(!getLightengine().isRenderingData());
-                    Gdx.app.log("DEBUG","Toggled lightengine data rendering:"+ !getLightengine().isRenderingData());
-                } 
-
-                if (keycode == Input.Keys.T) {
-                    setTimespeed();
-                } 
-
-                if (keycode == Input.Keys.ESCAPE)// Gdx.app.exit();
-                    WurfelEngine.getInstance().setScreen(new MainMenuScreen()); 
+            
+           //toggle minimap
+            if (keycode == Input.Keys.M){
+                GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
             }
+            //toggle fullscreen
+            if (keycode == Input.Keys.F){
+                WurfelEngine.setFullscreen(!WurfelEngine.isFullscreen());
+                Gdx.app.log("DEBUG","Set to fullscreen:"+!WurfelEngine.isFullscreen());
+            }
+
+            //toggle eathquake
+            if (keycode == Input.Keys.E){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
+                getMap().earthquake(5000);
+            }
+            
+            //pause
+            //if (input.isKeyDown(Input.Keys.P)) Gdx.app.setPaused(true);
+            //time is set 0 but the game keeps running
+              if (keycode == Input.Keys.P) {
+                setTimespeed(0);
+             } 
+
+            //reset zoom
+            if (keycode == Input.Keys.Z) {
+                getCameras().get(0).setZoom(1);
+                GameplayScreen.msgSystem().add("Zoom reset");
+             }  
+            
+            //show/hide light engine
+            if (keycode == Input.Keys.L) {
+                getLightengine().RenderData(!getLightengine().isRenderingData());
+                Gdx.app.log("DEBUG","Toggled lightengine data rendering:"+ !getLightengine().isRenderingData());
+             } 
             
             //toggle input for msgSystem
             if (keycode == Input.Keys.ENTER)
                 GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
             
+             if (keycode == Input.Keys.T) {
+                setTimespeed();
+             } 
             return true;
             
         }
@@ -166,13 +168,25 @@ public class CustomGameController extends Controller {
 
         @Override
         public boolean keyTyped(char character) {
-        	GameplayScreen.msgSystem().getInput(character); 
-        	return true;
+            return false;
         }
 
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            return false;
+            Coordinate coords = getView().ScreenToGameCoords(screenX,screenY);
+            if (coords.getZ() < Map.getBlocksZ()-1) coords.setZ(coords.getZ()+1);
+            
+            if (button == 0){ //left click
+                setMapData(coords, Block.getInstance(71, 0, coords));
+                WECamera.traceRayTo(coords, true);
+            } else {//right click
+                if (getMapDataSafe(coords) instanceof ExplosiveBarrel)
+                    ((ExplosiveBarrel) getMapDataSafe(coords)).explode();
+                 if (coords.getZ() < Map.getBlocksZ()-1) coords.setZ(coords.getZ()+1);
+                 if (getMapDataSafe(coords) instanceof ExplosiveBarrel)
+                    ((ExplosiveBarrel) getMapDataSafe(coords)).explode();
+            }
+            return true;
         }
 
         @Override

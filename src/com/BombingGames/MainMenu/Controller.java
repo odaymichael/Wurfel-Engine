@@ -1,8 +1,13 @@
 package com.BombingGames.MainMenu;
 
 import com.BombingGames.EngineCore.GameplayScreen;
+import com.BombingGames.Game.CustomGameController;
+import com.BombingGames.Game.CustomGameView;
+import com.BombingGames.Game.ExplosivesDemoController;
 import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -13,7 +18,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
  */
 public class Controller {
     
-    private MenuItem[] menuItems = new MenuItem[3];
+    private MenuItem[] menuItems = new MenuItem[4];
     private final Sound fx;
     
     /**
@@ -22,12 +27,14 @@ public class Controller {
     public Controller() {
         TextureAtlas texture = new TextureAtlas(Gdx.files.internal("com/BombingGames/MainMenu/Images/MainMenu.txt"), true);
                 
-        menuItems[0] = new MenuItem(0, texture.getRegions().get(2));
-        menuItems[1] = new MenuItem(1, texture.getRegions().get(0));
-        menuItems[2] = new MenuItem(2, texture.getRegions().get(1));
+        menuItems[0] = new MenuItem(0, texture.getRegions().get(3));
+        menuItems[1] = new MenuItem(1, texture.getRegions().get(1));
+        menuItems[2] = new MenuItem(2, texture.getRegions().get(0));
+        menuItems[3] = new MenuItem(3, texture.getRegions().get(2)); 
         
         
         fx = Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/MainMenu/click2.wav"));
+        Gdx.input.setInputProcessor(new InputListener()); 
     }
     
     /**
@@ -38,15 +45,19 @@ public class Controller {
         if (menuItems[0].isClicked()){
             MainMenuScreen.setLoadMap(true);
             fx.play();
-            WurfelEngine.getInstance().setScreen(new GameplayScreen());
+            WurfelEngine.startGame(new CustomGameController(), new CustomGameView());
         } else if (menuItems[1].isClicked()) { 
                 MainMenuScreen.setLoadMap(false);
                 fx.play();
-                WurfelEngine.getInstance().setScreen(new GameplayScreen());
-            } else if (menuItems[2].isClicked()){
-                fx.play();
-                Gdx.app.exit();
-            }
+                WurfelEngine.startGame(new CustomGameController(), new CustomGameView());
+        	} else if(menuItems[2].isClicked()) {
+        			MainMenuScreen.setLoadMap(false);
+        			fx.play();
+        			WurfelEngine.startGame(new ExplosivesDemoController(), new CustomGameView()); 
+        		} else if (menuItems[3].isClicked()){
+        			fx.play();
+        			Gdx.app.exit();
+        		}
     }
 
     /**
@@ -62,5 +73,50 @@ public class Controller {
      */
     public void dispose(){
         fx.dispose();
+    }
+
+    private class InputListener implements InputProcessor {
+
+        @Override
+        public boolean keyDown(int keycode) {
+            if (keycode == Input.Keys.ESCAPE)
+                Gdx.app.exit();
+            return true;
+        }
+
+        @Override
+        public boolean keyUp(int keycode) {
+            return true;
+        }
+
+        @Override
+        public boolean keyTyped(char character) {
+            return true;
+        }
+
+        @Override
+        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+            return true;
+        }
+
+        @Override
+        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            return true;
+        }
+
+        @Override
+        public boolean touchDragged(int screenX, int screenY, int pointer) {
+            return true;
+        }
+
+        @Override
+        public boolean mouseMoved(int screenX, int screenY) {
+            return true;
+        }
+
+        @Override
+        public boolean scrolled(int amount) {
+            return true;
+        }
     }
 }

@@ -329,7 +329,7 @@ public class Chunk {
         } catch (IOException ex) {
             /*JOptionPane.showMessageDialog(
                 null,
-                "The meta file could not be read. It must be named 'map."+ Chunk.METAFILESUFFIX + "' and must be at the maps directory:"+ Wurfelengine.getWorkingDirectory().getAbsolutePath() + "/map/",
+                "The meta file could not be read. It must be named 'map."+ Chunk.METAFILESUFFIX + "' and must be at the maps directory:"+ WurfelEngine.getWorkingDirectory().getAbsolutePath() + "/map/",
                 "Loading error",
                  JOptionPane.ERROR_MESSAGE);
                  //Na on android

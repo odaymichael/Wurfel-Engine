@@ -1,7 +1,5 @@
 package com.BombingGames.EngineCore;
 
-import com.BombingGames.Game.CustomGameController;
-import com.BombingGames.Game.CustomGameView;
 import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -22,13 +20,14 @@ public class GameplayScreen implements Screen{
     /**
      * Create the gameplay state.
      */
-    public GameplayScreen() {
+    public GameplayScreen(Controller controller, View view) {
         msgSystem = new MsgSystem(Gdx.graphics.getWidth()/2, 3*Gdx.graphics.getHeight()/4);
-        //Wurfelengine.getGameContainer().setSmoothDeltas(true);
-        
-        controller = new CustomGameController();
-        view = new CustomGameView(controller);
-        controller.setView(view);
+
+        this.controller = controller;
+        this.controller.init();
+        this.view = view;
+        this.view.init(controller);
+        this.controller.setView(view); 
     }
              
 
@@ -39,7 +38,26 @@ public class GameplayScreen implements Screen{
     public static MsgSystem msgSystem() {
         return msgSystem;
     }
+    
+    /**
+     *
+     * @return
+     */
+    public View getView() {
+        return view;
+    }
 
+    /**
+     *
+     * @return
+     */
+    public Controller getController() {
+        return controller;
+    }
+    
+    
+ 
+   
     @Override
     public void render(float delta) {
         controller.update(delta*1000);

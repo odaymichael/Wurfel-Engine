@@ -402,7 +402,6 @@ public class Block extends AbstractGameObject {
     /**
      * Ignores lightlevel.
      * @param view the view using this render method
-     * @param camera The camera rendering the scene
      * @param xPos rendering position
      * @param yPos rendering position
      * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
@@ -417,7 +416,6 @@ public class Block extends AbstractGameObject {
     /**
      * Draws a side of a block at a custom position. Apllies color before rendering and takes the lightlevel into account.
      * @param view the view using this render method
-     * @param camera The camera rendering the scene
      * @param xPos rendering position
      * @param yPos rendering position
      * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
@@ -453,7 +451,7 @@ public class Block extends AbstractGameObject {
 //        color.a = 1; 
         sprite.getVertices()[SpriteBatch.C3] = color.toFloatBits();//bottom right
  
-        sprite.draw(view.BATCH);
+        sprite.draw(view.getBatch());
     
     }
 
