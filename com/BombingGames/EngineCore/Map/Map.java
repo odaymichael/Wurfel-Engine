@@ -466,8 +466,8 @@ public class Map {
      * @param type
      * @return a list with the entitys
      */
-    public <type> ArrayList<type> getAllEntitysOfType(Class type) {
-        ArrayList<type> list=new ArrayList<type>();
+    public <type> ArrayList<type> getAllEntitysOfType(Class<type> type) {
+        ArrayList<type> list = new ArrayList<type>();
         //e inst=(e) e.newInstance();
 
         for (AbstractEntity entity : entitylist) {

@@ -1,9 +1,9 @@
 package com.BombingGames.EngineCore.Gameobjects;
 
+import com.BombingGames.EngineCore.LightEngine.PseudoGrey;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
-import com.BombingGames.EngineCore.LightEngine.PseudoGrey;
 import com.badlogic.gdx.graphics.Color;
 
 /**

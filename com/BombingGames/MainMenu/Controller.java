@@ -17,7 +17,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
  */
 public class Controller {
     
-    private MenuItem[] menuItems = new MenuItem[4];
+    private final MenuItem[] menuItems = new MenuItem[4];
     private final Sound fx;
     
     /**

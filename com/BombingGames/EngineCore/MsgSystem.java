@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @author Benedikt
  */
 class Msg {
-    private String fmessage;
+    private final String fmessage;
     private String sender = "System";
     private int importance = 1;
     

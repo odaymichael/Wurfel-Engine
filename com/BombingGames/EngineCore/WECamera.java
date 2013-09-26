@@ -1,11 +1,11 @@
 package com.BombingGames.EngineCore;
 
+import com.BombingGames.EngineCore.Gameobjects.AbstractEntity;
+import com.BombingGames.EngineCore.Gameobjects.AbstractGameObject;
+import com.BombingGames.EngineCore.Gameobjects.Block;
 import com.BombingGames.EngineCore.Map.Cell;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
-import com.BombingGames.EngineCore.Gameobjects.AbstractEntity;
-import com.BombingGames.EngineCore.Gameobjects.Block;
-import com.BombingGames.EngineCore.Gameobjects.AbstractGameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
@@ -424,15 +424,10 @@ public class WECamera extends Camera {
             && (left || right) //left or right still visible
             && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset()));
         
-        //check last layer
-        if ((z <= 0)
+        DEEPEST_LAYER_VISIVBILITY[x][y] =
+            (z <= 0)
             && (left || right) //left or right still visible
-            && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset())
-            ) {
-            DEEPEST_LAYER_VISIVBILITY[x][y] = true;
-            //Gdx.app.log("DEBUG", "Ray hit ground at:["+x+"|"+y+"] "+left+":"+right);
-        } else
-            DEEPEST_LAYER_VISIVBILITY[x][y]=false;
+            && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset());
     }
     
     /**

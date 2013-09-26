@@ -10,11 +10,12 @@ import com.BombingGames.EngineCore.Gameobjects.Block;
  * @author Benedikt Vogler
  */
 public class Coordinate {
-    int x;
-    int y;
-    float height;
-    int topleftX;//top left chunk x coordinate
-    int topleftY;//topl left chunk Y coordinate
+    private final int topleftX;//top left chunk x coordinate
+    private final int topleftY;//topl left chunk Y coordinate
+    
+    private int x;
+    private int y;
+    private float height;
     
     /**
      * Creates a coordiante. You can specify wether the given values are absolute or relative to the map.
