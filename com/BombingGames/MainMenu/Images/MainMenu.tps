@@ -151,6 +151,7 @@
             <filename>Exit.png</filename>
             <filename>generate.png</filename>
             <filename>load.png</filename>
+            <filename>Barrel.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -1,4 +1,4 @@
-package com.BombingGames.Game.Lighting;
+package com.BombingGames.EngineCore.LightEngine;
 
 import com.badlogic.gdx.graphics.Color;
 

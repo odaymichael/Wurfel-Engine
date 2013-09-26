@@ -1,4 +1,4 @@
-package com.BombingGames.Game.Lighting;
+package com.BombingGames.EngineCore.LightEngine;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Chunk;
