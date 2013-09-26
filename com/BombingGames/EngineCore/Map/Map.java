@@ -73,11 +73,10 @@ public class Map {
      */
     public void fillWithBlocks(){
         Gdx.app.log("DEBUG","Filling the map with blocks...");
-        
-        for (int x = 0; x < data.length; x++) {
-            for (int y = 0; y < data[x].length; y++) {
-                for (int z = 0; z < data[x][y].length; z++) {
-                    data[x][y][z] = new Cell();
+        for (Cell[][] x : data) {
+            for (Cell[] y : x) {
+                for (int z = 0; z < y.length; z++) {
+                    y[z] = new Cell();
                 }
             }   
         }

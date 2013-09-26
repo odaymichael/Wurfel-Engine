@@ -28,7 +28,7 @@ public class LightEngine {
     
     //ambient light
     private final float ambientBaseLevel = .5f;//value 0-1
-    private float k_ambient = 0.32f;//material constant, value 0-1
+    private final float k_ambient = 0.32f;//material constant, value 0-1
     private float I_ambient;//ambient light
     
     //diffuse light

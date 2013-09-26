@@ -15,6 +15,7 @@ import java.io.File;
 /**
  *The Main class of the engine. To create a new engine use  {@link com.BombingGames.WurfelEngine#construct(java.lang.String, java.lang.String[]) WurfelEngine.construct}
  * The Wurfel Engine needs the API libGDX0.9.8. It has not been tested with other versions.
+ * Java 7 does not work with libGDX0.9.8 on Mac. Use Java 6 instead.
  * @author Benedikt Vogler
  */
 public class WurfelEngine extends Game {
@@ -27,7 +28,7 @@ public class WurfelEngine extends Game {
     private static WurfelEngine instance;
 
     /**
-     * Create the Engine. Don't use this. Use construct instead. 
+     * Create the Engine. Don't use this. Use construct() instead. 
      * @param title The title, which is displayed in the window.
      * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
      */
