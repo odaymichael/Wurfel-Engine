@@ -1,4 +1,4 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
@@ -12,9 +12,9 @@ public class Sea extends Block implements IsSelfAware{
      *
      */
     public static int waveAmplitude = 50;
-    private static float wavespeed = 1/600f; //the smaller the slower
+    private static final float wavespeed = 1/600f; //the smaller the slower
     private static float currentX = 0;
-    private int wavesize = Map.getBlocksX()/7;
+    private final int wavesize = Map.getBlocksX()/7;
     
     private float startvalue;
     

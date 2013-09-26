@@ -1,7 +1,7 @@
 package com.BombingGames.EngineCore;
 
 import com.BombingGames.EngineCore.Map.Coordinate;
-import com.BombingGames.Game.Gameobjects.AbstractGameObject;
+import com.BombingGames.EngineCore.Gameobjects.AbstractGameObject;
 
 /**
  *Saves the information for the rendering. This class is only used in the rendering process.
@@ -10,7 +10,7 @@ import com.BombingGames.Game.Gameobjects.AbstractGameObject;
 public class Renderobject {
     private final Coordinate coords;
     private final int depth;
-    private AbstractGameObject content;
+    private final AbstractGameObject content;
 
      /**
          * Create an Renderobject with a regular Block in the map

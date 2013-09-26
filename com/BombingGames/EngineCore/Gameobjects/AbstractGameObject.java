@@ -1,4 +1,4 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;

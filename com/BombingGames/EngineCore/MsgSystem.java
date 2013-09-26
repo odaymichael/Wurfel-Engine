@@ -61,7 +61,7 @@ class Msg {
 public class MsgSystem extends ArrayList<Msg> {
     private int timelastupdate = 0;
     private boolean waitforinput = false;
-    private int xPos, yPos;    
+    private final int xPos, yPos;    
     private String input = "";
 
     /**

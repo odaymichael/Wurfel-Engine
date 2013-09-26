@@ -1,8 +1,8 @@
 package com.BombingGames.EngineCore.Map;
 
 import com.BombingGames.EngineCore.Controller;
-import com.BombingGames.Game.Gameobjects.AbstractGameObject;
-import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.EngineCore.Gameobjects.AbstractGameObject;
+import com.BombingGames.EngineCore.Gameobjects.Block;
 
 /**
  *A coordinate is a reference to a specific cell in the map. The coordinate can transfer between relative and absolute coordiantes.

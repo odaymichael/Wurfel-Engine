@@ -1,18 +1,9 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH4;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.GAMEDIMENSION;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_WIDTH2;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_WIDTH4;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.VALUESCOUNT;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getPixmap;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getSpritesheet;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -24,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
  * @author Benedikt Vogler
  */
 public class Block extends AbstractGameObject {
-    private static Color[][] colorlist = new Color[OBJECTTYPESCOUNT][VALUESCOUNT];
+    private static final Color[][] colorlist = new Color[OBJECTTYPESCOUNT][VALUESCOUNT];
     /**The id of the left side of a block.*/
     public static final int LEFTSIDE=0;
     /**The id of the top side of a block.*/
@@ -49,7 +40,7 @@ public class Block extends AbstractGameObject {
     private boolean clippedTop = false;
     private boolean clippedLeft = false;
     
-    private static AtlasRegion[][][] blocksprites = new AtlasRegion[OBJECTTYPESCOUNT][VALUESCOUNT][3];//{id}{value}{side}
+    private static final AtlasRegion[][][] blocksprites = new AtlasRegion[OBJECTTYPESCOUNT][VALUESCOUNT][3];//{id}{value}{side}
     
     static {
         NAMELIST[0] = "air";

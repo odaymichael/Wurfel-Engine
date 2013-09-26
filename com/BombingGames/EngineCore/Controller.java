@@ -4,10 +4,10 @@ import com.BombingGames.EngineCore.Map.Cell;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.EngineCore.Map.Minimap;
-import com.BombingGames.Game.Gameobjects.AbstractCharacter;
-import com.BombingGames.Game.Gameobjects.AbstractEntity;
-import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.AbstractGameObject;
+import com.BombingGames.EngineCore.Gameobjects.AbstractCharacter;
+import com.BombingGames.EngineCore.Gameobjects.AbstractEntity;
+import com.BombingGames.EngineCore.Gameobjects.Block;
+import com.BombingGames.EngineCore.Gameobjects.AbstractGameObject;
 import com.BombingGames.EngineCore.LightEngine.LightEngine;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Gdx;
@@ -27,7 +27,7 @@ public class Controller {
     
     private View view;
         
-    private ArrayList<WECamera> cameras = new ArrayList();
+    private final ArrayList<WECamera> cameras = new ArrayList();
     private Minimap minimap;
     /** The speed of time. 1 = real time;*/
     private float timespeed = 1;
