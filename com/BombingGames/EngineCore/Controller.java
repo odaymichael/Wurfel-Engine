@@ -8,7 +8,7 @@ import com.BombingGames.Game.Gameobjects.AbstractCharacter;
 import com.BombingGames.Game.Gameobjects.AbstractEntity;
 import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.Game.Gameobjects.AbstractGameObject;
-import com.BombingGames.Game.Lighting.LightEngine;
+import com.BombingGames.EngineCore.LightEngine.LightEngine;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
