@@ -9,11 +9,7 @@ import com.BombingGames.EngineCore.Map.Map;
  * @author Benedikt
  */
 public abstract class AbstractEntity extends AbstractGameObject implements IsSelfAware {
-   private Coordinate coords;//the position in the map-grid
-   private float positionX = 0; //the horizontal offset
-   private float positionY = 0;
-   
-    /**
+       /**
      *
      */
     public static final char CATEGORY = 'e';
@@ -24,6 +20,10 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     /** A list containing the offset of the objects. */
     public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][VALUESCOUNT][2];
     
+    private Coordinate coords;//the position in the map-grid
+    private float positionX = 0; //the horizontal offset
+    private float positionY = 0;
+   
     static {
         NAMELIST[40] = "player";
         OFFSET[40][0][0] = 54;

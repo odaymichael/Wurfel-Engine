@@ -115,50 +115,53 @@ public class ExplosivesDemoController extends Controller {
 
         @Override
         public boolean keyDown(int keycode) {
-            
-           //toggle minimap
-            if (keycode == Input.Keys.M){
-                GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
-            }
-            //toggle fullscreen
-            if (keycode == Input.Keys.F){
-                WurfelEngine.setFullscreen(!WurfelEngine.isFullscreen());
-                Gdx.app.log("DEBUG","Set to fullscreen:"+!WurfelEngine.isFullscreen());
-            }
+            if (!GameplayScreen.msgSystem().isListeningForInput()) {
+                //toggle minimap
+                 if (keycode == Input.Keys.M){
+                     GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
+                 }
+                 //toggle fullscreen
+                 if (keycode == Input.Keys.F){
+                     WurfelEngine.setFullscreen(!WurfelEngine.isFullscreen());
+                     Gdx.app.log("DEBUG","Set to fullscreen:"+!WurfelEngine.isFullscreen());
+                 }
 
-            //toggle eathquake
-            if (keycode == Input.Keys.E){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
-                getMap().earthquake(5000);
+                 //toggle eathquake
+                 if (keycode == Input.Keys.E){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
+                     getMap().earthquake(5000);
+                 }
+
+                 //pause
+                 //if (input.isKeyDown(Input.Keys.P)) Gdx.app.setPaused(true);
+                 //time is set 0 but the game keeps running
+                   if (keycode == Input.Keys.P) {
+                     setTimespeed(0);
+                  } 
+
+                 //reset zoom
+                 if (keycode == Input.Keys.Z) {
+                     getCameras().get(0).setZoom(1);
+                     GameplayScreen.msgSystem().add("Zoom reset");
+                  }  
+
+                 //show/hide light engine
+                 if (keycode == Input.Keys.L) {
+                     if (getLightengine() != null) getLightengine().RenderData(!getLightengine().isRenderingData());
+                  } 
+
+                  if (keycode == Input.Keys.T) {
+                     setTimespeed();
+                  } 
+
+                 if (keycode == Input.Keys.ESCAPE)// Gdx.app.exit();
+                     WurfelEngine.getInstance().setScreen(new MainMenuScreen());
             }
             
-            //pause
-            //if (input.isKeyDown(Input.Keys.P)) Gdx.app.setPaused(true);
-            //time is set 0 but the game keeps running
-              if (keycode == Input.Keys.P) {
-                setTimespeed(0);
-             } 
+             //toggle input for msgSystem
+             if (keycode == Input.Keys.ENTER)
+                 GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
 
-            //reset zoom
-            if (keycode == Input.Keys.Z) {
-                getCameras().get(0).setZoom(1);
-                GameplayScreen.msgSystem().add("Zoom reset");
-             }  
-            
-            //show/hide light engine
-            if (keycode == Input.Keys.L) {
-                getLightengine().RenderData(!getLightengine().isRenderingData());
-                Gdx.app.log("DEBUG","Toggled lightengine data rendering:"+ !getLightengine().isRenderingData());
-             } 
-            
-            //toggle input for msgSystem
-            if (keycode == Input.Keys.ENTER)
-                GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
-            
-             if (keycode == Input.Keys.T) {
-                setTimespeed();
-             } 
-            return true;
-            
+            return true;            
         }
 
         @Override
