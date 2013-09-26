@@ -68,7 +68,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
             if (jumpingSound != null) jumpingSound.play();
         }
     }
-    
 
     
    /**

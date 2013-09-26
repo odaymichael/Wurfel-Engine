@@ -365,7 +365,7 @@ public class Block extends AbstractGameObject {
     public void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb){
         Color color = Color.GRAY;
         if (Controller.getLightengine() != null){
-                color = Controller.getLightengine().getColorOfSide(sidenumb);
+            color = Controller.getLightengine().getColorOfSide(sidenumb);
         }
         renderSide(view, camera, coords, sidenumb, color);
     }

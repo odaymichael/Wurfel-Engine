@@ -85,12 +85,13 @@ public class Coordinate {
      * @return
      */
     public static Coordinate getMapCenter(float height){
-        return new Coordinate(
-                                Chunk.getBlocksX()/2,
-                                Chunk.getBlocksY()/2,
-                                height,
-                                false
-                            );
+        return
+            new Coordinate(
+                Chunk.getBlocksX()/2,
+                Chunk.getBlocksY()/2,
+                height,
+                false
+            );
     }
         
     
@@ -233,10 +234,10 @@ public class Coordinate {
      * @return the new coordiantes which resulted of the addition
      */
     public Coordinate addVector(int[] vector) {
-            this.x += vector[0];
-            this.y += vector[1];
-            this.height += vector[2]*Block.GAMEDIMENSION;
-            return this;
+        this.x += vector[0];
+        this.y += vector[1];
+        this.height += vector[2]*Block.GAMEDIMENSION;
+        return this;
     }
     
    /**
@@ -245,11 +246,11 @@ public class Coordinate {
      * @return the new coordiantes which resulted of the addition
      */
     public Coordinate addVectorCpy(int[] vector) {
-            Coordinate newvec = this.cpy();
-            newvec.x += vector[0];
-            newvec.y += vector[1];
-            newvec.height += vector[2]*Block.GAMEDIMENSION;
-            return newvec;
+        Coordinate newvec = this.cpy();
+        newvec.x += vector[0];
+        newvec.y += vector[1];
+        newvec.height += vector[2]*Block.GAMEDIMENSION;
+        return newvec;
     }
 
     /**
@@ -317,7 +318,7 @@ public class Coordinate {
      * @return
      */
     public int get2DPosX() {
-         int offset = 0;
+        int offset = 0;
         if (getZ()>=0)
             offset = (int) (getCellOffset()[0]);
         return getRelX() * Block.SCREEN_WIDTH //x-coordinate multiplied by it's dimension in this direction

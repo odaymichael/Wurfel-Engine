@@ -59,7 +59,7 @@ public abstract class AbstractGameObject {
     /**The sprite texture which contains every object texture*/
     private static TextureAtlas spritesheet;
     private static Pixmap pixmap;
-    private static AtlasRegion[][][] sprites = new AtlasRegion[(int) 'z'][OBJECTTYPESCOUNT][VALUESCOUNT];//{category}{id}{value}
+    private static final AtlasRegion[][][] sprites = new AtlasRegion[(int) 'z'][OBJECTTYPESCOUNT][VALUESCOUNT];//{category}{id}{value}
     
     private final int id; 
     private int value;

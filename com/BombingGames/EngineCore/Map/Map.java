@@ -317,10 +317,10 @@ public class Map {
         
         if (z >= blocksZ){
             z = blocksZ-1;
-            Gdx.app.log("DEBUG","Z:"+z);
+            Gdx.app.log("DEBUG","Z:"+z+">="+blocksZ);
         } else if( z < 0 ){
             z = 0;
-            Gdx.app.log("DEBUG","Z:"+z);
+            Gdx.app.log("DEBUG","Z:"+z+">="+blocksZ);
         }
         
         return data[x][y][z].getBlock();    
