@@ -328,7 +328,12 @@ public class Controller {
         return view;
     }
 
-    public static void setLightEngine(LightEngine lightEngine) {
-        Controller.lightEngine = lightEngine;
+    /**
+     * Use the light engine
+     * @param xPos the x position of the diagrams position
+     * @param yPos the y position of the diagrams position 
+     */
+    public static void useLightEngine(int xPos, int yPos) {
+        Controller.lightEngine = new LightEngine(xPos, yPos);
     }
 }
