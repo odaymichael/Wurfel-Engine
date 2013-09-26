@@ -43,10 +43,11 @@ public class WurfelEngine extends Game {
         if (args.length == 0){
            config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
         } else {
-            if (args.length >= 3)
+            if (args.length >= 3){
                 config.width = Integer.parseInt(args[0]);
                 config.height = Integer.parseInt(args[1]);
                 config.fullscreen = ("true".equals(args[2]));
+            }
         }    
         
         config.title = title + " " + config.width + "x"+config.height;     
