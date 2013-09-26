@@ -1,7 +1,7 @@
 package com.BombingGames.EngineCore;
 
+import com.BombingGames.EngineCore.Gameobjects.AbstractGameObject;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import com.BombingGames.Game.Gameobjects.AbstractGameObject;
 
 /**
  *Saves the information for the rendering. This class is only used in the rendering process.

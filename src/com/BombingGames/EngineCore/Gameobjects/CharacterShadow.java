@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
+import com.BombingGames.EngineCore.LightEngine.PseudoGrey;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
-import com.BombingGames.Game.Lighting.PseudoGrey;
 import com.badlogic.gdx.graphics.Color;
 
 /**

@@ -1,8 +1,8 @@
 package com.BombingGames.EngineCore.Map;
 
 import com.BombingGames.EngineCore.Controller;
-import com.BombingGames.Game.Gameobjects.AbstractGameObject;
-import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.EngineCore.Gameobjects.AbstractGameObject;
+import com.BombingGames.EngineCore.Gameobjects.Block;
 
 /**
  *A coordinate is a reference to a specific cell in the map. The coordinate can transfer between relative and absolute coordiantes.
@@ -365,7 +365,7 @@ public class Coordinate {
      * @param x game-space-coordinates, value in pixels
      * @param y game-space-coordinates, value in pixels
      * @return Returns the fieldnumber of the coordinates. 8 is the field itself.
-     * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#neighbourSidetoCoords(com.BombingGames.EngineCore.Map.Coordinate, int)
+     * @see com.BombingGames.EngineCore.Gameobjects.AbstractGameObject#neighbourSidetoCoords(com.BombingGames.EngineCore.Map.Coordinate, int)
      */
     public static int getNeighbourSide(float x, float y) {
         x += Block.SCREEN_WIDTH2;

@@ -1,10 +1,10 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.LightEngine.PseudoGrey;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
-import com.BombingGames.Game.Lighting.PseudoGrey;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -72,7 +72,7 @@ public abstract class AbstractGameObject {
      * Creates an object. Use getInterface() to create blocks or entitys.
      * @param id the id of the object
      * @param value 
-     * @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
+     * @see com.BombingGames.EngineCore.Gameobjects.Block#getInstance() 
      */
     protected AbstractGameObject(int id, int value) {
         this.id = id;
@@ -378,7 +378,7 @@ public abstract class AbstractGameObject {
     /**
      * Hide this object and prevent it from beeing rendered. Don't use this to hide objects. This data is only for rendering data and view specific not for gameworld information. This should be just used for setting during the rendering process.
      * @param clipped Sets the visibility.
-     * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#setHidden(boolean) 
+     * @see com.BombingGames.EngineCore.Gameobjects.AbstractGameObject#setHidden(boolean) 
      */
     public void setClipped(boolean clipped) {
         this.clipped = clipped;

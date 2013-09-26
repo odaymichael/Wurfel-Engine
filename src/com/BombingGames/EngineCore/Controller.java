@@ -1,14 +1,14 @@
 package com.BombingGames.EngineCore;
 
+import com.BombingGames.EngineCore.Gameobjects.AbstractCharacter;
+import com.BombingGames.EngineCore.Gameobjects.AbstractEntity;
+import com.BombingGames.EngineCore.Gameobjects.AbstractGameObject;
+import com.BombingGames.EngineCore.Gameobjects.Block;
+import com.BombingGames.EngineCore.LightEngine.LightEngine;
 import com.BombingGames.EngineCore.Map.Cell;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.EngineCore.Map.Minimap;
-import com.BombingGames.Game.Gameobjects.AbstractCharacter;
-import com.BombingGames.Game.Gameobjects.AbstractEntity;
-import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.AbstractGameObject;
-import com.BombingGames.Game.Lighting.LightEngine;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;

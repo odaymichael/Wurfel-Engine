@@ -1,13 +1,15 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.GAMEDIMENSION;
+
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.GAMEDIMENSION;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_DEPTH;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_WIDTH;
+
 import com.BombingGames.EngineCore.Map.Map;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_WIDTH;
 
 /**
  *An entity is a game object wich is self aware that means it knows it's position.
@@ -58,7 +60,7 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     /**
      * Create an abstractEntity. You should use Block.getInstance(int) 
      * @param id 
-     * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
+     * @see com.BombingGames.EngineCore.Gameobjects.Block#getInstance(int) 
      */
     protected AbstractEntity(int id){
         super(id,0);

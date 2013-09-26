@@ -1,5 +1,8 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.EngineCore.Gameobjects.AbstractCharacter;
+import com.BombingGames.EngineCore.Gameobjects.AbstractEntity;
+import com.BombingGames.EngineCore.Gameobjects.Block;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.EngineCore.Map.Minimap;
 import com.BombingGames.EngineCore.WECamera;
@@ -11,9 +14,6 @@ import static com.BombingGames.EngineCore.Controller.getMap;
 
 import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.EngineCore.Map.Chunk;
-import com.BombingGames.Game.Gameobjects.AbstractCharacter;
-import com.BombingGames.Game.Gameobjects.AbstractEntity;
-import com.BombingGames.Game.Gameobjects.Block;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;

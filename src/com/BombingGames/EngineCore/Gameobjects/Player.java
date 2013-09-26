@@ -1,4 +1,4 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.badlogic.gdx.Gdx;
@@ -13,7 +13,7 @@ public class Player extends AbstractCharacter{
      * Creates a player. The parameters are for the lower half of the player. The constructor automatically creates a block on top of it.
      * @param id 
      * @param coord 
-     * @see com.BombingGames.Game.Gameobjects.Block#getInstance(int) 
+     * @see com.BombingGames.EngineCore.Gameobjects.Block#getInstance(int) 
      */
     public Player(int id, Coordinate coord) {
         super(id, 1, coord);

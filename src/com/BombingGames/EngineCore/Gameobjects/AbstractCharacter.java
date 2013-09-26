@@ -1,4 +1,4 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
@@ -53,7 +53,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
    
    /**
      * This method should define what happens when the object  jumps. It should call super.jump(int velo)
-     * @see com.BombingGames.Game.Gameobjects.AbstractCharacter#jump(float)
+     * @see com.BombingGames.EngineCore.Gameobjects.AbstractCharacter#jump(float)
      */
     public abstract void jump();
     

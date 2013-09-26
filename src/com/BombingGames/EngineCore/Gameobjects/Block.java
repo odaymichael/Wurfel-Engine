@@ -1,18 +1,20 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH4;
+
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.GAMEDIMENSION;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_DEPTH4;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_WIDTH2;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_WIDTH4;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.VALUESCOUNT;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.getPixmap;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.getSpritesheet;
+
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.GAMEDIMENSION;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_WIDTH2;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_WIDTH4;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.VALUESCOUNT;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getPixmap;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getSpritesheet;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -85,7 +87,7 @@ public class Block extends AbstractGameObject {
     /**
      * Don't use this constructor to get a new block. Use the static <i>getInstance</i> methods instead.
      * @param id
-     *  @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
+     *  @see com.BombingGames.EngineCore.Gameobjects.Block#getInstance() 
      */
     protected Block(int id){
         super(id,0);

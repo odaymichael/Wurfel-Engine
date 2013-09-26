@@ -1,9 +1,10 @@
 package com.BombingGames.EngineCore.Map;
 
 import com.BombingGames.EngineCore.Controller;
-import com.BombingGames.Game.Gameobjects.AbstractEntity;
-import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.EngineCore.Gameobjects.AbstractEntity;
+import com.BombingGames.EngineCore.Gameobjects.Block;
 import com.badlogic.gdx.Gdx;
+
 import java.util.ArrayList;
 
 /**

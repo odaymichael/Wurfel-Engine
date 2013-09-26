@@ -1,8 +1,8 @@
 package com.BombingGames.EngineCore;
 
+import com.BombingGames.EngineCore.Gameobjects.Block;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
-import com.BombingGames.Game.Gameobjects.Block;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
