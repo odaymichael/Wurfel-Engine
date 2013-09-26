@@ -102,7 +102,7 @@ public class WurfelEngine extends Game {
             + "Benedikt Vogler"+newline
             + "Pia Lenﬂen"+newline+newline
             + "Sound:"+newline
-            + "Bendikt Vogler"+newline+newline
+            + "Benedikt Vogler"+newline+newline
             + "Quality Assurance"+newline
             + "Thomas Vogt"+newline+newline
         	+ "Android-Porting:"+newline
