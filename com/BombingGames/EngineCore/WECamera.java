@@ -8,10 +8,10 @@ import com.BombingGames.EngineCore.Gameobjects.Block;
 import com.BombingGames.EngineCore.Gameobjects.AbstractGameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
-import org.lwjgl.opengl.GL11;
 
 /**
  *Creates a virtual camera wich displays the game world on the viewport.  
@@ -161,7 +161,7 @@ public class WECamera extends Camera {
             );
             
             view.getBatch().begin();
-            view.setDrawmode(GL11.GL_MODULATE);
+            view.setDrawmode(GL10.GL_MODULATE);
             
             //render last layer tiles if visible
             for (int x = 0; x < Map.getBlocksX(); x++) {

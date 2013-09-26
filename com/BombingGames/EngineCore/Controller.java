@@ -27,7 +27,7 @@ public class Controller {
     
     private View view;
         
-    private final ArrayList<WECamera> cameras = new ArrayList();
+    private final ArrayList<WECamera> cameras = new ArrayList<WECamera>();
     private Minimap minimap;
     /** The speed of time. 1 = real time;*/
     private float timespeed = 1;
@@ -54,7 +54,6 @@ public class Controller {
          //update the log
         GameplayScreen.msgSystem().update(delta);
         
-                
         if (ENABLECHUNKSWITCH && cameras.size() >0){
             //earth to right
             if (cameras.get(0).getLeftBorder() <= 0)
