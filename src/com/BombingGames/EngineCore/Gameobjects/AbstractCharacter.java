@@ -14,7 +14,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private final int COLISSIONRADIUS = SCREEN_DEPTH2;
    private final int SPRITESPERDIR;
       
-   private float[] dir = {1, 0, 0};
+   private final float[] dir = {1, 0, 0};
    private String controls = "NPC";
 
    /** Set value how fast the character brakes or slides. 1 is "immediately". The higher the value, the more "slide". Can cause problems with running sound. Value >1**/
@@ -34,7 +34,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
 
    private boolean inliquid;
        
-   private CharacterShadow shadow;
+   private final CharacterShadow shadow;
    
    private int walkingAnimationCounter;
 

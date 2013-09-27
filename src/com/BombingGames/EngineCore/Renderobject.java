@@ -10,7 +10,7 @@ import com.BombingGames.EngineCore.Map.Coordinate;
 public class Renderobject {
     private final Coordinate coords;
     private final int depth;
-    private AbstractGameObject content;
+    private final AbstractGameObject content;
 
      /**
          * Create an Renderobject with a regular Block in the map

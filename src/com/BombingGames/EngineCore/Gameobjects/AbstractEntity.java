@@ -2,13 +2,6 @@ package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.GAMEDIMENSION;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_DEPTH;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_WIDTH;
-
 import com.BombingGames.EngineCore.Map.Map;
 
 /**

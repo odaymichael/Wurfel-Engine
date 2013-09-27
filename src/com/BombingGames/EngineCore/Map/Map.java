@@ -32,14 +32,14 @@ public class Map {
     private boolean newMap;
     
     /**A list which has all current nine chunk coordinates in it.*/
-    private int[][] coordlist = new int[9][2];
+    private final int[][] coordlist = new int[9][2];
     
     private static int blocksX, blocksY, blocksZ;
     /** the map data are the blocks in their cells */
     private Cell[][][] data;
     
     /** every entity on the map is stored in this field */
-    private ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
+    private final ArrayList<AbstractEntity> entitylist = new ArrayList<AbstractEntity>();
         
     /**
      *Creates an empty  map. Fill the map with fillWithBlocks(boolean load);

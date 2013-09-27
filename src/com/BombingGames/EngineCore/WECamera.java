@@ -33,7 +33,7 @@ public class WECamera extends Camera {
     
     private Coordinate focusCoordinates;
     private AbstractEntity focusentity;
-    private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
+    private final ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
     
     private final Block groundBlock;
     

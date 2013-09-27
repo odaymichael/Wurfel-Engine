@@ -26,7 +26,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
  * @author Benedikt Vogler
  */
 public class Block extends AbstractGameObject {
-    private static Color[][] colorlist = new Color[OBJECTTYPESCOUNT][VALUESCOUNT];
+    private static final Color[][] colorlist = new Color[OBJECTTYPESCOUNT][VALUESCOUNT];
     /**The id of the left side of a block.*/
     public static final int LEFTSIDE=0;
     /**The id of the top side of a block.*/
@@ -51,7 +51,7 @@ public class Block extends AbstractGameObject {
     private boolean clippedTop = false;
     private boolean clippedLeft = false;
     
-    private static AtlasRegion[][][] blocksprites = new AtlasRegion[OBJECTTYPESCOUNT][VALUESCOUNT][3];//{id}{value}{side}
+    private static final AtlasRegion[][][] blocksprites = new AtlasRegion[OBJECTTYPESCOUNT][VALUESCOUNT][3];//{id}{value}{side}
     
     static {
         NAMELIST[0] = "air";

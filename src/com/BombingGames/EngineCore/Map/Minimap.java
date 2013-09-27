@@ -19,7 +19,7 @@ public class Minimap {
     private final float scaleY = 6;//4
     private Controller controller;
     private WECamera camera;
-    private Color[][] mapdata = new Color[Map.getBlocksX()][Map.getBlocksY()];
+    private final Color[][] mapdata = new Color[Map.getBlocksX()][Map.getBlocksY()];
     private boolean visible;
 
     /**

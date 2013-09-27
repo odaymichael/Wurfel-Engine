@@ -27,7 +27,7 @@ public class Controller {
         
 
     private View view;
-    private ArrayList<WECamera> cameras = new ArrayList();
+    private final ArrayList<WECamera> cameras = new ArrayList();
     private Minimap minimap;
     /** The speed of time. 1 = real time;*/
     private float timespeed = 1;
