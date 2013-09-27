@@ -59,7 +59,7 @@ public class WurfelEngine extends Game {
 
         workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
         
-        Texture.setEnforcePotImages(false);
+        Texture.setEnforcePotImages(false);//allow non-power-of-two textures
         LwjglApplication application = new LwjglApplication(this, config);
          
         //LIBGDX: no equivalent found in libGDX yet
