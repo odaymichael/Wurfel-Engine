@@ -33,6 +33,10 @@ public class WurfelEngine extends Game {
      * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
      */
     private WurfelEngine(String title, String[] args){
+        // set the name of the application menu item on mac
+        if (System.getProperty("os.name").toLowerCase().equals("mac"))
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", title);
+        
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
          config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
