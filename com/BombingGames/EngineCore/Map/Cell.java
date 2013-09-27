@@ -1,6 +1,6 @@
 package com.BombingGames.EngineCore.Map;
 
-import com.BombingGames.Game.Gameobjects.Block;
+import com.BombingGames.EngineCore.Gameobjects.Block;
 
 /**
  * A cell is field in the map containing a block. It can have an offset.

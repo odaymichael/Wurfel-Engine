@@ -1,8 +1,8 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.Gameobjects.Block;
 import com.BombingGames.EngineCore.View;
-import com.BombingGames.Game.Gameobjects.Block;
 import com.badlogic.gdx.Gdx;
 
 

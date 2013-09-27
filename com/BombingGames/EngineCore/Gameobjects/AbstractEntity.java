@@ -1,25 +1,16 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
-import com.BombingGames.Game.Zombie;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_DEPTH;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.GAMEDIMENSION;
 import com.BombingGames.EngineCore.Map.Map;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.SCREEN_WIDTH;
+import com.BombingGames.Game.Zombie;
 
 /**
  *An entity is a game object wich is self aware that means it knows it's position.
  * @author Benedikt
  */
 public abstract class AbstractEntity extends AbstractGameObject implements IsSelfAware {
-   private Coordinate coords;//the position in the map-grid
-   private float positionX = 0; //the horizontal offset
-   private float positionY = 0;
-   
-    /**
+       /**
      *
      */
     public static final char CATEGORY = 'e';
@@ -30,6 +21,10 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     /** A list containing the offset of the objects. */
     public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][VALUESCOUNT][2];
     
+    private Coordinate coords;//the position in the map-grid
+    private float positionX = 0; //the horizontal offset
+    private float positionY = 0;
+   
     static {
         NAMELIST[40] = "player";
         OFFSET[40][0][0] = 24+21;

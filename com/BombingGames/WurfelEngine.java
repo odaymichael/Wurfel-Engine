@@ -15,46 +15,53 @@ import java.io.File;
 
 /**
  *The Main class of the engine. To create a new engine use  {@link com.BombingGames.WurfelEngine#construct(java.lang.String, java.lang.String[]) WurfelEngine.construct}
- * The Wurfel Engine needs the API libGDX0.9.8. It has not been tested with other versions.
+ * The Wurfel Engine needs the API libGDX0.9.8. Besides the shape renderer the nightly build does also work (27. September 2013).
+ * Java 7 does not work with libGDX0.9.8 on Mac. Use Java 6 instead. You can use Java 7 when using the nightly build  (27. September 2013).
  * @author Benedikt Vogler
  */
 public class WurfelEngine extends Game {
     /**
      * The version of the Engine
      */
-    public static final String VERSION = "1.1.8";    
+    public static final String VERSION = "1.1.9";    
     private static File workingDirectory;
     private static boolean fullscreen = false;
     private static WurfelEngine instance;
 
     /**
-     * Create the Engine. Don't use this. Use construct instead. 
+     * Create the Engine. Don't use this. Use construct() instead. 
      * @param title The title, which is displayed in the window.
      * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
      */
     private WurfelEngine(String title, String[] args){
-        final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        // set the name of the application menu item on mac
+        if (System.getProperty("os.name").toLowerCase().equals("mac"))
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", title);
+        
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
          config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
          config.fullscreen = false;
          config.vSyncEnabled = false;
+         config.useGL20 = false;
          
         //arguments
         //you can start the game with a custom resolution
         if (args.length == 0){
            config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
         } else {
-            if (args.length >= 3)
+            if (args.length >= 3){
                 config.width = Integer.parseInt(args[0]);
                 config.height = Integer.parseInt(args[1]);
                 config.fullscreen = ("true".equals(args[2]));
+            }
         }    
         
         config.title = title + " " + config.width + "x"+config.height;     
 
         workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
         
-        Texture.setEnforcePotImages(false);
+        Texture.setEnforcePotImages(false);//allow non-power-of-two textures
         LwjglApplication application = new LwjglApplication(this, config);
          
         //LIBGDX: no equivalent found in libGDX yet
@@ -104,8 +111,8 @@ public class WurfelEngine extends Game {
      * @return a long string with breaks
      */
     public static String getCredits() {
-        final String newline = System.getProperty("line.separator");
-        return "Idea & Producing:"+newline
+        String newline = System.getProperty("line.separator");
+        return "Created by:"+newline
             + " Benedikt Vogler"+newline+newline
             + "Programming:"+newline
             + "Benedikt Vogler"+newline+newline

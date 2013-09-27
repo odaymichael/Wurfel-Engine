@@ -1,12 +1,10 @@
 package com.BombingGames.Game;
 
 import com.BombingGames.EngineCore.Controller;
+import com.BombingGames.EngineCore.Gameobjects.AbstractCharacter;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
-import com.BombingGames.Game.Gameobjects.AbstractCharacter;
-import static com.BombingGames.Game.Gameobjects.AbstractEntity.CATEGORY;
-import static com.BombingGames.Game.Gameobjects.AbstractGameObject.getSprites;
 import com.badlogic.gdx.graphics.Color;
 import java.util.Arrays;
 

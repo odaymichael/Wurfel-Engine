@@ -1,4 +1,4 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.audio.Sound;
  */
 public class ExplosiveBarrel extends Block implements IsSelfAware {
     /**Defines the radius of the explosion.*/
-    public static int RADIUS = 2;
+    public static final int RADIUS = 2;
     private Coordinate coords;
     private static Sound explosionsound;
 

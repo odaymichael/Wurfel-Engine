@@ -1,6 +1,7 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
+import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.badlogic.gdx.Gdx;
@@ -14,7 +15,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
    private final int COLISSIONRADIUS = SCREEN_DEPTH2;
    private final int SPRITESPERDIR;
       
-   private float[] dir = {1, 0, 0};
+   private final float[] dir = {1, 0, 0};
    private String controls = "NPC";
 
    /** Set value how fast the character brakes or slides. 1 is "immediately". The higher the value, the more "slide". Can cause problems with running sound. Value >1**/
@@ -35,7 +36,7 @@ public abstract class AbstractCharacter extends AbstractEntity {
 
    private boolean inliquid;
        
-   private CharacterShadow shadow;
+   private final CharacterShadow shadow;
    
    private int walkingAnimationCounter;
 
@@ -68,7 +69,6 @@ public abstract class AbstractCharacter extends AbstractEntity {
             if (jumpingSound != null) jumpingSound.play();
         }
     }
-    
 
     
    /**

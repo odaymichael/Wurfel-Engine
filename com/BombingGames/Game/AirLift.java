@@ -1,8 +1,8 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.EngineCore.Gameobjects.Block;
+import com.BombingGames.EngineCore.Gameobjects.IsSelfAware;
 import com.BombingGames.EngineCore.Map.Coordinate;
-import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.IsSelfAware;
 
 
 /**
@@ -10,7 +10,7 @@ import com.BombingGames.Game.Gameobjects.IsSelfAware;
  * @author Benedikt Vogler
  */
 public class AirLift extends Block implements IsSelfAware {
-    Coordinate coords;
+    private Coordinate coords;
 
     public AirLift(Coordinate coords, int id) {
         super(id);

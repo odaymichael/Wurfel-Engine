@@ -1,17 +1,17 @@
 package com.BombingGames.EngineCore;
 
+import com.BombingGames.EngineCore.Gameobjects.AbstractEntity;
+import com.BombingGames.EngineCore.Gameobjects.AbstractGameObject;
+import com.BombingGames.EngineCore.Gameobjects.Block;
 import com.BombingGames.EngineCore.Map.Cell;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
-import com.BombingGames.Game.Gameobjects.AbstractEntity;
-import com.BombingGames.Game.Gameobjects.Block;
-import com.BombingGames.Game.Gameobjects.AbstractGameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
-import org.lwjgl.opengl.GL11;
 
 /**
  *Creates a virtual camera wich displays the game world on the viewport.  
@@ -33,7 +33,7 @@ public class WECamera extends Camera {
     
     private Coordinate focusCoordinates;
     private AbstractEntity focusentity;
-    private ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
+    private final ArrayList<Renderobject> depthsort = new ArrayList<Renderobject>();
     
     private final Block groundBlock;
     
@@ -161,7 +161,7 @@ public class WECamera extends Camera {
             );
             
             view.getBatch().begin();
-            view.setDrawmode(GL11.GL_MODULATE);
+            view.setDrawmode(GL10.GL_MODULATE);
             
             //render last layer tiles if visible
             for (int x = 0; x < Map.getBlocksX(); x++) {
@@ -199,14 +199,15 @@ public class WECamera extends Camera {
                 for (int z=0; z < Map.getBlocksZ(); z++){
                     
                     Coordinate coord = new Coordinate(x, y, z, true); 
-                    if (! coord.getBlock().isHidden()
-                        && !coord.getBlock().isClipped()
+                    Block blockAtCoord = coord.getBlock();
+                    if (! blockAtCoord.isHidden()
+                        && !blockAtCoord.isClipped()
                         && 
-                            coord.getBlock().get2DPosY(coord)
+                            coord.get2DPosY()
                         <
                             outputPosY + get2DHeight()
                     ) {
-                        depthsort.add(new Renderobject(Controller.getMapData(coord), coord));
+                        depthsort.add(new Renderobject(blockAtCoord, coord));
                     }
                 }
             }
@@ -216,9 +217,7 @@ public class WECamera extends Camera {
             AbstractEntity entity = Controller.getMap().getEntitys().get(i);
             if (!entity.isHidden() && !entity.isClipped()
                 && 
-                entity.get2DPosY(entity.getCoords())
-                <
-                outputPosY + get2DHeight()
+                entity.get2DPosY(null) < outputPosY + get2DHeight()
                 )
                     depthsort.add(
                         new Renderobject(entity, entity.getCoords())
@@ -424,15 +423,10 @@ public class WECamera extends Camera {
             && (left || right) //left or right still visible
             && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset()));
         
-        //check last layer
-        if ((z <= 0)
+        DEEPEST_LAYER_VISIVBILITY[x][y] =
+            (z <= 0)
             && (left || right) //left or right still visible
-            && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset())
-            ) {
-            DEEPEST_LAYER_VISIVBILITY[x][y] = true;
-            //Gdx.app.log("DEBUG", "Ray hit ground at:["+x+"|"+y+"] "+left+":"+right);
-        } else
-            DEEPEST_LAYER_VISIVBILITY[x][y]=false;
+            && (!new Coordinate(x, y, z, true).hidingPastBlock() || new Coordinate(x, y, z, true).hasOffset());
     }
     
     /**

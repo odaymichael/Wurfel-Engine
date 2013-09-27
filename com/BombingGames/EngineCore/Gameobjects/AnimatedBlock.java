@@ -1,14 +1,14 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 /**
  *A block who has an animation.
  * @author Benedikt
  */
 public class AnimatedBlock extends Block implements Animatable{
-    private int[] animationsduration;
+    private final int[] animationsduration;
     private int counter = 0;
     private boolean running;
-    private boolean loop;
+    private final boolean loop;
     
     /**
      * Create this Block with an array wich has the time of every animation step in ms in it.

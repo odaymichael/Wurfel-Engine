@@ -1,4 +1,4 @@
-package com.BombingGames.Game.Gameobjects;
+package com.BombingGames.EngineCore.Gameobjects;
 
 /**
  *An object wich is animatable.

@@ -1,8 +1,8 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.EngineCore.Gameobjects.AbstractGameObject;
+import com.BombingGames.EngineCore.Gameobjects.Block;
 import com.BombingGames.EngineCore.View;
-import com.BombingGames.Game.Gameobjects.AbstractGameObject;
-import com.BombingGames.Game.Gameobjects.Block;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.lwjgl.opengl.GL11;
@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 public class BlockToolbar {
     private int posX;
     private int posY;
-    private Block[] slot = new Block[9];
+    private final Block[] slot = new Block[9];
     private int selection = 0;
 
     public BlockToolbar() {
