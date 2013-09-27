@@ -389,13 +389,13 @@ public class Block extends AbstractGameObject {
                    color.clamp();
                }
                 if (!clippedLeft)
-                    renderSideAt(view, xPos, yPos+SCREEN_WIDTH4, Block.LEFTSIDE, color, scale);
+                    renderSideAt(view, xPos, (int) (yPos+SCREEN_WIDTH4*(1+scale)), Block.LEFTSIDE, color, scale);
                 if (shade) {
                     color = color.sub(Color.DARK_GRAY.cpy());
                     color.clamp();
                 }
                 if (!clippedRight)
-                    renderSideAt(view, xPos+SCREEN_WIDTH2, yPos+SCREEN_WIDTH4, Block.RIGHTSIDE, color, scale);
+                    renderSideAt(view, (int) (xPos+SCREEN_WIDTH2*(1+scale)), (int) (yPos+SCREEN_WIDTH4*(1+scale)), Block.RIGHTSIDE, color, scale);
             } else super.renderAt(view, xPos, yPos, color);
         }
     }
@@ -460,6 +460,7 @@ public class Block extends AbstractGameObject {
     public void renderSideAt(final View view, int xPos, int yPos, final int sidenumb, Color color, float scale){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         sprite.setPosition(xPos, yPos);
+        sprite.setOrigin(0,0);
         sprite.scale(scale);
         
         color.mul(getLightlevel()*2);
