@@ -20,7 +20,7 @@ public class View {
      * The virtual render width (resolution).
      * Every resolution smaller than this get's scaled down and every resolution bigger scaled up. 
      */
-    public static final int RENDER_RESOLUTION_WIDTH = 1920;
+    public static final int RENDER_RESOLUTION_WIDTH = 960;
 
     private static BitmapFont font;
     
@@ -120,21 +120,21 @@ public class View {
    /**
      * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
      * @param x the x position on the screen
-     * @param camera 
+     * @param camera the camera where the position is on
      * @return the relative game coordinate
      */
     public int ScreenXtoGame(int x, WECamera camera){
-        return (int) ((x - camera.getViewportPosX()) / camera.getTotalScale()+ camera.getGamePosX());
+        return (int) (x / camera.getTotalScale()- camera.getViewportPosX()+ camera.getOutputPosX());
     }
     
    /**
      * Reverts the perspective and transforms it into a coordiante which can be used in the game logic.
      * @param y the y position on the screen
-     * @param camera 
+     * @param camera the camera where the position is on
      * @return the relative game coordinate
      */
     public int ScreenYtoGame(int y, WECamera camera){
-        return (int) ((y - camera.getViewportPosY()) / camera.getTotalScale() + camera.getGamePosY()) * 2;
+        return (int) ((y / camera.getTotalScale() + camera.getOutputPosY())*2 - camera.getViewportPosY());
     }
     
     /**
@@ -144,10 +144,9 @@ public class View {
      * @return the relative map coordinates
      */
     public Coordinate ScreenToGameCoords(int x, int y){
-        int i = 0;
-
         //find camera
-         WECamera camera;
+        WECamera camera;
+        int i = 0;
          do {          
             camera = controller.getCameras().get(i);
             i++;
@@ -155,27 +154,26 @@ public class View {
             && !(x > camera.getViewportPosX() && x < camera.getViewportPosX()+camera.getViewportWidth()
                 && y > camera.getViewportPosY() && y < camera.getViewportPosY()+camera.getViewportHeight()));
  
-        
-        //reverse y to game niveau, first the zoom:
+        //reverse y to game niveau
         x = ScreenXtoGame(x, camera);
         y = ScreenYtoGame(y, camera);
         
-        
         //find out where the click went
         Coordinate coords = new Coordinate(
-                       x / Block.SCREEN_WIDTH -1,
-                       2*y / (Block.SCREEN_DEPTH*2) -1,
+                       x / Block.SCREEN_WIDTH,
+                       y / (2*Block.SCREEN_DEPTH)*2,
                        Map.getBlocksZ()-1,
-                        true
+                       true
         );
        
         //find the specific coordinate
         Coordinate specificCoords = Coordinate.neighbourSidetoCoords(
-                            coords,
-                            Coordinate.getNeighbourSide(x % Block.SCREEN_WIDTH, y % Block.SCREEN_DEPTH*2)
+            coords,
+            Coordinate.getNeighbourSide(x % Block.SCREEN_WIDTH, y % (2*Block.SCREEN_DEPTH))
         );
         coords.setRelX(specificCoords.getRelX());
         coords.setRelY(specificCoords.getRelY() + coords.getZ()*2);
+//        coords.setRelY(coords.getRelY() + coords.getZ()*2);
         
         //if selection is not found by that specify it
         if (coords.getBlock().isHidden()){
