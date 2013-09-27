@@ -57,7 +57,7 @@ public class BlockToolbar {
         
         for (int i = 0; i < 9; i++) {
             if (slot[i].getId() != 0){
-                slot[i].renderAt(view, posX+i*80+17, posY+15, Color.GRAY);
+                slot[i].renderAt(view, posX+i*80+17, posY+15, Color.GRAY.cpy());
             }
         }
         batch.end();
