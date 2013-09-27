@@ -111,7 +111,7 @@ public class WurfelEngine extends Game {
      */
     public static String getCredits() {
         String newline = System.getProperty("line.separator");
-        return "Idea & Producing:"+newline
+        return "Created by:"+newline
             + " Benedikt Vogler"+newline+newline
             + "Programming:"+newline
             + "Benedikt Vogler"+newline+newline
