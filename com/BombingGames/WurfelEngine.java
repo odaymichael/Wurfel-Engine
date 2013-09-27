@@ -42,6 +42,7 @@ public class WurfelEngine extends Game {
          config.setFromDisplayMode(LwjglApplicationConfiguration.getDesktopDisplayMode());
          config.fullscreen = false;
          config.vSyncEnabled = false;
+         config.useGL20 = false;
          
         //arguments
         //you can start the game with a custom resolution
