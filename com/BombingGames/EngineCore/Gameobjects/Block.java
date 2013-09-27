@@ -1,10 +1,10 @@
 package com.BombingGames.EngineCore.Gameobjects;
 
-import com.BombingGames.Game.AirLift;
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
+import com.BombingGames.Game.AirLift;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -375,7 +375,7 @@ public class Block extends AbstractGameObject {
                     renderSideAt(view, xPos, yPos+SCREEN_WIDTH4, Block.LEFTSIDE, color);
                 if (!clippedRight)
                     renderSideAt(view, xPos+SCREEN_WIDTH2, yPos+SCREEN_WIDTH4, Block.RIGHTSIDE, color);
-                } else super.renderAt(view, xPos, yPos, color);
+             } else super.renderAt(view, xPos, yPos, color);
         }
     }
        
