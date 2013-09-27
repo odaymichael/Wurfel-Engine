@@ -32,7 +32,7 @@ public class CustomGameController extends Controller {
         
     @Override
     public void init(){
-         Chunk.setGenerator(0);
+         Chunk.setGenerator(20);
          super.init();
 
 
