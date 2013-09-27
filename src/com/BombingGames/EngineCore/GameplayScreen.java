@@ -19,6 +19,8 @@ public class GameplayScreen implements Screen{
     
     /**
      * Create the gameplay state.
+     * @param controller The controller of this screen.
+     * @param view  The view of this screen.
      */
     public GameplayScreen(Controller controller, View view) {
         msgSystem = new MsgSystem(Gdx.graphics.getWidth()/2, 3*Gdx.graphics.getHeight()/4);
@@ -27,7 +29,7 @@ public class GameplayScreen implements Screen{
         this.controller.init();
         this.view = view;
         this.view.init(controller);
-        this.controller.setView(view); 
+        this.controller.setView(view);
     }
              
 
@@ -38,7 +40,7 @@ public class GameplayScreen implements Screen{
     public static MsgSystem msgSystem() {
         return msgSystem;
     }
-    
+
     /**
      *
      * @return
@@ -56,8 +58,7 @@ public class GameplayScreen implements Screen{
     }
     
     
- 
-   
+
     @Override
     public void render(float delta) {
         controller.update(delta*1000);

@@ -1,19 +1,17 @@
 package com.BombingGames.Game;
 
+import com.BombingGames.EngineCore.Controller;
+import static com.BombingGames.EngineCore.Controller.getLightengine;
+import static com.BombingGames.EngineCore.Controller.getMap;
 import com.BombingGames.EngineCore.Gameobjects.AbstractCharacter;
 import com.BombingGames.EngineCore.Gameobjects.AbstractEntity;
 import com.BombingGames.EngineCore.Gameobjects.Block;
+import com.BombingGames.EngineCore.GameplayScreen;
+import com.BombingGames.EngineCore.Map.Chunk;
+import com.BombingGames.EngineCore.Map.Coordinate;
 import com.BombingGames.EngineCore.Map.Map;
 import com.BombingGames.EngineCore.Map.Minimap;
 import com.BombingGames.EngineCore.WECamera;
-import com.BombingGames.EngineCore.Map.Coordinate;
-import com.BombingGames.EngineCore.Controller;
-
-import static com.BombingGames.EngineCore.Controller.getLightengine;
-import static com.BombingGames.EngineCore.Controller.getMap;
-
-import com.BombingGames.EngineCore.GameplayScreen;
-import com.BombingGames.EngineCore.Map.Chunk;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
@@ -25,11 +23,11 @@ import com.badlogic.gdx.InputProcessor;
  * @author Benedikt
  */
 public class CustomGameController extends Controller {
-    
-    @Override 
-    public void init(){ 
-        Chunk.setGenerator(0); 
-        super.init(); 
+        
+    @Override
+    public void init(){
+         Chunk.setGenerator(0);
+         super.init();
 
          AbstractCharacter player = (AbstractCharacter) AbstractEntity.getInstance(
                 40,
@@ -62,7 +60,7 @@ public class CustomGameController extends Controller {
             new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 400,10)
         );
         
-        Chunk.setGenerator(1);
+        useLightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         
         
         Gdx.input.setInputProcessor(new InputListener());
@@ -98,7 +96,7 @@ public class CustomGameController extends Controller {
                     + (input.isKeyPressed(Input.Keys.D)? 3: 0)
                     - (input.isKeyPressed(Input.Keys.A)? 3: 0)
                     );
-            }         
+            }
         }
         
         super.update(delta);
@@ -108,55 +106,53 @@ public class CustomGameController extends Controller {
 
         @Override
         public boolean keyDown(int keycode) {
-        	if(!GameplayScreen.msgSystem().isListeningForInput()){
+            if (!GameplayScreen.msgSystem().isListeningForInput()) {
                 //toggle minimap
-                if (keycode == Input.Keys.M){
-                    GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
-                }
-                //toggle fullscreen
-                if (keycode == Input.Keys.F){
-                    WurfelEngine.setFullscreen(!WurfelEngine.isFullscreen());
-                    Gdx.app.log("DEBUG","Set to fullscreen:"+!WurfelEngine.isFullscreen());
-                }
+                 if (keycode == Input.Keys.M){
+                     GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
+                 }
+                 //toggle fullscreen
+                 if (keycode == Input.Keys.F){
+                     WurfelEngine.setFullscreen(!WurfelEngine.isFullscreen());
+                     Gdx.app.log("DEBUG","Set to fullscreen:"+!WurfelEngine.isFullscreen());
+                 }
 
-                //toggle eathquake
-                if (keycode == Input.Keys.E){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
-                    getMap().earthquake(5000);
-                }
+                 //toggle eathquake
+                 if (keycode == Input.Keys.E){ //((ExplosiveBarrel)(getMapData(Chunk.getBlocksX()+5, Chunk.getBlocksY()+5, 3))).explode();
+                     getMap().earthquake(5000);
+                 }
 
-                //pause
-                //if (input.isKeyDown(Input.Keys.P)) Gdx.app.setPaused(true);
-                //time is set 0 but the game keeps running
-                if (keycode == Input.Keys.P) {
-                    setTimespeed(0);
-                } 
+                 //pause
+                 //if (input.isKeyDown(Input.Keys.P)) Gdx.app.setPaused(true);
+                 //time is set 0 but the game keeps running
+                   if (keycode == Input.Keys.P) {
+                     setTimespeed(0);
+                  } 
 
-                //reset zoom
-                if (keycode == Input.Keys.Z) {
-                    getCameras().get(0).setZoom(1);
-                    GameplayScreen.msgSystem().add("Zoom reset");
-                }  
+                 //reset zoom
+                 if (keycode == Input.Keys.Z) {
+                     getCameras().get(0).setZoom(1);
+                     GameplayScreen.msgSystem().add("Zoom reset");
+                  }  
 
-                //show/hide light engine
-                if (keycode == Input.Keys.L) {
-                    getLightengine().RenderData(!getLightengine().isRenderingData());
-                    Gdx.app.log("DEBUG","Toggled lightengine data rendering:"+ !getLightengine().isRenderingData());
-                } 
+                 //show/hide light engine
+                 if (keycode == Input.Keys.L) {
+                     if (getLightengine() != null) getLightengine().RenderData(!getLightengine().isRenderingData());
+                  } 
 
-                if (keycode == Input.Keys.T) {
-                    setTimespeed();
-                } 
+                  if (keycode == Input.Keys.T) {
+                     setTimespeed();
+                  } 
 
-                if (keycode == Input.Keys.ESCAPE)// Gdx.app.exit();
-                    WurfelEngine.getInstance().setScreen(new MainMenuScreen()); 
+                 if (keycode == Input.Keys.ESCAPE)// Gdx.app.exit();
+                     WurfelEngine.getInstance().setScreen(new MainMenuScreen());
             }
             
-            //toggle input for msgSystem
-            if (keycode == Input.Keys.ENTER)
-                GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
-            
-            return true;
-            
+             //toggle input for msgSystem
+             if (keycode == Input.Keys.ENTER)
+                 GameplayScreen.msgSystem().listenForInput(!GameplayScreen.msgSystem().isListeningForInput());
+
+            return true;            
         }
 
         @Override
@@ -166,8 +162,8 @@ public class CustomGameController extends Controller {
 
         @Override
         public boolean keyTyped(char character) {
-        	GameplayScreen.msgSystem().getInput(character); 
-        	return true;
+            GameplayScreen.msgSystem().getInput(character);
+            return true;
         }
 
         @Override

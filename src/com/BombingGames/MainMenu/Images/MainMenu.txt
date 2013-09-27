@@ -8,7 +8,7 @@ Barrel
   size: 458, 42
   orig: 458, 42
   offset: 0, 0
-  index: -1 
+  index: -1
 generate
   rotate: false
   xy: 144, 46
@@ -18,7 +18,7 @@ generate
   index: -1
 Exit
   rotate: false
-  xy: 2,46
+  xy: 2, 46
   size: 140, 42
   orig: 140, 42
   offset: 0, 0

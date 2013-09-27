@@ -3,12 +3,12 @@ package com.BombingGames.MainMenu;
 import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-//import org.lwjgl.opengl.GL11;
 
 
 /**
@@ -46,7 +46,7 @@ public class View {
        a += delta/1000f;
        if (a>1) a=1;
     }
-     
+        
     /**
      * renders the scene
      * @param pController
@@ -54,15 +54,15 @@ public class View {
     public void render(Controller pController){
         //clear & set background to black
         Gdx.gl11.glClearColor( 0f, 0f, 0f, 1f );
-        Gdx.gl11.glClear(Gdx.gl11.GL_COLOR_BUFFER_BIT);
+        Gdx.gl11.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         //update camera and set the projection matrix
         camera.update();
-        batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(camera.combined);     
         
         // render the lettering
         batch.begin();
-        lettering.setColor(1, 1, 1, a); 
+        lettering.setColor(1, 1, 1, a);
         lettering.draw(batch);
         batch.end();
         
@@ -78,12 +78,12 @@ public class View {
         font.draw(batch, Gdx.input.getX()+ ","+Gdx.input.getY(), Gdx.input.getX(), Gdx.input.getY());
         batch.end();
         
-        font.scale(-0.5f); 
+        font.scale(-0.5f);
         batch.begin();
         font.drawMultiLine(batch, WurfelEngine.getCredits(), 50, 100);
         batch.end();
         font.scale(0.5f);
     }
-    
+
 }
 

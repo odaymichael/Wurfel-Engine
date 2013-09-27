@@ -16,7 +16,7 @@ public class GlobalLightSource {
     private Color tone; //the color of the light
     private float height;
     private float azimuth;
-    private int amplitude; //the max possible angle (from horizon) the sun can has
+    private final int amplitude; //the max possible angle (from horizon) the sun can has
 
     /**
      * A GlobalLightSource can be the moon, the sun or even something new.

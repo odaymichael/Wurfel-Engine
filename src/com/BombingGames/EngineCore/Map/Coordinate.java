@@ -10,11 +10,12 @@ import com.BombingGames.EngineCore.Gameobjects.Block;
  * @author Benedikt Vogler
  */
 public class Coordinate {
-    int x;
-    int y;
-    float height;
-    int topleftX;//top left chunk x coordinate
-    int topleftY;//topl left chunk Y coordinate
+    private final int topleftX;//top left chunk x coordinate
+    private final int topleftY;//topl left chunk Y coordinate
+    
+    private int x;
+    private int y;
+    private float height;
     
     /**
      * Creates a coordiante. You can specify wether the given values are absolute or relative to the map.
@@ -85,12 +86,13 @@ public class Coordinate {
      * @return
      */
     public static Coordinate getMapCenter(float height){
-        return new Coordinate(
-                                Chunk.getBlocksX()/2,
-                                Chunk.getBlocksY()/2,
-                                height,
-                                false
-                            );
+        return
+            new Coordinate(
+                Chunk.getBlocksX()/2,
+                Chunk.getBlocksY()/2,
+                height,
+                false
+            );
     }
         
     
@@ -233,10 +235,10 @@ public class Coordinate {
      * @return the new coordiantes which resulted of the addition
      */
     public Coordinate addVector(int[] vector) {
-            this.x += vector[0];
-            this.y += vector[1];
-            this.height += vector[2]*Block.GAMEDIMENSION;
-            return this;
+        this.x += vector[0];
+        this.y += vector[1];
+        this.height += vector[2]*Block.GAMEDIMENSION;
+        return this;
     }
     
    /**
@@ -245,11 +247,11 @@ public class Coordinate {
      * @return the new coordiantes which resulted of the addition
      */
     public Coordinate addVectorCpy(int[] vector) {
-            Coordinate newvec = this.cpy();
-            newvec.x += vector[0];
-            newvec.y += vector[1];
-            newvec.height += vector[2]*Block.GAMEDIMENSION;
-            return newvec;
+        Coordinate newvec = this.cpy();
+        newvec.x += vector[0];
+        newvec.y += vector[1];
+        newvec.height += vector[2]*Block.GAMEDIMENSION;
+        return newvec;
     }
 
     /**
@@ -317,7 +319,7 @@ public class Coordinate {
      * @return
      */
     public int get2DPosX() {
-         int offset = 0;
+        int offset = 0;
         if (getZ()>=0)
             offset = (int) (getCellOffset()[0]);
         return getRelX() * Block.SCREEN_WIDTH //x-coordinate multiplied by it's dimension in this direction
@@ -365,7 +367,7 @@ public class Coordinate {
      * @param x game-space-coordinates, value in pixels
      * @param y game-space-coordinates, value in pixels
      * @return Returns the fieldnumber of the coordinates. 8 is the field itself.
-     * @see com.BombingGames.EngineCore.Gameobjects.AbstractGameObject#neighbourSidetoCoords(com.BombingGames.EngineCore.Map.Coordinate, int)
+     * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#neighbourSidetoCoords(com.BombingGames.EngineCore.Map.Coordinate, int)
      */
     public static int getNeighbourSide(float x, float y) {
         x += Block.SCREEN_WIDTH2;

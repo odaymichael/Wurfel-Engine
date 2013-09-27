@@ -25,7 +25,7 @@ public class MainMenuScreen implements Screen{
     public void render(float delta) {
         Controller.update((int) (delta*1000));
         View.render(Controller);
-        View.update(delta*1000); 
+        View.update(delta*1000);
     }
 
     @Override

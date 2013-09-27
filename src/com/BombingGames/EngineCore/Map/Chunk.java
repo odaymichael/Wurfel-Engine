@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class Chunk {
     /**The number of the mapgenerator used.*/
-    public static int generator = 8;
+    private static int generator = 8;
     /**The suffix of a chunk file.*/
     protected static final String CHUNKFILESUFFIX = "wec";
     /**The suffix of the metafile */
@@ -53,7 +53,7 @@ public class Chunk {
 
         if (newMap)
             generate(pos, coordX, coordY);
-            else load(pos, coordX, coordY);
+        else load(pos, coordX, coordY);
     }
     
     /**
@@ -62,7 +62,6 @@ public class Chunk {
     private void generate(int pos, int coordX, int coordY){
         //chunkdata will contain the blocks and objects
         //alternative to chunkdata.length ChunkBlocks
-        Gdx.app.log("DEBUG","Creating new chunk: "+ coordX + ", "+ coordY);
         GameplayScreen.msgSystem().add("Creating new chunk: "+coordX+", "+ coordY);
         switch (generator){
             case 0:{//random pillars
@@ -151,6 +150,7 @@ public class Chunk {
                             else data[x][y][z].newBlock(1);
                     }
             }
+            break;
                 
             case 5: {//animation test                
                 for (int x=0; x < blocksX; x++)
@@ -249,8 +249,8 @@ public class Chunk {
                 do {
                     line = new StringBuilder();
                     line.append(bufRead.readLine());
-                    //optionale Kommentarzeile überspringen
-                    if ((line.charAt(1) == '/') && (line.charAt(2) == '/')){
+                    
+                    if ((line.charAt(1) == '/') && (line.charAt(2) == '/')){//jump over optional comment line
                         line = new StringBuilder();
                         line.append(bufRead.readLine());
                     }
@@ -272,12 +272,12 @@ public class Chunk {
                                         Integer.parseInt(line.substring(0,posdots)),
                                         Integer.parseInt(line.substring(posdots+1, posend)),
                                         new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, z, true)
-                                        );
+                            );
                             x++;
                             line.delete(0,posend+1);
                         } while (x < blocksX);
 
-                        line = new StringBuilder();
+                        line = new StringBuilder(1);
                         line.append(bufRead.readLine());
 
                         y++;
@@ -331,9 +331,7 @@ public class Chunk {
                 null,
                 "The meta file could not be read. It must be named 'map."+ Chunk.METAFILESUFFIX + "' and must be at the maps directory:"+ WurfelEngine.getWorkingDirectory().getAbsolutePath() + "/map/",
                 "Loading error",
-                 JOptionPane.ERROR_MESSAGE);
-                 //Na on android
-                 */
+                 JOptionPane.ERROR_MESSAGE);*/
             Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -399,5 +397,5 @@ public class Chunk {
      */
     public static void setGenerator(int generator) {
         Chunk.generator = generator;
-    } 
+    }
 }

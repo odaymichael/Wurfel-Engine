@@ -7,11 +7,11 @@ import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-//import org.lwjgl.opengl.GL11;
 
 /**
  *An object is something wich can be found in the game world.
@@ -59,7 +59,7 @@ public abstract class AbstractGameObject {
     /**The sprite texture which contains every object texture*/
     private static TextureAtlas spritesheet;
     private static Pixmap pixmap;
-    private static AtlasRegion[][][] sprites = new AtlasRegion[(int) 'z'][OBJECTTYPESCOUNT][VALUESCOUNT];//{category}{id}{value}
+    private static final AtlasRegion[][][] sprites = new AtlasRegion[(int) 'z'][OBJECTTYPESCOUNT][VALUESCOUNT];//{category}{id}{value}
     
     private final int id; 
     private int value;
@@ -72,7 +72,7 @@ public abstract class AbstractGameObject {
      * Creates an object. Use getInterface() to create blocks or entitys.
      * @param id the id of the object
      * @param value 
-     * @see com.BombingGames.EngineCore.Gameobjects.Block#getInstance() 
+     * @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
     protected AbstractGameObject(int id, int value) {
         this.id = id;
@@ -120,7 +120,7 @@ public abstract class AbstractGameObject {
      * @param camera The camera rendering the scene
      */
     public void render(View view, WECamera camera, Coordinate coords) {
-        Color color = Color.GRAY;
+        Color color = Color.GRAY.cpy();
         if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getGlobalLight();
         }
@@ -152,7 +152,7 @@ public abstract class AbstractGameObject {
      * @param yPos rendering position
      */
     public void renderAt(View view, int xPos, int yPos) {
-        Color color = Color.GRAY;
+        Color color = Color.GRAY.cpy();
         if (Controller.getLightengine() != null){
                 color = Controller.getLightengine().getGlobalLight();
         }
@@ -186,12 +186,12 @@ public abstract class AbstractGameObject {
         //float brightness = (color.r+color.g+color.b)/3;
         
         if (brightness > 0.5f){
-            view.setDrawmode(Gdx.gl11.GL_ADD);
+            view.setDrawmode(GL10.GL_ADD);
             color.r -= .5f;
             color.g -= .5f;
             color.b -= .5f;
         } else {
-            view.setDrawmode(Gdx.gl11.GL_MODULATE);
+            view.setDrawmode(GL10.GL_MODULATE);
             color.mul(2);
         }
         color.clamp();
@@ -378,7 +378,7 @@ public abstract class AbstractGameObject {
     /**
      * Hide this object and prevent it from beeing rendered. Don't use this to hide objects. This data is only for rendering data and view specific not for gameworld information. This should be just used for setting during the rendering process.
      * @param clipped Sets the visibility.
-     * @see com.BombingGames.EngineCore.Gameobjects.AbstractGameObject#setHidden(boolean) 
+     * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#setHidden(boolean) 
      */
     public void setClipped(boolean clipped) {
         this.clipped = clipped;

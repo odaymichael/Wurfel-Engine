@@ -2,17 +2,6 @@ package com.BombingGames.EngineCore.Gameobjects;
 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Map.Coordinate;
-
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.GAMEDIMENSION;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.OBJECTTYPESCOUNT;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_DEPTH2;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_DEPTH4;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_WIDTH2;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.SCREEN_WIDTH4;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.VALUESCOUNT;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.getPixmap;
-import static com.BombingGames.EngineCore.Gameobjects.AbstractGameObject.getSpritesheet;
-
 import com.BombingGames.EngineCore.View;
 import com.BombingGames.EngineCore.WECamera;
 import com.badlogic.gdx.Gdx;
@@ -26,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
  * @author Benedikt Vogler
  */
 public class Block extends AbstractGameObject {
-    private static final Color[][] colorlist = new Color[OBJECTTYPESCOUNT][VALUESCOUNT];
     /**The id of the left side of a block.*/
     public static final int LEFTSIDE=0;
     /**The id of the top side of a block.*/
@@ -45,13 +33,19 @@ public class Block extends AbstractGameObject {
        /** A list containing the offset of the objects. */
     public static final int[][][] OFFSET = new int[OBJECTTYPESCOUNT][VALUESCOUNT][2];
     
+    private static final AtlasRegion[][][] blocksprites = new AtlasRegion[OBJECTTYPESCOUNT][VALUESCOUNT][3];//{id}{value}{side}
+        
+    /**
+     * a list where a representing color of the block is stored
+     */
+    private static final Color[][] colorlist = new Color[OBJECTTYPESCOUNT][VALUESCOUNT];
+    
+    
     private boolean liquid;
     private boolean hasSides = true;
     private boolean clippedRight = false;
     private boolean clippedTop = false;
     private boolean clippedLeft = false;
-    
-    private static final AtlasRegion[][][] blocksprites = new AtlasRegion[OBJECTTYPESCOUNT][VALUESCOUNT][3];//{id}{value}{side}
     
     static {
         NAMELIST[0] = "air";
@@ -87,7 +81,7 @@ public class Block extends AbstractGameObject {
     /**
      * Don't use this constructor to get a new block. Use the static <i>getInstance</i> methods instead.
      * @param id
-     *  @see com.BombingGames.EngineCore.Gameobjects.Block#getInstance() 
+     *  @see com.BombingGames.Game.Gameobjects.Block#getInstance() 
      */
     protected Block(int id){
         super(id,0);
@@ -335,7 +329,6 @@ public class Block extends AbstractGameObject {
     /**
      * Render the whole block at a custom position and checks for clipping and hidden.
      * @param view the view using this render method
-     * @param camera The camera rendering the scene
      * @param xPos rendering position
      * @param yPos rendering position
      */
@@ -366,7 +359,7 @@ public class Block extends AbstractGameObject {
                 } else super.renderAt(view, xPos, yPos, color);
         }
     }
-        
+       
     /**
      * Render a side of a block at the position of the coordinates.
      * @param view the view using this render method
@@ -375,10 +368,10 @@ public class Block extends AbstractGameObject {
      * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
      */
     public void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb){
-        Color color = Color.GRAY;
+        Color color;
         if (Controller.getLightengine() != null){
-                color = Controller.getLightengine().getColorOfSide(sidenumb);
-        }
+            color = Controller.getLightengine().getColorOfSide(sidenumb);
+        } else color = Color.GRAY.cpy();
         renderSide(view, camera, coords, sidenumb, color);
     }
 
@@ -393,12 +386,12 @@ public class Block extends AbstractGameObject {
     public void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb, Color color){
         int xPos = get2DPosX(coords) + ( sidenumb == 2 ? SCREEN_WIDTH2 : 0);//right side is  half a block more to the right
         int yPos = get2DPosY(coords) + (sidenumb != 1 ? SCREEN_WIDTH4 : 0);//the top is drawn a quarter blocks higher
-        //uncomment these two lines to add a depth-effect (note that it is very dark and still a prototype)
-//color.mul((camera.getBottomBorder()-coords.getRelY())
-//    /
-//    (float)(camera.getBottomBorder()-camera.getTopBorder())
-//    );
-        renderSideAt(view, xPos, yPos, sidenumb, color); 
+                //uncomment these two lines to add a depth-effect (note that it is very dark and still a prototype)
+//        color.mul((camera.getBottomBorder()-coords.getRelY())
+//            /
+//            (float)(camera.getBottomBorder()-camera.getTopBorder())
+//            );
+        renderSideAt(view, xPos, yPos, sidenumb, color);
     }
     
     /**
@@ -409,10 +402,10 @@ public class Block extends AbstractGameObject {
      * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
      */
     public void renderSideAt(final View view, int xPos, int yPos, final int sidenumb){
-        Color color = Color.GRAY;
+        Color color;
         if (Controller.getLightengine() != null){
-                color = Controller.getLightengine().getColorOfSide(sidenumb);
-        }
+            color = Controller.getLightengine().getColorOfSide(sidenumb);
+        } else color = Color.GRAY.cpy();
         renderSideAt(view, xPos, yPos, sidenumb, color);
     }
     /**
@@ -426,7 +419,6 @@ public class Block extends AbstractGameObject {
     public void renderSideAt(final View view, int xPos, int yPos, final int sidenumb, Color color){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         sprite.setPosition(xPos, yPos);
-        
         
         color.mul(getLightlevel()*2);
         

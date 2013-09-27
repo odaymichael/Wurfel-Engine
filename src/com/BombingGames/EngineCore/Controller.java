@@ -24,22 +24,20 @@ public class Controller {
     private static LightEngine lightEngine;
     private static Map map;
     private static boolean recalcRequested;
-        
-
+    
     private View view;
-    private final ArrayList<WECamera> cameras = new ArrayList();
+        
+    private final ArrayList<WECamera> cameras = new ArrayList<WECamera>(6);
     private Minimap minimap;
     /** The speed of time. 1 = real time;*/
     private float timespeed = 1;
     private AbstractCharacter player;   
 
-    
     /**
      * This method works like a constructor. Everything is loaded. Set you custom chunk generator before calling this method.
      */
-    public void init(){  
+    public void init(){
         newMap();
-        lightEngine = new LightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         
         recalcRequested = true;
     }
@@ -55,7 +53,6 @@ public class Controller {
          //update the log
         GameplayScreen.msgSystem().update(delta);
         
-                
         if (ENABLECHUNKSWITCH && cameras.size() >0){
             //earth to right
             if (cameras.get(0).getLeftBorder() <= 0)
@@ -229,7 +226,7 @@ public class Controller {
     public void setPlayer(AbstractCharacter player) {
         this.player = player;
         player.exist();
-    }
+    }   
 
     /**
      * Get the neighbour block to a side
@@ -303,10 +300,7 @@ public class Controller {
             Gdx.app.log("Error", "Invalid nubmer entered: "+e.toString());
         } catch(NullPointerException e){
             Gdx.app.log("DEBUG", "Canceled: "+e.toString());
-        }
-        //Not availible on Android
-        */
-        
+        }*/
     }
     
     /**
@@ -332,5 +326,14 @@ public class Controller {
      */
     public View getView() {
         return view;
-    } 
+    }
+
+    /**
+     * Use the light engine
+     * @param xPos the x position of the diagrams position
+     * @param yPos the y position of the diagrams position 
+     */
+    public static void useLightEngine(int xPos, int yPos) {
+        Controller.lightEngine = new LightEngine(xPos, yPos);
+    }
 }

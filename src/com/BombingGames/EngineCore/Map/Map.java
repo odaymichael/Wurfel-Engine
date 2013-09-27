@@ -4,7 +4,6 @@ import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.Gameobjects.AbstractEntity;
 import com.BombingGames.EngineCore.Gameobjects.Block;
 import com.badlogic.gdx.Gdx;
-
 import java.util.ArrayList;
 
 /**
@@ -73,12 +72,11 @@ public class Map {
      * Fill the data array of the map with blocks. Also resets the cellOffset.
      */
     public void fillWithBlocks(){
-        Gdx.app.log("DEBUG","Filling the map with blocks...");
-        
-        for (int x = 0; x < data.length; x++) {
-            for (int y = 0; y < data[x].length; y++) {
-                for (int z = 0; z < data[x][y].length; z++) {
-                    data[x][y][z] = new Cell();
+        Gdx.app.log("DEBUG","Filling the map with air cells...");
+        for (Cell[][] x : data) {
+            for (Cell[] y : x) {
+                for (int z = 0; z < y.length; z++) {
+                    y[z] = new Cell();
                 }
             }   
         }
@@ -319,10 +317,10 @@ public class Map {
         
         if (z >= blocksZ){
             z = blocksZ-1;
-            Gdx.app.log("DEBUG","Z:"+z);
+            Gdx.app.log("DEBUG","Z:"+z+">="+blocksZ);
         } else if( z < 0 ){
             z = 0;
-            Gdx.app.log("DEBUG","Z:"+z);
+            Gdx.app.log("DEBUG","Z:"+z+">="+blocksZ);
         }
         
         return data[x][y][z].getBlock();    
@@ -468,8 +466,8 @@ public class Map {
      * @param type
      * @return a list with the entitys
      */
-    public <type> ArrayList<type> getAllEntitysOfType(Class type) {
-        ArrayList<type> list=new ArrayList<type>();
+    public <type> ArrayList<type> getAllEntitysOfType(Class<type> type) {
+        ArrayList<type> list = new ArrayList<type>();
         //e inst=(e) e.newInstance();
 
         for (AbstractEntity entity : entitylist) {
