@@ -14,8 +14,8 @@ import java.io.File;
 
 /**
  *The Main class of the engine. To create a new engine use  {@link com.BombingGames.WurfelEngine#construct(java.lang.String, java.lang.String[]) WurfelEngine.construct}
- * The Wurfel Engine needs the API libGDX0.9.8. It has not been tested with other versions.
- * Java 7 does not work with libGDX0.9.8 on Mac. Use Java 6 instead.
+ * The Wurfel Engine needs the API libGDX0.9.8. Besides the shape renderer the nightly build does also work (27. September 2013).
+ * Java 7 does not work with libGDX0.9.8 on Mac. Use Java 6 instead. You can use Java 7 when using the nightly build  (27. September 2013).
  * @author Benedikt Vogler
  */
 public class WurfelEngine extends Game {
