@@ -20,7 +20,7 @@ public class View {
      * The virtual render width (resolution).
      * Every resolution smaller than this get's scaled down and every resolution bigger scaled up. 
      */
-    public static final int RENDER_RESOLUTION_WIDTH = 960;
+    public static final int RENDER_RESOLUTION_WIDTH = 1980;
 
     private static BitmapFont font;
     
