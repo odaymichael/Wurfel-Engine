@@ -246,11 +246,11 @@ public class Chunk {
 
                 //finish a layer
                 do {
-                    line = new StringBuilder();
+                    line = new StringBuilder(1);
                     line.append(bufRead.readLine());
                     
                     if ((line.charAt(1) == '/') && (line.charAt(2) == '/')){//jump over optional comment line
-                        line = new StringBuilder();
+                        line = new StringBuilder(1);
                         line.append(bufRead.readLine());
                     }
 
