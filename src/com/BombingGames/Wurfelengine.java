@@ -23,7 +23,7 @@ public class WurfelEngine extends Game {
     /**
      * The version of the Engine
      */
-    public static final String VERSION = "1.1.7";    
+    public static final String VERSION = "1.1.9";    
     private static File workingDirectory;
     private static boolean fullscreen = false;
     private static WurfelEngine instance;
@@ -40,7 +40,7 @@ public class WurfelEngine extends Game {
     	
         //workingDirectory = WorkingDirectory.getWorkingDirectory("Wurfelengine");
         
-        Texture.setEnforcePotImages(false);
+        Texture.setEnforcePotImages(false);//allow non-power-of-two textures
 
 
         
@@ -94,7 +94,7 @@ public class WurfelEngine extends Game {
      */
     public static String getCredits(){
         String newline = System.getProperty("line.separator");
-        return "Idea & Producing:"+newline
+        return "Created by:"+newline
             + " Benedikt Vogler"+newline+newline
             + "Programming:"+newline
             + "Benedikt Vogler"+newline+newline
