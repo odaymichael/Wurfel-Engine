@@ -23,7 +23,7 @@ import com.badlogic.gdx.backends.openal.Ogg.Sound;
  *The <i>CustomGameController</i> is for the game code. Put engine code into <i>Controller</i>.
  * @author Benedikt
  */
-public class CustomGameController extends Controller {
+public class MinecraftController extends Controller {
     private AbstractEntity focusentity;
     private Sound gras1;
     private Sound gras2;
@@ -34,7 +34,6 @@ public class CustomGameController extends Controller {
     public void init(){
          Chunk.setGenerator(20);
          super.init();
-
 
         gras1 = (Sound) Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/grass1.ogg"));
         gras2 = (Sound) Gdx.audio.newSound(Gdx.files.internal("com/BombingGames/Game/Sounds/grass2.ogg"));

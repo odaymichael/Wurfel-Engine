@@ -10,13 +10,13 @@ import com.badlogic.gdx.Gdx;
  *
  * @author Benedikt
  */
-public class CustomGameView extends View{
-     private CustomGameController controller;
+public class MinecraftView extends View{
+     private MinecraftController controller;
 
     @Override
     public void init(Controller controller) {
         super.init(controller);
-         this.controller = (CustomGameController) controller;
+         this.controller = (MinecraftController) controller;
          
          this.controller.getBlockToolbar().setPos(
             (Gdx.graphics.getWidth()/2)

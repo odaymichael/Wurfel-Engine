@@ -1,7 +1,7 @@
 package com.BombingGames.MainMenu;
 
-import com.BombingGames.Game.CustomGameController;
-import com.BombingGames.Game.CustomGameView;
+import com.BombingGames.Game.MinecraftController;
+import com.BombingGames.Game.MinecraftView;
 import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -41,11 +41,11 @@ public class Controller {
         if (menuItems[0].isClicked()){
             MainMenuScreen.setLoadMap(true);
             fx.play();
-            WurfelEngine.startGame(new CustomGameController(), new CustomGameView());
+            WurfelEngine.startGame(new MinecraftController(), new MinecraftView());
         } else if (menuItems[1].isClicked()) { 
                 MainMenuScreen.setLoadMap(false);
                 fx.play();
-                WurfelEngine.startGame(new CustomGameController(), new CustomGameView());
+                WurfelEngine.startGame(new MinecraftController(), new MinecraftView());
             } else if (menuItems[2].isClicked()){
                 fx.play();
                 Gdx.app.exit();
