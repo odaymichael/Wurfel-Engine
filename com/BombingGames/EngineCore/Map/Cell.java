@@ -11,38 +11,40 @@ public class Cell {
     private float[] cellOffset;
 
     /**
-     *Create a cell containing air-
+     *Create a new cell containing air-
      */
     public Cell() {
+        newBlock(0);
+    }
+    
+    /**
+     *Create a new block in this cell. Resets offset.
+     * @param id
+     */
+    public final void newBlock(int id){
         block = Block.getInstance(0);
         cellOffset = new float[]{0, 0,0};
     }
     
     /**
-     *
-     * @param id
-     */
-    public void newBlock(int id){
-        this.block = Block.getInstance(id);
-    }
-    
-    /**
-     *
+     *Create a new block in this cell. Resets offset.
      * @param id
      * @param value
      */
-    public void newBlock(int id, int value){
+    public final void newBlock(int id, int value){
        this.block = Block.getInstance(id, value); 
+       cellOffset = new float[]{0, 0,0};
     }
     
     /**
-     *
+     *Create a new block in this cell. Resets offset.
      * @param id
      * @param value
      * @param coords
      */
-    public void newBlock(int id, int value, Coordinate coords){
-       this.block = Block.getInstance(id, value, coords); 
+    public final void newBlock(int id, int value, Coordinate coords){
+       this.block = Block.getInstance(id, value, coords);
+       cellOffset = new float[]{0, 0,0};
     }
 
     /**
