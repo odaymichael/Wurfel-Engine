@@ -91,11 +91,11 @@ public class ExplosivesDemoController extends Controller {
             } else {
                 //update camera position
                 WECamera camera = getCameras().get(0);
-                camera.setGamePosY( camera.getGamePosY()
+                camera.setOutputPosY( camera.getOutputPosY()
                     - (input.isKeyPressed(Input.Keys.W)? 3: 0)
                     + (input.isKeyPressed(Input.Keys.S)? 3: 0)
                     );
-                camera.setGamePosX( camera.getGamePosX()
+                camera.setOutputPosX( camera.getOutputPosX()
                     + (input.isKeyPressed(Input.Keys.D)? 3: 0)
                     - (input.isKeyPressed(Input.Keys.A)? 3: 0)
                     );

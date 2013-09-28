@@ -126,8 +126,8 @@ public class Minimap {
             shapeRenderer.begin(ShapeType.Rectangle);
             shapeRenderer.setColor(Color.GREEN);
             shapeRenderer.rect(
-                viewportPosX + scaleX * camera.getGamePosX() / Block.SCREEN_WIDTH,
-                viewportPosY + scaleY * camera.getGamePosY() / Block.SCREEN_DEPTH2,
+                viewportPosX + scaleX * camera.getOutputPosX() / Block.SCREEN_WIDTH,
+                viewportPosY + scaleY * camera.getOutputPosY() / Block.SCREEN_DEPTH2,
                 scaleX*camera.get2DWidth() / Block.SCREEN_WIDTH,
                 scaleY*camera.get2DHeight() / Block.SCREEN_DEPTH2
             );
@@ -136,8 +136,8 @@ public class Minimap {
                 //player level getCameras() rectangle
                 shapeRenderer.setColor(Color.GRAY);
                 shapeRenderer.rect(
-                    viewportPosX + scaleX * camera.getGamePosX() / Block.SCREEN_WIDTH,
-                    viewportPosY + scaleY * camera.getGamePosY() / Block.SCREEN_DEPTH2
+                    viewportPosX + scaleX * camera.getOutputPosX() / Block.SCREEN_WIDTH,
+                    viewportPosY + scaleY * camera.getOutputPosY() / Block.SCREEN_DEPTH2
                     + scaleY *2*(controller.getPlayer().getCoords().getZ() * Block.SCREEN_HEIGHT2)/ (float) (Block.SCREEN_DEPTH),
                     scaleX*camera.get2DWidth() / Block.SCREEN_WIDTH,
                     scaleY*camera.get2DHeight() / Block.SCREEN_DEPTH2
@@ -147,8 +147,8 @@ public class Minimap {
             //top level getCameras() rectangle
             shapeRenderer.setColor(Color.WHITE);
             shapeRenderer.rect(
-                viewportPosX + scaleX * camera.getGamePosX() / Block.SCREEN_WIDTH,
-                viewportPosY + scaleY * camera.getGamePosY() / Block.SCREEN_DEPTH2
+                viewportPosX + scaleX * camera.getOutputPosX() / Block.SCREEN_WIDTH,
+                viewportPosY + scaleY * camera.getOutputPosY() / Block.SCREEN_DEPTH2
                 + scaleY *2*(Chunk.getBlocksZ() * Block.SCREEN_DEPTH2)/ (float) (Block.SCREEN_DEPTH),
                 scaleX*camera.get2DWidth() / Block.SCREEN_WIDTH,
                 scaleY*camera.get2DHeight() / Block.SCREEN_DEPTH2
@@ -158,9 +158,9 @@ public class Minimap {
             if (controller.getPlayer()!=null){
                 view.drawString(
                         camera.getRightBorder() +" | "+ camera.getBottomBorder(),
-                        (int) (viewportPosX + scaleX * camera.getGamePosX() / Block.SCREEN_WIDTH
+                        (int) (viewportPosX + scaleX * camera.getOutputPosX() / Block.SCREEN_WIDTH
                         + scaleX*camera.get2DWidth() / Block.SCREEN_WIDTH),
-                        (int) (viewportPosY + scaleY * camera.getGamePosY() / Block.SCREEN_DEPTH2
+                        (int) (viewportPosY + scaleY * camera.getOutputPosY() / Block.SCREEN_DEPTH2
                         + scaleY *2*(controller.getPlayer().getCoords().getZ() * Block.SCREEN_DEPTH2)/ (float) (Block.SCREEN_DEPTH)
                         + scaleY*camera.get2DHeight() / Block.SCREEN_DEPTH2),
                         Color.BLACK
@@ -185,7 +185,7 @@ public class Minimap {
 
             //getCamera() pos
             view.drawString(
-                    camera.getGamePosX() +" | "+ camera.getGamePosY(),
+                    camera.getOutputPosX() +" | "+ camera.getOutputPosY(),
                     viewportPosX ,
                     (int) (viewportPosY + 3*Chunk.getBlocksY()*scaleY + 15),
                     Color.WHITE

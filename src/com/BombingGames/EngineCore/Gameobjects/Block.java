@@ -348,15 +348,36 @@ public class Block extends AbstractGameObject {
 
     @Override
     public void renderAt(View view, int xPos, int yPos, Color color) {
+        renderAt(view, xPos, yPos, color, Controller.getLightengine() == null, 0);
+    }
+    
+    /**
+     * Renders a block at a custom position with a scale.
+     * @param view the view using this render method
+     * @param xPos rendering position
+     * @param yPos rendering position
+     * @param color when the block has sides it's sides gets shaded using this color.
+     * @param shade
+     * @param scale the scale of the image
+     */
+    public void renderAt(View view, int xPos, int yPos, Color color, boolean shade, float scale) {
         if (!isClipped() && !isHidden()) {
             if (hasSides) {
                 if (!clippedTop)
-                    renderSideAt(view, xPos, yPos, Block.TOPSIDE, color);
+                    renderSideAt(view, xPos, yPos, Block.TOPSIDE, color, scale);
+               if (shade) {
+                   color = color.add(Color.DARK_GRAY.cpy());
+                   color.clamp();
+               }
                 if (!clippedLeft)
-                    renderSideAt(view, xPos, yPos+SCREEN_WIDTH4, Block.LEFTSIDE, color);
+                    renderSideAt(view, xPos, (int) (yPos+SCREEN_WIDTH4*(1+scale)), Block.LEFTSIDE, color, scale);
+                if (shade) {
+                    color = color.sub(Color.DARK_GRAY.cpy());
+                    color.clamp();
+                }
                 if (!clippedRight)
-                    renderSideAt(view, xPos+SCREEN_WIDTH2, yPos+SCREEN_WIDTH4, Block.RIGHTSIDE, color);
-                } else super.renderAt(view, xPos, yPos, color);
+                    renderSideAt(view, (int) (xPos+SCREEN_WIDTH2*(1+scale)), (int) (yPos+SCREEN_WIDTH4*(1+scale)), Block.RIGHTSIDE, color, scale);
+            } else super.renderAt(view, xPos, yPos, color);
         }
     }
        
@@ -385,13 +406,13 @@ public class Block extends AbstractGameObject {
      */
     public void renderSide(final View view, final WECamera camera, Coordinate coords, final int sidenumb, Color color){
         int xPos = get2DPosX(coords) + ( sidenumb == 2 ? SCREEN_WIDTH2 : 0);//right side is  half a block more to the right
-        int yPos = get2DPosY(coords) + (sidenumb != 1 ? SCREEN_WIDTH4 : 0);//the top is drawn a quarter blocks higher
+        int yPos = get2DPosY(coords) + ( sidenumb != 1 ? SCREEN_WIDTH4 : 0);//the top is drawn a quarter blocks higher
                 //uncomment these two lines to add a depth-effect (note that it is very dark and still a prototype)
 //        color.mul((camera.getBottomBorder()-coords.getRelY())
 //            /
 //            (float)(camera.getBottomBorder()-camera.getTopBorder())
 //            );
-        renderSideAt(view, xPos, yPos, sidenumb, color);
+        renderSideAt(view, xPos, yPos, sidenumb, color, 0);
     }
     
     /**
@@ -406,7 +427,7 @@ public class Block extends AbstractGameObject {
         if (Controller.getLightengine() != null){
             color = Controller.getLightengine().getColorOfSide(sidenumb);
         } else color = Color.GRAY.cpy();
-        renderSideAt(view, xPos, yPos, sidenumb, color);
+        renderSideAt(view, xPos, yPos, sidenumb, color, 0);
     }
     /**
      * Draws a side of a block at a custom position. Apllies color before rendering and takes the lightlevel into account.
@@ -415,10 +436,13 @@ public class Block extends AbstractGameObject {
      * @param yPos rendering position
      * @param sidenumb The number identifying the side. 0=left, 1=top, 2=right
      * @param color a tint in which the sprite gets rendered
+     * @param scale
      */
-    public void renderSideAt(final View view, int xPos, int yPos, final int sidenumb, Color color){
+    public void renderSideAt(final View view, int xPos, int yPos, final int sidenumb, Color color, float scale){
         Sprite sprite = new Sprite(getBlockSprite(getId(), getValue(), sidenumb));
         sprite.setPosition(xPos, yPos);
+        sprite.setOrigin(0, 0);
+        sprite.scale(scale);
         
         color.mul(getLightlevel()*2);
         
