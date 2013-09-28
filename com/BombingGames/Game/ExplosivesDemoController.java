@@ -26,7 +26,6 @@ import com.badlogic.gdx.InputProcessor;
  * @author Benedikt
  */
 public class ExplosivesDemoController extends Controller {
-    
 
     @Override
     public void init(){
@@ -215,7 +214,6 @@ public class ExplosivesDemoController extends Controller {
             GameplayScreen.msgSystem().add("Zoom: " + getCameras().get(0).getZoom());   
             return true;
         }
-        
        
     }
 }
