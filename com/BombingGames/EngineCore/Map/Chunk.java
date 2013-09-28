@@ -285,7 +285,7 @@ public class Chunk {
                     z++;
                 } while (lastline != null);
             } else {
-                Gdx.app.log("DEBUG","...but it could not be found. Creating new.");
+                Gdx.app.log("DEBUG","...but it could not be found.");
                 generate(pos, coordX, coordY);
             }
         } catch (IOException ex) {
