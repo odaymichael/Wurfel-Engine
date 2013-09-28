@@ -27,57 +27,57 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
    
     static {
         NAMELIST[40] = "player";
-        OFFSET[40][0][0] = 24+21;
-        OFFSET[40][0][1] = 30+20;
-        OFFSET[40][1][0] = 39+21;
-        OFFSET[40][1][1] = 34+20;
-        OFFSET[40][2][0] = 24+21;
-        OFFSET[40][2][1] = 30+20;
-        OFFSET[40][3][0] = 20+21;
-        OFFSET[40][3][1] = 34+20;
-        OFFSET[40][4][0] = 24+21;
-        OFFSET[40][4][1] = 30+20;
-        OFFSET[40][5][0] = 40+21;
-        OFFSET[40][5][1] = 34+20;
-        OFFSET[40][6][0] = 24+21;
-        OFFSET[40][6][1] = 30+20;
-        OFFSET[40][7][0] = 20+21;
-        OFFSET[40][7][1] = 34+20;
-        OFFSET[40][8][0] = 15+21;
-        OFFSET[40][8][1] = 30+20;
-        OFFSET[40][9][0] = 17+21;
-        OFFSET[40][9][1] = 34+20;
-        OFFSET[40][10][0] = 5+21;
-        OFFSET[40][10][1] = 30+20;
-        OFFSET[40][11][0] = 20+21;
-        OFFSET[40][11][1] = 34+20;
-        OFFSET[40][12][0] = 16+21;
-        OFFSET[40][12][1] = 30+20;
-        OFFSET[40][13][0] = 18+21;
-        OFFSET[40][13][1] = 34+20;
-        OFFSET[40][14][0] = 5+21;
-        OFFSET[40][14][1] = 30+20;
-        OFFSET[40][15][0] = 20+21;
-        OFFSET[40][15][1] = 34+20;
-        OFFSET[40][16][0] = 6+21;
-        OFFSET[40][16][1] = 30+20;
-        OFFSET[40][17][0] = 17+21;
-        OFFSET[40][17][1] = 34+20;
-        OFFSET[40][18][0] = 15+21;
-        OFFSET[40][18][1] = 30+20;
-        OFFSET[40][19][0] = 20+21;
-        OFFSET[40][19][1] = 34+20;
-        OFFSET[40][20][0] = 5+21;
-        OFFSET[40][20][1] = 30+20;
-        OFFSET[40][21][0] = 18+21;
-        OFFSET[40][21][1] = 34+20;
-        OFFSET[40][22][0] = 16+21;
-        OFFSET[40][22][1] = 30+20;
-        OFFSET[40][23][0] = 20+21;
-        OFFSET[40][23][1] = 34+20;
+        OFFSET[40][0][0] = 24-59;
+        OFFSET[40][0][1] = 30-20;
+        OFFSET[40][1][0] = 39-59;
+        OFFSET[40][1][1] = 34-20;
+        OFFSET[40][2][0] = 24-59;
+        OFFSET[40][2][1] = 30-20;
+        OFFSET[40][3][0] = 20-59;
+        OFFSET[40][3][1] = 34-20;
+        OFFSET[40][4][0] = 24-59;
+        OFFSET[40][4][1] = 30-20;
+        OFFSET[40][5][0] = 40-59;
+        OFFSET[40][5][1] = 34-20;
+        OFFSET[40][6][0] = 24-59;
+        OFFSET[40][6][1] = 30-20;
+        OFFSET[40][7][0] = 20-59;
+        OFFSET[40][7][1] = 34-20;
+        OFFSET[40][8][0] = 15-59;
+        OFFSET[40][8][1] = 30-20;
+        OFFSET[40][9][0] = 17-59;
+        OFFSET[40][9][1] = 34-20;
+        OFFSET[40][10][0] = 5-59;
+        OFFSET[40][10][1] = 30-20;
+        OFFSET[40][11][0] = 20-59;
+        OFFSET[40][11][1] = 34-20;
+        OFFSET[40][12][0] = 16-59;
+        OFFSET[40][12][1] = 30-20;
+        OFFSET[40][13][0] = 18-59;
+        OFFSET[40][13][1] = 34-20;
+        OFFSET[40][14][0] = 5-59;
+        OFFSET[40][14][1] = 30-20;
+        OFFSET[40][15][0] = 20-59;
+        OFFSET[40][15][1] = 34-20;
+        OFFSET[40][16][0] = 6-59;
+        OFFSET[40][16][1] = 30-20;
+        OFFSET[40][17][0] = 17-59;
+        OFFSET[40][17][1] = 34-20;
+        OFFSET[40][18][0] = 15-59;
+        OFFSET[40][18][1] = 30-20;
+        OFFSET[40][19][0] = 20-59;
+        OFFSET[40][19][1] = 34-20;
+        OFFSET[40][20][0] = 5-59;
+        OFFSET[40][20][1] = 30-20;
+        OFFSET[40][21][0] = 18-59;
+        OFFSET[40][21][1] = 34-20;
+        OFFSET[40][22][0] = 16-59;
+        OFFSET[40][22][1] = 30-20;
+        OFFSET[40][23][0] = 20-59;
+        OFFSET[40][23][1] = 34-20;
         NAMELIST[41] = "smoke test";
-        OFFSET[42][0][0] = 0;
-        OFFSET[42][0][1] = 80;
+        OFFSET[42][0][0] = 0-80;
+        OFFSET[42][0][1] = 80-40;
         NAMELIST[42] = "character shadow";
     }
     
@@ -185,8 +185,7 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     public int get2DPosX(Coordinate coords) {
         return this.coords.getRelX() * SCREEN_WIDTH //x-coordinate multiplied by it's dimension in this direction
                + (this.coords.getRelY() % 2) * SCREEN_DEPTH //y-coordinate multiplied by it's dimension in this direction
-               + (int) (positionX) //add the objects position inside this coordinate
-               - AbstractGameObject.SCREEN_WIDTH2;
+               + (int) (positionX); //add the objects position inside this coordinate
     }
 
     /**
@@ -198,8 +197,7 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     public int get2DPosY(Coordinate coords) {
         return this.coords.getRelY() * SCREEN_DEPTH2 //y-coordinate * the tile's size
                + (int) (positionY / 2) //add the objects position inside this coordinate
-               - (int) (this.coords.getHeight() / Math.sqrt(2)) //take z-axis shortening into account
-               - AbstractGameObject.SCREEN_DEPTH2;
+               - (int) (this.coords.getHeight() / Math.sqrt(2)); //take z-axis shortening into account
     }
         
     /**
