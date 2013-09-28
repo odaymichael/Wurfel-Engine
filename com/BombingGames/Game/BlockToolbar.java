@@ -26,7 +26,7 @@ public class BlockToolbar {
         slot[5] = Block.getInstance(6);
         slot[6] = Block.getInstance(7);
         slot[7] = Block.getInstance(8);
-        slot[8] = Block.getInstance(10);
+        slot[8] = Block.getInstance(21);
     }
 
     public void setSlot(int slot, int id) {
