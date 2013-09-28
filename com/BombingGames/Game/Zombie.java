@@ -37,11 +37,11 @@ public class Zombie extends AbstractCharacter{
 
     @Override
     public void render(View view, WECamera camera, Coordinate coords) {
-        getSprites()[CATEGORY][43][getValue()] = getSprites()[CATEGORY][40][getValue()];
-       Color color = Color.GRAY;
+        getSprites()[CATEGORY][43][getValue()] = getSprites()[CATEGORY][40][getValue()];//reference player sprite
+        Color color = Color.GRAY.cpy();
         if (Controller.getLightengine() != null){
-                color = Controller.getLightengine().getGlobalLight();
-            }
+            color = Controller.getLightengine().getGlobalLight();
+        }
         render(view, camera, coords, color.mul(Color.GREEN));
     }
 
@@ -49,11 +49,12 @@ public class Zombie extends AbstractCharacter{
     public void update(float delta) {
         //follow the target
         walk(
-            target.getCoords().getAbsY()<getCoords().getAbsY()?true:false,
-            target.getCoords().getAbsY()>getCoords().getAbsY()?true:false,
-            target.getCoords().getAbsX()<getCoords().getAbsX()?true:false,
-            target.getCoords().getAbsX()>getCoords().getAbsX()?true:false,
-            0.35f);
+            (target.getCoords().getAbsY()<getCoords().getAbsY()),
+            (target.getCoords().getAbsY()>getCoords().getAbsY()),
+            (target.getCoords().getAbsX()<getCoords().getAbsX()),
+            (target.getCoords().getAbsX()>getCoords().getAbsX()),
+            0.35f
+        );
         
         //update as usual
         super.update(delta);
