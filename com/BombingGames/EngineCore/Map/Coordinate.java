@@ -369,10 +369,7 @@ public class Coordinate {
      * @return Returns the fieldnumber of the coordinates. 8 is the field itself.
      * @see com.BombingGames.Game.Gameobjects.AbstractGameObject#neighbourSidetoCoords(com.BombingGames.EngineCore.Map.Coordinate, int)
      */
-    public static int getNeighbourSide(float x, float y) {
-        x += Block.SCREEN_WIDTH2;
-        y += Block.SCREEN_DEPTH2;
-        
+    public static int getNeighbourSide(float x, float y) {       
         int result = 8;//standard result
         if (x + y <= Block.SCREEN_DEPTH) {
             result = 7;

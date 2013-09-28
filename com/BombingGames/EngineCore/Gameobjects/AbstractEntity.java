@@ -185,7 +185,8 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     public int get2DPosX(Coordinate coords) {
         return this.coords.getRelX() * SCREEN_WIDTH //x-coordinate multiplied by it's dimension in this direction
                + (this.coords.getRelY() % 2) * SCREEN_DEPTH //y-coordinate multiplied by it's dimension in this direction
-               + (int) (positionX); //add the objects position inside this coordinate
+               + (int) (positionX) //add the objects position inside this coordinate
+               - AbstractGameObject.SCREEN_WIDTH2;
     }
 
     /**
@@ -197,7 +198,8 @@ public abstract class AbstractEntity extends AbstractGameObject implements IsSel
     public int get2DPosY(Coordinate coords) {
         return this.coords.getRelY() * SCREEN_DEPTH2 //y-coordinate * the tile's size
                + (int) (positionY / 2) //add the objects position inside this coordinate
-               - (int) (this.coords.getHeight() / Math.sqrt(2)); //take axis shortening into account
+               - (int) (this.coords.getHeight() / Math.sqrt(2)) //take z-axis shortening into account
+               - AbstractGameObject.SCREEN_DEPTH2;
     }
         
     /**

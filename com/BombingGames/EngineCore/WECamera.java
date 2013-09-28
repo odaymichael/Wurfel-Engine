@@ -541,7 +541,7 @@ public class WECamera extends Camera {
      * The Camera Position in the game world.
      * @return in pixels
      */
-    public int getGamePosX() {
+    public int getOutputPosX() {
         return outputPosX;
     }
 
@@ -549,7 +549,7 @@ public class WECamera extends Camera {
      * The Camera left Position in the game world.
      * @param x in pixels
      */
-    public void setGamePosX(int x) {
+    public void setOutputPosX(int x) {
         this.outputPosX = x;
     }
 
@@ -557,7 +557,7 @@ public class WECamera extends Camera {
      * The Camera top-position in the game world.
      * @return in camera position game space
      */
-    public int getGamePosY() {
+    public int getOutputPosY() {
         return outputPosY;
     }
 
@@ -565,7 +565,7 @@ public class WECamera extends Camera {
      * The Camera top-position in the game world.
      * @param y in game space
      */
-    public void setGamePosY(int y) {
+    public void setOutputPosY(int y) {
         this.outputPosY = y;
     }
 
