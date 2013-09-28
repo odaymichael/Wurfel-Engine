@@ -153,7 +153,6 @@
             <filename>sprites/b0-0-2.png</filename>
             <filename>sprites/b1-0-0.png</filename>
             <filename>sprites/b1-0-1.png</filename>
-            <filename>sprites/b1-0-2.png</filename>
             <filename>sprites/b2-0-0.png</filename>
             <filename>sprites/b2-0-1.png</filename>
             <filename>sprites/b2-0-2.png</filename>
@@ -239,6 +238,7 @@
             <filename>sprites/error.png</filename>
             <filename>sprites/selection.png</filename>
             <filename>sprites/toolbar.png</filename>
+            <filename>sprites/b1-0-2.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
