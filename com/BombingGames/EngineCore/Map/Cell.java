@@ -22,7 +22,7 @@ public class Cell {
      * @param id
      */
     public final void newBlock(int id){
-        block = Block.getInstance(0);
+        block = Block.getInstance(id);
         cellOffset = new float[]{0, 0,0};
     }
     
