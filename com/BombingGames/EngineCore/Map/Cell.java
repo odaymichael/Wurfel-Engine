@@ -31,7 +31,7 @@ public class Cell {
      * @param id
      * @param value
      */
-    public void newBlock(int id, int value){
+    public final void newBlock(int id, int value){
        this.block = Block.getInstance(id, value); 
        cellOffset = new float[]{0, 0,0};
     }
@@ -42,7 +42,7 @@ public class Cell {
      * @param value
      * @param coords
      */
-    public void newBlock(int id, int value, Coordinate coords){
+    public final void newBlock(int id, int value, Coordinate coords){
        this.block = Block.getInstance(id, value, coords);
        cellOffset = new float[]{0, 0,0};
     }
