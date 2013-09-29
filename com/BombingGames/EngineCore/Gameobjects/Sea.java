@@ -26,7 +26,7 @@ public class Sea extends Block implements IsSelfAware{
         super(id);
         setTransparent(true);
         
-        if (coords == null) throw new NullPointerException("No coordinates given to ExplosiveBarrel during creation."); 
+        if (coords == null) throw new NullPointerException("No coordinates given to Sea-Block during creation."); 
         
         this.coords = coords;
         startvalue = (float) (coords.getCellOffset()[2] + Math.random()*WAVE_AMPLITUDE - WAVE_AMPLITUDE);
