@@ -3,8 +3,6 @@ package com.BombingGames.Game;
 import com.BombingGames.EngineCore.Controller;
 import static com.BombingGames.EngineCore.Controller.getLightengine;
 import static com.BombingGames.EngineCore.Controller.getMap;
-import static com.BombingGames.EngineCore.Controller.getMapDataSafe;
-import static com.BombingGames.EngineCore.Controller.setMapData;
 import com.BombingGames.EngineCore.Gameobjects.AbstractCharacter;
 import com.BombingGames.EngineCore.Gameobjects.AbstractEntity;
 import com.BombingGames.EngineCore.Gameobjects.Block;
@@ -182,14 +180,14 @@ public class ExplosivesDemoController extends Controller {
             if (coords.getZ() < Map.getBlocksZ()-1) coords.setZ(coords.getZ()+1);
             
             if (button == 0){ //left click
-                setMapData(coords, Block.getInstance(71, 0, coords));
+                getMap().setData(coords, Block.getInstance(71, 0, coords));
                 WECamera.traceRayTo(coords, true);
             } else {//right click
-                if (getMapDataSafe(coords) instanceof ExplosiveBarrel)
-                    ((ExplosiveBarrel) getMapDataSafe(coords)).explode();
+                if (getMap().getDataSafe(coords) instanceof ExplosiveBarrel)
+                    ((ExplosiveBarrel) getMap().getDataSafe(coords)).explode();
                  if (coords.getZ() < Map.getBlocksZ()-1) coords.setZ(coords.getZ()+1);
-                 if (getMapDataSafe(coords) instanceof ExplosiveBarrel)
-                    ((ExplosiveBarrel) getMapDataSafe(coords)).explode();
+                 if (getMap().getDataSafe(coords) instanceof ExplosiveBarrel)
+                    ((ExplosiveBarrel) getMap().getDataSafe(coords)).explode();
             }
             return true;
         }

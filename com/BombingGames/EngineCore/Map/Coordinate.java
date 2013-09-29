@@ -283,7 +283,7 @@ public class Coordinate {
      * @return
      */
     public Block getBlock(){
-        return Controller.getMapData(this);
+        return Controller.getMap().getData(this);
     }
     
 
@@ -293,7 +293,7 @@ public class Coordinate {
      * @return
      */
     public Block getBlockSafe(){
-        return Controller.getMapDataSafe(this);
+        return Controller.getMap().getDataSafe(this);
     }
     
 
