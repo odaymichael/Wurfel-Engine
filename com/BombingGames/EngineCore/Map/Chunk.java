@@ -81,8 +81,8 @@ public class Chunk {
                     for (int y=0; y < blocksY; y++){
                         
                         data[x][y][0] = new Cell(8);
-                        data[x][y][1] = new Cell(9, 0, new Coordinate(x, y, 1, true));
-                        data[x][y][2] = new Cell(9, 0, new Coordinate(x, y, 2, true));
+                        data[x][y][1] = new Cell(9, 0, new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, 1, true));
+                        data[x][y][2] = new Cell(9, 0, new Coordinate(x + pos % 3 * blocksX, y + pos / 3 * blocksY, 2, true));
                     }
                 
                 //mountain
