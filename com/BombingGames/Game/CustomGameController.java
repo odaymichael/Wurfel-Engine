@@ -26,7 +26,7 @@ public class CustomGameController extends Controller {
         
     @Override
     public void init(){
-         Chunk.setGenerator(0);
+         //Chunk.setGenerator(0);
          super.init();
 
          AbstractCharacter player = (AbstractCharacter) AbstractEntity.getInstance(
