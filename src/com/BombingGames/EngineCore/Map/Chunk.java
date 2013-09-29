@@ -3,13 +3,12 @@ package com.BombingGames.EngineCore.Map;
 import com.BombingGames.EngineCore.GameplayScreen;
 import com.BombingGames.WurfelEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//import javax.swing.JOptionPane;
+import javax.swing.JOptionPane;
 
 /**
  * A Chunk is filled with many Blocks and is a part of the map.
@@ -17,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class Chunk {
     /**The number of the mapgenerator used.*/
-    private static int generator = 8;
+    private static int generator = 1;
     /**The suffix of a chunk file.*/
     protected static final String CHUNKFILESUFFIX = "wec";
     /**The suffix of the metafile */
@@ -225,15 +224,15 @@ public class Chunk {
     private void load(int pos, int coordX, int coordY){
         //Reading map files test
         try {
-            // if (new File("map/chunk"+coordX+","+coordY+".otmc").exists()) {
-            File path = new File(WurfelEngine.getWorkingDirectory().getAbsolutePath() + "/map/chunk"+coordX+","+coordY+"."+CHUNKFILESUFFIX);
-            Gdx.app.log("DEBUG","Trying to load Chunk: "+ coordX + ", "+ coordY + " from \"" + path.getAbsolutePath() + "\"");
+            FileHandle path = Gdx.files.internal("map/chunk"+coordX+","+coordY+"."+CHUNKFILESUFFIX);
+            
+            Gdx.app.log("DEBUG","Trying to load Chunk: "+ coordX + ", "+ coordY + " from \"" + path.path() + "\"");
             GameplayScreen.msgSystem().add("Load: "+coordX+","+coordY);
             
-            if (path.isFile()) {
+            if (path.exists()) {
                 //FileReader input = new FileReader("map/chunk"+coordX+","+coordY+".otmc");
                 //BufferedReader bufRead = new BufferedReader(input);
-                BufferedReader bufRead = new BufferedReader(new FileReader(path));
+                BufferedReader bufRead = path.reader(30000);//normal chunk file is around 17.000byte
 
                 StringBuilder line;
                 //jump over first line to prevent problems with length byte
@@ -247,11 +246,11 @@ public class Chunk {
 
                 //finish a layer
                 do {
-                    line = new StringBuilder();
+                    line = new StringBuilder(1);
                     line.append(bufRead.readLine());
                     
                     if ((line.charAt(1) == '/') && (line.charAt(2) == '/')){//jump over optional comment line
-                        line = new StringBuilder();
+                        line = new StringBuilder(1);
                         line.append(bufRead.readLine());
                     }
 
@@ -286,7 +285,7 @@ public class Chunk {
                     z++;
                 } while (lastline != null);
             } else {
-                Gdx.app.log("DEBUG","...but it could not be found. Creating new.");
+                Gdx.app.log("DEBUG","...but it could not be found.");
                 generate(pos, coordX, coordY);
             }
         } catch (IOException ex) {
@@ -298,11 +297,12 @@ public class Chunk {
      * reads the map info file and sets the size of the chunk
      */
     public static void readMapInfo(){
-        BufferedReader bufRead = null;
+        BufferedReader bufRead;
         try {
-            File path = new File(WurfelEngine.getWorkingDirectory().getAbsolutePath() + "/map/map."+METAFILESUFFIX);
-            Gdx.app.log("DEBUG","Trying to load Map Info from \"" + path.getAbsolutePath() + "\"");
-            bufRead = new BufferedReader(new FileReader(path));
+            FileHandle path = Gdx.files.internal("map/map."+METAFILESUFFIX);
+            //File path = new File(WurfelEngine.getWorkingDirectory().getAbsolutePath() + "/map/map."+METAFILESUFFIX);
+            Gdx.app.log("DEBUG","Trying to load Map Info from \"" + path.path() + "\"");
+            bufRead =  path.reader(1024);
             String mapname = bufRead.readLine();
             mapname = mapname.substring(2, mapname.length());
             Gdx.app.log("INFO","Loading map: "+mapname);
@@ -333,12 +333,6 @@ public class Chunk {
                 "Loading error",
                  JOptionPane.ERROR_MESSAGE);*/
             Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                bufRead.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
     

@@ -16,20 +16,21 @@ import java.io.File;
 
 /**
  *The Main class of the engine. To create a new engine use  {@link com.BombingGames.WurfelEngine#construct(java.lang.String, java.lang.String[]) WurfelEngine.construct}
- * The Wurfel Engine needs the API libGDX0.9.8. It has not been tested with other versions.
+ * The Wurfel Engine needs the API libGDX0.9.8. Besides the shape renderer the nightly build does also work (27. September 2013).
+ * Java 7 does not work with libGDX0.9.8 on Mac. Use Java 6 instead. You can use Java 7 when using the nightly build  (27. September 2013).
  * @author Benedikt Vogler
  */
 public class WurfelEngine extends Game {
     /**
      * The version of the Engine
      */
-    public static final String VERSION = "1.1.9";    
+    public static final String VERSION = "1.1.12";    
     private static File workingDirectory;
     private static boolean fullscreen = false;
     private static WurfelEngine instance;
-   
+
     /**
-     * Create the Engine.
+     * Create the Engine. Don't use this. Use construct() instead. 
      * @param title The title, which is displayed in the window.
      * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
      */
@@ -55,8 +56,17 @@ public class WurfelEngine extends Game {
         setScreen(new MainMenuScreen());
     }
     
+        /**
+     * Create a new instance of the Engine.
+     * @param title The title, which is displayed in the window.
+     * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
+     */
+    public static void construct(String title, String[] args){
+        instance = new WurfelEngine(title,args);
+    }
+    
     /**
-     * Singleton method  to get the only instance.
+     * Singleton method to get the only instance.
      * @return the wurfelengine
      */
     public static WurfelEngine getInstance(){
@@ -64,35 +74,24 @@ public class WurfelEngine extends Game {
     }
     
     /**
-     * Create the Engine.
-     * @param title The title, which is displayed in the window.
-     * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
-     * @return the engine
-     */
-    public static WurfelEngine construct(){
-        instance = new WurfelEngine();
-        return instance;
-    }
-    
-    /**
      * Launch the main game with you custom controller and view.
      * @param controller
-     * @param view
-     */     
+     * @param view 
+     */
     public static void startGame(Controller controller, View view){
         instance.setScreen(
             new GameplayScreen(
                 controller,
                 view
             )
-        );   
+        );
     }
     
     /**
      * Get the credits of the engine.
      * @return a long string with breaks
      */
-    public static String getCredits(){
+    public static String getCredits() {
         String newline = System.getProperty("line.separator");
         return "Created by:"+newline
             + " Benedikt Vogler"+newline+newline
@@ -133,6 +132,6 @@ public class WurfelEngine extends Game {
      */
     public static boolean isFullscreen() {
         return fullscreen;
-    }
+    } 
     
 }
