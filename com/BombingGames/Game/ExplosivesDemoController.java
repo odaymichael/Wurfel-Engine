@@ -63,6 +63,8 @@ public class ExplosivesDemoController extends Controller {
             new Minimap(this, getCameras().get(0), Gdx.graphics.getWidth() - 400,10)
         );
         
+        useLightEngine(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        
         Gdx.input.setInputProcessor(new InputListener());
     }
 
