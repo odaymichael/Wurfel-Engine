@@ -328,12 +328,15 @@ public class Chunk {
             blocksZString = blocksZString.substring(2, blocksZString.length());
             blocksZ = Integer.parseInt(blocksZString);
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(
-                null,
-                "The meta file could not be read. It must be named 'map."+ Chunk.METAFILESUFFIX + "' and must be at the maps directory:"+ WurfelEngine.getWorkingDirectory().getAbsolutePath() + "/map/",
-                "Loading error",
-                 JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
+            if (!WurfelEngine.isFullscreen()) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    "The meta file could not be read. It must be named 'map."+ Chunk.METAFILESUFFIX + "' and must be at the maps directory:"+ WurfelEngine.getWorkingDirectory().getAbsolutePath() + "/map/",
+                    "Loading error",
+                     JOptionPane.ERROR_MESSAGE
+                );
+            }
+             Logger.getLogger(Chunk.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
