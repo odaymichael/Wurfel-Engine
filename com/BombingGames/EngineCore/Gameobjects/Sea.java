@@ -11,7 +11,7 @@ public class Sea extends Block implements IsSelfAware{
     public static final int WAVE_AMPLITUDE = AbstractGameObject.SCREEN_HEIGHT-10;
     private static final float wavespeed = 1/700f; //the smaller the slower
     private static float currentX = 0;
-    private final int wavesize = Map.getBlocksX()/7;
+    private final int waveWidth = Map.getBlocksX()/7;
     
     private float startvalue;
     
