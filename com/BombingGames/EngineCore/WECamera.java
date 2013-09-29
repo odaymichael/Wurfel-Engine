@@ -62,7 +62,7 @@ public class WECamera extends Camera {
         outputPosX = Coordinate.getMapCenter().get2DPosX() - get2DWidth() / 2;
         outputPosY = Coordinate.getMapCenter().get2DPosY() - get2DHeight() / 2;
         
-        groundBlock = Block.getInstance(44);//set the ground level groundBlock
+        groundBlock = Block.getInstance(2);//set the ground level groundBlock
         groundBlock.setSideClipping(0, true);
         groundBlock.setSideClipping(2, true);
     }
