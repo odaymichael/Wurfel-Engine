@@ -6,3 +6,4 @@ lint.xml
 proguard.cfg
 gen/
 .settings
+.bak

@@ -58,11 +58,9 @@ public class WurfelEngine extends Game {
     
         /**
      * Create a new instance of the Engine.
-     * @param title The title, which is displayed in the window.
-     * @param args custom display resolution: [0] width, [1] height, [2] fullscreen
      */
-    public static void construct(String title, String[] args){
-        instance = new WurfelEngine(title,args);
+    public static void construct(){
+        instance = new WurfelEngine();
     }
     
     /**

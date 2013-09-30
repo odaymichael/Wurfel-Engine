@@ -14,6 +14,7 @@ public class MainActivity extends AndroidApplication {
         
         cfg.useGL20 = false;
         
-        initialize(WurfelEngine.construct(), cfg);
+        WurfelEngine.construct();
+        initialize(WurfelEngine.getInstance(), cfg);
     }
 }
