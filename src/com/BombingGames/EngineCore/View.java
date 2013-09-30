@@ -73,9 +73,9 @@ public class View {
         //Gdx.gl10.glClear(GL10.GL_DEPTH_BUFFER_BIT); //clearing the screen is ~5-10% slower than without.
         
         //render every camera
-        for (WECamera camera : controller.getCameras()) {
-            camera.render(this, camera);
-        }
+        //for (WECamera camera : controller.getCameras()) {
+         //   camera.render(this, camera);
+        //}
         
         
         //render HUD
