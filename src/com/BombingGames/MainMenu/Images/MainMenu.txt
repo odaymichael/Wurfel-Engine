@@ -1,0 +1,32 @@
+MainMenu.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Barrel
+  rotate: false
+  xy: 2, 2
+  size: 458, 42
+  orig: 458, 42
+  offset: 0, 0
+  index: -1
+generate
+  rotate: false
+  xy: 144, 46
+  size: 314, 42
+  orig: 314, 42
+  offset: 0, 0
+  index: -1
+Exit
+  rotate: false
+  xy: 2, 46
+  size: 140, 42
+  orig: 140, 42
+  offset: 0, 0
+  index: -1
+load
+  rotate: false
+  xy: 2, 90
+  size: 158, 42
+  orig: 158, 42
+  offset: 0, 0
+  index: -1
