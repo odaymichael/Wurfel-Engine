@@ -26,7 +26,7 @@ public class CustomGameController extends Controller {
         
     @Override
     public void init(){
-         Chunk.setGenerator(0);
+         //Chunk.setGenerator(0);
          super.init();
 
          AbstractCharacter player = (AbstractCharacter) AbstractEntity.getInstance(
@@ -109,7 +109,7 @@ public class CustomGameController extends Controller {
             if (!GameplayScreen.msgSystem().isListeningForInput()) {
                 //toggle minimap
                  if (keycode == Input.Keys.M){
-                     GameplayScreen.msgSystem().add("Minimap toggled to: "+ getMinimap().toggleVisibility());
+                     getMinimap().toggleVisibility();
                  }
                  //toggle fullscreen
                  if (keycode == Input.Keys.F){
@@ -194,6 +194,5 @@ public class CustomGameController extends Controller {
             return true;
         }
         
-       
     }
 }

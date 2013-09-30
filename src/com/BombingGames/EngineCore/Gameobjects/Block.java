@@ -147,7 +147,7 @@ public class Block extends AbstractGameObject {
             case 8: block = new Block(id); //sand
                     block.setObstacle(true);
                     break;      
-            case 9: block = new Block(id); //water
+            case 9: block = new Sea(id, coords); //water
                     block.liquid = true;
                     block.setTransparent(true);
                     break;

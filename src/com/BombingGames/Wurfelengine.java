@@ -4,14 +4,12 @@ import android.os.Environment;
 import com.BombingGames.EngineCore.GameplayScreen; 
 import com.BombingGames.EngineCore.Controller;
 import com.BombingGames.EngineCore.View;
-import com.BombingGames.EngineCore.WorkingDirectory;
 import com.BombingGames.MainMenu.MainMenuScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 //import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 //import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture;
-
 import java.io.File;
 
 /**
@@ -24,7 +22,7 @@ public class WurfelEngine extends Game {
     /**
      * The version of the Engine
      */
-    public static final String VERSION = "1.1.12";    
+    public static final String VERSION = "1.1.13";    
     private static File workingDirectory;
     private static boolean fullscreen = false;
     private static WurfelEngine instance;

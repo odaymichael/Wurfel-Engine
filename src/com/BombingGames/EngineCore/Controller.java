@@ -137,81 +137,6 @@ public class Controller {
     
     
     /**
-     * Returns a block inside the map. The same as "getMap().getDataSafe(x,y,z)"
-     * @param x
-     * @param y
-     * @param z
-     * @return the wanted block
-     * @see com.BombingGames.Game.Map#getDataSafe(int, int, int) 
-     */
-    public static Block getMapDataSafe(int x, int y, int z){
-        return map.getDataSafe(x, y, z);
-    }
-    
-    /**
-     * 
-     * @param coords
-     * @return
-     */
-    public static Block getMapDataSafe(Coordinate coords) {
-        return map.getDataSafe(coords);
-    }
-    
-    /**
-     * Same as "Map.getDataSafe(int, int, int)". This is a shortcut.
-     * @param x
-     * @param y
-     * @param z
-     * @return the wanted block
-     * @see com.BombingGames.Game.Map#getData(int, int, int) 
-     */
-    public static Block getMapData(int x, int y, int z){
-        return map.getData(x, y, z);
-    }
-    
-    /**
-     * Shortcut to "Map.getDataSafe(int, int, int)"
-     * @param coords the coordinates in an array (vector)
-     * @return the wanted block
-     * @see com.BombingGames.Game.Map#getData(int, int, int) 
-     */
-    public static Block getMapData(Coordinate coords){
-        return map.getData(coords);
-    }
-    
-    /**
-     * Shortcut to  "Map.setDataSafe(int, int, int, Block block)"
-     * @param x
-     * @param y
-     * @param z
-     * @param block 
-     * 
-     */
-    public static void setMapData(int x, int y, int z, Block block){
-        map.setData(x, y, z, block);
-    }
-    
-    
-     /**
-     * 
-     * @param coords 
-     * @param block
-     */
-    public static void setMapData(Coordinate coords, Block block) {
-        map.setData(coords, block);
-    }
-    
-    /**
-     * Shortcut to "map.setDataSafe". Set a block with safety checks.
-     * @param coords 
-     * @param block the block you want to set
-     */
-    public static void setMapDataSafe(Coordinate coords, Block block) {
-        map.setDataSafe(coords, block);
-    }
-
-    
-    /**
      * Returns the player
      * @return the player
      */
@@ -235,7 +160,7 @@ public class Controller {
      * @return the neighbour block
      */
     public static Block getNeighbourBlock(Coordinate coords, int side){
-        return Controller.getMapDataSafe(Coordinate.neighbourSidetoCoords(coords, side));
+        return Controller.getMap().getDataSafe(Coordinate.neighbourSidetoCoords(coords, side));
     }
     
   

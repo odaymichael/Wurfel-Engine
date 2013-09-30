@@ -8,10 +8,10 @@ import com.BombingGames.EngineCore.Map.Map;
  * @author Benedikt Vogler
  */
 public class Sea extends Block implements IsSelfAware{
-    public static final int WAVE_AMPLITUDE = 50;
-    private static final float wavespeed = 1/600f; //the smaller the slower
+    public static final int WAVE_AMPLITUDE = AbstractGameObject.SCREEN_HEIGHT-10;
+    private static final float wavespeed = 1/700f; //the smaller the slower
     private static float currentX = 0;
-    private final int wavesize = Map.getBlocksX()/7;
+    private final int waveWidth = Map.getBlocksX()/7;
     
     private float startvalue;
     
@@ -26,7 +26,7 @@ public class Sea extends Block implements IsSelfAware{
         super(id);
         setTransparent(true);
         
-        if (coords == null) throw new NullPointerException("No coordinates given to ExplosiveBarrel during creation."); 
+        if (coords == null) throw new NullPointerException("No coordinates given to Sea-Block during creation."); 
         
         this.coords = coords;
         startvalue = (float) (coords.getCellOffset()[2] + Math.random()*WAVE_AMPLITUDE - WAVE_AMPLITUDE);
@@ -49,7 +49,7 @@ public class Sea extends Block implements IsSelfAware{
             startvalue +
             (float) (Math.sin(
                 (currentX-coords.getRelX()-coords.getRelY())
-                * Math.PI/wavesize
+                * Math.PI/waveWidth
                 )*WAVE_AMPLITUDE
             )
         );
@@ -62,7 +62,5 @@ public class Sea extends Block implements IsSelfAware{
     public static void staticUpdate(float delta){
         currentX += delta*wavespeed;
     }
-    
-    
-    
+
 }

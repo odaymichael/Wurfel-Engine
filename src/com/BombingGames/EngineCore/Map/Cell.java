@@ -8,43 +8,40 @@ import com.BombingGames.EngineCore.Gameobjects.Block;
  */
 public class Cell {
     private Block block;
-    private float[] cellOffset;
+    private float[] cellOffset = new float[]{0, 0,0};
 
     /**
-     *Create a new cell containing air-
+     *Create a new cell containing air.
      */
     public Cell() {
-        newBlock(0);
+        block = Block.getInstance(0);
     }
     
     /**
-     *Create a new block in this cell. Resets offset.
+     *Create a new block in this cell.
      * @param id
      */
-    public final void newBlock(int id){
+    public Cell(int id){
         block = Block.getInstance(id);
-        cellOffset = new float[]{0, 0,0};
     }
     
     /**
-     *Create a new block in this cell. Resets offset.
+     *Create a new block in this cell.
      * @param id
      * @param value
      */
-    public final void newBlock(int id, int value){
+    public Cell(int id, int value){
        this.block = Block.getInstance(id, value); 
-       cellOffset = new float[]{0, 0,0};
     }
     
     /**
-     *Create a new block in this cell. Resets offset.
+     *Create a new block in this cell.
      * @param id
      * @param value
      * @param coords
      */
-    public final void newBlock(int id, int value, Coordinate coords){
+    public Cell(int id, int value, Coordinate coords){
        this.block = Block.getInstance(id, value, coords);
-       cellOffset = new float[]{0, 0,0};
     }
 
     /**
@@ -56,7 +53,7 @@ public class Cell {
     }
 
     /**
-     *
+     *Set the block inside this cell. The offset stays the same.
      * @param block
      */
     public void setBlock(Block block) {
